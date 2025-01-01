@@ -1,0 +1,105 @@
+
+<style>
+.pmessage {
+	opacity: 0;
+	transition: opacity 0.3s ease; /* Yumuşak geçiş için */
+}
+
+.psuccess {
+	color: green;
+}
+
+.perror {
+	color: red;
+}
+
+.pvisible {
+	opacity: 1;
+}
+</style>
+<div class="center verticle_center">
+	<div class="login_section">
+		<div class="login_form">
+			<form id="updateForm" action="/user/user_update" method="post"
+				enctype="multipart/form-data">
+				<fieldset>
+					<div class="field">
+						<label class="label_field">Adi</label> 
+						<input type="text"
+							name="firstName" id="firstName" placeholder="Adi" 
+							th:value="${user.firstName}" required />
+					</div>
+					<div class="field">
+						<label class="label_field">Soyadi</label> <input type="text"
+							name="lastName" id="lastName" placeholder="Soyadi"
+							th:value="${user.lastName}" required/>
+					</div>
+					<div class="field">
+						<label class="label_field hidden">hidden label</label> <label
+							id="error" th:if="${error}" class="forgot" th:text="${error}"></label>
+						<span id="message" style="font-weight: bold;"></span>
+					</div>
+					<div class="field">
+						<label class="label_field hidden"></label> 
+						<input type="file" name="image" id="image" accept="image/*" />
+					</div>
+					<div class="field margin_0">
+						<label class="label_field hidden"></label> 
+						<label id="message" class="message hidden"></label>
+					</div>
+				</fieldset>
+				<div class="field">
+						<label class="label_field"></label>
+						<button type="submit" class="main_bt" id="submitBtn">Kaydet</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+
+document.getElementById('image').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const maxSizeInKB = 500; // Maksimum dosya boyutu (KB cinsinden)
+    const maxSizeInBytes = maxSizeInKB * 1024; // Bayta çeviriyoruz
+    if (file && file.size > maxSizeInBytes) {
+        document.getElementById('message').textContent = 
+            `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
+        event.target.value = ''; // Dosya seçimini sıfırlar
+    } else {
+        document.getElementById('message').textContent = '';
+    }
+});
+
+$(document).ready(function() {
+    $('#updateForm').on('submit', async function(event) {
+        event.preventDefault();
+        const $submitButton = $(this).find('button[type="submit"]');
+        $submitButton.prop('disabled', true).text('İşleniyor...');
+        const formData = new FormData(this);
+            try {
+                const response = await fetchWithSessionCheck('user/user_update', {
+                	method: 'POST',
+                    body: formData,
+                });
+                const result = response;
+                if (result.errorMessage === "") {
+                    //window.location.href = "/index";
+                } else {
+                    $('#message')
+                        .removeClass("psuccess hidden")
+                        .addClass("perror pvisible")
+                        .text(result.errorMessage || "Bir hata oluştu.");
+                }
+            } catch (error) {
+                $('#message')
+                    .removeClass("psuccess hidden")
+                    .addClass("perror pvisible")
+                    .text(error.message || "Beklenmeyen bir hata oluştu.");
+            } finally {
+                $submitButton.prop('disabled', false).text('Kaydet');
+            }
+     });
+});
+</script>

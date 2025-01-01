@@ -1,0 +1,30 @@
+<div class="card p-4">
+	<span sec:authorize="isAuthenticated()" sec:authentication="name" style="font-weight: bold;"></span>
+	<br>
+	<button class="btn btn-primary" type="button" id="hesapyoketButton"
+		style="width: 150px;" onclick="deleteAccount()">Hesap Sil</button>
+</div>
+
+<script>
+
+async function deleteAccount() {
+	   document.body.style.cursor = "wait";
+	   try {
+	        const response = await fetchWithSessionCheck("user/accountdelete", {
+	        	method: 'GET',
+				headers: {
+					'Content-Type': 'text/html',
+				},
+	        });
+			if (response.errorMessage) {
+				throw new Error(response.errorMessage);
+			}
+	        window.location.href = "/logout";
+	    } catch (error) {
+	        document.getElementById("errorDiv").style.display = "block";
+	        document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	    } finally {
+	        document.body.style.cursor = "default";
+	     }
+	}
+</script>

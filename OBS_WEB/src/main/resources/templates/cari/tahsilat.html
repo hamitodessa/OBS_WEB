@@ -1,0 +1,296 @@
+<style>
+.editable-cell {
+	cursor: text;
+}
+
+.double-column {
+	text-align: right;
+}
+.table .thead-dark th {
+ color: #fff;
+  background: #214162;
+}
+.tah-table th, .tah-table td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	height: 15px;
+}
+
+.tah-table th:nth-child(1), .tah-table td:nth-child(1) {
+	width: 15%;
+}
+
+.tah-table th:nth-child(2), .tah-table td:nth-child(2) {
+	width: 15%;
+}
+
+.tah-table th:nth-child(3), .tah-table td:nth-child(3) {
+	width: 10%;
+}
+
+.tah-table th:nth-child(4), .tah-table td:nth-child(4) {
+	width: 10%;
+}
+
+.tah-table th:nth-child(5), .tah-table td:nth-child(5) {
+	width: 15%;
+}
+
+.tah-table th:nth-child(6), .tah-table td:nth-child(6) {
+	width: 10%;
+}
+
+.tah-table th:nth-child(7), .tah-table td:nth-child(7) {
+	width: 10%;
+}
+
+.saga-bold {
+	text-align: right;
+	font-weight: bold;
+}
+
+.group-box {
+	border: 1px solid #ccc;
+	padding: 7px;
+	margin: 10px;
+	width: 97%;
+	box-sizing: border-box;
+}
+
+.child {
+	width: 700px;
+	padding: 2px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	align-items: center;
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+datalist {
+	display: none;
+}
+</style>
+<div class="card p-4">
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item" role="presentation">
+			<button class="nav-link active" id="tab1-tab"
+				style="font-weight: bold;" data-bs-toggle="tab"
+				data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1"
+				aria-selected="true">Tahsilat Fisi</button>
+		</li>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="tab2-tab" style="font-weight: bold;"
+				disabled data-bs-toggle="tab" data-bs-target="#tab2" type="button"
+				role="tab" aria-controls="tab2" aria-selected="false">Cek
+				Dokum</button>
+		</li>
+	</ul>
+</div>	
+	<!-- Tab Content -->
+	<div class="tab-content" id="myTabContent">
+		<!-- Tab 1 Content -->
+		<div class="tab-pane fade show active" id="tab1" role="tabpanel"
+			aria-labelledby="tab1-tab">
+			<div class="child">
+				<div class="group-box">
+					<div class="form-row">
+						<input type="date" id="tahTarih" class="form-control"
+							th:value="${evrakTarih}" style="width: 150px; font-weight: bold;" />
+						<label for="bos" style="width: 45%;"></label>
+						
+						<button type="button" class="btn btn-secondary ml-2" onclick="tahgerifisNo()">
+							<i class="fa fa-backward"></i>
+						</button>
+						<span style="padding-left: 5px;"></span>
+						<button type="button" class="btn btn-secondary ml-2" onclick="tahsonfisNo()">
+							<i class="fa fa-refresh"></i>
+						</button>
+						<span style="padding-left: 5px;"></span>
+						<button type="button" class="btn btn-secondary ml-2" onclick="tahilerifisNo()">
+							<i class="fa fa-forward"></i>
+						</button>
+						<span style="padding-left: 5px;"></span> <input type="text"	id="tahevrakNo" name="tahevrakNo" placeholder="0"
+							onkeydown="tahevrakOkuma(event); allowOnlyNumbers(event)"
+							class="form-control saga-bold" style="width: 100px;" /> <span
+							style="padding-left: 5px;"></span>
+						<button type="button" id="btnYeni" class="btn btn-secondary ml-2" onclick="tahyenifis()">
+							<i class="fa fa-plus"></i>
+						</button>
+					</div>
+				</div>
+				
+				<div class="group-box">
+					<div class="form-row">
+						<select class="form-control" id="tah_ted" name="tah_ted">
+							<option value="Tahsilat">Tahsilat</option>
+							<option value="Tediye">Tediye</option>
+						</select> <span style="padding-left: 8%;"></span> 
+						<select
+							class="form-control" id="tur" name="tur"
+							onchange=turChange()>
+							<option value="Nakit">Nakit</option>
+							<option value="Cek">Cek</option>
+							<option value="Kredi Karti">Kredi Karti</option>
+						</select> 
+						<span style="padding-left: 15%;"></span> 
+						<input type="text"
+							id="tutar" onblur="formatInputBox2(this)"
+							class="form-control saga-bold" value="0.00"
+							style="width: 150px; text-align: right;">
+					</div>
+				</div>
+				<!-- ****************************************************************************************************** -->
+				<div class="group-box">
+					<div style="display: flex; align-items: center; gap: 10px;">
+						<label for="label5" style="width: 75px;">Cari Kodu</label>
+						<div style="position: relative; width: 125px;">
+							<input class="form-control cins_bold"
+								ondblclick="openSecondModal('tcheskod', 'tahsilat')"
+								list="chkoduOptions" maxlength="12" id="tcheskod"
+								oninput="hesapAdiOgren(this.value, 'lblcheskod'); validateAutoSearch('tcheskod', 'chkoduOptions')">
+							<datalist id="chkoduOptions">
+								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option> 
+							</datalist>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
+						</div>
+						<span style="padding-left: 80px;"></span>
+						<label for="label5" style="width: 100px;">Adres Kodu</label>
+						<div style="position: relative; width: 125px;">
+							<input class="form-control cins_bold" 
+								oninput="adrhesapAdiOgren('adresheskod','lbladrheskod')"
+								list="adreskoduOptions" maxlength="12" id="adresheskod">
+							<datalist id="adreskoduOptions"></datalist>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
+						</div>
+					</div>
+					<div style="display: flex; align-items: center; gap: 10px;margin-top:7px;">
+						<span style="padding-left: 75px;"></span>	
+						<label id="lblcheskod" for="label4"	style="width: 350px; font-weight: bold;">...</label> 
+						<span style="padding-left: 30px;"></span>	
+						<label id="lbladrheskod" for="label5" style="width: 300px; font-weight: bold;">...</label>
+					</div>
+				</div>
+				<!-- ****************************************************************************************************** -->
+				<div class="group-box">
+					<div class="container mt-3">
+						<!-- İlk Satır: 3 Label -->
+						<div class="row mb-2">
+							<div class="col">
+								<label for="label1" style="width: 100px">Doviz Cinsi</label>
+							</div>
+							<div class="col" id="divcekbilgi" style="display: none;">
+								<label for="label2" style="width: 100px">Cek Sayisi</label>
+							</div>
+							<div class="col" id="divposbilgi" style="display: none;">
+								<label for="label3" style="width: 300px">Pos Banka</label>
+							</div>
+						</div>
+						<!-- İkinci Satır: 3 Input -->
+						<div class="row mb-2">
+							<div class="col">
+								<select class="form-control" id="dvz_cins" name="dvz_cins" style="width: 100px">
+									<option value="TL">TL</option>
+									<option value="USD">USD</option>
+									<option value="EUR">EUR</option>
+									<option value="RUB">RUB</option>
+								</select>
+							</div>
+							<div class="col" id="cekbilgidiv" style="display: none;">
+								<label id="ceksayisi" class="form-control" style="width: 100px">0</label>
+							</div>
+							<div class="col" id="posbilgidiv" style="display: none;">
+								<div style="position: relative; width: 300px;">
+									<input class="form-control cins_bold" style="width: 300px;"
+										list="posbankaOptions" id="posBanka">
+									<datalist id="posbankaOptions">
+										<option th:each="kod : ${nameBanks}" th:value="${kod.BANKA}"></option> 
+									</datalist>
+									<span
+										style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- ****************************************************************************************************** -->
+				<div class="group-box">
+					<div class="form-row">
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="fisnoyazdir">
+							<label class="form-check-label" for="calisanmi">Yazicida
+								Fis No Yazdir</label>
+						</div>
+					</div>
+				</div>
+				<div class="group-box">
+					<div class="form-row">
+						<button class="btn btn-primary" type="button" id="tahkaydetButton"
+								onclick="tahfisKayit()">Kaydet</button>
+						<span style="padding-left: 10px;"></span>			
+						<button class="btn btn-primary" type="button" id="tahsilButton" 
+								onclick="tahfisYoket()">Sil</button>
+						<span style="padding-left: 10px;"></span>			
+						<button class="btn btn-primary" type="button" id="indirButton" 
+								onclick="tahsilatdownloadReport()">Indir</button>
+						<span style="padding-left: 10px;"></span>
+						<button class="btn btn-primary" type="button" id="carikaydetButton" 
+								onclick="openFirstModal('tahsilatckaydet')">Cari Kaydet</button>
+					</div>
+				</div>
+
+			</div>
+			<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+		</div>
+
+		<!-- Tab 2 Content -->
+		<div class="tab-pane fade" id="tab2" role="tabpanel"
+			aria-labelledby="tab2-tab">
+			<button type="button" class="btn btn-secondary ml-2"
+				onclick="addRow()">
+				<i class="fa fa-plus"></i>
+			</button>
+			<table class="table table-bordered tah-table" id="cekTable"
+				style="margin-top: 5px;">
+				<thead class="thead-dark">
+					<tr>
+						<th>Banka</th>
+						<th>Sube</th>
+						<th>Seri No</th>
+						<th>Hesap</th>
+						<th>Borclu</th>
+						<th>Vade</th>
+						<th class="double-column">Tutar</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody">
+				</tbody>
+				<tfoot>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td style="font-weight: bold;">Toplam</td>
+						<td id="totalTutar" class="saga-bold"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	
+<input type="hidden" id="tahsilatBilgi" name="tahsilatBilgi" value="initialValue">
+
+<div th:replace="modal/borc_alacak :: modalborcalacak"></div>
+
+<div th:replace="modal/yenihsppln :: secondModal"></div>
+
+<script src="/obs_js_files/cari/tahsilat.js"></script>

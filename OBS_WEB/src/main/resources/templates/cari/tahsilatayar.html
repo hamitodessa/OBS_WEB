@@ -1,0 +1,138 @@
+
+<style>
+.group-box {
+	padding: 1px;
+	width: 73%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+}
+
+.aramagroup-box {
+	width: 73%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	border: 1px solid #ccc;
+	height: 50px; /* Yüksekliği sabitledim */
+}
+.centered-div {
+	width: 70%; /* Genişlik %80 */
+	margin: 0 auto; /* Ekran ortasında konumlandırma */
+	box-sizing: border-box;
+	text-align: center; /* İçerikleri ortala (opsiyonel) */
+}
+
+.resimgoster {
+    display: flex; /* Flexbox ile hizalama */
+    justify-content: center; /* Yatayda ortala */
+    align-items: center; /* Dikeyde ortala */
+    width: 315px; /* Sabit genişlik */
+    height: 150px; /* Sabit yükseklik */
+    border: 1px solid #ddd; /* İsteğe bağlı çerçeve */
+    overflow: hidden; /* Resmin taşmasını engelle */
+    background-color: #f8f9fa; /* Arka plan rengi */
+}
+
+
+</style>
+<!-- Ana Sayfa -->
+
+<div class="card p-4 d-flex flex-row gap-3">
+    <div class="centered-div">
+        <div class="group-box" style="margin-top:5px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:100px;">Firma Adi</span>
+            <span style="padding-left: 5px;"></span>
+           <input 	type="text" class="form-control"   id="adi" maxlength="50">
+					
+         </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:100px;">Adres 1</span>
+            <span style="padding-left: 5px;"></span>
+       		 <input 	type="text" class="form-control"  id="adr1" maxlength="50">
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:100px;">Adres 2</span>
+            <span style="padding-left: 5px;"></span>
+            <input 	type="text" class="form-control"  id="adr2" maxlength="50">
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:100px;" >VD - VN</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" class="form-control" id="vdvn" maxlength="60">
+        </div>
+
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:100px;">E Mail</span>
+            <span style="padding-left: 5px;"></span>
+            <input 	type="text" class="form-control"  id="mail" maxlength="60">
+						
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:100px;">Diger</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" 	class="form-control"  id="diger" maxlength="50">
+        </div>
+        <div class="group-box" style="margin-top: 10px;">
+            <span style="padding-left: 5px;"></span>
+            <div style="min-width:315px;height:150px;border: 1px solid #ddd;">
+ 				<img id="resimLogo" class="resimgoster"  src="" alt="Logo"  />
+    		</div>
+            <span style="padding-left: 50px;"></span>
+            <div style="min-width:315px;height:150px;border: 1px solid #ddd;">
+ 				<img id="resimKase" class="resimgoster"  src="" alt="Kase"  />
+    		</div>
+        </div>
+        <div class="group-box" style="margin-top:5px;">
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="logoremove" class="btn btn-secondary ml-2" onclick="logoSil()" ><i class="fa fa-remove"></i>	</button>
+            <span style="padding-left: 5px;"></span>
+            <input type="file" style="min-width:325px;" name="image" id="imageLogo" accept="image/*" />
+      		
+      		
+      		<button type="button" id="kaseremove" class="btn btn-secondary ml-2" onclick="kaseSil()" ><i class="fa fa-remove"></i>	</button>
+            <span style="padding-left: 5px;"></span>
+            <input type="file" style="max-width:250px;" name="image" id="imageKase" accept="image/*" />
+       
+       
+        </div>
+        
+        <div class="aramagroup-box" style="margin-top:5px;">
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="serverButton" class="btn btn-secondary ml-2" onclick="ayarKayit()" ><i class="fa fa-save"></i>	</button>
+        </div>
+        <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+       </div>
+    
+</div>
+
+<script src="/obs_js_files/cari/tahsilatayar.js"></script>
+
+<script>
+function handleFileChange(event) {
+    const file = event.target.files[0];
+    const maxSizeInKB = 500; // Maksimum dosya boyutu (KB cinsinden)
+    const maxSizeInBytes = maxSizeInKB * 1024; // Bayta çeviriyoruz
+    const errorDiv = document.getElementById("errorDiv");
+    
+    if (file && file.size > maxSizeInBytes) {
+        errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
+        errorDiv.style.display = "block";
+        event.target.value = ''; // Dosya seçimini sıfırlıyoruz
+    } else {
+        errorDiv.style.display = "none";
+        errorDiv.innerText = "";
+    }
+}
+document.getElementById('imageLogo').addEventListener('change', handleFileChange);
+document.getElementById('imageKase').addEventListener('change', handleFileChange);
+</script>
+

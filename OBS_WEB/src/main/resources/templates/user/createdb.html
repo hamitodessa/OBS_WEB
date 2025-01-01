@@ -1,0 +1,110 @@
+<style>
+
+
+.group-box {
+	padding: 1px;
+	width: 50%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+}
+
+.aramagroup-box {
+	width: 50%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	border: 1px solid #ccc;
+	height: 50px; /* Yüksekliği sabitledim */
+}
+.centered-div {
+	width: 60%; /* Genişlik %80 */
+	margin: 0 auto; /* Ekran ortasında konumlandırma */
+/*	padding: 4px;
+	border: 1px solid #ccc;  */
+	box-sizing: border-box;
+	/* Padding ve border genişlik içinde hesaplansın */
+	text-align: center; /* İçerikleri ortala (opsiyonel) */
+}
+
+
+
+</style>
+<!-- Ana Sayfa -->
+
+<div class="card p-4 d-flex flex-row gap-3">
+    <div class="centered-div">
+        
+        <div class="group-box" style="margin-top:5px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:200px;">Modul</span>
+            <span style="padding-left: 5px;"></span>
+          
+           <select class="form-control" id="user_modul" name="user_modul"	onchange=detailoku()>
+				<option value="Cari Hesap">Cari Hesap</option>
+				<option value="Fatura">Fatura</option>
+				<option value="Kambiyo">Kambiyo</option>
+				<option value="Adres">Adres</option>
+				<option value="Kur">Kur</option>
+				<option value="Sms">Sms</option>
+				<option value="Gunluk">Gunluk</option>
+			</select>
+					
+         </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:200px;">Unvan</span>
+            <span style="padding-left: 5px;"></span>
+            <select class="form-control" id="hangi_sql" name="hangi_sql" onchange=serversuperviserdurum() >
+				<option value="MS SQL">MS SQL</option>
+				<option value="MY SQL">MY SQL</option>
+				<option value="PG SQL">PG SQL</option>
+			</select>
+       
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:200px;">Kodu</span>
+            <span style="padding-left: 5px;"></span>
+            <input 	type="text" class="form-control"  id="user_prog_kodu" maxlength="10">
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:200px;">Server Kullanici</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" class="form-control" id="user_server" maxlength="50">
+        </div>
+
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:200px;">Şifre Sunucu</span>
+            <span style="padding-left: 5px;"></span>
+            <input 	type="password" class="form-control" id="user_pwd_server" maxlength="50">
+						
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:200px;">Ip</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" 	class="form-control" id="user_ip" maxlength="50">
+        </div>
+        <div class="group-box" id="superviserdiv" style="visibility: hidden; opacity: 0; transition: all 0.3s ease;" >
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:200px;">Superviser</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" 	class="form-control" id="superviser" maxlength="50">
+        </div>
+        
+        <div class="aramagroup-box" style="margin-top:5px;">
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="serverButton" class="btn btn-secondary ml-2" onclick="serverKontrol()" ><i class="fa fa-server"></i>	</button>
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="dbKontrolButton" class="btn btn-secondary ml-2" disabled onclick="databaseKontrol()" ><i class="fa fa-database"></i>	</button>
+        </div>
+        <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div></div>
+    
+</div>
+
+<script src="/obs_js_files/server/createdb.js"></script>

@@ -1,0 +1,79 @@
+	
+<style>
+
+.table-hover tbody tr:hover {
+	background-color: #ced4da !important;
+	color: inherit !important;
+}
+
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+.table .thead-dark th {
+ color: #fff;
+  background: #214162;
+}
+
+th:nth-child(1) {
+	width: 15%;
+}
+
+
+
+</style>
+
+
+<div class="card p-4">
+		<div style="display: flex; align-items: center;">
+			<select   style="width:120px;" class="form-control" id="user_modul" name="user_modul">
+				<option value="Cari Hesap">Cari Hesap</option>
+				<option value="Fatura">Fatura</option>
+				<option value="Kambiyo">Kambiyo</option>
+				<option value="Adres">Adres</option>
+				<option value="Kur">Kur</option>
+				<option value="Sms">Sms</option>
+				<option value="Gunluk">Gunluk</option>
+			</select>
+		  	<span style="padding-left: 5px;"></span>
+  			<input type="date" style="width:120px;" id="startDate" class="form-control" value="1900-01-01">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" style="width:120px;" id="endDate" class="form-control" value="2100-12-31">
+			<span style="padding-left: 5px;"></span>
+			<input type="text" id="aciklama" style="width:200px;" class="form-control"  placeholder="Aciklama" />
+			<span style="padding-left: 5px;"></span>
+			<button class="btn btn-primary" type="button" onclick="lograpor()" id="logyenileButton" style="margin-left: 10px;">Yenile</button>
+	</div>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<br>
+<!-- Tablo -->
+<!-- <div class="card p-4">  -->
+<table class="table table-bordered table-hover">
+		 <thead class="thead-dark">
+			<tr>
+				<th>Tarih</th>
+				<th>Mesaj</th>
+				<th>Evrak</th>
+				<th>User</th>
+			</tr>
+		</thead>
+		<tbody id="tableBody">
+		</tbody>
+		<tfoot>
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+        </tr>
+    </tfoot>
+	</table>
+<!--</div>  -->
+
+<input type="hidden" id="logBilgi" name="logBilgi" value="initialValue">
+<!-- Modal -->
+
+<script src="/obs_js_files/user/lograpor.js"></script>
+ 

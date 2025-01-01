@@ -1,0 +1,134 @@
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+<title>OBS Kullanici Ekleme</title>
+<link rel="icon" href="/images/favicon.png" type="image/png" />
+<link rel="stylesheet" href="/css/font-awesome.css" />
+<link rel="stylesheet" href="/style/style.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+
+
+      
+</head>
+<body class="inner_page login">
+	<div class="full_container">
+		<div class="container">
+			<div class="center verticle_center full_height">
+				<div class="login_section">
+					<div class="logo_login">
+						<div class="center">
+							<img width="210" th:src="@{/images/logo/logo.png}" alt="#" />
+						</div>
+					</div>
+					<div class="login_form">
+						<form action="/user/register" method="POST" id="registrationForm" enctype="multipart/form-data" onsubmit="return validateForm()">
+							<fieldset>
+								<div class="field">
+									<label class="label_field">Email Address</label>
+									<input type="email" name="email" id="email" placeholder="E-mail" required />
+								</div>
+								<div class="field">
+									<label class="label_field">Adi</label>
+									<input type="text" name="firstName" id="firstName" placeholder="Adi" required />
+								</div>
+								<div class="field">
+									<label class="label_field">Soy Adi</label>
+									<input type="text" name="lastName" id="lastName" placeholder="Soy Adi" required />
+								</div>
+								<div class="field">
+									<label class="label_field">Sifre</label>
+									<input type="password" name="password" id="password" onkeyup='check();'  placeholder="Sifre" required />
+								</div>
+								<div class="field">
+									<label class="label_field">Sifre Tekrar</label>
+									<input type="password" name="verifypassword" id="verifypassword" onkeyup='check();' placeholder="Sifre Tekrar" required />
+								</div>
+								<div class="field" style="display: flex;">
+									<label class="label_field">Role</label>
+									<select class="form-control" onchange="toggleAdminHesap()" style="max-width:100px;" id="role" name="role">
+										<option value="ADMIN">ADMIN</option>
+										<option value="USER">USER</option>
+									</select>
+								</div>
+								<div class="field" id="adminhesap" style="display: none;">
+									<label class="label_field">Email Address</label>
+									<input type="email" name="adminemail" id="adminemail" placeholder="Admin Hesap"/>
+								</div>
+								<div class="field">
+									<label class="label_field hidden">hidden label</label> 
+									<label id="error" th:if="${error}" class="forgot" th:text="${error}" ></label>
+									<span id="message"  style="font-weight:bold;"></span>
+								</div>
+								<div class="field">
+									<label class="label_field hidden">hidden label</label>
+									<input type="file" name="image" id="image" accept="image/*" />
+								</div>
+								
+								<div class="field margin_0">
+									<label class="label_field hidden">hidden label</label>
+									<button type="submit" class="main_bt" id="submitBtn">Kaydet</button>
+								</div>
+								<div class="field">
+									<label class="label_field hidden">hidden label</label> 
+									<a>Zaten bir hesabınız var mı?</a>
+									<a class="register" href="/login"  style="font-weight:bold;">Login</a>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script>
+var check = function() {
+	  if (document.getElementById('password').value ==
+	    document.getElementById('verifypassword').value) {
+	    document.getElementById('message').style.color = 'green';
+	    document.getElementById('message').textContent = 'sifre uyumlu';
+	  } else {
+	    document.getElementById('message').style.color = 'red';
+	    document.getElementById('message').textContent = 'sifre uyusmuyor';
+	  }
+	}
+	
+document.getElementById('image').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const maxSizeInKB = 500;
+    const maxSizeInBytes = maxSizeInKB * 1024; 
+
+    if (file && file.size > maxSizeInBytes) {
+    	document.getElementById('message').style.color = 'red';
+        document.getElementById('message').textContent = 
+            `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
+        event.target.value = ''; 
+    } else {
+        document.getElementById('message').textContent = '';
+    }
+});	
+function toggleAdminHesap() {
+    const role = document.getElementById("role").value;
+    const adminHesap = document.getElementById("adminhesap");
+    
+    if (role === "USER") {
+        adminHesap.style.display = "block"; // Görünür yap
+    } else {
+        adminHesap.style.display = "none"; // Gizle
+    }
+}
+
+function validateForm() {
+    const role = document.getElementById("role").value;
+    const adminEmail = document.getElementById("adminemail").value;
+    if (role === "USER" && adminEmail.trim() === "") {
+        alert("Lütfen Admin Hesap alanını doldurun.");
+        return false;
+    }
+    return true;
+}
+</script>
+</body>
+</html>

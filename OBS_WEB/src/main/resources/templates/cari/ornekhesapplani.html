@@ -1,0 +1,41 @@
+<div class="card p-4">
+	<label class="form-control" th:text="${kayitadedi}"  style="font-weight: bold;"></label>
+	<br>
+	<button class="btn btn-primary" type="button" id="hplkayitButton"
+		style="width: 150px;" onclick="hplnkaydet()">Hesap Plani Kaydet</button>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+
+<script>
+
+async function hplnkaydet() {
+	const confirmDelete = confirm("Ornek Hesap Plani Kayit Islemi Baslayacak ?");
+	if (!confirmDelete) {
+		return;
+	}
+	document.body.style.cursor = "wait";
+	const $kaydetButton = $('#hplkayitButton');
+	$kaydetButton.prop('disabled', true).text('İşleniyor...');
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+	try {
+		const response = await fetchWithSessionCheck("cari/ornekhesapplanikayit", {
+			method: 'GET',
+			headers: {
+				   'Content-Type': 'application/json',
+			},
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		alert("Ornek Hesap Plani Olusturuldu");
+	} catch (error) {
+		document.getElementById("errorDiv").style.display = "block";
+		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		$kaydetButton.prop('disabled', false).text('Hesap Plani Kaydet');
+		document.body.style.cursor = "default";
+	}
+}
+</script>

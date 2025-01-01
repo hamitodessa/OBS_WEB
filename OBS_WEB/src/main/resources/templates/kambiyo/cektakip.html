@@ -1,0 +1,151 @@
+<style>
+.centered-div {
+	width: 60%; /* Genişlik %80 */
+	margin: 0 auto; /* Ekran ortasında konumlandırma */
+
+	border: 1px solid #ccc;  
+	box-sizing: border-box;
+	text-align: center; 
+
+}
+
+.group-box {
+	padding: 1px;
+	width: 97%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+}
+</style>
+<div class="card p-4">
+	<div class="centered-div">
+		<div class="group-box" style="padding-top:10px;padding-bottom:10px;">
+			<span style="padding-left: 5px;"></span> <label class="form-control"
+				style="width: 130px;">Cek No</label> <span
+				style="padding-left: 5px;"></span>
+				<input type="text"  onkeydown="if(event.key === 'Enter') aramaYap();" id="arama" style="width: 100px;" class="form-control" />
+			<span style="padding-left: 100px;"></span>
+            <button class="btn btn-primary" type="button" id="cekdurumButton"
+					onclick="cekdurumKayit()">Kaydet</button>
+		</div>
+	</div>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<br>
+
+<div class="card p-4">
+	<div class="centered-div">
+	
+		<div class="group-box" style="padding-top:10px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Cek No</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="cekno" style="min-width:200px;text-align: left; display: inline-block;"></span>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Banka</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="banka" style="min-width: 200px; text-align: left; display: inline-block;"></span>
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Cikis Bordro</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="cikisbordro"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Cikis Hesap.Kod</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="cikishesapkod"  style="min-width:200px; text-align: left; display: inline-block;"></span>
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Cikis Tarihi</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="cikistarihi"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Vade</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="vade"  style="min-width:200px;; text-align: left; display: inline-block;"></span>
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Giris Bordro</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="girisbordro"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Giris Hesap.Kod</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="girishesapkod"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Giris Tarihi</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="giristarihi"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Sube</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="sube"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Seri No</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="serino"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Ilk Borclu</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="ilkborclu"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Cek Hesap No</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="cekhesapno"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Tutar</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="tutar"  style="font-weight:bold;min-width:200px;text-align: left; display: inline-block;"></span>
+        </div>
+        
+        <div class="group-box" style="padding-bottom:10px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Giris Oz. Kod</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="gozelkod"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Cikis Oz. Kod</span>
+            <span style="padding-left: 5px;"></span>
+            <span id="cozelkod"  style="min-width:200px;text-align: left; display: inline-block;"></span>
+        </div>
+        
+	</div>
+</div>
+<br>
+<div class="card p-4">
+	<div class="centered-div">
+		<div class="group-box" style="padding-bottom:10px;padding-top:10px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Islem</span>
+            <span style="padding-left: 5px;"></span>
+            <select class="form-control"  style="max-width:200px;" id="islem" name="islem">
+					<option value=""></option>
+					<option value="iade">Iade</option>
+					<option value="protesto">Protesto</option>
+					<option value="tahsil">Tahsil</option>
+			</select>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="min-width:130px;">Tarih</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="date" id="ttarih" class="form-control"
+							th:value="${gunlukTarih}" style="width: 140px; font-weight: bold;" />
+        </div>
+	
+	</div>
+</div>
+
+<script src="/obs_js_files/kambiyo/cekkontrol.js"></script>

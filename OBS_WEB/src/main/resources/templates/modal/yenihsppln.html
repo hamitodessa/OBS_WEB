@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="style/yenihsppln.css" />
+<div class="modal fade" th:fragment="secondModal" id="secondModal" tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true"
+	data-bs-backdrop="static" data-bs-keyboard="false">
+	<div class="modal-dialog modal-dialog-centered"	style="max-width: 650px;">
+		<div class="modal-content" style="height: 600px; overflow-y: hidden;">
+			<div class="modal-header">
+				<input type="text" class="form-control" id="modalSearch" placeholder="Search..." oninput="filterTable()">
+				<button type="button" class="btn-close" data-bs-dismiss="modal"	aria-label="Close"></button>
+			</div>
+			<div id="hsperrorDiv"
+				style="display: none; color: red; font-weight: bold;"></div>
+			<div class="modall-table-container">
+				<table id="modalTable"
+					class="table modal-table table-bordered table-hover">
+					<thead class="thead-dark">
+						<tr>
+							<th>Hesap</th>
+							<th>Unvan</th>
+							<th>Cins</th>
+							<th>Karton</th>
+						</tr>
+					</thead>
+					<tbody id="modalTableBody"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

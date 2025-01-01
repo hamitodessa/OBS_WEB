@@ -1,0 +1,96 @@
+<style>
+.group-box {
+	border: 1px solid #ccc;
+	padding: 7px;
+	margin: 10px;
+	width: 70%;
+	box-sizing: border-box;
+}
+</style>
+<div class="card p-4">
+	<div class="group-box">
+		<div style="display: flex; align-items: center; gap: 10px;">
+			<label for="label5" style="width: 150px;">Yeni Kullanici</label>
+			<div style="position: relative; width: 300px;">
+				<input class="form-control input-width"
+					onkeydown="if(event.key === 'Enter') aramaYap();" type="email"
+					id="hesap" name="hesap">
+			</div>
+		</div>
+	</div>
+	<div id="errorDiv"
+		style="display: none; color: red; font-weight: bold;"></div>
+	<br>
+	<div class="group-box">
+		<button class="btn btn-primary" type="button" id="kaydetButton"
+			style="width: 150px;" disabled onclick="copyUser()">Kaydet</button>
+	</div>
+</div>
+<script>
+
+async function aramaYap() {
+
+	const hesap = document.getElementById("hesap").value;
+	document.getElementById("errorDiv").style.display = "none";
+    document.getElementById("errorDiv").innerText = "";
+	document.body.style.cursor = "wait";
+	   try {
+	        const response = await fetchWithSessionCheck("user/checkuser", {
+	        	method: 'POST',
+	        	headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({ hesap: hesap }),
+	        });
+			if (response.errorMessage) {
+				throw new Error(response.errorMessage);
+			}
+			const $kaydetButton = $('#kaydetButton');
+			$kaydetButton.prop('disabled', false).text('Kaydet');
+			document.body.style.cursor = "default";
+	    } catch (error) {
+	        document.getElementById("errorDiv").style.display = "block";
+	        document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	    } finally {
+	    	document.body.style.cursor = "default";
+	     }
+	}
+	
+async function copyUser() {
+
+	const hesap = document.getElementById("hesap").value;
+	if (!hesap) {
+	    alert("Lütfen kullanici alanini doldurun.");
+	    return;
+	}
+	const $kaydetButton = $('#kaydetButton');
+	$kaydetButton.prop('disabled', true).text('Islem Yapiliyor...');
+
+	
+	document.getElementById("errorDiv").style.display = "none";
+    document.getElementById("errorDiv").innerText = "";
+	document.body.style.cursor = "wait";
+	   try {
+	        const response = await fetchWithSessionCheck("user/savecopyuser", {
+	        	method: 'POST',
+	        	headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: new URLSearchParams({ hesap: hesap }),
+	        });
+			if (response.errorMessage) {
+				throw new Error(response.errorMessage);
+			}
+			document.body.style.cursor = "default";
+			setTimeout(() => {
+				alert("Kullanici Olusturuldu :" + response.success);
+			}, 100);
+	    } catch (error) {
+	        document.getElementById("errorDiv").style.display = "block";
+	        document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	    } finally {
+	    	document.body.style.cursor = "default";
+	    	$kaydetButton.prop('disabled', false).text('Kaydet');
+	     }
+	}
+</script>

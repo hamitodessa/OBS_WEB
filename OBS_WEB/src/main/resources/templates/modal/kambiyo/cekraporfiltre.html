@@ -1,0 +1,172 @@
+<style>
+    .modal-dialog {
+     	height: 500px; /* Modal yüksekliği */
+     	
+        margin: 0 auto; /* Modalı ortalar */
+    }
+
+    .modal-content {
+        overflow-y: auto; /* Fazla içerik için kaydırma */
+    }
+    .modal-backdrop {
+        z-index: 1040 !important; /* Birinci modalın üstüne çıkacak */
+    }
+    #secondModal {
+        z-index: 1050 !important; /* İkinci modal birinciden daha yukarıda */
+    }
+</style>
+
+<!-- Modal -->
+ <div class="modal fade" th:fragment="modalcekrapor" id="firstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="min-width:790px;" >
+    <div class="modal-content">
+    
+      	<div class="modal-header">
+       			 <h5 class="modal-title" id="exampleModalLabel">Cek Raporlama</h5>
+        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      	</div>
+		
+      <div class="modal-body">
+         <div class="input-group" style="padding:2px;">
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk ve Son Cek</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="cekno1" style="max-width:120px;" aria-label="Ilk Hesap" class="form-control" >
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="cekno2" style="max-width:120px;" aria-label="Son Hesap" value="ZZZZZZZZZZ" class="form-control" >
+		
+			<span style="padding-left: 5px;"></span>
+			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk ve Son Durum</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="durum1" style="max-width:120px;"  aria-label="Ilk Hesap" class="form-control" >
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="durum2" style="max-width:120px;"  aria-label="Son Hesap" value="Z" class="form-control" >
+		
+		</div>
+		
+        <div class="input-group" style="padding:2px;">
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son Vade</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" id="vade1" style="max-width:120px;" aria-label="vade1" class="form-control" value="1900-01-01">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" id="vade2" style="max-width:120px;" aria-label="vade2" class="form-control" value="2100-12-31">
+  			
+  			<span style="padding-left: 5px;"></span>
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son T.Tarih</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" id="ttar1" style="max-width:120px;"  class="form-control" value="1900-01-01">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" id="ttar2" style="max-width:120px;"  class="form-control" value="2100-12-31">
+  			
+		</div>
+		
+		<div class="input-group" style="padding:2px;">
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son G.Bordro</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="gbor1" style="max-width:120px;"  class="form-control">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="gbor2" style="max-width:120px;"  value="ZZZZZZZZZZ" class="form-control">
+		
+			<span style="padding-left: 5px;"></span>
+			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Giris / Cikis Ozel</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<select id="gozel" class="form-control"	style="padding-left:5px;max-width:120px;" >
+				<option value="" selected></option>
+				<option value="bos">Bos</option>
+			</select>
+  			<span style="padding-left: 5px;"></span>
+  			<select id="cozel" class="form-control"	style="padding-left:5px;max-width:120px;" >
+				<option value="" selected></option>
+				<option value="bos">Bos</option>
+			</select>
+		</div>
+		
+		<div class="input-group" style="padding:2px;">
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son Giris Tarih</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" id="gtar1" style="max-width:120px;"  class="form-control" value="1900-01-01">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" id="gtar2" style="max-width:120px;"  class="form-control" value="2100-12-31">
+
+			<span style="padding-left: 5px;"></span>
+			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son Cins</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="cins1" style="max-width:120px;"  class="form-control">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="cins2" style="max-width:120px;"   value="ZZZ" class="form-control">
+
+		</div>
+		<div class="input-group" style="padding:2px;">
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son Cik.Bordro</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="cbor1" style="max-width:120px;"  class="form-control">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="cbor2" style="max-width:120px;"  value="ZZZZZZZZZZ" class="form-control">
+		
+ 			<span style="padding-left: 5px;"></span>
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son Cik.Hesap</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="ches1" style="max-width:120px;" aria-label="Ilk Cins" class="form-control" ondblclick="openSecondModal('ches1')">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="ches2" style="max-width:120px;" aria-label="Son Cins" value="ZZZZZZZZZZZZ" class="form-control" ondblclick="openSecondModal('ches2')">
+		</div>
+		
+		<div class="input-group" style="padding:2px;">
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son Cik Tar</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" id="ctar1" style="max-width:120px;"  class="form-control" value="1900-01-01">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="date" id="ctar2" style="max-width:120px;"  class="form-control" value="2100-12-31">
+			
+			<span style="padding-left: 5px;"></span>
+			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Turu</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<select id="hangi_tur" class="form-control"	style="padding-left:5px;max-width:120px;" >
+				<option value="G" selected>GIREN</option>
+				<option value="C">CIKAN</option>
+				<option value="M">MEVCUT</option>
+			</select>
+		</div>
+		
+		<div class="input-group" style="padding:2px;">
+  			<div class="input-group-prepend">
+    			<span class="input-group-text" style="width:130px;">Ilk Son G.Hesap</span>
+  			</div>
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="ghes1" style="max-width:120px;"  class="form-control" ondblclick="openSecondModal('ghes1')">
+  			<span style="padding-left: 5px;"></span>
+  			<input type="text" id="ghes2" style="max-width:120px;"  value="ZZZZZZZZZZ" class="form-control" ondblclick="openSecondModal('ghes2')">
+		
+		</div>
+ 		
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Raporla</button>
+      </div>
+    </div>
+  </div>
+</div>

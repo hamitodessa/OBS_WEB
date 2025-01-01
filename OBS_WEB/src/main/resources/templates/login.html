@@ -1,0 +1,56 @@
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBS Sistem</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="images/favicon.png" type="image/png" />
+<link rel="stylesheet" href="css/bootstrap.min.css" />
+<link rel="stylesheet" href="style/style.css" />
+</head>
+<body class="inner_page login">
+	<div class="full_container">
+		<div class="container">
+			<div class="center verticle_center full_height">
+				<div class="login_section">
+					<div class="logo_login">
+						<div class="center">
+							<img width="210" src="images/logo/obs_logo.png" alt="#" />
+						</div>
+					</div>
+					<div class="login_form">
+						<form action="/login" method="POST">
+							<fieldset>
+								<div class="field">
+									<label class="label_field">Email Address</label> <input
+										value="hamit@okumus.com" type="email" name="username"
+										placeholder="E-mail" />
+								</div>
+								<div class="field">
+									<label class="label_field">Password</label> <input value="1"
+										type="password" name="password" placeholder="Password" />
+								</div>
+								<div class="field margin_0">
+									<label class="label_field hidden">hidden label</label>
+									<button class="main_bt" type="submit">Giris Yap</button>
+								</div>
+								<div class="field">
+									<label class="label_field hidden">hidden label</label> <a
+										class="forgot" th:href="@{/user/send_password}">Şifremi
+										Unuttum</a> <br> <label class="label_field hidden">hidden
+										label</label> <a class="register" th:href="@{/user/register}">Hesabınız
+										yok mu?</a>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

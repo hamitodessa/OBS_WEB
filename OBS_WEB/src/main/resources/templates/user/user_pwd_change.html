@@ -1,0 +1,76 @@
+
+<style>
+    .pmessage {
+        opacity: 0;
+        transition: opacity 0.3s ease; /* Yumuşak geçiş için */
+    }
+    .psuccess {
+        color: green;
+    }
+    .perror {
+        color: red;
+    }
+    .pvisible {
+        opacity: 1;
+    }
+ </style>
+<div class="center verticle_center">
+    <div class="login_section">
+        <div class="login_form">
+            <form id="passwordForm">
+                 <fieldset>
+                    <div class="field">
+                        <label class="label_field">Şifre</label>
+                        <input type="password" name="oldPassword" id="oldPassword" placeholder="Şifre" required />
+                    </div>
+                    <div class="field">
+                        <label class="label_field">Şifre Tekrar</label>
+                        <input type="password" name="newPassword" id="newPassword" placeholder="Yeni Şifre" required />
+                    </div>
+                    
+                     <div class="field  margin_0">
+						<label class="label_field hidden">hidden label</label> 
+						<label id="message" class="message hidden"></label>
+					</div>
+                </fieldset>
+                <div class="field">
+                        <label class="label_field"></label>
+                         <button class="main_bt" type="submit">Şifre Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function () {
+    $('#passwordForm').on('submit', async function (event) {
+        event.preventDefault();
+        const $submitButton = $(this).find('button[type="submit"]');
+        $submitButton.prop('disabled', true).text('İşleniyor...');
+        try {
+            const formData = new URLSearchParams(new FormData(this));
+            const response = await fetchWithSessionCheck('user/user_pwd_change', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            });
+            const result = response;
+            if (! result.errorMessage === "")  {
+                $('#message')
+                    .removeClass("psuccess hidden")
+                    .addClass("perror pvisible")
+                    .text(result.errorMessage || "Bir hata oluştu.");
+            }
+        } catch (error) {
+            $('#message')
+                .removeClass("psuccess hidden")
+                .addClass("perror pvisible")
+                .text(error.message || "Beklenmeyen bir hata oluştu.");
+        } finally {
+            $submitButton.prop('disabled', false).text('Şifre Güncelle');
+        }
+    });
+});
+</script>

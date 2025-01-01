@@ -1,0 +1,118 @@
+<!-- Created with Jaspersoft Studio version 7.0.0.final using JasperReports Library version 7.0.0-b478feaa9aab4375eba71de77b4ca138ad2f62aa  -->
+<jasperReport name="Blank_A4" language="java" columnCount="1" pageWidth="595" pageHeight="842" columnWidth="568" leftMargin="7" rightMargin="20" topMargin="25" bottomMargin="20" uuid="68da6de0-69e1-401b-8a60-d3af172bcd35">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="479"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="521"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<parameter name="yaziile" class="java.lang.String"/>
+	<parameter name="Aciklama" class="java.lang.String"/>
+	<parameter name="Borc_Alacak" class="java.lang.String"/>
+	<parameter name="Unvan" class="java.lang.String"/>
+	<parameter name="Adr1" class="java.lang.String"/>
+	<parameter name="Adr2" class="java.lang.String"/>
+	<parameter name="Semt" class="java.lang.String"/>
+	<parameter name="Tarih" class="java.lang.String"/>
+	<parameter name="Evrak" class="java.lang.String"/>
+	<parameter name="Cins" class="java.lang.String"/>
+	<query language="SQL"><![CDATA[SELECT * FROM TAH_AYARLAR]]></query>
+	<field name="LOGO" class="byte[]">
+		<property name="com.jaspersoft.studio.field.name" value="LOGO"/>
+		<property name="com.jaspersoft.studio.field.label" value="LOGO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="TAH_AYARLAR"/>
+	</field>
+	<field name="FIR_ISMI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FIR_ISMI"/>
+		<property name="com.jaspersoft.studio.field.label" value="FIR_ISMI"/>
+	</field>
+	<field name="ADR_1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ADR_1"/>
+		<property name="com.jaspersoft.studio.field.label" value="ADR_1"/>
+	</field>
+	<field name="ADR_2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ADR_2"/>
+		<property name="com.jaspersoft.studio.field.label" value="ADR_2"/>
+	</field>
+	<field name="VD_VN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VD_VN"/>
+		<property name="com.jaspersoft.studio.field.label" value="VD_VN"/>
+	</field>
+	<field name="MAIL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MAIL"/>
+		<property name="com.jaspersoft.studio.field.label" value="MAIL"/>
+	</field>
+	<field name="DIGER" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DIGER"/>
+		<property name="com.jaspersoft.studio.field.label" value="DIGER"/>
+	</field>
+	<field name="KASE" class="byte[]">
+		<property name="com.jaspersoft.studio.field.name" value="KASE"/>
+		<property name="com.jaspersoft.studio.field.label" value="KASE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="TAH_AYARLAR"/>
+	</field>
+	<background splitType="Stretch"/>
+	<pageHeader height="561" splitType="Stretch">
+		<element kind="image" uuid="b398afca-79b9-464a-8e7a-63a590421e82" stretchType="NoStretch" x="365" y="30" width="180" height="77" scaleImage="FillFrame">
+			<expression><![CDATA[$F{LOGO}]]></expression>
+		</element>
+		<element kind="textField" uuid="38ea50d9-c92a-416c-a1e3-537d6c66cae9" key="Adr1" x="28" y="212" width="306" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$P{Adr1}]]></expression>
+		</element>
+		<element kind="staticText" uuid="03355ef5-b157-4704-b335-18378c963fe5" key="evrlbl" x="426" y="212" width="48" height="14">
+			<text><![CDATA[Evrak]]></text>
+		</element>
+		<element kind="textField" uuid="89754457-7068-456b-b5c9-6c594090c881" key="Cins" x="28" y="156" width="518" height="14" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Center">
+			<expression><![CDATA[$P{Cins}]]></expression>
+		</element>
+		<element kind="textField" uuid="a058e9d3-f5f7-4cc1-a3b7-78a2a7a127f4" key="Tarih" x="474" y="198" width="72" height="14" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+			<expression><![CDATA[$P{Tarih}]]></expression>
+		</element>
+		<element kind="textField" uuid="f1d834a0-fd59-4058-b420-63dcb98eec43" key="Adr2" x="28" y="226" width="306" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$P{Adr2}]]></expression>
+		</element>
+		<element kind="textField" uuid="b72a81b1-7f4c-4547-bf7e-eab44ed8eebc" key="evrtext" x="474" y="212" width="72" height="14" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+			<expression><![CDATA[$P{Evrak}]]></expression>
+		</element>
+		<element kind="textField" uuid="233e0cfa-49eb-4e56-be90-1b8ecf75f9aa" key="Adr3" x="28" y="240" width="306" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$P{Semt}]]></expression>
+		</element>
+		<element kind="staticText" uuid="6438509f-b1e2-41d1-9d13-ae636b5ee23d" key="Text8" x="426" y="198" width="48" height="14">
+			<text><![CDATA[Tarih]]></text>
+		</element>
+		<element kind="textField" uuid="620d9472-d52d-469e-8d07-8311a52100b9" key="Unvan" x="28" y="198" width="306" height="14" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+			<expression><![CDATA[$P{Unvan}]]></expression>
+		</element>
+		<element kind="textField" uuid="8a7af138-c831-4c65-9d02-156dda62c2bd" x="30" y="423" width="516" height="14" fontName="Arial Narrow" fontSize="10.0" pdfFontName="static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$P{yaziile}]]></expression>
+		</element>
+		<element kind="staticText" uuid="e473f824-44fb-4561-9824-0afcda498b1a" x="408" y="459" width="100" height="14" hTextAlign="Center">
+			<text><![CDATA[Kase - Imza]]></text>
+		</element>
+		<element kind="image" uuid="e8cf4822-d1e3-4b6c-90b1-5f5ec13c109f" x="408" y="489" width="138" height="72" scaleImage="FillFrame">
+			<expression><![CDATA[$F{KASE}]]></expression>
+		</element>
+		<element kind="textField" uuid="c52e60d6-2ed2-46d6-901a-534a99d83877" key="Aciklama" x="30" y="306" width="518" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$P{Aciklama}]]></expression>
+		</element>
+		<element kind="textField" uuid="5356087e-0f29-4480-8510-e44c04df4df7" x="28" y="30" width="324" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$F{FIR_ISMI}]]></expression>
+		</element>
+		<element kind="textField" uuid="046de6d1-f9ae-480b-9b45-cc831b93e8c6" x="28" y="100" width="324" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$F{DIGER}]]></expression>
+		</element>
+		<element kind="textField" uuid="471beabb-a9a4-4f1c-b03f-8169afb2674d" x="28" y="72" width="324" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$F{VD_VN}]]></expression>
+		</element>
+		<element kind="textField" uuid="e653dffa-cc1f-4b3f-a55d-386c94a9697d" x="28" y="44" width="324" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$F{ADR_1}]]></expression>
+		</element>
+		<element kind="textField" uuid="8cea5d1d-c03f-4752-983c-8def18003fa2" x="28" y="58" width="324" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$F{ADR_2}]]></expression>
+		</element>
+		<element kind="textField" uuid="52280933-1658-48e7-b790-70b1b9eedc28" x="28" y="86" width="324" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$F{MAIL}]]></expression>
+		</element>
+		<element kind="textField" uuid="f32f86a7-d630-40ea-a4c5-2a8abff425fc" x="30" y="321" width="518" height="14" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<expression><![CDATA[$P{Borc_Alacak}]]></expression>
+		</element>
+	</pageHeader>
+</jasperReport>

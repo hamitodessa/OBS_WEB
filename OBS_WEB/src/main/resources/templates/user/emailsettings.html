@@ -1,0 +1,152 @@
+<style>
+.pmessage {
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.psuccess {
+	color: green;
+}
+
+.perror {
+	color: red;
+}
+
+.pvisible {
+	opacity: 1;
+}
+</style>
+<div class="card p-4 mb-4">
+	<div class="form-container">
+		<div style="display: flex; justify-content: center;">
+			<div class="centered-container">
+				<br>
+				<form id="updateForm" action="/user/emailsettings" method="post"
+					enctype="multipart/form-data">
+					<fieldset>
+						<div class="form-row">
+							<label class="form-check-label" for="input1">Mail</label> <input
+								class="form-control input-width" type="email" id="hesap"
+								name="hesap" th:value="${user.hesap}">
+						</div>
+						<div class="form-row">
+							<label class="form-check-label" for="input2">Host</label> <input
+								class="form-control input-width" type="text" id="host"
+								name="host" th:value="${user.host}">
+						</div>
+						<div class="form-row">
+							<label class="form-check-label" for="input3">Port</label> <input
+								class="form-control port-width" type="text" id="port"
+								name="port" th:value="${user.port}">
+						</div>
+						<div class="form-row">
+							<label class="form-check-label" for="input4">Sifre</label> <input
+								class="form-control input-width" type="password" id="sifre"
+								name="sifre" th:value="${user.sifre}">
+						</div>
+						<br> <br>
+						<div class="form-row">
+							<label class="form-check-label" for="input5">Hesap</label> <input
+								class="form-control input-width" type="email" id="gon_mail"
+								name="gon_mail" th:value="${user.gon_mail}">
+						</div>
+						<div class="form-row">
+							<label class="form-check-label" for="input6">Isim</label> <input
+								class="form-control input-width" type="text" id="gon_isim"
+								name="gon_isim" th:value="${user.gon_isim}">
+						</div>
+						<div class="form-row">
+							<label class="form-check-label" for="input4"></label> <label
+								class="form-check-label" style="width: 40px;" for="input4">SSL</label>
+							<input type="checkbox" id="bssl" name="bssl"
+								th:checked="${user.bssl}"> <label
+								class="form-check-label" style="width: 40px;" for="input4">TSL</label>
+							<input type="checkbox" id="btsl" name="btsl"
+								th:checked="${user.btsl}">
+						</div>
+						<div class="form-row">
+							<label class="form-check-label" for="input6"></label>
+							<button type="submit" class="main_bt" id="submitBtn">Kaydet</button>
+						</div>
+						<div class="field">
+							<label class="label_field hidden">hidden label</label> <label
+								id="error" th:if="${error}" class="forgot" th:text="${error}"></label>
+							<span id="message" style="font-weight: bold;"></span>
+						</div>
+						<input type="hidden" id="Id" name="id" th:value="${user.Id}">
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+.centered-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid #ced4da;
+	padding: 10px;
+	border-radius: 5px;
+	width: 60%;
+}
+
+.form-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px; /* Satırlar arası boşluk */
+}
+
+.form-container .form-row+.form-row {
+	margin-top: 10px;
+	/* Satırlar arası boşluk miktarını burada ayarlayın */
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	gap: 10px; /* Label ve input arasındaki boşluk */
+}
+
+.form-row label {
+	width: 80px; /* Label genişliği */
+}
+
+.input-width {
+	width: 300px; /* Input genişliği */
+}
+
+.port-width {
+	width: 50px; /* Input genişliği */
+}
+</style>
+<script>
+$(document).ready(function () {
+    $('#updateForm').on('submit', async function (event) {
+        event.preventDefault();
+        const $submitButton = $(this).find('button[type="submit"]');
+        $submitButton.prop('disabled', true).text('İşleniyor...');
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetchWithSessionCheck('user/emailsettings_save', {
+                method: 'POST',
+                body: formData,
+            });
+            const result = response;
+            if (! result.errorMessage === "") {
+                $('#message').removeClass("psuccess hidden")
+                    .addClass("perror pvisible")
+                    .text(result.error);
+            }
+        } catch (error) {
+            $('#message')
+                .removeClass("psuccess hidden")
+                .addClass("perror pvisible")
+                .text(error.message || "Bir hata oluştu.");
+        } finally {
+            $submitButton.prop('disabled', false).text('Kaydet');
+        }
+    });
+});
+</script>

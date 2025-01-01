@@ -1,0 +1,288 @@
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBS Sistem</title>
+<link rel="icon" href="images/favicon.png" type="image/png" />
+<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'	rel='stylesheet'>
+<link rel="stylesheet" href="/css/font-awesome.css" />
+<link rel="stylesheet" href="/style/style.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/bootstrap-select.css" />
+<link rel="stylesheet" href="/css/perfect-scrollbar.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/animate.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+
+<link rel="stylesheet" href="style/yenihsppln.css" />
+<style>
+
+.hidden {
+    display: none;
+}
+</style>
+
+</head>
+<body class="dashboard dashboard_1">
+	<div class="full_container">
+		<div class="inner_container">
+			<!-- Sidebar  -->
+			<nav id="sidebar">
+				<div class="sidebar_blog_1">
+					<div class="sidebar-header">
+						<div class="logo_section">
+							<a href="/index"><img class="logo_icon img-responsive"
+								src="images/logo/logo_icon.png" alt="#" /></a>
+						</div>
+					</div>
+					<div class="sidebar_user_info">
+						<div class="icon_setting"></div>
+						<div class="user_profle_side">
+							<div class="user_img">
+								<img class="img-responsive" th:if="${profileImage != null}"
+									th:src="'data:image/jpeg;base64,' + ${profileImage}" alt="#" />
+							</div>
+							<div class="user_info">
+								<span sec:authorize="isAuthenticated()"
+									sec:authentication="name"></span>
+								<p>
+									<span class="online_animation"></span> Online
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="sidebar_blog_2">
+					<h4>Menu</h4>
+					<ul class="list-unstyled components">
+						<li class="active"><a href="#carihesap"	data-toggle="collapse" aria-expanded="false"
+							class="dropdown-toggle"> <i	class="fa fa-dashboard yellow_color"></i> <span>Cari Hesap</span></a>
+							<ul class="collapse list-unstyled" id="carihesap">
+								<li><a href="" class="changeLink"
+									data-url="/cari/hspplngiris"><span>Hesap Plani Giris</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/hspplnliste"><span>Hesap Plani</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/dekont"> <span>Dekont</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/tahsilat"> <span>Tahsilat Fisi</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/ekstre"> <span>Cari Ekstre</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/mizan"> <span>Cari Mizan</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/ozelmizan"> <span>Cari Ozel Mizan</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/dvzcevirme"> <span>Cari Dovize Cevirme</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/tahsilatrapor"> <span>Tahsilat Raporlama</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/tahsilatdegerleri"> <span>Tahsilat Degerleri</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/ornekhesapplani"> <span>Ornek Hesap Plani</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/cari/carikoddegis"> <span>Kod Degistirme</span></a></li>
+								<li><a href="" onclick="firmaIsmi('cari', event)"
+									> <span>Firma Ismi Degistirme</span></a></li>
+							</ul>
+						</li>
+						<li class="active"><a href="#doviz" data-toggle="collapse"
+							aria-expanded="false" class="dropdown-toggle"> <i
+								class="fa fa-money orange_color"></i> <span>Kur Islemleri</span></a>
+							<ul class="collapse list-unstyled" id="doviz">
+								<li><a href="" class="changeLink"
+									data-url="/kur/kurgiris"><span>Kur Giris</span></a></li>
+								<li><a href="" class="changeLink"
+									data-url="/kur/kurrapor"><span>Kur Raporlama</span></a></li>
+							</ul>
+						</li>
+							
+						<li class="active"><a href="#adres" data-toggle="collapse"
+							aria-expanded="false" class="dropdown-toggle"> <i class="fa fa-envelope-o blue2_color"></i> <span>Adres Islemleri</span></a>
+							<ul class="collapse list-unstyled" id="adres">
+								<li><a href="" class="changeLink" data-url="/adres/adresgiris"><span>Adres Giris</span></a></li>
+								<li><a href="" class="changeLink" data-url="/adres/etiketliste"><span>Etiket Listeleme</span></a></li>
+								<li><a href="" class="changeLink" data-url="/adres/etiketayar"><span>Etiket Ayar</span></a></li>
+								<li><a href="" onclick="firmaIsmi('adres', event)"><span>Firma Ismi Degistirme</span></a></li>
+							</ul>
+						</li>
+						
+						<li class="active"><a href="#kambiyo" data-toggle="collapse"
+							aria-expanded="false" class="dropdown-toggle"> <i
+								class="fa fa-table purple_color2"></i> <span>Kambiyo Islemleri</span></a>
+							<ul class="collapse list-unstyled" id="kambiyo">
+								<li><a href="" class="changeLink" data-url="/kambiyo/cekgiris"><span>Cek Giris</span></a></li>
+								<li><a href="" class="changeLink" data-url="/kambiyo/cekcikis"><span>Cek Cikis</span></a></li>
+								<li><a href="" class="changeLink" data-url="/kambiyo/cektakip"><span>Cek Takip</span></a></li>
+								<li><a href="" class="changeLink" data-url="/kambiyo/cekrapor"><span>Cek Raporlama</span></a></li>
+								<li><a href="" onclick="firmaIsmi('kambiyo', event)"><span>Firma Ismi Degistirme</span></a></li>
+							</ul>
+						</li>
+						
+						<li class="active"><a href="#stok" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"> 
+							<i class="fa fa-clone yellow_color"></i><span>Stok Islemleri</span></a>
+							<ul class="collapse list-unstyled" id="stok">
+								<li><a href="" class="changeLink" data-url="/stok/urunkart"><span>Urun Giris</span></a></li>
+							</ul>
+						</li>
+						
+						<li class="active"><a href="#kereste" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+						 <i class="fa fa-paper-plane red_color"></i> <span>Kereste Islemleri</span></a>
+							<ul class="collapse list-unstyled" id="kereste">
+								<li><a href="" class="changeLink" data-url=""><span>Giris</span></a></li>
+							</ul>
+						</li>
+						<li><a href="" data-url="/user/gidenraporlar" class="changeLink" ><i class="fa fa-briefcase blue1_color"></i><span>Giden Raporlar</span></a></li>
+
+						<li><a href="" data-url="/user/lograpor" class="changeLink" ><i class="fa fa-object-group blue2_color"></i><span>Log Rapor</span></a></li>
+
+						<li><a href="#ayar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
+									class="fa fa-cog yellow_color"></i> <span>Ayarlar</span></a>
+							<ul class="collapse list-unstyled" id="ayar">
+								<li><a href="" class="changeLink" data-url="/user/user_pwd_change"> <span>Sifre Degis</span></a></li>
+								<li><a href="" class="changeLink" data-url="/user/user_update"> <span>Isim Degis</span></a></li>
+								<li><a href="" class="changeLink" data-url="/user/userdetails"> <span>Kullanici Detaylari</span></a></li>
+								<li th:if="${menuitemvisible}">
+   										 <a href="" class="changeLink" data-url="/user/userizinler">
+        								<span>Admin İşlemleri</span></a>
+								</li>
+								<li><a href="" class="changeLink" data-url="/user/emailsettings"> <span>E Mail Ayarlari</span></a></li>
+								<li><a href="" class="changeLink" data-url="/user/createdb"> <span>Yeni Veritabani Olustur</span></a></li>
+								<li><a href="" class="changeLink" data-url="/user/copyuser"> <span>Kullanici Kopyala</span></a></li>
+								<li><a href="" class="changeLink" data-url="/user/deleteaccount"> <span>Hesap Silme</span></a></li>
+							</ul>
+						</li>
+
+					</ul>
+				</div>
+			</nav>
+<!-- 
+class="fa fa-paper-plane red_color"
+class="fa fa-map purple_color2"
+class="fa fa-bar-chart-o green_color"
+ -->							
+
+			<!-- end sidebar -->
+			<!-- right content -->
+			<div id="content">
+				<!-- topbar -->
+				<div class="topbar">
+					<nav class="navbar navbar-expand-lg navbar-light">
+						<div class="full">
+							<button type="button" id="sidebarCollapse" class="sidebar_toggle">
+								<i class="fa fa-bars"></i>
+							</button>
+							<div class="logo_section">
+								<a href="index"><img class="img-responsive"
+									src="images/logo/obs_logo.png" alt="#" /></a>
+							</div>
+							<div class="right_topbar">
+								<div class="icon_info">
+									<button type="button" class="sidebar_toggle"
+										onclick="window.location.href='/logout'">
+										<i class="fa fa-sign-out"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</nav>
+				</div>
+				<!-- end topbar -->
+				<!-- dashboard inner -->
+				<div class="midde_cont">
+					<!-- Baslik  -->
+					<div class="container-fluid">
+						<div class="row column_title">
+							<div class="col-md-12">
+								<div class="page_title">
+								<h2 id="baslik" style="white-space: pre;" ></h2>
+							<!--		<h2 id="baslik" th:text="${baslik}"></h2>   -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Baslik  son-->
+					<div id="ara_content">
+						<!-- Dinamik içerik buraya yüklenecek -->
+					</div>
+					<!-- footer -->
+					<div class="container-fluid">
+						<div class="footer">
+							<p>
+								Copyright © 2024 Designed by html.design. All rights reserved.
+								<br>
+								<br> Distributed By: <a href="https://okumus.gen.tr/">Hamit	Okumus</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- end dashboard inner -->
+			</div>
+		</div>
+	</div>
+	<script>
+	function loadDefaultContent() {
+		sayfaYukle('/wellcome'); // İlk yüklenen içerik 'deneme.html' olacak
+    }
+	async function sayfaYukle(url) {
+		try {
+			document.body.style.cursor = 'wait';
+			$.ajax({
+				url: url,
+				type: "GET",
+				success: function(data) {
+					if (data.includes('<form') && data.includes('name="username"')) {
+						window.location.href = "/login";
+					} else {
+						$('#ara_content').html(data);
+						getWellcomeData();
+					}
+				},
+				error: function(xhr) {
+					if (xhr.status === 401) {
+						window.location.href = "/login";
+					} else {
+						$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
+					}
+				},
+				complete: function() {
+					$('body').css('cursor', 'default');
+				}
+			});
+		} catch (error) {
+			document.getElementById('ara_content').innerHTML =
+				`<h2>Bir hata oluştu: ${error.message}</h2>`;
+		} finally {
+			document.body.style.cursor = 'default';
+		}
+	}
+	function refreshPage() {
+          location.reload(); 
+    }
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const trigger = urlParams.get('trigger');
+        if (trigger === 'userdetails') {
+            const link = document.querySelector('.changeLink[data-url="/user/userdetails"]');
+            if (link) {
+                link.click();
+            }
+        }
+        else{
+        	loadDefaultContent();
+		}
+    };
+    </script>
+    <script src="/obs_js_files/fetchWithSessionCheck.js"></script>
+    <script src="/obs_js_files/fetchWithSessionCheckForDownload.js"></script>
+      
+    <script src="/obs_js_files/index.js"></script>
+    <script src="/obs_js_files/obs_global.js"></script>
+
+	<script src="/obs_js_files/modal/yeni_hsppln.js"></script>
+</body>
+</html>

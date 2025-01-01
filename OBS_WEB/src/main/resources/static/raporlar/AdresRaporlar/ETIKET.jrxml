@@ -1,0 +1,48 @@
+<!-- Created with Jaspersoft Studio version 7.0.0.final using JasperReports Library version 7.0.0-b478feaa9aab4375eba71de77b4ca138ad2f62aa  -->
+<jasperReport name="ETIKET" language="java" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="820" columnWidth="281" columnSpacing="10" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7dc58891-00f9-4a8b-9fee-e362721686a5">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.report.description" value=""/>
+	<style name="Style1"/>
+	<query language="SQL"><![CDATA[Select * From Adres]]></query>
+	<field name="adi" class="java.lang.String"/>
+	<field name="adres1" class="java.lang.String"/>
+	<field name="adres2" class="java.lang.String"/>
+	<field name="telefon" class="java.lang.String"/>
+	<field name="semt" class="java.lang.String"/>
+	<field name="sehir" class="java.lang.String"/>
+	<background splitType="Stretch"/>
+	<detail>
+		<band height="80" splitType="Stretch">
+			<element kind="textField" uuid="af7302d0-5663-4ba8-96d2-8a54da5c52ea" x="0" y="0" width="280" height="15" fontName="SansSerif" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Left">
+				<paragraph lineSpacing="Single"/>
+				<expression><![CDATA[$F{adi}]]></expression>
+			</element>
+			<element kind="textField" uuid="ad19154c-62e8-4e98-9e6f-aee6a0049fe1" key="Adres1" x="0" y="15" width="280" height="15" fontName="SansSerif" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H" bold="false">
+				<expression><![CDATA[$F{adres1}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9383d56f-0cd1-4248-9e0a-f9c56bdbc253"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="5013181b-1e86-45e8-aa1d-1e4f5ceeb7f5" key="Adres2" x="0" y="30" width="280" height="15" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+				<expression><![CDATA[$F{adres2}]]></expression>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="89ace9ab-05c9-4729-a9fc-038ed2e6c9e1" x="0" y="45" width="280" height="15" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+				<expression><![CDATA[$F{telefon}]]></expression>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			</element>
+			<element kind="textField" uuid="d1f66d00-f290-4dfc-8ce3-9cd51869c3c1" key="Semt" x="0" y="60" width="130" height="15" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+				<expression><![CDATA[$F{semt}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f32866b-ed8d-490d-95ef-0cd6e03988b2"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="1e011308-71ad-49b6-8ef3-ba8c226faed5" key="Sehir" x="130" y="60" width="150" height="15" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+				<expression><![CDATA[$F{sehir}]]></expression>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</detail>
+</jasperReport>

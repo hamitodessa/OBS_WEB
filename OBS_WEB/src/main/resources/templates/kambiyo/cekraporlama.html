@@ -1,0 +1,81 @@
+	
+<style>
+
+.double-column {
+	text-align: right;
+}
+
+.table-hover tbody tr:hover {
+	background-color: #ced4da !important;
+	color: inherit !important;
+}
+
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+.table .thead-dark th {
+ color: #fff;
+  background: #214162;
+}
+
+
+
+</style>
+
+
+<div class="card p-4">
+		<div style="display: flex; align-items: center;">
+		<button class="btn btn-primary" type="button" id="rapyenileButton" style="margin-left: 10px;"
+			onclick="openFirstModal('cekrapor')">Yenile</button>
+		 <select
+			id="reportFormat" class="form-control"
+			style="width: 150px;margin-left: 10px;"
+			onchange="rapdownloadReport(this.value)"  disabled>
+			<option value="" disabled selected>Rapor Indir</option>
+			<option value="pdf">PDF</option>
+			<option value="xlsx">Excel (XLSX)</option>
+			<option value="docx">Word (DOCX)</option>
+			<option value="xml">XML</option>
+		</select>
+	</div>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<br>
+<!-- Tablo -->
+<!-- <div class="card p-4">  -->
+<div style="overflow-x: auto; width: 100%;height:650px;">
+	<table class="table table-bordered table-hover" >
+		<thead class="thead-dark">
+			<tr>
+				<th>Cek_No</th>
+				<th>Vade</th>
+				<th>Giris_Bordro</th>
+				<th>Giris_Tarihi</th>
+				<th>Giris_Musteri</th>
+				<th style="min-width:200px;">Banka</th>
+				<th style="min-width:200px;">Sube</th>
+				<th>Cins</th>
+				<th class="double-column">Tutar</th>
+				<th>Durum</th>
+				<th>T_Tarih</th>
+				<th>G.Ozel_Kod</th>
+				<th>Cikis_Bordro</th>
+				<th>Cikis_Tarihi</th>
+				<th>Cikis_Musteri</th>
+				<th>C.Ozel_Kod</th>
+				<th>User</th>
+			</tr>
+		</thead>
+		<tbody id="tableBody">
+		</tbody>
+	</table>
+</div>
+
+<input type="hidden" id="cekrapBilgi" name="cekrapBilgi" value="initialValue">
+<!-- Modal -->
+<div th:replace="modal/kambiyo/cekraporfiltre :: modalcekrapor"></div>
+<div th:replace="modal/yenihsppln :: secondModal"></div>
+
+<script src="/obs_js_files/kambiyo/cekrapor.js"></script>
+ 

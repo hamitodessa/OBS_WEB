@@ -1,0 +1,107 @@
+<style>
+.centered-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid #ced4da;
+	padding: 10px;
+	border-radius: 5px;
+	width: 60%;
+}
+
+.form-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px; /* Satırlar arası boşluk */
+}
+
+.form-container .form-row+.form-row {
+	margin-top: 10px;
+	/* Satırlar arası boşluk miktarını burada ayarlayın */
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	gap: 10px; /* Label ve input arasındaki boşluk */
+}
+
+.form-row label {
+	width: 130px; /* Label genişliği */
+}
+
+.input-width {
+	width: 80px; /* Input genişliği */
+}
+
+</style>
+
+<div class="card p-4 mb-4">
+	<div class="form-container">
+		<div style="display: flex; justify-content: center;">
+			<div class="centered-container">
+				<br>
+				<form id="updateForm" action="adres/etiketayar" method="post"
+					enctype="multipart/form-data">
+					<fieldset>
+						<div class="form-row">
+							<label class="form-check-label" >Sol Bosluk</label> <input
+								class="form-control input-width" type="number" id="solbosluk"
+								name="solbosluk" th:value="${etiket.solbosluk}">
+								
+								<label class="form-check-label" >Sag Bosluk</label> <input
+								class="form-control input-width" type="number" id="sagbosluk"
+								name="sagbosluk" th:value="${etiket.sagbosluk}">
+								
+						</div>
+						
+						
+						<div class="form-row">
+							<label class="form-check-label" >Ust Bosluk</label> <input
+								class="form-control input-width" type="number" id="ustbosluk"
+								name="ustbosluk" th:value="${etiket.ustbosluk}">
+								
+								<label class="form-check-label" >Alt Bosluk</label> <input
+								class="form-control input-width" type="number" id="altbosluk"
+								name="altbosluk" th:value="${etiket.altbosluk}">
+						</div>
+						<br>
+						<div class="form-row">
+							<label class="form-check-label" >Etiket Yukseklik</label> <input
+								class="form-control input-width" type="number" id="yukseklik"
+								name="yukseklik" th:value="${etiket.yukseklik}">
+								
+								<label class="form-check-label" >Genislik</label> <input
+								class="form-control input-width" type="number" id="genislik"
+								name="genislik" th:value="${etiket.genislik}">
+						</div>
+						
+						<div class="form-row">
+							<label class="form-check-label" >Ara Bosluk Diket</label> <input
+								class="form-control input-width" type="number" id="dikeyarabosluk"
+								name="dikeyarabosluk" th:value="${etiket.dikeyarabosluk}">
+								
+								<label class="form-check-label" >Etiket Yazim</label> 
+							<select class="form-control input-width" th:value="${etiket.yataydikey}"  id="yataydikey" name="yataydikey">
+										<option value="YATAY">YATAY</option>
+										<option value="DIKEY">USER</option>
+							</select>
+						</div>
+						
+						<br>
+						<div class="form-row">
+							<label class="form-check-label" ></label>
+							<button type="button" class="main_bt" id="kaydetButton" onclick="ayarKayit()">Kaydet</button>
+						</div>
+						<input type="hidden" id="id" name="id" th:value="${etiket.id}">
+				</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="errorDiv" th:if="${errorMessage}" style="color: red; font-weight: bold;">
+    <span th:text="${errorMessage}"></span>
+</div>
+
+<script src="/obs_js_files/adres/etiketayar.js"></script>

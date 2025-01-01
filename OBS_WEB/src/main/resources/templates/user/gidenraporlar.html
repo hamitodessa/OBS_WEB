@@ -1,0 +1,48 @@
+<style>
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+.table-hover tbody tr:hover {
+	background-color: #ced4da !important;
+	color: inherit !important;
+}
+.table .thead-dark th {
+  color: #fff;
+  background: #214162;
+}
+</style>
+<div class="card p-4">
+		<table class="table table-bordered table-hover">
+			<thead class="thead-dark">
+				<tr>
+					<th>ID</th>
+					<th>Tarih</th>
+					<th>Konu</th>
+					<th>Rapor</th>
+					<th>Alıcı</th>
+					<th>Açıklama</th>
+					<th>Gönderen</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="mail : ${raporlar}" class="table-row-height">
+					<td th:text="${mail.id}"></td>
+					<td th:text="${#dates.format(mail.tarih, 'dd.MM.yyyy')}"></td>
+					<td th:text="${mail.konu}"></td>
+					<td th:text="${mail.rapor}"></td>
+					<td th:text="${mail.alici}"></td>
+					<td th:text="${mail.aciklama}"></td>
+					<td th:text="${mail.gonderen}"></td>
+					<td>
+                        <button class="btn btn-secondary ml-2" 
+                             th:onclick="'raporYoket(' + ${mail.id} + ')'"><i class="fa fa-trash"></i></button>
+                    </td>
+				</tr>
+			</tbody>
+		</table>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<script src="/obs_js_files/giden_rapor/gidenrapor.js"></script>

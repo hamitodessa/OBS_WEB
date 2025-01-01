@@ -1,0 +1,118 @@
+ 	
+<style>
+.form-group {
+	display: flex;
+	align-items: center;
+	gap: 10px; /* Elemanlar arasındaki boşluk */
+	margin-bottom: 15px;
+}
+
+.form-group label {
+	width: 100px; /* Sabit bir genişlik, hizalama için */
+}
+
+.form-group .datepicker, .form-group input[type="text"] {
+	padding: 5px;
+}
+
+.double-column {
+	text-align: right;
+}
+
+.custom-width-input {
+	width: 175px !important;
+	font-weight: bold;
+}
+
+.custom-width-label {
+	width: 300px !important;
+	font-weight: bold;
+}
+
+.table-hover tbody tr:hover {
+	background-color: #ced4da !important;
+	color: inherit !important;
+}
+
+.table .thead-dark th {
+ color: #fff;
+  background: #214162;
+}
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+th:nth-child(1), td:nth-child(1) {
+	width: 8%;
+}
+
+th:nth-child(2), td:nth-child(2) {
+	width: 37%;
+}
+
+th:nth-child(3), td:nth-child(3) {
+	width: 4%;
+}
+th:nth-child(4), td:nth-child(4) {
+	width: 12%;
+}
+
+th:nth-child(5), td:nth-child(5) {
+	width: 12%;
+}
+
+th:nth-child(6), td:nth-child(6) {
+	width: 12%;
+}
+
+</style>
+
+<div class="card p-4">
+<div style="display: flex; align-items: center;">
+		<button class="btn btn-primary" type="button" id="mizyenileButton" style="margin-left: 10px;" onclick="openFirstModal('mizan')">Filtre</button>
+		<select id="reportFormat" class="form-control"	style="width: 150px; margin-left: 10px;" onchange="mizdownloadReport(this.value)"  disabled>
+				<option value="" disabled selected>Rapor Indir</option>
+				<option value="pdf">PDF</option>
+				<option value="xlsx">Excel (XLSX)</option>
+				<option value="docx">Word (DOCX)</option>
+				<option value="xml">XML</option>
+		</select>	
+		<button class="btn btn-primary" style="margin-left: 10px;"type="button" id="mailButton" onclick="mizmailAt()"  disabled>Email Gonder</button>		
+	</div>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<br>
+<!-- Tablo -->
+	<table class="table table-bordered table-hover">
+		<thead class="thead-dark">
+			<tr>
+				<th>HESAP</th>
+				<th>UNVAN</th>
+				<th>H_CINSI</th>
+				<th class="double-column">BORC</th>
+				<th class="double-column">ALACAK</th>
+				<th class="double-column">BAKIYE</th>
+			</tr>
+		</thead>
+		<tbody id="tableBody">
+		</tbody>
+		<tfoot>
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td id="totalBorc" style="text-align: right;font-weight: bold;"></td>
+            <td id="totalAlacak" style="text-align: right;font-weight: bold;"></td>
+            <td id="totalBakiye" style="text-align: right;font-weight: bold;"></td>
+        </tr>
+    	</tfoot>
+	</table>
+<input type="hidden" id="mizanBilgi" name="mizanBilgi" value="initialValue">
+
+<div th:replace="modal/cari/mizanfiltre :: modalmizan"></div>
+<div th:replace="modal/yenihsppln :: secondModal"></div>
+ 
+<script src="/obs_js_files/cari/mizan.js"></script>
+   
+

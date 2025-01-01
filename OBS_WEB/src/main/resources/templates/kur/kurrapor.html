@@ -1,0 +1,59 @@
+<style>
+
+.double-column {
+	text-align: right;
+}
+
+.table-hover tbody tr:hover {
+	background-color: #ced4da !important;
+	color: inherit !important;
+}
+
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+.table .thead-dark th {
+  color: #fff;
+  background: #214162;
+}
+
+</style>
+
+
+<div class="card p-4">
+		<div style="display: flex; align-items: center;">
+		<button class="btn btn-primary" type="button" id="yenileButton" style="margin-left: 10px;"
+			onclick="openFirstModal('kurrapor')">Yenile</button>
+		
+	</div>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<br>
+<!-- Tablo -->
+<div class="card p-4">
+	<table class="table table-bordered table-hover" style="width:60%">
+		<thead class="thead-dark">
+			<tr>
+				<th>Tarih</th>
+				<th>Kur</th>
+				<th class="double-column">MA</th>
+				<th class="double-column">MS</th>
+				<th class="double-column">SA</th>
+				<th class="double-column">SS</th>
+				<th class="double-column">BA</th>
+				<th class="double-column">BS</th>
+			</tr>
+		</thead>
+		<tbody id="tableBody"></tbody>
+	</table>
+</div>
+<script src="/obs_js_files/kur/kurrapor.js"></script>
+
+<input type="hidden" id="kurraporBilgi" name="kurraporBilgi" value="initialValue">
+<!-- Modal -->
+<div th:replace="modal/kur/kurraporfiltre :: modalkurrapor"></div>
+ 
+
+

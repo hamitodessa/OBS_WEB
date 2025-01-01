@@ -1,0 +1,303 @@
+	
+<style>
+
+/* Ana div düzeni */
+.container {
+	width: 660px;    /* 65%*/
+	padding: 2px;
+	margin: 0 auto; /* Ekran ortasında konumlandırma */
+	box-sizing: border-box;
+	/*	border: 1px solid #ccc; */
+	justify-content: center; /* Yatayda içerikleri ortalar */
+	align-items: center; /* Dikeyde içerikleri ortalar */
+}
+
+
+/* Alt div düzeni */
+.child {
+	width: 100%;
+	padding: 2px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+}
+
+.buttonBolum {
+	width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: flex-start; /* Elemanları sola hizalar */
+	gap: 10px;
+}
+
+.child:last-child {
+	margin-bottom: 0;
+}
+
+.group-box {
+	border: 1px solid #ccc;
+	padding: 7px;
+	margin: 10px;
+	width: 97%;
+	box-sizing: border-box;
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+.form-row-borc-alacak {
+	display: flex;
+	align-items: center; /* Dikey eksende hizalama */
+	justify-content: space-between; /* Öğeleri sola ve sağa yaslar */
+	margin-bottom: 5px;
+	height: 25px;
+}
+
+.form-row input, .form-row select {
+	margin-right: 5px;
+	margin-left: 5px;
+	height: 30px;
+}
+
+.form-row label {
+	margin-right: 10px;
+}
+
+/* Dördüncü Child için stil */
+.fourth-group-box {
+	border: 1px solid #ccc;
+	padding: 7px;
+	margin: 10px;
+	width: 97%;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+.text-area {
+	width: 70%;
+	height: 75px;
+	box-sizing: border-box;
+	padding: 5px;
+	font-size: 14px;
+	resize: none;
+}
+
+.right-section {
+	width: 25%;
+	display: flex;
+	flex-direction: column;
+}
+
+.label {
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+.input {
+	width: 100%;
+	height: 30px;
+	box-sizing: border-box;
+	padding: 5px;
+	font-size: 14px;
+}
+
+
+
+.padding-sag {
+	padding-right: 15px;
+}
+
+
+.cins_bold {
+	font-weight: bold;
+}
+
+.saga-bold {
+	text-align: right;
+	font-weight: bold;
+}
+
+.width-50 {
+	width: 50px;
+}
+
+.borcluAdi{
+    text-align: left;
+	font-weight: bold;
+	color: red;
+	white-space: nowrap; /* Tek satırda tut */
+    overflow: hidden; /* Taşan içeriği gizle */
+    text-overflow: ellipsis; /* Uzun metin için '...' uygula */
+    display: inline-block; /* Genişlik ayarını etkinleştirmek için */
+}
+
+.alacakliAdi{
+    text-align: left;
+	font-weight: bold;
+	color: green;
+	white-space: nowrap; /* Tek satırda tut */
+    overflow: hidden; /* Taşan içeriği gizle */
+    text-overflow: ellipsis; /* Uzun metin için '...' uygula */
+    display: inline-block; /* Genişlik ayarını etkinleştirmek için */
+}
+.width-150 {
+	width: 150px;
+}
+
+.width-250 {
+	width: 250px;
+}
+
+.centered-div {
+	width: 90%; /* Genişlik %80 */
+	margin: 0 auto; /* Ekran ortasında konumlandırma */
+	padding: 20px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	/* Padding ve border genişlik içinde hesaplansın */
+	text-align: center; /* İçerikleri ortala (opsiyonel) */
+}
+/************************************************************/
+</style>
+<div class="card p-4">
+	<div class="centered-div">
+		<div class="container">
+			<!-- İlk Child -->
+			<div class="child">
+				<div class="group-box">
+					<div class="form-row">
+						<input type="date" id="dekontTarih" class="form-control" th:value="${evrakTarih}"
+							style="width: 140px;font-weight: bold;" /> 
+							<label for="bos" style="width: 160px;"></label>
+						<button type="button" class="btn btn-secondary ml-2" onclick="dekgerifisNo()">
+							<i class="fa fa-backward"></i>
+						</button>
+						<span style="padding-left: 5px;"></span>
+						<button type="button" class="btn btn-secondary ml-2" onclick="deksonfisNo()">
+							<i class="fa fa-refresh"></i>
+						</button>
+						<span style="padding-left: 5px;"></span>
+						<button type="button" class="btn btn-secondary ml-2" onclick="dekilerifisNo()">
+							<i class="fa fa-forward"></i>
+						</button>
+						<span style="padding-left: 5px;"></span>
+						<input type="text" id="evrakNo" name="evrakNo" placeholder="0" onkeypress="checkEnter(event)" onkeydown="allowOnlyNumbers(event)"
+							class="form-control saga-bold" style="width: 100px;" />
+						<span style="padding-left: 5px;"></span>
+						<button type="button" id="btnYeni" class="btn btn-secondary ml-2" onclick="dekyenifis()" ><i class="fa fa-plus"></i>	</button>
+					</div>
+				</div>
+			</div>
+			<!-- Borclu Hesap Child -->
+			<h6 style="text-align:left; color:red;">Borclu Hesap</h6>
+			<div class="child">
+				<div class="group-box">
+					<div class="form-row-borc-alacak">    
+						<label for="cins" class="borcluAdi width-250" id="borcluAdi"></label> 
+						<label for="cins"></label>
+					</div>
+					<div class="form-row">
+
+
+						<div style="position: relative; width: 150px;">
+							<!-- Input Alanı -->
+							<input class="form-control cins_bold"
+								ondblclick="openSecondModal('borcHesap', 'dekont')"
+								maxlength="12" style="width: 100%; padding-right: 30px;"
+								list="borcOptions" id="borcHesap" 
+								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"
+								disabled>
+								
+							<datalist id="borcOptions" >
+								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+							</datalist>
+							
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+						</div>
+
+
+						<label for="cins" class="width-50 cins_bold" id="borcluHesapCins"></label> 
+						
+						<select class="form-control" style="width: 100px" id="borcKurCins" disabled onchange="dekkurOku('borcluHesapCins',this,'borcKur')">
+							<option value="">Kur Cinsi</option>
+							<option value="MA">MA</option>
+							<option value="MS">MS</option>
+							<option value="SA">SA</option>
+							<option value="SS">SS</option>
+						</select> 
+						<input class="form-control saga-bold" style="width: 100px" type="number" id="borcKur" value="1.0000" disabled /> 
+						<input class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)" id="borcTutar" value="0.00" ondblclick="tutarKontrolBorc()" disabled />
+					</div>
+				</div>
+			</div>
+			<!-- Alacakli Child -->
+			<h6 style="text-align:left; color:green;">Alacakli Hesap</h6>
+			<div class="child">
+				<div class="group-box">
+					<div class="form-row-borc-alacak">
+						<label for="cins" class="alacakliAdi width-250" id="alacakliAdi"></label> 
+						<label for="cins" ></label>
+					</div>
+					<div class="form-row">
+						<div style="position: relative; width: 150px;">
+							<input class="form-control cins_bold"
+								ondblclick="openSecondModal('alacakHesap', 'dekont')"
+								style="width: 100%; padding-right: 30px;" list="alacakOptions"
+								maxlength="12" id="alacakHesap" 
+								oninput="dekhesapAdiOgren('alacakHesap', 'alacakliAdi', 'alacakliHesapCins'); validateAutoSearch('alacakHesap', 'alacakOptions')"
+								disabled>
+							<datalist id="alacakOptions">
+								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+							</datalist>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+						</div>
+
+
+
+						<label for="cins" id="alacakliHesapCins"
+							class="width-50 cins_bold"></label> 
+						<select class="form-control"style="width: 100px" id="alacakKurCins" disabled onchange="dekkurOku('alacakliHesapCins',this,'alacakKur')">
+							<option value="">Kur Cinsi</option>
+							<option value="MA">MA</option>
+							<option value="MS">MS</option>
+							<option value="SA">SA</option>
+							<option value="SS">SS</option>
+						</select> 
+						<input class="form-control saga-bold" style="width: 100px" type="number" id="alacakKur" value="1.0000" disabled />
+						 <input	ondblclick="tutarKontrolAlacak()" class="form-control saga-bold"
+							style="width: 160px" type="text" onblur="formatInputBox2(this)"	id="alacakTutar" value="0.00" disabled />
+					</div>
+				</div>
+			</div>
+			<!-- Dördüncü Child -->
+			<div class="child">
+				<div class="fourth-group-box">
+					<textarea class="form-control text-area" maxlength="100"
+						placeholder="Açıklama girin..." id="aciklama" disabled></textarea>
+					<div class="right-section">
+						<input type="text" id="kodu"  maxlength="5" class="form-control input"
+							placeholder="Kodu" disabled/>
+					</div>
+				</div>
+			</div>
+			<!-- Buttonlar -->
+			<div class="buttonBolum">
+				<button class="btn btn-primary" type="button" id="dekkaydetButton"
+					onclick="dekfisKayit()">Kaydet</button>
+				<button class="btn btn-primary" type="button" id="deksilButton" 
+					onclick="dekfisYoket()">Sil</button>
+			</div>
+			<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+    </div>
+		</div>
+	</div>
+<!-- Modal -->
+<div th:replace="modal/yenihsppln :: secondModal"></div>
+
+<script src="/obs_js_files/cari/dekont.js"></script>
+

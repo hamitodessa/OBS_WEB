@@ -1,0 +1,209 @@
+<style>
+.centered-div {
+	width: 45%; /* Genişlik %80 */
+	margin: 0 auto; /* Ekran ortasında konumlandırma */
+	padding: 4px;
+	border: 1px solid #ccc; 
+	box-sizing: border-box;
+	align-items: center;
+	/* Padding ve border genişlik içinde hesaplansın */
+	text-align: center; /* İçerikleri ortala (opsiyonel) */
+}
+
+.buttonBolum {
+	margin-top:5px;
+	width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: flex-start; /* Elemanları sola hizalar */
+	gap: 10px;
+}
+
+.aramagroup-box {
+	width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	border: 1px solid #ccc;
+	height: 50px; /* Yüksekliği sabitledim */
+}
+.group-box {
+	padding: 1px;
+	width: 100%;
+	box-sizing: border-box;
+	
+	display: flex;
+	align-items: center;
+/*	border: 1px solid #ccc;   */
+}
+
+div::-webkit-scrollbar {
+    width: 8px; /* Kaydırma çubuğu genişliği */
+}
+
+div::-webkit-scrollbar-thumb {
+    background-color: #888; /* Kaydırma çubuğu rengi */
+    border-radius: 4px; /* Köşeleri yuvarla */
+}
+
+div::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Hover efekti */
+}
+
+
+.double-column {
+	text-align: right;
+}
+
+.table-hover tbody tr:hover {
+	background-color: #ced4da !important;
+	color: inherit !important;
+}
+
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+th:nth-child(1), td:nth-child(1) {
+	width: 8%;
+}
+
+th:nth-child(2), td:nth-child(2) {
+	width: 10%;
+}
+
+th:nth-child(3), td:nth-child(3) {
+	width: 10%;
+}
+
+th:nth-child(4), td:nth-child(4) {
+	width: 10%;
+}
+
+th:nth-child(5), td:nth-child(5) {
+	width: 10%;
+}
+
+th:nth-child(6), td:nth-child(6) {
+	width: 10%;
+}
+
+th:nth-child(7), td:nth-child(7) {
+	width: 10%;
+}
+.saga-bold {
+	text-align: right;
+	font-weight: bold;
+}
+.table .thead-dark th {
+  color: #fff;
+  background: #214162;
+}
+
+</style>
+<div class="card p-4">
+	<div class="centered-div">
+		<div class="aramagroup-box">
+			<span style="padding-left: 5px;"></span> 
+			<select
+				style="width: 100px;" class="form-control" id="doviz_tur" onchange=kurSatirOku()
+				name="doviz_tur">
+				<option value="USD">USD</option>
+				<option value="EUR">EUR</option>
+				<option value="RUB">RUB</option>
+			</select> <span style="padding-left: 50px;"></span>
+			<button type="button" id="geriButton" class="btn btn-secondary ml-2" onclick="tarihGeri()">
+				<i class="fa fa-backward"></i>
+			</button>
+			
+			<span style="width: 10px;"></span> 
+			<input type="date" id="tarih" class="form-control" style="width: 150px; font-weight: bold;" th:value="${tarih}" onkeypress="checkEnter(event)" /> 
+			<span style="width: 10px;"></span>
+			
+			<button type="button" id="ileriButton" onclick="tarihIleri()" class="btn btn-secondary ml-2" >	
+			<i class="fa fa-forward"></i>
+			</button>
+			
+<!-- 		<span style="padding-left: 50px;"></span>
+			<button type="button" id="geriButton" class="btn btn-secondary ml-2"
+				onclick="merkezOku()">
+				<i class="fa fa-bank"></i>
+			</button>
+ -->	
+		</div>
+		<br>
+		<div
+			style="display: flex; flex-direction: column; width: 100%;">
+			<div class="group-box" style="margin-top: 5px;">
+				<span style="padding-left: 5px;"></span> <span style="width: 100px;"></span>
+				<span style="padding-left: 5px;"></span> 
+				<label style="width: 150px;">Merkez</label> 
+				<span style="padding-left: 5px;"></span> 
+				<label style="width: 150px;">Serbest</label>
+				<span style="padding-left: 5px;"></span> 
+				<span style="width: 150px;">Bankalar</span>
+				<span style="padding-left: 5px;"></span>
+			</div>
+			<div class="group-box" style="margin-top: 5px;">
+				<span style="padding-left: 5px;"></span> 
+				<span class="input-group-text" style="min-width: 100px;">Alis</span> <span
+					style="padding-left: 5px;"></span> 
+					
+					<input id="ma" style="max-width: 150px;" type="number" value="0.0000" class="form-control saga-bold"> 
+					<span style="padding-left: 5px;"></span> 
+					
+					<input id="ba" style="max-width: 150px;" type="number" value="0.0000" class="form-control saga-bold"> 
+					<span style="padding-left: 5px;"></span>
+					
+					<input id="sa" style="max-width: 150px;" type="number" value="0.0000" class="form-control saga-bold"> 
+					<span style="padding-left: 5px;"></span>
+					
+			</div>
+			<div class="group-box" style="margin-top: 5px;margin-bottom: 5px;">
+				<span style="padding-left: 5px;"></span> <span
+					class="input-group-text" style="min-width: 100px;">Satis</span> <span
+					style="padding-left: 5px;"></span> 
+					<input type="number" value="0.0000" id="ms"
+					style="max-width: 150px;" class="form-control saga-bold"> <span
+					style="padding-left: 5px;"></span> 
+					<input type="number" value="0.0000" id="bs"
+					style="max-width: 150px;" class="form-control saga-bold"> <span
+					style="padding-left: 5px;"></span> 
+					<input type="number" value="0.0000" id="ss"
+					style="max-width: 150px;" class="form-control saga-bold"> <span
+					style="padding-left: 5px;"></span>
+			</div>
+		</div>
+	<br>
+	<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+		<div
+			style="display: flex; flex-direction: column; border: 1px solid #ccc; width: 100%; height: 300px; overflow-y: scroll;">
+			<table class="table table-bordered table-hover">
+				<thead class="thead-dark">
+					<tr>
+						<th>Kur</th>
+						<th class="double-column">MA</th>
+						<th class="double-column">MS</th>
+						<th class="double-column">SA</th>
+						<th class="double-column">SS</th>
+						<th class="double-column">BA</th>
+						<th class="double-column">BS</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody">
+					<!-- Dinamik içerik burada yüklenecek -->
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="buttonBolum">
+				<button class="btn btn-primary" type="button" id="kaydetButton"
+					onclick="kurKayit()">Kaydet</button>
+				<button class="btn btn-primary" type="button" id="silButton" 
+					onclick="kurYoket()">Sil</button>
+		</div>
+			
+	</div>
+</div>
+<script src="/obs_js_files/kur/kurgiris.js"></script>

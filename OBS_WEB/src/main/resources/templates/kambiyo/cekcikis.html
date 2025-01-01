@@ -1,0 +1,285 @@
+<style>
+.editable-cell {
+	cursor: text;
+}
+
+.double-column {
+	text-align: right;
+}
+
+.tah-table th, .tah-table td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	height: 15px;
+}
+
+.tah-table th:nth-child(1) {
+	width: 30px;
+}
+
+.tah-table th:nth-child(2) {
+	width: 9%;
+}
+
+.tah-table th:nth-child(3) {
+	width: 8%;
+}
+
+.tah-table th:nth-child(5) {
+	width: 15%;
+}
+
+.tah-table th:nth-child(6) {
+	width: 7%;
+}
+
+.tah-table th:nth-child(7) {
+	width: 15%;
+}
+
+.tah-table th:nth-child(8) {
+	width: 8%;
+}
+
+.tah-table th:nth-child(9) {
+	width: 3%;
+}
+
+.tah-table th:nth-child(10) {
+	width: 10%;
+}
+
+.group-box {
+	border: 1px solid #ccc;
+	padding: 7px;
+	margin: 10px;
+	width: 98%;
+	box-sizing: border-box;
+}
+
+.child {
+	width: 100%;
+	padding: 2px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	align-items: center;
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+datalist {
+	display: none;
+}
+
+.toggle-button {
+	font-weight: bold;
+	font-size: 16px;
+	cursor: pointer;
+	width: 20px;
+	text-align: center;
+}
+
+.toggle-button:hover {
+	color: #007BFF;
+}
+
+.saga-bold {
+	text-align: right;
+	font-weight: bold;
+}
+
+.table .thead-dark th {
+ color: #fff;
+  background: #214162;
+}
+</style>
+<link rel="stylesheet" href="style/yenihsppln.css" />
+<div class="card p-4">
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item" role="presentation">
+			<button class="nav-link active" id="tab1-tab"
+				style="font-weight: bold;" data-bs-toggle="tab"
+				data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1"
+				aria-selected="true">Cikis Bordro</button>
+		</li>
+		<li class="nav-item" role="presentation">
+			<button class="nav-link" id="tab2-tab" style="font-weight: bold;"
+				data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
+				aria-controls="tab2" aria-selected="false">Aciklama</button>
+		</li>
+	</ul>
+</div>
+<!-- Tab Content -->
+<div class="tab-content" id="myTabContent">
+	<!-- Tab 1 Content -->
+	<div class="tab-pane fade show active" id="tab1" role="tabpanel"
+		aria-labelledby="tab1-tab">
+		<div class="child">
+			<!-- ****************************************************************************************************** -->
+			<div class="group-box">
+				<div style="display: flex; align-items: center; ">
+					<label for="label5" style="min-width:75px;">Bordro No</label>
+					<div style="position: relative; width: 125px;">
+						<input class="form-control" style="font-weight: bold;" maxlength="12" id="bordrono" onkeydown="bordroOkuma(event);" ondblclick="yeniBordro();">
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<button type="button" class="btn btn-secondary ml-2" onclick="soncikisBordro()">
+							<i class="fa fa-refresh"></i>
+					</button>
+					<span style="padding-left: 10px;"></span> 
+					<input type="date" id="bordroTarih" class="form-control"
+							th:value="${evrakTarih}" style="width: 140px; font-weight: bold;" />
+					
+					<span style="padding-left: 10px;"></span> 	
+					<label for="label5" style="min-width:75px;">Ozel Kod</label>	
+					<div style="position: relative; width: 125px;">
+							<input class="form-control cins_bold"
+								list="ozelkodOptions" maxlength="12" id="ozelkod">
+							<datalist id="ozelkodOptions">
+								<option th:each="kod : ${ozelKodlar}" th:value="${kod.Cikis_Ozel_Kod}"></option> 
+							</datalist>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
+					</div>
+					<span style="padding-left: 10px;"></span>
+					<label  style="min-width: 75px;">Doviz Cinsi</label> 
+					<input class="form-control cins_bold"  style="max-width: 50px;" id="dvzcinsi">		
+					
+					<span style="padding-left: 10px;"></span>
+					<label >Faiz</label> 
+					<span style="padding-left: 137px;"></span>
+					<input class="form-control cins_bold"  style="max-width: 50px;" id="faiz" oninput="ortgun()">
+					
+				</div>
+				<div
+					style="display: flex; align-items: center;margin-top: 7px;">
+					<label  for="label4" style="min-width: 75px;">Cari Kodu</label>
+					<div style="position: relative; width: 125px;">
+							<input class="form-control cins_bold"
+								ondblclick="openSecondModal('bcheskod', 'cekgiris')"
+								list="bhkoduOptions" maxlength="12" id="bcheskod"
+								oninput="hesapAdiOgren(this.value, 'lblcheskod'); validateAutoSearch('bcheskod', 'bhkoduOptions')">
+							<datalist id="bhkoduOptions">
+								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option> 
+							</datalist>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
+					</div>
+					<span style="padding-left: 545px;"></span>
+					<label >Faiz Tutari</label> 
+					<span style="padding-left: 20px;"></span>
+					<label style="text-align: right;width:130px;"  id="lblfaiztutari">0.00</label> 
+					
+				</div>
+				<div style="display: flex;align-items:center;margin-top:7px;">
+					<span style="padding-left: 75px;"></span>
+					<label id="lblcheskod" style="min-width:400px;font-weight: bold;">...</label>
+					
+					<span style="padding-left: 270px;"></span>
+					<label >Ort.Gun</label> 
+					<span style="padding-left: 82px;"></span>
+					<label style="width: 80px;text-align:right;" id="lblortgun" >0</label> 
+					
+				</div>	
+			</div>
+
+			<div class="group-box">
+				<div class="form-row">
+					<button class="btn btn-primary" type="button" id="gbkaydetButton"
+						onclick="cbKayit()">Kaydet</button>
+					<span style="padding-left: 5px;"></span>
+					<button class="btn btn-primary" type="button" id="gbsilButton"
+						onclick="cbYoket()">Sil</button>
+					<span style="padding-left: 5px;"></span>
+					<button class="btn btn-primary" type="button" id="gbcariButton"
+						onclick="openFirstModal('cekcik')" >Cari Kayit</button>
+					<span style="padding-left: 5px;"></span>
+					<button class="btn btn-primary" type="button" id="indirButton"
+						onclick="cbDownload()">Indir</button>
+					<span style="padding-left: 5px;"></span>	
+					<button class="btn btn-primary" style="margin-left: 10px;"type="button" id="mailButton" onclick="cbmailAt()"  >Email Gonder</button>		
+				</div>
+			</div>
+
+		</div>
+		<div id="errorDiv"	style="display: none; color: red; font-weight: bold;"></div>
+		<div th:with="errorMessage=${errorMessage ?: ''}" id="errorDiv2" th:if="${errorMessage}" 
+     				th:text="${errorMessage}"  style="color: red; font-weight: bold;">
+</div>
+	</div>
+
+	<!-- Tab 2 Content -->
+	<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+	  <div class="card p-4">
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 150px;">Aciklama 1</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="aciklama1" class="form-control" style="max-width: 300px;">
+
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 150px;">Aciklama 2</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="aciklama2" class="form-control" style="max-width: 300px;">
+				</div>
+		</div>
+	</div>
+</div>
+<button type="button" class="btn btn-secondary ml-2" onclick="cekcikaddRow()"><i class="fa fa-plus"></i></button>
+
+<table class="table table-bordered tah-table" id="gbTable"
+	style="margin-top: 5px;">
+	<thead class="thead-dark">
+		<tr>
+		 <th></th>
+			<th>Cek No</th>
+			<th>Vade</th>
+			<th>Banka</th>
+			<th>Sube</th>
+			<th>Seri No</th>
+			<th>Ilk Borclu</th>
+			<th>Hesap</th>
+			<th>Cins</th>
+			<th class="double-column">Tutar</th>
+		</tr>
+	</thead>
+	<tbody id="tbody">
+	</tbody>
+	<tfoot>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td style="font-weight: bold;">Toplam</td>
+			<td id="totalTutar" class="saga-bold">0.00</td>
+		</tr>
+	</tfoot>
+</table>
+ <div class="card p-4">
+	<div class="form-row">
+		<span style="padding-left: 20px;">Cek Sayisi :</span>
+		<label style="text-align: right;width:50px;" id="ceksayisi">0</label> 
+	</div>
+</div>
+<input type="hidden" id="cekcikBilgi" name="cekcikBilgi" value="initialValue">
+
+<div th:replace="modal/borc_alacak :: modalborcalacak"></div>
+
+<div th:replace="modal/yenihsppln :: secondModal"></div>
+
+<script src="/obs_js_files/kambiyo/cekcikis.js"></script>
+

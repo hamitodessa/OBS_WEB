@@ -1,0 +1,137 @@
+<style>
+.group-box {
+	border: 1px solid #ccc;
+	padding: 7px;
+	margin: 10px;
+	width: calc(100% - 20px);
+	box-sizing: border-box;
+}
+
+.child {
+	width: 70%;
+	padding: 2px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	align-items: center;
+}
+</style>
+<div class="card p-4">Merhaba , OBS Sisteme hos geldiniz </div>
+<br>
+<div class="card p-4">
+<a style="font-size:14px;font-weight:bold;" href="http://www.okumus.gen.tr" target="_blank">OBS Masaüstü versiyon indirme</a>
+</div>
+<br>
+<div class="card p-4">
+	<div class="child">
+		<div class="group-box">
+			<div style="display: flex; align-items: center; gap: 10px;">
+				<label style="width: 70px;" >Cari Hesap</label> 
+				<span style="padding-left: 5px;"></span> 
+				<label  style="min-width: 40px;" id="ckod"></label> 
+				<span style="padding-left: 5px;"></span> 
+				<label  id="cserver" style="min-width: 150px;"></label>
+				<span style="padding-left: 5px;"></span> 
+				<label  id="cfadi" style="min-width: 300px;"></label> 
+				<span style="padding-left: 5px;"></span> 
+				<label style="max-width: 50px;" id="chsql"></label>
+			</div>
+		</div>
+		<div class="group-box">
+			<div style="display: flex; align-items: center; gap: 10px;">
+				<label style="width: 70px;" >Adres</label> 
+				<span style="padding-left: 5px;"></span> 
+				<label  style="width: 40px;" id="akod"></label> 
+				<span style="padding-left: 5px;"></span> 
+				<label  id="aserver" style="width: 150px;"></label>
+				<span style="padding-left: 5px;"></span> 
+				<label  id="afadi" style="width: 300px;"></label> 
+				<span style="padding-left: 5px;"></span> 
+				<label style="width: 50px;" id="ahsql"></label>
+			</div>
+		</div>
+		<div class="group-box">
+			<div style="display: flex; align-items: center; gap: 10px;">
+				<label style="width: 70px;" >Kur</label> 
+				<span style="padding-left: 5px;"></span> 
+				<label  style="width: 40px;" id="kkod"></label> 
+				<span style="padding-left: 5px;"></span> 
+				<label  id="kserver" style="width: 150px;"></label>
+				<span style="padding-left: 5px;"></span> 
+				<label  id="kfadi" style="width: 300px;"></label> 
+				<span style="padding-left: 5px;"></span> 
+				<label style="width: 50px;" id="khsql"></label>
+			</div>
+		</div>
+		<div class="group-box">
+			<div style="display: flex; align-items: center; gap: 10px;">
+				<label style="width: 70px;" >Kambiyo</label> 
+				<span style="padding-left: 5px;"></span> 
+				<label  style="width: 40px;" id="kakod"></label> 
+				<span style="padding-left: 5px;"></span> 
+				<label  id="kaserver" style="width: 150px;"></label>
+				<span style="padding-left: 5px;"></span> 
+				<label  id="kafadi" style="width: 300px;"></label> 
+				<span style="padding-left: 5px;"></span> 
+				<label style="width: 50px;" id="kahsql"></label>
+			</div>
+		</div>
+		
+	</div>
+</div>
+	<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+
+<script>
+
+async function getWellcomeData() {
+    try {
+        const response = await fetch("wellcomecalismadizini", {
+			method: "GET",
+		});
+        console.log("Response received:", response);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.errorMessage) {
+            console.error("Error message from server:", data.errorMessage);
+            throw new Error(data.errorMessage);
+        }
+
+        const responseData = data.data;
+        responseData.forEach(item => {
+			if(item.modul === "Cari Hesap"){
+            	document.getElementById("ckod").innerText = item.progkodu;
+           		document.getElementById("cserver").innerText = item.server;
+            	document.getElementById("cfadi").innerText = item.firma;
+            	document.getElementById("chsql").innerText = item.hangi_sql;
+			}else if(item.modul === "Adres"){
+	            	document.getElementById("akod").innerText = item.progkodu;
+	           		document.getElementById("aserver").innerText = item.server;
+	            	document.getElementById("afadi").innerText = item.firma;
+	            	document.getElementById("ahsql").innerText = item.hangi_sql;
+        	}else if(item.modul === "Kur"){
+        		document.getElementById("kkod").innerText = item.progkodu;
+       			document.getElementById("kserver").innerText = item.server;
+        		document.getElementById("kfadi").innerText = item.firma;
+        		document.getElementById("khsql").innerText = item.hangi_sql;
+        	}else if(item.modul === "Kambiyo"){
+        		document.getElementById("kakod").innerText = item.progkodu;
+       			document.getElementById("kaserver").innerText = item.server;
+        		document.getElementById("kafadi").innerText = item.firma;
+        		document.getElementById("kahsql").innerText = item.hangi_sql;
+			}
+        });
+    } catch (error) {
+        const errorDiv = document.getElementById("errorDiv");
+        errorDiv.style.display = "block";
+        errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+    } finally {
+        document.body.style.cursor = "default";
+    }
+}
+
+</script>

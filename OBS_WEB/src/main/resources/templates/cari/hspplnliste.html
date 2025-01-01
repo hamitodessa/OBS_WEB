@@ -1,0 +1,119 @@
+	
+<style>
+
+.table-hover tbody tr:hover {
+	background-color: #ced4da !important;
+	color: inherit !important;
+}
+
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+.table .thead-dark th {
+ color: #fff;
+  background: #214162;
+}
+
+th:nth-child(2) {
+	width: 18%;
+}
+
+
+</style>
+
+
+<div class="card p-4">
+		<div style="display: flex; align-items: center;">
+			<input type="text" id="arama" oninput="aramaYap()" style="width:400px;" class="form-control"  placeholder="Arama" />
+	</div>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<br>
+<div style="overflow-x: auto; width: 100%;height:650px;">
+	<table class="table table-bordered table-hover" id="myTable">
+		 <thead class="thead-dark">
+			<tr>
+				<th>HESAP</th>
+				<th>UNVAN</th>
+				<th>HESAP_CINSI</th>
+				<th>KARTON</th>
+				<th>YETKILI</th>
+				<th>ADRES_1</th>
+				<th>ADRES_2</th>
+				<th>SEMT</th>
+				<th>SEHIR</th>
+				<th>VERGI_DAIRESI</th>
+				<th>VERGI_NO</th>
+				<th>FAX</th>
+				<th>TEL_1</th>
+				<th>TEL_2</th>
+				<th>TEL_3</th>
+				<th>OZEL_KOD_1</th>
+				<th>OZEL_KOD_2</th>
+				<th>OZEL_KOD_3</th>
+				<th>ACIKLAMA</th>
+				<th>TC_KIMLIK</th>
+				<th>WEB</th>
+				<th>E_MAIL</th>
+				<th>SMS_GONDER</th>
+				<th>RESIM</th>
+				<th>USER</th>
+			</tr>
+		</thead>
+        <tr th:each="hsppln:${hsppln}" class="table-row-height">
+            <td th:text="${hsppln.HESAP}"></td>
+            <td th:text="${hsppln.UNVAN}"></td>
+            <td th:text="${hsppln.HESAP_CINSI}"></td>
+            <td th:text="${hsppln.KARTON}"></td>
+            <td th:text="${hsppln.YETKILI}"></td>
+            <td th:text="${hsppln.ADRES_1}"></td>
+            <td th:text="${hsppln.ADRES_2}"></td>
+            <td th:text="${hsppln.SEMT}"></td>
+            <td th:text="${hsppln.SEHIR}"></td>
+            <td th:text="${hsppln.VERGI_DAIRESI}"></td>
+            <td th:text="${hsppln.VERGI_NO}"></td>
+            <td th:text="${hsppln.FAX}"></td>
+            <td th:text="${hsppln.TEL_1}"></td>
+            <td th:text="${hsppln.TEL_2}"></td>
+            <td th:text="${hsppln.TEL_3}"></td>
+            <td th:text="${hsppln.OZEL_KOD_1}"></td>
+            <td th:text="${hsppln.OZEL_KOD_2}"></td>
+            <td th:text="${hsppln.OZEL_KOD_3}"></td>
+            <td th:text="${hsppln.ACIKLAMA}"></td>
+            <td th:text="${hsppln.TC_KIMLIK}"></td>
+            <td th:text="${hsppln.WEB}"></td>
+            <td th:text="${hsppln.E_MAIL}"></td>
+            <td th:text="${hsppln.SMS_GONDER ? 'Evet' : 'Hayır'}"></td>
+            <td>
+    			<img th:if="${hsppln.RESIM != ''}" th:src="${hsppln.RESIM}" alt="Resim" style="width: 100px; height: auto;" />
+    			<span th:if="${hsppln.RESIM == ''}"></span>
+			</td>
+            <td th:text="${hsppln.USER}"></td>
+        </tr>
+	</table>
+</div>
+<script>
+  function aramaYap() {
+    const input = document.getElementById("arama");
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById("myTable");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) { // İlk satır başlık olduğu için 1'den başlıyoruz
+      const cells = rows[i].getElementsByTagName("td");
+      let shouldDisplay = false;
+
+      if (cells.length > 1) {
+        const col1 = cells[0].textContent.toLowerCase();
+        const col2 = cells[1].textContent.toLowerCase();
+
+        if (col1.includes(filter) || col2.includes(filter)) {
+          shouldDisplay = true;
+        }
+      }
+      rows[i].style.display = shouldDisplay ? "" : "none";
+    }
+  }
+</script>

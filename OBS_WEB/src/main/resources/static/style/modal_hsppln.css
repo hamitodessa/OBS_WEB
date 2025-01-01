@@ -1,0 +1,92 @@
+/************************************************************/
+.modall {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modall-content {
+    background: white;
+    width: 650px; /* Modal genişliği */
+    height: 500px; /* Modal yüksekliği */
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column; /* İçeriği dikey hizala */
+    justify-content: space-between;
+}
+
+/* Tabloyu sarmalayan scrollable alan */
+.modall-table-container {
+    flex-grow: 1; /* Kalan alanı kaplasın */
+    overflow-y: auto; /* Sadece dikey kaydırma */
+    margin-bottom: 10px; /* Butonla aralık bırak */
+    border-top: 1px solid #ccc; /* Görsel ayırıcı */
+    border-bottom: 1px solid #ccc;
+}
+
+/* Buton alanı */
+.modall-footer {
+    padding: 1px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: center; /* Ortala */
+}
+
+.modall-footer button {
+
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    width:100%;
+}
+
+.modall-footer button:hover {
+    background-color: #0056b3;
+}
+
+/* Tablo Stili */
+/* Modal için özel tablo stilleri */
+.modal-table th, .modal-table td {
+    text-align: left;
+}
+
+.modal-table tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.modal-table.table-hover tbody tr:hover {
+	background-color: #ced4da !important; 
+	color: inherit !important;
+}
+
+.modal-table .table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+.modal-table th:nth-child(1), .modal-table td:nth-child(1) {
+	width: 5%;
+} 
+.modal-table th:nth-child(2), .modal-table td:nth-child(2) {
+	width: 25%;
+} 
+.modal-table th:nth-child(3), .modal-table td:nth-child(3) {
+	width: 5%;
+} 
+.modal-table th:nth-child(4), .modal-table td:nth-child(4) {
+	width: 5%;
+}
