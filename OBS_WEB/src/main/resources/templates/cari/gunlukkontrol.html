@@ -1,0 +1,150 @@
+<style>
+.double-column {
+	text-align: right;
+}
+
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+.table .thead-dark th {
+ color: #fff;
+  background: #214162;
+}
+.tah-table th, .tah-table td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	height: 15px;
+}
+
+
+.saga-bold {
+	text-align: right;
+	font-weight: bold;
+}
+
+.group-box {
+	border: 1px solid #ccc;
+	padding: 7px;
+	margin: 10px;
+	width: 50%;
+	box-sizing: border-box;
+}
+
+
+.tah-table th:nth-child(1) {
+	width: 6%;
+}
+
+
+
+.tah-table th:nth-child(3) {
+	width: 13%;
+}
+
+.tah-table th:nth-child(4){
+	width: 13%;
+}
+
+.tah-table th:nth-child(5) {
+	width: 13%;
+}
+.tah-table th:nth-child(6) {
+	width: 5%;
+}
+
+</style>
+<div class="card p-4">
+				<div class="group-box">
+					<div style="display: flex; align-items: center; gap: 10px;">
+						<label for="label5" style="width: 75px;">Cari Kodu</label>
+						<div style="position: relative; width: 145px;">
+							<input class="form-control cins_bold"
+								ondblclick="openSecondModal('tcheskod', 'gunlukkontrol')"
+								list="chkoduOptions" maxlength="12" id="tcheskod"
+								oninput="hesapAdiOgren(this.value, 'lblcheskod'); validateAutoSearch('tcheskod', 'chkoduOptions')">
+							<datalist id="chkoduOptions">
+								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option> 
+							</datalist>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
+						</div>
+						
+						<span style="padding-left: 60px;"></span>
+						<input type="date" id="tarih" class="form-control"
+							th:value="${evrakTarih}" style="width: 150px; font-weight: bold;" onkeypress="checkEnter(event)"/>
+						
+						<button type="button" class="btn btn-secondary ml-2" onclick="tarihGeri()">
+							<i class="fa fa-backward"></i>
+						</button>
+						<span style="padding-left: 5px;"></span>
+						<button type="button" class="btn btn-secondary ml-2" onclick="gunlukTarih()">
+							<i class="fa fa-refresh"></i>
+						</button>
+						<span style="padding-left: 5px;"></span>
+						<button type="button" class="btn btn-secondary ml-2" onclick="tarihIleri()">
+							<i class="fa fa-forward"></i>
+						</button>
+					</div>
+					<div style="display: flex; align-items: center; gap: 10px;margin-top:7px;">
+						<span style="padding-left: 75px;"></span>	
+						<label id="lblcheskod" for="label4"	style="font-weight: bold;">...</label> 
+					</div>
+				</div>
+				<!-- ****************************************************************************************************** -->
+	<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+
+	<div style="overflow-x: auto; width: 80%;height:650px;">
+			<table class="table table-bordered tah-table" id="mytable"
+				style="margin-top: 5px;">
+				<thead class="thead-dark">
+					<tr>
+						<th>EVRAK</th>
+						<th>IZAHAT</th>
+						<th>KOD</th>
+						<th class="double-column">BORC</th>
+						<th class="double-column">ALACAK</th>
+						<th>USER</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody">
+				</tbody>
+				<tfoot>
+				   <tr class="table-row-height">
+    	<td colspan="6"></td>
+    </tr>
+				
+    <tr class="table-row-height">
+    	<td ></td>
+    	<td class="double-column">Gunluk Toplam Bakiye</td>
+        <td class="double-column" style="font-weight: bold;" id="gbakiye">0.00</td>
+        <td class="double-column" id="gborc">0.00</td>
+        <td class="double-column" id="galacak">0.00</td>
+        <td ></td>
+    </tr>
+    <tr class="table-row-height">
+        <td ></td>
+    	<td class="double-column">Eski Donem</td>
+        <td class="double-column" style="font-weight: bold;" id="ebakiye">0.00</td>
+        <td class="double-column" id="eborc">0.00</td>
+        <td class="double-column" id="ealacak">0.00</td>
+        <td ></td>
+    </tr>
+    <tr class="table-row-height">
+       <td ></td>
+    	<td class="double-column">+ / - Bakiye</td>
+        <td class="double-column" style="font-weight: bold;" id="bbakiye">0.00</td>
+        <td class="double-column" id="bborc">0.00</td>
+        <td class="double-column" id="balacak">0.00</td>
+        <td ></td>
+    </tr>
+</tfoot>
+			</table>
+	</div>
+</div>
+
+<div th:replace="modal/yenihsppln :: secondModal"></div>
+
+<script src="/obs_js_files/cari/gunluktakip.js"></script>

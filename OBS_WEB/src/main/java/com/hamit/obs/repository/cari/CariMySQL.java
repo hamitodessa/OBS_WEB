@@ -1058,4 +1058,17 @@ public class CariMySQL implements ICariDatabase{
 		
 	}
 
+	@Override
+	public List<Map<String, Object>> kasa_kontrol(String hesap, String t1, ConnectionDetails cariConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> kasa_mizan(String kod, String ilktarih, String sontarih,
+			ConnectionDetails cariConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

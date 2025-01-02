@@ -611,4 +611,30 @@ public class CariService {
 			throw new ServiceException(detailedMessage);
 		}
 	}
+	public List<Map<String, Object>> kasa_kontrol(String hesap, String t1){
+		try {
+			return strategy.kasa_kontrol(hesap,t1,cariConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
+	public List<Map<String, Object>> kasa_mizan(String kod, String ilktarih, String sontarih){
+		try {
+			return strategy.kasa_mizan(kod,ilktarih,sontarih ,cariConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
 }

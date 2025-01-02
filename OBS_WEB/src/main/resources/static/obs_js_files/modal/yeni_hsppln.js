@@ -99,6 +99,10 @@ function selectValue(inputId, selectedValue, secondnerden) {
 		else if (secondnerden === "carikoddegis") {
 			inputElement.oninput();
 		}
+		else if (secondnerden === "gunlukkontrol") {
+			inputElement.oninput();
+			belgeoku();
+		}
 		document.getElementById("modalSearch").value = "";
 		$('#secondModal').modal('hide');
 	}

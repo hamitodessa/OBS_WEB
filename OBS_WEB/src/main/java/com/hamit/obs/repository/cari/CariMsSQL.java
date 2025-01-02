@@ -1074,4 +1074,44 @@ public class CariMsSQL implements ICariDatabase{
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
 		}
 	}
+
+	@Override
+	public List<Map<String, Object>> kasa_kontrol(String hesap, String t1, ConnectionDetails cariConnDetails) {
+		String sql =  "SELECT SATIRLAR.EVRAK,IZAHAT,KOD,BORC,ALACAK,[USER]" +
+				" FROM SATIRLAR,IZAHAT" +
+				" WHERE SATIRLAR.EVRAK = IZAHAT.EVRAK and HESAP =N'" + hesap + "'" +
+				" AND CONVERT(VARCHAR(25),TARIH,121) LIKE '" + t1 + "%'" +
+				" ORDER BY SATIRLAR.EVRAK";
+		List<Map<String, Object>> resultList = new ArrayList<>(); 
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("gunluk kontrol okuma", e); 
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> kasa_mizan(String kod, String ilktarih, String sontarih,
+			ConnectionDetails cariConnDetails) {
+		String sql =  "SELECT SATIRLAR.HESAP,HESAP.UNVAN,HESAP.HESAP_CINSI, SUM(SATIRLAR.BORC) AS islem, SUM(SATIRLAR.ALACAK) AS islem2, SUM(SATIRLAR.ALACAK - SATIRLAR.BORC) AS bakiye" +
+				" FROM SATIRLAR LEFT JOIN" +
+				" HESAP ON SATIRLAR.HESAP = HESAP.HESAP" +
+				" WHERE SATIRLAR.HESAP = N'" + kod + "'" + 
+				" AND SATIRLAR.TARIH >= '" + ilktarih + "' AND SATIRLAR.TARIH < '" + sontarih + " 23:59:59.998'" +
+				" GROUP BY SATIRLAR.HESAP,HESAP.UNVAN,HESAP.HESAP_CINSI" +
+				" ORDER BY SATIRLAR.HESAP";
+		List<Map<String, Object>> resultList = new ArrayList<>(); 
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("kasamizan okuma", e); 
+		}
+		return resultList; 
+
+	}
 }
