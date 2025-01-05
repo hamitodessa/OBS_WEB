@@ -1,25 +1,31 @@
 
 services:
-  mysql-container:
-    image: mysql:8.0.33
-    container_name: mysql-container
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: obs_user
-      MYSQL_USER: my_user
-      MYSQL_PASSWORD: user_password
-    volumes:
-      - mysql_data:/var/lib/mysql
-
   obs_web:
     image: obs_web:0.0.1
-    container_name: obs_web
-    depends_on:
-      - mysql-container
+    restart: always
     ports:
-      - "8080:8080"
+      - 8080:8080
+    networks:
+      - obs_network
+    environment:
+      - DB_URL=jdbc:mysql://mysqldb:3306/obs_user
+      - DB_USERNAME=hamit
+      - DB_PASSWORD=oOk271972
+    depends_on:
+      - mysqldb
 
-volumes:
-  mysql_data:
+  mysqldb:
+    image: "mysql:8.0.33"
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - obs_network
+    environment:
+      MYSQL_DATABASE: obs_user
+      MYSQL_USER: hamit
+      MYSQL_PASSWORD: oOk271972
+      MYSQL_ROOT_PASSWORD: rootpassword
+
+networks:
+  obs_network:
