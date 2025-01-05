@@ -8,14 +8,14 @@ services:
     networks:
       - obs_network
     environment:
-      - DB_URL=jdbc:mysql://mysqldb:3306/obs_user
-      - DB_USERNAME=hamit
-      - DB_PASSWORD=oOk271972
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/obs_user
+      - SPRING_DATASOURCE_USERNAME=hamit
+      - SPRING_DATASOURCE_PASSWORD=oOk271972
     depends_on:
       - mysqldb
 
   mysqldb:
-    image: "mysql:8.0.33"
+    image: mysql:8.0.33
     restart: always
     ports:
       - 3306:3306
