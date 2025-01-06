@@ -5,8 +5,8 @@ FROM maven:3.8-openjdk-17 AS build
 WORKDIR /app
 
 # Sadece gerekli dosyaları kopyala
-COPY OBS_WEB/OBS_WEB/pom.xml ./
-COPY OBS_WEB/OBS_WEB/src ./src
+COPY /OBS_WEB/pom.xml ./
+COPY /OBS_WEB/src ./src
 
 # Maven ile projeyi build et
 RUN mvn clean package -DskipTests
