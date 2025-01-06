@@ -1,5 +1,5 @@
 # Maven Build Aşaması
-FROM maven:3.8-openjdk-17 AS build
+FROM maven:3.8-openjdk-21 AS build
 
 # Çalışma dizinini ayarla
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY /OBS_WEB/src ./src
 RUN mvn clean package -DskipTests
 
 # Runtime Aşaması
-FROM openjdk:17-jdk-slim
+FROM openjdk:21-jdk
 WORKDIR /app
 
 # Maven build çıktısını kopyala
