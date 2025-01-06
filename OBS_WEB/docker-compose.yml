@@ -1,19 +1,5 @@
 
 services:
-  obs_web:
-    image: obs_web:0.0.1
-    restart: always
-    ports:
-      - 8080:8080
-    networks:
-      - obs_network
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/obs_user
-      - SPRING_DATASOURCE_USERNAME=hamit
-      - SPRING_DATASOURCE_PASSWORD=oOk271972
-    depends_on:
-      - mysqldb
-
   mysqldb:
     image: mysql:8.0.33
     restart: always
@@ -26,6 +12,21 @@ services:
       MYSQL_USER: hamit
       MYSQL_PASSWORD: oOk271972
       MYSQL_ROOT_PASSWORD: rootpassword
+  
+  obs_web:
+    image: obs_web:0.0.1
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - obs_network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/obs_user
+      - SPRING_DATASOURCE_USERNAME=hamit
+      - SPRING_DATASOURCE_PASSWORD=oOk271972
+      - SPRING_SQL_INIT_MODE=always
+    depends_on:
+      - mysqldb
 
 networks:
   obs_network:
