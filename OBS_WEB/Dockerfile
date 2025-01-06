@@ -5,8 +5,8 @@ FROM maven:3.8-openjdk-17 AS build
 WORKDIR /app
 
 # Sadece gerekli dosyaları kopyala
-COPY pom.xml ./
-COPY src ./src
+COPY OBS_WEB/OBS_WEB/pom.xml ./
+COPY OBS_WEB/OBS_WEB/src ./src
 
 # Maven ile projeyi build et
 RUN mvn clean package -DskipTests
@@ -21,5 +21,3 @@ COPY --from=build /app/target/OBS_WEB-0.0.1-SNAPSHOT.jar app.jar
 # Uygulamayı çalıştır
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
-
