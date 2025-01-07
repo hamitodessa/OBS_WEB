@@ -1,48 +1,47 @@
+// Updated Entity Files for PostgreSQL Compatibility
+
 package com.hamit.obs.model.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "etiket_ayar")
 @Data
+@NoArgsConstructor
 public class Etiket_Ayarlari {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column()
-	private int altbosluk;
-	
-	@Column()
-	private int ustbosluk;
-	
-	@Column()
-	private int sagbosluk;
-	
-	@Column()
-	private int solbosluk;
-	
-	@Column()
-	private int dikeyarabosluk;
 
-	@Column()
-	private int genislik;
-	
-	@Column()
-	private int yataydikey;
-	
-	@Column()
-	private int yukseklik;
-	
-	@OneToOne
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "etiket_ayar_seq")
+    @SequenceGenerator(name = "etiket_ayar_seq", sequenceName = "etiket_ayar_sequence", allocationSize = 1)
+    private Long id;
+
+    @Column
+    private Integer altbosluk;
+
+    @Column
+    private Integer ustbosluk;
+
+    @Column
+    private Integer solbosluk;
+
+    @Column
+    private Integer sagbosluk;
+
+    @Column
+    private Integer yukseklik;
+
+    @Column
+    private Integer genislik;
+
+    @Column
+    private Integer yataydikey;
+
+    @Column
+    private Integer dikeyarabosluk;
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

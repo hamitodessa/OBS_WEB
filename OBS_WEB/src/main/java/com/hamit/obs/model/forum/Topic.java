@@ -1,6 +1,7 @@
 
 package com.hamit.obs.model.forum;
 
+/*
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,4 +41,6 @@ public class Topic {
     private List<Comment> comments = new ArrayList<>();
     
 	private LocalDateTime createdAt = LocalDateTime.now();
+	
 }
+*/

@@ -80,14 +80,14 @@ public class EmailController {
 			email_Details.setPort(emailDTO.getPort());
 			email_Details.setSifre(TextSifreleme.encrypt(emailDTO.getSifre()));
 			if (emailDTO.getId() != null) {
-			    Email_Details emailDetails = user.getEmail_Details();
+			    Email_Details emailDetails = user.getEmailDetails();
 			    if (emailDetails != null && emailDetails.getId().equals(emailDTO.getId())) {
-			        user.setEmail_Details(null);
+			        user.setEmailDetails(null);
 			        userService.saveUser(user);
 			    }
 			}
 			email_Details.setUser(user);
-			user.setEmail_Details(email_Details);
+			user.setEmailDetails(email_Details);
 			userService.saveUser(user);
 			response.put("errorMessage", "");
 	    } catch (ServiceException e) {

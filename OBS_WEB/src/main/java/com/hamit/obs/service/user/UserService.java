@@ -146,7 +146,7 @@ public class UserService {
 		newUser.setAdmin_hesap(currentUser.getAdmin_hesap());
 		newUser.setRoles(new HashSet<>(currentUser.getRoles()));
 
-		Email_Details emailDetail = currentUser.getEmail_Details();
+		Email_Details emailDetail = currentUser.getEmailDetails();
 			Email_Details newEmailDetail = new Email_Details();
 			newEmailDetail.setBssl(emailDetail.getBssl());
 			newEmailDetail.setBtsl(emailDetail.getBtsl());
@@ -158,10 +158,10 @@ public class UserService {
 			newEmailDetail.setPort(emailDetail.getPort());
 			newEmailDetail.setSifre(emailDetail.getSifre());
 			newEmailDetail.setUser(newUser);
-		    newUser.setEmail_Details(newEmailDetail);
+		    newUser.setEmailDetails(newEmailDetail);
 		
 
-		for (User_Details userDetail : currentUser.getUser_Details()) {
+		for (User_Details userDetail : currentUser.getUserDetails()) {
 			User_Details newUserDetail = new User_Details();
 			newUserDetail.setCalisanmi(userDetail.getCalisanmi());
 			newUserDetail.setEmail(newEmail);
@@ -175,10 +175,10 @@ public class UserService {
 			newUserDetail.setUser_pwd_server(userDetail.getUser_pwd_server());
 			newUserDetail.setUser_server(userDetail.getUser_server());
 			newUserDetail.setUser(newUser);
-			newUser.getUser_Details().add(newUserDetail);
+			newUser.getUserDetails().add(newUserDetail);
 		}
 
-		Etiket_Ayarlari etiketAyari = currentUser.getEtiket_Ayarlari();
+		Etiket_Ayarlari etiketAyari = currentUser.getEtiketAyarlari();
 			Etiket_Ayarlari newEtiketAyari = new Etiket_Ayarlari();
 			newEtiketAyari.setAltbosluk(etiketAyari.getAltbosluk());
 			newEtiketAyari.setDikeyarabosluk(etiketAyari.getDikeyarabosluk());
@@ -189,7 +189,7 @@ public class UserService {
 			newEtiketAyari.setYataydikey(etiketAyari.getYataydikey());
 			newEtiketAyari.setYukseklik(etiketAyari.getYukseklik());
 			newEtiketAyari.setUser(newUser);
-			newUser.setEtiket_Ayarlari(newEtiketAyari);
+			newUser.setEtiketAyarlari(newEtiketAyari);
 		
 		return userRepository.save(newUser);
 	}

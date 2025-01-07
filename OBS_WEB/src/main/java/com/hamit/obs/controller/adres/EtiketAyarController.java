@@ -68,7 +68,7 @@ public class EtiketAyarController {
 		Map<String, String> response = new HashMap<>();
 		try {
 			User user = userService.getCurrentUser();
-	        user.setEtiket_Ayarlari(null);
+	        user.setEtiketAyarlari(null);
 	        userService.saveUser(user);
 			Etiket_Ayarlari etiket_Ayarlari = new Etiket_Ayarlari();
 			etiket_Ayarlari.setAltbosluk(etiketayarDTO.getAltbosluk());
@@ -80,7 +80,7 @@ public class EtiketAyarController {
 			etiket_Ayarlari.setYataydikey(etiketayarDTO.getYataydikey().equals("YATAY") ?  0 : 1);
 			etiket_Ayarlari.setYukseklik(etiketayarDTO.getYukseklik());
 			etiket_Ayarlari.setUser(user);
-			user.setEtiket_Ayarlari(etiket_Ayarlari);
+			user.setEtiketAyarlari(etiket_Ayarlari);
 			userService.saveUser(user);
 			response.put("errorMessage","");
 		} catch (ServiceException e) {

@@ -160,11 +160,11 @@ public class UserDetailsController {
 		try {
 			Long id = request.get("id");
 			User user = userService.getCurrentUser();
-			User_Details userdetailsToRemove = user.getUser_Details().stream()
+			User_Details userdetailsToRemove = user.getUserDetails().stream()
 					.filter(details -> details.getId().equals(id))
 					.findFirst()
 					.orElseThrow(() -> new RuntimeException("User Details not found"));
-			user.getUser_Details().remove(userdetailsToRemove);
+			user.getUserDetails().remove(userdetailsToRemove);
 			userService.saveUser(user);	
 			response.put("errorMessage", ""); 
 			if(userdetailsToRemove.getUser_modul().equals("Cari Hesap"))

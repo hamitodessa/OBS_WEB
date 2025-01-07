@@ -1,16 +1,12 @@
+// Updated Entity Files for PostgreSQL Compatibility
+
 package com.hamit.obs.model.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+
 
 @Entity
 @Table(name = "email_details")
@@ -18,7 +14,8 @@ import lombok.Data;
 public class Email_Details {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "email_details_seq")
+	@SequenceGenerator(name = "email_details_seq", sequenceName = "email_details_sequence", allocationSize = 1)
 	private Long id;
 	
 	@Email
@@ -45,10 +42,10 @@ public class Email_Details {
 	private String gon_isim;
 	
 	@Column
-	private Boolean  bssl;
+	private Boolean bssl;
 	
 	@Column
-	private Boolean  btsl;
+	private Boolean btsl;
 	
 	@OneToOne
     @JoinColumn(name = "user_id", nullable = false)

@@ -1,6 +1,7 @@
 
 package com.hamit.obs.model.forum;
 
+/*
 import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,3 +39,4 @@ public class Comment {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 }
+*/

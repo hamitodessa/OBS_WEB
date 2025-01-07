@@ -1,3 +1,5 @@
+// Updated Entity Files for PostgreSQL Compatibility
+
 package com.hamit.obs.model.user;
 
 import jakarta.persistence.Column;
@@ -7,9 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
+
 
 @Entity
 @Table(name = "user_details")
@@ -17,7 +21,8 @@ import lombok.Data;
 public class User_Details {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_details_seq")
+	@SequenceGenerator(name = "user_details_seq", sequenceName = "user_details_sequence", allocationSize = 1)
 	private Long id;
 
 	@Email
@@ -40,16 +45,16 @@ public class User_Details {
 	private String user_modul;
 	
 	@Column
-	private Boolean  izinlimi;
+	private Boolean izinlimi;
 	
 	@Column
-	private Boolean  calisanmi;
+	private Boolean calisanmi;
 	
 	@Column(nullable = false, length = 10)
 	private String hangi_sql;
 	
 	@Column
-	private Boolean   log;
+	private Boolean log;
 	
 
 	@ManyToOne

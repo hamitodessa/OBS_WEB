@@ -1,21 +1,23 @@
+// Updated Entity Files for PostgreSQL Compatibility
+
 package com.hamit.obs.model.user;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "roles")
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_seq")
+    @SequenceGenerator(name = "roles_seq", sequenceName = "roles_sequence", allocationSize = 1)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(unique = true, nullable = false)
-    private RolEnum name; 
-
- }
+    @Column(nullable = false, unique = true)
+    private RolEnum name;
+}
