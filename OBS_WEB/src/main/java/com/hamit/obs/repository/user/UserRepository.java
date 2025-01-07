@@ -13,6 +13,6 @@ import com.hamit.obs.model.user.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
     
-    @Query("SELECT u FROM User u WHERE LOWER(u.admin_hesap) = LOWER(:email) ORDER BY u.admin_hesap")
+    @Query("SELECT u FROM User u WHERE LOWER(u.admin_hesap) = LOWER(:email) ORDER BY LOWER(u.admin_hesap)")
     List<User> findByUserAdminHesap(@Param("email") String email);
 }
