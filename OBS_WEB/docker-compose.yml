@@ -1,22 +1,39 @@
 
 services:
-  
-  obs_web:
-    image: obs_web:0.0.1
-    restart: always
-    ports:
-      - 8082:8080
-    environment:
-      MYSQL_HOST: mysqldb
-      MYSQL_USER: hamit
-      MYSQL_PASSWORD: oOk271972
-      MYSQL_PORT: 3306
-
   mysqldb:
     image: mysql:8.0.33
     restart: always
     ports:
-      - 3307:3306
+      - 3306:3306
+    networks:
+      - obs_network
     environment:
       MYSQL_DATABASE: obs_user
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: hamit
+      MYSQL_PASSWORD: oOk271972
+      MYSQL_ROOT_PASSWORD: rootpassword
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  obs_web:
+    image: obs_web:0.0.1
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - obs_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/obs_user
+      SPRING_DATASOURCE_USERNAME: hamit
+      SPRING_DATASOURCE_PASSWORD: oOk271972
+      SPRING_SQL_INIT_MODE: always
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+
+networks:
+  obs_network:
+    driver: bridge
