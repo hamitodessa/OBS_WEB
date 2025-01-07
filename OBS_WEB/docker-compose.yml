@@ -1,32 +1,22 @@
 
 services:
-  mysqldb:
-    image: mysql:8.0.33
-    restart: always
-    ports:
-      - 3306:3306
-    networks:
-      - obs_network
-    environment:
-      MYSQL_DATABASE: obs_user
-      MYSQL_USER: hamit
-      MYSQL_PASSWORD: oOk271972
-      MYSQL_ROOT_PASSWORD: rootpassword
   
   obs_web:
     image: obs_web:0.0.1
     restart: always
     ports:
-      - 8080:8080
-    networks:
-      - obs_network
+      - 8082:8080
     environment:
       MYSQL_HOST: mysqldb
       MYSQL_USER: hamit
       MYSQL_PASSWORD: oOk271972
       MYSQL_PORT: 3306
-    depends_on:
-      - mysqldb
 
-networks:
-  obs_network:
+  mysqldb:
+    image: mysql:8.0.33
+    restart: always
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: obs_user
+      MYSQL_ROOT_PASSWORD: root
