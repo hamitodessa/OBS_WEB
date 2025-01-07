@@ -21,10 +21,10 @@ services:
     networks:
       - obs_network
     environment:
-      MYSQL_HOST: mysqldb
-      MYSQL_USER: hamit
-      MYSQL_PASSWORD: oOk271972
-      MYSQL_PORT: 3306
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/obs_user
+      - SPRING_DATASOURCE_USERNAME=hamit
+      - SPRING_DATASOURCE_PASSWORD=oOk271972
+      - SPRING_SQL_INIT_MODE=always
     depends_on:
       - mysqldb
 
