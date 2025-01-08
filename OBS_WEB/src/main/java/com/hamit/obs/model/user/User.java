@@ -1,5 +1,3 @@
-// Updated Entity Files for PostgreSQL Compatibility
-
 package com.hamit.obs.model.user;
 
 import jakarta.persistence.*;
@@ -39,7 +37,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(columnDefinition = "BYTEA")
+    @Lob
+    @Column(columnDefinition = "bytea")
     private byte[] image;
 
     @Email

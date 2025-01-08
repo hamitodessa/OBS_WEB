@@ -216,8 +216,8 @@ class="fa fa-bar-chart-o green_color"
 						<div class="footer">
 							<p>
 								Copyright © 2024 Designed by html.design. All rights reserved.
-								<br>
 								<br> Distributed By: <a href="https://okumus.gen.tr/">Hamit	Okumus</a>
+								<br> <a id="ip" th:text="${ip}"></a>
 							</p>
 						</div>
 					</div>
@@ -242,6 +242,7 @@ class="fa fa-bar-chart-o green_color"
 					} else {
 						$('#ara_content').html(data);
 						getWellcomeData();
+						$('body').css('cursor', 'default');
 					}
 				},
 				error: function(xhr) {
@@ -275,6 +276,7 @@ class="fa fa-bar-chart-o green_color"
             }
         }
         else{
+        	document.body.style.cursor = 'wait';
         	loadDefaultContent();
 		}
     };

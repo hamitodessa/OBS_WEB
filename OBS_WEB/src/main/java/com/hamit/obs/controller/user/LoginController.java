@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import com.hamit.obs.dto.user.CalismaDiziniDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -51,12 +52,15 @@ public class LoginController {
 	
 	@GetMapping("/index")
 	public Model index(Model model) {
-	    User user = userService.getCurrentUser();
-	    model.addAttribute("profileImage", getBase64Image(user != null ? user.getImage() : null));
-	    boolean isAdmin = user != null && user.getRoles().stream()
-	            .anyMatch(role -> role.getName() == RolEnum.ADMIN);
-	    model.addAttribute("menuitemvisible", isAdmin);
-	    return model;
+		User user = userService.getCurrentUser();
+		model.addAttribute("profileImage", getBase64Image(user != null ? user.getImage() : null));
+		boolean isAdmin = user != null && user.getRoles().stream()
+				.anyMatch(role -> role.getName() == RolEnum.ADMIN);
+		model.addAttribute("menuitemvisible", isAdmin);
+		String apiUrl = "https://api.ipify.org?format=text";
+		RestTemplate restTemplate = new RestTemplate();
+		model.addAttribute("ip", restTemplate.getForObject(apiUrl, String.class));
+		return model;
 	}
 
 	private String getBase64Image(byte[] image) {
