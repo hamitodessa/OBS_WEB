@@ -228,14 +228,13 @@ class="fa fa-bar-chart-o green_color"
 	</div>
 	</body>
 </html>
-	<script>
+<script>
 	function loadDefaultContent() {
 		sayfaYukle('/wellcome'); // İlk yüklenen içerik 'deneme.html' olacak
     }
 	async function sayfaYukle(url) {
 		try {
 			document.body.style.cursor = 'wait';
-			$('body').css('cursor', 'default');
 			$.ajax({
 				url: url,
 				type: "GET",
@@ -244,7 +243,6 @@ class="fa fa-bar-chart-o green_color"
 						window.location.href = "/login";
 					} else {
 						$('#ara_content').html(data);
-						getWellcomeData();
 					}
 				},
 				error: function(xhr) {
@@ -254,15 +252,10 @@ class="fa fa-bar-chart-o green_color"
 						$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
 					}
 				},
-				complete: function() {
-					$('body').css('cursor', 'default');
-				}
 			});
 		} catch (error) {
 			document.getElementById('ara_content').innerHTML =
 				`<h2>Bir hata oluştu: ${error.message}</h2>`;
-		} finally {
-			document.body.style.cursor = 'default';
 		}
 	}
 	function refreshPage() {

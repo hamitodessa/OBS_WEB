@@ -23,7 +23,7 @@
 						</div>
 					</div>
 					<div class="login_form">
-						<form action="/login" method="POST" onsubmit="showLoader()">
+						<form action="/login" method="POST" onsubmit="return showLoader(event)">
 							<fieldset>
 								<div class="field">
 									<label class="label_field">Email Address</label> <input
@@ -36,8 +36,18 @@
 								</div>
 								<div class="field margin_0">
 									<label class="label_field hidden">hidden label</label>
-									<button class="main_bt" type="submit">Giris Yap</button>
+									<button class="main_bt" type="submit" >Giris Yap</button>
 								</div>
+								
+								<div class="field">
+									<label class="label_field hidden">hidden label</label>
+                        			<div id="progressBar" style="display: none; margin-top: 20px;">
+                            			<div style="width: 100%; background: #f0f0f0; border-radius: 10px;">
+                                			<div id="progress" style="width: 0%; height: 15px; background: #214162; border-radius: 10px; transition: width 0.5s;"></div>
+                            			</div>
+                        			</div>
+								</div>
+								
 								<div class="field">
 									<label class="label_field hidden">hidden label</label> <a
 										class="forgot" th:href="@{/user/send_password}">Şifremi
@@ -47,6 +57,7 @@
 								</div>
 							</fieldset>
 						</form>
+						
 					</div>
 				</div>
 			</div>
@@ -55,7 +66,22 @@
 </body>
 </html>
 <script>
-  function showLoader() {
-     document.body.style.cursor = "wait";
-  }
+    let progressInterval;
+    function showLoader(event) {
+        const progressBar = document.getElementById("progressBar");
+        const progress = document.getElementById("progress");
+        document.body.style.cursor = "wait";
+        progressBar.style.display = "block";
+        progress.style.width = "0%";
+        let width = 0;
+        progressInterval = setInterval(() => {
+            if (width >= 100) {
+                width = 0;
+            } else {
+                width += 5;
+            }
+            progress.style.width = width + "%";
+        }, 300);
+        return true;
+    }
 </script>
