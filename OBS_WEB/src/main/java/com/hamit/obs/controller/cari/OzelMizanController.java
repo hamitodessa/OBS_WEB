@@ -32,7 +32,7 @@ public class OzelMizanController {
 	@Autowired
 	private RaporOlustur raporOlustur;
 
-	@GetMapping("cari/ozelmizan")
+	@GetMapping("/cari/ozelmizan")
 	public String register() {
 		return "/cari/ozelmizan";
 	}

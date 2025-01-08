@@ -35,7 +35,7 @@ public class EkstreController {
 	private RaporOlustur raporOlustur;
 
 
-	@GetMapping("cari/ekstre")
+	@GetMapping("/cari/ekstre")
 	public String ekstre() {
 		return "/cari/ekstre";
 	}

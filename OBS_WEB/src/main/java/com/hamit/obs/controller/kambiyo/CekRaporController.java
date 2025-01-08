@@ -23,7 +23,7 @@ public class CekRaporController {
 	@Autowired 
 	KambiyoService kambiyoService;
 	
-	@GetMapping("kambiyo/cekrapor")
+	@GetMapping("/kambiyo/cekrapor")
 	public String ekstre() {
 		return "/kambiyo/cekraporlama";
 	}

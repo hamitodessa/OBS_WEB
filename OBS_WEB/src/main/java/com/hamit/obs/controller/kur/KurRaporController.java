@@ -23,7 +23,7 @@ public class KurRaporController {
 	@Autowired
 	private KurService kurService;
 	
-	@GetMapping("kur/kurrapor")
+	@GetMapping("/kur/kurrapor")
 	public String register() {
 		return "/kur/kurrapor";
 	}

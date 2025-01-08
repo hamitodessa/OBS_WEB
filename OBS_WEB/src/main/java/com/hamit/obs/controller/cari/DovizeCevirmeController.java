@@ -35,7 +35,7 @@ public class DovizeCevirmeController {
 	@Autowired
 	private RaporOlustur raporOlustur;
 
-	@GetMapping("cari/dvzcevirme")
+	@GetMapping("/cari/dvzcevirme")
 	public String dvzcevirme() {
 		return "/cari/dvzcevirme";
 	}

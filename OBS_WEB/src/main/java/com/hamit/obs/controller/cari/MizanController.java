@@ -34,7 +34,7 @@ public class MizanController {
 	@Autowired
 	private RaporOlustur raporOlustur;
 
-	@GetMapping("cari/mizan")
+	@GetMapping("/cari/mizan")
 	public String register() {
 		return "/cari/mizan";
 	}

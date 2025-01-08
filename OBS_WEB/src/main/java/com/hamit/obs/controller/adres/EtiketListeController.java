@@ -30,7 +30,7 @@ public class EtiketListeController {
 	@Autowired
 	private RaporOlustur raporOlustur;
 	
-	@GetMapping("adres/etiketliste")
+	@GetMapping("/adres/etiketliste")
 	public Map<String, Object>  etiketliste() {
 		Map<String, Object> response = new HashMap<>();
 		try {
