@@ -92,7 +92,7 @@ async function ekstredownloadReport(format) {
 	$yenileButton.prop('disabled', true);
 
 	try {
-		const response = await fetchWithSessionCheckForDownload('/cari/ekstre_download', {
+		const response = await fetchWithSessionCheckForDownload('cari/ekstre_download', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

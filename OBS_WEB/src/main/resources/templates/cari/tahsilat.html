@@ -289,8 +289,7 @@ datalist {
 	
 <input type="hidden" id="tahsilatBilgi" name="tahsilatBilgi" value="initialValue">
 
-<div th:replace="modal/borc_alacak :: modalborcalacak"></div>
-
-<div th:replace="modal/yenihsppln :: secondModal"></div>
+<div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
+<div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 
 <script src="/obs_js_files/cari/tahsilat.js"></script>

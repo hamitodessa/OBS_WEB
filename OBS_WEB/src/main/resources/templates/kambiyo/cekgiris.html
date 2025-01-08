@@ -280,12 +280,11 @@ datalist {
 </div>
 <input type="hidden" id="cekgirBilgi" name="cekgirBilgi" value="initialValue">
 
-
-<div th:replace="modal/borc_alacak :: modalborcalacak"></div>
-
-<div th:replace="modal/yenihsppln :: secondModal"></div>
-
 <script src="/obs_js_files/kambiyo/cekgiris.js"></script>
+
+<div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
+<div th:replace="~{modal/yenihsppln :: secondModal}"></div>
+
 
 
  
