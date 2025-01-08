@@ -226,6 +226,8 @@ class="fa fa-bar-chart-o green_color"
 			</div>
 		</div>
 	</div>
+	</body>
+</html>
 	<script>
 	function loadDefaultContent() {
 		sayfaYukle('/wellcome'); // İlk yüklenen içerik 'deneme.html' olacak
@@ -233,6 +235,7 @@ class="fa fa-bar-chart-o green_color"
 	async function sayfaYukle(url) {
 		try {
 			document.body.style.cursor = 'wait';
+			$('body').css('cursor', 'default');
 			$.ajax({
 				url: url,
 				type: "GET",
@@ -242,7 +245,6 @@ class="fa fa-bar-chart-o green_color"
 					} else {
 						$('#ara_content').html(data);
 						getWellcomeData();
-						$('body').css('cursor', 'default');
 					}
 				},
 				error: function(xhr) {
@@ -288,5 +290,3 @@ class="fa fa-bar-chart-o green_color"
     <script src="/obs_js_files/obs_global.js"></script>
 
 	<script src="/obs_js_files/modal/yeni_hsppln.js"></script>
-</body>
-</html>
