@@ -25,7 +25,7 @@ public class TahsilatAyarlariController {
 
 	@GetMapping("cari/tahsilatdegerleri")
 	public String register() {
-		return "/cari/tahsilatayar";
+		return "cari/tahsilatayar";
 	}	
 
 	@PostMapping("cari/tahayarYukle")

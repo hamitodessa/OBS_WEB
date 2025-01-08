@@ -34,7 +34,7 @@ public class OzelMizanController {
 
 	@GetMapping("/cari/ozelmizan")
 	public String register() {
-		return "/cari/ozelmizan";
+		return "cari/ozelmizan";
 	}
 
 	@PostMapping("cari/ozelmizan")

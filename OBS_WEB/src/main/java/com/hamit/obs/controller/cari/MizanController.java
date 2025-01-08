@@ -36,7 +36,7 @@ public class MizanController {
 
 	@GetMapping("/cari/mizan")
 	public String register() {
-		return "/cari/mizan";
+		return "cari/mizan";
 	}
 
 	@PostMapping("cari/mizanrapor")

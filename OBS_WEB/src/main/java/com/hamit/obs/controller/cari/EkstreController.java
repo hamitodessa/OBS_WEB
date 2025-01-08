@@ -37,7 +37,7 @@ public class EkstreController {
 
 	@GetMapping("/cari/ekstre")
 	public String ekstre() {
-		return "/cari/ekstre";
+		return "cari/ekstre";
 	}
 
 
