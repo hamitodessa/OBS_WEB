@@ -48,7 +48,8 @@ public class RegistirasyonController {
 				user.setAdmin_hesap("");
 			}
 			if (!image.isEmpty()) {
-				user.setImage(image.getBytes());
+				byte[] resimBytes = image.getBytes();
+				user.setImage(resimBytes);
 			} else {
 				user.setImage(null);
 			}

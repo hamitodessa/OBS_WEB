@@ -42,12 +42,16 @@ public class UserChangeNameController {
 			user.setFirstName(userDTO.getFirstName());
 			user.setLastName(userDTO.getLastName());
 			if ( !image.isEmpty())
-				user.setImage(image.getBytes());
+			{
+				byte[] resimBytes = image.getBytes();
+				user.setImage(resimBytes);
+			}
 			userService.saveUser(user);
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
