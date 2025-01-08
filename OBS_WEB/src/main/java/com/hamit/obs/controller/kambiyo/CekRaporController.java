@@ -25,7 +25,7 @@ public class CekRaporController {
 	
 	@GetMapping("/kambiyo/cekrapor")
 	public String ekstre() {
-		return "/kambiyo/cekraporlama";
+		return "kambiyo/cekraporlama";
 	}
 
 	

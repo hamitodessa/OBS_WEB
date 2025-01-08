@@ -37,7 +37,7 @@ public class DovizeCevirmeController {
 
 	@GetMapping("/cari/dvzcevirme")
 	public String dvzcevirme() {
-		return "/cari/dvzcevirme";
+		return "cari/dvzcevirme";
 	}
 
 	@PostMapping("cari/dvzcevirme")

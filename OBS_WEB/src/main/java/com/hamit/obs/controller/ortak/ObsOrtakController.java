@@ -28,7 +28,7 @@ public class ObsOrtakController {
 	@Autowired
 	private KambiyoService kambiyoService;
 
-	@GetMapping("obs/firmaismi")
+	@GetMapping("/obs/firmaismi")
 	public String firmaism() {
 		return "ortak/firmaismidegistirme";
 	}

@@ -121,9 +121,9 @@ public class CariController {
 		return response;
 	}
 	
-	@GetMapping("cari/carikoddegis")
+	@GetMapping("/cari/carikoddegis")
 	public String carikoddegis() {
-		return "/cari/carikoddegis";
+		return "cari/carikoddegis";
 	}
 
 	@PostMapping("cari/koddegiskaydet")
