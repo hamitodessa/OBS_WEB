@@ -38,7 +38,7 @@ async function mizfetchTableData() {
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
 
 	try {
-		const data = await fetchWithSessionCheck("cari/mizan", {
+		const data = await fetchWithSessionCheck("cari/mizanrapor", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

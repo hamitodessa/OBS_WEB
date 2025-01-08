@@ -39,9 +39,9 @@ public class MizanController {
 		return "/cari/mizan";
 	}
 
-	@PostMapping("cari/mizan")
+	@PostMapping("cari/mizanrapor")
 	@ResponseBody
-	public Map<String, Object> sorgula(@RequestBody mizanDTO mizanDTO) {
+	public Map<String, Object> mizanrapor(@RequestBody mizanDTO mizanDTO) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			List<Map<String, Object>> mizan = cariservice.mizan(mizanDTO);
