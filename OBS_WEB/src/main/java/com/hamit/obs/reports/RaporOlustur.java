@@ -71,7 +71,7 @@ public class RaporOlustur {
 			JasperPrint jp = prepareJasperPrint("MIZAN.jrxml", parameters, mizanData,UygulamaSabitleri.CariRaporYeri);
 			return exportRapor(jp, mizanDTO.getFormat());
 		} catch (Exception e) {
-			throw new ServiceException("Cari Rapor Olusturma", e);
+			throw new ServiceException( e.getMessage());
 		}
 	}
 
