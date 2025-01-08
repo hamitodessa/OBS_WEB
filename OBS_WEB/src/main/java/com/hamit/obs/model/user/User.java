@@ -37,8 +37,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Lob
-    @Column(columnDefinition = "bytea")
+    @Column(columnDefinition = "BYTEA")
     private byte[] image;
 
     @Email
