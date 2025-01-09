@@ -29,6 +29,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		try {
+			System.setProperty("jasperreports.fonts.path", "/usr/share/fonts/truetype/custom_fonts");
 			cariService.initialize();
 			kurService.initialize();
 			adresService.initialize();
