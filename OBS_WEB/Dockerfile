@@ -18,9 +18,9 @@ COPY /OBS_WEB/src ./src
 RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ttf-mscorefonts-installer \
-    && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y --no-install-recommends \
+#    ttf-mscorefonts-installer \
+#    && rm -rf /var/lib/apt/lists/*
 
 COPY /OBS_WEB/src/main/resources/static/fonts /usr/share/fonts/truetype/custom_fonts
 RUN fc-cache -fv
