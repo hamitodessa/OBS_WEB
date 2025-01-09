@@ -53,59 +53,59 @@
 				<bottomPen lineWidth="1.0" lineStyle="Double"/>
 			</box>
 		</element>
-		<element kind="textField" uuid="a6ba1ba1-040f-4d58-b5fe-7fdf6343381c" x="480" y="18" width="95" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="a6ba1ba1-040f-4d58-b5fe-7fdf6343381c" x="480" y="18" width="95" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/app/BOOT-INF/classes/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy" bold="true" hTextAlign="Right">
 			<expression><![CDATA[new java.util.Date()]]></expression>
 		</element>
-		<element kind="textField" uuid="4eef15bc-5cfc-4f79-ac7e-88c17ebd807f" x="349" y="39" width="226" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="4eef15bc-5cfc-4f79-ac7e-88c17ebd807f" x="349" y="39" width="226" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/app/BOOT-INF/classes/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<expression><![CDATA[$P{Periyot}]]></expression>
 		</element>
-		<element kind="textField" uuid="76d724ca-9a4b-47fb-8585-b8a4ac4e1c8a" x="0" y="39" width="340" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="textField" uuid="76d724ca-9a4b-47fb-8585-b8a4ac4e1c8a" x="0" y="39" width="340" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/app/BOOT-INF/classes/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<expression><![CDATA[$P{Firma}]]></expression>
 		</element>
 	</title>
 	<pageHeader height="15" splitType="Stretch">
-		<element kind="staticText" uuid="f747616e-e305-4e13-ad10-0376ed19854c" x="0" y="0" width="58" height="14" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="staticText" uuid="f747616e-e305-4e13-ad10-0376ed19854c" x="0" y="0" width="58" height="14" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<text><![CDATA[HESAP]]></text>
 		</element>
-		<element kind="staticText" uuid="8179803a-2094-44cd-90f4-c9de0fc2e0ff" x="60" y="0" width="225" height="14" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="staticText" uuid="8179803a-2094-44cd-90f4-c9de0fc2e0ff" x="60" y="0" width="225" height="14" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<text><![CDATA[UNVAN]]></text>
 		</element>
-		<element kind="staticText" uuid="bf617523-017e-4269-a805-55677b163455" x="285" y="0" width="38" height="14" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="staticText" uuid="bf617523-017e-4269-a805-55677b163455" x="285" y="0" width="38" height="14" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<text><![CDATA[H_CINSI]]></text>
 		</element>
-		<element kind="staticText" uuid="eb356180-d0cd-4b7e-9a33-ae8cd4dc875f" x="323" y="0" width="86" height="14" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="eb356180-d0cd-4b7e-9a33-ae8cd4dc875f" x="323" y="0" width="86" height="14" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[BORC]]></text>
 		</element>
-		<element kind="staticText" uuid="40d94115-6c6d-4346-b9e3-7088227e8173" x="409" y="0" width="86" height="14" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="40d94115-6c6d-4346-b9e3-7088227e8173" x="409" y="0" width="86" height="14" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[ALACAK]]></text>
 		</element>
-		<element kind="staticText" uuid="4ff1b36a-4c42-4cfd-bfa5-e1d3981ad640" x="496" y="0" width="79" height="14" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="4ff1b36a-4c42-4cfd-bfa5-e1d3981ad640" x="496" y="0" width="79" height="14" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[BAKIYE]]></text>
 		</element>
 		<element kind="line" uuid="6e557a97-caba-433b-972c-73f2fbbdafaa" x="0" y="13" width="575" height="2"/>
 	</pageHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
-			<element kind="textField" uuid="8a38cc6a-47dc-45a7-88c9-99cb170dc0e7" x="0" y="0" width="58" height="12" fontName="Arial Narrow" fontSize="10.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
+			<element kind="textField" uuid="8a38cc6a-47dc-45a7-88c9-99cb170dc0e7" x="0" y="0" width="58" height="12" fontName="Arial Narrow" fontSize="10.0" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{HESAP}]]></expression>
 			</element>
 			<element kind="line" uuid="cec6be27-3301-433b-9a60-b0a45c27ece7" x="0" y="12" width="575" height="1">
 				<property name="com.jaspersoft.studio.unit.height" value="inch"/>
 				<pen lineStyle="Dotted"/>
 			</element>
-			<element kind="textField" uuid="2f6ff282-05c2-4a6f-9a18-cceafed8e7c9" x="60" y="0" width="225" height="12" fontName="Arial Narrow" fontSize="10.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
+			<element kind="textField" uuid="2f6ff282-05c2-4a6f-9a18-cceafed8e7c9" x="60" y="0" width="225" height="12" fontName="Arial Narrow" fontSize="10.0" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{UNVAN}]]></expression>
 			</element>
-			<element kind="textField" uuid="b4985c79-6eef-4a39-8505-3ecde60461b1" x="285" y="0" width="38" height="12" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
+			<element kind="textField" uuid="b4985c79-6eef-4a39-8505-3ecde60461b1" x="285" y="0" width="38" height="12" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{H_CINSI}]]></expression>
 			</element>
-			<element kind="textField" uuid="a92fbd1a-8b2e-490b-9582-4de2ca7ccc4e" x="323" y="0" width="86" height="12" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right">
+			<element kind="textField" uuid="a92fbd1a-8b2e-490b-9582-4de2ca7ccc4e" x="323" y="0" width="86" height="12" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right">
 				<expression><![CDATA[$F{BORC}]]></expression>
 			</element>
-			<element kind="textField" uuid="591909b6-85b4-490b-a3b5-9c46f8983771" x="409" y="0" width="86" height="12" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right">
+			<element kind="textField" uuid="591909b6-85b4-490b-a3b5-9c46f8983771" x="409" y="0" width="86" height="12" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right">
 				<expression><![CDATA[$F{ALACAK}]]></expression>
 			</element>
-			<element kind="textField" uuid="e86f4223-0414-46c5-b222-03d011bfba8e" x="496" y="0" width="79" height="12" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="###,##0.00" hTextAlign="Right">
+			<element kind="textField" uuid="e86f4223-0414-46c5-b222-03d011bfba8e" x="496" y="0" width="79" height="12" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="###,##0.00" hTextAlign="Right">
 				<expression><![CDATA[$F{BAKIYE}]]></expression>
 			</element>
 		</band>
@@ -116,10 +116,10 @@
 		</element>
 	</pageFooter>
 	<summary height="14" splitType="Stretch">
-		<element kind="textField" uuid="ae55a790-672d-49b0-9dc5-b416bdcd8f81" x="300" y="0" width="109" height="14" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="ae55a790-672d-49b0-9dc5-b416bdcd8f81" x="300" y="0" width="109" height="14" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" bold="true" hTextAlign="Right">
 			<expression><![CDATA[$V{borc_toplam}]]></expression>
 		</element>
-		<element kind="textField" uuid="dd44381f-d21e-47d2-a03a-4d86fbf2a1e6" x="409" y="0" width="87" height="14" fontName="Arial Narrow" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="dd44381f-d21e-47d2-a03a-4d86fbf2a1e6" x="409" y="0" width="87" height="14" fontName="Arial Narrow" pdfFontName="/app/BOOT-INF/classes/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" bold="true" hTextAlign="Right">
 			<expression><![CDATA[$V{alacak_toplam}]]></expression>
 		</element>
 	</summary>
