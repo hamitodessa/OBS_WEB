@@ -57,29 +57,23 @@ public class CariMsSQL implements ICariDatabase{
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
 			tARIH.append(" AND TARIH BETWEEN ? AND ?");
 		}
-
 		String sql = "SELECT TARIH, SATIRLAR.EVRAK, ISNULL(IZAHAT.IZAHAT, '') AS IZAHAT, KOD, KUR, BORC, ALACAK, " +
 				"SUM(ALACAK - BORC) OVER(ORDER BY TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE, [USER] " +
 				"FROM SATIRLAR LEFT JOIN IZAHAT " +
 				"ON SATIRLAR.EVRAK = IZAHAT.EVRAK WHERE HESAP = ?" +
 				tARIH +
 				" ORDER BY TARIH";
-
 		List<Map<String, Object>> resultList = new ArrayList<>();
-
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
 			preparedStatement.setString(1, hesap);
 			if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
 				preparedStatement.setString(2, t1);
 				preparedStatement.setString(3, t2 + " 23:59:59.998");
 			}
-
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
-
 			if (!t1.equals("1900-01-01")) {
 				List<Map<String, Object>> mizanList = ekstre_mizan(
 						hesap,
@@ -89,13 +83,11 @@ public class CariMsSQL implements ICariDatabase{
 						"     ", "ZZZZZ",
 						cariConnDetails
 						);
-
 				if (!mizanList.isEmpty()) {
 					Map<String, Object> newRow = new HashMap<>();
 					double borc = (double) mizanList.get(0).getOrDefault("ISLEM", 0.0);
 					double alacak = (double) mizanList.get(0).getOrDefault("ISLEM2", 0.0);
 					double bakiye = alacak - borc;
-
 					newRow.put("TARIH", new Date());
 					newRow.put("EVRAK", "0");
 					newRow.put("IZAHAT", "Devir");
@@ -106,11 +98,9 @@ public class CariMsSQL implements ICariDatabase{
 					newRow.put("BAKIYE", bakiye);
 					newRow.put("USER", "hmt");
 					resultList.add(0, newRow);
-
 					borc = 0.00;
 					alacak = 0.00;
 					bakiye = 0.00;
-					// Bakiye değerlerini güncelle
 					for (Map<String, Object> row : resultList) {
 						borc = (double) row.getOrDefault("BORC", 0.0);
 						alacak = (double) row.getOrDefault("ALACAK", 0.0);
@@ -122,7 +112,6 @@ public class CariMsSQL implements ICariDatabase{
 		} catch (Exception e) {
 			throw new ServiceException("Ekstre okunamadı", e);
 		}
-
 		return resultList;
 	}
 
