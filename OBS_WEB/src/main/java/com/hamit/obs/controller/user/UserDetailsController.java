@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +58,8 @@ public class UserDetailsController {
 	public Map<String, Object> detailoku(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			String email = userService.getCurrentUser().getEmail();
+			//String email = userService.getCurrentUser().getEmail();
+			String email = SecurityContextHolder.getContext().getAuthentication().getName();
 			User user = userService.getCurrentUser();
 			Set<Role> roles = user.getRoles();
 			String rolName = roles.stream()

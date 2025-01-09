@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,9 +32,10 @@ public class EmailController {
 
 	@GetMapping("user/emailsettings")
 	public Model getemailSettings(Model model) {
-		User user = userService.getCurrentUser();
+		//User user = userService.getCurrentUser();
+		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		EmailAyarlarDTO emailDTO = new EmailAyarlarDTO();
-		Email_Details email = emailService.findByEmail(user.getEmail().toString());
+		Email_Details email = emailService.findByEmail(useremail);
 		if(email != null) {
 			emailDTO.setId(email.getId());
 			emailDTO.setHesap(email.getHesap());

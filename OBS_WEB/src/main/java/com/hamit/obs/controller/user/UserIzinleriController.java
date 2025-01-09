@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +67,8 @@ public class UserIzinleriController {
 	public Map<String, Object> adminbaglihesapoku() {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			String email = userService.getCurrentUser().getEmail();
+			//String email = userService.getCurrentUser().getEmail();
+			String email = SecurityContextHolder.getContext().getAuthentication().getName();
 			List<User> userList = userService.findByUserAdminHesap(email);
 			if (userList.isEmpty()) {
 				response.put("success", false);
@@ -94,7 +96,8 @@ public class UserIzinleriController {
 	public Map<String, Object> sorgula(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			String email = userService.getCurrentUser().getEmail();
+			//String email = userService.getCurrentUser().getEmail();
+			String email = SecurityContextHolder.getContext().getAuthentication().getName();
 			List<User_Details> userDetailsList ;
 			if(params.get("hesap").equals("ADMIN"))
 				userDetailsList = userDetailsService.findByUserModulAndEmail(params.get("modul"), email,"ADMIN");
