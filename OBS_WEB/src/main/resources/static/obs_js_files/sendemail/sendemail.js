@@ -32,6 +32,7 @@ async function sendmailAt() {
 			},
 			body: JSON.stringify(RaporEmailDegiskenler)
 		});
+		console.info(response);
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}

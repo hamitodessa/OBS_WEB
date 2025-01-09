@@ -68,8 +68,11 @@ public class SendEmailController {
 				response.put("errorMessage", "E-posta gonderilemedi");
 			}
 		} catch (ServiceException e) {
+			response.put("success", "");
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
+			response.put("success", "");
 			response.put("errorMessage", e.getMessage());
 		}
 		return response;

@@ -4,8 +4,6 @@ async function getWellcomeData() {
 		const response = await fetch("wellcomecalismadizini", {
 			method: "GET",
 		});
-		console.log("Response received:", response);
-
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}

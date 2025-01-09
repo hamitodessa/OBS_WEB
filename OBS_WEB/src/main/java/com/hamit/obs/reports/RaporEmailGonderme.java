@@ -18,7 +18,6 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.dto.cari.mizanDTO;
 import com.hamit.obs.dto.kambiyo.bordroPrinter;
@@ -28,7 +27,9 @@ import com.hamit.obs.model.user.Email_Details;
 import com.hamit.obs.model.user.Gonderilmis_Mailler;
 import com.hamit.obs.model.user.User;
 import com.hamit.obs.service.user.EmailService;
+import com.hamit.obs.service.user.GidenRaporService;
 import com.hamit.obs.service.user.UserService;
+
 @Component
 public class RaporEmailGonderme {
 
@@ -37,6 +38,9 @@ public class RaporEmailGonderme {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private GidenRaporService gidenRaporService;
 
 	@Autowired
 	private RaporOlustur raporOlustur;
@@ -51,7 +55,7 @@ public class RaporEmailGonderme {
 			gonder_jasper();
 			durum = true ;
 		} catch (Exception e) {
-			throw new ServiceException("Mail Gonderme ", e);
+			throw new ServiceException( e.getMessage());
 		}
 		return durum ;
 	}
@@ -64,7 +68,7 @@ public class RaporEmailGonderme {
 			String rapor_dos_adi = raporAdi + zaman + getDosyaUzantisi(raporEmailDegiskenler.getFormat());
 			son_gonderme(ds, rapor_dos_adi);
 		} catch (Exception ex) {
-			throw new ServiceException("Mail Gönderme Hatası", ex);
+			throw new ServiceException(ex.getMessage());
 		}
 	}
 
@@ -181,6 +185,8 @@ public class RaporEmailGonderme {
 		ByteArrayDataSource ds = raporOlustur.cekbordroCikis(bordroPrinter);
 		return ds ;
 	}
+	
+	
 	private void son_gonderme(ByteArrayDataSource ds,String rapdosadi) 
 	{
 		try {
@@ -230,7 +236,6 @@ public class RaporEmailGonderme {
 			Transport.send(message);
 			message= null;
 			session = null;
-
 			Gonderilmis_Mailler gonderilmis_Mailler = new Gonderilmis_Mailler();
 			gonderilmis_Mailler.setTarih(new Date());
 			gonderilmis_Mailler.setAciklama(raporEmailDegiskenler.getAciklama().toString().trim());
@@ -240,8 +245,7 @@ public class RaporEmailGonderme {
 			gonderilmis_Mailler.setKonu(raporEmailDegiskenler.getKonu().toString().trim());
 			gonderilmis_Mailler.setRapor(rapdosadi);
 			gonderilmis_Mailler.setUser(user);
-			user.getGonderilmisMailler().add(gonderilmis_Mailler);
-			userService.saveUser(user);
+			gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
 			if(! raporEmailDegiskenler.getCcc().toString().equals(""))
 			{
 				Gonderilmis_Mailler ikinciGonderilmisMailler = new Gonderilmis_Mailler();
@@ -253,12 +257,11 @@ public class RaporEmailGonderme {
 				ikinciGonderilmisMailler.setKonu(raporEmailDegiskenler.getKonu().toString().trim());
 				ikinciGonderilmisMailler.setRapor(rapdosadi);
 				ikinciGonderilmisMailler.setUser(user);
-				user.getGonderilmisMailler().add(ikinciGonderilmisMailler);
-				userService.saveUser(user);
+				gidenRaporService.savegonderilmisMailler(ikinciGonderilmisMailler);
 			}
 		} catch (Exception ex) 
 		{
-			throw new ServiceException("Mail Gonderme ", ex);
+			throw new ServiceException(ex.getMessage());
 		}
 	}
 }
