@@ -53,13 +53,13 @@
 				<bottomPen lineWidth="1.0" lineStyle="Double"/>
 			</box>
 		</element>
-		<element kind="textField" uuid="a6ba1ba1-040f-4d58-b5fe-7fdf6343381c" x="480" y="18" width="95" height="14" fontName="Arial.ttf" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="a6ba1ba1-040f-4d58-b5fe-7fdf6343381c" x="480" y="18" width="95" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy" bold="true" hTextAlign="Right">
 			<expression><![CDATA[new java.util.Date()]]></expression>
 		</element>
-		<element kind="textField" uuid="4eef15bc-5cfc-4f79-ac7e-88c17ebd807f" x="349" y="39" width="226" height="14" fontName="Arial.ttf" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="4eef15bc-5cfc-4f79-ac7e-88c17ebd807f" x="349" y="39" width="226" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<expression><![CDATA[$P{Periyot}]]></expression>
 		</element>
-		<element kind="textField" uuid="76d724ca-9a4b-47fb-8585-b8a4ac4e1c8a" x="0" y="39" width="340" height="14" fontName="Arial.ttf" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="textField" uuid="76d724ca-9a4b-47fb-8585-b8a4ac4e1c8a" x="0" y="39" width="340" height="14" fontName="Arial" fontSize="10.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<expression><![CDATA[$P{Firma}]]></expression>
 		</element>
 	</title>
