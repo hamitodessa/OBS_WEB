@@ -22,9 +22,9 @@ public class LogRaporController {
 	@Autowired
 	private LogRaporService logRaporService;
 
-	@GetMapping("user/lograpor")
+	@GetMapping("/user/lograpor")
 	public String ekstre() {
-		return "/user/lograpor";
+		return "user/lograpor";
 	}
 
 	@PostMapping("user/loglistele")

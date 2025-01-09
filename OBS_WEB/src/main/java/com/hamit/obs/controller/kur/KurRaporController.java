@@ -25,7 +25,7 @@ public class KurRaporController {
 	
 	@GetMapping("/kur/kurrapor")
 	public String register() {
-		return "/kur/kurrapor";
+		return "kur/kurrapor";
 	}
 	
 	@PostMapping("kur/kurrapor")

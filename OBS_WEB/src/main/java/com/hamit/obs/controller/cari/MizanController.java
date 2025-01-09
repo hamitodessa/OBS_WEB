@@ -35,7 +35,7 @@ public class MizanController {
 	private RaporOlustur raporOlustur;
 
 	@GetMapping("/cari/mizan")
-	public String register() {
+	public String mizan() {
 		return "cari/mizan";
 	}
 

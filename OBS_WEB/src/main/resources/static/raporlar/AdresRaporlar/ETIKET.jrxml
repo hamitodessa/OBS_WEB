@@ -14,30 +14,30 @@
 	<background splitType="Stretch"/>
 	<detail>
 		<band height="80" splitType="Stretch">
-			<element kind="textField" uuid="af7302d0-5663-4ba8-96d2-8a54da5c52ea" x="0" y="0" width="280" height="15" fontName="SansSerif" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Left">
+			<element kind="textField" uuid="af7302d0-5663-4ba8-96d2-8a54da5c52ea" x="0" y="0" width="280" height="15" fontName="Arial" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Left">
 				<paragraph lineSpacing="Single"/>
 				<expression><![CDATA[$F{adi}]]></expression>
 			</element>
-			<element kind="textField" uuid="ad19154c-62e8-4e98-9e6f-aee6a0049fe1" key="Adres1" x="0" y="15" width="280" height="15" fontName="SansSerif" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H" bold="false">
+			<element kind="textField" uuid="ad19154c-62e8-4e98-9e6f-aee6a0049fe1" key="Adres1" x="0" y="15" width="280" height="15" fontName="Arial" pdfFontName="/static/fonts/Helvetica.ttf" pdfEncoding="Identity-H" bold="false">
 				<expression><![CDATA[$F{adres1}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9383d56f-0cd1-4248-9e0a-f9c56bdbc253"/>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			</element>
-			<element kind="textField" uuid="5013181b-1e86-45e8-aa1d-1e4f5ceeb7f5" key="Adres2" x="0" y="30" width="280" height="15" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<element kind="textField" uuid="5013181b-1e86-45e8-aa1d-1e4f5ceeb7f5" key="Adres2" x="0" y="30" width="280" height="15" pdfFontName="/static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{adres2}]]></expression>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			</element>
-			<element kind="textField" uuid="89ace9ab-05c9-4729-a9fc-038ed2e6c9e1" x="0" y="45" width="280" height="15" pdfFontName="static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
+			<element kind="textField" uuid="89ace9ab-05c9-4729-a9fc-038ed2e6c9e1" x="0" y="45" width="280" height="15" pdfFontName="/static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{telefon}]]></expression>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			</element>
-			<element kind="textField" uuid="d1f66d00-f290-4dfc-8ce3-9cd51869c3c1" key="Semt" x="0" y="60" width="130" height="15" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+			<element kind="textField" uuid="d1f66d00-f290-4dfc-8ce3-9cd51869c3c1" key="Semt" x="0" y="60" width="130" height="15" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
 				<expression><![CDATA[$F{semt}]]></expression>
 				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f32866b-ed8d-490d-95ef-0cd6e03988b2"/>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<property name="com.jaspersoft.studio.unit.y" value="px"/>
 			</element>
-			<element kind="textField" uuid="1e011308-71ad-49b6-8ef3-ba8c226faed5" key="Sehir" x="130" y="60" width="150" height="15" pdfFontName="static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+			<element kind="textField" uuid="1e011308-71ad-49b6-8ef3-ba8c226faed5" key="Sehir" x="130" y="60" width="150" height="15" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
 				<expression><![CDATA[$F{sehir}]]></expression>
 				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<property name="com.jaspersoft.studio.unit.y" value="px"/>

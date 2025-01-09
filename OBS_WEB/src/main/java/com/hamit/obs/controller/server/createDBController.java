@@ -25,9 +25,9 @@ public class createDBController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("user/createdb")
+	@GetMapping("/user/createdb")
 	public String createdb() {
-		return "/user/createdb";
+		return "user/createdb";
 	}
 
 	@PostMapping("server/serverkontrol")
