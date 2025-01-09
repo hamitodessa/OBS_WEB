@@ -1,3 +1,15 @@
+#FROM maven:3.8-eclipse-temurin-21 AS build
+#WORKDIR /app
+#COPY /OBS_WEB/pom.xml ./
+#COPY /OBS_WEB/src ./src
+#RUN mvn clean package -DskipTests
+#FROM eclipse-temurin:21-jdk
+#WORKDIR /app
+#COPY --from=build /app/target/OBS_WEB.jar app.jar
+#EXPOSE 8080
+#ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Build aşaması
 FROM maven:3.8-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY /OBS_WEB/pom.xml ./
@@ -5,9 +17,14 @@ COPY /OBS_WEB/src ./src
 RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    ttf-mscorefonts-installer \
+    && fc-cache -fv && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/target/OBS_WEB.jar app.jar
+
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
 
 
 #FROM openjdk:21-jdk
