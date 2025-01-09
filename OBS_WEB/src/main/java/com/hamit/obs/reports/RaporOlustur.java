@@ -324,7 +324,7 @@ public class RaporOlustur {
 			JasperPrint jp = JasperFillManager.fillReport(jr,null, qazBe);
 			return exportRapor(jp, "pdf");
 		} catch (Exception e) {
-			throw new ServiceException("Bordro Rapor Olusturma", e);
+			throw new ServiceException( e.getMessage());
 		}
 	}
 
