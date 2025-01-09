@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ttf-mscorefonts-installer \
     && rm -rf /var/lib/apt/lists/*
 
-COPY /OBS_WEB/static/fonts /usr/share/fonts/truetype/custom_fonts
+COPY /OBS_WEB/src/static/fonts /usr/share/fonts/truetype/custom_fonts
 RUN fc-cache -fv
 COPY --from=build /app/target/OBS_WEB.jar app.jar
 
