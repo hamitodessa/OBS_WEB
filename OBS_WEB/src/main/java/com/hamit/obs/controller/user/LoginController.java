@@ -79,7 +79,6 @@ public class LoginController {
 	    Map<String, Object> response = new HashMap<>();
 	    try {
 	        List<CalismaDiziniDTO> calismaDiziniDTO = new ArrayList<>();
-	        
 	        CalismaDiziniDTO dto = new CalismaDiziniDTO();
 	        dto.setFirma(cariService.cari_firma_adi());
 	        dto.setModul("Cari Hesap");
@@ -110,14 +109,11 @@ public class LoginController {
 	        calismaDiziniDTO.add(dto);
 	        response.put("data", calismaDiziniDTO);
 	        response.put("errorMessage", "");
-	        
 	        return ResponseEntity.ok(response);
 	    } catch (ServiceException e) {
-	    	
 	        response.put("errorMessage", "Hata: " + e.getMessage());
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	    } catch (Exception e) {
-	    	e.printStackTrace();
 	        response.put("errorMessage", "Hata: " + e.getMessage());
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 	    }

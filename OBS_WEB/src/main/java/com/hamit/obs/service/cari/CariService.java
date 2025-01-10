@@ -49,11 +49,13 @@ public class CariService {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			this.strategy = databaseStrategyContext.getStrategy();
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			return masterConnectionManager.getConnection("Cari Hesap", useremail); // Bağımsız olarak döndür
+			masterConnectionManager.loadConnections("Cari Hesap",useremail);
+			return masterConnectionManager.getConnection("Cari Hesap", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
 	}
+	
 	public String[] conn_detail() {
 		ConnectionDetails cariConnDetails = initialize();
 		String[] detay = {"","",""};

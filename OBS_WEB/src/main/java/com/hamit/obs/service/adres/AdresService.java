@@ -29,6 +29,7 @@ public class AdresService {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			this.strategy = databaseStrategyContext.getStrategy();
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			masterConnectionManager.loadConnections("Adres",useremail);
 			return masterConnectionManager.getConnection("Adres", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
