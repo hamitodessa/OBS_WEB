@@ -12,14 +12,10 @@ import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.dto.adres.adresDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.adres.IAdresDatabase;
-import com.hamit.obs.service.user.UserService;
 
 @Service
 public class AdresService {
 
-	@Autowired
-	private UserService userService;
-	
 	@Autowired
 	private ConnectionManager masterConnectionManager;
 	
@@ -33,7 +29,7 @@ public class AdresService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			this.strategy = databaseStrategyContext.getStrategy();
-			String useremail = userService.getCurrentUser().getEmail();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			masterConnectionManager.loadConnections("Adres",useremail);
 			adresConnDetails = masterConnectionManager.getConnection("Adres", useremail);
 		} else {

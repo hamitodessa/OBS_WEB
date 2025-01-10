@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.exception.ServiceException;
@@ -12,14 +13,10 @@ import com.hamit.obs.repository.adres.AdresMySQL;
 import com.hamit.obs.repository.adres.AdresPgSQL;
 import com.hamit.obs.repository.adres.IAdresDatabase;
 import com.hamit.obs.service.user.UserDetailsService;
-import com.hamit.obs.service.user.UserService;
 
 @Service
 public class AdresDatabaseContext {
 	private final Map<String, IAdresDatabase> strategies = new HashMap<>();
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -32,7 +29,8 @@ public class AdresDatabaseContext {
 
 	public IAdresDatabase getStrategy() {
 		try {
-			String config = userDetailsService.findHangiSQLByUserId("Adres", userService.getCurrentUser().getEmail());
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			String config = userDetailsService.findHangiSQLByUserId("Adres", useremail);
 			if (config == null || config.isEmpty()) {
 				throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
 			}

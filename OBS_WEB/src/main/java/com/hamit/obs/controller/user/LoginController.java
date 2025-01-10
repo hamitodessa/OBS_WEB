@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import com.hamit.obs.dto.user.CalismaDiziniDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.RolEnum;
-import com.hamit.obs.model.user.User;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
@@ -52,10 +52,11 @@ public class LoginController {
 	
 	@GetMapping("/index")
 	public Model index(Model model) {
-		User user = userService.getCurrentUser();
-		model.addAttribute("profileImage", getBase64Image(user != null ? user.getImage() : null));
-		boolean isAdmin = user != null && user.getRoles().stream()
-				.anyMatch(role -> role.getName() == RolEnum.ADMIN);
+		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+		byte[] image = userService.getImage(useremail);
+		model.addAttribute("profileImage", getBase64Image(image));
+		List<RolEnum> roleNames =userService.getRoleNamesByEmail(useremail);
+		boolean isAdmin = roleNames.contains(RolEnum.ADMIN);
 		model.addAttribute("menuitemvisible", isAdmin);
 		String apiUrl = "https://api.ipify.org?format=text";
 		RestTemplate restTemplate = new RestTemplate();
@@ -78,7 +79,6 @@ public class LoginController {
 	    Map<String, Object> response = new HashMap<>();
 	    try {
 	        List<CalismaDiziniDTO> calismaDiziniDTO = new ArrayList<>();
-	        
 	        CalismaDiziniDTO dto = new CalismaDiziniDTO();
 	        dto.setFirma(cariService.cari_firma_adi());
 	        dto.setModul("Cari Hesap");

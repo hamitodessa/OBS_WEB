@@ -74,10 +74,19 @@ public class UserService {
 		}
 	}	 
 	
+	public byte[] getImage(String email){
+		return userRepository.getImage(email);
+	}
+	
 	public List<User> findByUserAdminHesap(String email){
 		return userRepository.findByUserAdminHesap(email);
 		
 	}
+	
+	public List<RolEnum> getRoleNamesByEmail(String email){
+		return userRepository.getRoleNamesByEmail(email);
+	}
+	
 	public User findUserByUsername(String username) {
 		return userRepository.findByEmail(username);
 	}

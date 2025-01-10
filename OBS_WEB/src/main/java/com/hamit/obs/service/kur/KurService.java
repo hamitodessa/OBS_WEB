@@ -13,7 +13,6 @@ import com.hamit.obs.dto.kur.kurgirisDTO;
 import com.hamit.obs.dto.kur.kurraporDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.kur.IKurDatabase;
-import com.hamit.obs.service.user.UserService;
 
 @Service
 public class KurService {
@@ -21,8 +20,6 @@ public class KurService {
 	@Autowired
 	private ConnectionManager masterConnectionManager;
 	
-	@Autowired
-	private UserService userService;
 	public ConnectionDetails kurConnDetails ;
 	
 	private final KurDatabaseContext databaseStrategyContext;
@@ -34,7 +31,7 @@ public class KurService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			this.strategy = databaseStrategyContext.getStrategy();
-			String useremail = userService.getCurrentUser().getEmail();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			masterConnectionManager.loadConnections("Kur",useremail);
 			kurConnDetails = masterConnectionManager.getConnection("Kur", useremail);
 		} else {

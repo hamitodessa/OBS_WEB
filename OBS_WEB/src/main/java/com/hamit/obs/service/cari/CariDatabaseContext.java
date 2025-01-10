@@ -3,6 +3,7 @@ package com.hamit.obs.service.cari;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.exception.ServiceException;
@@ -11,15 +12,11 @@ import com.hamit.obs.repository.cari.CariMySQL;
 import com.hamit.obs.repository.cari.CariPgSQL;
 import com.hamit.obs.repository.cari.ICariDatabase;
 import com.hamit.obs.service.user.UserDetailsService;
-import com.hamit.obs.service.user.UserService;
 
 @Service
 
 public class CariDatabaseContext {
 	private final Map<String, ICariDatabase> strategies = new HashMap<>();
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -32,7 +29,8 @@ public class CariDatabaseContext {
 
 	public ICariDatabase getStrategy() {
 		try {
-	        String config = userDetailsService.findHangiSQLByUserId("Cari Hesap", userService.getCurrentUser().getEmail());
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+	        String config = userDetailsService.findHangiSQLByUserId("Cari Hesap", useremail);
 	        if (config == null || config.isEmpty()) {
 	            throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
 	        }

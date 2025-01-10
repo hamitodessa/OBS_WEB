@@ -22,7 +22,6 @@ import com.hamit.obs.repository.cari.ICariDatabase;
 import com.hamit.obs.repository.loglama.LoglamaRepository;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.kur.KurService;
-import com.hamit.obs.service.user.UserService;
 
 @Service
 public class CariService {
@@ -30,10 +29,6 @@ public class CariService {
 	@Autowired
 	private LoglamaRepository loglamaRepository;
 
-	@Autowired
-	private UserService userService;
-	
-	
 	@Autowired
 	private ConnectionManager masterConnectionManager;
 	
@@ -54,7 +49,7 @@ public class CariService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			this.strategy = databaseStrategyContext.getStrategy();
-			String useremail = userService.getCurrentUser().getEmail();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			masterConnectionManager.loadConnections("Cari Hesap",useremail);
 			cariConnDetails = masterConnectionManager.getConnection("Cari Hesap", useremail);
 		} else {

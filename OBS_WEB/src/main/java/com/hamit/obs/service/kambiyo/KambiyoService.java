@@ -16,14 +16,10 @@ import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.kambiyo.IKambiyoDatabase;
 import com.hamit.obs.repository.loglama.LoglamaRepository;
-import com.hamit.obs.service.user.UserService;
 
 @Service
 public class KambiyoService {
 
-	@Autowired
-	private UserService userService;
-	
 	@Autowired
 	private LoglamaRepository loglamaRepository;
 	
@@ -42,7 +38,7 @@ public class KambiyoService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			this.strategy = databaseStrategyContext.getStrategy();
-			String useremail = userService.getCurrentUser().getEmail();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			masterConnectionManager.loadConnections("Kambiyo",useremail);
 			kambiyoConnDetails = masterConnectionManager.getConnection("Kambiyo", useremail);
 		} else {
