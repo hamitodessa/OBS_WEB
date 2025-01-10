@@ -380,7 +380,6 @@ public class CariMsSQL implements ICariDatabase{
 	@Override
 	public String cari_firma_adi(ConnectionDetails cariConnDetails) {
 		String firmaIsmi = "";
-		System.out.println(cariConnDetails.getJdbcUrl());
 		String query = "SELECT FIRMA_ADI FROM OZEL";
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);

@@ -20,27 +20,24 @@ public class KurService {
 	@Autowired
 	private ConnectionManager masterConnectionManager;
 	
-	private ConnectionDetails kurConnDetails ;
-	
 	private final KurDatabaseContext databaseStrategyContext;
 	private IKurDatabase strategy;
 	
 	public KurService(KurDatabaseContext databaseStrategyContext) {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
-	public void initialize() {
+	public ConnectionDetails  initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			this.strategy = databaseStrategyContext.getStrategy();
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			masterConnectionManager.loadConnections("Kur",useremail);
-			kurConnDetails = masterConnectionManager.getConnection("Kur", useremail);
+			return masterConnectionManager.getConnection("Kur", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
 	}
 
 	public String[] conn_detail() {
-		initialize();
+		ConnectionDetails kurConnDetails = initialize();
 		String[] detay = {"","",""};
 		detay[0] = kurConnDetails.getHangisql() ;
 		detay[1] = kurConnDetails.getDatabaseName() ;
@@ -49,14 +46,14 @@ public class KurService {
 	}
 	
 	public ConnectionDetails conn_details() {
-		initialize();
+		ConnectionDetails kurConnDetails = initialize();
 		return kurConnDetails;
 	}
 
 
 	public List<Map<String, Object>> kur_liste(String tarih){
 		try {
-			initialize();
+			ConnectionDetails kurConnDetails = initialize();
 			return strategy.kur_liste(tarih,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -70,7 +67,7 @@ public class KurService {
 	}
 	public void kur_sil (String tarih,String kur_turu) {
 		try {
-			initialize();
+			ConnectionDetails kurConnDetails = initialize();
 			strategy.kur_sil(tarih,kur_turu,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -85,7 +82,7 @@ public class KurService {
 	
 	public boolean kur_kayit(kurgirisDTO kurgirisDTO) {
 		try {
-			initialize();
+			ConnectionDetails kurConnDetails = initialize();
 			return strategy.kur_kayit(kurgirisDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -100,7 +97,7 @@ public class KurService {
 	
 	public List<Map<String, Object>> kur_rapor(kurraporDTO kurraporDTO) {
 		try {
-			initialize();
+			ConnectionDetails kurConnDetails = initialize();
 			return strategy.kur_rapor(kurraporDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -115,7 +112,7 @@ public class KurService {
 	
 	public List<Map<String, Object>> kur_oku(kurgirisDTO kurgirisDTO) {
 		try {
-			initialize();
+			ConnectionDetails kurConnDetails = initialize();
 			return strategy.kur_oku(kurgirisDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
