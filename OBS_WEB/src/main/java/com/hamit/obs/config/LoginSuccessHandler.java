@@ -19,7 +19,6 @@ import java.io.IOException;
 @AllArgsConstructor
 
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-
 	private final CariService cariService ;
 	private final KurService kurService;
 	private final AdresService adresService;

@@ -79,42 +79,45 @@ public class LoginController {
 	    Map<String, Object> response = new HashMap<>();
 	    try {
 	        List<CalismaDiziniDTO> calismaDiziniDTO = new ArrayList<>();
+	        
 	        CalismaDiziniDTO dto = new CalismaDiziniDTO();
 	        dto.setFirma(cariService.cari_firma_adi());
 	        dto.setModul("Cari Hesap");
-	        dto.setHangi_sql(cariService.cariConnDetails.getHangisql());
-	        dto.setProgkodu(cariService.cariConnDetails.getDatabaseName());
-	        dto.setServer(cariService.cariConnDetails.getServerIp());
+	        dto.setHangi_sql(cariService.conn_detail()[0]);
+	        dto.setProgkodu(cariService.conn_detail()[1]);
+	        dto.setServer(cariService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
 	        dto = new CalismaDiziniDTO();
 	        dto.setFirma("");
 	        dto.setModul("Kur");
-	        dto.setHangi_sql(kurService.kurConnDetails.getHangisql());
-	        dto.setProgkodu(kurService.kurConnDetails.getDatabaseName());
-	        dto.setServer(kurService.kurConnDetails.getServerIp());
+	        dto.setHangi_sql(kurService.conn_detail()[0]);
+	        dto.setProgkodu(kurService.conn_detail()[1]);
+	        dto.setServer(kurService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
 	        dto = new CalismaDiziniDTO();
 	        dto.setFirma(kambiyoService.kambiyo_firma_adi());
 	        dto.setModul("Kambiyo");
-	        dto.setHangi_sql(kambiyoService.kambiyoConnDetails.getHangisql());
-	        dto.setProgkodu(kambiyoService.kambiyoConnDetails.getDatabaseName());
-	        dto.setServer(kambiyoService.kambiyoConnDetails.getServerIp());
+	        dto.setHangi_sql(kambiyoService.conn_detail()[0]);
+	        dto.setProgkodu(kambiyoService.conn_detail()[1]);
+	        dto.setServer(kambiyoService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
 	        dto = new CalismaDiziniDTO();
 	        dto.setFirma(adresService.adres_firma_adi());
 	        dto.setModul("Adres");
-	        dto.setHangi_sql(adresService.adresConnDetails.getHangisql());
-	        dto.setProgkodu(adresService.adresConnDetails.getDatabaseName());
-	        dto.setServer(adresService.adresConnDetails.getServerIp());
+	        dto.setHangi_sql(adresService.conn_detail()[0]);
+	        dto.setProgkodu(adresService.conn_detail()[1]);
+	        dto.setServer(adresService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
 	        response.put("data", calismaDiziniDTO);
 	        response.put("errorMessage", "");
 	        
 	        return ResponseEntity.ok(response);
 	    } catch (ServiceException e) {
+	    	
 	        response.put("errorMessage", "Hata: " + e.getMessage());
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	    } catch (Exception e) {
+	    	e.printStackTrace();
 	        response.put("errorMessage", "Hata: " + e.getMessage());
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 	    }

@@ -20,7 +20,7 @@ public class KurService {
 	@Autowired
 	private ConnectionManager masterConnectionManager;
 	
-	public ConnectionDetails kurConnDetails ;
+	private ConnectionDetails kurConnDetails ;
 	
 	private final KurDatabaseContext databaseStrategyContext;
 	private IKurDatabase strategy;
@@ -39,8 +39,24 @@ public class KurService {
 		}
 	}
 
+	public String[] conn_detail() {
+		initialize();
+		String[] detay = {"","",""};
+		detay[0] = kurConnDetails.getHangisql() ;
+		detay[1] = kurConnDetails.getDatabaseName() ;
+		detay[2] = kurConnDetails.getServerIp() ;
+		return detay;
+	}
+	
+	public ConnectionDetails conn_details() {
+		initialize();
+		return kurConnDetails;
+	}
+
+
 	public List<Map<String, Object>> kur_liste(String tarih){
 		try {
+			initialize();
 			return strategy.kur_liste(tarih,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -54,6 +70,7 @@ public class KurService {
 	}
 	public void kur_sil (String tarih,String kur_turu) {
 		try {
+			initialize();
 			strategy.kur_sil(tarih,kur_turu,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -68,6 +85,7 @@ public class KurService {
 	
 	public boolean kur_kayit(kurgirisDTO kurgirisDTO) {
 		try {
+			initialize();
 			return strategy.kur_kayit(kurgirisDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -82,7 +100,7 @@ public class KurService {
 	
 	public List<Map<String, Object>> kur_rapor(kurraporDTO kurraporDTO) {
 		try {
-			
+			initialize();
 			return strategy.kur_rapor(kurraporDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -97,6 +115,7 @@ public class KurService {
 	
 	public List<Map<String, Object>> kur_oku(kurgirisDTO kurgirisDTO) {
 		try {
+			initialize();
 			return strategy.kur_oku(kurgirisDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();

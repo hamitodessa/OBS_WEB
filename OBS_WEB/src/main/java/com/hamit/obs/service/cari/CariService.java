@@ -38,7 +38,7 @@ public class CariService {
 	@Autowired
 	private KurService kurService;
 	
-	public ConnectionDetails cariConnDetails ;
+	private ConnectionDetails cariConnDetails ;
 	private LoglamaDTO loglamaDTO = new LoglamaDTO();
 	private final CariDatabaseContext databaseStrategyContext;
 	private ICariDatabase strategy;
@@ -56,8 +56,18 @@ public class CariService {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
 	}
+	public String[] conn_detail() {
+		initialize();
+		String[] detay = {"","",""};
+		detay[0] = cariConnDetails.getHangisql() ;
+		detay[1] = cariConnDetails.getDatabaseName() ;
+		detay[2] = cariConnDetails.getServerIp() ;
+		return detay;
+	}
+	
 	public String[] hesap_adi_oku(String hesap) {
 		try {
+			initialize();
 			return strategy.hesap_adi_oku(hesap,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -71,6 +81,7 @@ public class CariService {
 	}
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2){
 		try {
+			initialize();
 			return strategy.ekstre(hesap, t1, t2,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -84,6 +95,7 @@ public class CariService {
 	}
 	public List<Map<String, Object>> hesap_kodlari(){
 		try {
+			initialize();
 			return strategy.hesap_kodlari(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -97,6 +109,7 @@ public class CariService {
 	}
 	public List<Map<String, Object>> hp_pln(){
 		try {
+			initialize();
 			return strategy.hp_pln(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -111,6 +124,7 @@ public class CariService {
 
 	public int sonfisNo() {
 		try {
+			initialize();
 			return strategy.cari_sonfisno(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -125,6 +139,7 @@ public class CariService {
 
 	public boolean cari_dekont_kaydet(dekontDTO dBilgi){
 		try {
+			initialize();
 			loglamaDTO.setEvrak(String.valueOf(dBilgi.getFisNo()));
 			String mesaj = "A. Hes:" + dBilgi.getAhes().toString().trim() + " Tut:" + dBilgi.getAlacak() +
 					" B. Hes:"+ dBilgi.getBhes().toString().trim() + " Tut:" + dBilgi.getBorc();
@@ -149,6 +164,7 @@ public class CariService {
 	}
 	public List<dekontDTO> fiskon(int fisNo){
 		try {
+			initialize();
 			return strategy.fiskon(fisNo,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -162,6 +178,7 @@ public class CariService {
 	}
 	public int yenifisno() {
 		try {
+			initialize();
 			return strategy.yenifisno(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -175,6 +192,7 @@ public class CariService {
 	}
 	public void evrak_yoket(int evrakno,String user) {
 		try {
+			initialize();
 			loglamaDTO.setEvrak(String.valueOf(evrakno));
 			loglamaDTO.setmESAJ(String.valueOf(evrakno) + " Evrak Silme");
 			loglamaDTO.setUser(user);
@@ -193,6 +211,7 @@ public class CariService {
 	
 	public List<Map<String, Object>> mizan(mizanDTO mizanDTO){
 		try {
+			initialize();
 			return strategy.mizan(mizanDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -207,8 +226,7 @@ public class CariService {
 	
 	public String cari_firma_adi() {
 		try {
-//			return strategy.cari_firma_adi(cariConnDetails) + "				" +
-//				       cariConnDetails.getServerIp() + "\\" + cariConnDetails.getDatabaseName();
+			initialize();
 			return strategy.cari_firma_adi(cariConnDetails) ;
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -223,6 +241,7 @@ public class CariService {
 	public void hsp_sil(String hesap)
 	{
 		try {
+			initialize();
 			strategy.hsp_sil(hesap,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -238,6 +257,7 @@ public class CariService {
 	public void hpln_kayit(hesapplaniDTO hesapplaniDTO)
 	{
 		try {
+			initialize();
 			strategy.hpln_kayit(hesapplaniDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -253,6 +273,7 @@ public class CariService {
 	public void hpln_detay_kayit(hesapplaniDTO hesapplaniDTO)
 	{
 		try {
+			initialize();
 			strategy.hpln_detay_kayit(hesapplaniDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -266,6 +287,7 @@ public class CariService {
 	}
 	public hesapplaniDTO hsp_pln(String hesap){
 		try {
+			initialize();
 			return strategy.hsp_pln(hesap,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -280,6 +302,7 @@ public class CariService {
 	
 	public List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO){
 		try {
+			initialize();
 			return strategy.ozel_mizan(mizanDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -294,7 +317,8 @@ public class CariService {
 
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO){
 		try {
-			return strategy.dvzcevirme(dvzcevirmeDTO,cariConnDetails,kurService.kurConnDetails);
+			initialize();
+			return strategy.dvzcevirme(dvzcevirmeDTO,cariConnDetails,kurService.conn_details());
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
 			Throwable cause = e.getCause();
@@ -308,6 +332,7 @@ public class CariService {
 	
 	public List<Map<String, Object>> banka_sube(String nerden){
 		try {
+			initialize();
 			return strategy.banka_sube(nerden,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -322,6 +347,7 @@ public class CariService {
 	
 	public tahsilatDTO tahfiskon(String fisNo,Integer tah_ted){
 		try {
+			initialize();
 			return strategy.tahfiskon(fisNo,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -336,6 +362,7 @@ public class CariService {
 	
 	public List<Map<String, Object>> tah_cek_doldur(String fisNo,Integer tah_ted){
 		try {
+			initialize();
 			return strategy.tah_cek_doldur(fisNo,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -350,6 +377,7 @@ public class CariService {
 	
 	public int cari_tahsonfisno(Integer tah_ted) {
 		try {
+			initialize();
 			return strategy.cari_tahsonfisno(tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -364,6 +392,7 @@ public class CariService {
 
 	public int cari_tah_fisno_al(String tah_ted) {
 		try {
+			initialize();
 			return strategy.cari_tah_fisno_al(tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -378,6 +407,7 @@ public class CariService {
 	
 	public void tah_kayit(tahsilatDTO tahsilatDTO) {
 		try {
+			initialize();
 			strategy.tah_kayit(tahsilatDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -392,6 +422,7 @@ public class CariService {
 	
 	public void tah_cek_sil(tahsilatDTO tahsilatDTO,String user) {
 		try {
+			initialize();
 			loglamaDTO.setEvrak(String.valueOf(tahsilatDTO.getFisNo()));
 			loglamaDTO.setmESAJ(String.valueOf(tahsilatDTO.getFisNo()) + " Tahsilat Evrak Silme");
 			loglamaDTO.setUser(user);
@@ -410,6 +441,7 @@ public class CariService {
 	
 	public void tah_cek_kayit(tahsilatTableRowDTO tahsilatTableRowDTO, String fisno, Integer tah_ted) {
 		try {
+			initialize();
 			strategy.tah_cek_kayit(tahsilatTableRowDTO,fisno,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -425,6 +457,7 @@ public class CariService {
 	public void tah_sil(String fisno, Integer tah_ted,String user)
 	{
 		try {
+			initialize();
 			loglamaDTO.setEvrak(String.valueOf(fisno));
 			loglamaDTO.setmESAJ(String.valueOf(fisno) + " Tahsilat Evrak Silme");
 			loglamaDTO.setUser(user);
@@ -443,7 +476,8 @@ public class CariService {
 	
 	public List<Map<String, Object>> tah_listele(tahrapDTO tahrapDTO){
 		try {
-			return strategy.tah_listele(tahrapDTO,cariConnDetails,adresService.adresConnDetails);
+			initialize();
+			return strategy.tah_listele(tahrapDTO,cariConnDetails,adresService.conn_details());
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
 			Throwable cause = e.getCause();
@@ -457,6 +491,7 @@ public class CariService {
 
 	public tahayarDTO tahayaroku(){
 		try {
+			initialize();
 			return strategy.tahayaroku(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -472,6 +507,7 @@ public class CariService {
 	public void tahayar_kayit(tahayarDTO tahayarDTO)
 	{
 		try {
+			initialize();
 			strategy.tahayar_kayit(tahayarDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -486,6 +522,7 @@ public class CariService {
 
 	public List<Map<String, Object>> tah_ayar_oku(){
 		try {
+			initialize();
 			return strategy.tah_ayar_oku(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -500,6 +537,7 @@ public class CariService {
 	
 	public List<Map<String, Object>> tah_cek_kayit_aktar(String fisno, Integer tah_ted){
 		try {
+			initialize();
 			return strategy.tah_cek_kayit_aktar(fisno, tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -514,6 +552,7 @@ public class CariService {
 	
 	public void cari_firma_adi_kayit(String fadi) {
 		try {
+			initialize();
 			strategy.cari_firma_adi_kayit(fadi,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -527,6 +566,7 @@ public class CariService {
 	}
 	public List<Map<String, Object>> hsppln_liste(){
 		try {
+			initialize();
 			return strategy.hsppln_liste(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -541,6 +581,7 @@ public class CariService {
 	
 	public int hesap_plani_kayit_adedi() {
 		try {
+			initialize();
 			return strategy.hesap_plani_kayit_adedi(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -555,6 +596,7 @@ public class CariService {
 	
 	public void cari_kod_degis_hesap(String eskikod, String yenikod,String user) {
 		try {
+			initialize();
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ("Kod Degistirme   Eski Kod:" + eskikod + " Yeni Kod:"+yenikod);
 			loglamaDTO.setUser(user);
@@ -573,6 +615,7 @@ public class CariService {
 	
 	public void cari_kod_degis_satirlar(String eskikod, String yenikod,String user) {
 		try {
+			initialize();
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ("Kod Degistirme   Eski Kod:" + eskikod + " Yeni Kod:"+yenikod);
 			loglamaDTO.setUser(user);
@@ -591,6 +634,7 @@ public class CariService {
 	
 	public void cari_kod_degis_tahsilat(String eskikod, String yenikod,String user) {
 		try {
+			initialize();
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ("Kod Degistirme   Eski Kod:" + eskikod + " Yeni Kod:"+yenikod);
 			loglamaDTO.setUser(user);
@@ -608,6 +652,7 @@ public class CariService {
 	}
 	public List<Map<String, Object>> kasa_kontrol(String hesap, String t1){
 		try {
+			initialize();
 			return strategy.kasa_kontrol(hesap,t1,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -621,6 +666,7 @@ public class CariService {
 	}
 	public List<Map<String, Object>> kasa_mizan(String kod, String ilktarih, String sontarih){
 		try {
+			initialize();
 			return strategy.kasa_mizan(kod,ilktarih,sontarih ,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();

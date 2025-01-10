@@ -11,7 +11,7 @@ import com.hamit.obs.service.user.CustomUserDetails;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig {
 
 	private final CustomUserDetails customUserDetails;
 	public SecurityConfig(CustomUserDetails customUserDetails) {
