@@ -35,7 +35,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			kambiyoService.initialize();
 			response.sendRedirect("/index");
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.sendRedirect("/index?trigger=userdetails");
 		} 
 	}
