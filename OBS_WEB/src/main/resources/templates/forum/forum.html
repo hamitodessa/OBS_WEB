@@ -122,9 +122,9 @@
         <!-- Add a New Subject -->
         <div class="form">
             <h4>Yeni Konu Ekle</h4>
-            <input type="text" id="subject-title" placeholder="Konu Basligi" required>
-            <textarea id="subject-description" placeholder="Konu Detayi" rows="4" required></textarea>
-            <button onclick="addSubject()">Kaydet</button>
+            <input type="text" id="subject-title" placeholder="Konu Basligi" required maxlength="255">
+            <textarea id="subject-description" placeholder="Konu Detayi" rows="4" required maxlength="300"></textarea>
+            <button onclick="addSubject()" id="saveButton">Kaydet</button>
         </div>
     </div>
 </div>

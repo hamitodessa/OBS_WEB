@@ -39,6 +39,12 @@ public class SecurityConfig {
 				.logoutSuccessUrl("/login") // Çıkış sonrası yönlendirme
 				.invalidateHttpSession(true) // Oturum sonlandır
 				.deleteCookies("JSESSIONID") // Çerezleri sil
+				.addLogoutHandler((request, response, authentication) -> {
+		            if (authentication != null) {
+		                String username = authentication.getName(); // Çıkış yapan kullanıcı adı
+		                UserSessionManager.removeUserSessionsByUsername(username); // Kullanıcı oturum bilgilerini temizle
+		            }
+		        })
 				.permitAll()
 				)
 		.sessionManagement(session -> session

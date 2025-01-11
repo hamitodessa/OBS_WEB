@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.dto.cari.dekontDTO;
@@ -47,9 +49,13 @@ public class CariService {
 	}
 	public ConnectionDetails initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
-			this.strategy = databaseStrategyContext.getStrategy();
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+			UserSessionManager.removeUserByModul(useremail,"Cari Hesap");
+			this.strategy = databaseStrategyContext.getStrategy();
 			masterConnectionManager.loadConnections("Cari Hesap",useremail);
+			
+			UserSessionManager.addUserSession(useremail, "Cari Hesap", masterConnectionManager.getConnection("Cari Hesap", useremail));
 			return masterConnectionManager.getConnection("Cari Hesap", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
@@ -57,7 +63,8 @@ public class CariService {
 	}
 	
 	public String[] conn_detail() {
-		ConnectionDetails cariConnDetails = initialize();
+		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 		String[] detay = {"","",""};
 		detay[0] = cariConnDetails.getHangisql() ;
 		detay[1] = cariConnDetails.getDatabaseName() ;
@@ -67,7 +74,8 @@ public class CariService {
 	
 	public String[] hesap_adi_oku(String hesap) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hesap_adi_oku(hesap,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();

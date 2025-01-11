@@ -26,7 +26,6 @@ function renderSubjects(subjects) {
 	}
 	const subjectSection = document.querySelector('.subject-section');
 	subjectSection.innerHTML = '';
-
 	subjects.forEach((subject) => {
 		const commits = subject.commits || [];
 		const subjectElement = `
@@ -53,7 +52,7 @@ function renderSubjects(subjects) {
 
                 <!-- Yorum Formu -->
                 <div id="comment-form-${subject.subjectID}" class="comment-form" style="display: none; margin-top: 10px;">
-                    <textarea id="comment-text-${subject.subjectID}" placeholder="Yorum Yaz..." rows="3" style="width: 100%; padding: 10px;"></textarea>
+                    <textarea id="comment-text-${subject.subjectID}" placeholder="Yorum Yaz..." rows="3" style="width: 100%; padding: 10px;" maxlength="255"></textarea>
                     <button onclick="submitComment(${subject.subjectID})" style="margin-top: 5px; padding: 10px; background-color: #6200ea; color: white; border: none; border-radius: 4px;">Yorum Kaydet</button>
                 </div>
             </div>
@@ -104,73 +103,92 @@ function toggleCommentForm(subjectId) {
 
 async function submitComment(subjectId) {
 	const commentText = document.getElementById(`comment-text-${subjectId}`).value;
+
 	if (!commentText) {
-		alert('Please write a comment before submitting.');
+		alert('Lütfen bir yorum yazın.');
 		return;
 	}
-	const response = await fetch(`addComment/${subjectId}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({ text: commentText }),
-	});
+	const saveButton = document.querySelector(`#comment-form-${subjectId} button`);
+	saveButton.textContent = "İşlem yapılıyor...";
+	saveButton.disabled = true; // Butonu işlem sırasında devre dışı bırak
+	document.body.style.cursor = "wait";
 
-	if (response.ok) {
-		const url = "/forum";
-		$.ajax({
-			url: url,
-			type: "GET",
-			success: function(data) {
-				if (data.includes('<form') && data.includes('name="username"')) {
-					window.location.href = "/login";
-				} else {
-					$('#ara_content').html(data);
-				}
+	try {
+		const response = await fetch(`addComment/${subjectId}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
 			},
-			error: function(xhr) {
-				$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
-			},
-			complete: function() {
-				document.body.style.cursor = "default";
-			},
+			body: JSON.stringify({ text: commentText }),
 		});
-	} else {
-		alert('Failed to add comment.');
+
+		if (response.ok) {
+			alert('Yorum başarıyla eklendi!');
+			location.reload(); // Sayfayı yenile
+		} else {
+			alert('Yorum eklenemedi.');
+		}
+	} catch (error) {
+		console.error("Yorum eklenirken bir hata oluştu:", error);
+	} finally {
+		document.body.style.cursor = "default";
+		saveButton.textContent = "Yorum Kaydet";
+		saveButton.disabled = false;
 	}
 }
+
 
 
 async function addSubject() {
 	const title = document.querySelector('#subject-title').value;
 	const description = document.querySelector('#subject-description').value;
-	const response = await fetch('addSubject', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({ title, description }),
-	});
-	if (response.ok) {
-		const url = "/forum";
-		$.ajax({
-			url: url,
-			type: "GET",
-			success: function(data) {
-				if (data.includes('<form') && data.includes('name="username"')) {
-					window.location.href = "/login";
-				} else {
-					$('#ara_content').html(data);
-				}
+	if (!title || !description) {
+			alert('Lütfen hem başlık hem de açıklama alanlarını doldurun.');
+			return;
+	}
+	const saveButton = document.getElementById('saveButton');
+	saveButton.textContent = "İşlem yapılıyor..."; // Buton metnini değiştir
+	saveButton.disabled = true; // Butonu devre dışı bırak
+	document.body.style.cursor = "wait"; // Bekleme işareti
+
+	try {
+		const response = await fetch('addSubject', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
 			},
-			error: function(xhr) {
-				$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
-			},
-			complete: function() {
-				document.body.style.cursor = "default";
-			},
+			body: JSON.stringify({ title, description }),
 		});
-	} else {
-		alert('Failed to add subject.');
+
+		if (response.ok) {
+			const url = "/forum";
+			$.ajax({
+				url: url,
+				type: "GET",
+				success: function(data) {
+					if (data.includes('<form') && data.includes('name="username"')) {
+						window.location.href = "/login";
+					} else {
+						$('#ara_content').html(data);
+					}
+				},
+				error: function(xhr) {
+					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
+				},
+				complete: function() {
+					document.body.style.cursor = "default"; // Cursor eski haline döner
+					saveButton.textContent = "Kaydet"; // Buton metni eski haline döner
+					saveButton.disabled = false; // Buton tekrar aktif edilir
+				},
+			});
+		} else {
+			alert('Failed to add subject.');
+		}
+	} catch (error) {
+		console.error("Hata oluştu:", error);
+	} finally {
+		document.body.style.cursor = "default";
+		saveButton.textContent = "Kaydet";
+		saveButton.disabled = false;
 	}
 }
