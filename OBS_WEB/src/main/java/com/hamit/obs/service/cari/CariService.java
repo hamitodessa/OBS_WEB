@@ -47,7 +47,7 @@ public class CariService {
 	public CariService(CariDatabaseContext databaseStrategyContext) {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
-	public ConnectionDetails initialize() {
+	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -56,7 +56,7 @@ public class CariService {
 			masterConnectionManager.loadConnections("Cari Hesap",useremail);
 			
 			UserSessionManager.addUserSession(useremail, "Cari Hesap", masterConnectionManager.getConnection("Cari Hesap", useremail));
-			return masterConnectionManager.getConnection("Cari Hesap", useremail);
+			//return masterConnectionManager.getConnection("Cari Hesap", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
@@ -89,7 +89,8 @@ public class CariService {
 	}
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.ekstre(hesap, t1, t2,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -103,7 +104,8 @@ public class CariService {
 	}
 	public List<Map<String, Object>> hesap_kodlari(){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hesap_kodlari(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -117,7 +119,8 @@ public class CariService {
 	}
 	public List<Map<String, Object>> hp_pln(){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hp_pln(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -132,7 +135,8 @@ public class CariService {
 
 	public int sonfisNo() {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.cari_sonfisno(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -147,7 +151,8 @@ public class CariService {
 
 	public boolean cari_dekont_kaydet(dekontDTO dBilgi){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			loglamaDTO.setEvrak(String.valueOf(dBilgi.getFisNo()));
 			String mesaj = "A. Hes:" + dBilgi.getAhes().toString().trim() + " Tut:" + dBilgi.getAlacak() +
 					" B. Hes:"+ dBilgi.getBhes().toString().trim() + " Tut:" + dBilgi.getBorc();
@@ -172,7 +177,8 @@ public class CariService {
 	}
 	public List<dekontDTO> fiskon(int fisNo){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.fiskon(fisNo,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -186,7 +192,8 @@ public class CariService {
 	}
 	public int yenifisno() {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.yenifisno(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -200,7 +207,8 @@ public class CariService {
 	}
 	public void evrak_yoket(int evrakno,String user) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			loglamaDTO.setEvrak(String.valueOf(evrakno));
 			loglamaDTO.setmESAJ(String.valueOf(evrakno) + " Evrak Silme");
 			loglamaDTO.setUser(user);
@@ -219,7 +227,8 @@ public class CariService {
 	
 	public List<Map<String, Object>> mizan(mizanDTO mizanDTO){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.mizan(mizanDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -234,7 +243,8 @@ public class CariService {
 	
 	public String cari_firma_adi() {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.cari_firma_adi(cariConnDetails) ;
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -249,7 +259,8 @@ public class CariService {
 	public void hsp_sil(String hesap)
 	{
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.hsp_sil(hesap,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -265,7 +276,8 @@ public class CariService {
 	public void hpln_kayit(hesapplaniDTO hesapplaniDTO)
 	{
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.hpln_kayit(hesapplaniDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -281,7 +293,8 @@ public class CariService {
 	public void hpln_detay_kayit(hesapplaniDTO hesapplaniDTO)
 	{
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.hpln_detay_kayit(hesapplaniDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -295,7 +308,8 @@ public class CariService {
 	}
 	public hesapplaniDTO hsp_pln(String hesap){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hsp_pln(hesap,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -310,7 +324,8 @@ public class CariService {
 	
 	public List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.ozel_mizan(mizanDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -325,7 +340,8 @@ public class CariService {
 
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.dvzcevirme(dvzcevirmeDTO,cariConnDetails,kurService.conn_details());
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -340,7 +356,8 @@ public class CariService {
 	
 	public List<Map<String, Object>> banka_sube(String nerden){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.banka_sube(nerden,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -355,7 +372,8 @@ public class CariService {
 	
 	public tahsilatDTO tahfiskon(String fisNo,Integer tah_ted){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tahfiskon(fisNo,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -370,7 +388,8 @@ public class CariService {
 	
 	public List<Map<String, Object>> tah_cek_doldur(String fisNo,Integer tah_ted){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tah_cek_doldur(fisNo,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -385,7 +404,8 @@ public class CariService {
 	
 	public int cari_tahsonfisno(Integer tah_ted) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.cari_tahsonfisno(tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -400,7 +420,8 @@ public class CariService {
 
 	public int cari_tah_fisno_al(String tah_ted) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.cari_tah_fisno_al(tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -415,7 +436,8 @@ public class CariService {
 	
 	public void tah_kayit(tahsilatDTO tahsilatDTO) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.tah_kayit(tahsilatDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -430,7 +452,8 @@ public class CariService {
 	
 	public void tah_cek_sil(tahsilatDTO tahsilatDTO,String user) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			loglamaDTO.setEvrak(String.valueOf(tahsilatDTO.getFisNo()));
 			loglamaDTO.setmESAJ(String.valueOf(tahsilatDTO.getFisNo()) + " Tahsilat Evrak Silme");
 			loglamaDTO.setUser(user);
@@ -449,7 +472,8 @@ public class CariService {
 	
 	public void tah_cek_kayit(tahsilatTableRowDTO tahsilatTableRowDTO, String fisno, Integer tah_ted) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.tah_cek_kayit(tahsilatTableRowDTO,fisno,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -465,7 +489,8 @@ public class CariService {
 	public void tah_sil(String fisno, Integer tah_ted,String user)
 	{
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			loglamaDTO.setEvrak(String.valueOf(fisno));
 			loglamaDTO.setmESAJ(String.valueOf(fisno) + " Tahsilat Evrak Silme");
 			loglamaDTO.setUser(user);
@@ -484,7 +509,8 @@ public class CariService {
 	
 	public List<Map<String, Object>> tah_listele(tahrapDTO tahrapDTO){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tah_listele(tahrapDTO,cariConnDetails,adresService.conn_details());
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -499,7 +525,8 @@ public class CariService {
 
 	public tahayarDTO tahayaroku(){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tahayaroku(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -515,7 +542,8 @@ public class CariService {
 	public void tahayar_kayit(tahayarDTO tahayarDTO)
 	{
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.tahayar_kayit(tahayarDTO,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -530,7 +558,8 @@ public class CariService {
 
 	public List<Map<String, Object>> tah_ayar_oku(){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tah_ayar_oku(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -545,7 +574,8 @@ public class CariService {
 	
 	public List<Map<String, Object>> tah_cek_kayit_aktar(String fisno, Integer tah_ted){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tah_cek_kayit_aktar(fisno, tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -560,7 +590,8 @@ public class CariService {
 	
 	public void cari_firma_adi_kayit(String fadi) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.cari_firma_adi_kayit(fadi,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -574,7 +605,8 @@ public class CariService {
 	}
 	public List<Map<String, Object>> hsppln_liste(){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hsppln_liste(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -589,7 +621,8 @@ public class CariService {
 	
 	public int hesap_plani_kayit_adedi() {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hesap_plani_kayit_adedi(cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -604,7 +637,8 @@ public class CariService {
 	
 	public void cari_kod_degis_hesap(String eskikod, String yenikod,String user) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ("Kod Degistirme   Eski Kod:" + eskikod + " Yeni Kod:"+yenikod);
 			loglamaDTO.setUser(user);
@@ -623,7 +657,8 @@ public class CariService {
 	
 	public void cari_kod_degis_satirlar(String eskikod, String yenikod,String user) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ("Kod Degistirme   Eski Kod:" + eskikod + " Yeni Kod:"+yenikod);
 			loglamaDTO.setUser(user);
@@ -642,7 +677,8 @@ public class CariService {
 	
 	public void cari_kod_degis_tahsilat(String eskikod, String yenikod,String user) {
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ("Kod Degistirme   Eski Kod:" + eskikod + " Yeni Kod:"+yenikod);
 			loglamaDTO.setUser(user);
@@ -660,7 +696,8 @@ public class CariService {
 	}
 	public List<Map<String, Object>> kasa_kontrol(String hesap, String t1){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.kasa_kontrol(hesap,t1,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -674,7 +711,8 @@ public class CariService {
 	}
 	public List<Map<String, Object>> kasa_mizan(String kod, String ilktarih, String sontarih){
 		try {
-			ConnectionDetails cariConnDetails = initialize();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.kasa_mizan(kod,ilktarih,sontarih ,cariConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();

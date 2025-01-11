@@ -24,6 +24,8 @@
 .hidden {
     display: none;
 }
+
+
 </style>
 
 </head>
@@ -142,8 +144,6 @@
 
 						<li><a href="" data-url="/user/lograpor" class="changeLink" ><i class="fa fa-object-group blue2_color"></i><span>Log Rapor</span></a></li>
 						
-						<li><a href="" data-url="/forum" class="changeLink" ><i class="fa fa-object-group blue2_color"></i><span>Forum</span></a></li>
-
 						<li><a href="#ayar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
 									class="fa fa-cog yellow_color"></i> <span>Ayarlar</span></a>
 							<ul class="collapse list-unstyled" id="ayar">
@@ -186,6 +186,18 @@ class="fa fa-bar-chart-o green_color"
 							</div>
 							<div class="right_topbar">
 								<div class="icon_info">
+									<ul>
+        								<li>
+           									 <a href="" data-url="/forum" class="changeLink" data-toggle="tooltip" data-placement="top" title="Forum">
+                								<i class="fa fa-comments-o"></i><span ></span></a>
+        								</li>
+    								</ul>
+    								<ul>
+        								<li>
+                								<span>     </span>
+        								</li>
+    								</ul>
+
 									<button type="button" class="sidebar_toggle"
 										onclick="window.location.href='/logout'">
 										<i class="fa fa-sign-out"></i>
@@ -277,7 +289,27 @@ class="fa fa-bar-chart-o green_color"
         	loadDefaultContent();
 		}
     };
-    </script>
+    
+    // Initialize all tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Add click event to toggle tooltip visibility
+    document.querySelectorAll('[data-toggle="tooltip"]').forEach(function (el) {
+        el.addEventListener('click', function (e) {
+            e.preventDefault();
+            var tooltip = bootstrap.Tooltip.getInstance(el);
+            if (tooltip._element.getAttribute('data-bs-trigger') === 'manual') {
+                tooltip.hide();
+                el.removeAttribute('data-bs-trigger');
+            } else {
+                tooltip.show();
+                el.setAttribute('data-bs-trigger', 'manual');
+            }
+        });
+    });    </script>
     <script src="/obs_js_files/fetchWithSessionCheck.js"></script>
     <script src="/obs_js_files/fetchWithSessionCheckForDownload.js"></script>
       
