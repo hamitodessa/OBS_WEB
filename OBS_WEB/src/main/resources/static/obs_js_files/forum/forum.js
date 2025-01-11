@@ -10,12 +10,14 @@ async function loadSubjects() {
 	});
 	if (response.ok) {
 		const subjects = await response.json(); // Backend'den JSON verisi
+		allSubjects = subjects;
 		renderSubjects(subjects);
 		document.body.style.cursor = "default";
 	} else {
 		document.body.style.cursor = "default";
 	}
 };
+
 
 function renderSubjects(subjects) {
 	if (!subjects || !Array.isArray(subjects)) {
@@ -24,22 +26,20 @@ function renderSubjects(subjects) {
 	}
 	const subjectSection = document.querySelector('.subject-section');
 	subjectSection.innerHTML = '';
+
 	subjects.forEach((subject) => {
 		const commits = subject.commits || [];
 		const subjectElement = `
             <div class="subject">
-                <h3>${subject.subjectTitle}</h3>
-                <p>${subject.subjectDescription}</p>
+                <h3 style="font-weight: bold;">${subject.subjectTitle}</h3>
+                <p style="border: 1px solid #ddd; padding: 10px; border-radius: 4px;">${subject.subjectDescription}</p>
                 <button onclick="toggleCommentForm(${subject.subjectID})">Yorum Ekle</button>
-                
-                <!-- Form (Başlangıçta gizli) -->
-                <div id="comment-form-${subject.subjectID}" class="comment-form" style="display: none; margin-top: 10px;">
-                    <textarea placeholder="Yorum Yaz..." rows="3" style="width: 100%; padding: 10px;"></textarea>
-                    <button onclick="submitComment(${subject.subjectID})" style="margin-top: 5px; padding: 10px; background-color: #6200ea; color: white; border: none; border-radius: 4px;">Yorum Kaydet</button>
-                </div>
-                
-                <!-- Commits -->
-                <div class="commits">
+
+                <!-- Commits Göstermek/Gizlemek için Buton -->
+                <button onclick="toggleCommits(${subject.subjectID})" style="margin-top: 10px;">Yorumları Göster</button>
+
+                <!-- Yorumlar -->
+                <div id="commits-${subject.subjectID}" class="commits" style="display: none; margin-top: 10px;">
                     ${commits
 				.map(
 					(commit) => `
@@ -50,11 +50,48 @@ function renderSubjects(subjects) {
 				)
 				.join('')}
                 </div>
+
+                <!-- Yorum Formu -->
+                <div id="comment-form-${subject.subjectID}" class="comment-form" style="display: none; margin-top: 10px;">
+                    <textarea id="comment-text-${subject.subjectID}" placeholder="Yorum Yaz..." rows="3" style="width: 100%; padding: 10px;"></textarea>
+                    <button onclick="submitComment(${subject.subjectID})" style="margin-top: 5px; padding: 10px; background-color: #6200ea; color: white; border: none; border-radius: 4px;">Yorum Kaydet</button>
+                </div>
             </div>
         `;
 		subjectSection.innerHTML += subjectElement;
 	});
 }
+
+function filterSubjects() {
+	const searchTerm = document.getElementById('search-input').value.toLowerCase();
+	if (searchTerm.trim() === '') {
+		renderSubjects(allSubjects);
+		return;
+	}
+	const filteredSubjects = allSubjects.filter((subject) => {
+		const titleMatch = subject.subjectTitle.toLowerCase().includes(searchTerm);
+		const descriptionMatch = subject.subjectDescription.toLowerCase().includes(searchTerm);
+		return titleMatch || descriptionMatch;
+	});
+	if (filteredSubjects.length === 0) {
+		document.querySelector('.subject-section').innerHTML = '<p>Sonuç bulunamadı.</p>';
+	} else {
+		renderSubjects(filteredSubjects);
+	}
+}
+
+function toggleCommits(subjectId) {
+	const commitsDiv = document.getElementById(`commits-${subjectId}`);
+	if (!commitsDiv) {
+		console.error(`Yorumlar için div bulunamadı: commits-${subjectId}`);
+		return;
+	}
+	const isHidden = commitsDiv.style.display === 'none';
+	commitsDiv.style.display = isHidden ? 'block' : 'none';
+	const button = commitsDiv.previousElementSibling;
+	button.textContent = isHidden ? 'Yorumları Gizle' : 'Yorumları Göster';
+}
+
 
 function toggleCommentForm(subjectId) {
 	const form = document.getElementById(`comment-form-${subjectId}`);

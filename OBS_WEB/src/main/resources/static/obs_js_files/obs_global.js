@@ -1,6 +1,7 @@
-bankaIsimleri = []; // Global değişkenler burada tanımlanır
+bankaIsimleri = [];
 subeIsimleri = [];
 ilkBorclu = [];
+allSubjects = [];
 rowCounter = 0;
 
 incrementRowCounter = function() {
