@@ -30,7 +30,7 @@ function renderSubjects(subjects) {
 		const commits = subject.commits || [];
 		const subjectElement = `
             <div class="subject">
-                <h3 style="font-weight: bold;">${subject.subjectTitle}</h3>
+                <h4 style="font-weight: bold;">${subject.subjectTitle}</h4>
                 <p style="border: 1px solid #ddd; padding: 10px; border-radius: 4px;">${subject.subjectDescription}</p>
                 <button onclick="toggleCommentForm(${subject.subjectID})">Yorum Ekle</button>
 
@@ -38,7 +38,7 @@ function renderSubjects(subjects) {
                 <button onclick="toggleCommits(${subject.subjectID})" style="margin-top: 10px;">Yorumları Göster</button>
 
                 <!-- Yorumlar -->
-                <div id="commits-${subject.subjectID}" class="commits" style="display: none; margin-top: 10px;">
+                <div id="commits-${subject.subjectID}" class="commits" style="display: none; margin-top: 10px;border: 1px solid #ddd;">
                     ${commits
 				.map(
 					(commit) => `
@@ -103,16 +103,14 @@ function toggleCommentForm(subjectId) {
 
 async function submitComment(subjectId) {
 	const commentText = document.getElementById(`comment-text-${subjectId}`).value;
-
 	if (!commentText) {
 		alert('Lütfen bir yorum yazın.');
 		return;
 	}
 	const saveButton = document.querySelector(`#comment-form-${subjectId} button`);
 	saveButton.textContent = "İşlem yapılıyor...";
-	saveButton.disabled = true; // Butonu işlem sırasında devre dışı bırak
+	saveButton.disabled = true;
 	document.body.style.cursor = "wait";
-
 	try {
 		const response = await fetch(`addComment/${subjectId}`, {
 			method: 'POST',
@@ -120,44 +118,6 @@ async function submitComment(subjectId) {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({ text: commentText }),
-		});
-
-		if (response.ok) {
-			alert('Yorum başarıyla eklendi!');
-			location.reload(); // Sayfayı yenile
-		} else {
-			alert('Yorum eklenemedi.');
-		}
-	} catch (error) {
-		console.error("Yorum eklenirken bir hata oluştu:", error);
-	} finally {
-		document.body.style.cursor = "default";
-		saveButton.textContent = "Yorum Kaydet";
-		saveButton.disabled = false;
-	}
-}
-
-
-
-async function addSubject() {
-	const title = document.querySelector('#subject-title').value;
-	const description = document.querySelector('#subject-description').value;
-	if (!title || !description) {
-			alert('Lütfen hem başlık hem de açıklama alanlarını doldurun.');
-			return;
-	}
-	const saveButton = document.getElementById('saveButton');
-	saveButton.textContent = "İşlem yapılıyor..."; // Buton metnini değiştir
-	saveButton.disabled = true; // Butonu devre dışı bırak
-	document.body.style.cursor = "wait"; // Bekleme işareti
-
-	try {
-		const response = await fetch('addSubject', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ title, description }),
 		});
 
 		if (response.ok) {
@@ -176,13 +136,65 @@ async function addSubject() {
 					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
 				},
 				complete: function() {
-					document.body.style.cursor = "default"; // Cursor eski haline döner
-					saveButton.textContent = "Kaydet"; // Buton metni eski haline döner
-					saveButton.disabled = false; // Buton tekrar aktif edilir
+					document.body.style.cursor = "default";
+					saveButton.textContent = "Kaydet";
+					saveButton.disabled = false;
 				},
 			});
 		} else {
-			alert('Failed to add subject.');
+			alert('Yorum eklenemedi.');
+		}
+	} catch (error) {
+		console.error(error.message);
+	} finally {
+		document.body.style.cursor = "default";
+		saveButton.textContent = "Yorum Kaydet";
+		saveButton.disabled = false;
+	}
+}
+
+async function addSubject() {
+	const title = document.querySelector('#subject-title').value;
+	const description = document.querySelector('#subject-description').value;
+	if (!title || !description) {
+		alert('Lütfen hem başlık hem de açıklama alanlarını doldurun.');
+		return;
+	}
+	const saveButton = document.getElementById('saveButton');
+	saveButton.textContent = "İşlem yapılıyor...";
+	saveButton.disabled = true;
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetch('addSubject', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ title, description }),
+		});
+		if (response.ok) {
+			const url = "/forum";
+			$.ajax({
+				url: url,
+				type: "GET",
+				success: function(data) {
+					if (data.includes('<form') && data.includes('name="username"')) {
+						window.location.href = "/login";
+					} else {
+						$('#ara_content').html(data);
+					}
+				},
+				error: function(xhr) {
+					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
+				},
+				complete: function() {
+					document.body.style.cursor = "default";
+					saveButton.textContent = "Kaydet";
+					saveButton.disabled = false;
+				},
+			});
+		} else {
+			alert('Hata oluştu');
 		}
 	} catch (error) {
 		console.error("Hata oluştu:", error);
