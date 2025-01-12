@@ -1,6 +1,8 @@
 
 loadSubjects();
 async function loadSubjects() {
+	const mesajsayi = document.querySelector('#mesajadet'); 
+	mesajsayi.innerText = '';
 	document.body.style.cursor = "wait";
 	const response = await fetch('/getSubjects', {
 		method: 'GET',

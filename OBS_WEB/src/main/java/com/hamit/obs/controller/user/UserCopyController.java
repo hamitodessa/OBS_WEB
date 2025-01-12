@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.User;
+import com.hamit.obs.service.forum.ForumService;
 import com.hamit.obs.service.user.UserService;
 
 @Controller
@@ -19,6 +20,9 @@ public class UserCopyController {
 
 	@Autowired
     private UserService userService;
+	
+	@Autowired
+	private ForumService forumService;
 	
 	@GetMapping("user/copyuser")
 	public String copyuser() {
@@ -52,6 +56,7 @@ public class UserCopyController {
 			User currentUser = userService.getCurrentUser();
 			String newEmail = hesap;
 			User newUser = userService.duplicateUser(currentUser, newEmail);
+			forumService.mesajsayiSaveUser(newUser.getEmail());
 			response.put("success", newUser.getEmail());
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {

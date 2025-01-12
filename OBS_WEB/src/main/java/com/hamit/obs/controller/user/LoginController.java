@@ -21,6 +21,7 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.RolEnum;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
+import com.hamit.obs.service.forum.ForumService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kur.KurService;
 import com.hamit.obs.service.user.UserService;
@@ -33,13 +34,19 @@ public class LoginController {
 	private UserService userService;
 	
 	@Autowired
-	CariService cariService ;
+	private CariService cariService ;
+	
 	@Autowired
-	KurService kurService;
+	private KurService kurService;
+	
 	@Autowired
-	AdresService adresService;
+	private AdresService adresService;
+	
 	@Autowired
-	KambiyoService kambiyoService;
+	private KambiyoService kambiyoService;
+	
+	@Autowired
+	private ForumService forumService;
 	
 
 	@GetMapping("/login")
@@ -61,6 +68,8 @@ public class LoginController {
 		String apiUrl = "https://api.ipify.org?format=text";
 		RestTemplate restTemplate = new RestTemplate();
 		model.addAttribute("ip", restTemplate.getForObject(apiUrl, String.class));
+		int mesajsayi = forumService.getmesajsayi(useremail);
+		model.addAttribute("mesajadet", mesajsayi == 0 ? "":mesajsayi);
 		return model;
 	}
 

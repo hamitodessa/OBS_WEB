@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hamit.obs.model.user.RolEnum;
 import com.hamit.obs.model.user.User;
+import com.hamit.obs.service.forum.ForumService;
 import com.hamit.obs.service.user.UserService;
 
 
@@ -18,6 +19,9 @@ public class RegistirasyonController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ForumService forumService;
 
 	@GetMapping("user/register")
 	public String register() {
@@ -54,6 +58,7 @@ public class RegistirasyonController {
 				user.setImage(null);
 			}
 			userService.registerUser(user, userRole);
+			forumService.mesajsayiSaveUser(user.getEmail());
 			redirectAttrs.addFlashAttribute("success", "Kayıt başarılı! Lütfen giriş yapın.");
 			return "redirect:/login";
 		} catch (Exception e) {

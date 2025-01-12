@@ -31,7 +31,9 @@ public class ForumController {
 	@GetMapping("/getSubjects")
 	@ResponseBody
 	public List<Subjects> getSubjects() throws Exception {
-		return forumService.getAllSubjectsWithCommits();
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		forumService.mesajsayiUpdateUser(email);
+		return forumService.findAllWithCommits();
 	}
 
 	@PostMapping("addSubject")
