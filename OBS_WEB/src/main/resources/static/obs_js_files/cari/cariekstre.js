@@ -60,7 +60,7 @@ async function eksfetchTableData() {
 		}
 	} catch (error) {
 		errorDiv.style.display = "block";
-		errorDiv.innerText = error;
+		errorDiv.innerText = error.message;
 	} finally {
 		$yenileButton.prop('disabled', false).text('Yenile');
 		document.body.style.cursor = "default";

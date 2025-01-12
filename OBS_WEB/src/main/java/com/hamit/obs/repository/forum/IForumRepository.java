@@ -79,7 +79,6 @@ public class IForumRepository  {
 		}
 	}
 	public void mesajsayiUpdate(String username,int sayi) {
-		System.out.println(username + "=="+ sayi);
 		String sql = "UPDATE mesajsayi SET mesajsayi = mesajsayi + ? WHERE username != ? ";
 		try (Connection connection = DriverManager.getConnection(UygulamaSabitleri.forumConnString,UygulamaSabitleri.FORUMUSER_STRING, UygulamaSabitleri.FORUMPWD_STRING);
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

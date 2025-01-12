@@ -1,21 +1,40 @@
 
 loadSubjects();
 async function loadSubjects() {
-	const mesajsayi = document.querySelector('#mesajadet'); 
+	const mesajsayi = document.querySelector('#mesajadet');
 	mesajsayi.innerText = '';
 	document.body.style.cursor = "wait";
-	const response = await fetch('/getSubjects', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
-	if (response.ok) {
-		const subjects = await response.json(); // Backend'den JSON verisi
-		allSubjects = subjects;
-		renderSubjects(subjects);
-		document.body.style.cursor = "default";
-	} else {
+
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+
+	try {
+		const response = await fetchWithSessionCheck('/getSubjects', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		if (!response) {
+			return;
+		}
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		if (response.success) {
+			const subjects = response.subjects;
+			allSubjects = subjects; // Global değişken
+			renderSubjects(subjects); // Gelen veriyi render etmek
+		} else {
+			errorDiv.style.display = "block";
+			errorDiv.innerText = "Bir hata oluştu.";
+		}
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
+		console.error("API Error:", error);
+	} finally {
 		document.body.style.cursor = "default";
 	}
 };
@@ -109,20 +128,29 @@ async function submitComment(subjectId) {
 		alert('Lütfen bir yorum yazın.');
 		return;
 	}
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+
 	const saveButton = document.querySelector(`#comment-form-${subjectId} button`);
 	saveButton.textContent = "İşlem yapılıyor...";
 	saveButton.disabled = true;
 	document.body.style.cursor = "wait";
 	try {
-		const response = await fetch(`addComment/${subjectId}`, {
+		const response = await fetchWithSessionCheck(`addComment/${subjectId}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({ text: commentText }),
 		});
-
-		if (response.ok) {
+		if (!response) {
+			return;
+		}
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		if (response.success) {
 			const url = "/forum";
 			$.ajax({
 				url: url,
@@ -144,10 +172,12 @@ async function submitComment(subjectId) {
 				},
 			});
 		} else {
-			alert('Yorum eklenemedi.');
+			errorDiv.style.display = "block";
+			errorDiv.innerText = "Bir hata oluştu.";
 		}
 	} catch (error) {
-		console.error(error.message);
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
 	} finally {
 		document.body.style.cursor = "default";
 		saveButton.textContent = "Yorum Kaydet";
@@ -162,19 +192,29 @@ async function addSubject() {
 		alert('Lütfen hem başlık hem de açıklama alanlarını doldurun.');
 		return;
 	}
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+
 	const saveButton = document.getElementById('saveButton');
 	saveButton.textContent = "İşlem yapılıyor...";
 	saveButton.disabled = true;
 	document.body.style.cursor = "wait";
 	try {
-		const response = await fetch('addSubject', {
+		const response = await fetchWithSessionCheck('addSubject', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({ title, description }),
 		});
-		if (response.ok) {
+		if (!response) {
+			return;
+		}
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		if (response.success) {
 			const url = "/forum";
 			$.ajax({
 				url: url,
@@ -196,13 +236,15 @@ async function addSubject() {
 				},
 			});
 		} else {
-			alert('Hata oluştu');
+			errorDiv.style.display = "block";
+			errorDiv.innerText = "Bir hata oluştu.";
 		}
 	} catch (error) {
-		console.error("Hata oluştu:", error);
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
 	} finally {
 		document.body.style.cursor = "default";
-		saveButton.textContent = "Kaydet";
+		saveButton.textContent = "Yorum Kaydet";
 		saveButton.disabled = false;
 	}
 }
