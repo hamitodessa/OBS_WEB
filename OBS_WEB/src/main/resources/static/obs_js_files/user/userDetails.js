@@ -1,3 +1,7 @@
+document.getElementById("createdbMenuLink").addEventListener("click", function () {
+    document.querySelector('.changeLink[data-url="/user/createdb"]').click();
+});
+
 async function detailoku() {
 	const modul = document.getElementById("user_modul").value;
 	const errorDiv = document.getElementById("errorDiv");
@@ -214,7 +218,7 @@ async function checkFile() {
 			dbButton.disabled = false;
 		} else {
 			document.body.style.cursor = "default";
-			alert("Dosya Veritabanında Mevcut Değil");
+			alert("Baglanti saglanamadi veya Veritabanı Mevcut Değil");
 		}
 	} catch (error) {
 		errorDiv.style.display = "block";
