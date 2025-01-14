@@ -17,5 +17,6 @@ public class serverBilgiDTO {
 	private String user_name;
 	private String user_modul_baslik;
 	private String superviser;
+	private long id;
 
 }

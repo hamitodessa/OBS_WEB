@@ -9,7 +9,6 @@ async function getWellcomeData() {
 		}
 		const data = await response.json();
 		if (data.errorMessage) {
-			console.error("Error message from server:", data.errorMessage);
 			throw new Error(data.errorMessage);
 		}
 		const responseData = data.data;

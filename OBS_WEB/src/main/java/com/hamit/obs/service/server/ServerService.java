@@ -54,7 +54,6 @@ public class ServerService {
 		return result;
 	}
 
-
 	public boolean dosyaolustur(serverBilgiDTO serverBilgiDTO)
 	{
 		boolean result =false;

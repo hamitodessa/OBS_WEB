@@ -33,7 +33,6 @@ async function loadSubjects() {
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
-		console.error("API Error:", error);
 	} finally {
 		document.body.style.cursor = "default";
 	}
@@ -42,7 +41,6 @@ async function loadSubjects() {
 
 function renderSubjects(subjects) {
 	if (!subjects || !Array.isArray(subjects)) {
-		console.error("Geçersiz subject verisi:", subjects);
 		return;
 	}
 	const subjectSection = document.querySelector('.subject-section');
@@ -103,7 +101,6 @@ function filterSubjects() {
 function toggleCommits(subjectId) {
 	const commitsDiv = document.getElementById(`commits-${subjectId}`);
 	if (!commitsDiv) {
-		console.error(`Yorumlar için div bulunamadı: commits-${subjectId}`);
 		return;
 	}
 	const isHidden = commitsDiv.style.display === 'none';
@@ -115,7 +112,6 @@ function toggleCommits(subjectId) {
 function toggleCommentForm(subjectId) {
 	const form = document.getElementById(`comment-form-${subjectId}`);
 	if (!form) {
-		console.error(`Form with id comment-form-${subjectId} not found.`);
 		return;
 	}
 	form.style.display = form.style.display === 'none' ? 'block' : 'none';

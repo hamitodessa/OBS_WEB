@@ -303,7 +303,9 @@ async function cariBaslik() {
 			errorDiv.innerText = data.errorMessage;
 		}
 	} catch (error) {
-		console.error('Başlık yüklenirken hata:', error);
+		const errorDiv = document.getElementById("errorDiv");
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message;
 	}
 }
 
@@ -320,7 +322,9 @@ async function adresBaslik() {
 			errorDiv.innerText = data.errorMessage;
 		}
 	} catch (error) {
-		console.error('Başlık yüklenirken hata:', error);
+		const errorDiv = document.getElementById("errorDiv");
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message;
 	}
 }
 
@@ -336,6 +340,8 @@ async function kambiyoBaslik() {
 			errorDiv.innerText = data.errorMessage;
 		}
 	} catch (error) {
-		console.error('Başlık yüklenirken hata:', error);
+		const errorDiv = document.getElementById("errorDiv");
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message;
 	}
 }

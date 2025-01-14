@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.yardimci.TextSifreleme;
+import com.hamit.obs.dto.server.serverBilgiDTO;
 import com.hamit.obs.dto.user.User_DetailsDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.RolEnum;
@@ -27,6 +28,7 @@ import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kur.KurService;
+import com.hamit.obs.service.server.ServerService;
 import com.hamit.obs.service.user.UserDetailsService;
 import com.hamit.obs.service.user.UserService;
 
@@ -44,7 +46,9 @@ public class UserDetailsController {
     private AdresService adresService;
 	@Autowired
     private KambiyoService kambiyoService;
-
+	@Autowired
+	private ServerService serverService;
+	
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -155,6 +159,54 @@ public class UserDetailsController {
 		return response;
 	}
 
+	@PostMapping("user/checkfile")
+	@ResponseBody
+	public Map<String, String> dosyakontrol(@RequestBody serverBilgiDTO serverBilgiDTO) {
+		Map<String, String> response = new HashMap<>();
+		boolean result = false;
+		String drm  = "false" ;
+		try {
+			switch (serverBilgiDTO.getUser_modul()) {
+			case "Cari Hesap": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Car");
+				break;
+			}
+			case "Kur": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Kur");
+				break;
+			}
+			case "Adres": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Adr");
+				break;
+			}
+			case "Kambiyo": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Kam");
+				break;
+			}
+			}
+			String sifre = serverBilgiDTO.getUser_pwd_server();
+			if (sifre == null) {
+				User_Details existingDetails = userDetailsService.getUserDetailsById(serverBilgiDTO.getId());
+				sifre = TextSifreleme.decrypt(existingDetails.getUser_pwd_server());
+			} else {
+				sifre = TextSifreleme.decrypt(serverBilgiDTO.getUser_pwd_server());
+			}
+			serverBilgiDTO.setUser_pwd_server(sifre);
+			result = serverService.dosyakontrol(serverBilgiDTO);
+			drm = result != false ? "true" : "false" ;
+			response.put("dosyaDurum",drm ); 
+			response.put("errorMessage", ""); 
+		} catch (ServiceException e) {
+			response.put("dosyaDurum",drm ); 
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("dosyaDurum",drm ); 
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	
 	@PostMapping("user/delete_user_details")
 	@ResponseBody
 	public Map<String, Object> deleteUserDetails(@RequestBody Map<String, Long> request) {

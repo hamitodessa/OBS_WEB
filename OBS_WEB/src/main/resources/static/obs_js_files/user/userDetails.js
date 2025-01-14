@@ -180,3 +180,46 @@ async function deleteUserDetailsus() {
 		document.body.style.cursor = "default";
 	}
 }
+
+//****************************************DOSYA KONTROL ************************************************/
+async function checkFile() {
+	const userPwdServerInput = document.getElementById("user_pwd_server").value;
+	const userPwdServer = userPwdServerInput === "******" ? null : userPwdServerInput;
+	const serverBilgiDTO = {
+		user_modul: document.getElementById("user_modul").value,
+		hangi_sql: document.getElementById("hangi_sql").value,
+		user_prog_kodu: document.getElementById("user_prog_kodu").value,
+		user_server: document.getElementById("user_server").value,
+		user_pwd_server: userPwdServer,
+		user_ip: document.getElementById("user_ip").value,
+		superviser: "",
+		id: document.getElementById("hiddenId").value,
+	};
+	const dbButton = document.getElementById("savebutton");
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck("user/checkfile", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(serverBilgiDTO),
+		});
+		const data = response;
+		if (data.dosyaDurum === "true") {
+			document.body.style.cursor = "default";
+			dbButton.disabled = false;
+		} else {
+			document.body.style.cursor = "default";
+			alert("Dosya Veritabanında Mevcut Değil");
+		}
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+	}
+}
