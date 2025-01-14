@@ -4,7 +4,7 @@ async function loadSubjects() {
 	const mesajsayi = document.querySelector('#mesajadet');
 	mesajsayi.innerText = '';
 	document.body.style.cursor = "wait";
-
+	await new Promise(resolve => setTimeout(resolve, 50));
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -111,7 +111,6 @@ function toggleCommits(subjectId) {
 	const button = commitsDiv.previousElementSibling;
 	button.textContent = isHidden ? 'Yorumları Gizle' : 'Yorumları Göster';
 }
-
 
 function toggleCommentForm(subjectId) {
 	const form = document.getElementById(`comment-form-${subjectId}`);
