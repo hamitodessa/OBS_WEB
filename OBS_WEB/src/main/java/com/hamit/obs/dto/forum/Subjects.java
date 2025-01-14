@@ -1,5 +1,5 @@
 
-package com.hamit.obs.model.forum;
+package com.hamit.obs.dto.forum;
 
 import java.sql.Timestamp;
 import java.util.List;

@@ -25,7 +25,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	private final KurService kurService;
 	private final AdresService adresService;
 	private final KambiyoService kambiyoService;
-
+	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {

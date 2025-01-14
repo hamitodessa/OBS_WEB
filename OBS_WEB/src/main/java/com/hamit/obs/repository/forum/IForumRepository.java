@@ -13,36 +13,36 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.custom.degiskenler.UygulamaSabitleri;
+import com.hamit.obs.dto.forum.Commit;
+import com.hamit.obs.dto.forum.Subjects;
 import com.hamit.obs.exception.ServiceException;
-import com.hamit.obs.model.forum.Subjects;
-import com.hamit.obs.model.forum.Commit;
 @Component
 public class IForumRepository  {
 
 	@SuppressWarnings("unused")
 	public void createForum() {
 		String sqlSubjects = "CREATE TABLE subjects ("
-				+ "    SubjectID SERIAL PRIMARY KEY,"
-				+ "    SubjectTitle VARCHAR(255) NOT NULL,"
-				+ "    SubjectDescription TEXT,"
-				+ "    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
-				+ "    CreatedBy VARCHAR(255) NOT NULL);" ;
+				+ "    subjectid SERIAL PRIMARY KEY,"
+				+ "    subjecttitle VARCHAR(100) NOT NULL,"
+				+ "    subjectdescription VARCHAR(300),"
+				+ "    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+				+ "    createdby VARCHAR(100) NOT NULL);" ;
 
 		String sqlCommits = "CREATE TABLE commits ("
-				+ "    CommitID SERIAL PRIMARY KEY,"
-				+ "    SubjectID INT NOT NULL REFERENCES Subjects(SubjectID) ON DELETE CASCADE,"
-				+ "    CommitText TEXT NOT NULL,"
-				+ "    CreatedBy VARCHAR(100) NOT NULL,"
-				+ "    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP);";
+				+ "    commitid SERIAL PRIMARY KEY,"
+				+ "    subjectid INT NOT NULL ,"
+				+ "    committext VARCHAR(300),"
+				+ "    createdby VARCHAR(100) NOT NULL,"
+				+ "    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP);";
 
 		String sqlmesajsayiString = "CREATE TABLE mesajsayi("
 				+ "    mesajsayiid SERIAL PRIMARY KEY ,"
-				+ "	   username VARCHAR(255) NOT NULL,"
+				+ "	   username VARCHAR(100) NOT NULL,"
 				+ "    mesajsayi integer);";
 	}
 
 	public void subjectSave(String subjectTitle, String subjectDescription,String CreatedBy) {
-		String sql = "INSERT INTO Subjects (SubjectTitle, SubjectDescription,CreatedBy) VALUES (?, ?,?)";
+		String sql = "INSERT INTO subjects (subjecttitle, subjectdescription,createdby) VALUES (?, ?,?)";
 		try (Connection connection = DriverManager.getConnection(UygulamaSabitleri.forumConnString,UygulamaSabitleri.FORUMUSER_STRING, UygulamaSabitleri.FORUMPWD_STRING);
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, subjectTitle);
@@ -55,7 +55,7 @@ public class IForumRepository  {
 		}
 	}
 	public void commitSave(Long subjectID, String commitText, String createdBy) {
-		String sql = "INSERT INTO Commits (SubjectID, CommitText, CreatedBy) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO commits (subjectid, committext, createdby) VALUES (?, ?, ?)";
 		try (Connection connection = DriverManager.getConnection(UygulamaSabitleri.forumConnString,UygulamaSabitleri.FORUMUSER_STRING, UygulamaSabitleri.FORUMPWD_STRING);
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setLong(1, subjectID);
@@ -118,35 +118,35 @@ public class IForumRepository  {
 	public List<Subjects> findAllWithCommits() throws Exception {
 		List<Subjects> subjects = new ArrayList<>();
 		Map<Long, Subjects> subjectMap = new HashMap<>();
-		String sql = "SELECT s.SubjectID, s.SubjectTitle, s.SubjectDescription, s.CreatedBy, " +
-				"c.CommitID, c.CommitText, c.CreatedBy AS CommitCreatedBy " +
-				"FROM Subjects s " +
-				"LEFT JOIN Commits c ON s.SubjectID = c.SubjectID " +
-				"ORDER BY s.SubjectID";
+		String sql = "SELECT s.subjectid, s.subjecttitle, s.subjectdescription, s.createdby, " +
+				"c.commitID, c.committext, c.createdby AS CommitCreatedBy " +
+				"FROM subjects s " +
+				"LEFT JOIN commits c ON s.subjectid = c.subjectid " +
+				"ORDER BY s.subjectid";
 		try (Connection connection = DriverManager.getConnection(UygulamaSabitleri.forumConnString, UygulamaSabitleri.FORUMUSER_STRING, UygulamaSabitleri.FORUMPWD_STRING);
 				PreparedStatement statement = connection.prepareStatement(sql);
 				ResultSet resultSet = statement.executeQuery()) {
 			while (resultSet.next()) {
-				Long subjectId = resultSet.getLong("SubjectID");
+				Long subjectId = resultSet.getLong("subjectid");
 				Subjects subject = subjectMap.get(subjectId);
 				if (subject == null) {
 					subject = new Subjects();
 					subject.setSubjectID(subjectId);
-					subject.setSubjectTitle(resultSet.getString("SubjectTitle"));
-					subject.setSubjectDescription(resultSet.getString("SubjectDescription"));
-					subject.setCreatedBy(resultSet.getString("CreatedBy"));
+					subject.setSubjectTitle(resultSet.getString("subjecttitle"));
+					subject.setSubjectDescription(resultSet.getString("subjectdescription"));
+					subject.setCreatedBy(resultSet.getString("createdby"));
 
 					subject.setCommits(subject.getCommits() != null ? subject.getCommits() : new ArrayList<>());
 					subjects.add(subject);
 					subjectMap.put(subjectId, subject);
 				}
-				long commitId = resultSet.getInt("CommitID");
+				long commitId = resultSet.getInt("commitid");
 				if (commitId > 0) {
 					Commit commit = new Commit();
 					commit.setCommitID(commitId);
 					commit.setSubjectID(subjectId);
-					commit.setCommitText(resultSet.getString("CommitText"));
-					commit.setCreatedBy(resultSet.getString("CommitCreatedBy"));
+					commit.setCommitText(resultSet.getString("committext"));
+					commit.setCreatedBy(resultSet.getString("commitcreatedby"));
 					subject.getCommits().add(commit);
 				}
 			}

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hamit.obs.model.forum.Subjects;
+import com.hamit.obs.dto.forum.Subjects;
 import com.hamit.obs.repository.forum.IForumRepository;
 
 @Service
