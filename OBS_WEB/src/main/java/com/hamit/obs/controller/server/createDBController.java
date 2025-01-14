@@ -62,6 +62,18 @@ public class createDBController {
 				serverBilgiDTO.setUser_modul_baslik("OK_Car");
 				break;
 			}
+			case "Kur": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Kur");
+				break;
+			}
+			case "Adres": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Adr");
+				break;
+			}
+			case "Kambiyo": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Kam");
+				break;
+			}
 			}
 			result = serverService.dosyakontrol(serverBilgiDTO);
 			drm = result != false ? "true" : "false" ;
@@ -69,7 +81,7 @@ public class createDBController {
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {
 			response.put("dosyaDurum",drm ); 
-			response.put("errorMessage", e.getMessage()); // Hata mesajı
+			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
 			response.put("dosyaDurum",drm ); 
 			response.put("errorMessage", "Hata: " + e.getMessage());
@@ -99,6 +111,11 @@ public class createDBController {
 			case "Adres": {
 				serverBilgiDTO.setUser_name(usrString);
 				serverBilgiDTO.setUser_modul_baslik("OK_Adres");
+				break;
+			}
+			case "Kambiyo": {
+				serverBilgiDTO.setUser_name(usrString);
+				serverBilgiDTO.setUser_modul_baslik("OK_Kam");
 				break;
 			}
 			}

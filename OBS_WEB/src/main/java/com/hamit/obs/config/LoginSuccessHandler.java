@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -21,10 +22,18 @@ import java.io.IOException;
 @AllArgsConstructor
 
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-	private final CariService cariService ;
-	private final KurService kurService;
-	private final AdresService adresService;
-	private final KambiyoService kambiyoService;
+	
+	@Autowired
+	private CariService cariService ;
+	
+	@Autowired
+	private KurService kurService;
+	
+	@Autowired
+	private AdresService adresService;
+	
+	@Autowired
+	private KambiyoService kambiyoService;
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
