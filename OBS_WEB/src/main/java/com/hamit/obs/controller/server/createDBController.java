@@ -74,6 +74,10 @@ public class createDBController {
 				serverBilgiDTO.setUser_modul_baslik("OK_Kam");
 				break;
 			}
+			case "Fatura": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Fat");
+				break;
+			}
 			}
 			result = serverService.dosyakontrol(serverBilgiDTO);
 			drm = result != false ? "true" : "false" ;
@@ -116,6 +120,11 @@ public class createDBController {
 			case "Kambiyo": {
 				serverBilgiDTO.setUser_name(usrString);
 				serverBilgiDTO.setUser_modul_baslik("OK_Kam");
+				break;
+			}
+			case "Fatura": {
+				serverBilgiDTO.setUser_name(usrString);
+				serverBilgiDTO.setUser_modul_baslik("OK_Fat");
 				break;
 			}
 			}

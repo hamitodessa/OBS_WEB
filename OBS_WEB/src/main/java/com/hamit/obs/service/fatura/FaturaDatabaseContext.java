@@ -1,39 +1,40 @@
-package com.hamit.obs.service.cari;
+package com.hamit.obs.service.fatura;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.exception.ServiceException;
-import com.hamit.obs.repository.cari.CariMsSQL;
-import com.hamit.obs.repository.cari.CariMySQL;
-import com.hamit.obs.repository.cari.CariPgSQL;
-import com.hamit.obs.repository.cari.ICariDatabase;
+import com.hamit.obs.repository.fatura.FaturaMsSQL;
+import com.hamit.obs.repository.fatura.FaturaMySQL;
+import com.hamit.obs.repository.fatura.FaturaPgSQL;
+import com.hamit.obs.repository.fatura.IFaturaDatabase;
 import com.hamit.obs.service.user.UserDetailsService;
 
 @Service
-public class CariDatabaseContext {
-	private final Map<String, ICariDatabase> strategies = new HashMap<>();
+public class FaturaDatabaseContext {
+	private final Map<String, IFaturaDatabase> strategies = new HashMap<>();
 
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	public CariDatabaseContext(CariMySQL mySQL, CariMsSQL msSQL, CariPgSQL pgSQL) {
+	public FaturaDatabaseContext(FaturaMySQL mySQL, FaturaMsSQL msSQL, FaturaPgSQL pgSQL) {
 		strategies.put("MY SQL", mySQL);
 		strategies.put("MS SQL", msSQL);
 		strategies.put("PG SQL", pgSQL);
 	}
 
-	public ICariDatabase getStrategy() {
+	public IFaturaDatabase getStrategy() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-	        String config = userDetailsService.findHangiSQLByUserId("Cari Hesap", useremail);
+	        String config = userDetailsService.findHangiSQLByUserId("Fatura", useremail);
 	        if (config == null || config.isEmpty()) {
 	            throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
 	        }
-	        ICariDatabase strategy = strategies.get(config);
+	        IFaturaDatabase strategy = strategies.get(config);
 	        if (strategy == null) {
 	            throw new ServiceException("Belirtilen konfigürasyona uygun strateji bulunamadı: " + config);
 	        }
@@ -44,4 +45,5 @@ public class CariDatabaseContext {
 	        throw new ServiceException("Strateji alma sırasında beklenmeyen bir hata oluştu.", e);
 	    }
 	}
+
 }

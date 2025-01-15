@@ -1,0 +1,311 @@
+<style>
+
+
+.child {
+	width: 95%;
+	padding: 2px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+}
+
+.group-box {
+	padding: 1px;
+	width: 97%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+}
+
+.aramagroup-box {
+	width: 97%;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	border: 1px solid #ccc;
+	height: 50px; /* Yüksekliği sabitledim */
+}
+.centered-div {
+	width: 60%; /* Genişlik %80 */
+	margin: 0 auto; /* Ekran ortasında konumlandırma */
+/*	padding: 4px;
+	border: 1px solid #ccc;  */
+	box-sizing: border-box;
+	/* Padding ve border genişlik içinde hesaplansın */
+	text-align: center; /* İçerikleri ortala (opsiyonel) */
+}
+
+.resimcentered-div {
+	width: 250px; /* Sabit genişlik */
+    height: 330px; /* Sabit yükseklik */
+    
+	margin: 0 auto; /* Ekran ortasında konumlandırma */
+	box-sizing: border-box;
+	
+	display: flex;
+	flex-direction: column; /* Dikey hizalama */
+	align-items: left; /* Elemanları ortala (opsiyonel) */
+	gap: 8px; /* Elemanlar arasında boşluk (opsiyonel) */
+}
+
+.resimgoster {
+    display: flex; /* Flexbox ile hizalama */
+    justify-content: center; /* Yatayda ortala */
+    align-items: center; /* Dikeyde ortala */
+    width: 250px; /* Sabit genişlik */
+    height: 300px; /* Sabit yükseklik */
+    border: 1px solid #ddd; /* İsteğe bağlı çerçeve */
+    overflow: hidden; /* Resmin taşmasını engelle */
+    background-color: #f8f9fa; /* Arka plan rengi */
+    
+}
+.resimdiv {
+  display: flex;
+    width: 250px; /* Sabit genişlik */
+    min-height: 300px; /* Sabit yükseklik */
+   border: 1px solid #ddd; /* İsteğe bağlı çerçeve */
+    overflow: hidden; /* Resmin taşmasını engelle */
+    background-color: #f8f9fa; /* Arka plan rengi */
+}
+
+</style>
+<!-- Ana Sayfa -->
+<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+
+<div class="card p-4 d-flex flex-row gap-3">
+    <div class="centered-div">
+        <div class="aramagroup-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Arama</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="arama"  style="max-width:300px;" class="form-control" oninput="hsparamaYap()"  th:value="${hesapKodu}" >
+            <span style="padding-left: 50px;"></span>
+
+			<div style="position: relative; width: 150px;">
+				<input class="form-control cins_bold" maxlength="12"
+					list="urunOptions" id="urunKodlari"
+					style="width: 100%; padding-right: 30px;">
+				<datalist id="urunOptions">
+					<option th:each="kod : ${urunKodlari}" th:value="${kod.Kodu}"></option>
+				</datalist>
+				<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+			</div>
+
+		</div>
+        <div class="aramagroup-box" style="margin-top:5px;">
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="geriButton" class="btn btn-secondary ml-2" onclick="hsplnGeri()" ><i class="fa fa-backward"></i>	</button>
+            
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="ilkButton" class="btn btn-secondary ml-2" onclick="hsplnIlk()" ><i class="fa fa-refresh"></i>	</button>
+
+           
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="ileriButton" class="btn btn-secondary ml-2" onclick="hsplnIleri()" ><i class="fa fa-forward"></i>	</button>
+
+        </div>
+        <div class="group-box" style="margin-top:5px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Urun Kodu</span>
+            <span style="padding-left: 5px;"></span>
+           <input type="text" id="kodu" disabled style="max-width:150px;font-weight: bold;" class="form-control" oninput="hesapAdiOgren(this.value, 'kodKontrol')">
+           <span style="padding-left: 5px;text-align:left; color:red;font-weight: bold;" id="kodKontrol"></span>
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Adi</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="adi"  disabled style="max-width:300px;" class="form-control">
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Birim</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="yetkili"  disabled class="form-control" style="max-width:100px;">
+            <span style="padding-left: 5px;"></span>
+            <select class="form-control" id="user_modul" style="max-width:100px;">
+				<option value="adet">Adet</option>
+				<option value="kg">Kg</option>
+				<option value="ton">Ton</option>
+				<option value="m3">m3</option>
+				<option value="m2">m2</option>
+				<option value="mtul">m/Tul</option>
+			</select>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Agirlik</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="hcins"  disabled class="form-control" style="max-width:100px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:80px;">Kusurat</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="hcins"  disabled class="form-control" style="max-width:50px;">
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Sinif</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="yetkili"  disabled class="form-control" style="max-width:100px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Mensei</span>
+            <span style="padding-left: 5px;"></span>
+            <div style="position: relative; width: 150px;">
+				<input class="form-control cins_bold"
+								ondblclick="openSecondModal('borcHesap', 'dekont')"
+								maxlength="12" style="width: 100%; padding-right: 30px;"
+								list="borcOptions" id="borcHesap" 
+								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"
+								disabled>
+								
+				<datalist id="borcOptions" >
+					<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+				</datalist>
+					
+					<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+			</div>
+
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Ana Grup</span>
+            <span style="padding-left: 5px;"></span>
+            <div style="position: relative; width: 150px;">
+				<input class="form-control cins_bold"
+								ondblclick="openSecondModal('borcHesap', 'dekont')"
+								maxlength="12" style="width: 100%; padding-right: 30px;"
+								list="borcOptions" id="borcHesap" 
+								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"
+								disabled>
+								
+				<datalist id="borcOptions" >
+					<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+				</datalist>
+					
+					<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+				</div>
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Alt Grup</span>
+            <span style="padding-left: 5px;"></span>
+            <div style="position: relative; width: 150px;">
+				<input class="form-control cins_bold"
+								ondblclick="openSecondModal('borcHesap', 'dekont')"
+								maxlength="12" style="width: 100%; padding-right: 30px;"
+								list="borcOptions" id="borcHesap" 
+								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"
+								disabled>
+								
+				<datalist id="borcOptions" >
+					<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+				</datalist>
+					
+					<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+			</div>
+
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Aciklama 1</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="ad2"  disabled class="form-control" style="max-width:300px;">
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Aciklama 2</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="ad2"  disabled class="form-control" style="max-width:300px;">
+        </div>
+        
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Ozel Kod 1</span>
+            <span style="padding-left: 5px;"></span>
+            <div style="position: relative; width: 150px;">
+				<input class="form-control cins_bold"
+								ondblclick="openSecondModal('borcHesap', 'dekont')"
+								maxlength="12" style="width: 100%; padding-right: 30px;"
+								list="borcOptions" id="borcHesap" 
+								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"
+								disabled>
+								
+				<datalist id="borcOptions" >
+					<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+				</datalist>
+					
+					<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+			</div>
+
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Ozel Kod 2</span>
+            <span style="padding-left: 5px;"></span>
+            <div style="position: relative; width: 150px;">
+				<input class="form-control cins_bold"
+								ondblclick="openSecondModal('borcHesap', 'dekont')"
+								maxlength="12" style="width: 100%; padding-right: 30px;"
+								list="borcOptions" id="borcHesap" 
+								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"
+								disabled>
+								
+				<datalist id="borcOptions" >
+					<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+				</datalist>
+					
+					<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+			</div>
+
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Fiat 1</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="t1"  disabled class="form-control" style="max-width:100px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Fiat 2</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="t2"  disabled class="form-control" style="max-width:100px;">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Fiat 3</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="t2"  disabled class="form-control" style="max-width:100px;">
+        </div>
+        <div class="group-box">
+            <span style="padding-left: 5px;"></span>
+            <span class="input-group-text" style="width:100px;">Barkod</span>
+            <span style="padding-left: 5px;"></span>
+            <input type="text" id="t3"  disabled class="form-control" style="max-width:150px;">
+        </div>
+        <div class="aramagroup-box" style="margin-top:5px;">
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="kaydetButton" class="btn btn-secondary ml-2" onclick="hsplnKayit()" ><i class="fa fa-save"></i>	</button>
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="silButton" class="btn btn-secondary ml-2" onclick="hsphesapSil()" ><i class="fa fa-trash"></i>	</button>
+            <span style="padding-left: 5px;"></span>
+            <button type="button" id="yeniButton" class="btn btn-secondary ml-2" onclick="hspenableInputs()" ><i class="fa fa-plus"></i>	</button>
+        </div>
+  </div>  
+    <div class="resimcentered-div">
+    	<div class="resimdiv">
+ 			<img id="resimGoster" class="resimgoster"  src="" alt="Base64 Resim" style="display: none;" />
+     	</div>
+     	<button type="button" id="resimremove" style="max-width:250px;" class="btn btn-secondary ml-2" onclick="resimSil()" ><i class="fa fa-remove"></i>	</button>
+        <input type="file" id="resim" name="resim" accept="image/*" disabled class="form-control" style="max-width:400px;">
+    </div>
+    
+</div>
+<script src="/obs_js_files/stok/urunkart.js"></script>
+
+<script>
+document.getElementById('resim').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const maxSizeInKB = 500; // Maksimum dosya boyutu (KB cinsinden)
+    const maxSizeInBytes = maxSizeInKB * 1024; // Bayta çeviriyoruz
+	const errorDiv = document.getElementById("errorDiv");
+    if (file && file.size > maxSizeInBytes) {
+        errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
+		errorDiv.style.display = "block";
+        event.target.value = ''; 
+    } else {
+		errorDiv.style.display = "none";
+		errorDiv.innerText = "";
+    }
+});
+</script>
+

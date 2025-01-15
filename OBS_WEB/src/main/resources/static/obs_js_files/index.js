@@ -78,5 +78,6 @@ $(document).ready(function() {
 		},
 		"/kambiyo/cektakip": kambiyoBaslik,
 		"/kambiyo/cekrapor": kambiyoBaslik,
+		"/stok/urunkart": stokBaslik,
 	}
 });

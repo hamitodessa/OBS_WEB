@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
+import com.hamit.obs.service.fatura.FaturaService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kur.KurService;
 
@@ -35,6 +36,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	@Autowired
 	private KambiyoService kambiyoService;
 	
+	@Autowired
+	private FaturaService faturaService;
+	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
@@ -45,6 +49,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			kurService.initialize();
 			adresService.initialize();
 			kambiyoService.initialize();
+			faturaService.initialize();
 			response.sendRedirect("/index");
 		} catch (Exception e) {
 			response.sendRedirect("/index?trigger=userdetails");

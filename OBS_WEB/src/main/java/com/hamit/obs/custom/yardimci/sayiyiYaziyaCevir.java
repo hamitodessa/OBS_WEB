@@ -2,78 +2,135 @@ package com.hamit.obs.custom.yardimci;
 
 public class sayiyiYaziyaCevir {
 
-	public static String yaziyaCevir(String sayi, int kurusBasamak, String paraBirimi, String paraKurus, String diyez, String[] bb1, String[] bb2, String[] bb3, String nereden) {
-	    String[] b1 = {"", "BİR", "İKİ", "ÜÇ", "DÖRT", "BEŞ", "ALTI", "YEDİ", "SEKİZ", "DOKUZ"};
-	    String[] b2 = {"", "ON", "YİRMİ", "OTUZ", "KIRK", "ELLİ", "ALTMIŞ", "YETMİŞ", "SEKSEN", "DOKSAN"};
-	    String[] b3 = {"", "YÜZ", "BİN", "MİLYON", "MİLYAR", "TRİLYON", "TRİLYAR"};
+	public static String yaziyaCevir(String sayi, int kurusbasamak,	String parabirimi, String parakurus, String diyez, String[] bb1, String[] bb2, String[] bb3,String nerden) 
+	{
+		String[] b1 = {"", "BİR", "İKİ", "ÜÇ",  "DÖRT", "BEŞ", "ALTI", "YEDİ", "SEKİZ", "DOKUZ"};
+		String[] b2 = {"", "ON", "YİRMİ", "OTUZ", "KIRK", "ELLİ", "ALTMIŞ", "YETMİŞ", "SEKSEN", "DOKSAN"};
+		String[] b3 = {"", "YÜZ", "BİN", "MİLYON", "MİLYAR", "TRİLYON", "TRİLYAR"};
+		if (bb1 != null)
+			b1 = bb1;// farklı dil kullanımı yada farklı yazım biçimi için
+		if (bb2 != null)
+			b2 = bb2; // farklı dil kullanımı
+		if (bb3 != null)
+			b3 = bb3;// farklı dil kullanımı
 
-	    if (bb1 != null) b1 = bb1;
-	    if (bb2 != null) b2 = bb2;
-	    if (bb3 != null) b3 = bb3;
+		String say1, say2 = ""; // say1 virgül öncesi, say2 kuruş bölümü
+		String sonuc = "";
 
-	    sayi = sayi.replace(",", ".");
-	    String[] sayiParcalari = sayi.split("\\.");
-	    String tamKisim = sayiParcalari[0];
-	    String kurusKisim = sayiParcalari.length > 1 ? sayiParcalari[1] : "";
+		sayi = sayi.replace(",", "."); //virgül noktaya çevrilir
 
-	    String tamYazi = yaziyaCevirHelper(tamKisim, b1, b2, b3);
-	    String kurusYazi = kurusKisim.isEmpty() ? "" : kurusYaziyaCevir(kurusKisim, kurusBasamak, b1, b2, b3);
+		if (sayi.indexOf(".") > 0) { // nokta varsa (kuruş)
+			say1 = sayi.substring(0, sayi.indexOf(".")); // virgül öncesi
+			say2 = sayi.substring(sayi.indexOf("."), sayi.length()); // virgül sonrası, kuruş
+		} 
+		else
+			say1 = sayi; // kuruş yok
 
-	    if (tamYazi.isEmpty()) paraBirimi = "";
-	    if (kurusYazi.isEmpty()) paraKurus = "";
+		char[] rk = say1.toCharArray(); // rakamlara ayırma
 
-	    String sonuc = diyez + tamYazi + " " + paraBirimi + " " + kurusYazi + paraKurus + diyez;
-	    return sonuc.trim();
-	}
-
-	private static String yaziyaCevirHelper(String sayi, String[] b1, String[] b2, String[] b3) {
-	    StringBuilder sonuc = new StringBuilder();
-	    int uzunluk = sayi.length();
-	    int grupSayaci = 0;
-
-	    for (int i = 0; i < uzunluk; i++) {
-	        int basamak = Character.getNumericValue(sayi.charAt(uzunluk - 1 - i));
-	        int pozisyon = i % 3;
-
-	        if (pozisyon == 0 && grupSayaci > 0) {
-	            sonuc.insert(0, b3[2 + grupSayaci] + " ");
-	        }
-
-	        if (pozisyon == 0 && basamak > 0) {
-	            sonuc.insert(0, b1[basamak] + " ");
-	        } else if (pozisyon == 1 && basamak > 0) {
-	            sonuc.insert(0, b2[basamak] + " ");
-	        } else if (pozisyon == 2) {
-	            if (basamak == 1) {
-	                sonuc.insert(0, b3[1] + " ");
-	            } else if (basamak > 1) {
-	                sonuc.insert(0, b1[basamak] + b3[1] + " ");
-	            }
-	        }
-
-	        if (pozisyon == 2) grupSayaci++;
-	    }
-	    return sonuc.toString().trim();
-	}
-
-	private static String kurusYaziyaCevir(String kurus, int kurusBasamak, String[] b1, String[] b2, String[] b3) {
-	    StringBuilder sonuc = new StringBuilder();
-	    kurus = kurus.length() > kurusBasamak ? kurus.substring(0, kurusBasamak) : kurus;
-
-	    for (int i = 0; i < kurus.length(); i++) {
-	        int basamak = Character.getNumericValue(kurus.charAt(i));
-	        if (i == 0 && kurusBasamak > 0) {
-	            sonuc.append(b1[basamak]).append(" ");
-	        } else if (i == 1 && kurusBasamak > 1) {
-	            sonuc.append(b2[basamak]).append(" ");
-	        } else if (i == 2 && kurusBasamak > 2) {
-	            if (basamak == 1) {
-	                sonuc.append(b3[1]).append(" ");
-	            } else if (basamak > 1) {
-	                sonuc.append(b1[basamak]).append(b3[1]).append(" ");
-	            }
-	        }
-	    }
-	    return sonuc.toString().trim();
+		String son;
+		int w = 1; // işlenen basamak
+		int sonaekle = 0; // binler on binler yüzbinler vs. için sona bin (milyon,trilyon...) eklenecek mi?
+		int kac = rk.length; // kaç rakam var?
+		int sonint; // işlenen basamağın rakamsal değeri
+		int uclubasamak = 0; // hangi basamakta (birler onlar yüzler gibi)
+		int artan = 0; // binler milyonlar milyarlar gibi artışları yapar
+		String gecici;
+		if (kac > 0) { // virgül öncesinde rakam var mı?
+			for (int i = 0; i < kac; i++) {
+				son = String.valueOf(rk[kac - 1 - i]); // son karakterden başlayarak çözümleme yapılır.
+				sonint = Integer.parseInt(son); // işlenen rakam
+				if (w == 1)
+					sonuc = b1[sonint] + sonuc;// birinci basamak bulunuyor
+				else if (w == 2)
+					sonuc = b2[sonint] + sonuc;// ikinci basamak
+				else if (w == 3) { // 3. basamak
+					if (sonint == 1)
+						sonuc = b3[1] + sonuc;
+					else if (sonint > 1)
+						sonuc = b1[sonint] + b3[1] + sonuc;
+					uclubasamak++;
+				}
+				if (w > 3) { // 3. basamaktan sonraki işlemler
+					if (uclubasamak == 1) {
+						if (sonint > 0) {
+							sonuc = b1[sonint] + b3[2 + artan] + sonuc;
+							if (artan == 0) { // birbin yazmasını engelle
+								if (kac - 1 == i)
+									sonuc = sonuc.replace(b1[1] + b3[2], b3[2]);// 11000 yazılışını düzeltme
+							}
+							sonaekle = 1; // sona bin eklendi
+						} else
+							sonaekle = 0;
+						uclubasamak++;
+					} else if (uclubasamak == 2)
+						{
+						if (sonint > 0) {
+							if (sonaekle > 0) {
+								sonuc = b2[sonint] + sonuc;
+								sonaekle++;
+							} else {
+								sonuc = b2[sonint] + b3[2 + artan] + sonuc;
+								sonaekle++;
+							}
+						}
+						uclubasamak++;
+					} else if (uclubasamak == 3) {
+						if (sonint > 0) {
+							if (sonint == 1)
+								gecici = b3[1];
+							else
+								gecici = b1[sonint] + b3[1];
+							if (sonaekle == 0)
+								gecici = gecici + b3[2 + artan];
+							sonuc = gecici + sonuc;
+						}
+						uclubasamak = 1;
+						artan++;
+					}
+				}
+				w++; // işlenen basamak
+			}
+		} // if(kac>0)
+		if ("".equals(sonuc))
+			parabirimi = "";// virgül öncesi sayı yoksa para birimi yazma
+		say2 = say2.replace(".", "");
+		String kurus = "";
+		if (!"".equals(say2)) { // kuruş hanesi varsa
+			if (kurusbasamak > 3)
+				kurusbasamak = 3;// 3 basamakla sınırlı
+			if (say2.length() > kurusbasamak)
+				say2 = say2.substring(0, kurusbasamak);// belirlenen basamak kadar rakam yazılır
+			char[] kurusrk = say2.toCharArray(); // rakamlara ayırma
+			kac = kurusrk.length; // kaç rakam var?
+			w = 1;
+			for (int i = 0; i < kac; i++) { // kuruş hesabı
+				son = String.valueOf(kurusrk[kac - 1 - i]); // son karakterden başlayarak çözümleme yapılır.
+				sonint = Integer.parseInt(son); // işlenen rakam
+				if (w == 1) { // birinci basamak
+					if (kurusbasamak > 0)
+						kurus = b1[sonint] + kurus;
+				} else if (w == 2) { // ikinci basamak
+					if (kurusbasamak > 1)
+						kurus = b2[sonint] + kurus;
+				} else if (w == 3) { // 3. basamak
+					if (kurusbasamak > 2) {
+						if (sonint == 1)
+							kurus = b3[1] + kurus;// 'biryüz' ü engeller
+						else if (sonint > 1)
+							kurus = b1[sonint] + b3[1] + kurus;
+					}
+				}
+				w++;
+			}
+			if ("".equals(kurus))
+				parakurus = "";// virgül öncesi sayı yoksa para birimi yazma
+			else
+				kurus = kurus + " "; // + "'DİR.";
+			kurus = kurus + parakurus + (kurus.equals("") ? "'DİR." : "'DUR." ) ; // kuruş hanesine 'kuruş' kelimesi ekler
+		}
+		if(! nerden.equals("SAYIILE"))
+			sonuc = diyez + sonuc + " " + parabirimi + " " + kurus + diyez;
+		return sonuc;
 	}
 }

@@ -107,6 +107,10 @@ public class createPGSQL {
 					createTableKambiyo(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
 					break;
 				}
+				case "Fatura": {
+					createTableFatura(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
+					break;
+				}
 				}
 
 			}
@@ -491,7 +495,393 @@ public class createPGSQL {
 			stmt.executeUpdate();
 		}
 	}
-	
+	public void createTableFatura(Connection connection, String firmaAdi , String user_name) throws SQLException {
+		String sql = null;
+		sql = "CREATE TABLE  \"DPN\" ( "
+				+ "  \"DID\"  SERIAL  PRIMARY KEY ,"
+				+ "  \"Evrak_No\"   character varying (10) NOT NULL,"
+				+ "  \"Tip\"   character varying (1) NULL,"
+				+ "  \"Bir\"   character varying (40) NULL,"
+				+ "  \"Iki\"   character varying (40) NULL,"
+				+ "  \"Uc\"   character varying (40) NULL,"
+				+ "  \"Gir_Cik\"   character varying (1) NULL,"
+				+ "  \"USER\"   character varying (15) NOT NULL )  ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE INDEX  \"IX_DPN\"  ON  \"DPN\" ( "
+				+ " \"Evrak_No\" , "
+				+ " \"Gir_Cik\" )";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"GDY\"( "
+				+ "  \"GID\" SERIAL  PRIMARY KEY, "
+				+ "  \"Isim\" character varying(50) NULL, "
+				+ "  \"Adres\" character varying(50) NULL, "
+				+ "  \"Semt\" character varying(50) NULL, "
+				+ "  \"Sehir\" character varying(50) NULL, "
+				+ "  \"USER\" character varying(15) NOT NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql= "CREATE TABLE \"FATURA\"( "
+				+ "\"Fatura_No\" character varying(10) NOT NULL,"
+				+ " \"Kodu\" character varying(12) NULL,"
+				+ " \"Tarih\" timestamp NULL,"
+				+ " \"Kdv\" DOUBLE PRECISION NULL,"
+				+ " \"Doviz\" character varying(3) NULL,"
+				+ " \"Miktar\" DOUBLE PRECISION NULL,"
+				+ " \"Fiat\" DOUBLE PRECISION NULL,"
+				+ " \"Tutar\" DOUBLE PRECISION NULL,"
+				+ " \"Kur\" DOUBLE PRECISION NULL,"
+				+ " \"Cari_Firma\" character varying(12) NULL,"
+				+ " \"Iskonto\" DOUBLE PRECISION NULL,"
+				+ " \"Tevkifat\" DOUBLE PRECISION NULL,"
+				+ " \"Ana_Grup\" int NULL,"
+				+ " \"Alt_Grup\" int NULL,"
+				+ " \"Depo\" int NULL,"
+				+ " \"Adres_Firma\" character varying(12) NULL,"
+				+ " \"Ozel_Kod\" character varying(10) NULL,"
+				+ " \"Gir_Cik\" character varying(1) NULL,"
+				+ " \"Izahat\" character varying(40) NULL,"
+				+ " \"Cins\" character varying(1) NULL,"
+				+ " \"USER\" character varying(15) NOT NULL);"
+				+ " CREATE INDEX \"IX_FATURA\" ON \"FATURA\" (\"Fatura_No\",\"Kodu\",\"Tarih\",\"Cari_Firma\",\"Gir_Cik\"); ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"IRSALIYE\"( "
+				+ " \"Irsaliye_No\" character varying(10) NOT NULL,"
+				+ " \"Kodu\" character varying(12) NULL,"
+				+ " \"Tarih\" timestamp NULL,"
+				+ " \"Kdv\" DOUBLE PRECISION NULL,"
+				+ " \"Doviz\" character varying(3) NULL,"
+				+ " \"Kur\" DOUBLE PRECISION NULL,"
+				+ " \"Miktar\" DOUBLE PRECISION NULL,"
+				+ " \"Fiat\" DOUBLE PRECISION NULL,"
+				+ " \"Tutar\" DOUBLE PRECISION NULL,"
+				+ " \"Firma\" character varying(12) NULL,"
+				+ " \"Iskonto\" DOUBLE PRECISION NULL,"
+				+ " \"Fatura_No\" character varying(10) NULL,"
+				+ " \"Sevk_Tarihi\" \"date\" NULL,"
+				+ " \"Ana_Grup\" int NULL,"
+				+ " \"Alt_Grup\" int NULL,"
+				+ " \"Depo\" int NULL,"
+				+ " \"Cari_Hesap_Kodu\" character varying(12) NULL,"
+				+ " \"Ozel_Kod\" character varying(10) NULL,"
+				+ " \"Hareket\" character varying(1) NULL,"
+				+ " \"Izahat\" character varying(40) NULL,"
+				+ " \"Cins\" character varying(1) NULL,"
+				+ " \"USER\" character varying(15) NOT NULL);"
+				+ " CREATE INDEX \"IX_IRSALIYE\" ON \"IRSALIYE\" (\"Irsaliye_No\",\"Kodu\",\"Tarih\",\"Firma\",\"Hareket\")";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"MAL\"( "
+				+ " \"Kodu\" character varying(12) NOT NULL PRIMARY KEY,"
+				+ " \"Adi\" character varying(40) NULL,"
+				+ " \"Birim\" character varying(5) NULL,"
+				+ " \"Kusurat\" int NULL,"
+				+ " \"Resim\" BYTEA NULL,"
+				+ " \"Sinif\" character varying(5) NULL,"
+				+ " \"Ana_Grup\" int NULL,"
+				+ " \"Alt_Grup\" int NULL,"
+				+ " \"Aciklama_1\" character varying(25) NULL,"
+				+ " \"Aciklama_2\" character varying(25) NULL,"
+				+ " \"Ozel_Kod_1\" int NULL,"
+				+ " \"Ozel_Kod_2\" int NULL,"
+				+ " \"Ozel_Kod_3\" int NULL,"
+				+ " \"Kdv\" DOUBLE PRECISION NULL,"
+				+ " \"Barkod\" character varying(20) NULL,"
+				+ " \"Mensei\" int NULL,"
+				+ " \"Agirlik\" DOUBLE PRECISION NULL,"
+				+ " \"Depo\" int NULL,"
+				+ " \"Fiat\" DOUBLE PRECISION NULL,"
+				+ " \"Fiat_2\" DOUBLE PRECISION NULL,"
+				+ " \"Fiat_3\" DOUBLE PRECISION NULL,"
+				+ " \"Recete\" character varying(10) NULL,"
+				+ " \"USER\" character varying(15) NOT NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE  INDEX \"IX_MAL\" ON \"MAL\"( "
+				+ " \"Adi\" ASC,"
+				+ " \"Ana_Grup\" ,"
+				+ " \"Alt_Grup\")";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"RECETE\"( "
+				+ " \"Recete_No\" character varying(10) NOT NULL,"
+				+ " \"Ana_Grup\" int NULL,"
+				+ " \"Alt_Grup\" int NULL,"
+				+ " \"Durum\" BOOLEAN NULL,"
+				+ " \"Tur\" character varying(7) NULL,"
+				+ " \"Kodu\" character varying(10) NULL,"
+				+ " \"Miktar\" DOUBLE PRECISION NULL,"
+				+ " \"USER\" character varying(15) NOT NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE INDEX \"IX_RECETE\" ON \"RECETE\"( "
+				+ " \"Recete_No\" ,"
+				+ " \"Kodu\" )";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE  \"OZEL\" ("
+				+ " \"OZID\"   SERIAL PRIMARY KEY,"
+				+ " \"YONETICI\"   character varying (25) NULL,"
+				+ " \"YON_SIFRE\"   character varying (15) NULL,"
+				+ " \"FIRMA_ADI\"   character varying (50) NULL) ";		
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"STOK\"("
+				+ " \"Evrak_No\" character varying(10) NOT NULL,"
+				+ " \"Evrak_Cins\" character varying(3) NULL,"
+				+ " \"Tarih\" timestamp NULL,"
+				+ " \"Depo\" int NULL,"
+				+ " \"Urun_Kodu\" character varying(12) NULL,"
+				+ " \"Miktar\" DOUBLE PRECISION NULL,"
+				+ " \"Fiat\" DOUBLE PRECISION NULL,"
+				+ " \"Tutar\" DOUBLE PRECISION NULL,"
+				+ " \"Ana_Grup\" int NULL,"
+				+ " \"Alt_Grup\" int NULL,"
+				+ " \"Hareket\" character varying(1) NULL,"
+				+ " \"Izahat\" character varying(40) NULL,"
+				+ " \"Hesap_Kodu\" character varying(12) NULL,"
+				+ " \"Kur\" DOUBLE PRECISION NULL,"
+				+ " \"Doviz\" character varying(3) NULL,"
+				+ " \"Kdvli_Tutar\" DOUBLE PRECISION NULL,"
+				+ " \"B1\" character varying(15) NULL,"
+				+ " \"USER\" character varying(40) NOT NULL);"
+				+ " CREATE INDEX \"IX_STOK\" ON \"STOK\" (\"Urun_Kodu\",\"Tarih\",\"Hareket\");";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"MENSEI_DEGISKEN\" ("
+				+ " \"MEID\" SERIAL PRIMARY KEY ,"
+				+ " \"MEID_Y\"   int   NOT NULL,"   
+				+ " \"MENSEI\"   character varying (25) NOT NULL,"
+				+ " \"USER\"   character varying (15) NOT NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE  \"ANA_GRUP_DEGISKEN\" ("
+				+ " \"AGID\" SERIAL PRIMARY KEY ,"
+				+ " \"AGID_Y\"   int  NOT NULL,"  
+				+ " \"ANA_GRUP\"   character varying (25) NOT NULL,"
+				+ " \"USER\"   character varying (15) NOT NULL) ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"ALT_GRUP_DEGISKEN\" ("
+				+ "  \"ALID\"   SERIAL PRIMARY KEY ,"
+				+ "  \"ALID_Y\"   int  NOT NULL,"  
+				+ "  \"ANA_GRUP\"   int  NOT NULL,"
+				+ "  \"ALT_GRUP\"   character varying (25) NOT NULL,"
+				+ "  \"USER\"   character varying (15) NOT NULL) ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"ACIKLAMA\" ("
+				+ "  \"ACID\"    SERIAL PRIMARY KEY ,"
+				+ "  \"EVRAK_CINS\"   character varying (3) NULL,"
+				+ "  \"SATIR\"   int  NULL,"
+				+ "  \"EVRAK_NO\"   character varying (10) NULL,"
+				+ "  \"ACIKLAMA\"   character varying (50) NULL,"
+				+ "  \"Gir_Cik\"   character varying (1) NULL) ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE INDEX \"IX_ACIKLAMA\" ON \"ACIKLAMA\"( "
+				+ " \"EVRAK_CINS\" ,"
+				+ " \"EVRAK_NO\" ,"
+				+ " \"Gir_Cik\" )";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"DEPO_DEGISKEN\"("
+				+ " \"DPID\" SERIAL PRIMARY KEY ,"
+				+ " \"DPID_Y\" int  NOT NULL,"   
+				+ " \"DEPO\" character varying(25) NOT NULL,"
+				+ " \"USER\" character varying(15) NOT NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"OZ_KOD_1_DEGISKEN\"("
+				+ " \"OZ1ID\" SERIAL PRIMARY KEY,"
+				+ " \"OZ1ID_Y\" int  NOT NULL,"  
+				+ " \"OZEL_KOD_1\" character varying(25) NOT NULL,"
+				+ " \"USER\" character varying(15) NOT NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"OZ_KOD_2_DEGISKEN\"("
+				+ " \"OZ2ID\" SERIAL PRIMARY KEY,"
+				+ " \"OZ2ID_Y\" int NOT NULL,"   
+				+ " \"OZEL_KOD_2\" character varying(25) NOT NULL,"
+				+ " \"USER\" character varying(15) NOT NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"DEPOEVRAK\"("
+				+ " \"E_No\" int NOT NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"URET_EVRAK\"("
+				+ " \"E_No\" int NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"ZAYI_EVRAK\"("
+				+ " \"E_No\" int NULL)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE  \"YETKILER\" ( "
+				+ " \"YETID\"  SERIAL PRIMARY KEY,"
+				+ " \"KULLANICI\"   character varying (25) NULL,"
+				+ " \"KARTON\"   character varying (5) NULL,"
+				+ " \"TAM_YETKI\"  BOOLEAN  NULL,"
+				+ " \"GORUNTU\"  BOOLEAN  NULL) ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"IRS_EVRAK_FORMAT\" ("
+				+ "  \"SAT_SUT\"   character varying (5) NULL,"
+				+ "  \"TARIH\"   DOUBLE PRECISION  NULL,"
+				+ "  \"SEVK_TARIH\"   DOUBLE PRECISION  NULL,"
+				+ "  \"FIRMA_KODU\"   DOUBLE PRECISION  NULL,"
+				+ "  \"FIRMA_UNVANI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"VERGI_DAIRESI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"VERGI_NO\"   DOUBLE PRECISION  NULL,"
+				+ "  \"GIDECEGI_YER\"   DOUBLE PRECISION  NULL,"
+				+ "  \"NOT_1\"   DOUBLE PRECISION  NULL,"
+				+ "  \"NOT_2\"   DOUBLE PRECISION  NULL,"
+				+ "  \"NOT_3\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BASLIK_BOLUM\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BARKOD\"   DOUBLE PRECISION  NULL,"
+				+ "  \"URUN_KODU\"   DOUBLE PRECISION  NULL,"
+				+ "  \"URUN_ADI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"DEPO\"   DOUBLE PRECISION  NULL,"
+				+ "  \"SIMGE\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BIRIM_FIAT\"   DOUBLE PRECISION  NULL,"
+				+ "  \"ISKONTO\"   DOUBLE PRECISION  NULL,"
+				+ "  \"MIKTAR\"   DOUBLE PRECISION  NULL,"
+				+ "  \"K_D_V\"   DOUBLE PRECISION  NULL,"
+				+ "  \"TUTAR\"   DOUBLE PRECISION  NULL,"
+				+ "  \"TUTAR_TOPLAM\"   DOUBLE PRECISION  NULL,"
+				+ "  \"ISKONTO_TOPLAMI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BAKIYE\"   DOUBLE PRECISION  NULL,"
+				+ "  \"K_D_V_TOPLAMI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BELGE_TOPLAMI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"YAZI_ILE\"   DOUBLE PRECISION  NULL,"
+				+ "  \"ALT_BOLUM\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N1\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N2\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N3\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N4\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N5\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N6\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N7\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N8\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N9\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N10\"   DOUBLE PRECISION  NULL,"
+				+ "  \"USER\"   character varying (15) NOT NULL) ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  \"IRS_EVRAK_FORMAT\"(\"SAT_SUT\" ,\"TARIH\",\"SEVK_TARIH\",\"FIRMA_KODU\",\"FIRMA_UNVANI\",\"VERGI_DAIRESI\",\"VERGI_NO\",\"GIDECEGI_YER\",\"NOT_1\",\"NOT_2\",\"NOT_3\",\"BASLIK_BOLUM\",\"BARKOD\",\"URUN_KODU\",\"URUN_ADI\",\"DEPO\",\"SIMGE\",\"BIRIM_FIAT\",\"ISKONTO\",\"MIKTAR\",\"K_D_V\",\"TUTAR\",\"TUTAR_TOPLAM\",\"ISKONTO_TOPLAMI\",\"BAKIYE\",\"K_D_V_TOPLAMI\",\"BELGE_TOPLAMI\",\"YAZI_ILE\",\"ALT_BOLUM\",\"N1\",\"N2\",\"N3\",\"N4\",\"N5\",\"N6\",\"N7\",\"N8\",\"N9\",\"N10\",\"USER\") VALUES ('SATIR','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  \"IRS_EVRAK_FORMAT\"(\"SAT_SUT\" ,\"TARIH\",\"SEVK_TARIH\",\"FIRMA_KODU\",\"FIRMA_UNVANI\",\"VERGI_DAIRESI\",\"VERGI_NO\",\"GIDECEGI_YER\",\"NOT_1\",\"NOT_2\",\"NOT_3\",\"BASLIK_BOLUM\",\"BARKOD\",\"URUN_KODU\",\"URUN_ADI\",\"DEPO\",\"SIMGE\",\"BIRIM_FIAT\",\"ISKONTO\",\"MIKTAR\",\"K_D_V\",\"TUTAR\",\"TUTAR_TOPLAM\",\"ISKONTO_TOPLAMI\",\"BAKIYE\",\"K_D_V_TOPLAMI\",\"BELGE_TOPLAMI\",\"YAZI_ILE\",\"ALT_BOLUM\",\"N1\",\"N2\",\"N3\",\"N4\",\"N5\",\"N6\",\"N7\",\"N8\",\"N9\",\"N10\",\"USER\") VALUES ('SUTUN','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE \"FAT_EVRAK_FORMAT\" ( "
+				+ "  \"SAT_SUT\"   character varying (5) NULL,"
+				+ "  \"TARIH\"   DOUBLE PRECISION  NULL,"
+				+ "  \"FIRMA_KODU\"   DOUBLE PRECISION  NULL,"
+				+ "  \"FIRMA_UNVANI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"VERGI_DAIRESI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"VERGI_NO\"   DOUBLE PRECISION  NULL,"
+				+ "  \"GIDECEGI_YER\"   DOUBLE PRECISION  NULL,"
+				+ "  \"NOT_1\"   DOUBLE PRECISION  NULL,"
+				+ "  \"NOT_2\"   DOUBLE PRECISION  NULL,"
+				+ "  \"NOT_3\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BASLIK_BOLUM\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BARKOD\"   DOUBLE PRECISION  NULL,"
+				+ "  \"URUN_KODU\"   DOUBLE PRECISION  NULL,"
+				+ "  \"URUN_ADI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"DEPO\"   DOUBLE PRECISION  NULL,"
+				+ "  \"IZAHAT\"   DOUBLE PRECISION  NULL,"
+				+ "  \"SIMGE\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BIRIM_FIAT\"   DOUBLE PRECISION  NULL,"
+				+ "  \"ISKONTO\"   DOUBLE PRECISION  NULL,"
+				+ "  \"MIKTAR\"   DOUBLE PRECISION  NULL,"
+				+ "  \"K_D_V\"   DOUBLE PRECISION  NULL,"
+				+ "  \"TUTAR\"   DOUBLE PRECISION  NULL,"
+				+ "  \"TUTAR_TOPLAM\"   DOUBLE PRECISION  NULL,"
+				+ "  \"ISKONTO_TOPLAMI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BAKIYE\"   DOUBLE PRECISION  NULL,"
+				+ "  \"K_D_V_TOPLAMI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BELGE_TOPLAMI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"TEVKIFAT_ORANI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"AL_TAR_TEV_ED_KDV\"   DOUBLE PRECISION  NULL,"
+				+ "  \"TEV_DAH_TOP_TUTAR\"   DOUBLE PRECISION  NULL,"
+				+ "  \"BEYAN_ED_KDV\"   DOUBLE PRECISION  NULL,"
+				+ "  \"TEV_HAR_TOP_TUT\"   DOUBLE PRECISION  NULL,"
+				+ "  \"YAZI_ILE\"   DOUBLE PRECISION  NULL,"
+				+ "  \"TEV_KASESI\"   DOUBLE PRECISION  NULL,"
+				+ "  \"ALT_BOLUM\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N1\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N2\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N3\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N4\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N5\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N6\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N7\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N8\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N9\"   DOUBLE PRECISION  NULL,"
+				+ "  \"N10\"   DOUBLE PRECISION  NULL,"
+				+ "  \"USER\"   character varying (15) NULL) ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  \"FAT_EVRAK_FORMAT\"(\"SAT_SUT\",\"TARIH\",\"FIRMA_KODU\",\"FIRMA_UNVANI\",\"VERGI_DAIRESI\" ,\"VERGI_NO\" ,\"GIDECEGI_YER\" ,\"NOT_1\" ,\"NOT_2\" ,\"NOT_3\",\"BASLIK_BOLUM\",\"BARKOD\",\"URUN_KODU\" ,\"URUN_ADI\" , \"DEPO\" ,\"IZAHAT\",\"SIMGE\" ,\"BIRIM_FIAT\" ,\"ISKONTO\" ,\"MIKTAR\",\"K_D_V\" ,\"TUTAR\" ,\"TUTAR_TOPLAM\" ,\"ISKONTO_TOPLAMI\"  ,\"BAKIYE\" ,\"K_D_V_TOPLAMI\" ,\"BELGE_TOPLAMI\" , \"YAZI_ILE\",\"TEVKIFAT_ORANI\" ,\"AL_TAR_TEV_ED_KDV\" ,\"TEV_DAH_TOP_TUTAR\" , \"BEYAN_ED_KDV\" ,\"TEV_HAR_TOP_TUT\",\"TEV_KASESI\",\"ALT_BOLUM\",\"N1\",\"N2\",\"N3\",\"N4\",\"N5\",\"N6\",\"N7\",\"N8\",\"N9\",\"N10\",\"USER\") VALUES " + " ('SATIR','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  \"FAT_EVRAK_FORMAT\"(\"SAT_SUT\",\"TARIH\",\"FIRMA_KODU\",\"FIRMA_UNVANI\",\"VERGI_DAIRESI\" ,\"VERGI_NO\" ,\"GIDECEGI_YER\" ,\"NOT_1\" ,\"NOT_2\" ,\"NOT_3\",\"BASLIK_BOLUM\",\"BARKOD\",\"URUN_KODU\" ,\"URUN_ADI\" , \"DEPO\" ,\"IZAHAT\",\"SIMGE\" ,\"BIRIM_FIAT\" ,\"ISKONTO\" ,\"MIKTAR\",\"K_D_V\" ,\"TUTAR\" ,\"TUTAR_TOPLAM\" ,\"ISKONTO_TOPLAMI\"  ,\"BAKIYE\" ,\"K_D_V_TOPLAMI\" ,\"BELGE_TOPLAMI\" , \"YAZI_ILE\",\"TEVKIFAT_ORANI\" ,\"AL_TAR_TEV_ED_KDV\" ,\"TEV_DAH_TOP_TUTAR\" , \"BEYAN_ED_KDV\" ,\"TEV_HAR_TOP_TUT\",\"TEV_KASESI\",\"ALT_BOLUM\",\"N1\",\"N2\",\"N3\",\"N4\",\"N5\",\"N6\",\"N7\",\"N8\",\"N9\",\"N10\",\"USER\") VALUES " + " ('SUTUN','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		// ***************EVRAK NO YAZ ************
+		sql = "INSERT INTO  \"DEPOEVRAK\"(\"E_No\") VALUES ('0')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  \"URET_EVRAK\"(\"E_No\") VALUES ('0')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  \"ZAYI_EVRAK\"(\"E_No\") VALUES ('0')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		// ***************SENET CIKIS EVRAK NO YAZ ************
+		sql = "INSERT INTO  \"EVRAK\"(\"EVRAK\",\"NO\") VALUES (?,?)";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, "SEN_C");
+			stmt.setInt(2, 0);
+			stmt.executeUpdate();
+		}
+	}
 	public void sifirdan_LOG(serverBilgiDTO sbilgi) {
 		String databaseName = sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu() + "_log";
 		sbilgi.setUser_prog_kodu(databaseName);

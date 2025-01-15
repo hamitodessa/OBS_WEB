@@ -253,7 +253,6 @@ public class RaporOlustur {
 				cnt = "Cent" ;
 			String yaziyla= sayiyiYaziyaCevir.yaziyaCevir(qwe, 2, bordroPrinter.getDvzcins(), cnt , "#", null, null, null,"");
 			parameters.put("Yazi",yaziyla);
-
 			JasperPrint jp = prepareJasperPrint("BORDRO.jrxml", parameters, bordrooku,UygulamaSabitleri.KambiyoRaporYeri);
 			return exportRapor(jp, "pdf");
 		} catch (Exception e) {
@@ -282,7 +281,6 @@ public class RaporOlustur {
 				cnt = "Cent" ;
 			String yaziyla= sayiyiYaziyaCevir.yaziyaCevir(qwe, 2, bordroPrinter.getDvzcins(), cnt , "#", null, null, null,"");
 			parameters.put("Yazi",yaziyla);
-
 			JasperPrint jp = prepareJasperPrint("BORDRO.jrxml", parameters, bordrooku,UygulamaSabitleri.KambiyoRaporYeri);
 			return exportRapor(jp, "pdf");
 		} catch (Exception e) {

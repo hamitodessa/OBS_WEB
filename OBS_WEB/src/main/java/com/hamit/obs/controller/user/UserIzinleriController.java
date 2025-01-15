@@ -26,6 +26,7 @@ import com.hamit.obs.model.user.User;
 import com.hamit.obs.model.user.User_Details;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
+import com.hamit.obs.service.fatura.FaturaService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kur.KurService;
 import com.hamit.obs.service.user.UserDetailsService;
@@ -45,7 +46,8 @@ public class UserIzinleriController {
     private AdresService adresService;
 	@Autowired
     private KambiyoService kambiyoService;
-
+	@Autowired
+	private FaturaService faturaService;
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -140,7 +142,6 @@ public class UserIzinleriController {
 			userDetails.setUser(user);
 			userDetailsService.saveUserDetails(userDetails);
 			response.put("errorMessage", ""); 
-			//
 			if(userDetails.getUser_modul().equals("Cari Hesap"))
 				cariService.initialize();
 			else if(userDetails.getUser_modul().equals("Kur"))
@@ -149,7 +150,8 @@ public class UserIzinleriController {
 				adresService.initialize();
 			else if(userDetails.getUser_modul().equals("Kambiyo"))
 				kambiyoService.initialize();
-			//
+			else if(userDetails.getUser_modul().equals("Fatura"))
+				faturaService.initialize();
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {
@@ -180,6 +182,8 @@ public class UserIzinleriController {
 				adresService.initialize();
 			else if(userdetailsToRemove.getUser_modul().equals("Kambiyo"))
 				kambiyoService.initialize();
+			else if(userdetailsToRemove.getUser_modul().equals("Fatura"))
+				faturaService.initialize();
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {
