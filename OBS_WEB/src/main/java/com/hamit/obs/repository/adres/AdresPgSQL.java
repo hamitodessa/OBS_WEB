@@ -21,7 +21,7 @@ public class AdresPgSQL implements IAdresDatabase {
 
 	@Override
 	public List<Map<String, Object>> hesap_kodlari(ConnectionDetails adresConnDetails) {
-		String sql = "SELECT \"M_KODU\" FROM \"ADRES\" ORDER BY \"M_KODU\"";
+		String sql = "SELECT \"M_KODU\" as \"M_Kodu\" FROM \"ADRES\" ORDER BY \"M_KODU\"";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -140,7 +140,7 @@ public class AdresPgSQL implements IAdresDatabase {
 	@Override
 	public void adres_sil(int id, ConnectionDetails adresConnDetails) {
 		String sql = "DELETE " +
-				" FROM Adres WHERE ID = '" + id + "'"  ;
+				" FROM \"ADRES\" WHERE ID = '" + id + "'"  ;
 		try (Connection connection = DriverManager.getConnection(
 				adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
@@ -203,7 +203,7 @@ public class AdresPgSQL implements IAdresDatabase {
 
 	@Override
 	public List<Map<String, Object>> adr_etiket(String siralama, ConnectionDetails adresConnDetails) {
-		String sql = "SELECT  CAST(0 as bit) as cbox ,\"ADI\",\"ADRES_1\",\"ADRES_2\",\"TEL_1\",\"SEMT\",\"SEHIR\" FROM \"ADRES\" ORDER BY \"" + siralama.toUpperCase() +"\"";
+		String sql = "SELECT  CAST(0 as bit) as cbox ,\"ADI\" as \"Adi\",\"ADRES_1\" as \"Adres_1\",\"ADRES_2\" as \"Adres_2\",\"TEL_1\" as \"Tel_1\",\"SEMT\" as \"Semt\",\"SEHIR\" as \"Sehir\" FROM \"ADRES\" ORDER BY \"" + siralama.toUpperCase() +"\"";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
