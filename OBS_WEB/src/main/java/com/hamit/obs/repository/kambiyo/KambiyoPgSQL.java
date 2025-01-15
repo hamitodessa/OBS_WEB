@@ -152,12 +152,12 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, bordrodetayDTO.getCekNo()); 
-			stmt.setString(2, bordrodetayDTO.getVade());
+			stmt.setDate(2, java.sql.Date.valueOf(bordrodetayDTO.getVade()));
 			stmt.setString(3,bordrodetayDTO.getGirisBordro());
 			stmt.setString(4, bordrodetayDTO.getGirisMusteri());
-			stmt.setString(5, bordrodetayDTO.getGirisTarihi());
+			stmt.setDate(5, java.sql.Date.valueOf(bordrodetayDTO.getGirisTarihi()));
 			stmt.setString(6, bordrodetayDTO.getGirisOzelKod());
-			stmt.setString(7, bordrodetayDTO.getCikisTarihi());
+			stmt.setDate(7, java.sql.Date.valueOf(bordrodetayDTO.getCikisTarihi()));
 			stmt.setString(8,bordrodetayDTO.getCikisBordro());
 			stmt.setString(9, bordrodetayDTO.getCikisMusteri()); 
 			stmt.setString(10, bordrodetayDTO.getCikisOzelKod());
@@ -169,7 +169,7 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 			stmt.setString(16, bordrodetayDTO.getIlkBorclu()); 
 			stmt.setString(17, bordrodetayDTO.getCekHesapNo()); 
 			stmt.setString(18, bordrodetayDTO.getDurum());
-			stmt.setString(19, bordrodetayDTO.getTtarih()); 
+			stmt.setDate(19, java.sql.Date.valueOf(bordrodetayDTO.getTtarih()));
 			stmt.setString(20, bordrodetayDTO.getUser());
 			stmt.executeUpdate();
 		} catch (Exception e) {
@@ -308,7 +308,7 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
 			deleteStmt.setString(1, "");
 			deleteStmt.setString(2, "");
-			deleteStmt.setString(3, "1900-01-01"); // Tarih formatı standart ISO 8601 formatında
+			deleteStmt.setDate(3, java.sql.Date.valueOf("1900-01-01"));
 			deleteStmt.setString(4, bordroNo);
 			deleteStmt.executeUpdate();
 		} catch (Exception e) {
@@ -326,7 +326,7 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 				PreparedStatement updateStmt = connection.prepareStatement(sql)) {
 			updateStmt.setString(1, cbor);
 			updateStmt.setString(2, cmus);
-			updateStmt.setString(3, ctar);
+			updateStmt.setDate(3, java.sql.Date.valueOf(ctar));
 			updateStmt.setString(4, ozkod);
 			updateStmt.setString(5, cekno);
 			updateStmt.executeUpdate();
@@ -433,7 +433,7 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 	@Override
 	public void kam_durum_yaz(String cekno, String ceksen_from, String ceksen_where, String durum, String ttarih,
 			ConnectionDetails kambiyoConnDetails) {
-		String sql = "UPDATE \""+ ceksen_from + "\" SET \"Durum\" = '"+ durum + "', \"T_Tarih\" = '"+ ttarih + "'" + 
+		String sql = "UPDATE \""+ ceksen_from + "\" SET \"Durum\" = '" + durum + "', \"T_Tarih\" = '" + ttarih + "'" + 
 				" WHERE \"" + ceksen_where + "\"  ='" + cekno + "'" ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
