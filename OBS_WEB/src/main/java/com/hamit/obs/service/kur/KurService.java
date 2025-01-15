@@ -30,13 +30,10 @@ public class KurService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			
 			UserSessionManager.removeUserByModul(useremail,"Kur");
 			this.strategy = databaseStrategyContext.getStrategy();
 			masterConnectionManager.loadConnections("Kur",useremail);
-
 			UserSessionManager.addUserSession(useremail, "Kur", masterConnectionManager.getConnection("Kur", useremail));
-			//return masterConnectionManager.getConnection("Kur", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}

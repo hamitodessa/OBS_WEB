@@ -50,13 +50,10 @@ public class CariService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-
 			UserSessionManager.removeUserByModul(useremail,"Cari Hesap");
 			this.strategy = databaseStrategyContext.getStrategy();
 			masterConnectionManager.loadConnections("Cari Hesap",useremail);
-			
 			UserSessionManager.addUserSession(useremail, "Cari Hesap", masterConnectionManager.getConnection("Cari Hesap", useremail));
-			//return masterConnectionManager.getConnection("Cari Hesap", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}

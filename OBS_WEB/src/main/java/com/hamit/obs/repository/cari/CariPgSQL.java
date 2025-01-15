@@ -565,8 +565,6 @@ public class CariPgSQL implements ICariDatabase{
 				cariConnDetails.getUsername(),
 				cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-			// Sorguyu çalıştır ve sonucu işle
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
@@ -668,12 +666,10 @@ public class CariPgSQL implements ICariDatabase{
 				dto.setPosBanka(resultSet.getString("POS_BANKA"));
 			}
 			resultSet.close();
-
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService Evrak Okuma", e);
 		}
 		return dto; 
-
 	}
 
 	@Override
@@ -723,7 +719,6 @@ public class CariPgSQL implements ICariDatabase{
 			throw new ServiceException("Hesap adı okunamadı", e); 
 		}
 		return evrakNo;
-
 	}
 
 	@Override
@@ -732,7 +727,6 @@ public class CariPgSQL implements ICariDatabase{
 		String sql1 = "DELETE FROM \"TAH_DETAY\" WHERE \"EVRAK\" = '" + tahsilatDTO.getFisNo()  + "' AND \"CINS\" = '" + tahsilatDTO.getTah_ted() + "' " ;
 		String sql  = "INSERT INTO \"TAH_DETAY\" (\"EVRAK\",\"TARIH\",\"C_HES\",\"A_HES\",\"CINS\",\"TUTAR\",\"TUR\",\"ACIKLAMA\",\"DVZ_CINS\",\"POS_BANKA\")" +
 				" VALUES (?,?,?,?,?,?,?,?,?,?)" ;
-
 		try (Connection connection = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql1);
@@ -807,82 +801,268 @@ public class CariPgSQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> tah_listele(tahrapDTO tahrapDTO, ConnectionDetails cariConnDetails,ConnectionDetails adresConnectionDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try {
+			if (!cariConnDetails.getHangisql().equals(adresConnectionDetails.getHangisql())) {
+				throw new ServiceException("Cari Dosya ve Adres Dosyası farklı SQL sunucularında yer alıyor.");
+			}
+			String adrServer = "" ;
+			if (!cariConnDetails.getHangisql().equals(adresConnectionDetails.getHangisql()))
+				throw  new Exception("Cari Dosya ve Adres Dosyasi Farkli SQL dosyalari");
+			if (!cariConnDetails.getServerIp().equals(adresConnectionDetails.getServerIp())) {
+				adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + adresConnectionDetails.getServerIp() + " host = localhost user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
+			}else{
+				String[] ipogren = Global_Yardimci.ipCevir(adresConnectionDetails.getServerIp());
+				adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
+			}
+
+			String cinString = "" , turString="" ,posString = "" ;
+			if(tahrapDTO.getTah_ted() !=0)
+				cinString = " \"CINS\" = '" + (tahrapDTO.getHangi_tur() - 1) + "' AND";
+			if(tahrapDTO.getHangi_tur() != 0)
+				turString = " \"TUR\" = '" + (tahrapDTO.getHangi_tur() - 1) + "' AND";
+			if(! tahrapDTO.getPos().equals("Hepsi"))
+				posString = " \"POS_BANKA\" = '" + tahrapDTO.getPos() + "' AND";
+			String sql = " SELECT \"EVRAK\",\"TARIH\" ,\"C_HES\" as \"CARI_HESAP\",(SELECT \"UNVAN\" FROM \"HESAP\" WHERE \"HESAP\" = \"C_HES\" ) AS \"UNVAN\" , "+ 
+					" \"A_HES\" as \"ADRES_HESAP\"," +
+					" (SELECT \"ADI\" FROM  dblink ('" + adrServer + "'," + 
+					" 'SELECT \"ADI\" ,\"M_KODU\" FROM \"ADRES\"') " + 
+					" AS adr(\"ADI\" CHARACTER VARYING ,\"M_KODU\" CHARACTER VARYING) "+
+					" WHERE \"M_KODU\" = TD.\"A_HES\")," +
+					" CASE \"CINS\" WHEN '0' THEN 'Tahsilat' WHEN '1' THEN 'Tediye' END as \"CINS\"," +
+					" CASE \"TUR\" WHEN '0' THEN 'Nakit' WHEN '1' THEN 'Cek' WHEN '2' THEN 'Kredi Kartı' END as \"TUR\",\"POS_BANKA\"," +
+					" \"DVZ_CINS\",\"TUTAR\"" +
+					" FROM \"TAH_DETAY\" " + 
+					" WHERE " + cinString  + turString  + posString +
+					" \"TARIH\" >= '" + tahrapDTO.getStartDate() + "' AND \"TARIH\" < '" + tahrapDTO.getEndDate() + "'" + 
+					" AND \"EVRAK\" >= '" + tahrapDTO.getEvrak1() + "' AND \"EVRAK\" < '" + tahrapDTO.getEvrak2() + "'" + 
+					" AND \"C_HES\" >= '" + tahrapDTO.getHkodu1() + "' AND \"C_HES\" < '" + tahrapDTO.getHkodu2() + "'" + 
+					" ORDER BY \"TARIH\",\"EVRAK\"" ;
+			try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+					PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				ResultSet resultSet = preparedStatement.executeQuery();
+				resultList = ResultSetConverter.convertToList(resultSet); 
+				resultSet.close();
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Tahsilat Listeleme okunamadi", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public tahayarDTO tahayaroku(ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM \"TAH_AYARLAR\"";
+		tahayarDTO tahayarDTO = new tahayarDTO();
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet rs = preparedStatement.executeQuery();
+			if (rs.isBeforeFirst()) {
+				rs.next();
+				tahayarDTO.setAdi(rs.getString("FIR_ISMI"));
+				tahayarDTO.setAd1(rs.getString("ADR_1"));
+				tahayarDTO.setAd2(rs.getString("ADR_2"));
+				tahayarDTO.setVdvn(rs.getString("VD_VN"));
+				tahayarDTO.setMail(rs.getString("MAIL"));
+				tahayarDTO.setDiger(rs.getString("DIGER"));
+				tahayarDTO.setImagelogo(rs.getBytes("LOGO"));
+				tahayarDTO.setImagekase(rs.getBytes("KASE"));
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Tahsilat ayar okunamadı", e);
+		}
+		return tahayarDTO;
 	}
 
 	@Override
 	public void tahayar_kayit(tahayarDTO tahayarDTO, ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql  = "INSERT INTO \"TAH_AYARLAR\" (\"FIR_ISMI\",\"ADR_1\",\"ADR_2\",\"VD_VN\",\"MAIL\",\"DIGER\",\"LOGO\",\"KASE\")" +
+				" VALUES (?,?,?,?,?,?,?,?)" ;
+		String deletesql=  "DELETE FROM \"TAH_AYARLAR\" " ;
+		try (Connection connection = DriverManager.getConnection(
+				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement deleteStmt = connection.prepareStatement(deletesql);
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,tahayarDTO.getAdi());
+			stmt.setString(2, tahayarDTO.getAd1());
+			stmt.setString(3, tahayarDTO.getAd2());
+			stmt.setString(4, tahayarDTO.getVdvn());
+			stmt.setString(5, tahayarDTO.getMail());
+			stmt.setString(6, tahayarDTO.getDiger());
+			stmt.setBytes(7, tahayarDTO.getImagelogo());
+			stmt.setBytes(8, tahayarDTO.getImagekase());
+			deleteStmt.executeUpdate();
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+		}
 	}
 
 	@Override
 	public List<Map<String, Object>> tah_ayar_oku(ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM \"TAH_AYARLAR\"";
+		List<Map<String, Object>> resultList = new ArrayList<>(); 
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("Tahsilat okuma", e); 
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> tah_cek_kayit_aktar(String fisno, Integer tah_ted,
 			ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT ta.\"LOGO\", ta.\"FIR_ISMI\",ta.\"ADR_1\",ta.\"ADR_2\",ta.\"VD_VN\", ta.\"MAIL\",ta.\"DIGER\", " 
+				+ " ta.\"KASE\",tc.\"BANKA\",tc.\"SUBE\",tc.\"SERI\",tc.\"HESAP\",tc.\"BORCLU\",tc.\"TARIH\",tc.\"TUTAR\" "
+				+ " FROM \"TAH_AYARLAR\" ta "
+				+ " CROSS JOIN \"TAH_CEK\" tc "
+				+ " WHERE tc.\"EVRAK\" = '" +fisno + "' AND tc.\"CINS\" = '" + tah_ted + "'";
+		List<Map<String, Object>> resultList = new ArrayList<>(); 
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("Cek tahsilat okuma", e); 
+		}
+		return resultList; 
 	}
 
 	@Override
 	public void cari_firma_adi_kayit(String fadi, ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE \"OZEL\" SET \"FIRMA_ADI\" = ?"  ;
+		try (Connection connection = DriverManager.getConnection(
+				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,fadi);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+		}
 	}
 
 	@Override
 	public List<Map<String, Object>> hsppln_liste(ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT \"HESAP\",\"UNVAN\",\"HESAP_CINSI\",\"KARTON\",\"YETKILI\",\"ADRES_1\",\"ADRES_2\",\"SEMT\",\"SEHIR\",\"VERGI_DAIRESI\"," + 
+				" \"VERGI_NO\",\"FAX\",\"TEL_1\",\"TEL_2\",\"TEL_3\",\"OZEL_KOD_1\",\"OZEL_KOD_2\",\"OZEL_KOD_3\",\"ACIKLAMA\",\"TC_KIMLIK\",\"WEB\"," + 
+				" \"E_MAIL\",\"SMS_GONDER\",\"RESIM\",\"USER\"" + 
+				" FROM \"HESAP\" LEFT OUTER JOIN \"HESAP_DETAY\" ON" + 
+				" \"HESAP\".\"HESAP\" = \"HESAP_DETAY\".\"D_HESAP\" ORDER BY \"HESAP\"";
+		List<Map<String, Object>> resultList = new ArrayList<>(); 
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("hsppln_liste okunamadı", e);
+		}
+		return resultList;
 	}
 
 	@Override
 	public int hesap_plani_kayit_adedi(ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return 0;
+		int kayitSayi = 0;
+		String query = "SELECT COUNT(\"HESAP\") AS \"SAYI\" FROM \"HESAP\"";
+		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					kayitSayi = resultSet.getInt("SAYI");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
+		}
+		return kayitSayi;
 	}
 
 	@Override
 	public void cari_kod_degis_hesap(String eskikod, String yenikod, ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE \"HESAP\" SET \"HESAP\" = ? WHERE \"HESAP\" = ?";
+		String sql2 = "UPDATE \"HESAP_DETAY\" SET \"D_HESAP\" = ? WHERE \"D_HESAP\" = ?";
+		try (Connection connection = DriverManager.getConnection(
+				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword())) {
+			try (PreparedStatement stmt1 = connection.prepareStatement(sql);
+					PreparedStatement stmt2 = connection.prepareStatement(sql2)) {
+				stmt1.setString(1, yenikod);
+				stmt1.setString(2, eskikod);
+				stmt1.executeUpdate();
+				stmt2.setString(1, yenikod);
+				stmt2.setString(2, eskikod);
+				stmt2.executeUpdate();
+			}
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
 	}
 
 	@Override
 	public void cari_kod_degis_satirlar(String eskikod, String yenikod, ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE \"SATIRLAR\" SET \"HESAP\" = ? WHERE \"HESAP\" = ?";
+		try (Connection connection = DriverManager.getConnection(
+				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,yenikod);
+			stmt.setString(2,eskikod);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
 	}
 
 	@Override
 	public void cari_kod_degis_tahsilat(String eskikod, String yenikod, ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE \"TAH_DETAY\" SET \"C_HES\" = ? WHERE \"C_HES\" = ? ";
+		try (Connection connection = DriverManager.getConnection(
+				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,yenikod);
+			stmt.setString(2,eskikod);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
 	}
 
 	@Override
 	public List<Map<String, Object>> kasa_kontrol(String hesap, String t1, ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = " SELECT \"SATIRLAR\".\"EVRAK\" ,\"IZAHAT\",\"KOD\",\"BORC\",\"ALACAK\",\"USER\" " +
+				" FROM \"SATIRLAR\",\"IZAHAT\"" +
+				" WHERE \"SATIRLAR\".\"EVRAK\" = \"IZAHAT\".\"EVRAK\" AND  \"HESAP\" ='" + hesap + "'" +
+				" AND TO_DATE(\"TARIH\"::text,'yyyy-MM-dd')::text LIKE  '" + t1 + "%'" +
+				" ORDER BY \"SATIRLAR\".\"EVRAK\"  ";
+		List<Map<String, Object>> resultList = new ArrayList<>(); 
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> kasa_mizan(String kod, String ilktarih, String sontarih,
 			ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql =  "SELECT \"SATIRLAR\".\"HESAP\",\"HESAP\".\"UNVAN\",\"HESAP\".\"HESAP_CINSI\",SUM(\"SATIRLAR\".\"BORC\") AS islem, SUM(\"SATIRLAR\".\"ALACAK\") AS islem2, SUM(\"SATIRLAR\".\"ALACAK\" - \"SATIRLAR\".\"BORC\") AS bakiye" +
+				" FROM \"SATIRLAR\" LEFT JOIN" +
+				" \"HESAP\" ON \"SATIRLAR\".\"HESAP\" = \"HESAP\".\"HESAP\"" +
+				" WHERE \"SATIRLAR\".\"HESAP\" ='" + kod + "' " + 
+				" AND \"SATIRLAR\".\"TARIH\" >= '" + ilktarih + "' AND \"SATIRLAR\".\"TARIH\" < '" + sontarih + " 23:59:59.998'" +
+				" GROUP BY \"SATIRLAR\".\"HESAP\",\"HESAP\".\"UNVAN\",\"HESAP\".\"HESAP_CINSI\"" +
+				" ORDER BY \"SATIRLAR\".\"HESAP\"";
+		List<Map<String, Object>> resultList = new ArrayList<>(); 
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return resultList; 
 	}
-
 }

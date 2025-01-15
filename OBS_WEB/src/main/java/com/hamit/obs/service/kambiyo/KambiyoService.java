@@ -37,13 +37,10 @@ public class KambiyoService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			
 			UserSessionManager.removeUserByModul(useremail,"Kambiyo");
 			this.strategy = databaseStrategyContext.getStrategy();
 			masterConnectionManager.loadConnections("Kambiyo",useremail);
-
 			UserSessionManager.addUserSession(useremail, "Kambiyo", masterConnectionManager.getConnection("Kambiyo", useremail));
-			//return masterConnectionManager.getConnection("Kambiyo", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}

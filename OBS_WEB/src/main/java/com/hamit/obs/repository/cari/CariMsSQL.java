@@ -1013,7 +1013,6 @@ public class CariMsSQL implements ICariDatabase{
 			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
 		}
 		return kayitSayi;
-
 	}
 
 	@Override
@@ -1032,7 +1031,7 @@ public class CariMsSQL implements ICariDatabase{
 	            stmt2.executeUpdate();
 	        }
 	    } catch (Exception e) {
-	        throw new ServiceException("Bağlantı sırasında bir hata oluştu", e);
+	        throw new ServiceException(e.getMessage());
 	    }
 	}
 
@@ -1046,7 +1045,7 @@ public class CariMsSQL implements ICariDatabase{
 			stmt.setString(2,eskikod);
 			stmt.executeUpdate();
 		} catch (Exception e) {
-			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -1060,7 +1059,7 @@ public class CariMsSQL implements ICariDatabase{
 			stmt.setString(2,eskikod);
 			stmt.executeUpdate();
 		} catch (Exception e) {
-			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -1077,7 +1076,7 @@ public class CariMsSQL implements ICariDatabase{
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("gunluk kontrol okuma", e); 
+			throw new ServiceException(e.getMessage());
 		}
 		return resultList; 
 	}
@@ -1098,9 +1097,8 @@ public class CariMsSQL implements ICariDatabase{
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("kasamizan okuma", e); 
+			throw new ServiceException(e.getMessage());
 		}
 		return resultList; 
-
 	}
 }

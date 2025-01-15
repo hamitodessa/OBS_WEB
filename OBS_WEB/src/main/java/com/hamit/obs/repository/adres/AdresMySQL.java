@@ -93,7 +93,6 @@ public class AdresMySQL implements IAdresDatabase{
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return firmaIsmi;
-
 	}
 
 	@Override
@@ -161,7 +160,7 @@ public class AdresMySQL implements IAdresDatabase{
 				kodIsmi = resultSet.getString("Adi");
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException(e.getMessage());
 		}
 		return kodIsmi;
 	}
@@ -183,20 +182,36 @@ public class AdresMySQL implements IAdresDatabase{
 				kodIsmi[5] = resultSet.getString("Sehir");
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Adres okunamadı", e);
+			throw new ServiceException(e.getMessage());
 		}
 		return kodIsmi;
 	}
 
 	@Override
 	public void adres_firma_adi_kayit(String fadi, ConnectionDetails adresConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE OZEL SET FIRMA_ADI = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,fadi);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
 	}
 
 	@Override
 	public List<Map<String, Object>> adr_etiket(String siralama, ConnectionDetails adresConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql =  "SELECT CAST(0 AS UNSIGNED) as cbox,Adi,Adres_1,Adres_2,Tel_1,Semt,Sehir FROM Adres ORDER BY " + siralama + "";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return resultList; 
 	}
 }

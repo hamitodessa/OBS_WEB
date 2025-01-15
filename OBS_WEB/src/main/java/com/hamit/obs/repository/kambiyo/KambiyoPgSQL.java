@@ -381,20 +381,66 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 
 	@Override
 	public void kambiyo_firma_adi_kayit(String fadi, ConnectionDetails kambiyoConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE \"OZEL\" SET \"FIRMA_ADI\" = '" + fadi + "'";
+		try (Connection connection = DriverManager.getConnection(
+				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,fadi);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+		}
 	}
 
 	@Override
 	public bordrodetayDTO cektakipkontrol(String cekno, ConnectionDetails kambiyoConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		bordrodetayDTO dto = new bordrodetayDTO();
+		String sql = "SELECT \"Banka\", \"Cek_No\", \"Cikis_Bordro\", \"Cikis_Musteri\", \"Cikis_Tarihi\", \"Cins\", \"Durum\", \"Giris_Bordro\", " + 
+				" \"Giris_Musteri\", \"Giris_Tarihi\", \"Ilk_Borclu\", \"Seri_No\", \"Sube\", \"T_Tarih\", "+ 
+				" \"Tutar\", \"Vade\", \"Cek_Hesap_No\" ,\"Cikis_Ozel_Kod\",\"Giris_Ozel_Kod\" " +
+				" FROM \"CEK\" WHERE \"Cek_No\" = '" + cekno + "' ";
+		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					dto.setBanka(resultSet.getString("Banka"));
+					dto.setCekNo(resultSet.getString("Cek_No"));
+					dto.setCikisBordro(resultSet.getString("Cikis_Bordro"));
+					dto.setCikisMusteri(resultSet.getString("Cikis_Musteri"));
+					dto.setCikisTarihi(resultSet.getString("Cikis_Tarihi"));
+					dto.setCins(resultSet.getString("Cins"));
+					dto.setDurum(resultSet.getString("Durum"));
+					dto.setGirisBordro(resultSet.getString("Giris_Bordro"));
+					dto.setGirisMusteri(resultSet.getString("Giris_Musteri"));
+					dto.setGirisTarihi(resultSet.getString("Giris_Tarihi"));
+					dto.setIlkBorclu(resultSet.getString("Ilk_Borclu"));
+					dto.setSeriNo(resultSet.getString("Seri_No"));
+					dto.setSube(resultSet.getString("Sube"));
+					dto.setTtarih(resultSet.getString("T_Tarih"));
+					dto.setTutar(resultSet.getDouble("Tutar"));
+					dto.setVade(resultSet.getString("Vade"));
+					dto.setCekHesapNo(resultSet.getString("Cek_Hesap_No"));
+					dto.setCikisOzelKod(resultSet.getString("Cikis_Ozel_Kod"));
+					dto.setGirisOzelKod(resultSet.getString("Giris_Ozel_Kod"));
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Aciklama okunamadı", e); 
+		}
+		return dto;
 	}
 
 	@Override
 	public void kam_durum_yaz(String cekno, String ceksen_from, String ceksen_where, String durum, String ttarih,
 			ConnectionDetails kambiyoConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE \""+ ceksen_from + "\" SET \"Durum\" = '"+ durum + "', \"T_Tarih\" = '"+ ttarih + "'" + 
+				" WHERE \"" + ceksen_where + "\"  ='" + cekno + "'" ;
+		try (Connection connection = DriverManager.getConnection(
+				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+		}
 	}
 }

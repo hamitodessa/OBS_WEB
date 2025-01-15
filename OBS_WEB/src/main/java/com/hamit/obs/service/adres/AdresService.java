@@ -31,11 +31,8 @@ public class AdresService {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			UserSessionManager.removeUserByModul(useremail,"Adres");
 			this.strategy = databaseStrategyContext.getStrategy();
-			
 			masterConnectionManager.loadConnections("Adres",useremail);
 			UserSessionManager.addUserSession(useremail, "Adres", masterConnectionManager.getConnection("Adres", useremail));
-
-			//return masterConnectionManager.getConnection("Adres", useremail);
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}

@@ -81,7 +81,6 @@ public class LoginController {
 	public String deneme() {
 		return "wellcome"; 
 	}
-
 	
 	@GetMapping("/wellcomecalismadizini")
 	public ResponseEntity<Map<String, Object>> wellcome() {
@@ -89,7 +88,8 @@ public class LoginController {
 	    try {
 	        List<CalismaDiziniDTO> calismaDiziniDTO = new ArrayList<>();
 	        CalismaDiziniDTO dto = new CalismaDiziniDTO();
-	        dto.setFirma(cariService.cari_firma_adi());
+	       //dto.setFirma(cariService.cari_firma_adi());
+	        dto.setFirma("");
 	        dto.setModul("Cari Hesap");
 	        dto.setHangi_sql(cariService.conn_detail()[0]);
 	        dto.setProgkodu(cariService.conn_detail()[1]);
@@ -103,14 +103,16 @@ public class LoginController {
 	        dto.setServer(kurService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
 	        dto = new CalismaDiziniDTO();
-	        dto.setFirma(kambiyoService.kambiyo_firma_adi());
+	        //dto.setFirma(kambiyoService.kambiyo_firma_adi());
+	        dto.setFirma("");
 	        dto.setModul("Kambiyo");
 	        dto.setHangi_sql(kambiyoService.conn_detail()[0]);
 	        dto.setProgkodu(kambiyoService.conn_detail()[1]);
 	        dto.setServer(kambiyoService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
 	        dto = new CalismaDiziniDTO();
-	        dto.setFirma(adresService.adres_firma_adi());
+	        //dto.setFirma(adresService.adres_firma_adi());
+	        dto.setFirma("");
 	        dto.setModul("Adres");
 	        dto.setHangi_sql(adresService.conn_detail()[0]);
 	        dto.setProgkodu(adresService.conn_detail()[1]);

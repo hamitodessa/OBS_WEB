@@ -197,7 +197,7 @@ public class AdresMsSQL implements IAdresDatabase {
 			stmt.setString(1,fadi);
 			stmt.executeUpdate();
 		} catch (Exception e) {
-			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
