@@ -189,7 +189,7 @@ public class UserDetailsController {
 				User_Details existingDetails = userDetailsService.getUserDetailsById(serverBilgiDTO.getId());
 				sifre = TextSifreleme.decrypt(existingDetails.getUser_pwd_server());
 			} else {
-				sifre = TextSifreleme.decrypt(serverBilgiDTO.getUser_pwd_server());
+				sifre = serverBilgiDTO.getUser_pwd_server();
 			}
 			serverBilgiDTO.setUser_pwd_server(sifre);
 			result = serverService.dosyakontrol(serverBilgiDTO);

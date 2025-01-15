@@ -587,12 +587,13 @@ public class CariPgSQL implements ICariDatabase{
 			String kurServer = "" ;
 			if (!cariConnDetails.getHangisql().equals(kurConnectionDetails.getHangisql()))
 				throw  new Exception("Cari Dosya ve Kur Dosyasi Farkli SQL dosyalari");
-			if (!cariConnDetails.getServerIp().equals(kurConnectionDetails.getServerIp())) {
-				kurServer = "dbname = ok_kur" + kurConnectionDetails.getDatabaseName() + " port = " + kurConnectionDetails.getServerIp() + " host = localhost user = " + kurConnectionDetails.getUsername() + " password = " + kurConnectionDetails.getPassword() +"" ; 
-			}else{
-				String[] ipogren = Global_Yardimci.ipCevir(kurConnectionDetails.getServerIp());
+			String[] ipogren = Global_Yardimci.ipCevir(kurConnectionDetails.getServerIp());
+//			if (!cariConnDetails.getServerIp().equals(kurConnectionDetails.getServerIp())) {
+//				kurServer = "dbname = ok_kur" + kurConnectionDetails.getDatabaseName() + " port = " + kurConnectionDetails.getServerIp() + " host = localhost user = " + kurConnectionDetails.getUsername() + " password = " + kurConnectionDetails.getPassword() +"" ; 
+//			}else{
+				System.out.println("burda");
 				kurServer = "dbname = ok_kur" + kurConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnectionDetails.getUsername() + " password = " + kurConnectionDetails.getPassword() +"" ; 
-			}
+//			}
 			if(! dvzcevirmeDTO.getStartDate().equals("1900-01-01") || ! dvzcevirmeDTO.getEndDate().equals("2100-12-31"))
 				tARIH = " AND s.\"TARIH\" BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" + dvzcevirmeDTO.getEndDate() + " 23:59:59.998'" ;
 			sql = "SELECT s.\"TARIH\", s.\"EVRAK\",I.\"IZAHAT\",COALESCE(NULLIF(\"" + dvzcevirmeDTO.getDvz_cins() + "\",0),1) as \"CEV_KUR\"," +
@@ -809,12 +810,15 @@ public class CariPgSQL implements ICariDatabase{
 			String adrServer = "" ;
 			if (!cariConnDetails.getHangisql().equals(adresConnectionDetails.getHangisql()))
 				throw  new Exception("Cari Dosya ve Adres Dosyasi Farkli SQL dosyalari");
-			if (!cariConnDetails.getServerIp().equals(adresConnectionDetails.getServerIp())) {
-				adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + adresConnectionDetails.getServerIp() + " host = localhost user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
-			}else{
-				String[] ipogren = Global_Yardimci.ipCevir(adresConnectionDetails.getServerIp());
-				adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
-			}
+//			if (!cariConnDetails.getServerIp().equals(adresConnectionDetails.getServerIp())) {
+//				adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + adresConnectionDetails.getServerIp() + " host = localhost user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
+//			}else{
+//				String[] ipogren = Global_Yardimci.ipCevir(adresConnectionDetails.getServerIp());
+//				adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
+//			}
+			String[] ipogren = Global_Yardimci.ipCevir(adresConnectionDetails.getServerIp());
+			adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
+
 
 			String cinString = "" , turString="" ,posString = "" ;
 			if(tahrapDTO.getTah_ted() !=0)
