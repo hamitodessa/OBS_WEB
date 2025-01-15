@@ -181,8 +181,8 @@ class="fa fa-bar-chart-o green_color"
 								<i class="fa fa-bars"></i>
 							</button>
 							<div class="logo_section">
-								<a href="index"><img class="img-responsive"
-									src="images/logo/obs_logo.png" alt="#" /></a>
+							<!--	<a href="index"><img class="img-responsive"	src="images/logo/obs_logo.png" alt="#" /></a>   -->
+								<a href="" data-url="/wellcome" class="changeLink"><img class="img-responsive"	src="images/logo/obs_logo.png" alt="#" /></a>
 							</div>
 							<div class="right_topbar">
 								<div class="icon_info">
@@ -246,34 +246,39 @@ class="fa fa-bar-chart-o green_color"
 </html>
 <script>
 	function loadDefaultContent() {
-		sayfaYukle('/wellcome'); // İlk yüklenen içerik 'deneme.html' olacak
+		sayfaYukle('/wellcome');
     }
 	async function sayfaYukle(url) {
-		try {
-			document.body.style.cursor = 'wait';
-			$.ajax({
-				url: url,
-				type: "GET",
-				success: function(data) {
-					if (data.includes('<form') && data.includes('name="username"')) {
-						window.location.href = "/login";
-					} else {
-						$('#ara_content').html(data);
-					}
-				},
-				error: function(xhr) {
-					if (xhr.status === 401) {
-						window.location.href = "/login";
-					} else {
-						$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
-					}
-				},
-			});
-		} catch (error) {
-			document.getElementById('ara_content').innerHTML =
-				`<h2>Bir hata oluştu: ${error.message}</h2>`;
-		}
+	    try {
+	        document.body.style.cursor = 'wait';
+	        $.ajax({
+	            url: url,
+	            type: "GET",
+	            success: function(data) {
+	                document.body.style.cursor = 'default';
+	                if (data.includes('<form') && data.includes('name="username"')) {
+	                    window.location.href = "/login";
+	                } else {
+	                    $('#ara_content').html(data);
+	                }
+	            },
+	            error: function(xhr) {
+	                document.body.style.cursor = 'default';
+	                if (xhr.status === 401) {
+	                    window.location.href = "/login";
+	                } else {
+	                    $('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
+	                }
+	            },
+	        });
+	    } catch (error) {
+	        document.body.style.cursor = 'default';
+	        document.getElementById('ara_content').innerHTML =
+	            `<h2>Bir hata oluştu: ${error.message}</h2>`;
+	    }
 	}
+
+	
 	function refreshPage() {
           location.reload(); 
     }

@@ -826,7 +826,7 @@ public class CariPgSQL implements ICariDatabase{
 					" (SELECT \"ADI\" FROM  dblink ('" + adrServer + "'," + 
 					" 'SELECT \"ADI\" ,\"M_KODU\" FROM \"ADRES\"') " + 
 					" AS adr(\"ADI\" CHARACTER VARYING ,\"M_KODU\" CHARACTER VARYING) "+
-					" WHERE \"M_KODU\" = TD.\"A_HES\")," +
+					" WHERE \"M_KODU\" = \"A_HES\") AS \"ADRES_UNVAN\"," +
 					" CASE \"CINS\" WHEN '0' THEN 'Tahsilat' WHEN '1' THEN 'Tediye' END as \"CINS\"," +
 					" CASE \"TUR\" WHEN '0' THEN 'Nakit' WHEN '1' THEN 'Cek' WHEN '2' THEN 'Kredi Kartı' END as \"TUR\",\"POS_BANKA\"," +
 					" \"DVZ_CINS\",\"TUTAR\"" +
