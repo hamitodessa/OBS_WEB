@@ -72,6 +72,8 @@ async function detailoku() {
 		errorDiv.innerText = error.message;
 	} finally {
 		document.body.style.cursor = "default";
+		const dbButton = document.getElementById("savebutton");
+		dbButton.disabled = true;
 	}
 }
 
@@ -88,6 +90,8 @@ function setFormValues(row) {
 	document.getElementById("izinlimi").checked = cells[7].textContent.trim() === "Evet";
 	document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 	document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
+	const dbButton = document.getElementById("savebutton");
+	dbButton.disabled = true;
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 }
