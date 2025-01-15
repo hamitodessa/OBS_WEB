@@ -93,7 +93,6 @@ public class AdresPgSQL implements IAdresDatabase {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return firmaIsmi;
-
 	}
 
 	@Override
@@ -140,7 +139,7 @@ public class AdresPgSQL implements IAdresDatabase {
 	@Override
 	public void adres_sil(int id, ConnectionDetails adresConnDetails) {
 		String sql = "DELETE " +
-				" FROM \"ADRES\" WHERE ID = '" + id + "'"  ;
+				" FROM \"ADRES\" WHERE \"ID\" = '" + id + "'"  ;
 		try (Connection connection = DriverManager.getConnection(
 				adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
@@ -214,6 +213,5 @@ public class AdresPgSQL implements IAdresDatabase {
 			throw new ServiceException(e.getMessage());
 		}
 		return resultList; 
-
 	}
 }

@@ -125,7 +125,7 @@ public class AdresGirisController {
 			}
 		} catch (ServiceException e) {
 			response.put("hesapAdi", ""); 
-			response.put("errorMessage", e.getMessage()); // Hata mesajı
+			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
@@ -140,7 +140,7 @@ public class AdresGirisController {
 			adresService.adres_sil(adrId);
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {
-			response.put("errorMessage", e.getMessage()); // Hata mesajı
+			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
