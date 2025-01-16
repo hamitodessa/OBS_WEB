@@ -78,6 +78,10 @@ $(document).ready(function() {
 		},
 		"/kambiyo/cektakip": kambiyoBaslik,
 		"/kambiyo/cekrapor": kambiyoBaslik,
-		"/stok/urunkart": stokBaslik,
+		"/stok/urunkart": () => {
+			stokBaslik();
+			urnaramaYap();
+			document.getElementById("arama").value = "";
+		},
 	}
 });
