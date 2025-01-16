@@ -47,7 +47,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -55,7 +54,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		String sql = "SELECT \"Kodu\",\"Adi\",\"Birim\",\"Kusurat\",\"Sinif\",\"Ana_Grup\",\"Alt_Grup\",\"Aciklama_1\",\"Aciklama_2\" ," +
 				" \"Ozel_Kod_1\" ,\"Ozel_Kod_2\" ,\"Barkod\",\"Mensei\",\"Agirlik\",\"Resim\",\"Fiat\",\"Fiat_2\",\"Fiat_3\",\"Recete\",\"USER\"" +
 				" FROM \"MAL\" WHERE \"Kodu\" =  '"+ arama +"'  ORDER by \"" + sira +"\"";
-		System.out.println(sql);
 		urunDTO urdto = new urunDTO();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -104,7 +102,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return deger;
-
 	}
 
 	@Override
@@ -122,24 +119,22 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
 	public List<Map<String, Object>> stk_kod_alt_grup_degisken_oku(int sno, ConnectionDetails faturaConnDetails) {
-
-			String sql =  "SELECT \"ALID_Y\" , \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\"   " +
+		String sql =  "SELECT \"ALID_Y\" , \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\"   " +
 				" WHERE \"ANA_GRUP\" = '" + sno + "' ORDER BY \"ALT_GRUP\"";
-			List<Map<String, Object>> resultList = new ArrayList<>();
-			try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-					PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-				ResultSet resultSet = preparedStatement.executeQuery();
-				resultList = ResultSetConverter.convertToList(resultSet); 
-				resultSet.close();
-			} catch (Exception e) {
-				throw new ServiceException("MS stkService genel hatası.", e);
-			}
-			return resultList; 
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
@@ -156,13 +151,19 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Urun okunamadı", e);
 		}
 		return firmaIsmi;
-
 	}
 
 	@Override
 	public void stk_ur_sil(String kodu, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "DELETE  FROM \"MAL\" WHERE \"Kodu\" = ?";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+			preparedStatement.setString(1, kodu); // Parametreyi bağla
+			preparedStatement.executeUpdate(); // Doğru metot
+		} catch (SQLException e) {
+			throw new ServiceException("Urun silme", e);
+		}
 	}
 
 	@Override
@@ -197,8 +198,22 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			stmt.setInt(22, 0);
 			stmt.setString(23, urunDTO.getUsr());
 			stmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new ServiceException("Adres kayit Hata:" + e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
 		}
+	}
 
-	}}
+	@Override
+	public void stk_firma_adi_kayit(String fadi, ConnectionDetails faturaConnDetails) {
+		String sql = "UPDATE \"OZEL\" SET \"FIRMA_ADI\" = ?"  ;
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,fadi);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+		}
+	}
+}

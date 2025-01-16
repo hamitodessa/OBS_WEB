@@ -261,6 +261,8 @@ async function firmaIsmi(modul, event) {
 				lblfismi.innerText = "Adres Firma Adi";
 			} else if (modul === "kambiyo") {
 				lblfismi.innerText = "Kambiyo Firma Adi";
+			} else if (modul === "fatura") {
+				lblfismi.innerText = "Stok Firma Adi";
 			}
 		}
 	} catch (error) {

@@ -17,4 +17,5 @@ public interface IFaturaDatabase {
 	String ur_kod_bak(String kodu,ConnectionDetails faturaConnDetails);
 	void stk_ur_sil(String kodu,ConnectionDetails faturaConnDetails);
 	void stk_ur_kayit(urunDTO urunDTO,ConnectionDetails faturaConnDetails);
+	void stk_firma_adi_kayit(String fadi,ConnectionDetails faturaConnDetails);
 }

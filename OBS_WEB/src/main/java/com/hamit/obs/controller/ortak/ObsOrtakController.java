@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
+import com.hamit.obs.service.fatura.FaturaService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
 
 @Controller
@@ -27,6 +28,9 @@ public class ObsOrtakController {
 	
 	@Autowired
 	private KambiyoService kambiyoService;
+	
+	@Autowired
+	private FaturaService faturaService;
 
 	@GetMapping("/obs/firmaismi")
 	public String firmaism() {
@@ -47,6 +51,9 @@ public class ObsOrtakController {
 			}
 			if(modul.trim().equals("kambiyo")) {
 				response.put("firmaismi", kambiyoService.kambiyo_firma_adi());
+			}
+			if(modul.trim().equals("fatura")) {
+				response.put("firmaismi", faturaService.fat_firma_adi());
 			}
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
@@ -69,6 +76,8 @@ public class ObsOrtakController {
 				adresService.adres_firma_adi_kayit(fismi);
 			else if(modul.trim().equals("kambiyo"))
 				kambiyoService.kambiyo_firma_adi_kayit(fismi);
+			else if(modul.trim().equals("fatura"))
+				faturaService.stk_firma_adi_kayit(fismi);
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());

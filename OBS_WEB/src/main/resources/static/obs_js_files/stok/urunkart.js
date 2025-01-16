@@ -47,13 +47,12 @@ async function urnKayit() {
 	if (["0", ""].includes(koduInput.value)) {
 		return;
 	}
-	const urunDTO = geturnDTO;
+	const urunDTO = geturnDTO();
 	const formData = new FormData();
 
 	for (const key in urunDTO) {
 		formData.append(key, urunDTO[key]);
 	}
-
 	const fileInput = document.getElementById("resim");
 	const file = fileInput.files[0];
 	if (file) {
@@ -80,7 +79,6 @@ async function urnKayit() {
 	document.body.style.cursor = "wait";
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-
 	try {
 		const response = await fetchWithSessionCheck("stok/urnkayit", {
 			method: "POST",
@@ -104,7 +102,7 @@ function geturnDTO() {
 		kodu: document.getElementById("kodu").value,
 		adi: document.getElementById("adi").value,
 		birim: document.getElementById("birim").value,
-		kusurat: document.getElementById("kusurat").value,
+		kusurat: parseInt(document.getElementById("kusurat").value) || 0,
 		sinif: document.getElementById("sinif").value,
 		anagrup: document.getElementById("anagrup").value,
 		altgrup: document.getElementById("altgrup").value,
@@ -114,10 +112,10 @@ function geturnDTO() {
 		ozelkod2: document.getElementById("ozelkod2").value,
 		barkod: document.getElementById("barkod").value,
 		mensei: document.getElementById("mensei").value,
-		agirlik: document.getElementById("agirlik").value,
-		fiat1: document.getElementById("fiat1").value,
-		fiat2: document.getElementById("fiat2").value,
-		fiat3: document.getElementById("fiat3").value,
+		agirlik: parseFloat(document.getElementById("agirlik").value) || 0.0,
+		fiat1: parseFloat(document.getElementById("fiat1").value) || 0.0,
+		fiat2: parseFloat(document.getElementById("fiat2").value) || 0.0,
+		fiat3: parseFloat(document.getElementById("fiat3").value) || 0.0,
 		recete: document.getElementById("recete").value
 	};
 }
@@ -259,7 +257,7 @@ function urnIlk() {
 //************************evrak sil ***********************************************
 async function urnSil() {
 	const urnKodu = document.getElementById('kodu').value;
-	if (["0", ""].includes(hesapKodu.value)) {
+	if (["0", ""].includes(urnKodu.value)) {
 		return;
 	}
 	const message = "Kayit Dosyadan Silinecek ..?" ;
