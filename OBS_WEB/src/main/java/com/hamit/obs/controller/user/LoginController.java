@@ -21,6 +21,7 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.RolEnum;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
+import com.hamit.obs.service.fatura.FaturaService;
 import com.hamit.obs.service.forum.ForumService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kur.KurService;
@@ -44,6 +45,9 @@ public class LoginController {
 	
 	@Autowired
 	private KambiyoService kambiyoService;
+	
+	@Autowired
+	private FaturaService faturaService;
 	
 	@Autowired
 	private ForumService forumService;
@@ -118,6 +122,15 @@ public class LoginController {
 	        dto.setProgkodu(adresService.conn_detail()[1]);
 	        dto.setServer(adresService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
+	        dto = new CalismaDiziniDTO();
+	        //dto.setFirma(kambiyoService.fatura_firma_adi());
+	        dto.setFirma("");
+	        dto.setModul("Fatura");
+	        dto.setHangi_sql(faturaService.conn_detail()[0]);
+	        dto.setProgkodu(faturaService.conn_detail()[1]);
+	        dto.setServer(faturaService.conn_detail()[2]);
+	        calismaDiziniDTO.add(dto);
+	        
 	        response.put("data", calismaDiziniDTO);
 	        response.put("errorMessage", "");
 	        return ResponseEntity.ok(response);

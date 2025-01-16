@@ -33,6 +33,11 @@ async function getWellcomeData() {
 				document.getElementById("kaserver").innerText = item.server;
 				document.getElementById("kafadi").innerText = item.firma;
 				document.getElementById("kahsql").innerText = item.hangi_sql;
+			} else if (item.modul === "Fatura") {
+				document.getElementById("fkod").innerText = item.progkodu;
+				document.getElementById("fserver").innerText = item.server;
+				document.getElementById("ffadi").innerText = item.firma;
+				document.getElementById("fhsql").innerText = item.hangi_sql;
 			}
 		});
 	} catch (error) {
