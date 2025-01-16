@@ -159,4 +159,16 @@ public class FaturaMySQL implements IFaturaDatabase {
 		}
 		return firmaIsmi;
 
+	}
+
+	@Override
+	public void stk_ur_sil(String kodu, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stk_ur_kayit(urunDTO urunDTO, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
 	}}

@@ -15,4 +15,6 @@ public interface IFaturaDatabase {
 	List<Map<String, Object>> stk_kod_degisken_oku(String fieldd,String sno,String nerden,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> stk_kod_alt_grup_degisken_oku (int sno,ConnectionDetails faturaConnDetails);
 	String ur_kod_bak(String kodu,ConnectionDetails faturaConnDetails);
+	void stk_ur_sil(String kodu,ConnectionDetails faturaConnDetails);
+	void stk_ur_kayit(urunDTO urunDTO,ConnectionDetails faturaConnDetails);
 }

@@ -159,4 +159,23 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		return firmaIsmi;
 
 	}
+
+	@Override
+	public void stk_ur_sil(String kodu, ConnectionDetails faturaConnDetails) {
+		String sql = " DELETE  FROM MAL WHERE Kodu= ?";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, kodu);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+		}
+	}
+
+	@Override
+	public void stk_ur_kayit(urunDTO urunDTO, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
 }

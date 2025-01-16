@@ -47,11 +47,11 @@ async function urnKayit() {
 	if (["0", ""].includes(koduInput.value)) {
 		return;
 	}
-	const urnDTO = geturnDTO;
+	const urunDTO = geturnDTO;
 	const formData = new FormData();
 
-	for (const key in urnDTO) {
-		formData.append(key, urnDTO[key]);
+	for (const key in urunDTO) {
+		formData.append(key, urunDTO[key]);
 	}
 
 	const fileInput = document.getElementById("resim");
@@ -276,7 +276,7 @@ async function urnSil() {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ urnKodu: urnKodu }),
+			body: new URLSearchParams({ urnkodu: urnKodu }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
