@@ -136,6 +136,7 @@ public class DekontController {
 	}
 	
 	@PostMapping("cari/fisYoket")
+	@ResponseBody
 	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam int evrakNo) {
 		try {
 			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());

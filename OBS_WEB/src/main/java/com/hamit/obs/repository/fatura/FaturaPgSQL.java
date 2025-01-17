@@ -216,4 +216,70 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
 		}
 	}
+
+	@Override
+	public String uret_son_bordro_no_al(ConnectionDetails faturaConnDetails) {
+		String E_NUMBER = "" ;
+		String query = "SELECT max(\"Evrak_No\")  as \"NO\" FROM \"STOK\"  where \"Evrak_Cins\" = 'URE' ";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				E_NUMBER = resultSet.getString("NO") == null ? "0" :resultSet.getString("NO") ;
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Firma adı okunamadı", e);
+		}
+		return E_NUMBER;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> stok_oku(String eno, String cins, ConnectionDetails faturaConnDetails) {
+		String sql = "SELECT \"Evrak_No\" ,\"Evrak_Cins\",\"Tarih\",\"Urun_Kodu\",\"Miktar\",\"Fiat\" ,\"Tutar\", \"Hareket\" , " +
+				" (SELECT \"DEPO\" from \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID_Y\" = \"STOK\".\"Depo\" ) as \"Depo\" , " +
+				" (SELECT \"ANA_GRUP\" from \"ANA_GRUP_DEGISKEN\" WHERE \"AGID_Y\" = \"STOK\".\"Ana_Grup\" ) as \"Ana_Grup\" , " +
+				" (SELECT \"ALT_GRUP\" from \"ALT_GRUP_DEGISKEN\" WHERE \"ALID_Y\" = \"STOK\".\"Alt_Grup\" ) as \"Alt_Grup\" , " +
+				" (SELECT \"Adi\" FROM \"MAL\"  WHERE \"MAL\".\"Kodu\" = \"STOK\".\"Urun_Kodu\" ) as \"Adi\" , " +
+				" (SELECT \"Birim\" FROM \"MAL\"  WHERE \"MAL\".\"Kodu\" = \"STOK\".\"Urun_Kodu\" ) as \"Birim\" , " +
+				" (SELECT \"Barkod\" FROM \"MAL\"  WHERE \"MAL\".\"Kodu\" = \"STOK\".\"Urun_Kodu\" ) as \"Barkod\" , " +
+				" \"Izahat\" ,\"Doviz\"" +
+				" FROM \"STOK\"  " +
+				" WHERE \"Evrak_No\"  =N'" + eno + "'" +
+				" AND \"Evrak_Cins\" = '" + cins + "'";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
+	}
+
+	@Override
+	public String aciklama_oku(String evrcins, int satir, String evrno, String gircik,
+			ConnectionDetails faturaConnDetails) {
+		String aciklama = "" ;
+		String query = "SELECT * " +
+				" FROM \"ACIKLAMA\" " +
+				" WHERE \"EVRAK_NO\" = N'" + evrno + "'" +
+				" AND \"SATIR\" = '" + satir + "'" +
+				" AND \"EVRAK_CINS\" = '" + evrcins + "'" +
+				" AND \"Gir_Cik\" = '" + gircik + "'";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				aciklama = resultSet.getString("ACIKLAMA");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Firma adı okunamadı", e);
+		}
+		return aciklama;
+
+	}
 }

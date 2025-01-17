@@ -218,4 +218,23 @@ public class FaturaMySQL implements IFaturaDatabase {
 		}
 
 	}
+
+	@Override
+	public String uret_son_bordro_no_al(ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> stok_oku(String eno, String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String aciklama_oku(String evrcins, int satir, String evrno, String gircik,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

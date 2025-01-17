@@ -48,6 +48,20 @@ formatNumber4 = function(value) {
 	});
 }
 
+formatNumber3 = function(value) {
+	if (value == null) return '';
+	return parseFloat(value).toLocaleString(undefined, {
+		minimumFractionDigits: 3,
+		maximumFractionDigits: 3
+	});
+}
+formatdateSaatsiz = function (dateString){
+	const isoDate = dateString; // "2025-01-15T09:48:22.023+00:00"
+	const formattedDate = new Date(isoDate).toISOString().split('T')[0];
+	return formattedDate;
+	
+}
+
 formatDate = function(dateString) {
 	if (!dateString) return '';
 	const date = new Date(dateString);

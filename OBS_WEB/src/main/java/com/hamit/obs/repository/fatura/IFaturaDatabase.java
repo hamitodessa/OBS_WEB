@@ -18,4 +18,7 @@ public interface IFaturaDatabase {
 	void stk_ur_sil(String kodu,ConnectionDetails faturaConnDetails);
 	void stk_ur_kayit(urunDTO urunDTO,ConnectionDetails faturaConnDetails);
 	void stk_firma_adi_kayit(String fadi,ConnectionDetails faturaConnDetails);
+	String uret_son_bordro_no_al(ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> stok_oku(String eno, String cins,ConnectionDetails faturaConnDetails);
+	String aciklama_oku(String evrcins, int satir, String evrno, String gircik,ConnectionDetails faturaConnDetails);
 }
