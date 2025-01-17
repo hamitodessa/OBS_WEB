@@ -80,9 +80,18 @@ datalist {
 .resimdiv {
   width: 100%; /* Sabit genişlik */
   min-height: 100%; /* Sabit yükseklik */
-  border: 1px solid #ddd; /* İsteğe bağlı çerçeve */
+  border: 1px solid #ddd; 
   overflow: hidden; /* Resmin taşmasını engelle */
   background-color: #f8f9fa; /* Arka plan rengi */
+}
+.resimgoster {
+    justify-content: center;
+    align-items: center; 
+    width: 100%; 
+    height: 100%; 
+    overflow: hidden;
+    background-color: #f8f9fa; 
+    
 }
 </style>
 <link rel="stylesheet" href="style/yenihsppln.css" />
@@ -136,8 +145,7 @@ datalist {
 				<div style="display: flex; align-items: center;margin-top: 10px;margin-bottom: 10px;">
 					<span style="padding-left: 5px;"></span>
 					<label  for="label4" style="min-width: 75px;">Urun Kodu</label>
-					<input class="form-control" style="width: 100px;"
-								 maxlength="12" id="girenurnkod">
+					<input class="form-control" style="width: 100px;" maxlength="12" id="girenurnkod" onkeydown="if(event.key === 'Enter') urnaramaYap()">
 					<span style="padding-left: 10px;"></span>
 					<button type="button" class="btn btn-secondary ml-2" onclick="">
 							<i class="fa fa-refresh"></i>
@@ -235,17 +243,17 @@ datalist {
 		<span style="padding-left: 20px;width:100px;">Birim :</span>
 		<label style="width:100px;" id="birim">...</label> 
 		<span style="padding-left: 20px;width:150px;">Ana Grup :</span>
-		<label style="width:150px;" id="birim">...</label> 
+		<label style="width:150px;" id="anagrpl">...</label> 
 		<span style="padding-left: 20px;width:100px;">Agirlik :</span>
-		<label style="width:100px;" id="birim">...</label> 
+		<label style="width:100px;" id="agirlik">...</label> 
 	</div>
 	<div class="form-row">
 		<span style="padding-left: 20px;width:100px;">Barkod :</span>
 		<label style="width:150px;" id="barkod">...</label> 
 		<span style="padding-left: 20px;width:100px;">Sinif :</span>
-		<label style="width:100px;" id="barkod">...</label> 
+		<label style="width:100px;" id="sinif">...</label> 
 		<span style="padding-left: 20px;width:150px;">Alt Grup :</span>
-		<label style="width:150px;" id="birim">...</label> 
+		<label style="width:150px;" id="altgrpl">...</label> 
 		
 	</div>
 </div>
