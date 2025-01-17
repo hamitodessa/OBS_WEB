@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
 
@@ -59,7 +60,7 @@ public class UretimController {
 
 	@PostMapping("stok/uretimOku")
 	@ResponseBody
-	public Map<String, Object> bordroOku(@RequestParam String fisno) {
+	public Map<String, Object> uretimOku(@RequestParam String fisno) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			List<Map<String, Object>> uretim = faturaService.stok_oku(fisno,"URE");
@@ -68,6 +69,76 @@ public class UretimController {
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("data", Collections.emptyList());
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	@GetMapping("stok/stkgeturndepo")
+	@ResponseBody
+	public Map<String, Object> stkgeturndepo() {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	    	List<Map<String, Object>> urunKodlari = faturaService.urun_kodlari() ;
+	    	System.out.println(urunKodlari.size());
+	    	Map<String, Object> urnDeger = new HashMap<>();
+	    	urnDeger.put("Kodu", ""); 
+	    	urunKodlari.add(0, urnDeger);
+	    	System.out.println(urunKodlari.size());
+	        response.put("urnkodlar", (urunKodlari != null) ? urunKodlari : new ArrayList<>());
+	        
+	        List<Map<String, Object>> depoKodlari = faturaService.stk_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
+			Map<String, Object> depoDeger = new HashMap<>();
+			depoDeger.put("DEPO", ""); 
+			depoKodlari.add(0, depoDeger);
+			response.put("depolar", (depoKodlari != null) ? depoKodlari : new ArrayList<>());
+	        response.put("errorMessage", "");
+	    } catch (ServiceException e) {
+	        response.put("errorMessage", e.getMessage());
+	    } catch (Exception e) {
+	        response.put("errorMessage", "Hata: " + e.getMessage());
+	    }
+	    return response;
+	}	
+
+	@PostMapping("stok/imalatcikan")
+	@ResponseBody
+	public Map<String, Object> imalatcikan(@RequestParam String ukodu, @RequestParam String fiatlama) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			System.out.println(fiatlama);
+			urunDTO urunDTO = new urunDTO();
+			urunDTO =  faturaService.urun_adi_oku(ukodu,"Kodu");
+			if (urunDTO.getKodu().equals("")) {
+				throw new ServiceException("Bu Kodda Urun Yok");
+			}
+			if (! fiatlama.equals(""))
+			{
+				if ( fiatlama.equals("fiat1"))
+					response.put("fiat", urunDTO.getFiat1());
+				else  if (fiatlama.equals("fiat2"))
+					response.put("fiat", urunDTO.getFiat2());
+				else  if (fiatlama.equals("fiat3"))
+					response.put("fiat", urunDTO.getFiat3());
+				else  if (fiatlama.equals("Sonimalat"))
+					response.put("fiat",(faturaService.son_imalat_fiati_oku(ukodu)));
+				else  if (fiatlama.equals("ortfiat"))
+				{
+//					Date  i_tar ;
+//					i_tar = ilk_tarih(cins, TARIH_CEVIR.dateFormater(dtc.getSelectedDateAsString(),"yyyy.MM.dd", "dd.MM.yyyy"));
+//					String qwe =  TARIH_CEVIR.dateFormaterSaatli(i_tar.toString(), "yyyy.MM.dd", "EEE MMM dd kk:mm:ss zzzz yyyy" );
+//					if (qwe.equals("1900.01.01"))
+//						table.getModel().setValueAt(0,table.getSelectedRow(), 7) ;
+//					else
+//						table.getModel().setValueAt(f_Access.gir_ort_fiati_oku(cins,qwe,TARIH_CEVIR.dateFormater(dtc.getSelectedDateAsString(),"yyyy.MM.dd", "dd.MM.yyyy")),table.getSelectedRow(), 7) ;
+				}
+			}
+			
+			response.put("urun", urunDTO);
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
 			response.put("errorMessage", "Hata: " + e.getMessage());

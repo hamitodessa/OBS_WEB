@@ -1,14 +1,28 @@
-//altgrup();
-//
-//function altgrup() {
-//        const selectElement = document.getElementById('altgrp');
-//        if (selectElement.options.length === 0) {
-//            selectElement.disabled = true;
-//        } else {
-//            selectElement.disabled = false;
-//        }
-//    };
-
+async function fetchkoddepo() {
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.innerText = "";
+	errorDiv.style.display = "none";
+	rowCounter = 0;
+	depolar = "";
+	urnkodlar = "";
+	try {
+		const response = await fetchWithSessionCheck("stok/stkgeturndepo", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (response.errorMessage) {
+			throw new Error(responseBanka.errorMessage);
+		}
+		urnkodlar = response.urnkodlar || [];
+		depolar = response.depolar || [];
+		initializeRows();
+	} catch (error) {
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+		errorDiv.style.display = "block";
+	}
+}
 
 async function anagrpChanged(anagrpElement) {
 	const anagrup = anagrpElement.value;
@@ -48,7 +62,7 @@ async function anagrpChanged(anagrpElement) {
 }
 
 async function urnaramaYap() {
-	
+
 	const aramaInput = document.getElementById("girenurnkod").value;
 	if (!aramaInput || aramaInput === "") {
 		return;
@@ -71,13 +85,13 @@ async function urnaramaYap() {
 		}
 		document.getElementById("recetekod").value = dto.recete;
 		document.getElementById("adi").innerText = dto.adi;
-		document.getElementById("birim").innerText = dto.birim; 
+		document.getElementById("birim").innerText = dto.birim;
 		document.getElementById("anagrpl").innerText = dto.anagrup;
 		document.getElementById("altgrpl").innerText = dto.altgrup;
 		document.getElementById("agirlik").innerText = dto.agirlik;
 		document.getElementById("barkod").innerText = dto.barkod;
 		document.getElementById("sinif").innerText = dto.sinif;
-		
+
 		const imgElement = document.getElementById("resimGoster");
 		if (dto.base64Resim && dto.base64Resim.trim() !== "") {
 			const base64String = 'data:image/jpeg;base64,' + dto.base64Resim.trim();
@@ -154,86 +168,232 @@ async function uretimOku() {
 			return;
 		}
 		const tableBody = document.getElementById("tbody");
-		
-		let ukoduoptionsHTML = bankaIsimleri;
-		let depoHTML = subeIsimleri;
-				
+
+		let ukoduoptionsHTML = urnkodlar;
+
 		tableBody.innerHTML = "";
 		rowCounter = 0;
 		rowCounter = 0;
 		data.data.forEach(item => {
-			if(item.Hareket === "C"){
-			incrementRowCounter();
-			const row = document.createElement("tr");
-			row.innerHTML = `
-					<td contenteditable="false">CIKAN</td>
-					<td>
-					    <div style="position: relative; width: 100%;">
-					        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}" maxlength="12" id="ukodu_${rowCounter}" 
-					            onkeydown="focusNextCell(event, this)" value="${item.Urun_Kodu || ''}">
-					        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
-					        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					    </div>
-					</td>
-					<td contenteditable="false">${item.Adi || ''}</td>
-					<td contenteditable="false">${item.Izahat || ''}</td>
-					<td>
-					    <div style="position: relative; width: 100%;">
-					        <input class="form-control cins_bold" list="depoOptions_${rowCounter}" maxlength="30" 
-							id="depo_${rowCounter}"  value="${item.Depo || ''}">
-					            <datalist id="depoOptions_${rowCounter}">${depoHTML}</datalist>
-					            <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					    </div>
-					</td>
-					<td class="double-column">${formatNumber3(item.Miktar *-1 || '0')}</td>
-					<td contenteditable="false" >${item.Birim || ''}</td>
-					<td class="editable-cell double-column" contenteditable="true" 
+			if (item.Hareket === "C") {
+				incrementRowCounter();
+				const row = document.createElement("tr");
+				row.innerHTML = `
+			<td >
+				<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
+			</td>
+			<td contenteditable="false">CIKAN</td>
+			<td>
+			    <div style="position: relative; width: 100%;">
+			        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}"  id="ukodu_${rowCounter}" 
+		            onkeydown="focusNextCell(event, this)" value="${item.Urun_Kodu || ''}"  onchange="updateRowValues(this, ${rowCounter})">
+			        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
+			        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+			    </div>
+			</td>
+			<td contenteditable="false">${item.Adi || ''}</td>
+			<td class="editable-cell" contenteditable="true" 
+				    onfocus="selectAllContent(this)" 
+				    onkeydown="focusNextRow(event, this)">${item.Izahat || ''}
+			</td>
+			<td>
+				<div style="position: relative; width: 100%;">
+				    <select class="form-control cins_bold" id="depo_${rowCounter}">
+				        ${depolar.map(kod => `
+				            <option value="${kod.DEPO}" ${item.Depo === kod.DEPO ? 'selected' : ''}>
+				                ${kod.DEPO}
+				            </option>
+				        `).join('')}
+				    </select>
+				    <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+				</div>
+			</td>
+			<td class="editable-cell double-column" contenteditable="true" 
+					    onfocus="selectAllContent(this)" 
+					    onblur="formatInputTable3(this); updateColumnTotal()" 
+					    onkeydown="focusNextRow(event, this)">${formatNumber2(item.Miktar)}
+			</td>
+			<td contenteditable="false" >${item.Birim || ''}</td>
+			<td class="editable-cell double-column" contenteditable="true" 
 					    onfocus="selectAllContent(this)" 
 					    onblur="formatInputTable2(this); updateColumnTotal()" 
 					    onkeydown="focusNextRow(event, this)">${formatNumber2(item.Fiat)}
-					</td>
-					<td class="editable-cell double-column" contenteditable="false" 
+			</td>
+			<td class="editable-cell double-column" contenteditable="true" 
 						   onfocus="selectAllContent(this)" 
 						  onblur="formatInputTable2(this); updateColumnTotal()" 
 						  onkeydown="focusNextRow(event, this)">${formatNumber2(item.Tutar)}
-					</td>
+			</td>
 		    `;
-			tableBody.appendChild(row);
+				tableBody.appendChild(row);
 			}
 		});
-		
+
 		for (let i = 0; i < data.data.length; i++) {
-		    const item = data.data[i];
-		    if (item.Hareket === "G") {
-		        document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
-		        document.getElementById("uretmiktar").value = item.Miktar;
-		        document.getElementById("girenurnkod").value = item.Urun_Kodu;
-		        document.getElementById("anagrp").value = item.Ana_Grup || '';
+			const item = data.data[i];
+			if (item.Hareket === "G") {
+				document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
+				document.getElementById("uretmiktar").value = item.Miktar;
+				document.getElementById("girenurnkod").value = item.Urun_Kodu;
+				document.getElementById("anagrp").value = item.Ana_Grup || '';
 				await anagrpChanged(document.getElementById("anagrp"));
-				
+
 				const selectElement = document.getElementById("altgrp");
 				if (Array.from(selectElement.options).some(option => option.value.trim() === (item.Alt_Grup || '').trim())) {
-				    selectElement.value = (item.Alt_Grup || '').trim();
-				    selectElement.disabled = false;
+					selectElement.value = (item.Alt_Grup || '').trim();
+					selectElement.disabled = false;
 				} else {
-				    selectElement.value = ''; // Geçerli bir değer değilse boş bırak
-				    selectElement.disabled = true;
+					selectElement.value = ''; // Geçerli bir değer değilse boş bırak
+					selectElement.disabled = true;
 				}
 				const selectElementd = document.getElementById("depo");
 				if (Array.from(selectElementd.options).some(option => option.value.trim() === (item.Depo || '').trim())) {
-					    selectElementd.value = (item.Depo || '').trim();
+					selectElementd.value = (item.Depo || '').trim();
 				} else {
-				    selectElementd.value = ''; // Geçerli bir değer değilse boş bırak
+					selectElementd.value = ''; // Geçerli bir değer değilse boş bırak
 				}
-		        break; // İlk eşleşmeden sonra döngüden çık
-		    }
+				break; // İlk eşleşmeden sonra döngüden çık
+			}
 		}
 		console.info(data);
 		document.getElementById("aciklama").value = data.aciklama;
 		urnaramaYap();
-		//updateColumnTotal();
+		updateColumnTotal();
 		errorDiv.style.display = "none";
 		errorDiv.innerText = "";
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+	}
+}
+
+function initializeRows() {
+	for (let i = 0; i < 5; i++) {
+		satirekle();
+	}
+}
+function satirekle() {
+	const table = document.getElementById("gbTable").getElementsByTagName("tbody")[0];
+	const newRow = table.insertRow();
+	incrementRowCounter();
+
+	let ukoduoptionsHTML = urnkodlar.map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`).join("");
+	//	let depoHTML = depolar.map(kod => `<option value="${kod.DEPO}">${kod.DEPO}</option>`).join("");
+	newRow.innerHTML = `
+		<td >
+			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
+		</td>
+		<td contenteditable="false">CIKAN</td>
+		<td>
+		    <div style="position: relative; width: 100%;">
+		        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}" maxlength="12" id="ukodu_${rowCounter}" 
+		            onkeydown="focusNextCell(event, this)"  onchange="updateRowValues(this, ${rowCounter})">
+		        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
+		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+		    </div>
+		</td>
+		<td contenteditable="false"></td>
+		<td class="editable-cell" contenteditable="true" 
+				    onfocus="selectAllContent(this)" 
+				    onkeydown="focusNextRow(event, this)">
+		</td>
+		<td>
+		<div style="position: relative; width: 100%;">
+		    <select class="form-control cins_bold" id="depo_${rowCounter}">
+		        ${depolar.map(kod => `
+		            <option value="${kod.DEPO}" >
+		                ${kod.DEPO}
+		            </option>
+		        `).join('')}
+		    </select>
+		    <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+		</div>
+		</td>
+		<td class="editable-cell double-column" contenteditable="true" 
+				    onfocus="selectAllContent(this)" 
+				    onblur="formatInputTable3(this); updateColumnTotal()" 
+				    onkeydown="focusNextRow(event, this)">${formatNumber3(0)}
+		</td>
+		<td contenteditable="false" ></td>
+		<td class="editable-cell double-column" contenteditable="true" 
+		    onfocus="selectAllContent(this)" 
+		    onblur="formatInputTable2(this); updateColumnTotal()" 
+		    onkeydown="focusNextRow(event, this)">${formatNumber2(0)}
+		</td>
+		<td class="editable-cell double-column" contenteditable="true" 
+			   onfocus="selectAllContent(this)" 
+			  onblur="formatInputTable2(this); updateColumnTotal()" 
+			  onkeydown="focusNextRow(event, this)">${formatNumber2(0)}
+		</td>
+	    `;
+}
+
+function selectAllContent(element) {
+	const range = document.createRange();
+	const selection = window.getSelection();
+	range.selectNodeContents(element);
+	selection.removeAllRanges();
+	selection.addRange(range);
+}
+
+function satirsil(button) {
+	const row = button.parentElement.parentElement;
+	row.remove();
+	updateColumnTotal();
+}
+
+function updateColumnTotal() {
+	const cells = document.querySelectorAll('table tr td:nth-child(10)');
+	const totalTutarCell = document.getElementById("totalTutar");
+	let total = 0;
+	totalTutarCell.textContent = "0.00";
+	cells.forEach(cell => {
+		const value = parseFloat(cell.textContent.replace(/,/g, '').trim());
+		if (!isNaN(value) && value > 0) {
+			total += value;
+		}
+	});
+	totalTutarCell.textContent = total.toLocaleString(undefined, {
+		minimumFractionDigits: 2, maximumFractionDigits: 2
+	});
+
+	const dbmik = parseFloat(document.getElementById("uretmiktar").value) || 0;
+	const lblbirimfiati = document.getElementById("birimfiati");
+
+	lblbirimfiati.innerText = (total / (dbmik === 0 ? 1 : dbmik)).toFixed(2);
+}
+async function updateRowValues(inputElement, rowCounter) {
+	const selectedValue = inputElement.value;
+	const uygulananfiat = document.getElementById("uygulananfiat").value;
+	
+	document.body.style.cursor = "wait";
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+	try {
+		const response = await fetchWithSessionCheck("stok/imalatcikan", {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: new URLSearchParams({ ukodu: selectedValue , fiatlama : uygulananfiat}),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+
+		const row = inputElement.closest('tr');
+		const cells = row.querySelectorAll('td');
+
+		const turCell = cells[1];
+		const adiCell = cells[3];
+		const birimCell = cells[7];
+		const fiatCell = cells[8];
+
+	console.info(response);
+		turCell.textContent = "CIKAN";
+		adiCell.textContent = response.urun.adi;
+		birimCell.textContent = response.urun.birim;
+		fiatCell.textContent = response.fiat.toFixed(2);
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";

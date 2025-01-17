@@ -282,4 +282,58 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		return aciklama;
 
 	}
+
+	@Override
+	public urunDTO urun_adi_oku(String kodu, String kodbarcode, ConnectionDetails faturaConnDetails) {
+		String sql = "SELECT \"Kodu\",\"Adi\",\"Birim\",\"Kusurat\",\"Barkod\",\"Depo\",\"Fiat\",\"Fiat_2\",\"Fiat_3\",\"Agirlik\", \"Sinif\",\"Recete\"," + 
+				" (SELECT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\"    WHERE \"AGID_Y\" = \"MAL\".\"Ana_Grup\") AS \"Ana_Grup\" ,  " + 
+				" (SELECT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\"    WHERE \"ALID_Y\" = \"MAL\".\"Alt_Grup\") AS \"Alt_Grup\",\"Resim\" " + 
+				"FROM \"MAL\" WHERE \"" + kodbarcode + "\" = N'" + kodu + "'";
+		urunDTO urdto = new urunDTO();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet rs = preparedStatement.executeQuery();
+			if (rs.isBeforeFirst()) {
+				rs.next();
+				urdto.setKodu(rs.getString("Kodu"));
+				urdto.setAdi(rs.getString("Adi"));
+				urdto.setBirim(rs.getString("Birim"));
+				urdto.setKusurat(rs.getInt("Kusurat"));
+				urdto.setBarkod(rs.getString("Barkod"));
+				urdto.setSinif(rs.getString("Sinif"));
+				urdto.setAnagrup(rs.getString("Ana_Grup"));
+				urdto.setAltgrup(rs.getString("Alt_Grup"));
+				urdto.setAgirlik(rs.getDouble("Agirlik"));
+				urdto.setFiat1(rs.getDouble("Fiat"));
+				urdto.setFiat2(rs.getDouble("Fiat_2"));
+				urdto.setFiat3(rs.getDouble("Fiat_3"));
+				urdto.setRecete(rs.getString("Recete"));
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Urun okunamadı", e);
+		}
+		return urdto;
+
+	}
+
+	@Override
+	public double son_imalat_fiati_oku(String kodu, ConnectionDetails faturaConnDetails) {
+		double fiat=0 ;
+		String query = "SELECT  \"Fiat\" " +
+				" FROM \"STOK\"   " +
+				" WHERE \"Evrak_Cins\" = 'URE' and \"Hareket\" ='C'  " +
+				" AND \"Urun_Kodu\" = N'" + kodu + "' " +
+				" ORDER BY  \"Tarih\" DESC LIMIT 1 ";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				fiat = resultSet.getDouble("Fiat");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Firma adı okunamadı", e);
+		}
+		return fiat;
+
+	}
 }

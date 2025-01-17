@@ -21,4 +21,6 @@ public interface IFaturaDatabase {
 	String uret_son_bordro_no_al(ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> stok_oku(String eno, String cins,ConnectionDetails faturaConnDetails);
 	String aciklama_oku(String evrcins, int satir, String evrno, String gircik,ConnectionDetails faturaConnDetails);
+	urunDTO urun_adi_oku (String kodu,String kodbarcode,ConnectionDetails faturaConnDetails);
+	double son_imalat_fiati_oku(String kodu,ConnectionDetails faturaConnDetails);
 }

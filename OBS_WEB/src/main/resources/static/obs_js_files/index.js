@@ -83,5 +83,10 @@ $(document).ready(function() {
 			urnaramaYap();
 			document.getElementById("arama").value = "";
 		},
+		"/stok/uretim": () => {
+			stokBaslik();
+			fetchkoddepo();
+		
+		},
 	}
 });

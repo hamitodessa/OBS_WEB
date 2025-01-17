@@ -252,4 +252,36 @@ public class FaturaService {
 			throw new ServiceException(detailedMessage);
 		}
 	}
+	
+	public urunDTO urun_adi_oku (String kodu,String kodbarcode) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.urun_adi_oku(kodu, kodbarcode,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
+	
+	public double son_imalat_fiati_oku(String kodu) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.son_imalat_fiati_oku(kodu,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
 }

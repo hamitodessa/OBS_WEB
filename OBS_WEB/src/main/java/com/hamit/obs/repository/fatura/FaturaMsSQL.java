@@ -235,4 +235,16 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public urunDTO urun_adi_oku(String kodu, String kodbarcode, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double son_imalat_fiati_oku(String kodu, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -90,6 +90,7 @@ public class UrunKartController {
 	}
 	
 	@PostMapping("stok/urnArama")
+	@ResponseBody
 	public ResponseEntity<?> hsplnArama(@RequestParam String arama) {
 		urunDTO urunDTO = new urunDTO();
 		try {

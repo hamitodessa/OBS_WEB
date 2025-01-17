@@ -2,6 +2,8 @@ bankaIsimleri = [];
 subeIsimleri = [];
 ilkBorclu = [];
 allSubjects = [];
+depolar = [];
+urnkodlar = [];
 rowCounter = 0;
 
 incrementRowCounter = function() {
@@ -17,6 +19,18 @@ formatInputBox2 = function(input) {
 	input.value = parseFloat(value).toLocaleString(undefined, {
 		minimumFractionDigits: 2,
 		maximumFractionDigits: 2
+	});
+}
+
+formatInputBox3 = function(input) {
+	const value = input.value.replace(/,/g, '').trim();
+	if (!value || isNaN(value)) {
+		input.value = "0.00";
+		return;
+	}
+	input.value = parseFloat(value).toLocaleString(undefined, {
+		minimumFractionDigits: 3,
+		maximumFractionDigits: 3
 	});
 }
 
