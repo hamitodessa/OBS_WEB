@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
@@ -324,6 +326,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				" WHERE \"Evrak_Cins\" = 'URE' and \"Hareket\" ='C'  " +
 				" AND \"Urun_Kodu\" = N'" + kodu + "' " +
 				" ORDER BY  \"Tarih\" DESC LIMIT 1 ";
+		System.out.println(query);
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -331,9 +334,78 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				fiat = resultSet.getDouble("Fiat");
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException("son ima fiat", e);
 		}
 		return fiat;
 
+	}
+
+	@Override
+	public String uret_ilk_tarih(String baslangic, String tar, String ukodu, ConnectionDetails faturaConnDetails) {
+		String result_tar = "1900-01-01" ;
+		String query = "SELECT \"Urun_Kodu\" ,  \"Evrak_Cins\",\"Tarih\" ,\"Miktar\" , " +
+				" SUM(\"Miktar\") OVER(ORDER BY \"Tarih\"  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as \"Miktar_Bakiye\" " +
+				" FROM \"STOK\"   WHERE  \"STOK\".\"Tarih\" >= '" + baslangic + "'  AND \"STOK\".\"Tarih\" < '" + tar + " 23:59:59.998'" +
+				" And \"STOK\".\"Urun_Kodu\" = N'" + ukodu + "' AND \"Evrak_Cins\" <> 'DPO'" +
+				" Order by \"Tarih\"";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				Statement preparedStatement = connection.createStatement( ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet resultSet = preparedStatement.executeQuery(query)) {
+			if (resultSet.next()) {
+				resultSet.last();
+				int kayit_sayi = resultSet.getRow();
+				double  dbbl  = 0;
+				for (int i = kayit_sayi - 1; i >= 0; i--)
+				{
+					dbbl = resultSet.getDouble("Miktar_Bakiye");
+					if (dbbl == 0 )
+					{
+						Timestamp timestamp = resultSet.getTimestamp("Tarih");
+						result_tar = timestamp.toString();
+						break ;
+					}
+					resultSet.previous();
+				}
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("uret ilk tar", e);
+		}
+		return result_tar;
+	}
+
+	@Override
+	public double gir_ort_fiati_oku(String kodu, String ilkt, String tarih, ConnectionDetails faturaConnDetails) {
+		double fiat=0 ;
+		String query = "SELECT COALESCE( SUM(\"Tutar\") / SUM(\"Miktar\"),0) as \"Ortalama\" " +
+				" FROM \"STOK\"   " +
+				" WHERE  \"Urun_Kodu\" = N'" + kodu + "' " +
+				" AND \"Hareket\" = 'G' AND \"Tarih\" > '" + ilkt + "' AND \"Tarih\" < '" + tarih + " 23:59:59.998'";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				fiat = resultSet.getDouble("Ortalama");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Firma adı okunamadı", e);
+		}
+		return fiat;
+	}
+
+	@Override
+	public int uretim_fisno_al(ConnectionDetails faturaConnDetails) {
+		int evrakNo = 0;
+		String sql = "UPDATE \"URET_EVRAK\" SET \"E_No\" = \"E_No\" + 1 WHERE \"EID\" = 1 RETURNING \"E_No\";";
+		try (Connection connection =  DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					evrakNo = resultSet.getInt("EVRAK");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
+		}
+		return evrakNo;
 	}
 }

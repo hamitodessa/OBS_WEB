@@ -249,4 +249,22 @@ public class FaturaMySQL implements IFaturaDatabase {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public String uret_ilk_tarih(String baslangic, String tar, String ukodu, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double gir_ort_fiati_oku(String kodu, String ilkt, String tarih, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int uretim_fisno_al(ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

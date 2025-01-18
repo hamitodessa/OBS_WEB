@@ -19,6 +19,7 @@ import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
 
+
 @Controller
 public class UretimController {
 
@@ -82,13 +83,10 @@ public class UretimController {
 	    Map<String, Object> response = new HashMap<>();
 	    try {
 	    	List<Map<String, Object>> urunKodlari = faturaService.urun_kodlari() ;
-	    	System.out.println(urunKodlari.size());
 	    	Map<String, Object> urnDeger = new HashMap<>();
 	    	urnDeger.put("Kodu", ""); 
 	    	urunKodlari.add(0, urnDeger);
-	    	System.out.println(urunKodlari.size());
 	        response.put("urnkodlar", (urunKodlari != null) ? urunKodlari : new ArrayList<>());
-	        
 	        List<Map<String, Object>> depoKodlari = faturaService.stk_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
 			Map<String, Object> depoDeger = new HashMap<>();
 			depoDeger.put("DEPO", ""); 
@@ -105,15 +103,17 @@ public class UretimController {
 
 	@PostMapping("stok/imalatcikan")
 	@ResponseBody
-	public Map<String, Object> imalatcikan(@RequestParam String ukodu, @RequestParam String fiatlama) {
+	public Map<String, Object> imalatcikan(@RequestParam String ukodu, @RequestParam String fiatlama, @RequestParam String fisTarih, @RequestParam String fiatTarih) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			System.out.println(fiatlama);
+			System.out.println(" fiatlama ="+fiatlama);
 			urunDTO urunDTO = new urunDTO();
 			urunDTO =  faturaService.urun_adi_oku(ukodu,"Kodu");
 			if (urunDTO.getKodu().equals("")) {
 				throw new ServiceException("Bu Kodda Urun Yok");
 			}
+			response.put("urun", urunDTO);
+			
 			if (! fiatlama.equals(""))
 			{
 				if ( fiatlama.equals("fiat1"))
@@ -126,17 +126,37 @@ public class UretimController {
 					response.put("fiat",(faturaService.son_imalat_fiati_oku(ukodu)));
 				else  if (fiatlama.equals("ortfiat"))
 				{
-//					Date  i_tar ;
-//					i_tar = ilk_tarih(cins, TARIH_CEVIR.dateFormater(dtc.getSelectedDateAsString(),"yyyy.MM.dd", "dd.MM.yyyy"));
-//					String qwe =  TARIH_CEVIR.dateFormaterSaatli(i_tar.toString(), "yyyy.MM.dd", "EEE MMM dd kk:mm:ss zzzz yyyy" );
-//					if (qwe.equals("1900.01.01"))
-//						table.getModel().setValueAt(0,table.getSelectedRow(), 7) ;
-//					else
-//						table.getModel().setValueAt(f_Access.gir_ort_fiati_oku(cins,qwe,TARIH_CEVIR.dateFormater(dtc.getSelectedDateAsString(),"yyyy.MM.dd", "dd.MM.yyyy")),table.getSelectedRow(), 7) ;
+					String i_tar = faturaService.uret_ilk_tarih(fiatTarih, fisTarih,ukodu);
+//					System.out.println(i_tar);
+//					if (i_tar.equals("1900-01-01")) {
+//						response.put("fiat", 0);
+//					}
+//					else {
+						double qwee = faturaService.gir_ort_fiati_oku(ukodu,i_tar, fisTarih);
+						response.put("fiat", qwee);
+//					}
 				}
 			}
 			
-			response.put("urun", urunDTO);
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@GetMapping("stok/uretimyenifis")
+	@ResponseBody
+	public Map<String, Object> uretimyenifis() {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			int evrakNo = faturaService.uretim_fisno_al();
+			int kj = 10 - Integer.toString(evrakNo).length();
+			String str_ = "0".repeat(kj) + evrakNo;
+			response.put("fisno", str_);
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
@@ -145,6 +165,5 @@ public class UretimController {
 		}
 		return response;
 	}
-
 
 }

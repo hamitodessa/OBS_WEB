@@ -23,4 +23,7 @@ public interface IFaturaDatabase {
 	String aciklama_oku(String evrcins, int satir, String evrno, String gircik,ConnectionDetails faturaConnDetails);
 	urunDTO urun_adi_oku (String kodu,String kodbarcode,ConnectionDetails faturaConnDetails);
 	double son_imalat_fiati_oku(String kodu,ConnectionDetails faturaConnDetails);
+	String uret_ilk_tarih(String baslangic, String tar, String ukodu,ConnectionDetails faturaConnDetails);
+	double gir_ort_fiati_oku(String kodu, String ilkt, String tarih,ConnectionDetails faturaConnDetails);
+	int uretim_fisno_al(ConnectionDetails faturaConnDetails);
 }

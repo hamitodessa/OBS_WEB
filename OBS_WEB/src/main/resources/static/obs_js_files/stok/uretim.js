@@ -159,7 +159,7 @@ async function uretimOku() {
 			body: new URLSearchParams({ fisno: fisno }),
 		});
 		const data = response;
-		//clearInputs();
+		clearInputs();
 		const dataSize = data.data.length;
 		if (dataSize === 0) return;
 		if (data.errorMessage) {
@@ -211,7 +211,7 @@ async function uretimOku() {
 			<td class="editable-cell double-column" contenteditable="true" 
 					    onfocus="selectAllContent(this)" 
 					    onblur="formatInputTable3(this); updateColumnTotal()" 
-					    onkeydown="focusNextRow(event, this)">${formatNumber2(item.Miktar)}
+					    onkeydown="focusNextRow(event, this)">${formatNumber2(item.Miktar  *-1)}
 			</td>
 			<td contenteditable="false" >${item.Birim || ''}</td>
 			<td class="editable-cell double-column" contenteditable="true" 
@@ -255,7 +255,6 @@ async function uretimOku() {
 				break; // İlk eşleşmeden sonra döngüden çık
 			}
 		}
-		console.info(data);
 		document.getElementById("aciklama").value = data.aciklama;
 		urnaramaYap();
 		updateColumnTotal();
@@ -367,7 +366,9 @@ function updateColumnTotal() {
 async function updateRowValues(inputElement, rowCounter) {
 	const selectedValue = inputElement.value;
 	const uygulananfiat = document.getElementById("uygulananfiat").value;
-	
+	const fisTarih = document.getElementById("fisTarih").value;
+	const fiatTarih = document.getElementById("fiatTarih").value;
+
 	document.body.style.cursor = "wait";
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -375,7 +376,7 @@ async function updateRowValues(inputElement, rowCounter) {
 		const response = await fetchWithSessionCheck("stok/imalatcikan", {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: new URLSearchParams({ ukodu: selectedValue , fiatlama : uygulananfiat}),
+			body: new URLSearchParams({ ukodu: selectedValue, fiatlama: uygulananfiat, fisTarih: fisTarih, fiatTarih: fiatTarih }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -389,11 +390,10 @@ async function updateRowValues(inputElement, rowCounter) {
 		const birimCell = cells[7];
 		const fiatCell = cells[8];
 
-	console.info(response);
 		turCell.textContent = "CIKAN";
 		adiCell.textContent = response.urun.adi;
 		birimCell.textContent = response.urun.birim;
-		fiatCell.textContent = response.fiat.toFixed(2);
+		fiatCell.textContent = (response.fiat || 0).toFixed(2);
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
@@ -401,3 +401,117 @@ async function updateRowValues(inputElement, rowCounter) {
 		document.body.style.cursor = "default";
 	}
 }
+
+function focusNextRow(event, element) {
+	if (event.key === "Enter") {
+		event.preventDefault();
+		const currentRow = element.closest('tr');
+		const nextRow = currentRow.nextElementSibling;
+		if (nextRow) {
+			const secondInput = nextRow.querySelector("td:nth-child(1) input");
+			if (secondInput) {
+				secondInput.focus();
+				secondInput.select();
+			}
+		} else {
+			satirekle();
+			const table = currentRow.parentElement;
+			const newRow = table.lastElementChild;
+			const secondInput = newRow.querySelector("td:nth-child(1) input");
+			if (secondInput) {
+				secondInput.focus();
+				secondInput.select();
+			}
+		}
+	}
+}
+
+function focusNextCell(event, element) {
+	if (event.key === "Enter") {
+		event.preventDefault();
+		const currentCell = element.closest('td');
+		const nextCell = currentCell.nextElementSibling;
+		if (nextCell) {
+			const focusableElement = nextCell.querySelector('input, [contenteditable="true"]');
+			if (focusableElement) {
+				focusableElement.focus();
+				if (focusableElement.select) {
+					focusableElement.select();
+				}
+			} else {
+				nextCell.focus();
+			}
+		}
+	}
+}
+
+function uygulananfiatchange(){
+	const uygfiat = document.getElementById("uygulananfiat").value;
+	const datlabel = document.getElementById("datlabel");
+	const fiatTarih = document.getElementById("fiatTarih");
+	if(uygfiat == "ortfiat"){
+		datlabel.style.visibility = "visible";
+		fiatTarih.style.visibility = "visible";
+	}
+	else{
+		datlabel.style.visibility = "hidden";
+		fiatTarih.style.visibility = "hidden";
+	}
+}
+
+function clearInputs() {
+	document.getElementById("uygulananfiat").value = "" ;
+	document.getElementById("recetekod").value = "";
+	document.getElementById("anagrp").innerText = "";
+	document.getElementById("altgrp").innerText = "";
+	document.getElementById("depo").innerText = "";
+	document.getElementById("girenurnkod").value = "";
+	document.getElementById("uretmiktar").value = "0";
+	document.getElementById("birimfiati").innerText = "0.00";
+	document.getElementById("aciklama").value = "";
+	
+	document.getElementById("adi").innerText = "";
+	document.getElementById("birim").innerText = "";
+	document.getElementById("anagrpl").innerText = "";
+	document.getElementById("altgrpl").innerText = "0";
+	document.getElementById("agirlik").innerText = "";
+	document.getElementById("barkod").innerText = "0";
+	document.getElementById("sinif").innerText = "0";
+	
+	
+	const tableBody = document.getElementById("tbody");
+	tableBody.innerHTML = "";
+	rowCounter = 0;
+	initializeRows();
+	const totalTutarCell = document.getElementById("totalTutar");
+	totalTutarCell.textContent = formatNumber2(0);
+}
+
+async function yeniFis() {
+	try {
+		const response = await fetchWithSessionCheck('stok/uretimyenifis', {
+			method: 'GET',
+			headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const data = response;
+		const fisNoInput = document.getElementById('fisno');
+		const errorDiv = document.getElementById('errorDiv');
+		if (data.errorMessage) {
+			errorDiv.innerText = data.errorMessage;
+			errorDiv.style.display = 'block';
+		}
+		fisNoInput.value = data.fisno;
+	} catch (error) {
+			errorDiv.style.display = "block";
+			errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		errorDiv.style.display = 'none';
+		document.body.style.cursor = "default";
+	}
+}
+
