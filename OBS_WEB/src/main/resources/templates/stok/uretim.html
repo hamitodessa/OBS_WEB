@@ -109,7 +109,7 @@ datalist {
 			<div class="group-box">
 				<div style="display: flex; align-items: center; ">
 					<label style="width:105px;">Fis No</label>
-					<div style="position: relative; width: 130px;">
+					<div style="position: relative; min-width: 130px;">
 						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') uretimOku()" ondblclick="yeniFis();">
 					</div>
 					<span style="padding-left: 5px;"></span>
@@ -151,7 +151,7 @@ datalist {
 				<div style="display: flex; align-items: center;margin-top: 10px;margin-bottom: 10px;">
 					<span style="padding-left: 5px;"></span>
 					<label style="min-width: 100px;">Urun Kodu</label>
-					<input class="form-control" style="width: 100px;" maxlength="12" id="girenurnkod" onkeydown="if(event.key === 'Enter') urnaramaYap()">
+					<input class="form-control" style="width: 100px; font-weight: bold;" maxlength="12" id="girenurnkod" onkeydown="if(event.key === 'Enter') urnaramaYap()">
 					<span style="padding-left: 10px;"></span>
 					<button type="button" class="btn btn-secondary ml-2" onclick="">
 							<i class="fa fa-refresh"></i>
@@ -163,7 +163,7 @@ datalist {
 					<span style="padding-left: 10px;"></span>
 					<label  style="min-width: 75px;">Uretim Miktari</label>
 					<span style="padding-left: 10px;"></span>
-					<input class="form-control saga_bold" maxlength="10" id="uretmiktar" value="0" style="width: 75px;">
+					<input class="form-control saga_bold" maxlength="10" id="uretmiktar" value="0" style="width: 75px; font-weight: bold;">
 					<span style="padding-left: 10px;"></span>
 					<label id="mikbirim" style="min-width: 75px;"></label>
 					<span style="padding-left: 10px;"></span>
@@ -192,7 +192,7 @@ datalist {
 					<span style="padding-left: 100px;"></span>
 					<label style="width: 150px;">Uretim Birim Fiat</label>
 					<span style="padding-left: 10px;"></span>
-					<label  style="width: 75px;" id="birimfiati">0.00</label>
+					<label style="width: 75px; font-weight: bold;" id="birimfiati">0.00</label>
 				</div>	
 				<div style="display: flex;align-items:center;margin-top:7px;">
 					<label >Aciklama</label>

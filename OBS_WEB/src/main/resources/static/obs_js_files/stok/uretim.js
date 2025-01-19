@@ -194,8 +194,10 @@ async function uretimOku() {
 		        if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
 
 		        const tutarInput = cells[9]?.querySelector('input');
+				console.info("sunucudan gelen :"+item.Tutar);
 		        if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
 
+				console.info("depo:"+item.Depo);
 		        const depoSelect = cells[5]?.querySelector('select');
 		        if (depoSelect) depoSelect.value = item.Depo || "";
 		    }
@@ -289,24 +291,30 @@ function satirekle() {
 		</div>
 		</td>
 		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" 
-			 onblur="formatInputTable3(this); updateColumnTotal()" 
+		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur3(this)" 
 			  onkeydown="focusNextCell(event, this)" value="${formatNumber3(0)}" style="text-align:right;">
 		</td>
 		<td>
 				<label class="form-control" style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label>
 		</td>
 		<td>
-			<input class="form-control" onfocus="selectAllContent(this)" 
-			onblur="formatInputTable2(this); updateColumnTotal()" 
+			<input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)" 
 			onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;" >
 		</td>
 		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" 
-			 onblur="formatInputTable2(this); updateColumnTotal()" 
-		     onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}"  style="text-align:right;">
+		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
+		     onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
 		</td>
 	    `;
+}
+
+function handleBlur3(input) {
+    input.value = formatNumber3(input.value);
+    updateColumnTotal();
+}
+function handleBlur(input) {
+    input.value = formatNumber2(input.value);
+    updateColumnTotal();
 }
 
 function selectAllContent(element) {
@@ -322,25 +330,39 @@ function satirsil(button) {
 }
 
 function updateColumnTotal() {
-	const cells = document.querySelectorAll('table tr td:nth-child(10)');
+	const rows = document.querySelectorAll('table tr');
 	const totalTutarCell = document.getElementById("totalTutar");
 	let total = 0;
 	totalTutarCell.textContent = "0.00";
-	cells.forEach(cell => {
-		const value = parseFloat(cell.textContent.replace(/,/g, '').trim());
-		if (!isNaN(value) && value > 0) {
-			total += value;
+	rows.forEach(row => {
+		const input7 = row.querySelector('td:nth-child(7) input');
+		const input9 = row.querySelector('td:nth-child(9) input');
+		const input10 = row.querySelector('td:nth-child(10) input');
+
+		if (input7 && input9 && input10) {
+			const value7 = parseFloat(input7.value.replace(/,/g, '').trim()) || 0;
+			const value9 = parseFloat(input9.value.replace(/,/g, '').trim()) || 0;
+			const result = value7 * value9;
+			console.info(result);
+			input10.value = result.toLocaleString(undefined, {
+				minimumFractionDigits: 2, maximumFractionDigits: 2
+			});
+			if (result > 0) {
+				total += result;
+			}
 		}
 	});
 	totalTutarCell.textContent = total.toLocaleString(undefined, {
 		minimumFractionDigits: 2, maximumFractionDigits: 2
 	});
-
 	const dbmik = parseFloat(document.getElementById("uretmiktar").value) || 0;
 	const lblbirimfiati = document.getElementById("birimfiati");
-
-	lblbirimfiati.innerText = (total / (dbmik === 0 ? 1 : dbmik)).toFixed(2);
+	lblbirimfiati.innerText = (total / (dbmik === 0 ? 1 : dbmik)).toLocaleString(undefined, {
+	    minimumFractionDigits: 2,
+	    maximumFractionDigits: 2
+	});
 }
+
 async function updateRowValues(inputElement) {
 	const selectedValue = inputElement.value;
 	const uygulananfiat = document.getElementById("uygulananfiat").value;
@@ -540,7 +562,7 @@ async function uretimYap() {
 				setLabelContent(cells[7], item.Birim || '');
 
 				const urunKoduInput = cells[2]?.querySelector('input');
-				if (urunKoduInput) urunKoduInput.value = item.Urun_Kodu || "";
+				if (urunKoduInput) urunKoduInput.value = item.Kodu || "";
 
 				const izahatInput = cells[4]?.querySelector('input');
 				if (izahatInput) izahatInput.value = "";
@@ -601,7 +623,7 @@ function getTableData() {
 		const rowData = {
 			ukodu: firstColumnValue,
 			izahat: cells[4]?.querySelector('input')?.value || "",
-			depo: cells[5]?.querySelector('input')?.value || "",
+			depo: cells[5]?.querySelector('select')?.value || "",
 			miktar: parseFloat(cells[6]?.querySelector('input')?.value || 0),
 			fiat: parseFloat(cells[8]?.querySelector('input')?.value || 0),
 			tutar: parseFloat(cells[9]?.querySelector('input')?.value || 0),

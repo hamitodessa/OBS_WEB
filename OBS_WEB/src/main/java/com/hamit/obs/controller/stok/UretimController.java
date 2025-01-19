@@ -200,6 +200,7 @@ public class UretimController {
 				dpo = 0 ;
 				ana = 0 ;
 				alt = 0;
+				System.out.println("dpo:"+row.getDepo());
 				if( ! row.getDepo().equals("")) {
 					String dpos = faturaService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN",  row.getDepo());
 					dpo = Integer.parseInt(dpos);
