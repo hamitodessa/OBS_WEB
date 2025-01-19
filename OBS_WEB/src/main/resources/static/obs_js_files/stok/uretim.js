@@ -167,66 +167,38 @@ async function uretimOku() {
 			errorDiv.innerText = data.errorMessage;
 			return;
 		}
-		const tableBody = document.getElementById("tbody");
+		const table = document.getElementById('imaTable');
+		const rows = table.querySelectorAll('tbody tr');
+		if (data.data.length > rows.length) {
+		    const additionalRows = data.data.length - rows.length;
+		    for (let i = 0; i < additionalRows; i++) {
+		        satirekle();
+		    }
+		}
+		data.data.forEach((item, index) => {
+		    if (item.Hareket === "C" && index < rows.length) {
+		        const cells = rows[index].cells;
+		        setLabelContent(cells[1], "CIKAN");
+		        setLabelContent(cells[3], item.Adi || '');
+		        setLabelContent(cells[7], item.Birim || '');
+		        const urunKoduInput = cells[2]?.querySelector('input');
+		        if (urunKoduInput) urunKoduInput.value = item.Urun_Kodu || "";
 
-		let ukoduoptionsHTML = urnkodlar;
+		        const izahatInput = cells[4]?.querySelector('input');
+		        if (izahatInput) izahatInput.value = item.Izahat || "";
 
-		tableBody.innerHTML = "";
-		rowCounter = 0;
-		rowCounter = 0;
-		data.data.forEach(item => {
-			if (item.Hareket === "C") {
-				incrementRowCounter();
-				const row = document.createElement("tr");
-				row.innerHTML = `
-			<td >
-				<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
-			</td>
-			<td contenteditable="false">CIKAN</td>
-			<td>
-			    <div style="position: relative; width: 100%;">
-			        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}"  id="ukodu_${rowCounter}" 
-		            onkeydown="focusNextCell(event, this)" value="${item.Urun_Kodu || ''}"  onchange="updateRowValues(this, ${rowCounter})">
-			        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
-			        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-			    </div>
-			</td>
-			<td contenteditable="false">${item.Adi || ''}</td>
-			<td class="editable-cell" contenteditable="true" 
-				    onfocus="selectAllContent(this)" 
-				    onkeydown="focusNextRow(event, this)">${item.Izahat || ''}
-			</td>
-			<td>
-				<div style="position: relative; width: 100%;">
-				    <select class="form-control cins_bold" id="depo_${rowCounter}">
-				        ${depolar.map(kod => `
-				            <option value="${kod.DEPO}" ${item.Depo === kod.DEPO ? 'selected' : ''}>
-				                ${kod.DEPO}
-				            </option>
-				        `).join('')}
-				    </select>
-				    <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-				</div>
-			</td>
-			<td class="editable-cell double-column" contenteditable="true" 
-					    onfocus="selectAllContent(this)" 
-					    onblur="formatInputTable3(this); updateColumnTotal()" 
-					    onkeydown="focusNextRow(event, this)">${formatNumber2(item.Miktar  *-1)}
-			</td>
-			<td contenteditable="false" >${item.Birim || ''}</td>
-			<td class="editable-cell double-column" contenteditable="true" 
-					    onfocus="selectAllContent(this)" 
-					    onblur="formatInputTable2(this); updateColumnTotal()" 
-					    onkeydown="focusNextRow(event, this)">${formatNumber2(item.Fiat)}
-			</td>
-			<td class="editable-cell double-column" contenteditable="true" 
-						   onfocus="selectAllContent(this)" 
-						  onblur="formatInputTable2(this); updateColumnTotal()" 
-						  onkeydown="focusNextRow(event, this)">${formatNumber2(item.Tutar)}
-			</td>
-		    `;
-				tableBody.appendChild(row);
-			}
+		        const miktarInput = cells[6]?.querySelector('input');
+		        if (miktarInput) miktarInput.value = formatNumber3(item.Miktar  *-1);
+
+		        const fiatInput = cells[8]?.querySelector('input');
+		        if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
+
+		        const tutarInput = cells[9]?.querySelector('input');
+		        if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
+
+		        const depoSelect = cells[5]?.querySelector('select');
+		        if (depoSelect) depoSelect.value = item.Depo || "";
+		    }
 		});
 
 		for (let i = 0; i < data.data.length; i++) {
@@ -235,7 +207,11 @@ async function uretimOku() {
 				document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
 				document.getElementById("uretmiktar").value = item.Miktar;
 				document.getElementById("girenurnkod").value = item.Urun_Kodu;
+				
 				document.getElementById("anagrp").value = item.Ana_Grup || '';
+				document.getElementById("mikbirim").innerText = item.Birim;
+				document.getElementById("dvzcins").value = item.Doviz;
+				
 				await anagrpChanged(document.getElementById("anagrp"));
 
 				const selectElement = document.getElementById("altgrp");
@@ -256,7 +232,7 @@ async function uretimOku() {
 			}
 		}
 		document.getElementById("aciklama").value = data.aciklama;
-		urnaramaYap();
+		await urnaramaYap();
 		updateColumnTotal();
 		errorDiv.style.display = "none";
 		errorDiv.innerText = "";
@@ -274,33 +250,35 @@ function initializeRows() {
 	}
 }
 function satirekle() {
-	const table = document.getElementById("gbTable").getElementsByTagName("tbody")[0];
+	const table = document.getElementById("imaTable").getElementsByTagName("tbody")[0];
 	const newRow = table.insertRow();
 	incrementRowCounter();
 
 	let ukoduoptionsHTML = urnkodlar.map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`).join("");
-	//	let depoHTML = depolar.map(kod => `<option value="${kod.DEPO}">${kod.DEPO}</option>`).join("");
 	newRow.innerHTML = `
 		<td >
 			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
 		</td>
-		<td contenteditable="false">CIKAN</td>
+		<td>
+			<label class="form-control" >CIKAN</label>
+		</td>
 		<td>
 		    <div style="position: relative; width: 100%;">
 		        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}" maxlength="12" id="ukodu_${rowCounter}" 
-		            onkeydown="focusNextCell(event, this)"  onchange="updateRowValues(this, ${rowCounter})">
+		            onkeydown="focusNextCell(event, this)"  onchange="updateRowValues(this)">
 		        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
 		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 		    </div>
 		</td>
-		<td contenteditable="false"></td>
-		<td class="editable-cell" contenteditable="true" 
-				    onfocus="selectAllContent(this)" 
-				    onkeydown="focusNextRow(event, this)">
+		<td>
+			<label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label>
+		</td>
+		<td>
+		      <input class="form-control"  onkeydown="focusNextCell(event, this)" onfocus="selectAllContent(this)"  >
 		</td>
 		<td>
 		<div style="position: relative; width: 100%;">
-		    <select class="form-control cins_bold" id="depo_${rowCounter}">
+		    <select class="form-control" id="depo_${rowCounter}">
 		        ${depolar.map(kod => `
 		            <option value="${kod.DEPO}" >
 		                ${kod.DEPO}
@@ -310,31 +288,31 @@ function satirekle() {
 		    <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 		</div>
 		</td>
-		<td class="editable-cell double-column" contenteditable="true" 
-				    onfocus="selectAllContent(this)" 
-				    onblur="formatInputTable3(this); updateColumnTotal()" 
-				    onkeydown="focusNextRow(event, this)">${formatNumber3(0)}
+		<td>
+		     <input class="form-control" onfocus="selectAllContent(this)" 
+			 onblur="formatInputTable3(this); updateColumnTotal()" 
+			  onkeydown="focusNextCell(event, this)" value="${formatNumber3(0)}" style="text-align:right;">
 		</td>
-		<td contenteditable="false" ></td>
-		<td class="editable-cell double-column" contenteditable="true" 
-		    onfocus="selectAllContent(this)" 
-		    onblur="formatInputTable2(this); updateColumnTotal()" 
-		    onkeydown="focusNextRow(event, this)">${formatNumber2(0)}
+		<td>
+				<label class="form-control" style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label>
 		</td>
-		<td class="editable-cell double-column" contenteditable="true" 
-			   onfocus="selectAllContent(this)" 
-			  onblur="formatInputTable2(this); updateColumnTotal()" 
-			  onkeydown="focusNextRow(event, this)">${formatNumber2(0)}
+		<td>
+			<input class="form-control" onfocus="selectAllContent(this)" 
+			onblur="formatInputTable2(this); updateColumnTotal()" 
+			onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;" >
+		</td>
+		<td>
+		     <input class="form-control" onfocus="selectAllContent(this)" 
+			 onblur="formatInputTable2(this); updateColumnTotal()" 
+		     onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}"  style="text-align:right;">
 		</td>
 	    `;
 }
 
 function selectAllContent(element) {
-	const range = document.createRange();
-	const selection = window.getSelection();
-	range.selectNodeContents(element);
-	selection.removeAllRanges();
-	selection.addRange(range);
+	if (element && element.select) {
+	   element.select(); // Input'un tüm metnini seçer
+	}
 }
 
 function satirsil(button) {
@@ -363,7 +341,7 @@ function updateColumnTotal() {
 
 	lblbirimfiati.innerText = (total / (dbmik === 0 ? 1 : dbmik)).toFixed(2);
 }
-async function updateRowValues(inputElement, rowCounter) {
+async function updateRowValues(inputElement) {
 	const selectedValue = inputElement.value;
 	const uygulananfiat = document.getElementById("uygulananfiat").value;
 	const fisTarih = document.getElementById("fisTarih").value;
@@ -381,25 +359,29 @@ async function updateRowValues(inputElement, rowCounter) {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-
 		const row = inputElement.closest('tr');
 		const cells = row.querySelectorAll('td');
-
+		
 		const turCell = cells[1];
 		const adiCell = cells[3];
 		const birimCell = cells[7];
-		const fiatCell = cells[8];
-
-		turCell.textContent = "CIKAN";
-		adiCell.textContent = response.urun.adi;
-		birimCell.textContent = response.urun.birim;
-		fiatCell.textContent = (response.fiat || 0).toFixed(2);
+		const fiatCell = cells[8]?.querySelector('input');
+		setLabelContent(turCell, "CIKAN");
+		setLabelContent(adiCell, response.urun.adi);
+		setLabelContent(birimCell, response.urun.birim);
+		fiatCell.value = formatNumber2(response.urun.fiat);
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
 	} finally {
 		document.body.style.cursor = "default";
 	}
+}
+function setLabelContent(cell, content) {
+    const span = cell.querySelector('label span');
+    if (span) {
+        span.textContent = content ? content : '\u00A0'; // Eğer içerik boşsa, boşluk karakteri eklenir
+    }
 }
 
 function focusNextRow(event, element) {
@@ -408,7 +390,7 @@ function focusNextRow(event, element) {
 		const currentRow = element.closest('tr');
 		const nextRow = currentRow.nextElementSibling;
 		if (nextRow) {
-			const secondInput = nextRow.querySelector("td:nth-child(1) input");
+			const secondInput = nextRow.querySelector("td:nth-child(3) input");
 			if (secondInput) {
 				secondInput.focus();
 				secondInput.select();
@@ -417,7 +399,7 @@ function focusNextRow(event, element) {
 			satirekle();
 			const table = currentRow.parentElement;
 			const newRow = table.lastElementChild;
-			const secondInput = newRow.querySelector("td:nth-child(1) input");
+			const secondInput = newRow.querySelector("td:nth-child(3) input");
 			if (secondInput) {
 				secondInput.focus();
 				secondInput.select();
@@ -427,22 +409,23 @@ function focusNextRow(event, element) {
 }
 
 function focusNextCell(event, element) {
-	if (event.key === "Enter") {
-		event.preventDefault();
-		const currentCell = element.closest('td');
-		const nextCell = currentCell.nextElementSibling;
-		if (nextCell) {
-			const focusableElement = nextCell.querySelector('input, [contenteditable="true"]');
-			if (focusableElement) {
-				focusableElement.focus();
-				if (focusableElement.select) {
-					focusableElement.select();
-				}
-			} else {
-				nextCell.focus();
-			}
-		}
-	}
+    if (event.key === "Enter") {
+        event.preventDefault();
+        let currentCell = element.closest('td');
+        let nextCell = currentCell.nextElementSibling;
+        while (nextCell) {
+            const focusableElement = nextCell.querySelector('input');
+            if (focusableElement) {
+                focusableElement.focus();
+                if (focusableElement.select) {
+                    focusableElement.select();
+                }
+                break; // Döngüden çık
+            } else {
+                nextCell = nextCell.nextElementSibling;
+            }
+        }
+    }
 }
 
 function uygulananfiatchange(){
@@ -462,22 +445,23 @@ function uygulananfiatchange(){
 function clearInputs() {
 	document.getElementById("uygulananfiat").value = "" ;
 	document.getElementById("recetekod").value = "";
-	document.getElementById("anagrp").innerText = "";
-	document.getElementById("altgrp").innerText = "";
-	document.getElementById("depo").innerText = "";
+	document.getElementById("anagrp").value = "";
+	document.getElementById("altgrp").value = "";
+	document.getElementById("depo").value = "";
 	document.getElementById("girenurnkod").value = "";
 	document.getElementById("uretmiktar").value = "0";
 	document.getElementById("birimfiati").innerText = "0.00";
 	document.getElementById("aciklama").value = "";
+	document.getElementById("dvzcins").value = "TL";
 	
 	document.getElementById("adi").innerText = "";
 	document.getElementById("birim").innerText = "";
 	document.getElementById("anagrpl").innerText = "";
-	document.getElementById("altgrpl").innerText = "0";
+	document.getElementById("altgrpl").innerText = "";
 	document.getElementById("agirlik").innerText = "";
-	document.getElementById("barkod").innerText = "0";
-	document.getElementById("sinif").innerText = "0";
-	
+	document.getElementById("barkod").innerText = "";
+	document.getElementById("sinif").innerText = "";
+	document.getElementById("mikbirim").innerText = "";
 	
 	const tableBody = document.getElementById("tbody");
 	tableBody.innerHTML = "";
@@ -515,3 +499,189 @@ async function yeniFis() {
 	}
 }
 
+async function uretimYap() {
+
+	const recetekod = document.getElementById("recetekod").value;
+	if (!recetekod || recetekod === "") {
+		return;
+	}
+	document.body.style.cursor = "wait";
+	document.getElementById("errorDiv").style.display = "none";
+	errorDiv.innerText = "";
+	try {
+		const response = await fetchWithSessionCheck("stok/hesapla", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			},
+			body: new URLSearchParams({ recetekod: recetekod })
+		});
+		const data = response;
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+
+		const uretmiktar = document.getElementById("uretmiktar").value;
+		
+		const table = document.getElementById('imaTable');
+		const rows = table.rows;
+
+		if (data.data.length > rows.length) {
+		    const additionalRows = data.data.length - rows.length;
+		    for (let i = 0; i < additionalRows; i++) {
+		        satirekle();
+		    }
+		}
+		data.data.forEach((item, index) => {
+			if (item.Tur === "Cikan" && index < rows.length) {
+				const cells = rows[index].cells;
+				setLabelContent(cells[1], item.Tur);
+				setLabelContent(cells[3], item.Adi || '');
+				setLabelContent(cells[7], item.Birim || '');
+
+				const urunKoduInput = cells[2]?.querySelector('input');
+				if (urunKoduInput) urunKoduInput.value = item.Urun_Kodu || "";
+
+				const izahatInput = cells[4]?.querySelector('input');
+				if (izahatInput) izahatInput.value = "";
+
+				const miktarInput = cells[6]?.querySelector('input');
+				if (miktarInput) miktarInput.value = formatNumber3(item.Miktar * uretmiktar) || "0";
+
+				const fiatInput = cells[8]?.querySelector('input');
+				if (fiatInput) fiatInput.value = formatNumber2(0);
+
+				const tutarInput = cells[9]?.querySelector('input');
+				if (tutarInput) tutarInput.value = formatNumber2(0);
+
+				const depoSelect = cells[5]?.querySelector('select');
+				if (depoSelect) depoSelect.value = "";
+			}
+			else{
+				document.getElementById("mikbirim").innerText = item.Birim;
+			}
+		});
+		updateColumnTotal();
+	} catch (error) {
+		document.getElementById("errorDiv").style.display = "block";
+		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+	}
+}
+
+function prepareureKayit() {
+	const uretimDTO = {
+		fisno: document.getElementById("fisno").value || "",
+		tarih: document.getElementById("fisTarih").value || "",
+		anagrup: document.getElementById("anagrp").value || "",
+		altgrup: document.getElementById("altgrp").value || "",
+		depo: document.getElementById("depo").value || "",
+		girenurkodu: document.getElementById("girenurnkod").value || "",
+		
+		aciklama: document.getElementById("aciklama").value || "",
+		dvzcins: document.getElementById("dvzcins").value || "",
+		uremiktar: parseFloat(document.getElementById("uretmiktar").value || 0),
+		toptutar: parseFloat(document.getElementById("totalTutar").textContent || 0),
+	};
+	tableData = getTableData();
+	return { uretimDTO, tableData, };
+}
+
+function getTableData() {
+	const table = document.getElementById('imaTable');
+	const rows = table.querySelectorAll('tbody tr');
+	const data = [];
+	rows.forEach((row) => {
+		const cells = row.querySelectorAll('td');
+		const firstColumnValue = cells[2]?.querySelector('input')?.value || "";
+		if (!firstColumnValue.trim()) {
+			return;
+		}
+		const rowData = {
+			ukodu: firstColumnValue,
+			izahat: cells[4]?.querySelector('input')?.value || "",
+			depo: cells[5]?.querySelector('input')?.value || "",
+			miktar: parseFloat(cells[6]?.querySelector('input')?.value || 0),
+			fiat: parseFloat(cells[8]?.querySelector('input')?.value || 0),
+			tutar: parseFloat(cells[9]?.querySelector('input')?.value || 0),
+		};
+		data.push(rowData);
+	});
+	return data;
+}
+
+async function ureKayit() {
+	const fisno = document.getElementById("fisno").value;
+	
+	const table = document.getElementById('imaTable');
+	const rows = table.rows;
+	if (!fisno || fisno === "0" || rows.length === 0 ) {
+		alert("Geçerli bir evrak numarası giriniz.");
+		return;
+	}
+	const uretimkayitDTO = prepareureKayit();
+	const errorDiv = document.getElementById('errorDiv');
+	const $kaydetButton = $('#urekaydetButton');
+	$kaydetButton.prop('disabled', true).text('İşleniyor...');
+	
+	document.body.style.cursor = 'wait';
+	try {
+		const response = await fetchWithSessionCheck('stok/ureKayit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(uretimkayitDTO),
+		});
+		if (response.errorMessage.trim() !== "") {
+			throw new Error(response.errorMessage);
+		}
+		clearInputs();
+		document.getElementById("fisno").value = "";
+		document.getElementById("errorDiv").innerText = "";
+		errorDiv.style.display = 'none';
+	} catch (error) {
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+		errorDiv.style.display = 'block';
+	} finally {
+		document.body.style.cursor = 'default';
+		$kaydetButton.prop('disabled', false).text('Kaydet');
+	}
+}
+
+async function ureYoket() {
+	const fisNoInput = document.getElementById('fisno');
+	if (["0", ""].includes(fisNoInput.value)) {
+		return;
+	}
+	const confirmDelete = confirm("Bu Uretim fisi silinecek ?");
+	if (!confirmDelete) {
+		return;
+	}
+	document.body.style.cursor = "wait";
+	const $silButton = $('#uresilButton');
+	$silButton.prop('disabled', true).text('Siliniyor...');
+	try {
+		const response = await fetchWithSessionCheck("stok/ureYoket", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ fisno: fisNoInput.value }),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		clearInputs();
+		document.getElementById("fisno").value = "";
+		document.getElementById("errorDiv").style.display = "none";
+		document.getElementById("errorDiv").innerText = "";
+	} catch (error) {
+		document.getElementById("errorDiv").style.display = "block";
+		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+		$silButton.prop('disabled', false).text('Sil');
+	}
+}

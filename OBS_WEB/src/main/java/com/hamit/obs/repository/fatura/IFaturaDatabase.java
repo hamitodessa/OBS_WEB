@@ -26,4 +26,11 @@ public interface IFaturaDatabase {
 	String uret_ilk_tarih(String baslangic, String tar, String ukodu,ConnectionDetails faturaConnDetails);
 	double gir_ort_fiati_oku(String kodu, String ilkt, String tarih,ConnectionDetails faturaConnDetails);
 	int uretim_fisno_al(ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> recete_oku(String rno,ConnectionDetails faturaConnDetails);
+	void stok_sil(String eno, String ecins, String cins,ConnectionDetails faturaConnDetails);
+	void stk_kaydet(String evrno, String evrcins, String tarih, int depo, String urnkodu, double miktar,
+			double fiat, double tutar, double kdvlitut, String hareket, String izah, int anagrp, int altgrp, double kur,
+			String b1, String doviz, String hspkodu, String usr,ConnectionDetails faturaConnDetails);
+	void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,ConnectionDetails faturaConnDetails);
+	void aciklama_sil(String evrcins,String evrno,String cins,ConnectionDetails faturaConnDetails);
 }

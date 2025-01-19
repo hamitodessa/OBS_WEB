@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
+import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 
@@ -160,7 +161,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		String sql = "DELETE  FROM \"MAL\" WHERE \"Kodu\" = ?";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
 			preparedStatement.setString(1, kodu); // Parametreyi bağla
 			preparedStatement.executeUpdate(); // Doğru metot
 		} catch (SQLException e) {
@@ -233,7 +233,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return E_NUMBER;
-
 	}
 
 	@Override
@@ -259,7 +258,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -282,7 +280,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return aciklama;
-
 	}
 
 	@Override
@@ -315,7 +312,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Urun okunamadı", e);
 		}
 		return urdto;
-
 	}
 
 	@Override
@@ -326,7 +322,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				" WHERE \"Evrak_Cins\" = 'URE' and \"Hareket\" ='C'  " +
 				" AND \"Urun_Kodu\" = N'" + kodu + "' " +
 				" ORDER BY  \"Tarih\" DESC LIMIT 1 ";
-		System.out.println(query);
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -337,7 +332,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("son ima fiat", e);
 		}
 		return fiat;
-
 	}
 
 	@Override
@@ -407,5 +401,120 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
 		}
 		return evrakNo;
+	}
+
+	@Override
+	public List<Map<String, Object>> recete_oku(String rno, ConnectionDetails faturaConnDetails) {
+		String sql = "SELECT \"Recete_No\",\"Durum\",\"Tur\",\"RECETE\".\"Kodu\",\"MAL\".\"Adi\",\"MAL\".\"Birim\" ,\"Miktar\" , " +
+				" (SELECT \"ANA_GRUP\" from \"ANA_GRUP_DEGISKEN\" WHERE \"AGID_Y\" = \"RECETE\".\"Ana_Grup\" ) as \"Ana_Grup\" , " +
+				" (SELECT \"ALT_GRUP\" from \"ALT_GRUP_DEGISKEN\" WHERE \"ALID_Y\" = \"RECETE\".\"Alt_Grup\" ) as \"Alt_Grup\" , " +
+				" \"MAL\".\"Kusurat\" ,\"RECETE\".\"USER\" " +
+				" FROM \"RECETE\"  , \"MAL\"  "+
+				" Where \"RECETE\".\"Kodu\" = \"MAL\".\"Kodu\" " +
+				" AND \"Recete_No\" = N'" + rno + "'";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public void stok_sil(String eno, String ecins, String cins, ConnectionDetails faturaConnDetails) {
+		String sql = "DELETE FROM \"STOK\" " +
+				"WHERE \"Evrak_No\" = ? " +
+				"AND \"Evrak_Cins\" = ? " +
+				"AND \"Hareket\" = ?";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, eno);
+			preparedStatement.setString(2, ecins);
+			preparedStatement.setString(3, cins);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+	}
+
+	@Override
+	public void stk_kaydet(String evrno, String evrcins, String tarih, int depo, String urnkodu, double miktar,
+			double fiat, double tutar, double kdvlitut, String hareket, String izah, int anagrp, int altgrp, double kur,
+			String b1, String doviz, String hspkodu, String usr, ConnectionDetails faturaConnDetails) {
+		String sql  ="INSERT INTO \"STOK\" (\"Evrak_No\",\"Evrak_Cins\",\"Tarih\",\"Depo\",\"Urun_Kodu\",\"Miktar\",\"Fiat\",\"Tutar\",\"Kdvli_Tutar\",\"Hareket\",\"Izahat\" " +
+				" ,\"Ana_Grup\",\"Alt_Grup\",\"Kur\",\"B1\",\"Doviz\",\"Hesap_Kodu\",\"USER\") " +
+				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, evrno);
+			stmt.setString(2, evrcins);
+			stmt.setTimestamp(3, Timestamp.valueOf(Tarih_Cevir.dateFormaterSaatli(tarih)));
+			stmt.setInt(4, depo);
+			stmt.setString(5, urnkodu);
+			stmt.setDouble(6, miktar);
+			stmt.setDouble(7, fiat);
+			stmt.setDouble(8, tutar);
+			stmt.setDouble(9, kdvlitut);
+			stmt.setString(10, hareket);
+			stmt.setString(11, izah);
+			stmt.setInt(12, anagrp);
+			stmt.setInt(13, altgrp);
+			stmt.setDouble(14, kur);
+			stmt.setString(15, b1);
+			stmt.setString(16, doviz);
+			stmt.setString(17, hspkodu);
+			stmt.setString(18, usr);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
+		}
+	}
+
+	@Override
+	public void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,
+			ConnectionDetails faturaConnDetails) {
+		String sql  = "INSERT INTO \"ACIKLAMA\" (\"EVRAK_CINS\",\"SATIR\",\"EVRAK_NO\",\"ACIKLAMA\",\"Gir_Cik\") " +
+				" VALUES (?,?,?,?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, evrcins);
+			stmt.setInt(2, satir);
+			stmt.setString(3, evrno);
+			stmt.setString(4, aciklama);
+			stmt.setString(5, gircik);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
+		}
+	}
+
+	@Override
+	public void aciklama_sil(String evrcins, String evrno, String cins, ConnectionDetails faturaConnDetails) {
+		String sql = " DELETE " +
+				" FROM \"ACIKLAMA\" " +
+				" WHERE \"EVRAK_CINS\" = ?" +
+				" AND \"EVRAK_NO\" = ? " +
+				" AND \"Gir_Cik\" = ? ";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, evrcins);
+			preparedStatement.setString(2, evrno);
+			preparedStatement.setString(3, cins);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("aciklama sil", e);
+		}	
 	}
 }

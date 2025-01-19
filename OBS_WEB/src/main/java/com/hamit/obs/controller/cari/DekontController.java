@@ -138,16 +138,16 @@ public class DekontController {
 	@PostMapping("cari/fisYoket")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam int evrakNo) {
+		Map<String, String> response = new HashMap<>();
 		try {
 			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
 			cariservice.evrak_yoket(evrakNo,usrString);
-			Map<String, String> response = new HashMap<>();
-			response.put("message", "Silme başarılı");
-			return ResponseEntity.ok(response); // HTTP 200
+			response.put("errorMessage", "");
 		} catch (ServiceException e) {
-			throw e; 
+			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			throw new ServiceException( e.getMessage());
+			response.put("errorMessage",  e.getMessage());
 		}
+		return ResponseEntity.ok(response); // HTTP 200
 	}
 }
