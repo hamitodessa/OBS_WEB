@@ -123,7 +123,7 @@ function cekgiraddRow() {
 }
 
 function handleBlur(input) {
-    input.value = formatNumber2(input.value);
+    input.value = formatNumber2(parseLocaleNumber(input.value));
     updateColumnTotal();
 }
 function cekgirremoveRow(button) {
@@ -141,25 +141,31 @@ function selectAllContent(element) {
 }
 
 function updateColumnTotal() {
-	const cells = document.querySelectorAll('.double-column');
-	const totalTutarCell = document.getElementById("totalTutar");
-	const totalceksayisi = document.getElementById("ceksayisi");
-	let total = 0;
-	let totaladet = 0;
-	cells.forEach(cell => {
-		const value = parseFloat(cell.textContent.replace(/,/g, '').trim());
-		if (!isNaN(value) && value > 0) {
-			total += value;
-			totaladet += 1;
-		}
-	});
-	totalceksayisi.innerText = totaladet.toLocaleString(undefined, {
-		minimumFractionDigits: 0, maximumFractionDigits: 0
-	});
-	totalTutarCell.textContent = total.toLocaleString(undefined, {
-		minimumFractionDigits: 2, maximumFractionDigits: 2
-	});
+    const cells = document.querySelectorAll('tr td:nth-child(10) input');
+    const totalTutarCell = document.getElementById("totalTutar");
+    const totalceksayisi = document.getElementById("ceksayisi");
+    let total = 0;
+    let totaladet = 0;
+
+    cells.forEach(input => {
+        const value = parseFloat(input.value.replace(/,/g, '').trim());
+        if (!isNaN(value) && value > 0) {
+            total += value;
+            totaladet += 1;
+        }
+    });
+
+    totalceksayisi.innerText = totaladet.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+
+    totalTutarCell.textContent = total.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 }
+
 
 function focusNextRow(event, element) {
 	if (event.key === "Enter") {
@@ -280,7 +286,6 @@ async function bordroOku() {
 		
 		const tableBody = document.getElementById("tbody");
 		tableBody.innerHTML = "";
-		console.info("Tablo boşaltıldı, satır sayısı:", tableBody.querySelectorAll("tr").length);
 		const table = document.getElementById('gbTable');
 		const rows = table.querySelectorAll('tbody tr');
 		if (data.data.length > rows.length) {
@@ -290,11 +295,7 @@ async function bordroOku() {
 		    }
 		}
 		const rowss = table.querySelectorAll('tbody tr');
-		console.info("Tablo boşaltıldı, satır sayısı:", tableBody.querySelectorAll("tr").length);
 		data.data.forEach((item,index) => {
-			console.info("index:", index);
-			
-			console.info("Tablo boşaltıldı, satır sayısı:", rowss.length);
 		        const cells = rowss[index].cells;
 				
 		        const ceknoInput = cells[1]?.querySelector('input');

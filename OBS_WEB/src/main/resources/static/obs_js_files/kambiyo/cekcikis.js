@@ -3,7 +3,7 @@ async function fetchcekno() {
 	errorDiv.innerText = "";
 	errorDiv.style.display = "none";
 	rowCounter = 0;
-	bankaIsimleri = ""; // Cek Isimleri
+	bankaIsimleri = "";
 	try {
 		const responseBanka = await fetchWithSessionCheck("kambiyo/kamgetCekListe", {
 			method: "GET",
@@ -72,16 +72,14 @@ function selectAllContent(element) {
 }
 
 function updateColumnTotal() {
-    const cells = document.querySelectorAll('tr td:nth-child(10) span'); // 9. kolondaki <span> elemanlarını seç
+    const cells = document.querySelectorAll('tr td:nth-child(10) span');
     const totalTutarCell = document.getElementById("totalTutar");
     const totalceksayisi = document.getElementById("ceksayisi");
     let total = 0;
     let totaladet = 0;
 
     cells.forEach(span => {
-		console.info("gfgf=" ,span.textContent);
-        const value = parseFloat(span.textContent.replace(/,/g, '').trim()); // <span> içeriğini al
-		console.info("gfgf=" ,value);
+        const value = parseFloat(span.textContent.replace(/,/g, '').trim());
         if (!isNaN(value) && value > 0) {
             total += value;
             totaladet += 1;
@@ -245,11 +243,8 @@ async function bordroOku() {
 			errorDiv.innerText = data.errorMessage;
 			return;
 		}
-		
-		////
 		const tableBody = document.getElementById("tbody");
 		tableBody.innerHTML = "";
-		console.info("Tablo boşaltıldı, satır sayısı:", tableBody.querySelectorAll("tr").length);
 		const table = document.getElementById('gbTable');
 		const rows = table.querySelectorAll('tbody tr');
 		if (data.data.length > rows.length) {
@@ -260,9 +255,6 @@ async function bordroOku() {
 		}
 		const rowss = table.querySelectorAll('tbody tr');
 		data.data.forEach((item,index) => {
-			console.info("index:", index);
-			
-			console.info("Tablo boşaltıldı, satır sayısı:", rowss.length);
 		        const cells = rowss[index].cells;
 				
 		        const ceknoInput = cells[1]?.querySelector('input');

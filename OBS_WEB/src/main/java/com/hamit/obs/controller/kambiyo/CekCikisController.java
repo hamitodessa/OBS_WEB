@@ -154,7 +154,6 @@ public class CekCikisController {
 			kambiyoService.kam_aciklama_sil("CEK", dto.getBordroNo(), "C");
 			kambiyoService.kam_aciklama_yaz("CEK", 1, dto.getBordroNo(), dto.getAciklama1(), "C");
 			kambiyoService.kam_aciklama_yaz("CEK", 2, dto.getBordroNo(), dto.getAciklama2(), "C");
-			
 			return ResponseEntity.ok(Map.of("errorMessage", ""));
 		} catch (ServiceException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
