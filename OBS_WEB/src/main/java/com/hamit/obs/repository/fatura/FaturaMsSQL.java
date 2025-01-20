@@ -373,11 +373,10 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public double gir_ort_fiati_oku(String kodu, String ilkt, String tarih, ConnectionDetails faturaConnDetails) {
 		double fiat=0 ;
-		String query = "SELECT Urun_Kodu ,  Evrak_Cins,Tarih ,Miktar , " +
-				" SUM(Miktar) OVER(ORDER BY Tarih  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as Miktar_Bakiye " +
-				" FROM STOK WITH (INDEX (IX_STOK))  WHERE  STOK.Tarih >= '" + ilkt + "'  AND STOK.Tarih < '" + tarih + " 23:59:59.998'" +
-				" And STOK.Urun_Kodu = N'" + kodu + "' AND Evrak_Cins <> 'DPO'" +
-				" Order by Tarih";
+		String query = "SELECT  ISNULL( SUM(Tutar) / SUM(Miktar),0) as Ortalama " +
+				" FROM STOK  WITH (INDEX (IX_STOK)) " +
+				" WHERE  Urun_Kodu = N'" + kodu + "' " +
+				" AND Hareket = 'G' AND Tarih > '" + ilkt + "' AND  Tarih < '" + tarih + " 23:59:59.998'";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {

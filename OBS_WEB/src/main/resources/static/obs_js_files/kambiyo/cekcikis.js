@@ -46,18 +46,14 @@ function cekcikaddRow() {
 
 	        </div>
 	    </td>
-		<td contenteditable="false"></td>
-        <td contenteditable="false"></td>
-        <td contenteditable="false"></td>
-		<td contenteditable="false"></td>
-		<td contenteditable="false"></td>
-		<td contenteditable="false"></td>
-		<td contenteditable="false"></td>
-        <td class="double-column"  
-            onfocus="selectAllContent(this)" 
-            onblur="formatInputTable2(this); updateColumnTotal()" 
-            onkeydown="focusNextRow(event, this)">0.00
-		</td>
+		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
+        <td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
+        <td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
+		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
+		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
+		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
+		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
+        <td><label class="form-control"style="display: block;width:100%;height:100%;text-align:right;"><span>0.00</span></label></td>
     `;
 }
 
@@ -76,26 +72,33 @@ function selectAllContent(element) {
 }
 
 function updateColumnTotal() {
-	const cells = document.querySelectorAll('.double-column');
-	const totalTutarCell = document.getElementById("totalTutar");
-	const totalceksayisi = document.getElementById("ceksayisi");
-	let total = 0;
-	let totaladet = 0;
-	cells.forEach(cell => {
-		const value = parseFloat(cell.textContent.replace(/,/g, '').trim());
-		if (!isNaN(value) && value > 0) {
-			total += value;
-			totaladet += 1;
-		}
-	});
-	totalceksayisi.innerText = totaladet.toLocaleString(undefined, {
-		minimumFractionDigits: 0, maximumFractionDigits: 0
-	});
+    const cells = document.querySelectorAll('tr td:nth-child(10) span'); // 9. kolondaki <span> elemanlarını seç
+    const totalTutarCell = document.getElementById("totalTutar");
+    const totalceksayisi = document.getElementById("ceksayisi");
+    let total = 0;
+    let totaladet = 0;
 
-	totalTutarCell.textContent = total.toLocaleString(undefined, {
-		minimumFractionDigits: 2, maximumFractionDigits: 2
-	});
+    cells.forEach(span => {
+		console.info("gfgf=" ,span.textContent);
+        const value = parseFloat(span.textContent.replace(/,/g, '').trim()); // <span> içeriğini al
+		console.info("gfgf=" ,value);
+        if (!isNaN(value) && value > 0) {
+            total += value;
+            totaladet += 1;
+        }
+    });
+
+    totalceksayisi.innerText = totaladet.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+
+    totalTutarCell.textContent = total.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 }
+
 
 function focusNextRow(event, element) {
 	if (event.key === "Enter") {
@@ -148,14 +151,16 @@ async function cekkontrol(element) {
 		}
 		const currentRow = element.closest('tr');
 		const cells = currentRow.getElementsByTagName('td');
-		cells[2].innerText = dto.vade;
-		cells[3].innerText = dto.banka;
-		cells[4].innerText = dto.sube;
-		cells[5].innerText = dto.seriNo;
-		cells[6].innerText = dto.ilkBorclu;
-		cells[7].innerText = dto.cekHesapNo;
-		cells[8].innerText = dto.cins;
-		cells[9].innerText = formatNumber2(dto.tutar);
+
+		setLabelContent(cells[2], formatDate(dto.vade) || '');
+		setLabelContent(cells[3], dto.banka || "");
+		setLabelContent(cells[4], dto.sube || "");
+		setLabelContent(cells[5], dto.seriNo || "");
+		setLabelContent(cells[6], dto.ilkBorclu || "");
+		setLabelContent(cells[7], dto.cekHesapNo || "");
+		setLabelContent(cells[8], dto.cins || "");
+		setLabelContent(cells[9], formatNumber2(dto.tutar));
+
 		updateColumnTotal();
 		document.getElementById("errorDiv").style.display = "none";
 		document.getElementById("errorDiv").innerText = "";
@@ -240,35 +245,37 @@ async function bordroOku() {
 			errorDiv.innerText = data.errorMessage;
 			return;
 		}
+		
+		////
 		const tableBody = document.getElementById("tbody");
 		tableBody.innerHTML = "";
-		let optionsHTML = bankaIsimleri;
-		rowCounter = 0;
-		data.data.forEach(item => {
-			incrementRowCounter();
-			const row = document.createElement("tr");
-			row.innerHTML = `
-					<td >
-					<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekcikremoveRow(this)"><i class="fa fa-trash"></i></button>
-					</td>
-					<td>
-						<div style="position: relative; width: 100%;">
-							<input class="form-control cins_bold" onchange="cekkontrol(this)" list="cekOptions_${rowCounter}" maxlength="10" id="cekno_${rowCounter}" 
-							value="${item.Cek_No || ''}">
-							<datalist id="cekOptions_${rowCounter}">${optionsHTML}</datalist>
-							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-						</div>
-					</td>
-					<td>${formatDate(item.Vade)}</td>
-					<td>${item.Banka || ''}</td>
-					<td>${item.Sube || ''}</td>
-					<td>${item.Seri_No || ''}</td>
-					<td>${item.Ilk_Borclu || ''}</td>
-					<td>${item.Cek_Hesap_No || ''}</td>
-					<td>${item.Cins || ''}</td>
-					<td class="double-column">${formatNumber2(item.Tutar)}</td>
-		    `;
-			tableBody.appendChild(row);
+		console.info("Tablo boşaltıldı, satır sayısı:", tableBody.querySelectorAll("tr").length);
+		const table = document.getElementById('gbTable');
+		const rows = table.querySelectorAll('tbody tr');
+		if (data.data.length > rows.length) {
+		    const additionalRows = data.data.length - rows.length;
+		    for (let i = 0; i < additionalRows +1 ; i++) {
+		        cekcikaddRow();
+		    }
+		}
+		const rowss = table.querySelectorAll('tbody tr');
+		data.data.forEach((item,index) => {
+			console.info("index:", index);
+			
+			console.info("Tablo boşaltıldı, satır sayısı:", rowss.length);
+		        const cells = rowss[index].cells;
+				
+		        const ceknoInput = cells[1]?.querySelector('input');
+		        if (ceknoInput) ceknoInput.value = item.Cek_No || "";
+				
+		        setLabelContent(cells[2], formatDate(item.Vade) || '');
+				setLabelContent(cells[3], item.Banka || "");
+		        setLabelContent(cells[4], item.Sube || "");
+		        setLabelContent(cells[5], item.Seri_No || "");
+		        setLabelContent(cells[6], item.Ilk_Borclu || "");
+				setLabelContent(cells[7], item.Cek_Hesap_No || "");
+				setLabelContent(cells[8], item.Cins || "");
+				setLabelContent(cells[9], formatNumber2(item.Tutar));
 		});
 		getTableData();
 		updateColumnTotal();
@@ -576,4 +583,11 @@ function cbmailAt() {
 	const degerler = cikisBordro + "," + cikisTarihi + "," + cikisMusteri + "," + unvan + "," + dvzcins + "," + tutar + ",ccbordro";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
+}
+
+function setLabelContent(cell, content) {
+    const span = cell.querySelector('label span');
+    if (span) {
+        span.textContent = content ? content : '\u00A0'; // Eğer içerik boşsa, boşluk karakteri eklenir
+    }
 }

@@ -51,6 +51,7 @@ async function fetchBankaSubeOnce() {
 }
 
 function initializeRows() {
+	rowCounter = 0; // Satır sayacını sıfırla
 	for (let i = 0; i < 5; i++) {
 		cekgiraddRow();
 	}
@@ -69,8 +70,7 @@ function cekgiraddRow() {
 		</td>
 		<td>
 	        <div style="position: relative; width: 100%;">
-	                <input class="form-control cins_bold" 
-	                    maxlength="10" id="cekno_${rowCounter}" 
+	                <input class="form-control cins_bold" maxlength="10" id="cekno_${rowCounter}" 
 	                    onkeydown="focusNextCell(event, this)" onchange="cekkontrol(this)">
 	        </div>
 	    </td>
@@ -108,10 +108,10 @@ function cekgiraddRow() {
 		<td>
 			<input class="form-control cins_bold"  maxlength="3" id="cins_${rowCounter}" onkeydown="focusNextCell(event, this)">
 		</td>
-        <td class="editable-cell double-column" contenteditable="true" 
-            onfocus="selectAllContent(this)" 
-            onblur="formatInputTable2(this); updateColumnTotal()" 
-            onkeydown="focusNextRow(event, this)">0.00
+		
+		<td>
+		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
+			     onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
 		</td>
 		<td style="display: none;"></td>
 		<td style="display: none;">1900-01-01</td>
@@ -122,6 +122,10 @@ function cekgiraddRow() {
     `;
 }
 
+function handleBlur(input) {
+    input.value = formatNumber2(input.value);
+    updateColumnTotal();
+}
 function cekgirremoveRow(button) {
 	const row = button.parentElement.parentElement;
 	row.remove();
@@ -273,80 +277,62 @@ async function bordroOku() {
 			errorDiv.innerText = data.errorMessage;
 			return;
 		}
+		
 		const tableBody = document.getElementById("tbody");
 		tableBody.innerHTML = "";
-		let optionsHTML = bankaIsimleri;
-		let subeHTML = subeIsimleri;
-		let ilkborcluHTML = ilkBorclu;
-		rowCounter = 0;
-		data.data.forEach(item => {
-			incrementRowCounter();
-			const row = document.createElement("tr");
-			row.innerHTML = `
-					<td >
-					<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekgirremoveRow(this)"><i class="fa fa-trash"></i></button>
-					</td>
-					<td>
-					    <div style="position: relative; width: 100%;">
-					            <input class="form-control cins_bold" 
-					                maxlength="10" id="cekno_${rowCounter}" 
-									value="${item.Cek_No || ''}"
-					                onkeydown="focusNextCell(event, this)" onchange="cekkontrol(this)">
-					    </div>
-					</td>
-					<td><input type="date" class="form-control" onkeydown="focusNextCell(event, this)" value="${formatTableDate(item.Vade)}"></td>
-					<td>
-					    <div style="position: relative; width: 100%;">
-					        <input class="form-control cins_bold" list="bankaOptions_${rowCounter}" maxlength="25" id="banka_${rowCounter}" 
-					            onkeydown="focusNextCell(event, this)" value="${item.Banka || ''}">
-					        <datalist id="bankaOptions_${rowCounter}">${optionsHTML}</datalist>
-					        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					    </div>
-					</td>
-					<td>
-					    <div style="position: relative; width: 100%;">
-					        <input class="form-control cins_bold" list="subeOptions_${rowCounter}" maxlength="25" id="sube_${rowCounter}" 
-					            onkeydown="focusNextCell(event, this)" value="${item.Sube || ''}">
-					        <datalist id="subeOptions_${rowCounter}">${subeHTML}</datalist>
-					        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					    </div>
-					</td>
-					<td>
-						<input class="form-control cins_bold"  maxlength="15" id="serino_${rowCounter}" value="${item.Seri_No || ''}"
-						onkeydown="focusNextCell(event, this)">
-					</td>
-					<td>
-					    <div style="position: relative; width: 100%;">
-					        <input class="form-control cins_bold" list="ilkborcluOptions_${rowCounter}" maxlength="30" 
-							id="ilkborclu_${rowCounter}"  value="${item.Ilk_Borclu || ''}"
-					            onkeydown="focusNextCell(event, this)">
-					            <datalist id="ilkborcluOptions_${rowCounter}">${ilkborcluHTML}</datalist>
-					            <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					    </div>
-					</td>
-					<td>
-						<input class="form-control cins_bold"  maxlength="15" id="hesap_${rowCounter}" 
-						onkeydown="focusNextCell(event, this)" value="${item.Cek_Hesap_No || ''}">
-					</td>
-					<td>
-						<input class="form-control cins_bold"  maxlength="3" id="cins_${rowCounter}"
-						 onkeydown="focusNextCell(event, this)" value="${item.Cins || ''}">
-					</td>
-					<td class="editable-cell double-column" contenteditable="true" 
-					    onfocus="selectAllContent(this)" 
-					    onblur="formatInputTable2(this); updateColumnTotal()" 
-					    onkeydown="focusNextRow(event, this)">${formatNumber2(item.Tutar)}
-					</td>
-					
-					<td style="display: none;">${item.Cikis_Bordro || ''}</td>
-					<td style="display: none;">${item.Cikis_Tarihi}</td>
-					<td style="display: none;">${item.Cikis_Musteri || ''}</td>
-					<td style="display: none;">${item.Durum || ''}</td>
-					<td style="display: none;">${item.T_Tarih}</td>
-					<td style="display: none;">${item.Cikis_Ozel_Kod || ''}</td>
-		    `;
-			tableBody.appendChild(row);
+		console.info("Tablo boşaltıldı, satır sayısı:", tableBody.querySelectorAll("tr").length);
+		const table = document.getElementById('gbTable');
+		const rows = table.querySelectorAll('tbody tr');
+		if (data.data.length > rows.length) {
+		    const additionalRows = data.data.length - rows.length;
+		    for (let i = 0; i < additionalRows +1 ; i++) {
+		        cekgiraddRow();
+		    }
+		}
+		const rowss = table.querySelectorAll('tbody tr');
+		console.info("Tablo boşaltıldı, satır sayısı:", tableBody.querySelectorAll("tr").length);
+		data.data.forEach((item,index) => {
+			console.info("index:", index);
+			
+			console.info("Tablo boşaltıldı, satır sayısı:", rowss.length);
+		        const cells = rowss[index].cells;
+				
+		        const ceknoInput = cells[1]?.querySelector('input');
+		        if (ceknoInput) ceknoInput.value = item.Cek_No || "";
+				
+		        const vadeInput = cells[2]?.querySelector('input');
+		        if (vadeInput) vadeInput.value = item.Vade;
+
+		        const bankaInput = cells[3]?.querySelector('input');
+		        if (bankaInput) bankaInput.value = item.Banka || "";
+
+		        const subeInput = cells[4]?.querySelector('input');
+		        if (subeInput) subeInput.value = item.Sube || "";
+
+		        const serinoInput = cells[5]?.querySelector('input');
+		        if (serinoInput) serinoInput.value = item.Seri_No;
+
+		        const ilkborcluSelect = cells[6]?.querySelector('input');
+		        if (ilkborcluSelect) ilkborcluSelect.value = item.Ilk_Borclu || "";
+				
+				const cekhspnoInput = cells[7]?.querySelector('input');
+				if (cekhspnoInput) cekhspnoInput.value = item.Cek_Hesap_No || "";
+				
+				const cinsInput = cells[8]?.querySelector('input');
+				if (cinsInput) cinsInput.value = item.Cins || "";
+				
+				const tutarInput = cells[9]?.querySelector('input');
+				if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
+				
+				cells[10].innerText = item.Cikis_Bordro || '';
+				cells[11].innerText = item.Cikis_Tarihi;
+				cells[12].innerText = item.Cikis_Musteri || '';
+				cells[13].innerText = item.Durum || '';
+				cells[14].innerText = item.T_Tarih;
+				cells[15].innerText = item.Cikis_Ozel_Kod || '';
+		
 		});
+
 		getTableData();
 		updateColumnTotal();
 		document.getElementById("ozelkod").value = data.data[0].Giris_Ozel_Kod;
@@ -402,23 +388,25 @@ function getTableData() {
 		}
 		const rowData = {
 			cekNo: firstColumnValue,
-			vade: cells[2]?.querySelector('input')?.value || "",
+			
 			girisBordro: document.getElementById('bordrono').value,
-			cikisBordro: cells[10]?.textContent || "",
 			girisTarihi: document.getElementById('bordroTarih').value,
-			cikisTarihi: cells[11]?.textContent || "",
+			girisOzelKod: document.getElementById('ozelkod').value,
 			girisMusteri: document.getElementById('bcheskod').value,
-			cikisMusteri: cells[12]?.textContent || "",
+			
+			vade: cells[2]?.querySelector('input')?.value || "",
 			banka: cells[3]?.querySelector('input')?.value || "",
 			sube: cells[4]?.querySelector('input')?.value || "",
-			tutar: parseLocaleNumber(cells[9]?.textContent || "0"),
-			cins: cells[8]?.querySelector('input')?.value || "",
-			durum: cells[13]?.textContent || "",
-			ttarih: cells[14]?.textContent || "",
 			seriNo: cells[5]?.querySelector('input')?.value || "",
 			ilkBorclu: cells[6]?.querySelector('input')?.value || "",
 			cekHesapNo: cells[7]?.querySelector('input')?.value || "",
-			girisOzelKod: document.getElementById('ozelkod').value,
+			cins: cells[8]?.querySelector('input')?.value || "",
+			tutar: parseLocaleNumber(cells[9]?.querySelector('input')?.value || "0"),
+			cikisBordro: cells[10]?.textContent || "",
+			cikisTarihi: cells[11]?.textContent || "",
+			cikisMusteri: cells[12]?.textContent || "",
+			durum: cells[13]?.textContent || "",
+			ttarih: cells[14]?.textContent || "",
 			cikisOzelKod: cells[15]?.textContent || "",
 		};
 		data.push(rowData);
