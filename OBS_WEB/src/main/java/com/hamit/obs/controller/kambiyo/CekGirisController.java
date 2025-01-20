@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,6 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
-import com.hamit.obs.service.user.UserService;
 
 
 @Controller
@@ -42,9 +42,6 @@ public class CekGirisController {
 
 	@Autowired
 	private CariService cariservice;
-	
-	@Autowired
-	private UserService userService;
 	
 	@Autowired 
 	KambiyoService kambiyoService;
@@ -178,7 +175,7 @@ public class CekGirisController {
 		try {
 			girisbordroDTO dto = bordrokayitDTO.getGirisbordroDTO();
 			List<bordrodetayDTO> tableData = bordrokayitDTO.getTableData();
-			String userrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			kambiyoService.bordro_sil(dto.getBordroNo(), "CEK", "Giris_Bordro",userrString);
 			for (bordrodetayDTO row : tableData) {
 				row.setUser(userrString);
@@ -200,8 +197,8 @@ public class CekGirisController {
 	@PostMapping("kambiyo/bordroYoket")
 	public ResponseEntity<Map<String, String>> bordroYoket(@RequestParam String bordroNo) {
 		try {
-			String usrString =  Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
-			kambiyoService.bordro_sil(bordroNo, "CEK", "Giris_Bordro",usrString);
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
+			kambiyoService.bordro_sil(bordroNo, "CEK", "Giris_Bordro",userrString);
 			kambiyoService.kam_aciklama_sil("CEK", bordroNo, "G");
 			return ResponseEntity.ok(Map.of("errorMessage", ""));
 		} catch (ServiceException e) {
@@ -272,7 +269,7 @@ public class CekGirisController {
 		try {
 			girisbordroDTO dto = bordrokayitDTO.getGirisbordroDTO();
 			List<bordrodetayDTO> tableData = bordrokayitDTO.getTableData();
-			String userrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			for (bordrodetayDTO row : tableData) {
 				String aciklama = row.getGirisBordro() +  "'Bordro ile " + row.getCekNo() + " Nolu " + Tarih_Cevir.tarihTers(row.getVade()) + " Vadeli Çek" ;
 				dekontDTO dekontDTO = new dekontDTO();

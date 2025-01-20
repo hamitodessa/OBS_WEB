@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -131,7 +132,7 @@ public class CariController {
 	public Map<String, Object> sorgula(@RequestParam String eskiKod,@RequestParam String yeniKod) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			cariservice.cari_kod_degis_hesap(eskiKod, yeniKod,usrString);
 			cariservice.cari_kod_degis_satirlar(eskiKod, yeniKod,usrString);
 			cariservice.cari_kod_degis_tahsilat(eskiKod, yeniKod,usrString);

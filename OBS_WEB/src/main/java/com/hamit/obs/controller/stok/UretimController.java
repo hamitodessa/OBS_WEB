@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +26,12 @@ import com.hamit.obs.dto.stok.uretimkayitDTO;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
-import com.hamit.obs.service.user.UserService;
 
 @Controller
 public class UretimController {
 
 	@Autowired
 	private FaturaService faturaService;
-
-	@Autowired
-	private UserService userService;
 
 	@GetMapping("stok/uretim")
 	public Model uretim(Model model) {
@@ -192,7 +189,7 @@ public class UretimController {
 			uretimDTO dto = uretimkayitDTO.getUretimDTO();
 			List<uretimdetayDTO> tableData = uretimkayitDTO.getTableData();
 			faturaService.stok_sil(dto.getFisno(), "URE", "C");
-			String userrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			int dpo = 0 ;
 			int ana = 0 ;
 			int alt = 0;
@@ -200,7 +197,6 @@ public class UretimController {
 				dpo = 0 ;
 				ana = 0 ;
 				alt = 0;
-				System.out.println("dpo:"+row.getDepo());
 				if( ! row.getDepo().equals("")) {
 					String dpos = faturaService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN",  row.getDepo());
 					dpo = Integer.parseInt(dpos);

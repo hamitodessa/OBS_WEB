@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,16 +35,12 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
-import com.hamit.obs.service.user.UserService;
 
 @Controller
 public class CekCikisController {
 
 	@Autowired
 	private CariService cariservice;
-	
-	@Autowired
-	private UserService userService;
 	
 	@Autowired 
 	KambiyoService kambiyoService;
@@ -144,7 +141,7 @@ public class CekCikisController {
 		try {
 			girisbordroDTO dto = bordrokayitDTO.getGirisbordroDTO();
 			List<bordrodetayDTO> tableData = bordrokayitDTO.getTableData();
-			String userrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			kambiyoService.bordro_cikis_sil(dto.getBordroNo(), "CEK",userrString);
 			for (bordrodetayDTO row : tableData) {
 				kambiyoService.bordro_cikis_yaz("CEK","Cek_No",
@@ -171,7 +168,7 @@ public class CekCikisController {
 	@PostMapping("kambiyo/cbordroYoket")
 	public ResponseEntity<Map<String, String>> bordroYoket(@RequestParam String bordroNo) {
 		try {
-			String userrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			kambiyoService.bordro_cikis_sil(bordroNo, "CEK",userrString);
 			kambiyoService.kam_aciklama_sil("CEK", bordroNo, "C");
 			return ResponseEntity.ok(Map.of("errorMessage", ""));
@@ -244,7 +241,7 @@ public class CekCikisController {
 		try {
 			girisbordroDTO dto = bordrokayitDTO.getGirisbordroDTO();
 			List<bordrodetayDTO> tableData = bordrokayitDTO.getTableData();
-			String userrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			for (bordrodetayDTO row : tableData) {
 				String aciklama = row.getCikisBordro() +  "'Bordro ile " + row.getCekNo() + " Nolu " + row.getVade() + " Vadeli Çek" ;
 				dekontDTO dekontDTO = new dekontDTO();

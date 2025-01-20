@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +21,12 @@ import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.cari.CariService;
-import com.hamit.obs.service.user.UserService;
 
 @Controller
 public class DekontController {
 
 	@Autowired
 	private CariService cariservice;
-	
-	@Autowired
-    private UserService userService;
-	
 	
 	@GetMapping("cari/dekont")
 	public Model register(Model model) {
@@ -114,7 +110,7 @@ public class DekontController {
 	public Map<String, Object> fiskayit(@RequestBody dekontDTO dekontDTO) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			dekontDTO.setUser(usrString);
 			cariservice.evrak_yoket(dekontDTO.getFisNo(),usrString);
 			boolean status = cariservice.cari_dekont_kaydet(dekontDTO);
@@ -140,7 +136,7 @@ public class DekontController {
 	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam int evrakNo) {
 		Map<String, String> response = new HashMap<>();
 		try {
-			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			cariservice.evrak_yoket(evrakNo,usrString);
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {

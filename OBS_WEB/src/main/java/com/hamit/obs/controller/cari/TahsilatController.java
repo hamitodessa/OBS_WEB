@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,6 @@ import com.hamit.obs.dto.cari.tahsilatTableRowDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.cari.CariService;
-import com.hamit.obs.service.user.UserService;
 
 @Controller
 public class TahsilatController {
@@ -40,9 +40,6 @@ public class TahsilatController {
 	@Autowired
 	private CariService cariservice;
 
-	@Autowired
-	private UserService userService;
-	
 	@Autowired
 	private RaporOlustur raporOlustur;
 
@@ -166,7 +163,7 @@ public class TahsilatController {
 				dto.setPosBanka("");
 			}
 			cariservice.tah_kayit(dto);
-			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			cariservice.tah_cek_sil(dto, usrString);
 
 			if (dto.getTur() == 1 && tableData != null && !tableData.isEmpty()) {
@@ -187,7 +184,7 @@ public class TahsilatController {
 	@PostMapping("cari/tahfisYoket")
 	public ResponseEntity<Map<String, String>> tah_sil(@RequestParam String evrakNo,@RequestParam Integer tah_ted) {
 		try {
-			String usrString =  Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			cariservice.tah_sil(evrakNo,tah_ted,usrString);
 			return ResponseEntity.ok(Map.of("errorMessage", ""));
 		} catch (ServiceException e) {
@@ -245,7 +242,7 @@ public class TahsilatController {
 				bh = dto.getTcheskod();
 			}
 
-			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
+			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 
 			dekontDTO dekontDTO = new dekontDTO();
 

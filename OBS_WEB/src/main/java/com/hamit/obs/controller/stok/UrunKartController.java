@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +21,10 @@ import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
-import com.hamit.obs.service.user.UserService;
 
 @Controller
 public class UrunKartController {
 
-	@Autowired
-    private UserService userService;
-	
 	@Autowired
 	private FaturaService faturaService;
 	
@@ -175,8 +172,8 @@ public class UrunKartController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			faturaService.stk_ur_sil(urunDTO.getKodu());
-			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
-			urunDTO.setUsr(usrString);
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
+			urunDTO.setUsr(userrString);
 			String anagrp = faturaService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN",urunDTO.getAnagrup());
 			String altgrp = faturaService.urun_kod_degisken_ara("ALID_Y", "ALT_GRUP", "ALT_GRUP_DEGISKEN", urunDTO.getAltgrup());
 			String mensei = faturaService.urun_kod_degisken_ara("MEID_Y", "MENSEI", "MENSEI_DEGISKEN", urunDTO.getMensei());

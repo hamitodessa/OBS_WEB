@@ -112,19 +112,6 @@ formatInputTable2 = function(element) {
 	});
 }
 
-parseLocaleNumber = function(input) {
-	if (input.includes(",") && input.includes(".")) {
-		if (input.indexOf(",") < input.indexOf(".")) {
-			return parseFloat(input.replace(/,/g, ""));
-		} else {
-			return parseFloat(input.replace(/\./g, "").replace(/,/g, "."));
-		}
-	} else if (input.includes(",")) {
-		return parseFloat(input.replace(/,/g, "."));
-	} else {
-		return parseFloat(input);
-	}
-}
 
 validateAutoSearch = function(inputId, datalistId) {
 	const inputElement = document.getElementById(inputId);
@@ -393,3 +380,19 @@ async function stokBaslik() {
 		errorDiv.innerText = error.message;
 	}
 }
+
+parseLocaleNumber = function(input) {
+	if (!input) return 0;
+	if (input.includes(",") && input.includes(".")) {
+		if (input.indexOf(",") < input.indexOf(".")) {
+			return parseFloat(input.replace(/,/g, ""));
+		} else {
+			return parseFloat(input.replace(/\./g, "").replace(/,/g, "."));
+		}
+	} else if (input.includes(",")) {
+		return parseFloat(input.replace(/,/g, "."));
+	} else {
+		return parseFloat(input);
+	}
+}
+

@@ -188,16 +188,14 @@ async function uretimOku() {
 		        if (izahatInput) izahatInput.value = item.Izahat || "";
 
 		        const miktarInput = cells[6]?.querySelector('input');
-		        if (miktarInput) miktarInput.value = formatNumber3(item.Miktar  *-1);
+		        if (miktarInput) miktarInput.value = formatNumber3(item.Miktar *-1);
 
 		        const fiatInput = cells[8]?.querySelector('input');
 		        if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
 
 		        const tutarInput = cells[9]?.querySelector('input');
-				console.info("sunucudan gelen :"+item.Tutar);
-		        if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
+		        if (tutarInput) tutarInput.value = formatNumber2(item.Tutar *-1);
 
-				console.info("depo:"+item.Depo);
 		        const depoSelect = cells[5]?.querySelector('select');
 		        if (depoSelect) depoSelect.value = item.Depo || "";
 		    }
@@ -221,16 +219,16 @@ async function uretimOku() {
 					selectElement.value = (item.Alt_Grup || '').trim();
 					selectElement.disabled = false;
 				} else {
-					selectElement.value = ''; // Geçerli bir değer değilse boş bırak
+					selectElement.value = '';
 					selectElement.disabled = true;
 				}
 				const selectElementd = document.getElementById("depo");
 				if (Array.from(selectElementd.options).some(option => option.value.trim() === (item.Depo || '').trim())) {
 					selectElementd.value = (item.Depo || '').trim();
 				} else {
-					selectElementd.value = ''; // Geçerli bir değer değilse boş bırak
+					selectElementd.value = '';
 				}
-				break; // İlk eşleşmeden sonra döngüden çık
+				break;
 			}
 		}
 		document.getElementById("aciklama").value = data.aciklama;
@@ -319,7 +317,7 @@ function handleBlur(input) {
 
 function selectAllContent(element) {
 	if (element && element.select) {
-	   element.select(); // Input'un tüm metnini seçer
+	   element.select();
 	}
 }
 
@@ -340,10 +338,10 @@ function updateColumnTotal() {
 		const input10 = row.querySelector('td:nth-child(10) input');
 
 		if (input7 && input9 && input10) {
-			const value7 = parseFloat(input7.value.replace(/,/g, '').trim()) || 0;
-			const value9 = parseFloat(input9.value.replace(/,/g, '').trim()) || 0;
+			const value7 = parseLocaleNumber(input7.value) || 0;
+			const value9 = parseLocaleNumber(input9.value) || 0;
+			console.info(value7 + "--" + value9);
 			const result = value7 * value9;
-			console.info(result);
 			input10.value = result.toLocaleString(undefined, {
 				minimumFractionDigits: 2, maximumFractionDigits: 2
 			});
@@ -355,7 +353,7 @@ function updateColumnTotal() {
 	totalTutarCell.textContent = total.toLocaleString(undefined, {
 		minimumFractionDigits: 2, maximumFractionDigits: 2
 	});
-	const dbmik = parseFloat(document.getElementById("uretmiktar").value) || 0;
+	const dbmik = parseLocaleNumber(document.getElementById("uretmiktar").value) || 0;
 	const lblbirimfiati = document.getElementById("birimfiati");
 	lblbirimfiati.innerText = (total / (dbmik === 0 ? 1 : dbmik)).toLocaleString(undefined, {
 	    minimumFractionDigits: 2,
@@ -603,8 +601,9 @@ function prepareureKayit() {
 		
 		aciklama: document.getElementById("aciklama").value || "",
 		dvzcins: document.getElementById("dvzcins").value || "",
-		uremiktar: parseFloat(document.getElementById("uretmiktar").value || 0),
-		toptutar: parseFloat(document.getElementById("totalTutar").textContent || 0),
+		uremiktar: parseLocaleNumber(document.getElementById("uretmiktar")?.value),
+		toptutar: parseLocaleNumber(document.getElementById("totalTutar")?.value),
+
 	};
 	tableData = getTableData();
 	return { uretimDTO, tableData, };
@@ -624,9 +623,9 @@ function getTableData() {
 			ukodu: firstColumnValue,
 			izahat: cells[4]?.querySelector('input')?.value || "",
 			depo: cells[5]?.querySelector('select')?.value || "",
-			miktar: parseFloat(cells[6]?.querySelector('input')?.value || 0),
-			fiat: parseFloat(cells[8]?.querySelector('input')?.value || 0),
-			tutar: parseFloat(cells[9]?.querySelector('input')?.value || 0),
+			miktar: parseLocaleNumber(cells[6]?.querySelector('input')?.value),
+			fiat: parseLocaleNumber(cells[8]?.querySelector('input')?.value),
+			tutar: parseLocaleNumber(cells[9]?.querySelector('input')?.value),
 		};
 		data.push(rowData);
 	});
