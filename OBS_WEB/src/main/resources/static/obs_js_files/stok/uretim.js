@@ -245,6 +245,8 @@ async function uretimOku() {
 }
 
 function initializeRows() {
+	
+	rowCounter = 0; // Satır sayacını sıfırla
 	for (let i = 0; i < 5; i++) {
 		satirekle();
 	}
@@ -493,6 +495,7 @@ function clearInputs() {
 async function yeniFis() {
 	const errorDiv = document.getElementById('errorDiv');
 	errorDiv.innerText = "";
+	clearInputs();
 	try {
 		const response = await fetchWithSessionCheck('stok/uretimyenifis', {
 			method: "GET",
@@ -535,19 +538,21 @@ async function uretimYap() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-
 		const uretmiktar = document.getElementById("uretmiktar").value;
-		
+		const tableBody = document.getElementById("tbody");
+		tableBody.innerHTML = "";
+		initializeRows();
 		const table = document.getElementById('imaTable');
-		const rows = table.rows;
-
+		const rows = table.querySelectorAll('tbody tr');
+		rowCounter = 0;
 		if (data.data.length > rows.length) {
 		    const additionalRows = data.data.length - rows.length;
 		    for (let i = 0; i < additionalRows; i++) {
 		        satirekle();
 		    }
 		}
-		data.data.forEach((item, index) => {
+		let index = 0;
+		data.data.forEach((item) => {
 			if (item.Tur === "Cikan" && index < rows.length) {
 				const cells = rows[index].cells;
 				setLabelContent(cells[1], item.Tur);
@@ -571,6 +576,8 @@ async function uretimYap() {
 
 				const depoSelect = cells[5]?.querySelector('select');
 				if (depoSelect) depoSelect.value = "";
+				
+				index++;
 			}
 			else{
 				document.getElementById("mikbirim").innerText = item.Birim;

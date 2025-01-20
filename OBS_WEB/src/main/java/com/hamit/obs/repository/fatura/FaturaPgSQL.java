@@ -411,7 +411,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				" \"MAL\".\"Kusurat\" ,\"RECETE\".\"USER\" " +
 				" FROM \"RECETE\"  , \"MAL\"  "+
 				" Where \"RECETE\".\"Kodu\" = \"MAL\".\"Kodu\" " +
-				" AND \"Recete_No\" = N'" + rno + "'";
+				" AND \"Recete_No\" = N'" + rno + "' ORDER BY \"Tur\"";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
