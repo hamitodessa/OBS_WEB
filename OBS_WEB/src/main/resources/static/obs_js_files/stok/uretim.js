@@ -340,7 +340,6 @@ function updateColumnTotal() {
 		if (input7 && input9 && input10) {
 			const value7 = parseLocaleNumber(input7.value) || 0;
 			const value9 = parseLocaleNumber(input9.value) || 0;
-			console.info(value7 + "--" + value9);
 			const result = value7 * value9;
 			input10.value = result.toLocaleString(undefined, {
 				minimumFractionDigits: 2, maximumFractionDigits: 2
@@ -492,24 +491,20 @@ function clearInputs() {
 }
 
 async function yeniFis() {
+	const errorDiv = document.getElementById('errorDiv');
+	errorDiv.innerText = "";
 	try {
 		const response = await fetchWithSessionCheck('stok/uretimyenifis', {
-			method: 'GET',
-			headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
+			method: "GET",
+				headers: {
+				"Content-Type": "application/json",
 		},
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		const data = response;
 		const fisNoInput = document.getElementById('fisno');
-		const errorDiv = document.getElementById('errorDiv');
-		if (data.errorMessage) {
-			errorDiv.innerText = data.errorMessage;
-			errorDiv.style.display = 'block';
-		}
-		fisNoInput.value = data.fisno;
+		fisNoInput.value = response.fisno;
 	} catch (error) {
 			errorDiv.style.display = "block";
 			errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";

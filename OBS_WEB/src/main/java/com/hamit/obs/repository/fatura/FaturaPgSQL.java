@@ -389,12 +389,12 @@ public class FaturaPgSQL implements IFaturaDatabase {
 	@Override
 	public int uretim_fisno_al(ConnectionDetails faturaConnDetails) {
 		int evrakNo = 0;
-		String sql = "UPDATE \"URET_EVRAK\" SET \"E_No\" = \"E_No\" + 1 WHERE \"EID\" = 1 RETURNING \"E_No\";";
+		String sql = "UPDATE \"URET_EVRAK\" SET \"E_No\" = \"E_No\" + 1 RETURNING \"E_No\";";
 		try (Connection connection =  DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
-					evrakNo = resultSet.getInt("EVRAK");
+					evrakNo = resultSet.getInt("E_No");
 				}
 			}
 		} catch (Exception e) {

@@ -160,7 +160,7 @@ public class UretimController {
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			response.put("errorMessage", "Hata: " + e.getMessage());
+			response.put("errorMessage",  e.getMessage());
 		}
 		return response;
 	}
