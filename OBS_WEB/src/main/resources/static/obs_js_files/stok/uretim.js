@@ -214,14 +214,8 @@ async function uretimOku() {
 				
 				await anagrpChanged(document.getElementById("anagrp"));
 
-				const selectElement = document.getElementById("altgrp");
-				if (Array.from(selectElement.options).some(option => option.value.trim() === (item.Alt_Grup || '').trim())) {
-					selectElement.value = (item.Alt_Grup || '').trim();
-					selectElement.disabled = false;
-				} else {
-					selectElement.value = '';
-					selectElement.disabled = true;
-				}
+				console.info("alt=",item.Alt_Grup);
+				document.getElementById("altgrp").value = item.Alt_Grup || ''
 				const selectElementd = document.getElementById("depo");
 				if (Array.from(selectElementd.options).some(option => option.value.trim() === (item.Depo || '').trim())) {
 					selectElementd.value = (item.Depo || '').trim();
