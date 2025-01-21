@@ -770,7 +770,7 @@ public class CariMySQL implements ICariDatabase{
 	@Override
 	public int cari_tahsonfisno(Integer tah_ted,ConnectionDetails cariConnDetails) {
 		int evrakNo = 0;
-		String query = "SELECT MAX(CONVERT(int,EVRAK)) AS MAX_NO FROM TAH_DETAY WHERE CINS = '" + tah_ted + "'";
+		String query = "SELECT MAX(CONVERT(EVRAK,UNSIGNED)) AS MAX_NO FROM TAH_DETAY WHERE CINS ='" + tah_ted + "'";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -897,7 +897,7 @@ public class CariMySQL implements ICariDatabase{
 			
 			String str1 = "";
 			if (cariConnDetails.getServerIp().equals(adresConnectionDetails.getServerIp())) {
-				str1=  "OK_Adr" + adresConnectionDetails.getDatabaseName() + ".dbo.Adres as adr ";
+				str1=  "OK_Adr" + adresConnectionDetails.getDatabaseName() + ".Adres as adr ";
 			}
 			else
 			{  
@@ -919,7 +919,7 @@ public class CariMySQL implements ICariDatabase{
 			String sql = "SELECT EVRAK,TARIH,C_HES as CARI_HESAP," + 
 					" (SELECT UNVAN FROM HESAP WHERE HESAP = C_HES ) AS UNVAN,"+ 
 					" A_HES as ADRES_HESAP," + 
-					" ISNULL(Adi,'') AS ADRES_UNVAN," +
+					" IFNULL(Adi,'') AS ADRES_UNVAN," +
 					" CASE CINS WHEN '0' THEN 'Tahsilat' WHEN '1' THEN 'Tediye' END as CINS," +
 					" CASE TUR  WHEN '0' THEN 'Nakit' WHEN '1' THEN 'Cek' WHEN '2' THEN 'Kredi Kartı' END as TUR,POS_BANKA," +
 					" DVZ_CINS,TUTAR" +
@@ -929,6 +929,8 @@ public class CariMySQL implements ICariDatabase{
 					" AND EVRAK >= '" + tahrapDTO.getEvrak1() + "' AND EVRAK < '" + tahrapDTO.getEvrak2() + "'" + 
 					" AND C_HES >= '" + tahrapDTO.getHkodu1() + "' AND C_HES < '" + tahrapDTO.getHkodu2() + "'" + 
 					" ORDER BY TARIH,EVRAK" ;
+			
+			System.out.println(sql);
 			try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 					PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 				ResultSet resultSet = preparedStatement.executeQuery();
