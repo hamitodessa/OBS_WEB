@@ -42,7 +42,7 @@ async function fetchHesapKodlariOnce() {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			});
+		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
@@ -71,19 +71,21 @@ function addRow() {
 	let subeHTML = subeIsimleri.map(kod => `<option value="${kod.SUBE}">${kod.SUBE}</option>`).join("");
 
 	newRow.innerHTML = `
+      	<td >
+	         <button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekgirremoveRow(this)"><i class="fa fa-trash"></i></button>
+	     </td>
+
         <td>
             <div style="position: relative; width: 100%;">
-                <input class="form-control cins_bold" 
-                    list="bankaOptions_${rowCounter}" 
-                    maxlength="40" id="banka_${rowCounter}" 
-                    onkeydown="focusNextCell(event, this)">
+                <input class="form-control" list="bankaOptions_${rowCounter}" 
+                    maxlength="40" id="banka_${rowCounter}" onkeydown="focusNextCell(event, this)">
                 <datalist id="bankaOptions_${rowCounter}">${optionsHTML}</datalist>
                 <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
             </div>
         </td>
         <td>
             <div style="position: relative; width: 100%;">
-                <input class="form-control cins_bold" 
+                <input class="form-control" 
                     list="subeOptions_${rowCounter}" 
                     maxlength="40" id="sube_${rowCounter}" 
                     onkeydown="focusNextCell(event, this)">
@@ -91,28 +93,46 @@ function addRow() {
                 <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
             </div>
         </td>
-        <td class="editable-cell" contenteditable="true" onkeydown="focusNextCell(event, this)"></td>
-        <td class="editable-cell" contenteditable="true" onkeydown="focusNextCell(event, this)"></td>
-        <td class="editable-cell" contenteditable="true" onkeydown="focusNextCell(event, this)"></td>
-        <td><input type="date" class="form-control" onkeydown="focusNextCell(event, this)"></td>
-        <td class="editable-cell double-column" contenteditable="true" 
-            onfocus="selectAllContent(this)" 
-            onblur="formatInputTable2(this); updateColumnTotal()" 
-            onkeydown="focusNextRow(event, this)">0.00</td>
+				<td>
+				      <input class="form-control" onkeydown="focusNextCell(event, this)">
+				</td>
+				<td>
+				      <input class="form-control" onkeydown="focusNextCell(event, this)">
+				</td>
+				<td>
+				      <input  class="form-control" onkeydown="focusNextCell(event, this)">
+				</td>
+				<td>
+				      <input type="date" class="form-control" onkeydown="focusNextCell(event, this)">
+				</td>
+				<td>
+				      <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
+				      onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
+				</td>
     `;
+}
+
+function cekgirremoveRow(button) {
+	const row = button.parentElement.parentElement;
+	row.remove();
+	updateColumnTotal();
+}
+
+function handleBlur(input) {
+	input.value = formatNumber2(parseLocaleNumber(input.value));
+	updateColumnTotal();
 }
 
 function selectAllContent(element) {
 	const range = document.createRange();
 	const selection = window.getSelection();
-
 	range.selectNodeContents(element);
 	selection.removeAllRanges();
 	selection.addRange(range);
 }
 
 function updateColumnTotal() {
-	const cells = document.querySelectorAll('.double-column');
+	const cells = document.querySelectorAll('tr td:nth-child(8) input');
 	const tutarToplam = document.getElementById("tutar");
 	const totalTutarCell = document.getElementById("totalTutar");
 	const totalceksayisi = document.getElementById("ceksayisi");
@@ -120,7 +140,7 @@ function updateColumnTotal() {
 	let total = 0;
 	let totaladet = 0;
 	cells.forEach(cell => {
-		const value = parseFloat(cell.textContent.replace(/,/g, '').trim());
+		const value = parseFloat(cell.value.replace(/,/g, '').trim());
 		if (!isNaN(value) && value > 0) {
 			total += value;
 			totaladet += 1;
@@ -147,25 +167,25 @@ function focusNextRow(event, element) {
 		event.preventDefault();
 		const currentRow = element.closest('tr');
 		const nextRow = currentRow.nextElementSibling;
-
 		if (nextRow) {
-			const firstInput = nextRow.querySelector("td:first-child input");
-			if (firstInput) {
-				firstInput.focus();
-				firstInput.select();
+			const secondInput = nextRow.querySelector("td:nth-child(2) input");
+			if (secondInput) {
+				secondInput.focus();
+				secondInput.select();
 			}
 		} else {
 			addRow();
 			const table = currentRow.parentElement;
 			const newRow = table.lastElementChild;
-			const firstInput = newRow.querySelector("td:first-child input");
-			if (firstInput) {
-				firstInput.focus();
-				firstInput.select();
+			const secondInput = newRow.querySelector("td:nth-child(2) input");
+			if (secondInput) {
+				secondInput.focus();
+				secondInput.select();
 			}
 		}
 	}
 }
+
 
 function focusNextCell(event, element) {
 	if (event.key === "Enter") {
@@ -248,45 +268,42 @@ async function tahevrakOku() {
 			const data = response;
 			const tableBody = document.getElementById("tableBody");
 			tableBody.innerHTML = "";
-			let optionsHTML = bankaIsimleri.map(kod => `<option value="${kod.BANKA}">${kod.BANKA}</option>`).join("");
-			let subeHTML = subeIsimleri.map(kod => `<option value="${kod.SUBE}">${kod.SUBE}</option>`).join("");
+
+			const table = document.getElementById('cekTable');
+			const rows = table.querySelectorAll('tbody tr');
+			if (data.data.length > rows.length) {
+				const additionalRows = data.data.length - rows.length;
+				for (let i = 0; i < additionalRows + 1; i++) {
+					addRow();
+				}
+			}
 			if (data.success) {
-				rowCounter = 0;
-				data.data.forEach(item => {
-					incrementRowCounter();
-					const row = document.createElement("tr");
-					row.innerHTML = `
-								        <td>
-								            <div style="position: relative; width: 100%;">
-								                <input class="form-control cins_bold" 
-								                    list="bankaOptions_${rowCounter}" 
-								                    maxlength="40" id="banka_${rowCounter}" 
-								                    onkeydown="focusNextCell(event, this)" value="${item.BANKA || ''}" >
-								                <datalist id="bankaOptions_${rowCounter}">${optionsHTML}</datalist>
-								                <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-								            </div>
-								        </td>
-								        <td>
-								            <div style="position: relative; width: 100%;">
-								                <input class="form-control cins_bold" 
-								                    list="subeOptions_${rowCounter}" 
-								                    maxlength="40" id="sube_${rowCounter}" 
-								                    onkeydown="focusNextCell(event, this)" value="${item.SUBE || ''}">
-								                <datalist id="subeOptions_${rowCounter}">${subeHTML}</datalist>
-								                <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-								            </div>
-								        </td>
-								        <td class="editable-cell" contenteditable="true" onkeydown="focusNextCell(event, this)">${item.SERI || ""}</td>
-								        <td class="editable-cell" contenteditable="true" onkeydown="focusNextCell(event, this)">${item.HESAP || ""}</td>
-								        <td class="editable-cell" contenteditable="true" onkeydown="focusNextCell(event, this)">${item.BORCLU || ""}</td>
-								        <td><input type="date" class="form-control" onkeydown="focusNextCell(event, this)" value="${formatTableDate(item.TARIH)}"></td>
-								        <td class="editable-cell double-column" contenteditable="true" 
-								            onfocus="selectAllContent(this)" 
-								            onblur="formatInputTable2(this); updateColumnTotal()" 
-								            onkeydown="focusNextRow(event, this)">${formatNumber2(item.TUTAR)}</td>
-								    `;
-					tableBody.appendChild(row);
+				const rowss = table.querySelectorAll('tbody tr');
+				data.data.forEach((item, index) => {
+					const cells = rowss[index].cells;
+
+					const bankaInput = cells[1]?.querySelector('input');
+					if (bankaInput) bankaInput.value = item.BANKA || "";
+
+					const subeInput = cells[2]?.querySelector('input');
+					if (subeInput) subeInput.value = item.SUBE || "";
+
+					const serinoInput = cells[3]?.querySelector('input');
+					if (serinoInput) serinoInput.value = item.SERI;
+
+					const hesapInput = cells[4]?.querySelector('input');
+					if (hesapInput) hesapInput.value = item.HESAP || "";
+
+					const borcluInput = cells[5]?.querySelector('input');
+					if (borcluInput) borcluInput.value = item.BORCLU || "";
+
+					const cinsInput = cells[6]?.querySelector('input');
+					if (cinsInput) cinsInput.value = item.TARIH || "";
+
+					const tutarInput = cells[7]?.querySelector('input');
+					if (tutarInput) tutarInput.value = formatNumber2(item.TUTAR);
 				});
+
 			}
 			updateColumnTotal();
 		}
@@ -475,20 +492,20 @@ function getTableData() {
 
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
-		const firstColumnValue = cells[0]?.querySelector('input')?.value || "";
-		const lastColumnValue = parseLocaleNumber(cells[6]?.textContent || "0");
+		const firstColumnValue = cells[1]?.querySelector('input')?.value || "";
+		const lastColumnValue = parseLocaleNumber(cells[7]?.querySelector('input')?.value || "0");
 		if (!firstColumnValue.trim() || lastColumnValue <= 0) {
 			return;
 		}
 
 		const rowData = {
 			banka: firstColumnValue,
-			sube: cells[1]?.querySelector('input')?.value || "",
-			seri: cells[2]?.textContent || "",
-			hesap: cells[3]?.textContent || "",
-			borclu: cells[4]?.textContent || "",
-			tarih: cells[5]?.querySelector('input')?.value || "",
-			tutar: lastColumnValue, // Sayıya çevrilmiş hali
+			sube: cells[2]?.querySelector('input')?.value || "",
+			seri: cells[3]?.querySelector('input')?.value || "",
+			hesap: cells[4]?.querySelector('input')?.value || "",
+			borclu: cells[5]?.querySelector('input')?.value || "",
+			tarih: cells[6]?.querySelector('input')?.value || "",
+			tutar: lastColumnValue,
 		};
 
 		data.push(rowData);
@@ -546,7 +563,7 @@ async function tahfisKayit() {
 			body: JSON.stringify(tahsilatKayitDTO),
 		});
 		if (response.errorMessage.trim() !== "") {
-				throw new Error(response.errorMessage);
+			throw new Error(response.errorMessage);
 		}
 		tahclearInputs();
 		tah_ted_cins_clear();
@@ -590,7 +607,7 @@ async function tahfisYoket() {
 			body: new URLSearchParams({ evrakNo: evrakNo, tah_ted: tah_ted }),
 		});
 		if (response.errorMessage.trim() !== "") {
-				throw new Error(response.errorMessage);
+			throw new Error(response.errorMessage);
 		}
 		tahclearInputs();
 		tah_ted_cins_clear();
@@ -658,7 +675,7 @@ async function tahcariIsle() {
 			body: JSON.stringify(tahsilatKayitDTO),
 		});
 		if (response.errorMessage.trim() !== "") {
-					throw new Error(response.errorMessage);
+			throw new Error(response.errorMessage);
 		}
 		document.getElementById("errorDiv").innerText = "";
 		errorDiv.style.display = 'none';

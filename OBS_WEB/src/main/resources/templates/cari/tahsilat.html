@@ -18,33 +18,7 @@
 	height: 15px;
 }
 
-.tah-table th:nth-child(1), .tah-table td:nth-child(1) {
-	width: 15%;
-}
 
-.tah-table th:nth-child(2), .tah-table td:nth-child(2) {
-	width: 15%;
-}
-
-.tah-table th:nth-child(3), .tah-table td:nth-child(3) {
-	width: 10%;
-}
-
-.tah-table th:nth-child(4), .tah-table td:nth-child(4) {
-	width: 10%;
-}
-
-.tah-table th:nth-child(5), .tah-table td:nth-child(5) {
-	width: 15%;
-}
-
-.tah-table th:nth-child(6), .tah-table td:nth-child(6) {
-	width: 10%;
-}
-
-.tah-table th:nth-child(7), .tah-table td:nth-child(7) {
-	width: 10%;
-}
 
 .saga-bold {
 	text-align: right;
@@ -257,17 +231,18 @@ datalist {
 				onclick="addRow()">
 				<i class="fa fa-plus"></i>
 			</button>
-			<table class="table table-bordered tah-table" id="cekTable"
+			<table class="table table-bordered" id="cekTable"
 				style="margin-top: 5px;">
 				<thead class="thead-dark">
 					<tr>
+						<th style="width:25px;"></th>
 						<th>Banka</th>
-						<th>Sube</th>
-						<th>Seri No</th>
-						<th>Hesap</th>
-						<th>Borclu</th>
-						<th>Vade</th>
-						<th class="double-column">Tutar</th>
+						<th style="width:15%;">Sube</th>
+						<th style="width:10%;">Seri No</th>
+						<th style="width:10%;">Hesap</th>
+						<th style="width:15%;">Borclu</th>
+						<th style="width:10%;">Vade</th>
+						<th class="double-column" style="width:10%;">Tutar</th>
 					</tr>
 				</thead>
 				<tbody id="tableBody">
@@ -279,8 +254,9 @@ datalist {
 						<td></td>
 						<td></td>
 						<td></td>
+						<td></td>
 						<td style="font-weight: bold;">Toplam</td>
-						<td id="totalTutar" class="saga-bold"></td>
+						<td id="totalTutar" class="saga-bold">0.00</td>
 					</tr>
 				</tfoot>
 			</table>

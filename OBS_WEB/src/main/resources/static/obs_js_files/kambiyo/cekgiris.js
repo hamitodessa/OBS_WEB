@@ -101,8 +101,8 @@ function cekgiraddRow() {
 }
 
 function handleBlur(input) {
-    input.value = formatNumber2(parseLocaleNumber(input.value));
-    updateColumnTotal();
+	input.value = formatNumber2(parseLocaleNumber(input.value));
+	updateColumnTotal();
 }
 function cekgirremoveRow(button) {
 	const row = button.parentElement.parentElement;
@@ -119,29 +119,29 @@ function selectAllContent(element) {
 }
 
 function updateColumnTotal() {
-    const cells = document.querySelectorAll('tr td:nth-child(10) input');
-    const totalTutarCell = document.getElementById("totalTutar");
-    const totalceksayisi = document.getElementById("ceksayisi");
-    let total = 0;
-    let totaladet = 0;
+	const cells = document.querySelectorAll('tr td:nth-child(10) input');
+	const totalTutarCell = document.getElementById("totalTutar");
+	const totalceksayisi = document.getElementById("ceksayisi");
+	let total = 0;
+	let totaladet = 0;
 
-    cells.forEach(input => {
-        const value = parseFloat(input.value.replace(/,/g, '').trim());
-        if (!isNaN(value) && value > 0) {
-            total += value;
-            totaladet += 1;
-        }
-    });
+	cells.forEach(input => {
+		const value = parseFloat(input.value.replace(/,/g, '').trim());
+		if (!isNaN(value) && value > 0) {
+			total += value;
+			totaladet += 1;
+		}
+	});
 
-    totalceksayisi.innerText = totaladet.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    });
+	totalceksayisi.innerText = totaladet.toLocaleString(undefined, {
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0
+	});
 
-    totalTutarCell.textContent = total.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
+	totalTutarCell.textContent = total.toLocaleString(undefined, {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2
+	});
 }
 
 
@@ -261,55 +261,55 @@ async function bordroOku() {
 			errorDiv.innerText = data.errorMessage;
 			return;
 		}
-		
+
 		const tableBody = document.getElementById("tbody");
 		tableBody.innerHTML = "";
 		const table = document.getElementById('gbTable');
 		const rows = table.querySelectorAll('tbody tr');
 		if (data.data.length > rows.length) {
-		    const additionalRows = data.data.length - rows.length;
-		    for (let i = 0; i < additionalRows +1 ; i++) {
-		        cekgiraddRow();
-		    }
+			const additionalRows = data.data.length - rows.length;
+			for (let i = 0; i < additionalRows + 1; i++) {
+				cekgiraddRow();
+			}
 		}
 		const rowss = table.querySelectorAll('tbody tr');
-		data.data.forEach((item,index) => {
-		        const cells = rowss[index].cells;
-				
-		        const ceknoInput = cells[1]?.querySelector('input');
-		        if (ceknoInput) ceknoInput.value = item.Cek_No || "";
-				
-		        const vadeInput = cells[2]?.querySelector('input');
-		        if (vadeInput) vadeInput.value = item.Vade;
+		data.data.forEach((item, index) => {
+			const cells = rowss[index].cells;
 
-		        const bankaInput = cells[3]?.querySelector('input');
-		        if (bankaInput) bankaInput.value = item.Banka || "";
+			const ceknoInput = cells[1]?.querySelector('input');
+			if (ceknoInput) ceknoInput.value = item.Cek_No || "";
 
-		        const subeInput = cells[4]?.querySelector('input');
-		        if (subeInput) subeInput.value = item.Sube || "";
+			const vadeInput = cells[2]?.querySelector('input');
+			if (vadeInput) vadeInput.value = item.Vade;
 
-		        const serinoInput = cells[5]?.querySelector('input');
-		        if (serinoInput) serinoInput.value = item.Seri_No;
+			const bankaInput = cells[3]?.querySelector('input');
+			if (bankaInput) bankaInput.value = item.Banka || "";
 
-		        const ilkborcluSelect = cells[6]?.querySelector('input');
-		        if (ilkborcluSelect) ilkborcluSelect.value = item.Ilk_Borclu || "";
-				
-				const cekhspnoInput = cells[7]?.querySelector('input');
-				if (cekhspnoInput) cekhspnoInput.value = item.Cek_Hesap_No || "";
-				
-				const cinsInput = cells[8]?.querySelector('input');
-				if (cinsInput) cinsInput.value = item.Cins || "";
-				
-				const tutarInput = cells[9]?.querySelector('input');
-				if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
-				
-				cells[10].innerText = item.Cikis_Bordro || '';
-				cells[11].innerText = item.Cikis_Tarihi;
-				cells[12].innerText = item.Cikis_Musteri || '';
-				cells[13].innerText = item.Durum || '';
-				cells[14].innerText = item.T_Tarih;
-				cells[15].innerText = item.Cikis_Ozel_Kod || '';
-		
+			const subeInput = cells[4]?.querySelector('input');
+			if (subeInput) subeInput.value = item.Sube || "";
+
+			const serinoInput = cells[5]?.querySelector('input');
+			if (serinoInput) serinoInput.value = item.Seri_No;
+
+			const ilkborcluSelect = cells[6]?.querySelector('input');
+			if (ilkborcluSelect) ilkborcluSelect.value = item.Ilk_Borclu || "";
+
+			const cekhspnoInput = cells[7]?.querySelector('input');
+			if (cekhspnoInput) cekhspnoInput.value = item.Cek_Hesap_No || "";
+
+			const cinsInput = cells[8]?.querySelector('input');
+			if (cinsInput) cinsInput.value = item.Cins || "";
+
+			const tutarInput = cells[9]?.querySelector('input');
+			if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
+
+			cells[10].innerText = item.Cikis_Bordro || '';
+			cells[11].innerText = item.Cikis_Tarihi;
+			cells[12].innerText = item.Cikis_Musteri || '';
+			cells[13].innerText = item.Durum || '';
+			cells[14].innerText = item.T_Tarih;
+			cells[15].innerText = item.Cikis_Ozel_Kod || '';
+
 		});
 
 		getTableData();
@@ -367,12 +367,12 @@ function getTableData() {
 		}
 		const rowData = {
 			cekNo: firstColumnValue,
-			
+
 			girisBordro: document.getElementById('bordrono').value,
 			girisTarihi: document.getElementById('bordroTarih').value,
 			girisOzelKod: document.getElementById('ozelkod').value,
 			girisMusteri: document.getElementById('bcheskod').value,
-			
+
 			vade: cells[2]?.querySelector('input')?.value || "",
 			banka: cells[3]?.querySelector('input')?.value || "",
 			sube: cells[4]?.querySelector('input')?.value || "",
@@ -598,10 +598,10 @@ async function cekkontrol(element) {
 		const bordrono = document.getElementById("bordrono").value;
 		if (gelenbordro.trim() === "") {
 			alert("Bu Numarada Cek Kaydi Bulunamadi");
-			return; 
+			return;
 		}
 		if (gelenbordro != bordrono) {
-				alert("Bu cek daha onceden giris yapilmis Bordro No:" + gelenbordro);
+			alert("Bu cek daha onceden giris yapilmis Bordro No:" + gelenbordro);
 		}
 	} catch (error) {
 		document.getElementById("errorDiv").style.display = "block";
