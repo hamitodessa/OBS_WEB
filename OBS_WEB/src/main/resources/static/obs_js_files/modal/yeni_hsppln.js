@@ -156,8 +156,8 @@ function saveToMain() {
 		hiddenField.val(degerler);
 	}
 	else if (nerden === "tahsilatrapor") {
-		const tah_ted = $('#tah_ted').selectedIndex;
-		const hangi_tur = $('#hangi_tur').selectedIndex;
+		const tah_ted = $('#tah_ted').prop('selectedIndex');
+		const hangi_tur = $('#hangi_tur').prop('selectedIndex');
 		const pos = $('#pos').val() || "";
 		const hkodu1 = $('#fhkodu1').val() || "";
 		const hkodu2 = $('#fhkodu2').val() || "";

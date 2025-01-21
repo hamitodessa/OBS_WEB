@@ -816,7 +816,7 @@ public class CariPgSQL implements ICariDatabase{
 			}
 			String cinString = "" , turString="" ,posString = "" ;
 			if(tahrapDTO.getTah_ted() !=0)
-				cinString = " \"CINS\" = '" + (tahrapDTO.getHangi_tur() - 1) + "' AND";
+				cinString = " \"CINS\" = '" + (tahrapDTO.getTah_ted() - 1) + "' AND";
 			if(tahrapDTO.getHangi_tur() != 0)
 				turString = " \"TUR\" = '" + (tahrapDTO.getHangi_tur() - 1) + "' AND";
 			if(! tahrapDTO.getPos().equals("Hepsi"))

@@ -649,7 +649,6 @@ public class CariMsSQL implements ICariDatabase{
 		String sql = "SELECT DISTINCT " + nerden +  " AS " +  nerden.toUpperCase() +
 				" FROM TAH_CEK" +
 				" ORDER BY " + nerden;
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -856,9 +855,9 @@ public class CariMsSQL implements ICariDatabase{
 
 			String cinString = "" , turString="" ,posString = "" ;
 			if(tahrapDTO.getTah_ted() !=0)
-				cinString = " CINS = '" + (tahrapDTO.getHangi_tur() - 1) + "' AND";
+				cinString = " CINS = '" + (tahrapDTO.getTah_ted() - 1) + "' AND";
 			if(tahrapDTO.getHangi_tur() != 0)
-				turString = " TUR = '" + (tahrapDTO.getHangi_tur() - 1) + "' AND";
+				turString = " TUR = '" + (tahrapDTO.getHangi_tur() -1) + "' AND";
 			if(! tahrapDTO.getPos().equals("Hepsi"))
 				posString = " POS_BANKA = '" + tahrapDTO.getPos() + "' AND";
 			String sql = "SELECT EVRAK,TARIH,C_HES as CARI_HESAP," + 
