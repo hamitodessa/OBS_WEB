@@ -646,9 +646,10 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> banka_sube(String nerden, ConnectionDetails cariConnDetails) {
-		String sql = "SELECT DISTINCT " + nerden +
+		String sql = "SELECT DISTINCT " + nerden +  " AS " +  nerden.toUpperCase() +
 				" FROM TAH_CEK" +
 				" ORDER BY " + nerden;
+		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

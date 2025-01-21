@@ -705,7 +705,7 @@ public class CariMySQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> banka_sube(String nerden, ConnectionDetails cariConnDetails) {
-		String sql = "SELECT DISTINCT " + nerden +
+		String sql = "SELECT DISTINCT " + nerden +  " AS " +  nerden.toUpperCase() +
 				" FROM TAH_CEK" +
 				" ORDER BY " + nerden;
 		List<Map<String, Object>> resultList = new ArrayList<>();
