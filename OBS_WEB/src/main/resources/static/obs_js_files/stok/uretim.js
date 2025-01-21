@@ -214,7 +214,6 @@ async function uretimOku() {
 				
 				await anagrpChanged(document.getElementById("anagrp"));
 
-				console.info("alt=",item.Alt_Grup);
 				document.getElementById("altgrp").value = item.Alt_Grup || ''
 				const selectElementd = document.getElementById("depo");
 				if (Array.from(selectElementd.options).some(option => option.value.trim() === (item.Depo || '').trim())) {

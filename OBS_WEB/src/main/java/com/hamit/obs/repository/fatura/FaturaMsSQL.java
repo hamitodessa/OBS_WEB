@@ -58,7 +58,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		String sql = "SELECT Kodu,Adi,Birim,Kusurat,Sinif,Ana_Grup,Alt_Grup,Aciklama_1,Aciklama_2 ," +
 				" Ozel_Kod_1 ,Ozel_Kod_2 ,Barkod,Mensei,Agirlik,Resim,Fiat,Fiat_2,Fiat_3,Recete,[USER]" +
 				" FROM MAL WITH (INDEX (IX_MAL))  WHERE Kodu = '" + arama + "'  ORDER by " + sira ;
-		System.out.println(sql);
 		urunDTO urdto = new urunDTO();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
