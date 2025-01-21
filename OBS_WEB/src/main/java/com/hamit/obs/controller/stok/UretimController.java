@@ -209,9 +209,12 @@ public class UretimController {
 					String alts = faturaService.urun_kod_degisken_ara("ALID_Y", "ALT_GRUP", "ALT_GRUP_DEGISKEN", dto.getAltgrup());
 					alt = Integer.parseInt(alts);
 				}
+				String izahat = row.getIzahat() ;
+				if (izahat.equals(""))
+					izahat = dto.getFisno() + " Nolu Uretimde Cikan " ;
 				faturaService.stk_kaydet(dto.getFisno(),"URE", dto.getTarih(), dpo, row.getUkodu(),
 						row.getMiktar() *-1, row.getFiat(), KusurYuvarla.round(row.getTutar() *-1,2), KusurYuvarla.round(row.getTutar() *-1,2), 
-						"C",row.getIzahat(), ana, alt, 0, "", dto.getDvzcins(), "", userrString);
+						"C",izahat, ana, alt, 0, "", dto.getDvzcins(), "", userrString);
 			}
 			//GIRIS YAZ
 			faturaService.stok_sil(dto.getFisno(), "URE", "G");
