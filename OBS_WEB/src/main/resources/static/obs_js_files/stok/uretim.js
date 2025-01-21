@@ -88,7 +88,7 @@ async function urnaramaYap() {
 		document.getElementById("birim").innerText = dto.birim;
 		document.getElementById("anagrpl").innerText = dto.anagrup;
 		document.getElementById("altgrpl").innerText = dto.altgrup;
-		document.getElementById("agirlik").innerText = dto.agirlik;
+		document.getElementById("agirlik").innerText = formatNumber3(dto.agirlik);
 		document.getElementById("barkod").innerText = dto.barkod;
 		document.getElementById("sinif").innerText = dto.sinif;
 
