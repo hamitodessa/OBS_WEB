@@ -532,65 +532,68 @@ public class CariMySQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO, ConnectionDetails cariConnDetails) {
-		List<Map<String, Object>> resultList = new ArrayList<>();
+	    List<Map<String, Object>> resultList = new ArrayList<>();
 
-		StringBuilder sql = new StringBuilder();
-		String havingCondition = "";
-		if (mizanDTO.getHangi_tur().equals("Borclu Hesaplar")) {
-			havingCondition = "HAVING (ROUND(COALESCE((SELECT SUM(SATIRLAR.ALACAK) - SUM(SATIRLAR.BORC) FROM SATIRLAR WHERE SATIRLAR.HESAP= s.HESAP), 0), 2)) < 0";
-		} else if (mizanDTO.getHangi_tur().equals("Alacakli Hesaplar")) {
-			havingCondition = "HAVING (ROUND(COALESCE((SELECT SUM(SATIRLAR.ALACAK) - SUM(SATIRLAR.BORC) FROM SATIRLAR WHERE SATIRLAR.HESAP= s.HESAP), 0), 2)) > 0";
-		} else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olanlar")) {
-			havingCondition = "HAVING (ROUND(COALESCE((SELECT SUM(SATIRLAR.ALACAK) - SUM(SATIRLAR.BORC) FROM SATIRLAR WHERE SATIRLAR.HESAP= s.HESAP), 0), 2)) = 0";
-		} else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olmayanlar")) {
-			havingCondition = "HAVING (ROUND(COALESCE((SELECT SUM(SATIRLAR.ALACAK) - SUM(SATIRLAR.BORC) FROM SATIRLAR WHERE SATIRLAR.HESAP= s.HESAP), 0), 2)) <> 0";
-		}
+	    StringBuilder sql = new StringBuilder();
+	    String havingCondition = "";
 
-		sql.append("SELECT s.HESAP, h.UNVAN, h.HESAP_CINSI AS H_CINSI, ")
-		.append("COALESCE(ROUND((SELECT ROUND(SUM(SATIRLAR.ALACAK), 2) - ROUND(SUM(SATIRLAR.BORC), 2) FROM SATIRLAR ")
-		.append("WHERE SATIRLAR.HESAP = s.HESAP AND TARIH < ?), 2), 0) AS ONCEKI_BAKIYE, ")
-		.append("COALESCE((SELECT SUM(SATIRLAR.BORC) FROM SATIRLAR WHERE SATIRLAR.HESAP = s.HESAP ")
-		.append("AND TARIH BETWEEN ? AND ?), 0) AS BORC, ")
-		.append("COALESCE((SELECT SUM(SATIRLAR.ALACAK) FROM SATIRLAR WHERE SATIRLAR.HESAP = s.HESAP ")
-		.append("AND TARIH BETWEEN ? AND ?), 0) AS ALACAK, ")
-		.append("ROUND(COALESCE((SELECT SUM(SATIRLAR.ALACAK) - SUM(SATIRLAR.BORC) FROM SATIRLAR ")
-		.append("WHERE SATIRLAR.HESAP = s.HESAP AND TARIH BETWEEN ? AND ?), 0), 2) AS BAK_KVARTAL, ")
-		.append("ROUND(COALESCE((SELECT SUM(SATIRLAR.ALACAK) - SUM(SATIRLAR.BORC) FROM SATIRLAR ")
-		.append("WHERE SATIRLAR.HESAP = s.HESAP AND TARIH < ?), 0), 2) AS BAKIYE ")
-		.append("FROM SATIRLAR s LEFT JOIN HESAP h ON h.HESAP = s.HESAP ")
-		.append("WHERE s.HESAP > ? AND s.HESAP < ? ")
-		.append("AND h.HESAP_CINSI BETWEEN ? AND ? ")
-		.append("AND h.KARTON BETWEEN ? AND ? ")
-		.append("GROUP BY s.HESAP, h.UNVAN, h.HESAP_CINSI ")
-		.append(havingCondition)
-		.append(" ORDER BY s.HESAP ASC");
+	    if (mizanDTO.getHangi_tur().equals("Borclu Hesaplar")) {
+	        havingCondition = "HAVING BAKIYE < 0";
+	    } else if (mizanDTO.getHangi_tur().equals("Alacakli Hesaplar")) {
+	        havingCondition = "HAVING BAKIYE > 0";
+	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olanlar")) {
+	        havingCondition = "HAVING BAKIYE = 0";
+	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olmayanlar")) {
+	        havingCondition = "HAVING BAKIYE <> 0";
+	    }
 
-		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+	    sql.append("SELECT s.HESAP, h.UNVAN, h.HESAP_CINSI AS H_CINSI, ")
+	       .append("COALESCE(ROUND(ozet.ONCEKI_BAKIYE, 2), 0) AS ONCEKI_BAKIYE, ")
+	       .append("COALESCE(ROUND(donem.BORC, 2), 0) AS BORC, ")
+	       .append("COALESCE(ROUND(donem.ALACAK, 2), 0) AS ALACAK, ")
+	       .append("ROUND(COALESCE(donem.ALACAK - donem.BORC, 0), 2) AS BAK_KVARTAL, ")
+	       .append("ROUND(COALESCE(ozet.ONCEKI_BAKIYE + (donem.ALACAK - donem.BORC), 0), 2) AS BAKIYE ")
+	       .append("FROM SATIRLAR s ")
+	       .append("LEFT JOIN HESAP h ON h.HESAP = s.HESAP ")
+	       .append("LEFT JOIN (")
+	       .append("  SELECT HESAP, SUM(ALACAK) - SUM(BORC) AS ONCEKI_BAKIYE ")
+	       .append("  FROM SATIRLAR WHERE TARIH < ? GROUP BY HESAP")
+	       .append(") AS ozet ON ozet.HESAP = s.HESAP ")
+	       .append("LEFT JOIN (")
+	       .append("  SELECT HESAP, SUM(BORC) AS BORC, SUM(ALACAK) AS ALACAK ")
+	       .append("  FROM SATIRLAR WHERE TARIH BETWEEN ? AND ? GROUP BY HESAP")
+	       .append(") AS donem ON donem.HESAP = s.HESAP ")
+	       .append("WHERE s.HESAP > ? AND s.HESAP < ? ")
+	       .append("AND h.HESAP_CINSI BETWEEN ? AND ? ")
+	       .append("AND h.KARTON BETWEEN ? AND ? ")
+	       .append("GROUP BY s.HESAP, h.UNVAN, h.HESAP_CINSI, ozet.ONCEKI_BAKIYE, donem.BORC, donem.ALACAK ")
+	       .append(havingCondition)
+	       .append(" ORDER BY s.HESAP ASC");
 
-			preparedStatement.setString(1, mizanDTO.getStartDate());
-			preparedStatement.setString(2, mizanDTO.getStartDate());
-			preparedStatement.setString(3, mizanDTO.getEndDate() + " 23:59:59");
-			preparedStatement.setString(4, mizanDTO.getStartDate());
-			preparedStatement.setString(5, mizanDTO.getEndDate() + " 23:59:59");
-			preparedStatement.setString(6, mizanDTO.getStartDate());
-			preparedStatement.setString(7, mizanDTO.getEndDate());
-			preparedStatement.setString(8, mizanDTO.getEndDate() + " 23:59:59");
-			preparedStatement.setString(9, mizanDTO.getHkodu1());
-			preparedStatement.setString(10, mizanDTO.getHkodu2());
-			preparedStatement.setString(11, mizanDTO.getCins1());
-			preparedStatement.setString(12, mizanDTO.getCins2());
-			preparedStatement.setString(13, mizanDTO.getKarton1());
-			preparedStatement.setString(14, mizanDTO.getKarton2());
+	    try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 
-			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				resultList = ResultSetConverter.convertToList(resultSet);
-			}
-		} catch (SQLException e) {
-			throw new ServiceException("Mizan okunamadı", e);
-		}
+	        preparedStatement.setString(1, mizanDTO.getStartDate());
+	        preparedStatement.setString(2, mizanDTO.getStartDate());
+	        preparedStatement.setString(3, mizanDTO.getEndDate() + " 23:59:59");
+	        preparedStatement.setString(4, mizanDTO.getHkodu1());
+	        preparedStatement.setString(5, mizanDTO.getHkodu2());
+	        preparedStatement.setString(6, mizanDTO.getCins1());
+	        preparedStatement.setString(7, mizanDTO.getCins2());
+	        preparedStatement.setString(8, mizanDTO.getKarton1());
+	        preparedStatement.setString(9, mizanDTO.getKarton2());
 
-		return resultList;	}
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            resultList = ResultSetConverter.convertToList(resultSet);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new ServiceException("Mizan okunamadı", e);
+	    }
+
+	    return resultList;
+	}
+
 
 	@Override
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO, 
