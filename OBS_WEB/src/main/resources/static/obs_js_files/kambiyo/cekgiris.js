@@ -552,8 +552,8 @@ async function gbDownload() {
 	toppara = 0;
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
-		const tutar = parseLocaleNumber(cells[9]?.textContent || "0");
-		toppara += tutar; // Toplam parayı artır
+		const tutar = parseLocaleNumber(cells[9]?.querySelector('input')?.value || "0");
+		toppara += tutar;
 	});
 	const bordroPrinter = {
 		girisBordro: document.getElementById("bordrono").value,

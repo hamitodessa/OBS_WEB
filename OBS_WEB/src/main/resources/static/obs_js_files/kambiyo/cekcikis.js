@@ -467,7 +467,7 @@ async function cbDownload() {
 	toppara = 0;
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
-		const tutar = parseLocaleNumber(cells[9]?.textContent || "0");
+		const tutar = parseLocaleNumber(cells[9]?.querySelector('span')?.textContent || "0")
 		toppara += tutar;
 	});
 	const bordroPrinter = {

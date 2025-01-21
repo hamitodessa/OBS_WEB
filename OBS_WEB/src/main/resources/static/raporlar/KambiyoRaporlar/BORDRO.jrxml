@@ -46,7 +46,7 @@
 		<element kind="staticText" uuid="6f7c51cf-4fca-4c21-9183-707560b974b7" x="220" y="10" width="76" height="18">
 			<text><![CDATA[BORDRO NO :]]></text>
 		</element>
-		<element kind="textField" uuid="32aaa56d-932b-43a3-9698-fbbed6a9c116" x="297" y="10" width="62" height="18" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="32aaa56d-932b-43a3-9698-fbbed6a9c116" x="297" y="10" width="72" height="18" bold="true" hTextAlign="Right">
 			<expression><![CDATA[$P{Bordro_No}]]></expression>
 		</element>
 		<element kind="textField" uuid="7d21ce4e-262d-40ee-97dc-8e4192d4ccd6" x="0" y="60" width="150" height="18" fontSize="12.0" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
