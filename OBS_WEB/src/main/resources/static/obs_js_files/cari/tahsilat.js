@@ -34,15 +34,20 @@ async function fetchHesapKodlariOnce() {
 	errorDiv.innerText = "";
 	errorDiv.style.display = "none";
 	rowCounter = 0;
-	bankaIsimleri = "";
-	subeIsimleri = "";
+	bankaIsimleri = [];
+	subeIsimleri = [];
 	try {
-		const response = await fetchWithSessionCheck('/getBankaIsmi');
-		//if (!response.ok) throw new Error('Banka isimlerini çekerken bir hata oluştu.');
-		bankaIsimleri = response;
-		const responsesube = await fetchWithSessionCheck('/getSubeIsmi');
-		//if (!responsesube.ok) throw new Error('Şube isimlerini çekerken bir hata oluştu.');
-		subeIsimleri = responsesube;
+		const response = await fetchWithSessionCheck("cari/getDegiskenler", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		bankaIsimleri = response.bankaIsmi || [];
+		subeIsimleri = response.subeIsmi || [];
 		initializeRows();
 	} catch (error) {
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";

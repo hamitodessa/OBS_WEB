@@ -48,7 +48,7 @@ public class TahsilatController {
 	public Model register(Model model) {
 		try {
 			model.addAttribute("hesapKodlari", (cariservice.hesap_kodlari() != null) ? cariservice.hesap_kodlari() : new ArrayList<>());
-			model.addAttribute("nameBanks", (cariservice.banka_sube("BANKA") != null) ? cariservice.banka_sube("BANKA") : new ArrayList<>());
+			model.addAttribute("nameBanks", (cariservice.banka_sube("Banka") != null) ? cariservice.banka_sube("Banka") : new ArrayList<>());
 			LocalDate today = LocalDate.now(); 
 			model.addAttribute("evrakTarih", today); 
 			model.addAttribute("errorMessage", "");
@@ -60,20 +60,22 @@ public class TahsilatController {
 		return model;
 	}
 
-	@GetMapping("/getBankaIsmi")
+	@GetMapping("cari/getDegiskenler")
 	@ResponseBody
-	public List<Map<String, Object>> bankaIsmi() {
-		List<Map<String, Object>> bankaIsmi = new ArrayList<>();
-		bankaIsmi = cariservice.banka_sube("BANKA");
-		return (bankaIsmi != null) ? bankaIsmi : new ArrayList<>();
-	}
-
-	@GetMapping("/getSubeIsmi")
-	@ResponseBody
-	public List<Map<String, Object>> subeIsmi() {
-		List<Map<String, Object>> subeIsmi = new ArrayList<>();
-		subeIsmi = cariservice.banka_sube("SUBE");
-		return (subeIsmi != null) ? subeIsmi : new ArrayList<>();
+	public Map<String, Object> bankaIsmi() {
+		Map<String, Object> response = new HashMap<>();
+		try {	 
+			List<Map<String, Object>> bankaIsmi = cariservice.banka_sube("Banka");
+			response.put("bankaIsmi", (bankaIsmi != null) ? bankaIsmi : new ArrayList<>());
+			List<Map<String, Object>> subeIsmi = cariservice.banka_sube("Sube");
+			response.put("subeIsmi", (subeIsmi != null) ? subeIsmi : new ArrayList<>());
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
 	}
 
 	@PostMapping("cari/tahevrakOku")
@@ -121,13 +123,13 @@ public class TahsilatController {
 				throw new ServiceException("Dosyada kayıt yok");
 			}
 			response.setFisNo(String.valueOf(evrakNo));
-			response.setErrorMessage(""); // Hata yoksa boş mesaj
+			response.setErrorMessage("");
 		} catch (ServiceException e) {
 			response.setFisNo("0");
-			response.setErrorMessage(e.getMessage()); // ServiceException hatası
+			response.setErrorMessage(e.getMessage());
 		} catch (Exception e) {
 			response.setFisNo("0");
-			response.setErrorMessage("Hata: " + e.getMessage()); // Diğer hatalar
+			response.setErrorMessage("Hata: " + e.getMessage());
 		}
 		return response;
 	}

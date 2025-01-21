@@ -7,42 +7,22 @@ async function fetchBankaSubeOnce() {
 	errorDiv.innerText = "";
 	errorDiv.style.display = "none";
 	rowCounter = 0;
-	bankaIsimleri = "";
-	subeIsimleri = "";
-	ilkBorclu = "";
+	bankaIsimleri = [];
+	subeIsimleri = [];
+	ilkBorclu = [];
 	try {
-		const responseBanka = await fetchWithSessionCheck("kambiyo/kamgetBankaIsmi", {
+		const response = await fetchWithSessionCheck("kambiyo/kamgetDegiskenler", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
-		if (responseBanka.errorMessage) {
-			throw new Error(responseBanka.errorMessage);
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
 		}
-		bankaIsimleri = responseBanka.bankaIsmi || [];
-		//************SUBE *********************************************/		
-		const responseSube = await fetchWithSessionCheck("kambiyo/kamgetSubeIsmi", {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		if (responseSube.errorMessage) {
-			throw new Error(responseSube.errorMessage);
-		}
-		subeIsimleri = responseSube.subeIsmi || [];
-		//************ILK BORCLU *********************************************/		
-		const responseBorclu = await fetchWithSessionCheck("kambiyo/kamgetIlkBorclu", {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		if (responseBorclu.errorMessage) {
-			throw new Error(responseBorclu.errorMessage);
-		}
-		ilkBorclu = responseBorclu.ilkBorclu || [];
+		bankaIsimleri = response.bankaIsmi || [];
+		subeIsimleri = response.subeIsmi || [];
+		ilkBorclu = response.ilkBorclu || [];
 		initializeRows();
 	} catch (error) {
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
@@ -51,7 +31,7 @@ async function fetchBankaSubeOnce() {
 }
 
 function initializeRows() {
-	rowCounter = 0; // Satır sayacını sıfırla
+	rowCounter = 0;
 	for (let i = 0; i < 5; i++) {
 		cekgiraddRow();
 	}

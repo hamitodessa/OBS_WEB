@@ -3,7 +3,7 @@ async function fetchcekno() {
 	errorDiv.innerText = "";
 	errorDiv.style.display = "none";
 	rowCounter = 0;
-	bankaIsimleri = "";
+	bankaIsimleri = [];
 	try {
 		const responseBanka = await fetchWithSessionCheck("kambiyo/kamgetCekListe", {
 			method: "GET",

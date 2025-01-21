@@ -625,9 +625,9 @@ public class CariPgSQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> banka_sube(String nerden, ConnectionDetails cariConnDetails) {
-		String sql = " SELECT DISTINCT \"" + nerden + "\"" +
+		String sql = " SELECT DISTINCT \"" + nerden.toUpperCase() + "\"" +
 				" FROM \"TAH_CEK\" " +
-				" ORDER BY \"" + nerden + "\"" ;
+				" ORDER BY \"" + nerden.toUpperCase() + "\"" ;
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -635,7 +635,7 @@ public class CariPgSQL implements ICariDatabase{
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService genel hatası.", e);
+			throw new ServiceException("PG CariService genel hatası.", e);
 		}
 		return resultList;
 	}

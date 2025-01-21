@@ -65,13 +65,17 @@ public class CekGirisController {
 		return model;
 	}
 
-	@GetMapping("kambiyo/kamgetBankaIsmi")
+	@GetMapping("kambiyo/kamgetDegiskenler")
 	@ResponseBody
-	public Map<String, Object> bankaIsmi() {
+	public Map<String, Object> kamgetDegiskenler() {
 	    Map<String, Object> response = new HashMap<>();
 	    try {
 	        List<Map<String, Object>> bankaListesi = kambiyoService.banka_sube("Banka");
 	        response.put("bankaIsmi", (bankaListesi != null) ? bankaListesi : new ArrayList<>());
+	        List<Map<String, Object>> subeIsmi = kambiyoService.banka_sube("Sube");
+			response.put("subeIsmi", (subeIsmi != null) ? subeIsmi : new ArrayList<>());
+			List<Map<String, Object>> ilkBorclu = kambiyoService.banka_sube("Ilk_Borclu");
+			response.put("ilkBorclu", (ilkBorclu != null) ? ilkBorclu : new ArrayList<>());
 	        response.put("errorMessage", "");
 	    } catch (ServiceException e) {
 	        response.put("errorMessage", e.getMessage());
@@ -80,39 +84,6 @@ public class CekGirisController {
 	    }
 	    return response;
 	}	
-	
-	
-	@GetMapping("kambiyo/kamgetSubeIsmi")
-	@ResponseBody
-	public Map<String, Object> subeIsmi() {
-		Map<String, Object> response = new HashMap<>();
-		try {
-			List<Map<String, Object>> subeIsmi = kambiyoService.banka_sube("Sube");
-			response.put("subeIsmi", (subeIsmi != null) ? subeIsmi : new ArrayList<>());
-			response.put("errorMessage", "");
-		} catch (ServiceException e) {
-			response.put("errorMessage", e.getMessage());
-		} catch (Exception e) {
-			response.put("errorMessage", "Hata: " + e.getMessage());
-		}
-		return response;
-	}
-	
-	@GetMapping("kambiyo/kamgetIlkBorclu")
-	@ResponseBody
-	public Map<String, Object> ilkBorclu() {
-		Map<String, Object> response = new HashMap<>();
-		try {
-			List<Map<String, Object>> ilkBorclu = kambiyoService.banka_sube("Ilk_Borclu");
-			response.put("ilkBorclu", (ilkBorclu != null) ? ilkBorclu : new ArrayList<>());
-			response.put("errorMessage", "");
-		} catch (ServiceException e) {
-			response.put("errorMessage", e.getMessage());
-		} catch (Exception e) {
-			response.put("errorMessage", "Hata: " + e.getMessage());
-		}
-		return response;
-	}
 	
 	@GetMapping("kambiyo/sonbordroNo")
 	@ResponseBody
