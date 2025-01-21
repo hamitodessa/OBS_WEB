@@ -66,27 +66,26 @@ function cekgiraddRow() {
 	let ilkborcluHTML = ilkBorclu.map(kod => `<option value="${kod.Ilk_Borclu}">${kod.Ilk_Borclu}</option>`).join("");
 	newRow.innerHTML = `
 		<td >
-		<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekgirremoveRow(this)"><i class="fa fa-trash"></i></button>
+			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekgirremoveRow(this)"><i class="fa fa-trash"></i></button>
 		</td>
 		<td>
 	        <div style="position: relative; width: 100%;">
-	                <input class="form-control cins_bold" maxlength="10" id="cekno_${rowCounter}" 
-	                    onkeydown="focusNextCell(event, this)" onchange="cekkontrol(this)">
+	           <input class="form-control cins_bold" maxlength="10" id="cekno_${rowCounter}" onkeydown="focusNextCell(event,this)" onchange="cekkontrol(this)">
 	        </div>
 	    </td>
-		<td><input type="date" class="form-control" onkeydown="focusNextCell(event, this)"></td>
+		<td>
+			<input type="date" class="form-control" onkeydown="focusNextCell(event, this)">
+		</td>
         <td>
             <div style="position: relative; width: 100%;">
-                <input class="form-control cins_bold" list="bankaOptions_${rowCounter}" maxlength="25" id="banka_${rowCounter}" 
-                    onkeydown="focusNextCell(event, this)">
+                <input class="form-control cins_bold" list="bankaOptions_${rowCounter}" maxlength="25" id="banka_${rowCounter}" onkeydown="focusNextCell(event, this)">
                 <datalist id="bankaOptions_${rowCounter}">${optionsHTML}</datalist>
                 <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
             </div>
         </td>
         <td>
             <div style="position: relative; width: 100%;">
-                <input class="form-control cins_bold" list="subeOptions_${rowCounter}" maxlength="25" id="sube_${rowCounter}" 
-                    onkeydown="focusNextCell(event, this)">
+                <input class="form-control cins_bold" list="subeOptions_${rowCounter}" maxlength="25" id="sube_${rowCounter}" onkeydown="focusNextCell(event, this)">
                 <datalist id="subeOptions_${rowCounter}">${subeHTML}</datalist>
                 <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
             </div>
@@ -108,7 +107,6 @@ function cekgiraddRow() {
 		<td>
 			<input class="form-control cins_bold"  maxlength="3" id="cins_${rowCounter}" onkeydown="focusNextCell(event, this)">
 		</td>
-		
 		<td>
 		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
 			     onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
@@ -492,12 +490,12 @@ function ortgun() {
 	let orgun = 0;
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
-		const tutar = parseLocaleNumber(cells[9]?.textContent || "0");
+		const tutar = parseLocaleNumber(cells[9]?.querySelector('input')?.value || "0");
 		const vade = cells[2]?.querySelector('input')?.value;
-		if (vade && gunlukTarih) {
+		if (tutar > 0 && vade && gunlukTarih) {
 			const gunfarki = tarihGunFarki(gunlukTarih, vade);
 			const faiz = (((tutar * faizoran) / 365) * gunfarki) / 100;
-			toppara += tutar; // Toplam parayı artır
+			toppara += tutar;
 			tfaiz += faiz;
 			orgun = ((toppara * faizoran) / 365) / 100;
 		}

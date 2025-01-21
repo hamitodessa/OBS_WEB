@@ -34,16 +34,13 @@ function cekcikaddRow() {
 	let optionsHTML = bankaIsimleri.map(kod => `<option value="${kod.Cek_No}">${kod.Cek_No}</option>`).join("");
 	newRow.innerHTML = `
 		<td >
-		<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekcikremoveRow(this)"><i class="fa fa-trash"></i></button>
+			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekcikremoveRow(this)"><i class="fa fa-trash"></i></button>
 		</td>
 		<td>
 	        <div style="position: relative; width: 100%;">
-	            <input class="form-control cins_bold" list="cekOptions_${rowCounter}"
-	               maxlength="10" id="cekno_${rowCounter}" 
-	               onchange="cekkontrol(this)">
+	            <input class="form-control cins_bold" list="cekOptions_${rowCounter}" maxlength="10" id="cekno_${rowCounter}" onchange="cekkontrol(this)">
 				<datalist id="cekOptions_${rowCounter}">${optionsHTML}</datalist>
 		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-
 	        </div>
 	    </td>
 		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
@@ -97,13 +94,11 @@ function updateColumnTotal() {
     });
 }
 
-
 function focusNextRow(event, element) {
 	if (event.key === "Enter") {
 		event.preventDefault();
 		const currentRow = element.closest('tr');
 		const nextRow = currentRow.nextElementSibling;
-
 		if (nextRow) {
 			const secondInput = nextRow.querySelector("td:nth-child(2) input");
 			if (secondInput) {
@@ -111,7 +106,6 @@ function focusNextRow(event, element) {
 				secondInput.select();
 			}
 		} else {
-			// Yeni bir satır ekle ve onun ikinci kolonundaki input öğesine odaklan
 			cekcikaddRow();
 			const table = currentRow.parentElement;
 			const newRow = table.lastElementChild;
@@ -313,7 +307,7 @@ function prepareBordroKayit() {
 }
 
 function getTableData() {
-	const table = document.getElementById('gbTable'); // Tablo ID'sini değiştirin
+	const table = document.getElementById('gbTable');
 	const rows = table.querySelectorAll('tbody tr');
 	const data = [];
 	rows.forEach((row) => {
@@ -367,9 +361,9 @@ async function cbKayit() {
 		document.body.style.cursor = 'default';
 	}
 }
-//************************evrak sil ***********************************************
+
 async function cbYoket() {
-	const bordroNo = document.getElementById("bordrono").value.trim(); // Boşlukları temizle
+	const bordroNo = document.getElementById("bordrono").value.trim();
 	if (!bordroNo || bordroNo === "0") {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
@@ -412,14 +406,14 @@ function ortgun() {
 	let orgun = 0;
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
-		const tutar = parseLocaleNumber(cells[9]?.textContent || "0");
-		const vade = cells[2]?.textContent;
-		if (vade && gunlukTarih) {
-			const gunfarki = tarihGunFarki(gunlukTarih, vade);
-			const faiz = (((tutar * faizoran) / 365) * gunfarki) / 100;
-			toppara += tutar;
-			tfaiz += faiz;
-			orgun = ((toppara * faizoran) / 365) / 100;
+		const tutar = parseLocaleNumber(cells[9]?.querySelector('span')?.textContent || "0");
+		const vade = cells[2]?.querySelector('span')?.textContent;
+		if (tutar > 0 && vade && gunlukTarih) {
+				const gunfarki = tarihGunFarki(gunlukTarih, vade);
+				const faiz = (((tutar * faizoran) / 365) * gunfarki) / 100;
+				toppara += tutar;
+				tfaiz += faiz;
+				orgun = ((toppara * faizoran) / 365) / 100;
 		}
 	});
 	document.getElementById("lblortgun").innerText = (tfaiz / orgun).toLocaleString(undefined, {
@@ -463,18 +457,18 @@ async function yeniBordro() {
 }
 
 async function cbDownload() {
-	const bordroNo = document.getElementById("bordrono").value.trim(); // Boşlukları temizle
+	const bordroNo = document.getElementById("bordrono").value.trim();
 	if (!bordroNo || bordroNo === "0") {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
-	const table = document.getElementById('gbTable'); // Tablo ID'sini değiştirin
+	const table = document.getElementById('gbTable');
 	const rows = table.querySelectorAll('tbody tr');
 	toppara = 0;
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
 		const tutar = parseLocaleNumber(cells[9]?.textContent || "0");
-		toppara += tutar; // Toplam parayı artır
+		toppara += tutar;
 	});
 	const bordroPrinter = {
 		cikisBordro: document.getElementById("bordrono").value,
@@ -484,7 +478,7 @@ async function cbDownload() {
 		dvzcins: document.getElementById("dvzcinsi").value || "",
 		tutar: toppara || 0,
 	};
-	const errorDiv = document.getElementById("errorDiv"); // Hata mesajını göstermek için
+	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
 	document.body.style.cursor = "wait";
@@ -511,7 +505,7 @@ async function cbDownload() {
 			throw new Error("Dosya indirilemedi.");
 		}
 	} catch (error) {
-		errorDiv.style.display = "block"; // Hata mesajını göster
+		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
 	} finally {
 		$indirButton.prop('disabled', false).text('Rapor İndir');
@@ -553,12 +547,12 @@ async function cekcariIsle() {
 
 function cbmailAt() {
 
-	const bordroNo = document.getElementById("bordrono").value.trim(); // Boşlukları temizle
+	const bordroNo = document.getElementById("bordrono").value.trim();
 	if (!bordroNo || bordroNo === "0") {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
-	const table = document.getElementById('gbTable'); // Tablo ID'sini değiştirin
+	const table = document.getElementById('gbTable');
 	const rows = table.querySelectorAll('tbody tr');
 	toppara = 0;
 	rows.forEach((row) => {
@@ -580,6 +574,6 @@ function cbmailAt() {
 function setLabelContent(cell, content) {
     const span = cell.querySelector('label span');
     if (span) {
-        span.textContent = content ? content : '\u00A0'; // Eğer içerik boşsa, boşluk karakteri eklenir
+        span.textContent = content ? content : '\u00A0';
     }
 }

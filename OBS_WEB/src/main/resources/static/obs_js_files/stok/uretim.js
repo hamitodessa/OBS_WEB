@@ -478,6 +478,9 @@ function clearInputs() {
 	document.getElementById("sinif").innerText = "";
 	document.getElementById("mikbirim").innerText = "";
 	
+	const selectElement = document.getElementById("altgrp");
+	selectElement.disabled = true;
+	
 	const tableBody = document.getElementById("tbody");
 	tableBody.innerHTML = "";
 	rowCounter = 0;
