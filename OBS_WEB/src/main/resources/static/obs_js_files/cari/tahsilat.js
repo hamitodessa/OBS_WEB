@@ -297,8 +297,8 @@ async function tahevrakOku() {
 					const borcluInput = cells[5]?.querySelector('input');
 					if (borcluInput) borcluInput.value = item.BORCLU || "";
 
-					const cinsInput = cells[6]?.querySelector('input');
-					if (cinsInput) cinsInput.value = item.TARIH || "";
+					const vadeInput = cells[6]?.querySelector('input');
+					if (vadeInput) vadeInput.value = formatTableDate(item.TARIH) || "";
 
 					const tutarInput = cells[7]?.querySelector('input');
 					if (tutarInput) tutarInput.value = formatNumber2(item.TUTAR);

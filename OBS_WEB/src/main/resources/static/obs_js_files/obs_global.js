@@ -22,36 +22,20 @@ formatInputBox2 = function(input) {
 	});
 }
 
-formatInputBox3 = function(input) {
-	const value = input.value.replace(/,/g, '').trim();
-	if (!value || isNaN(value)) {
-		input.value = "0.00";
-		return;
-	}
-	input.value = parseFloat(value).toLocaleString(undefined, {
-		minimumFractionDigits: 3,
-		maximumFractionDigits: 3
-	});
-}
-
-formatInputBox4 = function(input) {
-	const value = input.value.replace(/,/g, '').trim();
-	if (!value || isNaN(value)) {
-		input.value = "0.0000";
-		return;
-	}
-	input.value = parseFloat(value).toLocaleString(undefined, {
-		minimumFractionDigits: 4,
-		maximumFractionDigits: 4
-	});
-}
-
 formatNumber2 = function(value) {
-	if (value == null) return '';
-	return parseFloat(value).toLocaleString(undefined, {
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2
-	});
+  if (value == null) return '';
+  return parseFloat(value).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+formatNumber3 = function(value) {
+  if (value == null) return '';
+  return parseFloat(value).toLocaleString(undefined, {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3
+  });
 }
 
 formatNumber4 = function(value) {
@@ -62,19 +46,8 @@ formatNumber4 = function(value) {
 	});
 }
 
-formatNumber3 = function(value) {
-	if (value == null) return '';
-	return parseFloat(value).toLocaleString(undefined, {
-		minimumFractionDigits: 3,
-		maximumFractionDigits: 3
-	});
-}
-formatdateSaatsiz = function (dateString){
-	const isoDate = dateString; // "2025-01-15T09:48:22.023+00:00"
-	const formattedDate = new Date(isoDate).toISOString().split('T')[0];
-	return formattedDate;
-	
-}
+
+
 
 formatDate = function(dateString) {
 	if (!dateString) return '';
@@ -94,22 +67,19 @@ getFullDateWithTimeAndMilliseconds = function(dateInput) {
 	const fullDate = `${dateInput} ${hours}:${minutes}:${seconds}.${milliseconds}`;
 	return fullDate;
 }
-formatTableDate = function(date) {
-	if (!date) return '';
-	const d = new Date(date);
-	return d.toISOString().split('T')[0];
-}
 
-formatInputTable2 = function(element) {
-	const value = element.textContent.replace(/,/g, '').trim();
-	if (!value || isNaN(value)) {
-		element.textContent = "0.00";
-		return;
-	}
-	element.textContent = parseFloat(value).toLocaleString(undefined, {
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2
-	});
+function formatTableDate(dateValue) {
+    if (dateValue.includes('T')) {
+        const date = new Date(dateValue);
+        return date.toISOString().split('T')[0]; 
+    }
+    return dateValue; 
+}
+formatdateSaatsiz = function (dateString){
+  const isoDate = dateString;
+  const formattedDate = new Date(isoDate).toISOString().split('T')[0];
+  return formattedDate;
+  
 }
 
 
