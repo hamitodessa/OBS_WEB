@@ -12,23 +12,22 @@ import java.util.Locale;
 
 public class Tarih_Cevir {
 
-	public static String tarihEksi1(String tarih)
-	{
-		SimpleDateFormat datefmt = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH); 
-		Date datey;
-		LocalDate localDate = null;
-		Calendar cal = Calendar.getInstance();
-		try {
-			Date date = datefmt.parse(tarih);
-			cal = Calendar.getInstance();
-			cal.setTime(date);
-			cal.add(Calendar.DAY_OF_MONTH, -1); 
-			datey = cal.getTime();
-			localDate = datey.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		} catch (Exception e) {
-		}
-		return localDate.toString() ;
+	public static String tarihEksi1(String tarih) {
+	    SimpleDateFormat datefmt = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH); 
+	    try {
+	        Date date = datefmt.parse(tarih);
+	        Calendar cal = Calendar.getInstance();
+	        cal.setTime(date);
+	        cal.add(Calendar.DAY_OF_MONTH, -1); 
+	        return cal.getTime().toInstant()
+	                  .atZone(ZoneId.systemDefault())
+	                  .toLocalDate()
+	                  .toString();
+	    } catch (Exception e) {
+	        return null;
+	    }
 	}
+	
 	public static String tarihTers(String tarih) {
 		LocalDate localDate = LocalDate.parse(tarih, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		return localDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
