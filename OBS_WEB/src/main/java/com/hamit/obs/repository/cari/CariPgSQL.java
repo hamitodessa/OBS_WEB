@@ -521,48 +521,53 @@ public class CariPgSQL implements ICariDatabase{
 	@Override
 	public List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO, ConnectionDetails cariConnDetails) {
 		List<Map<String, Object>> resultList = new ArrayList<>();
-		String o1 = "";
-		String o2 = " ORDER BY 1,2,3";
+		String havingCondition = "";
+	    if (mizanDTO.getHangi_tur().equals("Borclu Hesaplar")) {
+	        havingCondition = " HAVING SUM(s.\"ALACAK\" - s.\"BORC\") < 0 ";
+	    } else if (mizanDTO.getHangi_tur().equals("Alacakli Hesaplar")) {
+	        havingCondition = " HAVING SUM(s.\"ALACAK\" - s.\"BORC\") > 0 ";
+	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olanlar")) {
+	        havingCondition = " HAVING SUM(s.\"ALACAK\" - s.\"BORC\") = 0 ";
+	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olmayanlar")) {
+	        havingCondition = " HAVING SUM(s.\"ALACAK\" - s.\"BORC\") <> 0 ";
+	    }
 
-		switch (mizanDTO.getHangi_tur()) {
-		case "Borclu Hesaplar":
-			o1 = " HAVING ROUND(SUM(s.\"ALACAK\" - s.\"BORC\")::numeric, 2) < 0";
-			break;
-		case "Alacakli Hesaplar":
-			o1 = " HAVING ROUND(SUM(s.\"ALACAK\" - s.\"BORC\")::numeric, 2) > 0";
-			break;
-		case "Bakiyesi 0 Olanlar":
-			o1 = " HAVING ROUND(SUM(s.\"ALACAK\" - s.\"BORC\")::numeric, 2) = 0";
-			break;
-		case "Bakiyesi 0 Olmayanlar":
-			o1 = " HAVING ROUND(SUM(s.\"ALACAK\" - s.\"BORC\")::numeric, 2) <> 0";
-			break;
-		}
+	    String sql = "" +
+		        "SELECT s.\"HESAP\", h.\"UNVAN\", h.\"HESAP_CINSI\", " +
+		        "COALESCE(ozet.\"ONCEKI_BAKIYE\", 0) AS \"ONCEKI_BAKIYE\", " +
+		        "COALESCE(donem.\"BORC\", 0) AS \"BORC\", " +
+		        "COALESCE(donem.\"ALACAK\", 0) AS \"ALACAK\", " +
+		        "(COALESCE(donem.\"ALACAK\", 0) - COALESCE(donem.\"BORC\", 0)) AS \"BAK_KVARTAL\", " +
+		        "(COALESCE(ozet.\"ONCEKI_BAKIYE\", 0) + (COALESCE(donem.\"ALACAK\", 0) - COALESCE(donem.\"BORC\", 0))) AS \"BAKIYE\" " +
+		        "FROM \"SATIRLAR\" s " +
+		        "LEFT JOIN \"HESAP\" h ON h.\"HESAP\" = s.\"HESAP\" " +
+		        "LEFT JOIN (" +
+		        "  SELECT \"HESAP\", SUM(\"ALACAK\") - SUM(\"BORC\") AS \"ONCEKI_BAKIYE\" " +
+		        "  FROM \"SATIRLAR\" WHERE \"TARIH\" < ? GROUP BY \"HESAP\" " +
+		        ") AS ozet ON ozet.\"HESAP\" = s.\"HESAP\" " +
+		        "LEFT JOIN (" +
+		        "  SELECT \"HESAP\", SUM(\"BORC\") AS \"BORC\", SUM(\"ALACAK\") AS \"ALACAK\" " +
+		        "  FROM \"SATIRLAR\" WHERE \"TARIH\" BETWEEN ? AND ? GROUP BY \"HESAP\" " +
+		        ") AS donem ON donem.\"HESAP\" = s.\"HESAP\" " +
+		        "WHERE s.\"HESAP\" > ? AND s.\"HESAP\" < ? " +
+		        "AND h.\"HESAP_CINSI\" BETWEEN ? AND ? " +
+		        "AND h.\"KARTON\" BETWEEN ? AND ? " +
+		        "GROUP BY s.\"HESAP\", h.\"UNVAN\", h.\"HESAP_CINSI\", ozet.\"ONCEKI_BAKIYE\", donem.\"BORC\", donem.\"ALACAK\" " +
+		        havingCondition + " " +
+		        "ORDER BY 1, 2, 3";
 
-		String sql = "SELECT s.\"HESAP\",h.\"UNVAN\",h.\"HESAP_CINSI\","
-				+ " COALESCE((SELECT SUM(\"SATIRLAR\".\"ALACAK\") - SUM(\"SATIRLAR\".\"BORC\") FROM \"SATIRLAR\""
-				+ " WHERE \"SATIRLAR\".\"HESAP\" = s.\"HESAP\" AND \"TARIH\" < '" + mizanDTO.getStartDate() + "'),0) as \"ONCEKI_BAKIYE\","
-				+ " COALESCE((SELECT SUM(\"SATIRLAR\".\"BORC\") FROM \"SATIRLAR\" WHERE \"SATIRLAR\".\"HESAP\" = s.\"HESAP\""
-				+ " AND \"TARIH\" BETWEEN '" + mizanDTO.getStartDate() + "' AND '" + mizanDTO.getEndDate() + " 23:59:59.998'),0) as \"BORC\","
-				+ " COALESCE((SELECT SUM(\"SATIRLAR\".\"ALACAK\") FROM \"SATIRLAR\" WHERE \"SATIRLAR\".\"HESAP\" = s.\"HESAP\""
-				+ " AND \"TARIH\" BETWEEN '" + mizanDTO.getStartDate() + "' AND '" + mizanDTO.getEndDate() +" 23:59:59.998'),0) as \"ALACAK\","
-				+ " COALESCE((SELECT SUM(\"SATIRLAR\".\"ALACAK\") FROM \"SATIRLAR\" WHERE \"SATIRLAR\".\"HESAP\" = s.\"HESAP\" AND \"TARIH\" BETWEEN"
-				+ " '" + mizanDTO.getStartDate() + "' AND '" + mizanDTO.getEndDate() + "'),0) -	"
-				+ " COALESCE((SELECT SUM(\"SATIRLAR\".\"BORC\") FROM \"SATIRLAR\" WHERE \"SATIRLAR\".\"HESAP\" = s.\"HESAP\""
-				+ " AND \"TARIH\" BETWEEN '" + mizanDTO.getStartDate() + "' AND '" + mizanDTO.getEndDate() + " 23:59:59.998'),0) as \"BAK_KVARTAL\","
-				+ " COALESCE((SELECT SUM(\"SATIRLAR\".\"ALACAK\") - SUM(\"SATIRLAR\".\"BORC\") FROM \"SATIRLAR\""
-				+ " WHERE \"SATIRLAR\".\"HESAP\" = s.\"HESAP\" AND \"TARIH\" < '" + mizanDTO.getEndDate() + " 23:59:59.998'),0) as \"BAKIYE\""
-				+ "	FROM \"SATIRLAR\" s LEFT JOIN \"HESAP\" as h ON h.\"HESAP\" = s.\"HESAP\"  "  
-				+ " WHERE s.\"HESAP\" > '" + mizanDTO.getHkodu1() + "' AND  s.\"HESAP\" < '" + mizanDTO.getHkodu2() + "'"
-				+ " AND h.\"HESAP_CINSI\" BETWEEN N'"+ mizanDTO.getCins1() + "' AND '"+ mizanDTO.getCins2() +"' " 
-				+ " AND h.\"KARTON\" BETWEEN N'" + mizanDTO.getKarton1() + "' AND N'" + mizanDTO.getKarton2() + "'" 
-				+ " GROUP BY 1,2,3 " + o1 + " " + o2 + "" ;
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 
-		try (Connection connection = DriverManager.getConnection(
-				cariConnDetails.getJdbcUrl(),
-				cariConnDetails.getUsername(),
-				cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setTimestamp(1, java.sql.Timestamp.valueOf(mizanDTO.getStartDate() + " 00:00:00"));
+			preparedStatement.setTimestamp(2, java.sql.Timestamp.valueOf(mizanDTO.getStartDate() + " 00:00:00"));
+			preparedStatement.setTimestamp(3, java.sql.Timestamp.valueOf(mizanDTO.getEndDate() + " 23:59:59.998"));
+			preparedStatement.setString(4, mizanDTO.getHkodu1());
+			preparedStatement.setString(5, mizanDTO.getHkodu2());
+			preparedStatement.setString(6, mizanDTO.getCins1());
+			preparedStatement.setString(7, mizanDTO.getCins2());
+			preparedStatement.setString(8, mizanDTO.getKarton1());
+			preparedStatement.setString(9, mizanDTO.getKarton2());
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
@@ -571,7 +576,6 @@ public class CariPgSQL implements ICariDatabase{
 		} catch (Exception e) {
 			throw new ServiceException("Bilinmeyen bir hata oluştu: " + e.getMessage(), e);
 		}
-
 		return resultList;
 	}
 	@Override

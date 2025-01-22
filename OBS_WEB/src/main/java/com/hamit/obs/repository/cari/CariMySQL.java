@@ -534,44 +534,43 @@ public class CariMySQL implements ICariDatabase{
 	public List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO, ConnectionDetails cariConnDetails) {
 	    List<Map<String, Object>> resultList = new ArrayList<>();
 
-	    StringBuilder sql = new StringBuilder();
 	    String havingCondition = "";
-
 	    if (mizanDTO.getHangi_tur().equals("Borclu Hesaplar")) {
-	        havingCondition = "HAVING BAKIYE < 0";
+	        havingCondition = " HAVING BAKIYE < 0 ";
 	    } else if (mizanDTO.getHangi_tur().equals("Alacakli Hesaplar")) {
-	        havingCondition = "HAVING BAKIYE > 0";
+	        havingCondition = " HAVING BAKIYE > 0 ";
 	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olanlar")) {
-	        havingCondition = "HAVING BAKIYE = 0";
+	        havingCondition = " HAVING BAKIYE = 0 ";
 	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olmayanlar")) {
-	        havingCondition = "HAVING BAKIYE <> 0";
+	        havingCondition = " HAVING BAKIYE <> 0 ";
 	    }
 
-	    sql.append("SELECT s.HESAP, h.UNVAN, h.HESAP_CINSI AS H_CINSI, ")
-	       .append("COALESCE(ROUND(ozet.ONCEKI_BAKIYE, 2), 0) AS ONCEKI_BAKIYE, ")
-	       .append("COALESCE(ROUND(donem.BORC, 2), 0) AS BORC, ")
-	       .append("COALESCE(ROUND(donem.ALACAK, 2), 0) AS ALACAK, ")
-	       .append("ROUND(COALESCE(donem.ALACAK - donem.BORC, 0), 2) AS BAK_KVARTAL, ")
-	       .append("ROUND(COALESCE(ozet.ONCEKI_BAKIYE + (donem.ALACAK - donem.BORC), 0), 2) AS BAKIYE ")
-	       .append("FROM SATIRLAR s ")
-	       .append("LEFT JOIN HESAP h ON h.HESAP = s.HESAP ")
-	       .append("LEFT JOIN (")
-	       .append("  SELECT HESAP, SUM(ALACAK) - SUM(BORC) AS ONCEKI_BAKIYE ")
-	       .append("  FROM SATIRLAR WHERE TARIH < ? GROUP BY HESAP")
-	       .append(") AS ozet ON ozet.HESAP = s.HESAP ")
-	       .append("LEFT JOIN (")
-	       .append("  SELECT HESAP, SUM(BORC) AS BORC, SUM(ALACAK) AS ALACAK ")
-	       .append("  FROM SATIRLAR WHERE TARIH BETWEEN ? AND ? GROUP BY HESAP")
-	       .append(") AS donem ON donem.HESAP = s.HESAP ")
-	       .append("WHERE s.HESAP > ? AND s.HESAP < ? ")
-	       .append("AND h.HESAP_CINSI BETWEEN ? AND ? ")
-	       .append("AND h.KARTON BETWEEN ? AND ? ")
-	       .append("GROUP BY s.HESAP, h.UNVAN, h.HESAP_CINSI, ozet.ONCEKI_BAKIYE, donem.BORC, donem.ALACAK ")
-	       .append(havingCondition)
-	       .append(" ORDER BY s.HESAP ASC");
+    String sql = "" +
+        "SELECT s.HESAP, h.UNVAN, h.HESAP_CINSI, " +
+        "COALESCE(ROUND(ozet.ONCEKI_BAKIYE, 2), 0) AS ONCEKI_BAKIYE, " +
+        "COALESCE(ROUND(donem.BORC, 2), 0) AS BORC, " +
+        "COALESCE(ROUND(donem.ALACAK, 2), 0) AS ALACAK, " +
+        "ROUND(COALESCE(donem.ALACAK, 0) - COALESCE(donem.BORC, 0), 2) AS BAK_KVARTAL, " +
+        "ROUND(COALESCE(ozet.ONCEKI_BAKIYE, 0) + COALESCE(donem.ALACAK, 0) - COALESCE(donem.BORC, 0), 2) AS BAKIYE " +
+        "FROM SATIRLAR s USE INDEX (IXS_HESAP) " +
+        "LEFT JOIN HESAP h ON h.HESAP = s.HESAP " +
+        "LEFT JOIN (" +
+        "  SELECT HESAP, SUM(ALACAK) - SUM(BORC) AS ONCEKI_BAKIYE " +
+        "  FROM SATIRLAR USE INDEX (IXS_HESAP) WHERE TARIH < ? GROUP BY HESAP " +
+        ") AS ozet ON ozet.HESAP = s.HESAP " +
+        "LEFT JOIN (" +
+        "  SELECT HESAP, SUM(BORC) AS BORC, SUM(ALACAK) AS ALACAK " +
+        "  FROM SATIRLAR USE INDEX (IXS_HESAP) WHERE TARIH BETWEEN ? AND ? GROUP BY HESAP " +
+        ") AS donem ON donem.HESAP = s.HESAP " +
+        "WHERE s.HESAP > ? AND s.HESAP < ? " +
+        "AND h.HESAP_CINSI BETWEEN ? AND ? " +
+        "AND h.KARTON BETWEEN ? AND ? " +
+        "GROUP BY s.HESAP, h.UNVAN, h.HESAP_CINSI, ozet.ONCEKI_BAKIYE, donem.BORC, donem.ALACAK " +
+        havingCondition + " " +
+        "ORDER BY s.HESAP ASC";
 
 	    try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-	         PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
 	        preparedStatement.setString(1, mizanDTO.getStartDate());
 	        preparedStatement.setString(2, mizanDTO.getStartDate());
@@ -587,7 +586,6 @@ public class CariMySQL implements ICariDatabase{
 	            resultList = ResultSetConverter.convertToList(resultSet);
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
 	        throw new ServiceException("Mizan okunamadı", e);
 	    }
 
