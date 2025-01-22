@@ -6,11 +6,11 @@ depolar = [];
 urnkodlar = [];
 rowCounter = 0;
 
-incrementRowCounter = function() {
+incrementRowCounter = function () {
 	rowCounter++;
 };
 
-formatInputBox2 = function(input) {
+formatInputBox2 = function (input) {
 	const value = input.value.replace(/,/g, '').trim();
 	if (!value || isNaN(value)) {
 		input.value = "0.00";
@@ -22,23 +22,23 @@ formatInputBox2 = function(input) {
 	});
 }
 
-formatNumber2 = function(value) {
-  if (value == null) return '';
-  return parseFloat(value).toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+formatNumber2 = function (value) {
+	if (value == null) return '';
+	return parseFloat(value).toLocaleString(undefined, {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2
+	});
 }
 
-formatNumber3 = function(value) {
-  if (value == null) return '';
-  return parseFloat(value).toLocaleString(undefined, {
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3
-  });
+formatNumber3 = function (value) {
+	if (value == null) return '';
+	return parseFloat(value).toLocaleString(undefined, {
+		minimumFractionDigits: 3,
+		maximumFractionDigits: 3
+	});
 }
 
-formatNumber4 = function(value) {
+formatNumber4 = function (value) {
 	if (value == null) return '';
 	return parseFloat(value).toLocaleString(undefined, {
 		minimumFractionDigits: 4,
@@ -46,10 +46,7 @@ formatNumber4 = function(value) {
 	});
 }
 
-
-
-
-formatDate = function(dateString) {
+formatDate = function (dateString) {
 	if (!dateString) return '';
 	const date = new Date(dateString);
 	const day = String(date.getDate()).padStart(2, '0');
@@ -57,8 +54,8 @@ formatDate = function(dateString) {
 	const year = date.getFullYear();
 	return `${day}.${month}.${year}`;
 }
-//********************************** tarih cevir ******************************************
-getFullDateWithTimeAndMilliseconds = function(dateInput) {
+
+getFullDateWithTimeAndMilliseconds = function (dateInput) {
 	const now = new Date(); // Şu anki zamanı al
 	const hours = now.getHours().toString().padStart(2, '0');
 	const minutes = now.getMinutes().toString().padStart(2, '0');
@@ -68,22 +65,22 @@ getFullDateWithTimeAndMilliseconds = function(dateInput) {
 	return fullDate;
 }
 
-function formatTableDate(dateValue) {
-    if (dateValue.includes('T')) {
-        const date = new Date(dateValue);
-        return date.toISOString().split('T')[0]; 
-    }
-    return dateValue; 
-}
-formatdateSaatsiz = function (dateString){
-  const isoDate = dateString;
-  const formattedDate = new Date(isoDate).toISOString().split('T')[0];
-  return formattedDate;
-  
+formatTableDate = function (dateValue) {
+	if (dateValue.includes('T')) {
+		const date = new Date(dateValue);
+		return date.toISOString().split('T')[0];
+	}
+	return dateValue;
 }
 
+formatdateSaatsiz = function (dateString) {
+	const isoDate = dateString;
+	const formattedDate = new Date(isoDate).toISOString().split('T')[0];
+	return formattedDate;
 
-validateAutoSearch = function(inputId, datalistId) {
+}
+
+validateAutoSearch = function (inputId, datalistId) {
 	const inputElement = document.getElementById(inputId);
 	const datalist = document.getElementById(datalistId);
 	const inputValue = inputElement.value;
@@ -94,7 +91,7 @@ validateAutoSearch = function(inputId, datalistId) {
 		inputElement.setCustomValidity("");
 	}
 	if (!options.includes(inputValue)) {
-		inputElement.addEventListener('blur', function() {
+		inputElement.addEventListener('blur', function () {
 			if (!options.includes(inputElement.value)) {
 				inputElement.value = "";
 			}
@@ -102,7 +99,7 @@ validateAutoSearch = function(inputId, datalistId) {
 	}
 }
 
-hesapAdiOgren = async function(inputId, targetLabelId1) {
+hesapAdiOgren = async function (inputId, targetLabelId1) {
 	const inputValue = inputId;
 	document.body.style.cursor = "wait";
 	if (!inputValue) {
@@ -110,7 +107,6 @@ hesapAdiOgren = async function(inputId, targetLabelId1) {
 		document.body.style.cursor = "default";
 		return;
 	}
-
 	try {
 		const response = await fetchWithSessionCheck("cari/hesapadi", {
 			method: 'POST',
@@ -131,16 +127,14 @@ hesapAdiOgren = async function(inputId, targetLabelId1) {
 	}
 }
 
-adrhesapAdiOgren = async function(inputId, targetLabelId1) {
+adrhesapAdiOgren = async function (inputId, targetLabelId1) {
 	const inputValue = document.getElementById(inputId).value;
 	document.body.style.cursor = "wait";
-
 	if (!inputValue) {
 		document.getElementById(targetLabelId1).innerText = "";
 		document.body.style.cursor = "default";
 		return;
 	}
-
 	try {
 		const response = await fetchWithSessionCheck("adr/hesapadi", {
 			method: 'POST',
@@ -149,7 +143,6 @@ adrhesapAdiOgren = async function(inputId, targetLabelId1) {
 			},
 			body: new URLSearchParams({ hesapkodu: inputValue }),
 		});
-
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
@@ -167,21 +160,21 @@ async function mailsayfasiYukle(url) {
 		$.ajax({
 			url: url,
 			type: "GET",
-			success: function(data) {
+			success: function (data) {
 				if (data.includes('<form') && data.includes('name="username"')) {
 					window.location.href = "/login";
 				} else {
 					$('#ara_content').html(data);
 				}
 			},
-			error: function(xhr) {
+			error: function (xhr) {
 				if (xhr.status === 401) {
 					window.location.href = "/login";
 				} else {
 					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
 				}
 			},
-			complete: function() {
+			complete: function () {
 				$('body').css('cursor', 'default');
 			}
 		});
@@ -281,7 +274,6 @@ async function cariBaslik() {
 	try {
 		const response = await fetchWithSessionCheck("cari/getBaslik");
 		const data = response;
-
 		if (data.errorMessage === "") {
 			document.getElementById("baslik").innerText = data.baslik;
 		} else {
@@ -300,7 +292,6 @@ async function adresBaslik() {
 	try {
 		const response = await fetchWithSessionCheck("adres/getBaslik");
 		const data = response;
-
 		if (data.errorMessage === "") {
 			document.getElementById("baslik").innerText = data.baslik;
 		} else {
@@ -351,7 +342,7 @@ async function stokBaslik() {
 	}
 }
 
-parseLocaleNumber = function(input) {
+parseLocaleNumber = function (input) {
 	if (!input) return 0;
 	if (input.includes(",") && input.includes(".")) {
 		if (input.indexOf(",") < input.indexOf(".")) {
@@ -365,4 +356,3 @@ parseLocaleNumber = function(input) {
 		return parseFloat(input);
 	}
 }
-

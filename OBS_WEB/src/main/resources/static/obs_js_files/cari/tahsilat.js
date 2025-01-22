@@ -59,17 +59,14 @@ function initializeRows() {
 	for (let i = 0; i < 10; i++) {
 		addRow();
 	}
-
 }
 
 function addRow() {
 	const table = document.getElementById("cekTable").getElementsByTagName("tbody")[0];
 	const newRow = table.insertRow();
-
 	incrementRowCounter();
 	let optionsHTML = bankaIsimleri.map(kod => `<option value="${kod.BANKA}">${kod.BANKA}</option>`).join("");
 	let subeHTML = subeIsimleri.map(kod => `<option value="${kod.SUBE}">${kod.SUBE}</option>`).join("");
-
 	newRow.innerHTML = `
       	<td >
 	         <button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekgirremoveRow(this)"><i class="fa fa-trash"></i></button>
@@ -136,7 +133,6 @@ function updateColumnTotal() {
 	const tutarToplam = document.getElementById("tutar");
 	const totalTutarCell = document.getElementById("totalTutar");
 	const totalceksayisi = document.getElementById("ceksayisi");
-
 	let total = 0;
 	let totaladet = 0;
 	cells.forEach(cell => {
@@ -186,7 +182,6 @@ function focusNextRow(event, element) {
 	}
 }
 
-
 function focusNextCell(event, element) {
 	if (event.key === "Enter") {
 		event.preventDefault();
@@ -206,7 +201,6 @@ function focusNextCell(event, element) {
 	}
 }
 
-//*****************************evrak kontrol **********************************************
 function tahevrakOkuma(event) {
 	if (event.key === "Enter" || event.keyCode === 13) {
 		tahevrakOku();
@@ -308,14 +302,12 @@ async function tahevrakOku() {
 			updateColumnTotal();
 		}
 		turChange();
-
 		document.getElementById("tahTarih").value = dto.tahTarih;
 		document.getElementById("tutar").value = formatNumber2(dto.tutar);
 		document.getElementById("tcheskod").value = dto.tcheskod || "";
 		document.getElementById("adresheskod").value = dto.adresheskod || "";
 		document.getElementById("dvz_cins").text = dto.dvz_cins || "TL";
 		document.getElementById("posBanka").value = dto.posBanka || "";
-
 		const ches = document.getElementById("tcheskod");
 		ches.oninput();
 		const ahes = document.getElementById("adresheskod");
@@ -331,7 +323,6 @@ async function tahevrakOku() {
 }
 
 function tahclearInputs() {
-
 	document.getElementById("tutar").value = formatNumber2(0);
 	document.getElementById("tcheskod").value = "";
 	document.getElementById("adresheskod").value = "";
@@ -340,7 +331,6 @@ function tahclearInputs() {
 	document.getElementById("lblcheskod").innerText = "";
 	document.getElementById("lbladrheskod").innerText = "";
 	document.getElementById("ceksayisi").innerText = "0";
-
 	const tableBody = document.getElementById("tableBody");
 	tableBody.innerHTML = "";
 	initializeRows();
@@ -353,13 +343,11 @@ function tah_ted_cins_clear() {
 	document.getElementById("tur").value = "Nakit";
 }
 
-//********************************gerifisno ***********************************************
 function tahgerifisNo() {
 	const fisNoInput = document.getElementById('tahevrakNo');
 	const errorDiv = document.getElementById('errorDiv');
 	if (fisNoInput) {
 		const currentValue = parseInt(fisNoInput.value, 10) || 0; // Eğer değer geçersizse 0 kabul edilir
-
 		if (currentValue <= 0) {
 			return;
 		}
@@ -372,7 +360,6 @@ function tahgerifisNo() {
 	}
 }
 
-//******************************** ileri fis **********************************************
 function tahilerifisNo() {
 	const fisNoInput = document.getElementById('tahevrakNo');
 	const errorDiv = document.getElementById('errorDiv');
@@ -382,13 +369,11 @@ function tahilerifisNo() {
 		tah_ted_cins_clear();
 		turChange();
 		tahevrakOku();
-
 	} else {
 		errorDiv.innerText = "Hata: 'evrakNo' elemanı bulunamadı.";
 	}
 }
 
-//************************************sonfisno *****************************************************
 async function tahsonfisNo() {
 	let tah_ted;
 	if (document.getElementById("tah_ted").value === "Tahsilat") {
@@ -396,7 +381,6 @@ async function tahsonfisNo() {
 	} else {
 		tah_ted = 1;
 	}
-
 	try {
 		const response = await fetchWithSessionCheck('/cari/tahsonfisNo', {
 			method: 'POST',
@@ -405,20 +389,16 @@ async function tahsonfisNo() {
 			},
 			body: new URLSearchParams({ tah_ted: tah_ted }),
 		});
-
 		const data = response;
 		const fisNoInput = document.getElementById('tahevrakNo');
 		const errorDiv = document.getElementById('errorDiv');
-
 		fisNoInput.value = data.fisNo;
-
 		if (data.fisNo === 0) {
 			alert('Hata: Evrak numarası bulunamadı.');
 			errorDiv.innerText = data.errorMessage || "Bilinmeyen bir hata.";
 			errorDiv.style.display = 'block';
 			return;
 		}
-
 		if (data.errorMessage) {
 			errorDiv.innerText = data.errorMessage;
 			errorDiv.style.display = 'block';
@@ -435,7 +415,6 @@ async function tahsonfisNo() {
 	}
 }
 
-//************************************sonfisno *****************************************************
 async function tahyenifis() {
 	let tah_ted;
 	if (document.getElementById("tah_ted").value === "Tahsilat") {
@@ -443,7 +422,6 @@ async function tahyenifis() {
 	} else {
 		tah_ted = "CIK";
 	}
-
 	try {
 		const response = await fetchWithSessionCheck('/cari/tahyenifisNo', {
 			method: 'POST',
@@ -452,23 +430,18 @@ async function tahyenifis() {
 			},
 			body: new URLSearchParams({ tah_ted: tah_ted }),
 		});
-
 		if (!response.ok) {
 			throw new Error(`HTTP error! Status: ${response.status}`);
 		}
-
 		const data = response;
 		const fisNoInput = document.getElementById('tahevrakNo');
 		const errorDiv = document.getElementById('errorDiv');
-
 		fisNoInput.value = data.fisNo;
-
 		if (data.fisNo === 0) {
 			errorDiv.innerText = data.errorMessage || "Bilinmeyen bir hata.";
 			errorDiv.style.display = 'block';
 			return;
 		}
-
 		if (data.errorMessage) {
 			errorDiv.innerText = data.errorMessage;
 			errorDiv.style.display = 'block';
@@ -489,7 +462,6 @@ function getTableData() {
 	const table = document.getElementById('cekTable'); // Tablo ID'sini değiştirin
 	const rows = table.querySelectorAll('tbody tr');
 	const data = [];
-
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
 		const firstColumnValue = cells[1]?.querySelector('input')?.value || "";
@@ -497,7 +469,6 @@ function getTableData() {
 		if (!firstColumnValue.trim() || lastColumnValue <= 0) {
 			return;
 		}
-
 		const rowData = {
 			banka: firstColumnValue,
 			sube: cells[2]?.querySelector('input')?.value || "",
@@ -515,7 +486,6 @@ function getTableData() {
 }
 
 function prepareRequestPayload() {
-
 	let turu = "";
 	if (document.getElementById("tur").value === "Nakit") {
 		turu = 0;
@@ -530,7 +500,6 @@ function prepareRequestPayload() {
 	} else if (document.getElementById("tah_ted").value === "Tediye") {
 		tah_ted = 1;
 	}
-
 	const tahsilatDTO = {
 		tah_ted: tah_ted,
 		fisNo: document.getElementById("tahevrakNo").value || "",
@@ -549,7 +518,6 @@ function prepareRequestPayload() {
 	}
 	return { tahsilatDTO, tableData, };
 }
-
 
 async function tahfisKayit() {
 	const tahsilatKayitDTO = prepareRequestPayload();
@@ -577,11 +545,9 @@ async function tahfisKayit() {
 	}
 }
 
-//************************evrak sil ***********************************************
 async function tahfisYoket() {
 	const evrakNo = document.getElementById("tahevrakNo").value;
 	let tah_ted;
-
 	if (document.getElementById("tah_ted").value === "Tahsilat") {
 		tah_ted = 0;
 	} else {

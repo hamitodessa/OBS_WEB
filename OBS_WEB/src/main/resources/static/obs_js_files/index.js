@@ -1,5 +1,5 @@
-$(document).ready(function() {
-	$('.changeLink').on('click', function(event) {
+$(document).ready(function () {
+	$('.changeLink').on('click', function (event) {
 		event.preventDefault();
 		document.getElementById("baslik").innerText = "";
 		const url = $(this).attr('data-url');
@@ -7,7 +7,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: url,
 			type: "GET",
-			success: function(data) {
+			success: function (data) {
 				if (data.includes('<form') && data.includes('name="username"')) {
 					window.location.href = "/login";
 				} else {
@@ -16,14 +16,14 @@ $(document).ready(function() {
 					if (action) action();
 				}
 			},
-			error: function(xhr) {
+			error: function (xhr) {
 				if (xhr.status === 401) {
 					window.location.href = "/login";
 				} else {
 					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
 				}
 			},
-			complete: function() {
+			complete: function () {
 				$('body').css('cursor', 'default');
 			}
 		});
@@ -86,7 +86,6 @@ $(document).ready(function() {
 		"/stok/uretim": () => {
 			stokBaslik();
 			fetchkoddepo();
-		
 		},
 	}
 });
