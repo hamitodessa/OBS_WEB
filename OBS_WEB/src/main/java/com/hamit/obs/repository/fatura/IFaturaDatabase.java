@@ -33,4 +33,5 @@ public interface IFaturaDatabase {
 			String b1, String doviz, String hspkodu, String usr,ConnectionDetails faturaConnDetails);
 	void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,ConnectionDetails faturaConnDetails);
 	void aciklama_sil(String evrcins,String evrno,String cins,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> urun_arama(ConnectionDetails faturaConnDetails);
 }

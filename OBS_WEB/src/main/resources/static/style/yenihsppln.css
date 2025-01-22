@@ -42,15 +42,3 @@
 	line-height: 10px;
 }
 
-.modal-table th:nth-child(1), .modal-table td:nth-child(1) {
-	width: 5% ;
-} 
-.modal-table th:nth-child(2), .modal-table td:nth-child(2) {
-	width: 25%;
-} 
-.modal-table th:nth-child(3), .modal-table td:nth-child(3) {
-	width: 5%;
-} 
-.modal-table th:nth-child(4), .modal-table td:nth-child(4) {
-	width: 5%;
-}

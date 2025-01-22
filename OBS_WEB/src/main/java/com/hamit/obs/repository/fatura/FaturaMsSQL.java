@@ -520,4 +520,26 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("aciklama sil", e);
 		}	
 	}
+
+	@Override
+	public List<Map<String, Object>> urun_arama(ConnectionDetails faturaConnDetails) {
+		String sql = " SELECT  MAL.Barkod, MAL.Kodu, MAL.Adi, mal.Sinif,mal.Birim,mal.agirlik as Agirlik,  " +
+				" ISNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = MAL.Mensei),'') AS Mensei , " +
+				" ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup),'') AS Ana_Grup, " +
+				" ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup),'') AS Alt_Grup, " +
+				" ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID = MAL.Ozel_Kod_1),'') as Ozel_Kod_1, " +
+				" ISNULL((SELECT OZEL_KOD_2 FROM OZ_KOD_2_DEGISKEN WHERE OZ_KOD_2_DEGISKEN.OZ2ID = MAL.Ozel_Kod_2),'') as Ozel_Kod_2, " +
+				" mal.Aciklama_1,mal.Aciklama_2 " +
+				" FROM MAL WITH (INDEX (IX_MAL)) ORDER BY MAL.Kodu ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
+	}
 }

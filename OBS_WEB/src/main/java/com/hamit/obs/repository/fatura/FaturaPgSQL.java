@@ -517,4 +517,10 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("aciklama sil", e);
 		}	
 	}
+
+	@Override
+	public List<Map<String, Object>> urun_arama(ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

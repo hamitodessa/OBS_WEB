@@ -11,18 +11,35 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.cari.CariService;
+import com.hamit.obs.service.fatura.FaturaService;
 
 @Controller
 public class ModalController {
 
 	@Autowired
 	private CariService cariservice;
+	
+	@Autowired
+	private FaturaService faturaService;
 
 	@GetMapping("/modal/hsppln")
 	@ResponseBody
 	public List<Map<String, Object>> getModalData() {
 		try {
 			List<Map<String, Object>> modalData = cariservice.hp_pln();
+			return (modalData != null) ? modalData : new ArrayList<>();
+		} catch (ServiceException e) {
+			throw e; 
+		} catch (Exception e) {
+			throw new ServiceException("Modal verileri alınırken bir hata oluştu.", e);
+		}
+	}
+	
+	@GetMapping("/modal/urunkodlari")
+	@ResponseBody
+	public List<Map<String, Object>> geturunkodlari() {
+		try {
+			List<Map<String, Object>> modalData = faturaService.urun_arama();
 			return (modalData != null) ? modalData : new ArrayList<>();
 		} catch (ServiceException e) {
 			throw e; 

@@ -362,17 +362,16 @@ function getTableData() {
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
 		const firstColumnValue = cells[1]?.querySelector('input')?.value || "";
-		if (!firstColumnValue.trim()) {
+		const ninthColumnValue = parseFloat(cells[9]?.querySelector('input')?.value || "0");
+		if (!firstColumnValue || ninthColumnValue <= 0) {
 			return;
 		}
 		const rowData = {
 			cekNo: firstColumnValue,
-
 			girisBordro: document.getElementById('bordrono').value,
 			girisTarihi: document.getElementById('bordroTarih').value,
 			girisOzelKod: document.getElementById('ozelkod').value,
 			girisMusteri: document.getElementById('bcheskod').value,
-
 			vade: cells[2]?.querySelector('input')?.value || "",
 			banka: cells[3]?.querySelector('input')?.value || "",
 			sube: cells[4]?.querySelector('input')?.value || "",

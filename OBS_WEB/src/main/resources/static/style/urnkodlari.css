@@ -1,0 +1,58 @@
+
+    .urnsecond-modall-body {
+        padding: 0; 
+        display: flex; 
+        flex-direction: column;
+    }
+    #urnsecond-modalTableBody {
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+    .urnsecond-modall-table-container {
+        overflow-y: auto;
+        overflow-x: auto;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+    }
+    #urnsecond-searchInputContainer {
+        flex: 0 0 auto; 
+        background-color: white;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        z-index: 1;
+    }
+.urnsecond-modal-table th, .urnsecond-modal-table td {
+    text-align: left;
+}
+
+.urnsecond-modal-table tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.urnsecond-table .thead-dark th {
+    color: #fff;
+    background: #214162;
+}
+
+.urnsecond-modal-table.table-hover tbody tr:hover {
+    background-color: #ced4da !important; 
+    color: inherit !important;
+}
+
+.urnsecond-modal-table .table-row-height td {
+    height: 10px;
+    line-height: 10px;
+}
+
+.tah-table th:nth-child(1) {
+	width: 8%;
+}
+
+.tah-table th:nth-child(2) {
+	width: 10%;
+}
+
+.tah-table th:nth-child(3) {
+	width: 20%;
+}
