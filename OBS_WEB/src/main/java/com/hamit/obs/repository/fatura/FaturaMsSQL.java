@@ -11,9 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.stok.urunDTO;
@@ -542,4 +544,166 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		return resultList; 
 
 	}
+
+	@Override
+	public void urun_degisken_eski(String fieldd, String degiskenAdi, String nerden, String sno, int id,
+	        ConnectionDetails faturaConnDetails) {
+	    String sql = "UPDATE " + nerden + " SET " + fieldd + " = ? WHERE " + sno + " = ?";
+	    try (Connection connection = DriverManager.getConnection(
+	            faturaConnDetails.getJdbcUrl(),
+	            faturaConnDetails.getUsername(),
+	            faturaConnDetails.getPassword());
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+	        preparedStatement.setString(1, degiskenAdi);
+	        preparedStatement.setInt(2, id);
+	        preparedStatement.executeUpdate();
+	    } catch (SQLException e) {
+	        throw new ServiceException("Ürün değişken güncelleme başarısız", e);
+	    }
+	}
+
+	@Override
+	public void urun_degisken_alt_grup_eski(String alt_grup, int ana_grup, int id,
+			ConnectionDetails faturaConnDetails) {
+		    String sql = "UPDATE ALT_GRUP_DEGISKEN SET ALT_GRUP = ?, ANA_GRUP = ? WHERE ALID_Y = ?";
+		    try (Connection connection = DriverManager.getConnection(
+		            faturaConnDetails.getJdbcUrl(),
+		            faturaConnDetails.getUsername(),
+		            faturaConnDetails.getPassword());
+		         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+		        preparedStatement.setString(1, alt_grup);
+		        preparedStatement.setInt(2, ana_grup);
+		        preparedStatement.setInt(3, id);
+		        preparedStatement.executeUpdate();
+		    } catch (SQLException e) {
+		        throw new ServiceException("Ürün değişken alt grup güncelleme başarısız", e);
+		    }
+		}
+
+	@Override
+	public void urun_degisken_kayit(String fieldd, String nerden, String degisken_adi, String sira,
+			ConnectionDetails faturaConnDetails) {
+		int maks = 0;
+		String sql = "SELECT MAX(" + fieldd + ") AS maks FROM " + nerden;
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement selectStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = selectStatement.executeQuery();
+			if (resultSet.next()) {
+				maks = resultSet.getInt("maks");
+			}
+			sql = "INSERT INTO " + nerden + " (" + fieldd + ", " + degisken_adi + ", [USER]) VALUES (?, ?, ?)";
+			try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
+				insertStatement.setInt(1, maks + 1);
+				insertStatement.setString(2, sira);
+				String usrString = Global_Yardimci.user_log(
+						SecurityContextHolder.getContext().getAuthentication().getName());
+				insertStatement.setString(3, usrString);
+				insertStatement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken kayıt işlemi başarısız", e);
+		}
+	}
+
+	@Override
+	public void urun_degisken_alt_grup_kayit(String alt_grup, int ana_grup, ConnectionDetails faturaConnDetails) {
+		int maks = 0;
+		String sql = "SELECT max(ALID_Y)  AS ALID_Y  FROM ALT_GRUP_DEGISKEN   " ;
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement selectStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = selectStatement.executeQuery();
+			if (resultSet.next()) {
+				int count=0;
+				count = resultSet.getRow();
+				maks = (count != 0) ? resultSet.getInt("ALID_Y") : 0;
+			}
+			sql = "INSERT INTO ALT_GRUP_DEGISKEN (ALID_Y,ALT_GRUP,ANA_GRUP,[USER]) " +
+					" VALUES (?,?,?,?)" ;
+			try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
+				insertStatement.setInt(1,maks + 1);
+				insertStatement.setString(2, alt_grup);
+				insertStatement.setInt(3,ana_grup);
+				String usrString = Global_Yardimci.user_log(
+						SecurityContextHolder.getContext().getAuthentication().getName());
+				insertStatement.setString(4, usrString);
+				insertStatement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken kayıt işlemi başarısız", e);
+		}
+
+	}
+
+	@Override
+	public boolean alt_grup_kontrol(int anagrp, int altgrp, ConnectionDetails faturaConnDetails) {
+		   boolean result = true;
+		    String[] sqlQueries = {
+		        "SELECT * FROM MAL WHERE Ana_Grup = ? AND Alt_Grup = ?",
+		        "SELECT * FROM FATURA WHERE Ana_Grup = ? AND Alt_Grup = ?",
+		        "SELECT * FROM IRSALIYE WHERE Ana_Grup = ? AND Alt_Grup = ?",
+		        "SELECT * FROM RECETE WHERE Ana_Grup = ? AND Alt_Grup = ?",
+		        "SELECT * FROM STOK WHERE Ana_Grup = ? AND Alt_Grup = ?"
+		    };
+		    try (Connection connection = DriverManager.getConnection(
+		            faturaConnDetails.getJdbcUrl(),
+		            faturaConnDetails.getUsername(),
+		            faturaConnDetails.getPassword())) {
+
+		        for (String sql : sqlQueries) {
+		            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+		                preparedStatement.setInt(1, anagrp);
+		                preparedStatement.setInt(2, altgrp);
+
+		                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		                    if (!resultSet.isBeforeFirst()) {
+		                        result = false;
+		                        break; 
+		                    }
+		                }
+		            }
+		        }
+
+		    } catch (SQLException e) {
+		        throw new ServiceException("Alt grup kontrolü sırasında bir hata oluştu", e);
+		    }		return result;
+
+	}
+
+	@Override
+	public void urun_degisken_alt_grup_sil(int id, ConnectionDetails faturaConnDetails) {
+		String sql = "DELETE ALT_GRUP_DEGISKEN  WHERE ALID_Y = ? ";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setInt(1, id);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+
+	}
+
+	@Override
+	public void urun_kod_degisken_sil(String hangi_Y, String nerden, int sira, ConnectionDetails faturaConnDetails) {
+		String sql = "DELETE " + nerden  + " WHERE " + hangi_Y + " = ?";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setInt(1, sira);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+
+	} 
 }

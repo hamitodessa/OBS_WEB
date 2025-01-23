@@ -523,4 +523,49 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void urun_degisken_eski(String fieldd, String degisken_adi, String nerden, String sno, int ID,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void urun_degisken_alt_grup_eski(String alt_grup, int ana_grup, int ID,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void urun_degisken_kayit(String fieldd, String nerden, String degisken_adi, String sira,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void urun_degisken_alt_grup_kayit(String alt_grup, int ana_grup, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean alt_grup_kontrol(int anagrp, int altgrp, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void urun_degisken_alt_grup_sil(int id, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void urun_kod_degisken_sil(String hangi_Y, String nerden, int sira, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
 }

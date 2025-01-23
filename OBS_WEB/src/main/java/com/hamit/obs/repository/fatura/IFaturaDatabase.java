@@ -34,4 +34,11 @@ public interface IFaturaDatabase {
 	void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,ConnectionDetails faturaConnDetails);
 	void aciklama_sil(String evrcins,String evrno,String cins,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> urun_arama(ConnectionDetails faturaConnDetails);
+	void urun_degisken_eski(String fieldd ,String degisken_adi ,String nerden ,String sno ,int ID ,ConnectionDetails faturaConnDetails);
+	void urun_degisken_alt_grup_eski(String alt_grup ,int ana_grup ,int  ID,ConnectionDetails faturaConnDetails);
+	void urun_degisken_kayit(String fieldd  ,String nerden,String degisken_adi,String sira,ConnectionDetails faturaConnDetails);
+	void  urun_degisken_alt_grup_kayit (String alt_grup , int ana_grup,ConnectionDetails faturaConnDetails);
+	boolean alt_grup_kontrol(int anagrp,int altgrp,ConnectionDetails faturaConnDetails);
+	void urun_degisken_alt_grup_sil(int id,ConnectionDetails faturaConnDetails);
+	void urun_kod_degisken_sil(String hangi_Y,String nerden,int sira,ConnectionDetails faturaConnDetails);
 }

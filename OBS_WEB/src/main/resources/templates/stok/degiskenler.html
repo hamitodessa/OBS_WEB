@@ -82,7 +82,7 @@
       <label class="form-control" style="width: 130px;text-align:left;">Aciklama</label>
       <span style="padding-left: 5px;"></span>
       <input type="text" id="aciklama" class="form-control" />
-      <input type="hidden" id="idacik"  value="">
+      <input type="hidden" id="idacik"  >
       
     </div>
   </div>
@@ -105,19 +105,16 @@
   
     <div class="centered-div" style="margin-top:10px;margin-bottom:10px;">
     <div class="group-box" style="padding-top:10px;padding-bottom:10px;padding-right: 5px;">
-      <span style="padding-left: 5px;"></span>
-      <button class="btn btn-primary" type="button" id="degkaydetButton"
-						onclick="degKayit()">Kaydet</button>
-					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="uresilButton"
-						onclick="degYoket()">Sil</button>
-			<button type="button" id="btnYeni" class="btn btn-secondary ml-2" onclick="degyeni()" ><i class="fa fa-plus"></i>	</button>
-		
-      
+      	<span style="padding-left: 5px;"></span>
+      	<button class="btn btn-primary" type="button" id="degkaydetButton"
+			onclick="degKayit()">Kaydet</button>
+		<span style="padding-left: 5px;"></span>
+		<button class="btn btn-primary" type="button" id="degsilButton"
+			onclick="degYoket()">Sil</button>
+		<span style="padding-left: 5px;"></span>
+		<button type="button" id="btnYeni" class="btn btn-primary" onclick="degyeni()" > + </button>
     </div>
   </div>
-  
-  
 </div>
 
 <script src="/obs_js_files/stok/degiskenler.js"></script>

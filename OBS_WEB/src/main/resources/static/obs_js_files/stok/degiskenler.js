@@ -29,9 +29,7 @@ async function degiskenchange(grpElement) {
 	else if (grup === "oz2") {
 		oz2doldur();
 	}
-
 }
-
 
 async function anagrpdoldur() {
 	const errorDiv = document.getElementById("errorDiv");
@@ -82,9 +80,7 @@ async function menseidoldur() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		console.info(response);
 		const data = response.mensei;
-
 		const tableBody = document.getElementById("degiskenTableBody");
 		tableBody.innerHTML = "";
 		if (data.length === 0) {
@@ -124,9 +120,7 @@ async function depodoldur() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		console.info(response);
 		const data = response.depo;
-
 		const tableBody = document.getElementById("degiskenTableBody");
 		tableBody.innerHTML = "";
 		if (data.length === 0) {
@@ -166,9 +160,8 @@ async function oz1doldur() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		console.info(response);
+		
 		const data = response.oz1;
-
 		const tableBody = document.getElementById("degiskenTableBody");
 		tableBody.innerHTML = "";
 		if (data.length === 0) {
@@ -208,9 +201,7 @@ async function oz2doldur() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		console.info(response);
 		const data = response.oz2;
-
 		const tableBody = document.getElementById("degiskenTableBody");
 		tableBody.innerHTML = "";
 		if (data.length === 0) {
@@ -273,7 +264,6 @@ async function altgrpdoldur() {
 		const tableBody = document.getElementById("degiskenTableBody");
 		tableBody.innerHTML = "";
 		if (data.length === 0) {
-
 			return;
 		}
 		tableBody.classList.add("table-row-height");
@@ -281,10 +271,10 @@ async function altgrpdoldur() {
 			if (row.ALT_GRUP != "") {
 				const tr = document.createElement("tr");
 				tr.innerHTML = `
-				<td style="display: none;">${row.KOD || ""}</td>
+				<td style="display: none;">${row.ALID_Y || ""}</td>
                 <td>${row.ALT_GRUP || ""}</td>
                `;
-				tr.onclick = () => selectValue(row.ALT_GRUP, row.KOD);
+				tr.onclick = () => selectValue(row.ALT_GRUP, row.ALID_Y);
 				tableBody.appendChild(tr);
 			}
 		});
@@ -305,11 +295,8 @@ async function altgrpdoldur() {
 function selectValue(selectedaciklama, selectedid) {
 	const inputElement = document.getElementById("aciklama");
 	const idacik = document.getElementById("idacik");
-
-	if (inputElement) {
-		inputElement.value = selectedaciklama;
-		idacik.value = selectedid;
-	}
+	inputElement.value = selectedaciklama;
+	idacik.value = selectedid;
 }
 
 function degyeni() {
@@ -321,7 +308,7 @@ function degyeni() {
 
 async function degKayit() {
 	const aciklama = document.getElementById("aciklama").value;
-	const idacik = document.getElementById("idacik").value;
+	const idacik = document.getElementById("idacik").value || "";
 	const degisken = document.getElementById("degiskenler").value;
 	const altgrpAna = document.getElementById("altgrpAna").value;
 		
@@ -337,6 +324,11 @@ async function degKayit() {
 	saveButton.textContent = "İşlem yapılıyor...";
 	saveButton.disabled = true;
 	document.body.style.cursor = "wait";
+	
+	if (!idacik) {
+	    alert('Lütfen  açıklama alanlarını doldurun.');
+	    return;
+	  }
 	try {
 		const response = await fetchWithSessionCheck('stok/degkayit', {
 			method: 'POST',
@@ -351,13 +343,64 @@ async function degKayit() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-
+		const inputElement = document.getElementById("degiskenler");
+		degiskenchange(inputElement);
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
 	} finally {
 		document.body.style.cursor = "default";
-		saveButton.textContent = "Yorum Kaydet";
+		saveButton.textContent = "Kaydet";
 		saveButton.disabled = false;
 	}
+}
+
+
+async function degYoket() {
+	const confirmDelete = confirm("Silmek istediğinize emin misiniz?");
+	  if (!confirmDelete) {
+	    return;
+	  }
+		const aciklama = document.getElementById("aciklama").value;
+  const idacik = document.getElementById("idacik").value || "";
+  const degisken = document.getElementById("degiskenler").value;
+  const altgrpAna = document.getElementById("altgrpAna").value;
+    
+  if (!idacik) {
+    alert('Lütfen  açıklama alanlarını doldurun.');
+    return;
+  }
+  const errorDiv = document.getElementById("errorDiv");
+  errorDiv.style.display = "none";
+  errorDiv.innerText = "";
+
+  const saveButton = document.getElementById('degsilButton');
+  saveButton.textContent = "İşlem yapılıyor...";
+  saveButton.disabled = true;
+  document.body.style.cursor = "wait";
+  console.info(aciklama,idacik,degisken ,altgrpAna);
+  try {
+    const response = await fetchWithSessionCheck('stok/degsil', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({aciklama,idacik,degisken ,altgrpAna}),
+    });
+    if (!response) {
+      return;
+    }
+    if (response.errorMessage) {
+      throw new Error(response.errorMessage);
+    }
+    const inputElement = document.getElementById("degiskenler");
+    degiskenchange(inputElement);
+  } catch (error) {
+    errorDiv.style.display = "block";
+    errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
+  } finally {
+    document.body.style.cursor = "default";
+    saveButton.textContent = "Sil";
+    saveButton.disabled = false;
+  }
 }
