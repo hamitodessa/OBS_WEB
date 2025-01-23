@@ -311,3 +311,53 @@ function selectValue(selectedaciklama, selectedid) {
 		idacik.value = selectedid;
 	}
 }
+
+function degyeni() {
+	const inputElement = document.getElementById("aciklama");
+	const idacik = document.getElementById("idacik");
+	inputElement.value = "";
+	idacik.value = "";
+}
+
+async function degKayit() {
+	const aciklama = document.getElementById("aciklama").value;
+	const idacik = document.getElementById("idacik").value;
+	const degisken = document.getElementById("degiskenler").value;
+	const altgrpAna = document.getElementById("altgrpAna").value;
+		
+	if (!aciklama) {
+		alert('Lütfen  açıklama alanlarını doldurun.');
+		return;
+	}
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+
+	const saveButton = document.getElementById('degkaydetButton');
+	saveButton.textContent = "İşlem yapılıyor...";
+	saveButton.disabled = true;
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck('stok/degkayit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ aciklama, idacik,degisken ,altgrpAna}),
+		});
+		if (!response) {
+			return;
+		}
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
+	} finally {
+		document.body.style.cursor = "default";
+		saveButton.textContent = "Yorum Kaydet";
+		saveButton.disabled = false;
+	}
+}
