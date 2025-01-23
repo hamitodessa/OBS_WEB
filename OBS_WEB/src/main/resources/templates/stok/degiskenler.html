@@ -10,7 +10,7 @@
   
   .group-box {
     padding: 1px;
-    width: 97%;
+ 
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -18,7 +18,7 @@
 </style>
 <div class="card p-4">
   <div class="centered-div">
-    <div class="group-box" style="padding-top:10px;padding-bottom:10px;">
+    <div class="group-box" style="padding-top:10px;padding-bottom:10px;padding-right: 5px;">
       <span style="padding-left: 5px;"></span>
       <label class="form-control" style="width: 130px;">Degiskenler</label>
       <span style="padding-left: 5px;"></span>
@@ -32,39 +32,37 @@
       </select>
     </div>
   </div>
-   <br>
-   <div class="centered-div" style="display:none;">
- 		 <div class="group-box" style="padding-top:10px;padding-bottom:10px;">
-   			 <span style="padding-left: 5px;"></span>
-   			 <select class="form-control" id="degiskenler"></select>
- 		 </div>
+ 
+   <div class="centered-div" style="display:none;padding-top:10px;padding-bottom:10px;">
+    <div class="group-box" style="padding-top:10px;padding-bottom:10px;">
+      <span style="padding-left: 5px;"></span>
+      <select class="form-control" id="degiskenler"></select>
+    </div>
   </div>
-  
-  <br>
-  
 
- <div class="centered-div">
-  <div class="group-box" style="padding-top:10px;padding-bottom:10px;">
-   <span style="padding-left: 5px;"></span>
+
+  <div class="centered-div" style="margin-top:10px;margin-bottom:10px;">
+    <div class="group-box" style="padding-top:10px;padding-bottom:10px;">
+      <span style="padding-left: 5px;"></span>
       <label class="form-control" style="width: 130px;">Aciklama</label>
       <span style="padding-left: 5px;"></span>
 
-    <input type="text" id="arama"  class="form-control" />
+      <input type="text" id="arama" class="form-control" />
+    </div>
   </div>
+
+  <div class="centered-div" style="margin-top:10px;margin-bottom:10px;">
+    <div class="group-box" >
+      <table id="degiskenTable" class="table table-bordered table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th style="display: none;">id</th>
+            <th>Aciklama</th>
+          </tr>
+        </thead>
+        <tbody id="degiskenTableBody"></tbody>
+      </table>
+    </div>
   </div>
-<br>
-<div class="centered-div">
-  <div class="group-box" style="padding-top:10px;padding-bottom:10px;">
-    <table id="degiskenTable" class="table table-bordered table-hover">
-      <thead class="thead-dark">
-        <tr>
-          <th style="display: none;">id</th>
-          <th>Aciklama</th>
-        </tr>
-      </thead>
-      <tbody id="degiskenTableBody"></tbody>
-    </table>
-  </div>
-</div>
   <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
 </div>
