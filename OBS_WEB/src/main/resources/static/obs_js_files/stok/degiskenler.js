@@ -3,6 +3,10 @@ document.getElementById("arama").value = "";
 anagrpdoldur();
 
 async function degiskenchange(grpElement) {
+	document.getElementById("aciklama").value = "";
+	document.getElementById("arama").value = "";
+	document.getElementById("idacik").value = "";
+
 	const grup = grpElement.value;
 	const altgrpdiv = document.getElementById("altgrpdiv");
 	document.getElementById("arama").value = "";
@@ -160,7 +164,7 @@ async function oz1doldur() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		
+
 		const data = response.oz1;
 		const tableBody = document.getElementById("degiskenTableBody");
 		tableBody.innerHTML = "";
@@ -311,7 +315,7 @@ async function degKayit() {
 	const idacik = document.getElementById("idacik").value || "";
 	const degisken = document.getElementById("degiskenler").value;
 	const altgrpAna = document.getElementById("altgrpAna").value;
-		
+
 	if (!aciklama) {
 		alert('Lütfen  açıklama alanlarını doldurun.');
 		return;
@@ -324,18 +328,14 @@ async function degKayit() {
 	saveButton.textContent = "İşlem yapılıyor...";
 	saveButton.disabled = true;
 	document.body.style.cursor = "wait";
-	
-	if (!idacik) {
-	    alert('Lütfen  açıklama alanlarını doldurun.');
-	    return;
-	  }
+
 	try {
 		const response = await fetchWithSessionCheck('stok/degkayit', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ aciklama, idacik,degisken ,altgrpAna}),
+			body: JSON.stringify({ aciklama, idacik, degisken, altgrpAna }),
 		});
 		if (!response) {
 			return;
@@ -358,49 +358,48 @@ async function degKayit() {
 
 async function degYoket() {
 	const confirmDelete = confirm("Silmek istediğinize emin misiniz?");
-	  if (!confirmDelete) {
-	    return;
-	  }
-		const aciklama = document.getElementById("aciklama").value;
-  const idacik = document.getElementById("idacik").value || "";
-  const degisken = document.getElementById("degiskenler").value;
-  const altgrpAna = document.getElementById("altgrpAna").value;
-    
-  if (!idacik) {
-    alert('Lütfen  açıklama alanlarını doldurun.');
-    return;
-  }
-  const errorDiv = document.getElementById("errorDiv");
-  errorDiv.style.display = "none";
-  errorDiv.innerText = "";
+	if (!confirmDelete) {
+		return;
+	}
+	const aciklama = document.getElementById("aciklama").value;
+	const idacik = document.getElementById("idacik").value || "";
+	const degisken = document.getElementById("degiskenler").value;
+	const altgrpAna = document.getElementById("altgrpAna").value;
 
-  const saveButton = document.getElementById('degsilButton');
-  saveButton.textContent = "İşlem yapılıyor...";
-  saveButton.disabled = true;
-  document.body.style.cursor = "wait";
-  console.info(aciklama,idacik,degisken ,altgrpAna);
-  try {
-    const response = await fetchWithSessionCheck('stok/degsil', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({aciklama,idacik,degisken ,altgrpAna}),
-    });
-    if (!response) {
-      return;
-    }
-    if (response.errorMessage) {
-      throw new Error(response.errorMessage);
-    }
-    const inputElement = document.getElementById("degiskenler");
-    degiskenchange(inputElement);
-  } catch (error) {
-    errorDiv.style.display = "block";
-    errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
-  } finally {
-    document.body.style.cursor = "default";
-    saveButton.textContent = "Sil";
-    saveButton.disabled = false;
-  }
+	if (!idacik) {
+		alert('Lütfen  açıklama alanlarını doldurun.');
+		return;
+	}
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+
+	const saveButton = document.getElementById('degsilButton');
+	saveButton.textContent = "İşlem yapılıyor...";
+	saveButton.disabled = true;
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck('stok/degsil', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ aciklama, idacik, degisken, altgrpAna }),
+		});
+		if (!response) {
+			return;
+		}
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const inputElement = document.getElementById("degiskenler");
+		degiskenchange(inputElement);
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
+	} finally {
+		document.body.style.cursor = "default";
+		saveButton.textContent = "Sil";
+		saveButton.disabled = false;
+	}
 }
