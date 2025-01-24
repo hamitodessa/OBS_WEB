@@ -103,6 +103,9 @@ function selectValue(inputId, selectedValue, secondnerden) {
 			inputElement.oninput();
 			belgeoku();
 		}
+		else if (secondnerden === "fatura") {
+			inputElement.oninput();
+		}
 		document.getElementById("modalSearch").value = "";
 		$('#secondModal').modal('hide');
 	}

@@ -40,6 +40,7 @@ public class FaturaController {
 		} catch (ServiceException e) {
 			model.addAttribute("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
 			model.addAttribute("errorMessage", "Hata: " + e.getMessage());
 		}
 		return model;

@@ -112,7 +112,7 @@ datalist {
 	<!-- Tab 1 Content -->
 	<div class="tab-pane fade show active" id="tab1" role="tabpanel"
 		aria-labelledby="tab1-tab">
-		<div class="cardd p-4">
+		<div class="cardd p-0">
 		<div class="child">
 			<!-- ****************************************************************************************************** -->
 			<div class="group-box">
@@ -156,7 +156,10 @@ datalist {
 			<div style="display: flex; align-items: center;margin-top:10px; ">
 					<label style="width:85px;">Cari Kod</label>
 					<div style="position: relative; width: 120px;">
-						<input class="form-control" style="font-weight: bold;" maxlength="10" id="carikod"  onkeydown="if(event.key === 'Enter') uretimOku()" ondblclick="yeniFis();">
+						<input class="form-control" style="font-weight: bold;" id="carikod"
+						  ondblclick="openSecondModal('carikod', 'fatura')"
+								maxlength="12" 
+								oninput="hesapAdiOgren(this.value, 'cariadilbl')">
 					</div>
 					<span style="padding-left: 187px;"></span> 
 					<label style="width:70px;">Adres Kod</label>
@@ -283,17 +286,17 @@ datalist {
 	style="margin-top: 5px;">
 	<thead class="thead-dark">
 		<tr>
-			<th style="width:25px;">&#8203;</th>
-			<th style="width:7%">Barkod</th>
+			<th style="width:25px;"></th>
+			<th style="width:10%">Barkod</th>
 			<th>Urun Kodu</th>
-			<th style="width:10%">Depo</th>
+			<th style="width:15%">Depo</th>
 			<th style="width:10%" class="double-column">Fiat</th>
-			<th style="width:5%" class="double-column">Iskonto</th>
-			<th style="width:7%" class="double-column">Miktar</th>
-			<th style="width:5%">Birim</th>
+			<th style="width:7%" class="double-column">Iskonto</th>
+			<th style="width:10%" class="double-column">Miktar</th>
+			<th style="width:6%">Birim</th>
 			<th style="width:5%" class="double-column">Kdv</th>
-			<th style="width:10%" class="double-column">Tutar</th>
-			<th style="width:15%">Izahat</th>
+			<th style="width:12%" class="double-column">Tutar</th>
+			<th style="width:13%">Izahat</th>
 		</tr>
 	</thead>
 	<tbody id="tbody">
@@ -301,7 +304,7 @@ datalist {
 	<tfoot>
 		<tr>
 			<td></td>
-			<td></td>
+			<td id="totalSatir">0</td>
 			<td></td>
 			<td></td>
 			<td></td>
@@ -348,7 +351,7 @@ datalist {
 	</div>
 </div>
 
-<script src="/obs_js_files/kambiyo/cekgiris.js"></script>
-
-<div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
+<div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
+
+<script src="/obs_js_files/stok/fatura.js"></script>

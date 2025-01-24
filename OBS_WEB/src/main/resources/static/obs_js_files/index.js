@@ -87,5 +87,9 @@ $(document).ready(function () {
 			stokBaslik();
 			fetchkoddepo();
 		},
+		"/stok/fatura": () => {
+			stokBaslik();
+			fetchkoddepo();
+		},
 	}
 });
