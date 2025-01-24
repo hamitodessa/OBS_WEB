@@ -1,5 +1,4 @@
 async function openurunkodlariModal(inputId, secondnerden,barkodurunkodu) {
-  activeNestedInputId = inputId;
   $('#urnsecondModal').modal('show');
   const modalError = document.getElementById("urnsecond-errorDiv");
   modalError.style.display = "none";
@@ -58,19 +57,22 @@ function stkfilterTable() {
 }
 
 function urnselectValue(inputId, selectedBarkod, selectedKodu, secondnerden, barkodurunkodu) {
-	const inputElement = document.getElementById(inputId);
+	const inputElementm = document.getElementById(inputId);
 	document.getElementById("urnsecond-modalSearch").value = "";
-	 $('#urnsecondModal').modal('hide');
+	$('#urnsecondModal').modal('hide');
 
-	if (inputElement) {
+	if (inputElementm) {
 		if (barkodurunkodu === "ukodukod") {
-			inputElement.value = selectedKodu;
+			inputElementm.value = selectedKodu;
 		} else if (barkodurunkodu === "barkod") {
-			inputElement.value = selectedBarkod;
-		}
-		if (secondnerden === "imalat") {
-			urnaramaYap();
+			inputElementm.value = selectedBarkod;
 		}
 	}
-
+	if (secondnerden === "imalat") {
+		urnaramaYap();
+	}
+	else if (secondnerden === "imalatsatir") {
+		const event = new Event('change', { bubbles: true });
+		inputElementm.dispatchEvent(event);
+	}
 }

@@ -324,6 +324,14 @@ async function anaChanged(selectElement) {
 	document.body.style.cursor = "wait";
 	document.getElementById("errorDiv").style.display = "none";
 	errorDiv.innerText = "";
+
+	const selectaltElement = document.getElementById("altgrup");
+	selectaltElement.innerHTML = '';
+
+	if (anagrup === "") {
+		selectaltElement.disabled = true;
+		return;
+	}
 	try {
 		const response = await fetchWithSessionCheck("stok/altgrup", {
 			method: 'POST',
@@ -335,18 +343,12 @@ async function anaChanged(selectElement) {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-
-		const selectElement = document.getElementById("altgrup");
-		selectElement.innerHTML = '';
-
 		response.altKodlari.forEach(kod => {
 			const option = document.createElement("option");
-			option.value = kod.ALT_GRUP; // Option value
-			option.textContent = kod.ALT_GRUP; // Option görünen metni
-			selectElement.appendChild(option); // Option'ı dropdown'a ekle
+			option.value = kod.ALT_GRUP;
+			option.textContent = kod.ALT_GRUP;
+			selectaltElement.appendChild(option);
 		});
-
-
 	} catch (error) {
 		document.getElementById("errorDiv").style.display = "block";
 		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
@@ -358,8 +360,8 @@ async function anaChanged(selectElement) {
 function birimtipChanged(selectElement) {
 	const selectedValue = selectElement.value; // Seçilen değeri al
 	const imgElementLogo = document.getElementById("birim");
-	imgElementLogo.value = selectedValue ;
-	
+	imgElementLogo.value = selectedValue;
+
 }
 
 async function urnAdiOgren(inputElement, targetId) {

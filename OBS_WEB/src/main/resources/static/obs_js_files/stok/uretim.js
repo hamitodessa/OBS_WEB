@@ -260,7 +260,7 @@ function satirekle() {
 		<td>
 		    <div style="position: relative; width: 100%;">
 		        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}" maxlength="12" id="ukodu_${rowCounter}" 
-		            onkeydown="focusNextCell(event, this)"  onchange="updateRowValues(this)">
+		            onkeydown="focusNextCell(event, this)" ondblclick="openurunkodlariModal('ukodu_${rowCounter}', 'imalatsatir','ukodukod')" onchange="updateRowValues(this)">
 		        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
 		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 		    </div>
@@ -360,7 +360,6 @@ async function updateRowValues(inputElement) {
 	const uygulananfiat = document.getElementById("uygulananfiat").value;
 	const fisTarih = document.getElementById("fisTarih").value;
 	const fiatTarih = document.getElementById("fiatTarih").value;
-
 	document.body.style.cursor = "wait";
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";

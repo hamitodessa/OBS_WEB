@@ -688,7 +688,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 
 	@Override
 	public void urun_degisken_alt_grup_sil(int id, ConnectionDetails faturaConnDetails) {
-		String sql = "DELETE ALT_GRUP_DEGISKEN WHERE ALID_Y = ? ";
+		String sql = "DELETE FROM ALT_GRUP_DEGISKEN WHERE ALID_Y = ? ";
 		try (Connection connection = DriverManager.getConnection(
 				faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(),
@@ -703,12 +703,13 @@ public class FaturaMySQL implements IFaturaDatabase {
 
 	@Override
 	public void urun_kod_degisken_sil(String hangi_Y, String nerden, int sira, ConnectionDetails faturaConnDetails) {
-		String sql = "DELETE " + nerden  + " WHERE " + hangi_Y + " = ?";
+		String sql = "DELETE  FROM " + nerden  + " WHERE " + hangi_Y + " = ? ";
 		try (Connection connection = DriverManager.getConnection(
 				faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(),
 				faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			System.out.println(sql);
 			preparedStatement.setInt(1, sira);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
