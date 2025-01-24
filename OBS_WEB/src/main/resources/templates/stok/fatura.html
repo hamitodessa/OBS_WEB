@@ -18,8 +18,6 @@
 	height: 15px;
 }
 
-
-
 .group-box {
 	border: 1px solid #ccc;
 	padding: 7px;
@@ -56,19 +54,16 @@ datalist {
 	display: none;
 }
 
-
-
 .saga-bold {
 	text-align: right;
 	font-weight: bold;
 }
 
-
-
 .table .thead-dark th {
   color: #fff;
   background: #214162;
 }
+
 .cardd {
     display: flex;gap: 10px;
 }
@@ -131,11 +126,9 @@ datalist {
 							<i class="fa fa-refresh"></i>
 					</button>
 					<span style="padding-left: 10px;"></span> 
-					<input type="date" id="fisTarih" class="form-control"
-							th:value="${tarih}" style="width: 125px; font-weight: bold;" />
-					
-					<span style="padding-left: 10px;"></span> 	
-					<label style="min-width:75px;">Depo</label>	
+					<input type="date" id="fisTarih" class="form-control" th:value="${tarih}" style="width: 125px; font-weight: bold;" />
+					<span style="padding-left: 10px;"></span> 
+					<label style="width:75px;">Depo</label>	
 					<div style="position: relative; width: 150px;">
 						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="depo" >
     						<option th:each="kod : ${depoKodlari}" th:value="${kod.DEPO}" th:text="${kod.DEPO}"></option>
@@ -159,20 +152,16 @@ datalist {
 						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 					</div>
 				</div>
-
 			<!-- 2 SATIR  -->
-			
 			<div style="display: flex; align-items: center;margin-top:10px; ">
 					<label style="width:85px;">Cari Kod</label>
 					<div style="position: relative; width: 120px;">
 						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') uretimOku()" ondblclick="yeniFis();">
 					</div>
-					
 					<span style="padding-left: 170px;"></span> 
 					<label style="width:85px;">Adres Kod</label>
 					<span style="padding-left: 5px;"></span> 
 					<input  id="fisTarih" class="form-control" style="width: 125px; font-weight: bold;" />
-					
 					<span style="padding-left: 35px;"></span> 	
 					<label style="min-width:75px;">Varsayilan</label>	
 					<div style="position: relative; width: 150px;">
@@ -189,56 +178,39 @@ datalist {
 					<label style="min-width:40px;">Kur</label>	
 					<input  id="fisTarih" class="form-control" style="width: 60px;" />
 				</div>
-			
 			<!-- 2 SATIR  SONU -->
-						<!-- 3 SATIR  -->
-			
+			<!-- 3 SATIR  -->
 			<div style="display: flex; align-items: center; ">
 					<span style="padding-left: 85px;"></span> 
-					
-					
 					<label style="width:200px;">....</label>
 					<span style="padding-left: 5px;"></span> 
-					
-					
 					<span style="padding-left: 85px;"></span> 	
 					<label style="min-width:300px;">...</label>	
-					
-					
 				</div>
-			
 			<!-- 3 SATIR  SONU -->
-			
 			</div>
-
 			<div class="group-box">
 				<div class="form-row">
 					<button class="btn btn-primary" type="button" id="urekaydetButton"
 						onclick="ureKayit()">Kaydet</button>
 					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="uresilButton"
-						onclick="ureYoket()">Sil</button>
-						
+					<button class="btn btn-primary" type="button" id="uresilButton"	onclick="ureYoket()">Sil</button>
 						<span style="padding-left: 25%;"></span>
 						<div style="position: relative; width: 150px;">
-						<select class="form-control" style="width: 100%; padding-right: 30px;font-weight: bold;" id="depo" >
-    						<option value="">SATIS</option>
-    						<option value="">ALIS</option>
-						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
-					
-					
+							<select class="form-control" style="width: 100%; padding-right: 30px;font-weight: bold;" id="depo" >
+    							<option value="">SATIS</option>
+    							<option value="">ALIS</option>
+							</select>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+						</div>
 				</div>
 			</div>
-
 		</div>
 		<div class="child2">
 				<div class="resimdiv">
  					<img id="resimGoster" class="resimgoster"  src="" alt="Base64 Resim" style="display: none;" />
      			</div>
 		</div>
-
 		</div>
 		<div id="errorDiv"
 			style="display: none; color: red; font-weight: bold;"></div>
@@ -257,14 +229,11 @@ datalist {
 				<span style="padding-left: 5px;"></span> <input type="text"
 					id="aciklama1" class="form-control" style="max-width: 300px;">
 			</div>
-			
 			<div class="form-check" style="width: 350px;">
 				<input type="checkbox" class="form-check-input" id="izinlimi">
 				<label class="form-check-label" for="izinlimi" >Faturada Toplam miktar Yazdir</label>
 			</div>
-					
 		</div>
-			
 			<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
 				<div class="input-group-prepend">
@@ -274,7 +243,6 @@ datalist {
 					id="aciklama2" class="form-control" style="max-width: 300px;">
 			</div>
 			</div>
-			
 			<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
 				<div class="input-group-prepend">
@@ -288,7 +256,7 @@ datalist {
 	</div>
 	<div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
 		
-				<div class="card p-4">
+	<div class="card p-4">
 		<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
 				<div class="input-group-prepend">
@@ -297,11 +265,7 @@ datalist {
 				<span style="padding-left: 5px;"></span> <input type="text"
 					id="aciklama1" class="form-control" style="max-width: 300px;">
 			</div>
-			
-			
-					
 		</div>
-			
 			<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
 				<div class="input-group-prepend">
@@ -312,15 +276,9 @@ datalist {
 			</div>
 			</div>
 		</div>
-		
-		
 	</div>	
 </div>
-
-<button type="button" class="btn btn-secondary ml-2"
-	onclick="cekgiraddRow()">
-	<i class="fa fa-plus"></i>
-</button>
+<button type="button" class="btn btn-secondary ml-2" onclick="cekgiraddRow()"><i class="fa fa-plus"></i></button>
 
 <table class="table table-bordered" id="fatTable"
 	style="margin-top: 5px;">
@@ -390,9 +348,6 @@ datalist {
 		
 	</div>
 </div>
-
-<input type="hidden" id="cekgirBilgi" name="cekgirBilgi"
-	value="initialValue">
 
 <script src="/obs_js_files/kambiyo/cekgiris.js"></script>
 

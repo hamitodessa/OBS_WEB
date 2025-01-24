@@ -15,7 +15,7 @@ public class FaturaController {
 	public Model cekkontrol(Model model) {
 		try {
 			LocalDate today = LocalDate.now(); 
-			model.addAttribute("gunlukTarih", today); 
+			model.addAttribute("fisTarih", today); 
 			model.addAttribute("errorMessage", "");
 		} catch (ServiceException e) {
 			model.addAttribute("errorMessage", e.getMessage());
