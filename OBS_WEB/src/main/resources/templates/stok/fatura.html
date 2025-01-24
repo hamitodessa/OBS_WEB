@@ -126,7 +126,7 @@ datalist {
 							<i class="fa fa-refresh"></i>
 					</button>
 					<span style="padding-left: 10px;"></span> 
-					<input type="date" id="fisTarih" class="form-control" th:value="${tarih}" style="width: 125px; font-weight: bold;" />
+					<input type="date" id="fisTarih" class="form-control" th:value="${fisTarih}" style="width: 125px; font-weight: bold;" />
 					<span style="padding-left: 10px;"></span> 
 					<label style="width:75px;">Depo</label>	
 					<div style="position: relative; width: 150px;">
@@ -147,7 +147,7 @@ datalist {
 					<label style="min-width:75px;">Alt Grup</label>	
 					<div style="position: relative; width: 150px;">
 						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="altgrp" disabled>
-    						<option th:each="kod : ${altKodlari}" th:value="${kod.ALT_GRUP}" th:text="${kod.ALT_GRUP}"></option>
+    						
 						</select>
 						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 					</div>
@@ -156,45 +156,48 @@ datalist {
 			<div style="display: flex; align-items: center;margin-top:10px; ">
 					<label style="width:85px;">Cari Kod</label>
 					<div style="position: relative; width: 120px;">
-						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') uretimOku()" ondblclick="yeniFis();">
+						<input class="form-control" style="font-weight: bold;" maxlength="10" id="carikod"  onkeydown="if(event.key === 'Enter') uretimOku()" ondblclick="yeniFis();">
 					</div>
-					<span style="padding-left: 170px;"></span> 
-					<label style="width:85px;">Adres Kod</label>
+					<span style="padding-left: 187px;"></span> 
+					<label style="width:70px;">Adres Kod</label>
 					<span style="padding-left: 5px;"></span> 
-					<input  id="fisTarih" class="form-control" style="width: 125px; font-weight: bold;" />
+					<input  id="adreskod" class="form-control" style="width: 125px; font-weight: bold;" />
 					<span style="padding-left: 35px;"></span> 	
 					<label style="min-width:75px;">Varsayilan</label>	
 					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="depo" >
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="varsayilan" >
     						<option value=""></option>
     						<option value="fiat1">Fiat 1</option>
+    						<option value="fiat2">Fiat 2</option>
+    						<option value="fiat3">Fiat 3</option>
+    						<option value="sonsatis">Son Satis Fiati</option>
 						</select>
 						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 					</div>
 					<span style="padding-left: 10px;"></span> 	
 					<label style="min-width:75px;">Doviz</label>	
-					<input  id="fisTarih" class="form-control" style="width: 50px;" />
+					<input  id="doviz" class="form-control" style="width: 50px;" />
 					<span style="padding-left: 20px;"></span> 	
 					<label style="min-width:40px;">Kur</label>	
-					<input  id="fisTarih" class="form-control" style="width: 60px;" />
+					<input  id="kur" class="form-control" style="width: 60px;" />
 				</div>
 			<!-- 2 SATIR  SONU -->
 			<!-- 3 SATIR  -->
 			<div style="display: flex; align-items: center; ">
 					<span style="padding-left: 85px;"></span> 
-					<label style="width:200px;">....</label>
+					<label style="width:200px;" id="cariadilbl">....</label>
 					<span style="padding-left: 5px;"></span> 
-					<span style="padding-left: 85px;"></span> 	
-					<label style="min-width:300px;">...</label>	
+					<span style="padding-left: 103px;"></span> 	
+					<label style="min-width:300px;" id="adresadilbl">...</label>	
 				</div>
 			<!-- 3 SATIR  SONU -->
 			</div>
 			<div class="group-box">
 				<div class="form-row">
-					<button class="btn btn-primary" type="button" id="urekaydetButton"
-						onclick="ureKayit()">Kaydet</button>
+					<button class="btn btn-primary" type="button" id="fatkaydetButton"
+						onclick="fatKayit()">Kaydet</button>
 					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="uresilButton"	onclick="ureYoket()">Sil</button>
+					<button class="btn btn-primary" type="button" id="fatsilButton"	onclick="fatYoket()">Sil</button>
 						<span style="padding-left: 25%;"></span>
 						<div style="position: relative; width: 150px;">
 							<select class="form-control" style="width: 100%; padding-right: 30px;font-weight: bold;" id="depo" >
@@ -212,11 +215,7 @@ datalist {
      			</div>
 		</div>
 		</div>
-		<div id="errorDiv"
-			style="display: none; color: red; font-weight: bold;"></div>
-		<div th:with="errorMessage=${errorMessage ?: ''}" id="errorDiv2"
-			th:if="${errorMessage}" th:text="${errorMessage}"
-			style="color: red; font-weight: bold;"></div>
+		<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
 	</div>
 	<!-- Tab 2 Content -->
 	<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
@@ -230,7 +229,7 @@ datalist {
 					id="aciklama1" class="form-control" style="max-width: 300px;">
 			</div>
 			<div class="form-check" style="width: 350px;">
-				<input type="checkbox" class="form-check-input" id="izinlimi">
+				<input type="checkbox" class="form-check-input" id="fatmikyazdir">
 				<label class="form-check-label" for="izinlimi" >Faturada Toplam miktar Yazdir</label>
 			</div>
 		</div>
@@ -249,7 +248,7 @@ datalist {
 					<span class="input-group-text" style="width: 150px;">Aciklama 3</span>
 				</div>
 				<span style="padding-left: 5px;"></span> <input type="text"
-					id="aciklama2" class="form-control" style="max-width: 300px;">
+					id="aciklama3" class="form-control" style="max-width: 300px;">
 			</div>
 			</div>
 		</div>
@@ -263,7 +262,7 @@ datalist {
 					<span class="input-group-text" style="width: 150px;">1 -</span>
 				</div>
 				<span style="padding-left: 5px;"></span> <input type="text"
-					id="aciklama1" class="form-control" style="max-width: 300px;">
+					id="n1" class="form-control" style="max-width: 300px;">
 			</div>
 		</div>
 			<div class="form-row">
@@ -272,13 +271,13 @@ datalist {
 					<span class="input-group-text" style="width: 150px;">2 -</span>
 				</div>
 				<span style="padding-left: 5px;"></span> <input type="text"
-					id="aciklama2" class="form-control" style="max-width: 300px;">
+					id="n2" class="form-control" style="max-width: 300px;">
 			</div>
 			</div>
 		</div>
 	</div>	
 </div>
-<button type="button" class="btn btn-secondary ml-2" onclick="cekgiraddRow()"><i class="fa fa-plus"></i></button>
+<button type="button" class="btn btn-secondary ml-2" onclick="fataddRow()"><i class="fa fa-plus"></i></button>
 
 <table class="table table-bordered" id="fatTable"
 	style="margin-top: 5px;">
@@ -318,33 +317,33 @@ datalist {
 <div class="card p-4">
 	<div class="form-row">
 		<span style="padding-left: 20px;width:100px;">Barkod:</span>
-		<input  id="fisTarih" class="form-control" style="width: 150px; font-weight: bold;" />
+		<input  id="barkod" class="form-control" style="width: 150px; font-weight: bold;" />
 		<span style="padding-left: 20px;width:100px;">Iskonto:</span>
-		<label style="width:100px;" id="birim">...</label> 
+		<label style="width:100px;" id="iskonto">...</label> 
 		<span style="padding-left: 20px;width:120px;">K.D.V.:</span>
-		<label style="width:100px;" id="anagrpl">...</label> 
+		<label style="width:100px;" id="kdv">...</label> 
 		<span style="padding-left: 20px;width:150px;">Tev.Edi.K.D.V.:</span>
-		<label style="width:100px;" id="agirlik">...</label> 
+		<label style="width:100px;" id="tevedkdv">...</label> 
 		<span style="padding-left: 20px;width:120px;">Beyan.Edi.K.D.V.:</span>
 		<span style="padding-left: 10px;"></span>
-		<label style="width:100px;" id="agirlik">...</label> 
+		<label style="width:100px;" id="beyedikdv">...</label> 
 	</div>
 	<div class="form-row">
 		<span style="padding-left: 20px;width:100px;"></span>
-		<label style="width:150px;" id="sinif">...</label> 
+		<label style="width:150px;" id="">...</label> 
 		<span style="padding-left: 20px;width:100px;">Bakiye :</span>
-		<label style="width:100px;" id="sinif">...</label> 
+		<label style="width:100px;" id="bakiye">...</label> 
 		<span style="padding-left: 20px;width:120px;">Tevkifat Oran :</span>
-		<input  id="fisTarih" class="form-control" style="width: 50px; font-weight: bold;" />
+		<input  id="tevoran" class="form-control" style="width: 50px; font-weight: bold;" />
 		<span style="padding-left: 70px;width:200px;">Tev.Dah.Top.Tut.:</span>
-		<label style="width:100px;" id="sinif">...</label> 
+		<label style="width:100px;" id="tevdahtoptut">...</label> 
 		<span style="padding-left: 20px;width:120px;">Tev.Har.Top.Tut. :</span>
 		<span style="padding-left: 10px;"></span>
-		<label style="width:100px;" id="sinif">...</label> 
+		<label style="width:100px;" id="tevhartoptut">...</label> 
 	</div>
 	<div class="form-row">
 		<span style="padding-left: 20px;width:100px;"></span>
-		<label style="width:150px;" id="sinif">...</label> 
+		<label style="width:150px;" id="">...</label> 
 		
 	</div>
 </div>
