@@ -255,7 +255,7 @@ async function altgrpdoldur() {
 	errorDiv.innerText = "";
 	document.body.style.cursor = "wait";
 	try {
-		const response = await fetchWithSessionCheck("stok/altgrup", {
+		const response = await fetchWithSessionCheck("stok/altgrupdeg", {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: new URLSearchParams({ anagrup: anagrup }),
@@ -304,10 +304,8 @@ function selectValue(selectedaciklama, selectedid) {
 }
 
 function degyeni() {
-	const inputElement = document.getElementById("aciklama");
-	const idacik = document.getElementById("idacik");
-	inputElement.value = "";
-	idacik.value = "";
+	document.getElementById("aciklama").value = "";
+	document.getElementById("idacik").value = "";
 }
 
 async function degKayit() {
@@ -355,9 +353,12 @@ async function degKayit() {
 	}
 }
 
-
 async function degYoket() {
-	const confirmDelete = confirm("Silmek istediğinize emin misiniz?");
+	const confirmDelete = confirm(
+	    "Alt Grup Degisken Silinecek ..?\n" +
+	    "Silme operasyonu butun dosyayi etkileyecek...\n" +
+	    "Ilk once Degisken Yenileme Bolumunden degistirip sonra siliniz...."
+	);
 	if (!confirmDelete) {
 		return;
 	}

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.exception.ServiceException;
@@ -109,6 +110,24 @@ public class DegiskenlerController {
   		}
   		return response;
   	}
+    
+	@PostMapping("stok/altgrupdeg")
+	@ResponseBody
+	public Map<String, Object> altgrupdeg(@RequestParam String anagrup) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> altKodlari = new ArrayList<Map<String,Object>>();
+			String qwe = faturaService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", anagrup);
+			altKodlari = faturaService.stk_kod_alt_grup_degisken_oku(Integer.parseInt(qwe)) ;
+			response.put("altKodlari", altKodlari);
+			response.put("errorMessage", ""); 
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
 
 	@PostMapping("stok/degkayit")
 	@ResponseBody
@@ -214,5 +233,4 @@ public class DegiskenlerController {
 		}
 		return response;
 	}
-
 }

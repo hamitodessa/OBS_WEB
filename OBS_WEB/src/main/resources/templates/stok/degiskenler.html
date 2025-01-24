@@ -39,7 +39,7 @@
       <span style="padding-left: 5px;"></span>
       
       <div style="position: relative; width: 100%;">
-      <select class="form-control" id="degiskenler" onchange="degiskenchange(this)">
+      <select class="form-control" id="degiskenler" style="font-weight: bold;" onchange="degiskenchange(this)">
         <option value="anagrp">Ana Grup</option>
         <option value="altgrp">Alt Grup</option>
         <option value="mensei">Mensei</option>
@@ -58,7 +58,7 @@
       <label class="form-control" style="width: 130px;">Ana Grup</label>
       <span style="padding-left: 5px;"></span>
       <div style="position: relative; width: 100%;">
-      <select class="form-control" id="altgrpAna" onchange="altgrpdoldur()">
+      <select class="form-control" id="altgrpAna" style="font-weight: bold;" onchange="altgrpdoldur()">
       	<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
       </select>
       <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
@@ -81,7 +81,7 @@
       <span style="padding-left: 5px;"></span>
       <label class="form-control" style="width: 130px;text-align:left;">Aciklama</label>
       <span style="padding-left: 5px;"></span>
-      <input type="text" id="aciklama" class="form-control" />
+      <input type="text" id="aciklama" style="font-weight: bold;" class="form-control" />
       <input type="hidden" id="idacik"  >
       
     </div>

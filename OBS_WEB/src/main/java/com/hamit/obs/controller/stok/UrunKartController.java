@@ -113,12 +113,20 @@ public class UrunKartController {
 	@ResponseBody
 	public Map<String, Object> altgrup(@RequestParam String anagrup) {
 		Map<String, Object> response = new HashMap<>();
+		List<Map<String, Object>> altKodlari = new ArrayList<Map<String,Object>>();
 		try {
-			String qwe = faturaService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", anagrup);
-			List<Map<String, Object>> altKodlari = faturaService.stk_kod_alt_grup_degisken_oku(Integer.parseInt(qwe)) ;
-			Map<String, Object> altDeger = new HashMap<>();
-			altDeger.put("ALT_GRUP", ""); 
-			altKodlari.add(0, altDeger);
+			if(anagrup.equals("")) {
+				Map<String, Object> altDeger = new HashMap<>();
+				altDeger.put("ALT_GRUP", ""); 
+				altKodlari.add(0, altDeger);
+			}
+			else {
+				String qwe = faturaService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", anagrup);
+				altKodlari = faturaService.stk_kod_alt_grup_degisken_oku(Integer.parseInt(qwe)) ;
+				Map<String, Object> altDeger = new HashMap<>();
+				altDeger.put("ALT_GRUP", ""); 
+				altKodlari.add(0, altDeger);
+			}
 			response.put("altKodlari", altKodlari);
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {
@@ -184,7 +192,6 @@ public class UrunKartController {
 			urunDTO.setMensei(mensei.equals("") ? "0" : mensei);
 			urunDTO.setOzelkod1(oz2.equals("") ? "0" : oz1);
 			urunDTO.setOzelkod2(oz2.equals("") ? "0" : oz2);
-			
 			if (urunDTO.getResim() != null) {
 				byte[] resimBytes = urunDTO.getResim().getBytes();
 				urunDTO.setImage(resimBytes);
