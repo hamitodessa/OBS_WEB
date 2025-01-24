@@ -696,5 +696,11 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
 		}
+	}
+
+	@Override
+	public double son_satis_fiati_oku(String kodu, String muskodu, String gircik, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
 	} 
 }

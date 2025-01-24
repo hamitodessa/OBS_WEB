@@ -41,4 +41,5 @@ public interface IFaturaDatabase {
 	boolean alt_grup_kontrol(int anagrp,int altgrp,ConnectionDetails faturaConnDetails);
 	void urun_degisken_alt_grup_sil(int id,ConnectionDetails faturaConnDetails);
 	void urun_kod_degisken_sil(String hangi_Y,String nerden,int sira,ConnectionDetails faturaConnDetails);
+	double son_satis_fiati_oku(String kodu,String muskodu,String gircik,ConnectionDetails faturaConnDetails);
 }

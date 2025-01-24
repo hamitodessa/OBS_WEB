@@ -542,4 +542,19 @@ public class FaturaService {
 			throw new ServiceException(detailedMessage);
 		}
 	}
+	public double son_satis_fiati_oku(String kodu,String muskodu,String gircik) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.son_satis_fiati_oku(kodu,muskodu,gircik,fatConnDetails);		
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
 }

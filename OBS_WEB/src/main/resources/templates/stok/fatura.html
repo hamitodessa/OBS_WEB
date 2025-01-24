@@ -164,11 +164,11 @@ datalist {
 					<span style="padding-left: 187px;"></span> 
 					<label style="width:70px;">Adres Kod</label>
 					<span style="padding-left: 5px;"></span> 
-					<input  id="adreskod" class="form-control" style="width: 125px; font-weight: bold;" />
+					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')"  style="width: 125px; font-weight: bold;" />
 					<span style="padding-left: 35px;"></span> 	
 					<label style="min-width:75px;">Varsayilan</label>	
 					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="varsayilan" >
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="uygulananfiat" >
     						<option value=""></option>
     						<option value="fiat1">Fiat 1</option>
     						<option value="fiat2">Fiat 2</option>
@@ -203,9 +203,9 @@ datalist {
 					<button class="btn btn-primary" type="button" id="fatsilButton"	onclick="fatYoket()">Sil</button>
 						<span style="padding-left: 25%;"></span>
 						<div style="position: relative; width: 150px;">
-							<select class="form-control" style="width: 100%; padding-right: 30px;font-weight: bold;" id="depo" >
-    							<option value="">SATIS</option>
-    							<option value="">ALIS</option>
+							<select class="form-control" style="width: 100%; padding-right: 30px;font-weight: bold;" id="gircik" >
+    							<option value="SATIS">SATIS</option>
+    							<option value="ALIS">ALIS</option>
 							</select>
 							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 						</div>
@@ -333,7 +333,7 @@ datalist {
 	</div>
 	<div class="form-row">
 		<span style="padding-left: 20px;width:100px;"></span>
-		<label style="width:150px;" id="">...</label> 
+		<label style="width:150px;" id="urunadi">...</label> 
 		<span style="padding-left: 20px;width:100px;">Bakiye :</span>
 		<label style="width:100px;" id="bakiye">...</label> 
 		<span style="padding-left: 20px;width:120px;">Tevkifat Oran :</span>
@@ -346,7 +346,7 @@ datalist {
 	</div>
 	<div class="form-row">
 		<span style="padding-left: 20px;width:100px;"></span>
-		<label style="width:150px;" id="">...</label> 
+		<label style="width:150px;" id="anaalt">...</label> 
 		
 	</div>
 </div>

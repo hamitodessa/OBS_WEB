@@ -705,5 +705,26 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("stok sil", e);
 		}
 
+	}
+
+	@Override
+	public double son_satis_fiati_oku(String kodu, String muskodu, String gircik, ConnectionDetails faturaConnDetails) {
+		double fiat = 0.0;
+		String sql = "SELECT TOP 1  Fiat " +
+				" FROM FATURA WITH (INDEX (IX_FATURA)) " +
+				" WHERE  Cari_Firma = N'" + muskodu + "'" +
+				" AND  Kodu = N'" + kodu + "'" +
+				" AND Gir_Cik = '" + gircik + "'" +
+				" ORDER BY  Tarih desc  OPTION (FAST 1)";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				fiat  = resultSet.getDouble("Fiat");
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Firma adı okunamadı", e);
+		}
+		return fiat;
 	} 
 }

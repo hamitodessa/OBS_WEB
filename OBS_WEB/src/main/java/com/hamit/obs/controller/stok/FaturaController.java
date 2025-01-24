@@ -2,6 +2,7 @@ package com.hamit.obs.controller.stok;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
 
@@ -44,6 +49,47 @@ public class FaturaController {
 			model.addAttribute("errorMessage", "Hata: " + e.getMessage());
 		}
 		return model;
+	}
+
+	@PostMapping("stok/urunoku")
+	@ResponseBody
+	public Map<String, Object> urunoku(@RequestParam String ukodu, @RequestParam String barkod, @RequestParam String fiatlama,String gircik,String ckod) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			urunDTO urunDTO = new urunDTO();
+			if(! ukodu.equals(""))
+				urunDTO =  faturaService.stk_urun("Kodu",ukodu);
+			if(! barkod.equals(""))
+				urunDTO =  faturaService.stk_urun("Barkod",ukodu);
+			if (urunDTO.getKodu().equals("")) {
+				throw new ServiceException("Bu Kodda Urun Yok");
+			}
+			if (urunDTO.getImage() != null) {
+	            String base64Image = Base64.getEncoder().encodeToString(urunDTO.getImage());
+	            urunDTO.setBase64Resim(base64Image);
+	            urunDTO.setImage(null) ;
+	        }
+			response.put("dto",urunDTO);
+			if (! fiatlama.equals(""))
+			{
+				if ( fiatlama.equals("fiat1"))
+					response.put("fiat", urunDTO.getFiat1());
+				else  if (fiatlama.equals("fiat2"))
+					response.put("fiat", urunDTO.getFiat2());
+				else  if (fiatlama.equals("fiat3"))
+					response.put("fiat", urunDTO.getFiat3());
+				else  if (fiatlama.equals("sonsatis"))
+					response.put("fiat", faturaService.son_satis_fiati_oku(ukodu,ckod, gircik.equals("SATIS") ? "C" : "G"));
+				}else {
+				response.put("fiat",0);
+			}
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
 	}
 
 }
