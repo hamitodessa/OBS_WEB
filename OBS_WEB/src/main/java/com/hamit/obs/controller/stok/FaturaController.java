@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ public class FaturaController {
 	private FaturaService faturaService;
 	
 	@GetMapping("stok/fatura")
-	public Model cekkontrol(Model model) {
+	public Model fatura(Model model) {
 		try {
 			List<Map<String, Object>> anaKodlari = faturaService.stk_kod_degisken_oku("ANA_GRUP", "AGID_Y", "ANA_GRUP_DEGISKEN") ;
 			Map<String, Object> anaDeger = new HashMap<>();
@@ -95,7 +96,7 @@ public class FaturaController {
 
 	@PostMapping("stok/fatOku")
 	@ResponseBody
-	public Map<String, Object> uretimOku(@RequestParam String fisno,@RequestParam String cins) {
+	public Map<String, Object> fatOku(@RequestParam String fisno,@RequestParam String cins) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			List<Map<String, Object>> fatura =new ArrayList<>();
@@ -113,6 +114,16 @@ public class FaturaController {
 				response.put("a2",faturaService.aciklama_oku("FAT", 2, fisno.trim(), "G"));
 				response.put("dipnot",faturaService.dipnot_oku(fisno.trim(), "F", "G"));
 			}
+			
+			fatura = fatura.stream().map(item -> {
+			    if (item.containsKey("Resim") && item.get("Resim") instanceof byte[]) {
+			        String base64Image = Base64.getEncoder().encodeToString((byte[]) item.get("Resim"));
+			        item.put("base64Resim", base64Image); // Base64 string olarak ekliyoruz
+			        item.remove("Resim"); // Orijinal byte[] alanını kaldırıyoruz (isteğe bağlı)
+			    }
+			    return item;
+			}).collect(Collectors.toList());
+			
 			response.put("data", (fatura != null) ? fatura : new ArrayList<>());
 			
 			

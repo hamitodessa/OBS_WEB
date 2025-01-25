@@ -734,13 +734,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" Tevkifat,FATURA.Ana_Grup ,FATURA.Alt_Grup ," + 
 				" ISNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = FATURA.DEPO ) , '') AS Depo ,Adres_Firma ," +
 				" Ozel_Kod ,Gir_Cik ,MAL.Barkod ,Birim ,Izahat,MAL.Adi,Tutar,Kur, " +
-				" ISNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUPO_DEGISKEN.AGID_Y = MAL.Ana_Grup ) , '') AS Ur_AnaGrup, " +
-				" ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUPO_DEGISKEN.ALID_Y = MAL.Alt_Grup ) , '') AS Ur_AltGrup " +
+				" ISNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) , '') AS Ur_AnaGrup, " +
+				" ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) , '') AS Ur_AltGrup, " +
+				" Resim" +
 				" FROM Fatura WITH (INDEX (IX_FATURA)), MAL WITH (INDEX (IX_MAL)) " +
 				" WHERE Fatura.Kodu = MAL.Kodu " +
 				" AND Fatura_No = N'" + fno + "'" +
 				" AND Gir_Cik = '" + cins + "'";
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -748,7 +748,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 

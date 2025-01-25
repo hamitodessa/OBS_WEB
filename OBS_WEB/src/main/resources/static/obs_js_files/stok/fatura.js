@@ -7,6 +7,16 @@ document.querySelector('table').addEventListener('focusin', (event) => {
 		let cells = currentRow.cells;
 		document.getElementById("urunadi").innerText = cells[11]?.textContent;
 		document.getElementById("anaalt").innerText = cells[12]?.textContent;
+
+		const imgElement = document.getElementById("resimGoster");
+		if (cells[13]?.textContent !== "") {
+			const base64String = 'data:image/jpeg;base64,' + cells[13]?.textContent.trim();
+			imgElement.src = base64String;
+			imgElement.style.display = "block";
+		} else {
+			imgElement.src = "";
+			imgElement.style.display = "none";
+		}
 	}
 });
 
@@ -109,6 +119,7 @@ function satirekle() {
 		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"
 		     onkeydown="focusNextRow(event, this)" value="" style="text-align:right;">
 		</td>
+		<td style="display: none;"></td>
 		<td style="display: none;"></td>
 		<td style="display: none;"></td>
 	    `;
@@ -277,7 +288,7 @@ async function updateRowValues(inputElement) {
 		const birimCell = cells[7];
 		cells[11].innerText = response.dto.adi || '';
 		cells[12].innerText = response.dto.anagrup + " / " + response.dto.altgrup || '';
-
+		cells[13].innerText = response.dto.base64Resim || '' ;
 		setLabelContent(birimCell, response.dto.birim);
 
 		barkodCell.value = response.dto.barkod;
@@ -367,14 +378,14 @@ function clearInputs() {
 	document.getElementById("tevhartoptut").innerText = "0.00";
 	document.getElementById("tevoran").value = "0.00";
 
-	document.getElementById("depo").innerText = '';
-	document.getElementById("anagrp").innerText = '';
+	document.getElementById("depo").value = '';
+	document.getElementById("anagrp").value = '';
 	document.getElementById("altgrp").innerHTML = '';
 	document.getElementById("altgrp").disabled = true;
 
 	document.getElementById("carikod").value = '';
 	document.getElementById("adreskod").value = '';
-	document.getElementById("varsayilan").innerText = '';
+	document.getElementById("uygulananfiat").selectedIndex = 0;
 	document.getElementById("adreskod").value = '';
 	document.getElementById("doviz").value = 'TL';
 	document.getElementById("kur").value = '0.0000';
@@ -431,50 +442,37 @@ async function fatOku() {
 		}
 		data.data.forEach((item, index) => {
 		        const cells = rows[index].cells;
-				const barkodInput = cells[2]?.querySelector('input');
+				const barkodInput = cells[1]?.querySelector('input');
 				if (barkodInput) barkodInput.value = item.Barkod || "";
-				
-				const urunKoduInput = cells[3]?.querySelector('input');
+				const urunKoduInput = cells[2]?.querySelector('input');
 				if (urunKoduInput) urunKoduInput.value = item.Kodu || "";
-				
-				const depoSelect = cells[4]?.querySelector('select');
+				const depoSelect = cells[3]?.querySelector('select');
 				if (depoSelect) depoSelect.value = item.Depo || "";
-				
-				const fiatInput = cells[5]?.querySelector('input');
+				const fiatInput = cells[4]?.querySelector('input');
 				if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
-				
-				const iskontoInput = cells[6]?.querySelector('input');
+				const iskontoInput = cells[5]?.querySelector('input');
 				if (iskontoInput) iskontoInput.value = formatNumber2(item.Iskonto);
-				
-				const miktarInput = cells[7]?.querySelector('input');
-				if (miktarInput) miktarInput.value = formatNumber3(item.Miktar *-1);
-				
-				setLabelContent(cells[8], item.Birim || '');
-							
-				const kdvInput = cells[9]?.querySelector('input');
-				if (kdvInput) kdvInput.value = formatNumber3(item.Kdv);
-		        
-				const tutarInput = cells[10]?.querySelector('input');
-				if (tutarInput) tutarInput.value = formatNumber2(item.Tutar *-1);
-
-		        const izahatInput = cells[11]?.querySelector('input');
+				const miktarInput = cells[6]?.querySelector('input');
+				if (miktarInput) miktarInput.value = formatNumber3(item.Miktar);
+				setLabelContent(cells[7], item.Birim || '');
+				const kdvInput = cells[8]?.querySelector('input');
+				if (kdvInput) kdvInput.value = formatNumber2(item.Kdv);
+				const tutarInput = cells[9]?.querySelector('input');
+				if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
+		        const izahatInput = cells[10]?.querySelector('input');
 		        if (izahatInput) izahatInput.value = item.Izahat || "";
-
-				cells[12].innerText = item.Adi || '';
-				cells[13].innerText = Ur_AnaGrup + " / " + Ur_AltGrup ;
-		  
+				cells[11].innerText = item.Adi || '';
+				cells[12].innerText = item.Ur_AnaGrup + " / " + item.Ur_AltGrup ;
+				cells[13].innerText = item.base64Resim ;
 		});
 
 		for (let i = 0; i < data.data.length; i++) {
 			const item = data.data[i];
 				document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
 				document.getElementById("anagrp").value = item.Ana_Grup || '';
-				
 				document.getElementById("kur").value = item.Kur;
-				
 				await anagrpChanged(document.getElementById("anagrp"));
 				document.getElementById("altgrp").value = item.Alt_Grup || ''
-				
 				document.getElementById("carikod").value = item.Cari_Firma || '';
 				document.getElementById("adreskod").value = item.Adres_Firma || '';
 				break;
@@ -488,6 +486,9 @@ async function fatOku() {
 		
 
 		updateColumnTotal();
+		
+		hesapAdiOgren(document.getElementById("carikod").value, 'cariadilbl')
+		adrhesapAdiOgren('adreskod','adresadilbl');
 		errorDiv.style.display = "none";
 		errorDiv.innerText = "";
 	} catch (error) {
