@@ -721,5 +721,18 @@ public class FaturaMySQL implements IFaturaDatabase {
 	public double son_satis_fiati_oku(String kodu, String muskodu, String gircik, ConnectionDetails faturaConnDetails) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> fatura_oku(String fno, String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] dipnot_oku(String ino, String cins, String gircik,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
 	} 
 }

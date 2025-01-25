@@ -22,6 +22,14 @@ formatInputBox2 = function (input) {
 	});
 }
 
+formatNumber0 = function (value) {
+	if (value == null) return '';
+	return parseFloat(value).toLocaleString(undefined, {
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0
+	});
+}
+
 formatNumber2 = function (value) {
 	if (value == null) return '';
 	return parseFloat(value).toLocaleString(undefined, {

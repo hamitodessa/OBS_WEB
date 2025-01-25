@@ -726,5 +726,57 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return fiat;
-	} 
+	}
+
+	@Override
+	public List<Map<String, Object>> fatura_oku(String fno, String cins, ConnectionDetails faturaConnDetails) {
+		String sql = "SELECT  Fatura_No ,FATURA.Kodu,Tarih ,FATURA.Kdv ,Doviz,ABS(Miktar) as Miktar ,FATURA.Fiat,Cari_Firma,Iskonto, " + 
+				" Tevkifat,FATURA.Ana_Grup ,FATURA.Alt_Grup ," + 
+				" ISNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = FATURA.DEPO ) , '') AS Depo ,Adres_Firma ," +
+				" Ozel_Kod ,Gir_Cik ,MAL.Barkod ,Birim ,Izahat,MAL.Adi,Tutar,Kur, " +
+				" ISNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUPO_DEGISKEN.AGID_Y = MAL.Ana_Grup ) , '') AS Ur_AnaGrup, " +
+				" ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUPO_DEGISKEN.ALID_Y = MAL.Alt_Grup ) , '') AS Ur_AltGrup " +
+				" FROM Fatura WITH (INDEX (IX_FATURA)), MAL WITH (INDEX (IX_MAL)) " +
+				" WHERE Fatura.Kodu = MAL.Kodu " +
+				" AND Fatura_No = N'" + fno + "'" +
+				" AND Gir_Cik = '" + cins + "'";
+		System.out.println(sql);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
+	}
+
+	@Override
+	public String[] dipnot_oku(String ino, String cins, String gircik,
+			ConnectionDetails faturaConnDetails) {
+		String[] dipnot = {"","",""};
+		String sql = "SELECT * " +
+				" FROM DPN " +
+				" WHERE Evrak_NO = N'" + ino + "'" +
+				" AND DPN.Tip = N'" + cins + "'" +
+				" AND Gir_Cik = '" + gircik + "'";
+		
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					dipnot[0] = resultSet.getString("Bir");
+					dipnot[1] = resultSet.getString("Iki");
+					dipnot[2] = resultSet.getString("Uc");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return dipnot; 
+	}
 }

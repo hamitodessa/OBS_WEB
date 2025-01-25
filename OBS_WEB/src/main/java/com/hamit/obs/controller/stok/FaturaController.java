@@ -3,6 +3,7 @@ package com.hamit.obs.controller.stok;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,40 @@ public class FaturaController {
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	@PostMapping("stok/fatOku")
+	@ResponseBody
+	public Map<String, Object> uretimOku(@RequestParam String fisno,@RequestParam String cins) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> fatura =new ArrayList<>();
+			if (cins.toString().equals("SATIS") )
+			{
+				fatura = faturaService.fatura_oku(fisno.trim(), "C");
+				response.put("a1",faturaService.aciklama_oku("FAT", 1, fisno.trim(), "C"));
+				response.put("a2",faturaService.aciklama_oku("FAT", 2, fisno.trim(), "C"));
+				response.put("dipnot",faturaService.dipnot_oku(fisno.trim(), "F", "C"));
+			}
+			else
+			{
+				fatura = faturaService.fatura_oku(fisno.trim(), "G");
+				response.put("a1",faturaService.aciklama_oku("FAT", 1, fisno.trim(), "G"));
+				response.put("a2",faturaService.aciklama_oku("FAT", 2, fisno.trim(), "G"));
+				response.put("dipnot",faturaService.dipnot_oku(fisno.trim(), "F", "G"));
+			}
+			response.put("data", (fatura != null) ? fatura : new ArrayList<>());
+			
+			
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("data", Collections.emptyList());
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;

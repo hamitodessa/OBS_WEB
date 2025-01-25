@@ -42,4 +42,6 @@ public interface IFaturaDatabase {
 	void urun_degisken_alt_grup_sil(int id,ConnectionDetails faturaConnDetails);
 	void urun_kod_degisken_sil(String hangi_Y,String nerden,int sira,ConnectionDetails faturaConnDetails);
 	double son_satis_fiati_oku(String kodu,String muskodu,String gircik,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> fatura_oku(String fno,String cins,ConnectionDetails faturaConnDetails);
+	String[] dipnot_oku(String ino,String cins ,String gircik,ConnectionDetails faturaConnDetails);
 }
