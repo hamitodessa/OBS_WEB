@@ -44,4 +44,6 @@ public interface IFaturaDatabase {
 	double son_satis_fiati_oku(String kodu,String muskodu,String gircik,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> fatura_oku(String fno,String cins,ConnectionDetails faturaConnDetails);
 	String[] dipnot_oku(String ino,String cins ,String gircik,ConnectionDetails faturaConnDetails);
+	String son_no_al(String cins,ConnectionDetails faturaConnDetails);
+	int fatura_no_al(String cins,ConnectionDetails faturaConnDetails);
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
+
+import OBS_C_2025.BAGLAN_LOG;
 
 @Controller
 public class FaturaController {
@@ -137,5 +140,76 @@ public class FaturaController {
 		}
 		return response;
 	}
+	
+	@PostMapping("stok/sonfatfis")
+	@ResponseBody
+	public Map<String, String> sorgula(@RequestParam String cins) {
+		Map<String, String> response = new HashMap<>();
+		try {
+			if (cins.toString().equals("SATIS"))
+				response.put("fisno", faturaService.son_no_al("C"));
+			else
+				response.put("fisno", faturaService.son_no_al("G"));
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	@PostMapping("stok/yenifis")
+	@ResponseBody
+	public Map<String, String> yenifis(@RequestParam String cins) {
+		Map<String, String> response = new HashMap<>();
+		try {
+			int sno = 0 ;
+			if (cins.toString().equals("SATIS"))
+				sno =  faturaService.fatura_no_al("C");
+			else
+				sno =  faturaService.fatura_no_al("G");
+			int kj = 10 - Integer.toString(sno).length();
+			StringBuilder strBuilder = new StringBuilder();
+			for (int i = 0; i < kj; i++) {
+			    strBuilder.append("0");
+			}
+			strBuilder.append(sno);
+			String str_ = strBuilder.toString();
+			
+			response.put("fisno", str_.equals("0000000000") ? "0000000001":str_);
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	@PostMapping("stok/fatYoket")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam String fisno,@RequestParam String cins) {
+		Map<String, String> response = new HashMap<>();
+		try {
+			if (cins.toString().equals("SATIS")) {
+				faturaService.fat_giris_sil(fisno.trim(), "C");
+				faturaService.dipnot_sil(fisno.trim(), "F", "C");
+				faturaService.aciklama_sil("FAT",fisno.trim(), "C");
+			}
+			else {
+				faturaService.fat_giris_sil(fisno.trim(), "G");
+				faturaService.dipnot_sil(fisno.trim(), "F", "G");
+				faturaService.aciklama_sil("FAT", fisno.trim(), "G");
+			}
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage",  e.getMessage());
+		}
+		return ResponseEntity.ok(response);
+	}
+
 
 }

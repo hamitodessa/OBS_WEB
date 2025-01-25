@@ -715,5 +715,17 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ConnectionDetails faturaConnDetails) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String son_no_al(String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int fatura_no_al(String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
 	} 
 }

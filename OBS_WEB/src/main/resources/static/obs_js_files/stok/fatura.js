@@ -385,6 +385,9 @@ function clearInputs() {
 
 	document.getElementById("carikod").value = '';
 	document.getElementById("adreskod").value = '';
+	document.getElementById("cariadilbl").innerText = "";
+	document.getElementById("adresadilbl").innerText = "";
+	
 	document.getElementById("uygulananfiat").selectedIndex = 0;
 	document.getElementById("adreskod").value = '';
 	document.getElementById("doviz").value = 'TL';
@@ -406,6 +409,11 @@ function clearInputs() {
 	document.getElementById("totalTutar").textContent = formatNumber2(0);
 	document.getElementById("totalSatir").textContent = formatNumber0(0);
 	document.getElementById("totalMiktar").textContent = formatNumber3(0);
+	
+	const imgElement = document.getElementById("resimGoster");
+	imgElement.src = "";
+	imgElement.style.display = "none";
+
 }
 
 async function fatOku() {
@@ -413,7 +421,6 @@ async function fatOku() {
 	const gircikdeger = document.getElementById("gircik").value;
 	const errorDiv = document.getElementById("errorDiv");
 	document.body.style.cursor = "wait";
-	console.info( fisno, gircikdeger);
 	try {
 		const response = await fetchWithSessionCheck("stok/fatOku", {
 			method: 'POST',
@@ -499,3 +506,107 @@ async function fatOku() {
 	}
 }
 
+async function sonfis() {
+	const gircikdeger = document.getElementById("gircik").value;
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck('stok/sonfatfis', {
+		method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+		},
+			body: new URLSearchParams({ cins: gircikdeger}),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const data = response;
+		const fisNoInput = document.getElementById('fisno');
+		const errorDiv = document.getElementById('errorDiv');
+
+		fisNoInput.value = data.fisno;
+		if (data.fisNo === 0) {
+			alert('Hata: Evrak numarası bulunamadı.');
+			errorDiv.innerText = data.errorMessage;
+			return;
+		}
+		if (data.errorMessage) {
+			errorDiv.innerText = data.errorMessage;
+			errorDiv.style.display = 'block';
+		} else {
+			errorDiv.style.display = 'none';
+			fatOku();
+		}
+	} catch (error) {
+		const errorDiv = document.getElementById('errorDiv');
+		errorDiv.style.display = 'block';
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+			document.body.style.cursor = "default";
+	}
+}
+
+async function yeniFis() {
+	const gircikdeger = document.getElementById("gircik").value;
+	const errorDiv = document.getElementById('errorDiv');
+	errorDiv.innerText = "";
+	clearInputs();
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck('stok/yenifis', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ cins: gircikdeger }),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const fisNoInput = document.getElementById('fisno');
+		fisNoInput.value = response.fisno;
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		
+		document.body.style.cursor = "default";
+	}
+}
+
+async function fatYoket() {
+	const fisNoInput = document.getElementById('fisno').value;
+	const gircikdeger = document.getElementById("gircik").value;
+	if (["0", ""].includes(fisNoInput.value)) {
+		return;
+	}
+	const confirmDelete = confirm("Bu Uretim fisi silinecek ?");
+	if (!confirmDelete) {
+		return;
+	}
+	document.body.style.cursor = "wait";
+	const $silButton = $('#uresilButton');
+	$silButton.prop('disabled', true).text('Siliniyor...');
+	try {
+		const response = await fetchWithSessionCheck("stok/fatYoket", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ fisno: fisNoInput.value, cins:gircikdeger }),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		clearInputs();
+		document.getElementById("fisno").value = "";
+		document.getElementById("errorDiv").style.display = "none";
+		document.getElementById("errorDiv").innerText = "";
+	} catch (error) {
+		document.getElementById("errorDiv").style.display = "block";
+		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+		$silButton.prop('disabled', false).text('Sil');
+	}
+}
