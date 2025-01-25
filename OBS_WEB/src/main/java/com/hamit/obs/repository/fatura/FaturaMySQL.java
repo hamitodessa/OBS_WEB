@@ -758,5 +758,27 @@ public class FaturaMySQL implements IFaturaDatabase {
 	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails faturaConnDetails) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<Map<String, Object>> fat_oz_kod(String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void fat_kaydet(String fatno, String kodu, int depo, double fiat, double tevkifat, double miktar,
+			String gircik, double tutar, double iskonto, double kdv, String tarih, String izah, String doviz,
+			String adrfirma, String carfirma, String ozkod, double kur, String cins, int anagrp, int altgrp, String usr,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
 	} 
 }

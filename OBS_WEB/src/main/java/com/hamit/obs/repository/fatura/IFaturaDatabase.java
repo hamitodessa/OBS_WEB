@@ -48,4 +48,10 @@ public interface IFaturaDatabase {
 	int fatura_no_al(String cins,ConnectionDetails faturaConnDetails);
 	void fat_giris_sil(String fno,String cins,ConnectionDetails faturaConnDetails);
 	void dipnot_sil(String ino,String cins,String gircik,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> fat_oz_kod (String cins,ConnectionDetails faturaConnDetails);
+	void fat_kaydet(String fatno ,String kodu ,int depo ,double  fiat ,double tevkifat  
+			, double miktar ,String gircik ,double tutar,double iskonto ,double kdv  
+			, String tarih, String izah,String doviz,String  adrfirma ,String carfirma  
+			, String ozkod ,double kur ,String cins,int  anagrp,int  altgrp ,String usr,ConnectionDetails faturaConnDetails);
+	void dipnot_yaz(String eno,String bir,String iki,String uc,String tip,String gircik,String usr,ConnectionDetails faturaConnDetails);
 }

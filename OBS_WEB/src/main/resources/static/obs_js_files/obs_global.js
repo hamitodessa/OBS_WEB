@@ -3,8 +3,10 @@ subeIsimleri = [];
 ilkBorclu = [];
 allSubjects = [];
 depolar = [];
+ozelkodlar = [];
 urnkodlar = [];
 rowCounter = 0;
+lastFocusedRow = null;
 
 incrementRowCounter = function () {
 	rowCounter++;

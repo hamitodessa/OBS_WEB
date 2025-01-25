@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.stok.faturaDTO;
 import com.hamit.obs.dto.stok.faturadetayDTO;
 import com.hamit.obs.dto.stok.faturakayitDTO;
@@ -41,11 +43,12 @@ public class FaturaController {
 			anaKodlari.add(0, anaDeger);
 			model.addAttribute("anaKodlari", (anaKodlari != null) ? anaKodlari : new ArrayList<>());
 
-			List<Map<String, Object>> depoKodlari = faturaService.stk_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
-			Map<String, Object> depoDeger = new HashMap<>();
-			depoDeger.put("DEPO", ""); 
-			depoKodlari.add(0, depoDeger);
-			model.addAttribute("depoKodlari", (depoKodlari != null) ? depoKodlari : new ArrayList<>());
+			List<Map<String, Object>> ozelKodlari = faturaService.fat_oz_kod("C") ;
+			Map<String, Object> ozelDeger = new HashMap<>();
+			ozelDeger.put("Ozel_Kod", ""); 
+			ozelKodlari.add(0, ozelDeger);
+			model.addAttribute("ozelKodlari", (ozelKodlari != null) ? ozelKodlari : new ArrayList<>());
+			
 			LocalDate today = LocalDate.now(); 
 			model.addAttribute("fisTarih", today); 
 			model.addAttribute("errorMessage", "");
@@ -219,6 +222,122 @@ public class FaturaController {
 		try {
 			faturaDTO dto = faturakayitDTO.getFaturaDTO();
 			List<faturadetayDTO> tableData = faturakayitDTO.getTableData();
+			if (dto.getFatcins().toString().equals("SATIS"))
+				faturaService.fat_giris_sil(dto.getFisno().trim(), "C");
+			else
+				faturaService.fat_giris_sil(dto.getFisno().trim(), "G");
+			
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
+			int dpo = 0 ;
+			int ana = 0 ;
+			int alt = 0;
+			String gircik, izahat ;
+			double  miktar ;
+			for (faturadetayDTO row : tableData) {
+				dpo = 0 ;
+				ana = 0 ;
+				alt = 0;
+				miktar = 0;
+				if( ! row.getDepo().equals("")) {
+					String dpos = faturaService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN",  row.getDepo());
+					dpo = Integer.parseInt(dpos);
+				}
+				if(! dto.getAnagrup().equals("")) {
+					String anas = faturaService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", dto.getAnagrup());
+					ana = Integer.parseInt(anas);
+				}
+				if(! dto.getAltgrup().equals("")) {
+					String alts = faturaService.urun_kod_degisken_ara("ALID_Y", "ALT_GRUP", "ALT_GRUP_DEGISKEN", dto.getAltgrup());
+					alt = Integer.parseInt(alts);
+				}
+				if (dto.getFatcins().toString().equals("SATIS") )
+				{
+					miktar = row.getMiktar();
+					miktar = miktar * -1;
+					gircik = "C" ;
+				}
+				else
+				{
+					miktar = row.getMiktar();
+					gircik = "G";
+				}
+				
+				double kur =0;
+				double tutar = row.getTutar();
+				izahat =  row.getIzahat();
+				kur = dto.getKur();
+				double tevk = dto.getTevoran()  ;
+				double fiat =0 ;
+				fiat = row.getFiat();
+				double isk = 0 ;
+				isk = row.getIskonto();
+				double kdv = 0 ; 
+				kdv = row.getKdv();
+				faturaService.fat_kaydet(dto.getFisno().trim(), row.getUkodu().trim(), dpo,fiat , tevk,
+						miktar, gircik, tutar ,isk,kdv,
+						dto.getTarih(), izahat, dto.getDvzcins(),dto.getAdreskod().trim(), dto.getCarikod().trim(), 
+						dto.getOzelkod(), kur, "", ana, alt, userrString);
+			}
+			
+			if (dto.getFatcins().toString().equals("SATIS")) {
+				faturaService.dipnot_sil(dto.getFisno().trim(), "F", "C");
+				faturaService.dipnot_yaz(dto.getFisno().trim(), 
+						dto.getNot1().trim(),dto.getNot2().trim(),dto.getNot3().trim(), "F", "C",userrString);
+			
+				faturaService.aciklama_sil("FAT", dto.getFisno().trim(), "C");
+				faturaService.aciklama_yaz("FAT", 1,  dto.getFisno().trim(),  
+						dto.getAcik1().trim(), "C");
+				faturaService.aciklama_yaz("FAT", 2, dto.getFisno().trim(), 
+						dto.getAcik2().trim(), "C");
+				
+			}
+			else {
+				faturaService.dipnot_sil(dto.getFisno().trim(), "F", "G");
+				faturaService.dipnot_yaz(dto.getFisno().trim(), 
+						dto.getNot1().trim(),dto.getNot2().trim(),dto.getNot3().trim(), "F", "G",userrString);
+
+				faturaService.aciklama_sil("FAT", dto.getFisno().trim(), "G");
+				faturaService.aciklama_yaz("FAT", 1,  dto.getFisno().trim(),  
+						dto.getAcik1().trim(), "G");
+				faturaService.aciklama_yaz("FAT", 2, dto.getFisno().trim(), 
+						dto.getAcik2().trim(), "G");
+
+			}
+			if (dto.getFatcins().toString().equals("SATIS"))
+				faturaService.stok_sil( dto.getFisno().trim(), "FAT", "C");
+			else
+				faturaService.stok_sil( dto.getFisno().trim(), "FAT", "G");
+			
+			double tutar,kdvlitut ;
+			String  har, izah ;
+			for (faturadetayDTO row : tableData) {
+				har = "";
+				izah = "";
+				miktar = 0 ;
+				tutar = 0;
+				kdvlitut = 0 ;
+				if (dto.getFatcins().toString().equals("SATIS")) {
+					miktar = row.getMiktar();
+					miktar = miktar * -1;
+					tutar =  row.getTutar();
+					tutar = tutar - ((tutar * row.getIskonto()) / 100);
+					tutar =  tutar * -1;
+					kdvlitut = sat_toplam(row.getTutar(), row.getIskonto(),row.getKdv(),dto.getTevoran() );
+					kdvlitut =  kdvlitut * -1;
+					har = "C";
+					izah = row.getIzahat() + " Nolu Satis Faturasi...";
+				}
+				else {
+					miktar =  row.getMiktar();
+					tutar =  row.getTutar();
+					tutar = tutar - ((tutar * row.getIskonto()) / 100);
+					kdvlitut = sat_toplam(row.getTutar(), row.getIskonto(),row.getKdv(),dto.getTevoran() );           
+					har = "G" ;
+					izah = row.getIzahat() + " Nolu Giris Faturasi...";
+				}
+				faturaService.stk_kaydet(dto.getFisno().trim(), "FAT", dto.getTarih(), dpo, row.getUkodu().trim(), miktar, row.getFiat()
+						,(double) Math.round(tutar), kdvlitut, har, izah, ana, alt, dto.getKur(), "",dto.getDvzcins(), dto.getCarikod().trim(),userrString);	
+			}
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
@@ -228,4 +347,13 @@ public class FaturaController {
 		return response;
 	}
 
+	private static double sat_toplam(double tutar,double isk ,double kdv ,double tev )
+	{
+		double double_0, double_1, double_2;
+		double_1 = (tutar * isk) / 100  ; //' iskonto
+		double_2 = ((tutar - (tutar * isk) / 100) * kdv) / 100 ; //' kdv
+		//'**********Tevkif Islemi **********************************************************
+		double_0 = ((double) Math.round(tutar) - (double) Math.round(double_1)) + ((double) Math.round(double_2) - ((double) Math.round(double_2) / 10) * (double) Math.round(tev));
+		return double_0;
+	}
 }

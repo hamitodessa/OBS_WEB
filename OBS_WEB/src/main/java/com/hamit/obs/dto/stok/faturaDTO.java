@@ -26,4 +26,6 @@ public class faturaDTO {
 	private String acik1;
 	private String acik2;
 	
+	private String fatcins;
+	
 }

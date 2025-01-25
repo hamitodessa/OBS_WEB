@@ -856,4 +856,82 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	        throw new ServiceException("Dipnot silme sırasında bir hata oluştu.", e);
 	    }
 	}
+
+	@Override
+	public List<Map<String, Object>> fat_oz_kod(String cins, ConnectionDetails faturaConnDetails) {
+		String sql = "SELECT DISTINCT  Ozel_Kod  " + 
+				"  FROM FATURA WHERE Gir_Cik = '" + cins + "'";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public void fat_kaydet(String fatno, String kodu, int depo, double fiat, double tevkifat, double miktar,
+			String gircik, double tutar, double iskonto, double kdv, String tarih, String izah, String doviz,
+			String adrfirma, String carfirma, String ozkod, double kur, String cins, int anagrp, int altgrp, String usr,
+			ConnectionDetails faturaConnDetails) {
+		String sql  = "INSERT INTO FATURA (Fatura_No,Kodu,Depo,Fiat,Tevkifat,Miktar,Gir_Cik,Tutar,Iskonto,Kdv,Tarih,Izahat " +
+				" ,Doviz,Adres_Firma,Cari_Firma,Ozel_Kod,Kur,Cins,Ana_Grup,Alt_Grup,[USER]) " +
+				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,fatno);
+			stmt.setString(2, kodu);
+			stmt.setInt(3,depo);
+			stmt.setDouble(4, fiat);
+			stmt.setDouble(5, tevkifat);
+			stmt.setDouble(6, miktar);
+			stmt.setString(7, gircik);
+			stmt.setDouble(8, tutar);
+			stmt.setDouble(9, iskonto);
+			stmt.setDouble(10, kdv);
+			stmt.setTimestamp(11, Timestamp.valueOf(Tarih_Cevir.dateFormaterSaatli(tarih)));
+			stmt.setString(12, izah);
+			stmt.setString(13, doviz);
+			stmt.setString(14, adrfirma);
+			stmt.setString(15, carfirma);
+			stmt.setString(16, ozkod);
+			stmt.setDouble(17, kur);
+			stmt.setString(18, cins);
+			stmt.setInt(19,anagrp);
+			stmt.setInt(20,altgrp);
+			stmt.setString(21,usr);
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
+		}
+
+	}
+
+	@Override
+	public void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr,
+			ConnectionDetails faturaConnDetails) {
+		String sql  = "INSERT INTO DPN (Evrak_No,Tip,Bir,Iki,Uc,Gir_Cik,[USER]) " +
+				" VALUES (?,?,?,?,?,?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, eno);
+			stmt.setString(2, tip);
+			stmt.setString(3, bir);
+			stmt.setString(4, iki);
+			stmt.setString(5, uc);
+			stmt.setString(6,gircik);
+			stmt.setString(7, usr);
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
+		}
+
+	}
 }
