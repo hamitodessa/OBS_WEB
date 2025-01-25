@@ -46,4 +46,6 @@ public interface IFaturaDatabase {
 	String[] dipnot_oku(String ino,String cins ,String gircik,ConnectionDetails faturaConnDetails);
 	String son_no_al(String cins,ConnectionDetails faturaConnDetails);
 	int fatura_no_al(String cins,ConnectionDetails faturaConnDetails);
+	void fat_giris_sil(String fno,String cins,ConnectionDetails faturaConnDetails);
+	void dipnot_sil(String ino,String cins,String gircik,ConnectionDetails faturaConnDetails);
 }

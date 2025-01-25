@@ -700,32 +700,161 @@ public class FaturaPgSQL implements IFaturaDatabase {
 
 	@Override
 	public double son_satis_fiati_oku(String kodu, String muskodu, String gircik, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return 0;
+		double fiat = 0.0;
+		String sql = "SELECT  \"Fiat\"  " +
+				" FROM \"FATURA\" " +
+				" WHERE  \"Cari_Firma\" = N'" + muskodu + "'" +
+				" AND  \"Kodu\" = N'" + kodu + "'" +
+				" AND \"Gir_Cik\" = '" + gircik + "'" +
+				" ORDER BY  \"Tarih\" desc  LIMIT 1";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				fiat  = resultSet.getDouble("Fiat");
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Firma adı okunamadı", e);
+		}
+		return fiat;
+
 	}
 
 	@Override
 	public List<Map<String, Object>> fatura_oku(String fno, String cins, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT  \"Fatura_No\" ,\"FATURA\".\"Kodu\",\"Tarih\" ,\"FATURA\".\"Kdv\" ,\"Doviz\",ABS(\"Miktar\") as \"Miktar\" ,\"FATURA\".\"Fiat\",\"Cari_Firma\",\"Iskonto\", " + 
+				" \"Tevkifat\", " + 
+				" COALESCE((Select \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"FATURA\".\"Ana_Grup\" ) , '')  AS \"Ana_Grup\" ," +
+				" COALESCE((Select \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"FATURA\".\"Alt_Grup\" ) , '')  AS \"Alt_Grup\" ," +
+				" COALESCE((Select \"DEPO\" FROM \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID_Y\" = \"FATURA\".\"Depo\" ) , '') AS \"Depo\" ,\"Adres_Firma\" ," +
+				" \"Ozel_Kod\" ,\"Gir_Cik\" ,\"MAL\".\"Barkod\" ,\"Birim\" ,\"Izahat\",\"MAL\".\"Adi\",\"Tutar\",\"Kur\" " +
+				" COALESCE((Select \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"MAL\".\"Ana_Grup\" ) , '')  AS \"Ur_AnaGrup\" ," +
+				" COALESCE((Select \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"MAL\".\"Alt_Grup\" ) , '')  AS \"Ur_AltGrup\" ," +
+				" \"Resim\"" +
+				" FROM \"FATURA\" , \"MAL\"  " +
+				" WHERE \"FATURA\".\"Kodu\" = \"MAL\".\"Kodu\" " +
+				" AND \"Fatura_No\" = N'" + fno + "'" +
+				" AND \"Gir_Cik\" = '" + cins + "'";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
 	}
 
 	@Override
 	public String[]  dipnot_oku(String ino, String cins, String gircik,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String[] dipnot = {"","",""};
+		String sql =  "SELECT * " +
+				" FROM \"DPN\" " +
+				" WHERE \"Evrak_No\" = N'" + ino + "'" +
+				" AND \"Tip\" = N'" + cins + "'" +
+				" AND \"Gir_Cik\" = '" + gircik + "'";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					dipnot[0] = resultSet.getString("Bir");
+					dipnot[1] = resultSet.getString("Iki");
+					dipnot[2] = resultSet.getString("Uc");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return dipnot; 
+
 	}
 
 	@Override
 	public String son_no_al(String cins, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String son_no = "";
+		String query = "SELECT max(\"Fatura_No\")  as \"NO\" FROM \"FATURA\" WHERE \"Gir_Cik\" = '" + cins + "' ";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				son_no = resultSet.getString("NO");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Firma adı okunamadı", e);
+		}
+		return son_no;
 	}
 
 	@Override
 	public int fatura_no_al(String cins, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return 0;
+		int E_NUMBER = 0;
+		String sql = "SELECT  CASE WHEN max(\"Fatura_No\")  = '' THEN '1' ELSE   max(\"Fatura_No\")::int + 1  END  AS \"NO\"  FROM \"FATURA\" WHERE \"Gir_Cik\" = '" + cins + "' ";
+		try (Connection connection =  DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (!resultSet.isBeforeFirst() ) {  
+					E_NUMBER = 0 ;
+				}
+				else
+				{
+					resultSet.next();
+					E_NUMBER = resultSet.getInt("NO");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Fatura Numaralarinda onceden harf ve rakkam kullanildigindan otomatik numara verilemez...."); 
+		}
+		return E_NUMBER;
+	}
+
+	@Override
+	public void fat_giris_sil(String fno, String cins, ConnectionDetails faturaConnDetails) {
+	    String sqlFatura = " DELETE " +
+				" FROM \"FATURA\" " +
+				" WHERE \"Fatura_No\"  =? " +
+				" AND \"Gir_Cik\" = ? ";
+	    String sqlStok = " DELETE " +
+				" FROM \"STOK\" " +
+				" WHERE \"Evrak_No\"  = ? " +
+				" AND \"Hareket\" = ? " +
+				" AND \"Evrak_Cins\" = 'FAT' ";
+	    try (Connection connection = DriverManager.getConnection(
+	            faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword())) {
+	        try (PreparedStatement stmt = connection.prepareStatement(sqlFatura)) {
+	            stmt.setString(1, fno);
+	            stmt.setString(2, cins);
+	            stmt.executeUpdate();
+	        }
+	        try (PreparedStatement stmt = connection.prepareStatement(sqlStok)) {
+	            stmt.setString(1, fno);
+	            stmt.setString(2, cins);
+	            stmt.executeUpdate();
+	        }
+	    } catch (Exception e) {
+	        throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+	    }
+	}
+
+	@Override
+	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails faturaConnDetails) {
+	    String sql = " DELETE " +
+				" FROM \"DPN\" " +
+				" WHERE \"Evrak_No\" = ? " +
+				" AND \"Tip\" = ? " +
+				" AND \"Gir_Cik\" = ?";
+	    try (Connection connection = DriverManager.getConnection(
+	            faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+	         PreparedStatement stmt = connection.prepareStatement(sql)) {
+	        stmt.setString(1, ino);
+	        stmt.setString(2, cins);
+	        stmt.setString(3, gircik);
+	        stmt.executeUpdate();
+	    } catch (Exception e) {
+	        throw new ServiceException("Dipnot silme sırasında bir hata oluştu.", e);
+	    }
 	} 
 }

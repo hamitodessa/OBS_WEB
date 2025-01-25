@@ -801,7 +801,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public int fatura_no_al(String cins, ConnectionDetails faturaConnDetails) {
 		int E_NUMBER = 0;
-		
 		String sql = "SELECT max(Fatura_No + 1) AS NO  FROM FATURA WHERE Gir_Cik = '" + cins + "' ";
 		try (Connection connection =  DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -820,5 +819,41 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		}
 		return E_NUMBER;
 
+	}
+
+	@Override
+	public void fat_giris_sil(String fno, String cins, ConnectionDetails faturaConnDetails) {
+	    String sqlFatura = "DELETE FROM FATURA WHERE Fatura_No = ? AND Gir_Cik = ?";
+	    String sqlStok = "DELETE FROM STOK WHERE Evrak_No = ? AND Hareket = ? AND Evrak_Cins = 'FAT'";
+	    try (Connection connection = DriverManager.getConnection(
+	            faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword())) {
+	        try (PreparedStatement stmt = connection.prepareStatement(sqlFatura)) {
+	            stmt.setString(1, fno);
+	            stmt.setString(2, cins);
+	            stmt.executeUpdate();
+	        }
+	        try (PreparedStatement stmt = connection.prepareStatement(sqlStok)) {
+	            stmt.setString(1, fno);
+	            stmt.setString(2, cins);
+	            stmt.executeUpdate();
+	        }
+	    } catch (Exception e) {
+	        throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+	    }
+	}
+
+	@Override
+	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails faturaConnDetails) {
+	    String sql = "DELETE FROM DPN WHERE Evrak_NO = ? AND Tip = ? AND Gir_Cik = ?";
+	    try (Connection connection = DriverManager.getConnection(
+	            faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+	         PreparedStatement stmt = connection.prepareStatement(sql)) {
+	        stmt.setString(1, ino);
+	        stmt.setString(2, cins);
+	        stmt.setString(3, gircik);
+	        stmt.executeUpdate();
+	    } catch (Exception e) {
+	        throw new ServiceException("Dipnot silme sırasında bir hata oluştu.", e);
+	    }
 	}
 }

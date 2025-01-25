@@ -746,5 +746,17 @@ public class FaturaMySQL implements IFaturaDatabase {
 	public int fatura_no_al(String cins, ConnectionDetails faturaConnDetails) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void fat_giris_sil(String fno, String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
 	} 
 }

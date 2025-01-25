@@ -15,14 +15,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.dto.stok.faturaDTO;
+import com.hamit.obs.dto.stok.faturadetayDTO;
+import com.hamit.obs.dto.stok.faturakayitDTO;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
-
-import OBS_C_2025.BAGLAN_LOG;
 
 @Controller
 public class FaturaController {
@@ -176,7 +178,6 @@ public class FaturaController {
 			}
 			strBuilder.append(sno);
 			String str_ = strBuilder.toString();
-			
 			response.put("fisno", str_.equals("0000000000") ? "0000000001":str_);
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
@@ -210,6 +211,21 @@ public class FaturaController {
 		}
 		return ResponseEntity.ok(response);
 	}
-
+	
+	@PostMapping("stok/fatKayit")
+	@ResponseBody
+	public  Map<String, Object>  fatKayit(@RequestBody faturakayitDTO faturakayitDTO ) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			faturaDTO dto = faturakayitDTO.getFaturaDTO();
+			List<faturadetayDTO> tableData = faturakayitDTO.getTableData();
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
 
 }
