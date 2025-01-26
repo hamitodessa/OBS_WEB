@@ -92,7 +92,7 @@ public class UrunKartController {
 		urunDTO urunDTO = new urunDTO();
 		try {
 			urunDTO =  faturaService.stk_urun("Kodu",arama);
-	        if (urunDTO.getKodu().equals("")) {
+			if (urunDTO.getKodu() == null || urunDTO.getKodu().isEmpty()) {
 	            throw new ServiceException("Bu Kodda Urun Yok");
 	        }
 	        if (urunDTO.getImage() != null) {

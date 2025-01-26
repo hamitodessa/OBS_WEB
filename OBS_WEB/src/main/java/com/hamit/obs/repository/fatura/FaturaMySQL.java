@@ -780,5 +780,29 @@ public class FaturaMySQL implements IFaturaDatabase {
 			ConnectionDetails faturaConnDetails) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String recete_son_bordro_no_al(ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int recete_no_al(ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void rec_sil(String rno, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void kod_recete_yaz(String ukodu, String rec, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
 	} 
 }

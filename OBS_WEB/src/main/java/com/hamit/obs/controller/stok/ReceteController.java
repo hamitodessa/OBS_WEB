@@ -1,8 +1,6 @@
 package com.hamit.obs.controller.stok;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.KusurYuvarla;
+import com.hamit.obs.dto.stok.receteDTO;
+import com.hamit.obs.dto.stok.recetedetayDTO;
+import com.hamit.obs.dto.stok.recetekayitDTO;
 import com.hamit.obs.dto.stok.uretimDTO;
 import com.hamit.obs.dto.stok.uretimdetayDTO;
 import com.hamit.obs.dto.stok.uretimkayitDTO;
@@ -28,115 +29,36 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
 
 @Controller
-public class UretimController {
+public class ReceteController {
 
 	@Autowired
 	private FaturaService faturaService;
-
-	@GetMapping("stok/uretim")
-	public Model uretim(Model model) {
-		List<Map<String, Object>> anaKodlari = faturaService.stk_kod_degisken_oku("ANA_GRUP", "AGID_Y", "ANA_GRUP_DEGISKEN") ;
-		Map<String, Object> anaDeger = new HashMap<>();
-		anaDeger.put("ANA_GRUP", ""); 
-		anaKodlari.add(0, anaDeger);
-		model.addAttribute("anaKodlari", (anaKodlari != null) ? anaKodlari : new ArrayList<>());
-
-		List<Map<String, Object>> depoKodlari = faturaService.stk_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
-		Map<String, Object> depoDeger = new HashMap<>();
-		depoDeger.put("DEPO", ""); 
-		depoKodlari.add(0, depoDeger);
-		model.addAttribute("depoKodlari", (depoKodlari != null) ? depoKodlari : new ArrayList<>());
-		LocalDate today = LocalDate.now(); 
-		model.addAttribute("tarih", today); 
+	
+	
+	@GetMapping("stok/recete")
+	public Model fatura(Model model) {
+		try {
+			List<Map<String, Object>> anaKodlari = faturaService.stk_kod_degisken_oku("ANA_GRUP", "AGID_Y", "ANA_GRUP_DEGISKEN") ;
+			Map<String, Object> anaDeger = new HashMap<>();
+			anaDeger.put("ANA_GRUP", ""); 
+			anaKodlari.add(0, anaDeger);
+			model.addAttribute("anaKodlari", (anaKodlari != null) ? anaKodlari : new ArrayList<>());
+			model.addAttribute("errorMessage", "");
+		} catch (ServiceException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMessage", "Hata: " + e.getMessage());
+		}
 		return model;
 	}
-
-	@PostMapping("stok/sonfis")
+	
+	@PostMapping("stok/recsonfis")
 	@ResponseBody
-	public Map<String, String> sonfis() {
+	public Map<String, String> recsonfis() {
 		Map<String, String> response = new HashMap<>();
 		try {
-			response.put("fisno", faturaService.uret_son_bordro_no_al());
-			response.put("errorMessage", "");
-		} catch (ServiceException e) {
-			response.put("errorMessage", e.getMessage());
-		} catch (Exception e) {
-			response.put("errorMessage", "Hata: " + e.getMessage());
-		}
-		return response;
-	}
-
-	@PostMapping("stok/uretimOku")
-	@ResponseBody
-	public Map<String, Object> uretimOku(@RequestParam String fisno) {
-		Map<String, Object> response = new HashMap<>();
-		try {
-			List<Map<String, Object>> uretim = faturaService.stok_oku(fisno,"URE");
-			response.put("data", (uretim != null) ? uretim : new ArrayList<>());
-			response.put("aciklama",faturaService.aciklama_oku("URE", 1, fisno, "G"));
-			response.put("errorMessage", "");
-		} catch (ServiceException e) {
-			response.put("data", Collections.emptyList());
-			response.put("errorMessage", e.getMessage());
-		} catch (Exception e) {
-			response.put("errorMessage", "Hata: " + e.getMessage());
-		}
-		return response;
-	}
-
-	@GetMapping("stok/stkgeturndepo")
-	@ResponseBody
-	public Map<String, Object> stkgeturndepo() {
-		Map<String, Object> response = new HashMap<>();
-		try {
-			List<Map<String, Object>> urunKodlari = faturaService.urun_kodlari() ;
-			Map<String, Object> urnDeger = new HashMap<>();
-			urnDeger.put("Kodu", ""); 
-			urunKodlari.add(0, urnDeger);
-			response.put("urnkodlar", (urunKodlari != null) ? urunKodlari : new ArrayList<>());
-			List<Map<String, Object>> depoKodlari = faturaService.stk_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
-			Map<String, Object> depoDeger = new HashMap<>();
-			depoDeger.put("DEPO", ""); 
-			depoKodlari.add(0, depoDeger);
-			response.put("depolar", (depoKodlari != null) ? depoKodlari : new ArrayList<>());
-			response.put("errorMessage", "");
-		} catch (ServiceException e) {
-			response.put("errorMessage", e.getMessage());
-		} catch (Exception e) {
-			response.put("errorMessage", "Hata: " + e.getMessage());
-		}
-		return response;
-	}	
-
-	@PostMapping("stok/imalatcikan")
-	@ResponseBody
-	public Map<String, Object> imalatcikan(@RequestParam String ukodu, @RequestParam String fiatlama, @RequestParam String fisTarih, @RequestParam String fiatTarih) {
-		Map<String, Object> response = new HashMap<>();
-		try {
-			urunDTO urunDTO = new urunDTO();
-			urunDTO =  faturaService.urun_adi_oku(ukodu,"Kodu");
-			if (urunDTO.getKodu() == null || urunDTO.getKodu().isEmpty()) {
-				throw new ServiceException("Bu Kodda Urun Yok");
-			}
-			response.put("urun", urunDTO);
-
-			if (! fiatlama.equals(""))
-			{
-				if ( fiatlama.equals("fiat1"))
-					response.put("fiat", urunDTO.getFiat1());
-				else  if (fiatlama.equals("fiat2"))
-					response.put("fiat", urunDTO.getFiat2());
-				else  if (fiatlama.equals("fiat3"))
-					response.put("fiat", urunDTO.getFiat3());
-				else  if (fiatlama.equals("Sonimalat"))
-					response.put("fiat",(faturaService.son_imalat_fiati_oku(ukodu)));
-				else  if (fiatlama.equals("ortfiat"))
-				{
-					String i_tar = faturaService.uret_ilk_tarih(fiatTarih, fisTarih,ukodu);
-					double qwee = faturaService.gir_ort_fiati_oku(ukodu,i_tar, fisTarih);
-					response.put("fiat", qwee);
-				}
-			}
+			response.put("recno", faturaService.recete_son_bordro_no_al());
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
@@ -147,31 +69,21 @@ public class UretimController {
 		return response;
 	}
 
-	@GetMapping("stok/uretimyenifis")
+	@PostMapping("stok/recyenifis")
 	@ResponseBody
-	public Map<String, Object> uretimyenifis() {
-		Map<String, Object> response = new HashMap<>();
+	public Map<String, String> recyenifis(@RequestParam String cins) {
+		Map<String, String> response = new HashMap<>();
 		try {
-			int evrakNo = faturaService.uretim_fisno_al();
-			int kj = 10 - Integer.toString(evrakNo).length();
-			String str_ = "0".repeat(kj) + evrakNo;
-			response.put("fisno", str_);
-			response.put("errorMessage", "");
-		} catch (ServiceException e) {
-			response.put("errorMessage", e.getMessage());
-		} catch (Exception e) {
-			response.put("errorMessage",  e.getMessage());
-		}
-		return response;
-	}
-
-	@PostMapping("stok/hesapla")
-	@ResponseBody
-	public Map<String, Object> hesapla(@RequestParam String recetekod) {
-		Map<String, Object> response = new HashMap<>();
-		try {
-			List<Map<String, Object>> uretim = faturaService.recete_oku(recetekod);
-			response.put("data", (uretim != null) ? uretim : new ArrayList<>());
+			int sno = 0 ;
+			sno =  faturaService.recete_no_al();
+			int kj = 10 - Integer.toString(sno).length();
+			StringBuilder strBuilder = new StringBuilder();
+			for (int i = 0; i < kj; i++) {
+			    strBuilder.append("0");
+			}
+			strBuilder.append(sno);
+			String str_ = strBuilder.toString();
+			response.put("recno", str_.equals("0000000000") ? "0000000001":str_);
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
@@ -180,27 +92,102 @@ public class UretimController {
 		}
 		return response;
 	}
-
-	@PostMapping("stok/ureKayit")
+	
+	@GetMapping("stok/stkgeturn")
 	@ResponseBody
-	public  Map<String, Object>  ureKayit(@RequestBody uretimkayitDTO uretimkayitDTO ) {
+	public Map<String, Object> stkgeturndepo() {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			uretimDTO dto = uretimkayitDTO.getUretimDTO();
-			List<uretimdetayDTO> tableData = uretimkayitDTO.getTableData();
-			faturaService.stok_sil(dto.getFisno(), "URE", "C");
+			List<Map<String, Object>> urunKodlari = faturaService.urun_kodlari() ;
+			Map<String, Object> urnDeger = new HashMap<>();
+			urnDeger.put("Kodu", ""); 
+			urunKodlari.add(0, urnDeger);
+			response.put("urnkodlar", (urunKodlari != null) ? urunKodlari : new ArrayList<>());
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}	
+
+	@PostMapping("stok/recetecikan")
+	@ResponseBody
+	public Map<String, Object> recetecikan(@RequestParam String kodu ,@RequestParam String cins) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			urunDTO urunDTO = new urunDTO();
+			urunDTO =  faturaService.urun_adi_oku(kodu,cins);
+			if (urunDTO.getKodu() == null || urunDTO.getKodu().isEmpty()) {
+				throw new ServiceException("Bu Kodda Urun Yok");
+			}
+			response.put("urun", urunDTO);
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@PostMapping("stok/receteOku")
+	@ResponseBody
+	public Map<String, Object> receteOku(@RequestParam String recno) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> uretim = faturaService.recete_oku(recno);
+			response.put("data", (uretim != null) ? uretim : new ArrayList<>());
+			response.put("aciklama",faturaService.aciklama_oku("REC", 1,recno, "G"));
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@PostMapping("stok/recYoket")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam String recno, @RequestParam List<String> data) {
+		Map<String, String> response = new HashMap<>();
+		try {
+			faturaService.rec_sil(recno.trim());
+			faturaService.aciklama_sil("REC", recno.trim(), "G");
+			
+			for (int i = 0; i < data.size(); i++) {
+				faturaService.kod_recete_yaz(data.get(i).trim(), "");
+	        }
+			
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage",  e.getMessage());
+		}
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("stok/recKayit")
+	@ResponseBody
+	public  Map<String, Object>  recKayit(@RequestBody recetekayitDTO recetekayitDTO ) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			receteDTO dto = recetekayitDTO.getReceteDTO();
+			List<recetedetayDTO> tableData = recetekayitDTO.getTableData();
+//			faturaService.stok_sil(dto.getFisno(), "URE", "C");
+/*
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			int dpo = 0 ;
 			int ana = 0 ;
 			int alt = 0;
-			for (uretimdetayDTO row : tableData) {
-				dpo = 0 ;
+			for (recetedetayDTO row : tableData) {
 				ana = 0 ;
 				alt = 0;
-				if( ! row.getDepo().equals("")) {
-					String dpos = faturaService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN",  row.getDepo());
-					dpo = Integer.parseInt(dpos);
-				}
 				if(! dto.getAnagrup().equals("")) {
 					String anas = faturaService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", dto.getAnagrup());
 					ana = Integer.parseInt(anas);
@@ -231,6 +218,7 @@ public class UretimController {
 			faturaService.aciklama_sil("URE", dto.getFisno().trim(), "G");
 			faturaService.aciklama_yaz("URE", 1, dto.getFisno().trim(), dto.getAciklama(), "G");
 			response.put("errorMessage", "");
+		*/
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
@@ -239,20 +227,4 @@ public class UretimController {
 		return response;
 	}
 
-	@PostMapping("stok/ureYoket")
-	@ResponseBody
-	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam String fisno) {
-		Map<String, String> response = new HashMap<>();
-		try {
-			faturaService.stok_sil(fisno.trim(),  "URE", "G");
-			faturaService.stok_sil(fisno.trim(),  "URE", "C");
-			faturaService.aciklama_sil("URE", fisno.trim(), "G");
-			response.put("errorMessage", "");
-		} catch (ServiceException e) {
-			response.put("errorMessage", e.getMessage());
-		} catch (Exception e) {
-			response.put("errorMessage",  e.getMessage());
-		}
-		return ResponseEntity.ok(response);
-	}
 }

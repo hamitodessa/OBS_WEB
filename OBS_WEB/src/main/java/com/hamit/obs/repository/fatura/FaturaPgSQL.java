@@ -934,5 +934,70 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		} catch (Exception e) {
 			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
 		}
+	}
+
+	@Override
+	public String recete_son_bordro_no_al(ConnectionDetails faturaConnDetails) {
+		String E_NUMBER = "" ;
+		String sql = "SELECT MAX(\"Recete_No\") as \"NO\"  FROM \"RECETE\"";
+		try (Connection connection =  DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.isBeforeFirst() ) {  
+					resultSet.next();
+					E_NUMBER = resultSet.getString("NO");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("REceto no alma.",e); 
+		}
+		return E_NUMBER;
+	}
+
+	@Override
+	public int recete_no_al(ConnectionDetails faturaConnDetails) {
+		int E_NUMBER = 0 ;
+		String sql = "SELECT  CASE WHEN max(\"Recete_No\")  = '' THEN '1' ELSE   max(\"Recete_No\")::int + 1  END  AS \"NO\"  FROM \"RECETE\"  ";
+		try (Connection connection =  DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.isBeforeFirst() ) {  
+					resultSet.next();
+					E_NUMBER = resultSet.getInt("NO");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("REceto no alma.",e); 
+		}
+		return E_NUMBER;
+	}
+
+	@Override
+	public void rec_sil(String rno, ConnectionDetails faturaConnDetails) {
+		String sql = " DELETE " +
+				" FROM \"RECETE\" " +
+				" WHERE \"Recete_No\"  = ? ";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, rno);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+		}
+
+	}
+
+	@Override
+	public void kod_recete_yaz(String ukodu, String rec, ConnectionDetails faturaConnDetails) {
+		String sql = "UPDATE \"MAL\" SET \"Recete\" = N'" + rec + "'  WHERE \"Kodu\" = N'" + ukodu + "'";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+		}
+
 	} 
 }

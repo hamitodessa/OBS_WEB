@@ -79,7 +79,7 @@ public class FaturaController {
 				urunDTO =  faturaService.stk_urun("Kodu",ukodu);
 			if(! barkod.equals(""))
 				urunDTO =  faturaService.stk_urun("Barkod",ukodu);
-			if (urunDTO.getKodu().equals("")) {
+			if (urunDTO.getKodu() == null || urunDTO.getKodu().isEmpty()) {
 				throw new ServiceException("Bu Kodda Urun Yok");
 			}
 			if (urunDTO.getImage() != null) {

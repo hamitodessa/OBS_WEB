@@ -1,5 +1,3 @@
-
-
 document.querySelector('table').addEventListener('focusin', (event) => {
 	let currentRow = event.target.closest('tr');
 	if (currentRow && currentRow !== lastFocusedRow) {
@@ -288,7 +286,7 @@ async function updateRowValues(inputElement) {
 		const birimCell = cells[7];
 		cells[11].innerText = response.dto.adi || '';
 		cells[12].innerText = response.dto.anagrup + " / " + response.dto.altgrup || '';
-		cells[13].innerText = response.dto.base64Resim || '' ;
+		cells[13].innerText = response.dto.base64Resim || '';
 		setLabelContent(birimCell, response.dto.birim);
 
 		barkodCell.value = response.dto.barkod;
@@ -387,7 +385,7 @@ function clearInputs() {
 	document.getElementById("adreskod").value = '';
 	document.getElementById("cariadilbl").innerText = "";
 	document.getElementById("adresadilbl").innerText = "";
-	
+
 	document.getElementById("uygulananfiat").selectedIndex = 0;
 	document.getElementById("adreskod").value = '';
 	document.getElementById("doviz").value = 'TL';
@@ -397,11 +395,11 @@ function clearInputs() {
 	document.getElementById("not2").value = '';
 	document.getElementById("not3").value = '';
 	document.getElementById("fatmikyazdir").checked = false;
-	
+
 	document.getElementById("a1").value = '';
 	document.getElementById("a2").value = '';
-	
-	
+
+
 	const tableBody = document.getElementById("tbody");
 	tableBody.innerHTML = "";
 	rowCounter = 0;
@@ -409,7 +407,7 @@ function clearInputs() {
 	document.getElementById("totalTutar").textContent = formatNumber2(0);
 	document.getElementById("totalSatir").textContent = formatNumber0(0);
 	document.getElementById("totalMiktar").textContent = formatNumber3(0);
-	
+
 	const imgElement = document.getElementById("resimGoster");
 	imgElement.src = "";
 	imgElement.style.display = "none";
@@ -427,76 +425,76 @@ async function fatOku() {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ fisno: fisno, cins: gircikdeger}),
+			body: new URLSearchParams({ fisno: fisno, cins: gircikdeger }),
 		});
 		const data = response;
 		clearInputs();
 		if (response.errorMessage) {
-		      throw new Error(response.errorMessage);
+			throw new Error(response.errorMessage);
 		}
 		const dataSize = data.data.length;
 		if (dataSize === 0) return;
-		
+
 		const table = document.getElementById('fatTable');
 		const rows = table.querySelectorAll('tbody tr');
 		if (data.data.length > rows.length) {
-		    const additionalRows = data.data.length - rows.length;
-		    for (let i = 0; i < additionalRows; i++) {
-		        satirekle();
-		    }
+			const additionalRows = data.data.length - rows.length;
+			for (let i = 0; i < additionalRows; i++) {
+				satirekle();
+			}
 		}
 		data.data.forEach((item, index) => {
-		        const cells = rows[index].cells;
-				const barkodInput = cells[1]?.querySelector('input');
-				if (barkodInput) barkodInput.value = item.Barkod || "";
-				const urunKoduInput = cells[2]?.querySelector('input');
-				if (urunKoduInput) urunKoduInput.value = item.Kodu || "";
-				const depoSelect = cells[3]?.querySelector('select');
-				if (depoSelect) depoSelect.value = item.Depo || "";
-				const fiatInput = cells[4]?.querySelector('input');
-				if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
-				const iskontoInput = cells[5]?.querySelector('input');
-				if (iskontoInput) iskontoInput.value = formatNumber2(item.Iskonto);
-				const miktarInput = cells[6]?.querySelector('input');
-				if (miktarInput) miktarInput.value = formatNumber3(item.Miktar);
-				setLabelContent(cells[7], item.Birim || '');
-				const kdvInput = cells[8]?.querySelector('input');
-				if (kdvInput) kdvInput.value = formatNumber2(item.Kdv);
-				const tutarInput = cells[9]?.querySelector('input');
-				if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
-		    const izahatInput = cells[10]?.querySelector('input');
-		    if (izahatInput) izahatInput.value = item.Izahat || "";
-				cells[11].innerText = item.Adi || '';
-				cells[12].innerText = item.Ur_AnaGrup + " / " + item.Ur_AltGrup ;
-				cells[13].innerText = item.base64Resim ;
+			const cells = rows[index].cells;
+			const barkodInput = cells[1]?.querySelector('input');
+			if (barkodInput) barkodInput.value = item.Barkod || "";
+			const urunKoduInput = cells[2]?.querySelector('input');
+			if (urunKoduInput) urunKoduInput.value = item.Kodu || "";
+			const depoSelect = cells[3]?.querySelector('select');
+			if (depoSelect) depoSelect.value = item.Depo || "";
+			const fiatInput = cells[4]?.querySelector('input');
+			if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
+			const iskontoInput = cells[5]?.querySelector('input');
+			if (iskontoInput) iskontoInput.value = formatNumber2(item.Iskonto);
+			const miktarInput = cells[6]?.querySelector('input');
+			if (miktarInput) miktarInput.value = formatNumber3(item.Miktar);
+			setLabelContent(cells[7], item.Birim || '');
+			const kdvInput = cells[8]?.querySelector('input');
+			if (kdvInput) kdvInput.value = formatNumber2(item.Kdv);
+			const tutarInput = cells[9]?.querySelector('input');
+			if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
+			const izahatInput = cells[10]?.querySelector('input');
+			if (izahatInput) izahatInput.value = item.Izahat || "";
+			cells[11].innerText = item.Adi || '';
+			cells[12].innerText = item.Ur_AnaGrup + " / " + item.Ur_AltGrup;
+			cells[13].innerText = item.base64Resim;
 		});
 
 		for (let i = 0; i < data.data.length; i++) {
 			const item = data.data[i];
-				document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
-				document.getElementById("anagrp").value = item.Ana_Grup || '';
-				document.getElementById("kur").value = item.Kur;
-				await anagrpChanged(document.getElementById("anagrp"));
-				document.getElementById("altgrp").value = item.Alt_Grup || ''
-				document.getElementById("ozelkod").value = item.Ozel_Kod || ''
-				document.getElementById("tevoran").value = item.Tevkifat || '0'
-				document.getElementById("tevoran").value
-				document.getElementById("carikod").value = item.Cari_Firma || '';
-				document.getElementById("adreskod").value = item.Adres_Firma || '';
-				break;
+			document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
+			document.getElementById("anagrp").value = item.Ana_Grup || '';
+			document.getElementById("kur").value = item.Kur;
+			await anagrpChanged(document.getElementById("anagrp"));
+			document.getElementById("altgrp").value = item.Alt_Grup || ''
+			document.getElementById("ozelkod").value = item.Ozel_Kod || ''
+			document.getElementById("tevoran").value = item.Tevkifat || '0'
+			document.getElementById("tevoran").value
+			document.getElementById("carikod").value = item.Cari_Firma || '';
+			document.getElementById("adreskod").value = item.Adres_Firma || '';
+			break;
 		}
 		document.getElementById("a1").value = data.a1;
 		document.getElementById("a2").value = data.a2;
-		
+
 		document.getElementById("not1").value = data.dipnot[0];
 		document.getElementById("not2").value = data.dipnot[1];
 		document.getElementById("not3").value = data.dipnot[2];
-		
+
 
 		updateColumnTotal();
-		
+
 		hesapAdiOgren(document.getElementById("carikod").value, 'cariadilbl')
-		adrhesapAdiOgren('adreskod','adresadilbl');
+		adrhesapAdiOgren('adreskod', 'adresadilbl');
 		errorDiv.style.display = "none";
 		errorDiv.innerText = "";
 	} catch (error) {
@@ -512,11 +510,11 @@ async function sonfis() {
 	document.body.style.cursor = "wait";
 	try {
 		const response = await fetchWithSessionCheck('stok/sonfatfis', {
-		method: 'POST',
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-		},
-			body: new URLSearchParams({ cins: gircikdeger}),
+			},
+			body: new URLSearchParams({ cins: gircikdeger }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -543,7 +541,7 @@ async function sonfis() {
 		errorDiv.style.display = 'block';
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
 	} finally {
-			document.body.style.cursor = "default";
+		document.body.style.cursor = "default";
 	}
 }
 
@@ -570,7 +568,7 @@ async function yeniFis() {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
 	} finally {
-		
+
 		document.body.style.cursor = "default";
 	}
 }
@@ -594,7 +592,7 @@ async function fatYoket() {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ fisno: fisNoInput.value, cins:gircikdeger }),
+			body: new URLSearchParams({ fisno: fisNoInput.value, cins: gircikdeger }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -613,135 +611,133 @@ async function fatYoket() {
 }
 
 function prepareureKayit() {
-   const faturaDTO = {
-    fisno: document.getElementById("fisno").value || "",
-    tarih: document.getElementById("fisTarih").value || "",
+	const faturaDTO = {
+		fisno: document.getElementById("fisno").value || "",
+		tarih: document.getElementById("fisTarih").value || "",
 		ozelkod: document.getElementById("ozelkod").value || "",
-    anagrup: document.getElementById("anagrp").value || "",
-    altgrup: document.getElementById("altgrp").value || "",
-   
-    carikod: document.getElementById("carikod").value || "",
+		anagrup: document.getElementById("anagrp").value || "",
+		altgrup: document.getElementById("altgrp").value || "",
+
+		carikod: document.getElementById("carikod").value || "",
 		adreskod: document.getElementById("adreskod").value || "",
-		
-    dvzcins: document.getElementById("doviz").value || "",
-    kur: document.getElementById("kur").value || "",
+
+		dvzcins: document.getElementById("doviz").value || "",
+		kur: document.getElementById("kur").value || "",
 		tevoran: parseLocaleNumber(document.getElementById("tevoran").value) || 0,
-		
+
 		not1: document.getElementById("not1").value || "",
 		not2: document.getElementById("not2").value || "",
 		not3: document.getElementById("not3").value || "",
-		
+
 		acik1: document.getElementById("a1").value || "",
 		acik2: document.getElementById("a2").value || "",
-		
+
 		fatcins: document.getElementById("gircik").value,
 
-  };
-  tableData = getTableData();
-  return { faturaDTO, tableData, };
+	};
+	tableData = getTableData();
+	return { faturaDTO, tableData, };
 }
 
 function getTableData() {
-  const table = document.getElementById('fatTable');
-  const rows = table.querySelectorAll('tbody tr');
-  const data = [];
-  rows.forEach((row) => {
-    const cells = row.querySelectorAll('td');
-    const firstColumnValue = cells[2]?.querySelector('input')?.value || "";
-    if (!firstColumnValue.trim()) {
-      return;
-    }
-    const rowData = {
-			barkod: cells[1]?.querySelector('input')?.value || "",
-      ukodu: firstColumnValue,
-			depo: cells[3]?.querySelector('select')?.value || "",
-			fiat: parseLocaleNumber(cells[4]?.querySelector('input')?.value || 0),
-			iskonto: parseLocaleNumber(cells[5]?.querySelector('input')?.value || 0),
-      miktar: parseLocaleNumber(cells[6]?.querySelector('input')?.value || 0),
-			kdv: parseLocaleNumber(cells[8]?.querySelector('input')?.value || 0),
-      tutar: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
-			izahat: cells[10]?.querySelector('input')?.value || "",
-    };
-    data.push(rowData);
-  });
-  return data;
+	const table = document.getElementById('fatTable');
+	const rows = table.querySelectorAll('tbody tr');
+	const data = [];
+	rows.forEach((row) => {
+		const cells = row.querySelectorAll('td');
+		const firstColumnValue = cells[2]?.querySelector('input')?.value || "";
+		if (firstColumnValue.trim()) {
+			const rowData = {
+				barkod: cells[1]?.querySelector('input')?.value || "",
+				ukodu: firstColumnValue,
+				depo: cells[3]?.querySelector('select')?.value || "",
+				fiat: parseLocaleNumber(cells[4]?.querySelector('input')?.value || 0),
+				iskonto: parseLocaleNumber(cells[5]?.querySelector('input')?.value || 0),
+				miktar: parseLocaleNumber(cells[6]?.querySelector('input')?.value || 0),
+				kdv: parseLocaleNumber(cells[8]?.querySelector('input')?.value || 0),
+				tutar: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
+				izahat: cells[10]?.querySelector('input')?.value || "",
+			};
+			data.push(rowData);
+		}
+	});
+	return data;
 }
 async function fatKayit() {
-  const fisno = document.getElementById("fisno").value;
-  const table = document.getElementById('fatTable');
-  const rows = table.rows;
-  if (!fisno || fisno === "0" || rows.length === 0 ) {
-    alert("Geçerli bir evrak numarası giriniz.");
-    return;
-  }
-  const faturakayitDTO = prepareureKayit();
-  const errorDiv = document.getElementById('errorDiv');
-  const $kaydetButton = $('#urekaydetButton');
-  $kaydetButton.prop('disabled', true).text('İşleniyor...');
-  
-  document.body.style.cursor = 'wait';
-  try {
-    const response = await fetchWithSessionCheck('stok/fatKayit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(faturakayitDTO),
-    });
-    if (response.errorMessage.trim() !== "") {
-      throw new Error(response.errorMessage);
-    }
-    clearInputs();
-    document.getElementById("fisno").value = "";
-    document.getElementById("errorDiv").innerText = "";
-    errorDiv.style.display = 'none';
-  } catch (error) {
-    errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-    errorDiv.style.display = 'block';
-  } finally {
-    document.body.style.cursor = 'default';
-    $kaydetButton.prop('disabled', false).text('Kaydet');
-  }
-}
-
-async function fatcariIsle() {
-  const hesapKodu = $('#faturaBilgi').val();
-	
 	const fisno = document.getElementById("fisno").value;
 	const table = document.getElementById('fatTable');
 	const rows = table.rows;
-	if (!fisno || fisno === "0" || rows.length === 0 ) {
-	  alert("Geçerli bir evrak numarası giriniz.");
-	  return;
+	if (!fisno || fisno === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarası giriniz.");
+		return;
 	}
-	 const faturaDTO = {
-	  fisno: document.getElementById("fisno").value || "",
-	  tarih: document.getElementById("fisTarih").value || "",
-	  carikod: document.getElementById("carikod").value || "",
+	const faturakayitDTO = prepareureKayit();
+	const errorDiv = document.getElementById('errorDiv');
+	const $kaydetButton = $('#urekaydetButton');
+	$kaydetButton.prop('disabled', true).text('İşleniyor...');
+
+	document.body.style.cursor = 'wait';
+	try {
+		const response = await fetchWithSessionCheck('stok/fatKayit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(faturakayitDTO),
+		});
+		if (response.errorMessage.trim() !== "") {
+			throw new Error(response.errorMessage);
+		}
+		clearInputs();
+		document.getElementById("fisno").value = "";
+		document.getElementById("errorDiv").innerText = "";
+		errorDiv.style.display = 'none';
+	} catch (error) {
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+		errorDiv.style.display = 'block';
+	} finally {
+		document.body.style.cursor = 'default';
+		$kaydetButton.prop('disabled', false).text('Kaydet');
+	}
+}
+
+async function fatcariIsle() {
+	const hesapKodu = $('#faturaBilgi').val();
+	const fisno = document.getElementById("fisno").value;
+	const table = document.getElementById('fatTable');
+	const rows = table.rows;
+	if (!fisno || fisno === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarası giriniz.");
+		return;
+	}
+	const faturaDTO = {
+		fisno: document.getElementById("fisno").value || "",
+		tarih: document.getElementById("fisTarih").value || "",
+		carikod: document.getElementById("carikod").value || "",
 		miktar: parseLocaleNumber(document.getElementById("totalMiktar").textContent || 0),
-		tutar: parseLocaleNumber(document.getElementById("tevhartoptut").innerText || 0),	  
-	  fatcins: document.getElementById("gircik").value,
-		karsihesapkodu : hesapKodu,
+		tutar: parseLocaleNumber(document.getElementById("tevhartoptut").innerText || 0),
+		fatcins: document.getElementById("gircik").value,
+		karsihesapkodu: hesapKodu,
 	};
-  const errorDiv = document.getElementById('errorDiv');
-  document.body.style.cursor = 'wait';
-  try {
+	const errorDiv = document.getElementById('errorDiv');
+	document.body.style.cursor = 'wait';
+	try {
 		const response = await fetchWithSessionCheck('stok/fatcariKayit', {
-		      method: 'POST',
-		      headers: {
-		        'Content-Type': 'application/json',
-		      },
-		      body: JSON.stringify(faturaDTO),
-		    });
-    if (response.errorMessage.trim() !== "") {
-      throw new Error(response.errorMessage);
-    }
-    document.getElementById("errorDiv").innerText = "";
-    errorDiv.style.display = 'none';
-  } catch (error) {
-    errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-    errorDiv.style.display = 'block';
-  } finally {
-    document.body.style.cursor = 'default';
-  }
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(faturaDTO),
+		});
+		if (response.errorMessage.trim() !== "") {
+			throw new Error(response.errorMessage);
+		}
+		document.getElementById("errorDiv").innerText = "";
+		errorDiv.style.display = 'none';
+	} catch (error) {
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+		errorDiv.style.display = 'block';
+	} finally {
+		document.body.style.cursor = 'default';
+	}
 }

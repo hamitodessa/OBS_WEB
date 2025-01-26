@@ -54,4 +54,8 @@ public interface IFaturaDatabase {
 			, String tarih, String izah,String doviz,String  adrfirma ,String carfirma  
 			, String ozkod ,double kur ,String cins,int  anagrp,int  altgrp ,String usr,ConnectionDetails faturaConnDetails);
 	void dipnot_yaz(String eno,String bir,String iki,String uc,String tip,String gircik,String usr,ConnectionDetails faturaConnDetails);
+	String recete_son_bordro_no_al(ConnectionDetails faturaConnDetails);
+	int recete_no_al(ConnectionDetails faturaConnDetails);
+	void rec_sil(String rno,ConnectionDetails faturaConnDetails);
+	void kod_recete_yaz(String ukodu,String rec,ConnectionDetails faturaConnDetails);
 }

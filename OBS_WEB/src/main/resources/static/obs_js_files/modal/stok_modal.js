@@ -75,4 +75,16 @@ function urnselectValue(inputId, selectedBarkod, selectedKodu, secondnerden, bar
 		const event = new Event('change', { bubbles: true });
 		inputElementm.dispatchEvent(event);
 	}
+  else if (secondnerden === "recetealt") {
+    console.info("recetealt");
+		const event = new Event('change', { bubbles: true });
+		inputElementm.dispatchEvent(event);
+	}
+  else if (secondnerden === "recetesatir") {
+    console.info("recetesatir");
+		const event = new Event('change', { bubbles: true });
+		inputElementm.dispatchEvent(event);
+	}
+
 }
+

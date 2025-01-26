@@ -91,5 +91,9 @@ $(document).ready(function () {
 			stokBaslik();
 			fetchkoddepo();
 		},
+		"/stok/recete": () => {
+			stokBaslik();
+			fetchkod();
+		},
 	}
 });
