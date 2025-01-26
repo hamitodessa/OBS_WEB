@@ -668,14 +668,13 @@ function getTableData() {
 }
 async function fatKayit() {
   const fisno = document.getElementById("fisno").value;
-  
   const table = document.getElementById('fatTable');
   const rows = table.rows;
   if (!fisno || fisno === "0" || rows.length === 0 ) {
     alert("Geçerli bir evrak numarası giriniz.");
     return;
   }
-  const uretimkayitDTO = prepareureKayit();
+  const faturakayitDTO = prepareureKayit();
   const errorDiv = document.getElementById('errorDiv');
   const $kaydetButton = $('#urekaydetButton');
   $kaydetButton.prop('disabled', true).text('İşleniyor...');
@@ -687,7 +686,7 @@ async function fatKayit() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(uretimkayitDTO),
+      body: JSON.stringify(faturakayitDTO),
     });
     if (response.errorMessage.trim() !== "") {
       throw new Error(response.errorMessage);
@@ -702,5 +701,47 @@ async function fatKayit() {
   } finally {
     document.body.style.cursor = 'default';
     $kaydetButton.prop('disabled', false).text('Kaydet');
+  }
+}
+
+async function fatcariIsle() {
+  const hesapKodu = $('#faturaBilgi').val();
+	
+	const fisno = document.getElementById("fisno").value;
+	const table = document.getElementById('fatTable');
+	const rows = table.rows;
+	if (!fisno || fisno === "0" || rows.length === 0 ) {
+	  alert("Geçerli bir evrak numarası giriniz.");
+	  return;
+	}
+	 const faturaDTO = {
+	  fisno: document.getElementById("fisno").value || "",
+	  tarih: document.getElementById("fisTarih").value || "",
+	  carikod: document.getElementById("carikod").value || "",
+		miktar: parseLocaleNumber(document.getElementById("totalMiktar").textContent || 0),
+		tutar: parseLocaleNumber(document.getElementById("tevhartoptut").innerText || 0),	  
+	  fatcins: document.getElementById("gircik").value,
+		karsihesapkodu : hesapKodu,
+	};
+  const errorDiv = document.getElementById('errorDiv');
+  document.body.style.cursor = 'wait';
+  try {
+		const response = await fetchWithSessionCheck('stok/fatcariKayit', {
+		      method: 'POST',
+		      headers: {
+		        'Content-Type': 'application/json',
+		      },
+		      body: JSON.stringify(faturaDTO),
+		    });
+    if (response.errorMessage.trim() !== "") {
+      throw new Error(response.errorMessage);
+    }
+    document.getElementById("errorDiv").innerText = "";
+    errorDiv.style.display = 'none';
+  } catch (error) {
+    errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+    errorDiv.style.display = 'block';
+  } finally {
+    document.body.style.cursor = 'default';
   }
 }

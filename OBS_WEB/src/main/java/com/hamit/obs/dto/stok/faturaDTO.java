@@ -28,4 +28,8 @@ public class faturaDTO {
 	
 	private String fatcins;
 	
+	private String karsihesapkodu;
+	private double miktar;
+	private double tutar;
+	
 }

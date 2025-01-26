@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,12 +21,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.custom.yardimci.Formatlama;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
+import com.hamit.obs.custom.yardimci.Tarih_Cevir;
+import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.dto.stok.faturaDTO;
 import com.hamit.obs.dto.stok.faturadetayDTO;
 import com.hamit.obs.dto.stok.faturakayitDTO;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
 
 @Controller
@@ -33,6 +38,9 @@ public class FaturaController {
 
 	@Autowired
 	private FaturaService faturaService;
+	
+	@Autowired
+	private CariService cariservice;
 	
 	@GetMapping("stok/fatura")
 	public Model fatura(Model model) {
@@ -355,5 +363,65 @@ public class FaturaController {
 		//'**********Tevkif Islemi **********************************************************
 		double_0 = ((double) Math.round(tutar) - (double) Math.round(double_1)) + ((double) Math.round(double_2) - ((double) Math.round(double_2) / 10) * (double) Math.round(tev));
 		return double_0;
+	}
+	
+	@PostMapping("stok/fatcariKayit")
+	@ResponseBody
+	public ResponseEntity<?> fatcariKayit(@RequestBody faturaDTO faturaDTO ) {
+		try {
+			faturaDTO dto = faturaDTO;
+			String[] hesapIsmi = {"",""};
+			hesapIsmi = cariservice.hesap_adi_oku(dto.getKarsihesapkodu());
+			if (hesapIsmi[0].equals("") ) {  
+				 throw new ServiceException("Girilen Alacakli Hesap Kodunda  bir  hesaba rastlanmadi!!!!");
+			} 
+			
+			double sdf =  dto.getMiktar();
+			String aciklama = "" ;
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
+			if (dto.getFatcins().toString().equals("SATIS")) {
+				aciklama = dto.getFisno() + "'Fatura ile " + Formatlama.doub_0(sdf) +  " Urun Satisi" ;
+				dekontDTO dekontDTO = new dekontDTO();
+				dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
+				dekontDTO.setFisNo(cariservice.yenifisno());
+				dekontDTO.setBhes(dto.getCarikod());
+				dekontDTO.setBcins("");
+				dekontDTO.setBkur(1);
+				dekontDTO.setBorc(dto.getTutar());
+				dekontDTO.setAhes(dto.getKarsihesapkodu());
+				dekontDTO.setAcins("");
+				dekontDTO.setAkur(1);
+				dekontDTO.setAlacak(dto.getTutar());
+				dekontDTO.setIzahat(aciklama);
+				dekontDTO.setKod("Satış");
+				dekontDTO.setUser(userrString);
+				cariservice.cari_dekont_kaydet(dekontDTO);
+			}
+			else {
+				aciklama = dto.getFisno() + "'Fatura ile " + Formatlama.doub_0(sdf) +  " Urun Girisi" ;
+				dekontDTO dekontDTO = new dekontDTO();
+				dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
+				dekontDTO.setFisNo(cariservice.yenifisno());
+				dekontDTO.setBhes(dto.getKarsihesapkodu());
+				dekontDTO.setBcins("");
+				dekontDTO.setBkur(1);
+				dekontDTO.setBorc(dto.getTutar());
+				dekontDTO.setAhes(dto.getCarikod());
+				dekontDTO.setAcins("");
+				dekontDTO.setAkur(1);
+				dekontDTO.setAlacak(dto.getTutar());
+				dekontDTO.setIzahat(aciklama);
+				dekontDTO.setKod("Alış");
+				dekontDTO.setUser(userrString);
+				cariservice.cari_dekont_kaydet(dekontDTO);
+			}
+			return ResponseEntity.ok(Map.of("errorMessage", ""));
+		} catch (ServiceException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Veriler kaydedilirken hata oluştu."));
+		}
 	}
 }

@@ -12,6 +12,12 @@ function openFirstModal(nerdenGeldi) {
 			return;
 		}
 	}
+	else if (nerdenGeldi === "fatura") {
+	    const fisno = document.getElementById("fisno").value.trim();
+	    if (!fisno || fisno === "0") {
+	      return;
+	    }
+	  }
 
 	const modal = document.getElementById('firstModal');
 	nerden = nerdenGeldi;
@@ -229,6 +235,11 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #tahsilatBilgi');
 		hiddenField.val(hesapKodu);
 	}
+	else if (nerden === "fatura") {
+	    const hesapKodu = $('#ckodu').val() || "";
+	    const hiddenField = $('#ara_content #faturaBilgi');
+	    hiddenField.val(hesapKodu);
+	 }
 
 
 
@@ -285,6 +296,9 @@ function saveToMain() {
 	}
 	else if (nerden === "tahsilatckaydet") {
 		tahcariIsle();
+	}
+	else if (nerden === "fatura") {
+	    fatcariIsle();
 	}
 }
 
