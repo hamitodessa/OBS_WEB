@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.connection.ConnectionManager;
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
+import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.fatura.IFaturaDatabase;
+import com.hamit.obs.repository.loglama.LoglamaRepository;
 
 @Service
 public class FaturaService {
@@ -20,6 +23,10 @@ public class FaturaService {
 	@Autowired
 	private ConnectionManager masterConnectionManager;
 	
+	private LoglamaDTO loglamaDTO = new LoglamaDTO();
+	
+	@Autowired
+	private LoglamaRepository loglamaRepository;
 	
 	private final FaturaDatabaseContext databaseStrategyContext;
 	private IFaturaDatabase strategy;
@@ -195,6 +202,12 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak("");
+			loglamaDTO.setmESAJ("Firma Ismi :" + fadi);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.stk_firma_adi_kayit(fadi,fatConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -348,10 +361,16 @@ public class FaturaService {
 		}
 	}
 	
-	public void stok_sil(String eno, String ecins, String cins) {
+	public void stok_sil(String eno, String ecins, String cins,String mesajlog) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak(eno);
+			loglamaDTO.setmESAJ(mesajlog);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.stok_sil(eno,ecins,cins,fatConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -366,10 +385,16 @@ public class FaturaService {
 	
 	public void stk_kaydet(String evrno, String evrcins, String tarih, int depo, String urnkodu, double miktar,
 			double fiat, double tutar, double kdvlitut, String hareket, String izah, int anagrp, int altgrp, double kur,
-			String b1, String doviz, String hspkodu, String usr) {
+			String b1, String doviz, String hspkodu, String usr,String mesajlog) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak(evrno);
+			loglamaDTO.setmESAJ(mesajlog);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.stk_kaydet(evrno,evrcins,tarih,depo,urnkodu,miktar,fiat,tutar,kdvlitut,hareket,izah,anagrp,altgrp,kur,
 					b1,doviz,hspkodu,usr,fatConnDetails);		
 		} catch (ServiceException e) {
@@ -387,6 +412,12 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak(evrno);
+			loglamaDTO.setmESAJ("Fatura Aciklama Yaz : " + evrcins + " - " + aciklama );
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.aciklama_yaz(evrcins,satir,evrno,aciklama,gircik,fatConnDetails);		
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -403,6 +434,12 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak(evrno);
+			loglamaDTO.setmESAJ("Fatura Aciklama Sil " + evrcins + " - " + cins);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.aciklama_sil(evrcins,evrno,cins,fatConnDetails);		
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -515,6 +552,12 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak("");
+			loglamaDTO.setmESAJ("Alt Grup Silme:" + id);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.urun_degisken_alt_grup_sil(id,fatConnDetails);		
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -531,6 +574,11 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			loglamaDTO.setEvrak("");
+			loglamaDTO.setmESAJ(nerden + " Silme:" + sira);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.urun_kod_degisken_sil(hangi_Y,nerden,sira,fatConnDetails);		
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -626,6 +674,12 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak(fno);
+			loglamaDTO.setmESAJ(fno + " Nolu Giris Fatura Silindi");
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.fat_giris_sil(fno,cins,fatConnDetails);		
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -642,6 +696,12 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak(ino);
+			loglamaDTO.setmESAJ("Fatura Dip Not Sil "  + ino);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.dipnot_sil(ino,cins,gircik,fatConnDetails);		
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -677,6 +737,12 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak(fatno);
+			loglamaDTO.setmESAJ(gircik + " Fatura Kayit " +  kodu + " Mik=" + miktar + " Tut=" + tutar);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.fat_kaydet(fatno, kodu, depo, fiat, tevkifat, miktar, gircik, tutar, iskonto, kdv, tarih, izah, doviz, adrfirma, carfirma, ozkod, kur, cins, anagrp, altgrp, usr, fatConnDetails);		
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
@@ -693,6 +759,12 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			
+			loglamaDTO.setEvrak(eno);
+			loglamaDTO.setmESAJ("Fatura Dip Not Yaz : "  + bir);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			
 			strategy.dipnot_yaz(eno, bir, iki, uc, tip, gircik, usr, fatConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();

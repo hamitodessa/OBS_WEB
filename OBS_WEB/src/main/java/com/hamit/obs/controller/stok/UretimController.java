@@ -188,7 +188,9 @@ public class UretimController {
 		try {
 			uretimDTO dto = uretimkayitDTO.getUretimDTO();
 			List<uretimdetayDTO> tableData = uretimkayitDTO.getTableData();
-			faturaService.stok_sil(dto.getFisno(), "URE", "C");
+			
+			String mesajlog = "Imalat Stok Silme" ;
+			faturaService.stok_sil(dto.getFisno(), "URE", "C",mesajlog);
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			int dpo = 0 ;
 			int ana = 0 ;
@@ -212,12 +214,15 @@ public class UretimController {
 				String izahat = row.getIzahat() ;
 				if (izahat.equals(""))
 					izahat = dto.getFisno() + " Nolu Uretimde Cikan " ;
+				
+				mesajlog = "Imalat Stok Cikan Kayit  Kod:" + row.getUkodu() + " Miktar:" + row.getMiktar() + " Fiat:" +  row.getFiat() ;
 				faturaService.stk_kaydet(dto.getFisno(),"URE", dto.getTarih(), dpo, row.getUkodu(),
 						row.getMiktar() *-1, row.getFiat(), KusurYuvarla.round(row.getTutar() *-1,2), KusurYuvarla.round(row.getTutar() *-1,2), 
-						"C",izahat, ana, alt, 0, "", dto.getDvzcins(), "", userrString);
+						"C",izahat, ana, alt, 0, "", dto.getDvzcins(), "", userrString,mesajlog);
 			}
 			//GIRIS YAZ
-			faturaService.stok_sil(dto.getFisno(), "URE", "G");
+			mesajlog = "Imalat Stok Silme" ;
+			faturaService.stok_sil(dto.getFisno(), "URE", "G",mesajlog);
 			if( ! dto.getDepo().equals("")) {
 				String dpos = faturaService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN",  dto.getDepo());
 				dpo = Integer.parseInt(dpos);
@@ -225,9 +230,11 @@ public class UretimController {
 			double miktar = Double.valueOf(dto.getUremiktar());
 			double tutar = Double.valueOf(dto.getToptutar())  ;
 			double fiat =tutar  / (miktar == 0 ? 1 :miktar);
+			
+			mesajlog =  "Imalat Stok Giren Kayit  Kod:" + dto.getFisno()  + " Miktar:" + miktar + " Fiat:" + fiat;
 			faturaService.stk_kaydet(dto.getFisno(),"URE", dto.getTarih(), dpo, dto.getGirenurkodu(),
 					dto.getUremiktar(), fiat, KusurYuvarla.round(tutar,2), KusurYuvarla.round(tutar,2), 
-					"G",dto.getFisno().trim() + " Nolu Fis Ile Uretim " , ana, alt, 0, "", dto.getDvzcins(), "", userrString);
+					"G",dto.getFisno().trim() + " Nolu Fis Ile Uretim " , ana, alt, 0, "", dto.getDvzcins(), "", userrString,mesajlog);
 			faturaService.aciklama_sil("URE", dto.getFisno().trim(), "G");
 			faturaService.aciklama_yaz("URE", 1, dto.getFisno().trim(), dto.getAciklama(), "G");
 			response.put("errorMessage", "");
@@ -244,8 +251,9 @@ public class UretimController {
 	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam String fisno) {
 		Map<String, String> response = new HashMap<>();
 		try {
-			faturaService.stok_sil(fisno.trim(),  "URE", "G");
-			faturaService.stok_sil(fisno.trim(),  "URE", "C");
+			String mesajlog =  "Imalat Stok Silme";
+			faturaService.stok_sil(fisno.trim(),  "URE", "G",mesajlog);
+			faturaService.stok_sil(fisno.trim(),  "URE", "C",mesajlog);
 			faturaService.aciklama_sil("URE", fisno.trim(), "G");
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {

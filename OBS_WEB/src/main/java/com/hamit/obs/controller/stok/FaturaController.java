@@ -230,11 +230,15 @@ public class FaturaController {
 		try {
 			faturaDTO dto = faturakayitDTO.getFaturaDTO();
 			List<faturadetayDTO> tableData = faturakayitDTO.getTableData();
-			if (dto.getFatcins().toString().equals("SATIS"))
+			String mesajlog = "";
+			if (dto.getFatcins().toString().equals("SATIS")) {
 				faturaService.fat_giris_sil(dto.getFisno().trim(), "C");
-			else
+				mesajlog = dto.getFisno().trim() + " Nolu Cikis Fatura Silindi" ;
+			}
+			else {
+				mesajlog = dto.getFisno().trim() + " Nolu Giris Fatura Silindi" ;
 				faturaService.fat_giris_sil(dto.getFisno().trim(), "G");
-			
+			}
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			int dpo = 0 ;
 			int ana = 0 ;
@@ -311,11 +315,14 @@ public class FaturaController {
 						dto.getAcik2().trim(), "G");
 
 			}
-			if (dto.getFatcins().toString().equals("SATIS"))
-				faturaService.stok_sil( dto.getFisno().trim(), "FAT", "C");
-			else
-				faturaService.stok_sil( dto.getFisno().trim(), "FAT", "G");
-			
+			if (dto.getFatcins().toString().equals("SATIS")) {
+				mesajlog = dto.getFisno().trim() + " Nolu Cikis Fatura Silindi" ;
+				faturaService.stok_sil( dto.getFisno().trim(), "FAT", "C",mesajlog);
+			}
+			else {
+				mesajlog = dto.getFisno().trim() + " Nolu Giris Fatura Silindi" ;
+				faturaService.stok_sil( dto.getFisno().trim(), "FAT", "G",mesajlog);
+			}
 			double tutar,kdvlitut ;
 			String  har, izah ;
 			for (faturadetayDTO row : tableData) {
@@ -343,8 +350,10 @@ public class FaturaController {
 					har = "G" ;
 					izah = row.getIzahat() + " Nolu Giris Faturasi...";
 				}
+				mesajlog = "Fatura Stok Kayit  H:"+ har + "   Kod:" + row.getUkodu().trim() + " Miktar:" + miktar + " Fiat:" + row.getFiat() ;
+
 				faturaService.stk_kaydet(dto.getFisno().trim(), "FAT", dto.getTarih(), dpo, row.getUkodu().trim(), miktar, row.getFiat()
-						,(double) Math.round(tutar), kdvlitut, har, izah, ana, alt, dto.getKur(), "",dto.getDvzcins(), dto.getCarikod().trim(),userrString);	
+						,(double) Math.round(tutar), kdvlitut, har, izah, ana, alt, dto.getKur(), "",dto.getDvzcins(), dto.getCarikod().trim(),userrString,mesajlog);	
 			}
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
