@@ -83,20 +83,20 @@ datalist {
 }
 
 .resimdiv {
-  width: 100%; /* Sabit genişlik */
-    min-height: 100%; /* Sabit yükseklik */
+  width: 100%;
+    min-height: 100%;
     border: 1px solid #ddd; 
-    overflow: hidden; /* Resmin taşmasını engelle */
-    background-color: #f8f9fa; /* Arka plan rengi */
-    display: flex; /* İçeriği ortalamak için */
-    justify-content: center; /* Yatay merkezleme */
-    align-items: center; /* Dikey merkezleme */
+    overflow: hidden;
+    background-color: #f8f9fa; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .resimgoster {
-    max-width: 100%; /* Resmi genişlik olarak sınırlamak için */
-    max-height: 100%; /* Resmi yükseklik olarak sınırlamak için */
-     object-fit: contain; /* Resmi divin içine sığdırırken orantıyı korur */
-    background-color: #f8f9fa; /* Arka plan rengi */
+    max-width: 100%;
+    max-height: 100%;
+     object-fit: contain;
+    background-color: #f8f9fa;
     
 }
 </style>
@@ -174,6 +174,7 @@ datalist {
 				<div style="display: flex;align-items:center;margin-top:7px;">
 					<label style="width: 150px;">Uygulanacak Fiat</label>
 					<span style="padding-left: 10px;"></span>
+					<div style="position: relative; width: 150px;">
 					<select class="form-control" id="uygulananfiat" onchange="uygulananfiatchange()" style="width: 150px;">
 						<option value=""></option>
 						<option value="ortfiat">Ortalama_Gris_Fiati</option>
@@ -182,6 +183,8 @@ datalist {
 						<option value="fiat2">Fiat_2</option>
 						<option value="fiat3">Fiat_3</option>
 					</select>
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+					</div>
 					<span style="padding-left: 10px;"></span>
 					<label id="datlabel"  style="visibility:hidden">Dikkatae Alinacak Tarih</label>
 					<span style="padding-left: 10px;"></span>
