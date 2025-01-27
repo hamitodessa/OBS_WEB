@@ -199,7 +199,6 @@ async function updateRowValues(inputElement) {
 		}
 		const row = inputElement.closest('tr');
 		const cells = row.querySelectorAll('td');
-		const turCell = cells[1];
 		const adiCell = cells[3];
 		const birimCell = cells[4];
 		setLabelContent(adiCell, response.urun.adi);

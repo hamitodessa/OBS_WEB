@@ -95,5 +95,9 @@ $(document).ready(function () {
 			stokBaslik();
 			fetchkod();
 		},
+		"/stok/zayi": () => {
+			stokBaslik();
+			fetchkod();
+		},
 	}
 });
