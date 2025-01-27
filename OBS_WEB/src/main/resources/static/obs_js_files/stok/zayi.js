@@ -274,6 +274,9 @@ function clearInputs() {
 	document.getElementById("altgrp").innerHTML = '';
 	document.getElementById("altgrp").disabled = true;
 	document.getElementById("depo").value = '';
+	
+	document.getElementById("a1").value = '';
+	document.getElementById("a2").value = '';
 
 	document.getElementById("adil").innerText =  '';
 	document.getElementById("anagrpl").innerText =  '';
