@@ -5,15 +5,13 @@
 .container {
 	width: 660px;    /* 65%*/
 	padding: 2px;
-	margin: 0 auto; /* Ekran ortasında konumlandırma */
+	margin: 0 auto;
 	box-sizing: border-box;
 	/*	border: 1px solid #ccc; */
-	justify-content: center; /* Yatayda içerikleri ortalar */
-	align-items: center; /* Dikeyde içerikleri ortalar */
+	justify-content: center;
+	align-items: center;
 }
 
-
-/* Alt div düzeni */
 .child {
 	width: 100%;
 	padding: 2px;
@@ -26,7 +24,7 @@
 	width: 100%;
 	box-sizing: border-box;
 	display: flex;
-	justify-content: flex-start; /* Elemanları sola hizalar */
+	justify-content: flex-start;
 	gap: 10px;
 }
 
@@ -50,8 +48,8 @@
 
 .form-row-borc-alacak {
 	display: flex;
-	align-items: center; /* Dikey eksende hizalama */
-	justify-content: space-between; /* Öğeleri sola ve sağa yaslar */
+	align-items: center;
+	justify-content: space-between;
 	margin-bottom: 5px;
 	height: 25px;
 }
@@ -66,7 +64,6 @@
 	margin-right: 10px;
 }
 
-/* Dördüncü Child için stil */
 .fourth-group-box {
 	border: 1px solid #ccc;
 	padding: 7px;
@@ -106,12 +103,9 @@
 	font-size: 14px;
 }
 
-
-
 .padding-sag {
 	padding-right: 15px;
 }
-
 
 .cins_bold {
 	font-weight: bold;
@@ -130,20 +124,20 @@
     text-align: left;
 	font-weight: bold;
 	color: red;
-	white-space: nowrap; /* Tek satırda tut */
-    overflow: hidden; /* Taşan içeriği gizle */
-    text-overflow: ellipsis; /* Uzun metin için '...' uygula */
-    display: inline-block; /* Genişlik ayarını etkinleştirmek için */
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
 }
 
 .alacakliAdi{
     text-align: left;
 	font-weight: bold;
 	color: green;
-	white-space: nowrap; /* Tek satırda tut */
-    overflow: hidden; /* Taşan içeriği gizle */
-    text-overflow: ellipsis; /* Uzun metin için '...' uygula */
-    display: inline-block; /* Genişlik ayarını etkinleştirmek için */
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
 }
 .width-150 {
 	width: 150px;
@@ -154,15 +148,13 @@
 }
 
 .centered-div {
-	width: 90%; /* Genişlik %80 */
-	margin: 0 auto; /* Ekran ortasında konumlandırma */
+	width: 90%;
+	margin: 0 auto;
 	padding: 20px;
 	border: 1px solid #ccc;
 	box-sizing: border-box;
-	/* Padding ve border genişlik içinde hesaplansın */
-	text-align: center; /* İçerikleri ortala (opsiyonel) */
+	text-align: center;
 }
-/************************************************************/
 </style>
 <link rel="stylesheet" href="style/yenihsppln.css" />
 
@@ -175,7 +167,7 @@
 					<div class="form-row">
 						<input type="date" id="dekontTarih" class="form-control" th:value="${evrakTarih}"
 							style="width: 140px;font-weight: bold;" /> 
-							<label for="bos" style="width: 160px;"></label>
+						<label for="bos" style="width: 160px;"></label>
 						<button type="button" class="btn btn-secondary ml-2" onclick="dekgerifisNo()">
 							<i class="fa fa-backward"></i>
 						</button>
@@ -204,27 +196,20 @@
 						<label for="cins"></label>
 					</div>
 					<div class="form-row">
-
-
 						<div style="position: relative; width: 150px;">
 							<!-- Input Alanı -->
 							<input class="form-control cins_bold"
 								ondblclick="openSecondModal('borcHesap', 'dekont')"
 								maxlength="12" style="width: 100%; padding-right: 30px;"
 								list="borcOptions" id="borcHesap" 
-								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"
-								disabled>
-								
-							<datalist id="borcOptions" >
-								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
-							</datalist>
-							
+								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"	disabled>
+								<datalist id="borcOptions" >
+									<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+								</datalist>
 							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 						</div>
-
-
 						<label for="cins" class="width-50 cins_bold" id="borcluHesapCins"></label> 
-						
+						<div style="position: relative; width: 100px;">
 						<select class="form-control" style="width: 100px" id="borcKurCins" disabled onchange="dekkurOku('borcluHesapCins',this,'borcKur')">
 							<option value="">Kur Cinsi</option>
 							<option value="MA">MA</option>
@@ -232,6 +217,9 @@
 							<option value="SA">SA</option>
 							<option value="SS">SS</option>
 						</select> 
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+						</div>
+						<span style="padding-left: 10px;"></span>
 						<input class="form-control saga-bold" style="width: 100px" type="number" id="borcKur" value="1.0000" disabled /> 
 						<input class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)" id="borcTutar" value="0.00" ondblclick="tutarKontrolBorc()" disabled />
 					</div>
@@ -258,11 +246,8 @@
 							</datalist>
 							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 						</div>
-
-
-
-						<label for="cins" id="alacakliHesapCins"
-							class="width-50 cins_bold"></label> 
+						<label for="cins" id="alacakliHesapCins" class="width-50 cins_bold"></label> 
+						<div style="position: relative; width: 100px;">
 						<select class="form-control"style="width: 100px" id="alacakKurCins" disabled onchange="dekkurOku('alacakliHesapCins',this,'alacakKur')">
 							<option value="">Kur Cinsi</option>
 							<option value="MA">MA</option>
@@ -270,9 +255,11 @@
 							<option value="SA">SA</option>
 							<option value="SS">SS</option>
 						</select> 
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+						</div>
+						<span style="padding-left: 10px;"></span>
 						<input class="form-control saga-bold" style="width: 100px" type="number" id="alacakKur" value="1.0000" disabled />
-						 <input	ondblclick="tutarKontrolAlacak()" class="form-control saga-bold"
-							style="width: 160px" type="text" onblur="formatInputBox2(this)"	id="alacakTutar" value="0.00" disabled />
+						<input	ondblclick="tutarKontrolAlacak()" class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)"	id="alacakTutar" value="0.00" disabled />
 					</div>
 				</div>
 			</div>
@@ -298,8 +285,6 @@
     </div>
 		</div>
 	</div>
-<!-- Modal -->
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 
 <script src="/obs_js_files/cari/dekont.js"></script>
-

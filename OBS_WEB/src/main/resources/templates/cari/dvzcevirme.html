@@ -88,8 +88,6 @@ th:nth-child(11), td:nth-child(9) {
 </div>
 <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
 <br>
-<!-- Tablo -->
-<!-- <div class="card p-4">  -->
 	<table class="table table-bordered table-hover">
 		<thead class="thead-dark">
 			<tr>
@@ -109,27 +107,23 @@ th:nth-child(11), td:nth-child(9) {
 		<tbody id="tableBody">
 		</tbody>
 		<tfoot>
-        <tr>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-            <td id="dvzBakiye" style="text-align: right;font-weight: bold;"></td>
-            <td id="bakiye" style="text-align: right;font-weight: bold;"></td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-            <td> </td>
-        </tr>
-    </tfoot>
+        	<tr>
+            	<td> </td>
+            	<td> </td>
+            	<td> </td>
+            	<td> </td>
+            	<td> </td>
+            	<td id="dvzBakiye" style="text-align: right;font-weight: bold;"></td>
+            	<td id="bakiye" style="text-align: right;font-weight: bold;"></td>
+            	<td> </td>
+            	<td> </td>
+            	<td> </td>
+            	<td> </td>
+        	</tr>
+    	</tfoot>
 	</table>
-<!--</div>  -->
 
 <input type="hidden" id="dvzcevirmeBilgi" name="dvzcevirmeBilgi" value="initialValue">
-<!-- Modal -->
 <div th:replace="~{modal/cari/dvzcevirmefiltre :: modaldvzcevirmefiltre}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
- 
 <script src="/obs_js_files/cari/dvzcevirme.js"></script>
- 
