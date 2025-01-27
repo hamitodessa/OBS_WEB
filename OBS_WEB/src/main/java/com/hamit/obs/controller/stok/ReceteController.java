@@ -17,13 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
-import com.hamit.obs.custom.yardimci.KusurYuvarla;
 import com.hamit.obs.dto.stok.receteDTO;
 import com.hamit.obs.dto.stok.recetedetayDTO;
 import com.hamit.obs.dto.stok.recetekayitDTO;
-import com.hamit.obs.dto.stok.uretimDTO;
-import com.hamit.obs.dto.stok.uretimdetayDTO;
-import com.hamit.obs.dto.stok.uretimkayitDTO;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
@@ -153,16 +149,13 @@ public class ReceteController {
 	
 	@PostMapping("stok/recYoket")
 	@ResponseBody
-	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam String recno, @RequestParam List<String> data) {
+	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam String recno, @RequestParam String kodu) {
 		Map<String, String> response = new HashMap<>();
 		try {
 			faturaService.rec_sil(recno.trim());
 			faturaService.aciklama_sil("REC", recno.trim(), "G");
-			
-			for (int i = 0; i < data.size(); i++) {
-				faturaService.kod_recete_yaz(data.get(i).trim(), "");
-	        }
-			
+			faturaService.kod_recete_yaz(kodu.trim(), "");
+	        
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
@@ -179,10 +172,15 @@ public class ReceteController {
 		try {
 			receteDTO dto = recetekayitDTO.getReceteDTO();
 			List<recetedetayDTO> tableData = recetekayitDTO.getTableData();
-//			faturaService.stok_sil(dto.getFisno(), "URE", "C");
-/*
+			faturaService.rec_sil(dto.getRecno());
+			faturaService.aciklama_sil("REC", dto.getRecno().trim(), "G");
+			
+			boolean drm ;
+			if (dto.getDurum().equals("Aktiv"))
+				drm = true;
+			else
+				drm = false;
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
-			int dpo = 0 ;
 			int ana = 0 ;
 			int alt = 0;
 			for (recetedetayDTO row : tableData) {
@@ -196,29 +194,18 @@ public class ReceteController {
 					String alts = faturaService.urun_kod_degisken_ara("ALID_Y", "ALT_GRUP", "ALT_GRUP_DEGISKEN", dto.getAltgrup());
 					alt = Integer.parseInt(alts);
 				}
-				String izahat = row.getIzahat() ;
-				if (izahat.equals(""))
-					izahat = dto.getFisno() + " Nolu Uretimde Cikan " ;
-				faturaService.stk_kaydet(dto.getFisno(),"URE", dto.getTarih(), dpo, row.getUkodu(),
-						row.getMiktar() *-1, row.getFiat(), KusurYuvarla.round(row.getTutar() *-1,2), KusurYuvarla.round(row.getTutar() *-1,2), 
-						"C",izahat, ana, alt, 0, "", dto.getDvzcins(), "", userrString);
+				faturaService.recete_kayit(dto.getRecno().trim(), drm,"Cikan",row.getUkodu()
+						, row.getMiktar(), ana, alt, userrString);
 			}
-			//GIRIS YAZ
-			faturaService.stok_sil(dto.getFisno(), "URE", "G");
-			if( ! dto.getDepo().equals("")) {
-				String dpos = faturaService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN",  dto.getDepo());
-				dpo = Integer.parseInt(dpos);
-			}
-			double miktar = Double.valueOf(dto.getUremiktar());
-			double tutar = Double.valueOf(dto.getToptutar())  ;
-			double fiat =tutar  / (miktar == 0 ? 1 :miktar);
-			faturaService.stk_kaydet(dto.getFisno(),"URE", dto.getTarih(), dpo, dto.getGirenurkodu(),
-					dto.getUremiktar(), fiat, KusurYuvarla.round(tutar,2), KusurYuvarla.round(tutar,2), 
-					"G",dto.getFisno().trim() + " Nolu Fis Ile Uretim " , ana, alt, 0, "", dto.getDvzcins(), "", userrString);
-			faturaService.aciklama_sil("URE", dto.getFisno().trim(), "G");
-			faturaService.aciklama_yaz("URE", 1, dto.getFisno().trim(), dto.getAciklama(), "G");
+			
+			faturaService.recete_kayit(dto.getRecno().trim().trim(), drm, "Giren",dto.getGirenurkodu().trim(),1
+					, ana, alt,userrString);
+			
+			faturaService.kod_recete_yaz(dto.getGirenurkodu(), dto.getRecno().trim());
+			
+			
+			faturaService.aciklama_yaz("REC", 1,dto.getRecno().trim(), dto.getAciklama(), "G");
 			response.put("errorMessage", "");
-		*/
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {

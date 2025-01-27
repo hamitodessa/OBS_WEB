@@ -58,4 +58,5 @@ public interface IFaturaDatabase {
 	int recete_no_al(ConnectionDetails faturaConnDetails);
 	void rec_sil(String rno,ConnectionDetails faturaConnDetails);
 	void kod_recete_yaz(String ukodu,String rec,ConnectionDetails faturaConnDetails);
+	void recete_kayit(String recno,boolean durum,String tur,String kodu ,double miktar ,int anagrp,int altgrup ,String usr,ConnectionDetails faturaConnDetails);
 }

@@ -366,6 +366,7 @@ async function anagrpChanged(anagrpElement) {
 
 async function recYoket() {
 	const fisNoInput = document.getElementById('recno');
+	const girenurunkod = document.getElementById('ukodu');
 	if (["0", ""].includes(fisNoInput.value)) {
 		return;
 	}
@@ -377,24 +378,13 @@ async function recYoket() {
 	const $silButton = $('#recsilButton');
 	$silButton.prop('disabled', true).text('Siliniyor...');
 
-	const table = document.getElementById('recTable');
-	const rows = table.querySelectorAll('tbody tr');
-	const data = [];
-	rows.forEach((row) => {
-		const cells = row.querySelectorAll('td');
-		const secondColumnValue = cells[2]?.querySelector('input')?.value || ""; // 2 numaralı kolon
-		if (secondColumnValue.trim()) { // Boş değilse
-			data.push(secondColumnValue.trim()); // Diziye ekle
-		}
-	});
-
 	try {
 		const response = await fetchWithSessionCheck("stok/recYoket", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ recno: fisNoInput.value, data: data }),
+			body: new URLSearchParams({ recno: fisNoInput.value, kodu: girenurunkod }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);

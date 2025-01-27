@@ -973,9 +973,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public void rec_sil(String rno, ConnectionDetails faturaConnDetails) {
-		String sql = " DELETE " +
-				" FROM RECETE " +
-				" WHERE Recete_No  = ?";
+		String sql = " DELETE FROM RECETE WHERE Recete_No = ?";
 		try (Connection connection = DriverManager.getConnection(
 				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -984,15 +982,36 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		} catch (Exception e) {
 			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
 		}
-
 	}
 
 	@Override
 	public void kod_recete_yaz(String ukodu, String rec, ConnectionDetails faturaConnDetails) {
-		String sql = "UPDATE MAL SET Recete = N'" + rec + "'  WHERE Kodu = N'" + ukodu + "'";
+		String sql = "UPDATE MAL SET Recete = N'" + rec + "' WHERE Kodu = N'" + ukodu + "'";
 		try (Connection connection = DriverManager.getConnection(
 				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+		}
+	}
+
+	@Override
+	public void recete_kayit(String recno, boolean durum, String tur, String kodu, double miktar, int anagrp,
+			int altgrup, String usr, ConnectionDetails faturaConnDetails) {
+		String sql = "INSERT INTO RECETE (Recete_No,Durum,Tur,Kodu,Miktar,Ana_Grup,Alt_Grup,[USER]) " +
+				" VALUES (?,?,?,?,?,?,?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, recno);
+			stmt.setBoolean(2, durum);
+			stmt.setString(3, tur);
+			stmt.setString(4, kodu);
+			stmt.setDouble(5, miktar);
+			stmt.setInt(6, anagrp);
+			stmt.setInt(7, altgrup);
+			stmt.setString(8, usr);
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);

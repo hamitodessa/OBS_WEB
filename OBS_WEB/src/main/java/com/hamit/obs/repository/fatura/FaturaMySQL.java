@@ -804,5 +804,12 @@ public class FaturaMySQL implements IFaturaDatabase {
 	public void kod_recete_yaz(String ukodu, String rec, ConnectionDetails faturaConnDetails) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void recete_kayit(String recno, boolean durum, String tur, String kodu, double miktar, int anagrp,
+			int altgrup, String usr, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		
 	} 
 }
