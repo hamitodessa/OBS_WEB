@@ -176,7 +176,7 @@ public class ReceteController {
 			faturaService.aciklama_sil("REC", dto.getRecno().trim(), "G");
 			
 			boolean drm ;
-			if (dto.getDurum().equals("Aktiv"))
+			if (dto.getDurum().equals("A"))
 				drm = true;
 			else
 				drm = false;
@@ -203,7 +203,6 @@ public class ReceteController {
 			
 			faturaService.kod_recete_yaz(dto.getGirenurkodu(), dto.getRecno().trim());
 			
-			
 			faturaService.aciklama_yaz("REC", 1,dto.getRecno().trim(), dto.getAciklama(), "G");
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
@@ -213,5 +212,4 @@ public class ReceteController {
 		}
 		return response;
 	}
-
 }

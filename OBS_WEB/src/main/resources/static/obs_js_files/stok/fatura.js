@@ -63,7 +63,7 @@ function satirekle() {
 		</td>
    		<td>
 		    <div style="position: relative; width: 100%;">
-		        <input class="form-control cins_bold" list="barkodOptions_${rowCounter}" maxlength="12" id="barkod_${rowCounter}" 
+		        <input class="form-control cins_bold" list="barkodOptions_${rowCounter}" maxlength="20" id="barkod_${rowCounter}" 
 		            onkeydown="focusNextCell(event, this)" ondblclick="openurunkodlariModal('barkod_${rowCounter}', 'fatsatir','barkodkod')" onchange="updateRowValues(this)">
 		        <datalist id="barkodOptions_${rowCounter}"></datalist>
 		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>

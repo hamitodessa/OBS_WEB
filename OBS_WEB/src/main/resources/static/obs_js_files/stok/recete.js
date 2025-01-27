@@ -215,7 +215,6 @@ async function updateRowValues(inputElement) {
 async function updateurunValues(inputElement) {
 
 	const selectedValue = inputElement.value;
-	console.info("==" + selectedValue);
 	document.body.style.cursor = "wait";
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -255,8 +254,6 @@ async function receteOku() {
 			body: new URLSearchParams({ recno: recno }),
 		});
 		const data = response;
-		console.info(data);
-		console.info(data.errorMessage);
 		clearInputs();
 
 		if (data.errorMessage) {
@@ -290,6 +287,7 @@ async function receteOku() {
 				document.getElementById("altgrp").value = item.Alt_Grup || ''
 				document.getElementById("aciklama").value = data.aciklama;
 				document.getElementById("ukodu").value = item.Kodu || ''
+				document.getElementById("durum").value = item.Durum ? "A" : "P";
 				break;
 			}
 		}
@@ -408,11 +406,11 @@ function prepareureKayit() {
 		anagrup: document.getElementById("anagrp").value || "",
 		altgrup: document.getElementById("altgrp").value || "",
 		aciklama: document.getElementById("aciklama").value || "",
-		girenurkodu: document.getElementById("girenurnkod").value || "",
+		girenurkodu: document.getElementById("ukodu").value || "",
 		durum: document.getElementById("durum").value || "",
 	};
 	tableData = getTableData();
-	return { uretimDTO, tableData, };
+	return { receteDTO, tableData, };
 }
 
 function getTableData() {
@@ -446,7 +444,6 @@ async function recKayit() {
 	const errorDiv = document.getElementById('errorDiv');
 	const $kaydetButton = $('#reckaydetButton');
 	$kaydetButton.prop('disabled', true).text('İşleniyor...');
-
 	document.body.style.cursor = 'wait';
 	try {
 		const response = await fetchWithSessionCheck('stok/recKayit', {
