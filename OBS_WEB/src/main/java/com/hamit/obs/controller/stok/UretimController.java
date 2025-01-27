@@ -247,7 +247,7 @@ public class UretimController {
 
 	@PostMapping("stok/ureYoket")
 	@ResponseBody
-	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam String fisno) {
+	public ResponseEntity<Map<String, String>> ureYoket(@RequestParam String fisno) {
 		Map<String, String> response = new HashMap<>();
 		try {
 			String mesajlog =  "Imalat Stok Silme";

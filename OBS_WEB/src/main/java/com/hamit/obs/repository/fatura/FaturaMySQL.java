@@ -1025,4 +1025,22 @@ public class FaturaMySQL implements IFaturaDatabase {
 				throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
 			}
 		}
+
+		@Override
+		public String zayi_son_bordro_no_al(ConnectionDetails faturaConnDetails) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public int zayi_fisno_al(ConnectionDetails faturaConnDetails) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public List<Map<String, Object>> zayi_oku(String eno, String cins, ConnectionDetails faturaConnDetails) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}

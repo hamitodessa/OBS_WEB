@@ -1019,5 +1019,67 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
 		}
 
+	}
+
+	@Override
+	public String zayi_son_bordro_no_al(ConnectionDetails faturaConnDetails) {
+		String E_NUMBER = "" ;
+		String sql =  "SELECT max(\"Evrak_No\")  as \"NO\" FROM \"STOK\"  where \"Evrak_Cins\" = 'ZAI'  ";
+		try (Connection connection =  DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.isBeforeFirst() ) {  
+					resultSet.next();
+					E_NUMBER = resultSet.getString("NO") == null ? "0" :resultSet.getString("NO") ;
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("REceto no alma.",e); 
+		}
+		return E_NUMBER;
+	}
+
+	@Override
+	public int zayi_fisno_al(ConnectionDetails faturaConnDetails) {
+		int evrakNo = 0;
+		String sql = "UPDATE \"ZAYI_EVRAK\" SET \"E_No\" = \"E_No\" + 1 RETURNING \"E_No\";";
+		try (Connection connection =  DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					evrakNo = resultSet.getInt("E_No");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
+		}
+		return evrakNo;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> zayi_oku(String eno, String cins, ConnectionDetails faturaConnDetails) {
+				String sql = "SELECT \"Evrak_No\" ,\"Evrak_Cins\",\"Tarih\",\"Urun_Kodu\",\"Miktar\",\"Fiat\" ,\"Tutar\", \"Hareket\" , " +
+				" (SELECT \"DEPO\" from \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID_Y\" = \"STOK\".\"Depo\" ) as \"Depo\" , " +
+				" (SELECT \"ANA_GRUP\" from \"ANA_GRUP_DEGISKEN\" WHERE \"AGID_Y\" = \"STOK\".\"Ana_Grup\" ) as \"Ana_Grup\" , " +
+				" (SELECT \"ALT_GRUP\" from \"ALT_GRUP_DEGISKEN\" WHERE \"ALID_Y\" = \"STOK\".\"Alt_Grup\" ) as \"Alt_Grup\" , " +
+				" (SELECT \"Adi\" FROM \"MAL\"  WHERE \"MAL\".\"Kodu\" = \"STOK\".\"Urun_Kodu\" ) as \"Adi\" , " +
+				" (SELECT \"Birim\" FROM \"MAL\"  WHERE \"MAL\".\"Kodu\" = \"STOK\".\"Urun_Kodu\" ) as \"Birim\" , " +
+				" (SELECT \"Barkod\" FROM \"MAL\"  WHERE \"MAL\".\"Kodu\" = \"STOK\".\"Urun_Kodu\" ) as \"Barkod\" , " +
+				" \"Izahat\" ,\"Doviz\"" +
+				" FROM \"STOK\"  " +
+				" WHERE \"Evrak_No\"  =N'" + eno + "'" +
+				" AND \"Evrak_Cins\" = '" + cins + "' AND \"Hareket\" ='C'";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
 	} 
 }

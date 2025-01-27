@@ -243,7 +243,6 @@ function updateColumnTotal() {
 		const input5 = row.querySelector('td:nth-child(5) input');
 		const input6 = row.querySelector('td:nth-child(6) input');
 		const input8 = row.querySelector('td:nth-child(8) input');
-
 		if (input5 && input6) {
 			const value5 = parseLocaleNumber(input5.value) || 0;
 			const value6 = parseLocaleNumber(input6.value) || 0;
@@ -253,18 +252,16 @@ function updateColumnTotal() {
 			});
 			if (result > 0) {
 				total += result;
-				totalmiktar += value6 ;
 			}
+			totalmiktar += value6;
 		}
 	});
 	totalTutarCell.textContent = total.toLocaleString(undefined, {
 		minimumFractionDigits: 2, maximumFractionDigits: 2
 	});
-	
-	document.getElementById("totalMiktar").textContent	= totalmiktar.toLocaleString(undefined, {
-			minimumFractionDigits: 3, maximumFractionDigits: 3
+	document.getElementById("totalMiktar").textContent = totalmiktar.toLocaleString(undefined, {
+		minimumFractionDigits: 3, maximumFractionDigits: 3
 	});
-		
 }
 
 function clearInputs() {
@@ -272,7 +269,6 @@ function clearInputs() {
 	document.getElementById("anagrp").value = '';
 	document.getElementById("altgrp").innerHTML = '';
 	document.getElementById("altgrp").disabled = true;
-	document.getElementById("depo").value = '';
 	
 	document.getElementById("a1").value = '';
 	document.getElementById("a2").value = '';
@@ -281,9 +277,245 @@ function clearInputs() {
 	document.getElementById("anagrpl").innerText =  '';
 	document.getElementById("altgrpl").innerText =  '';
 
+	document.getElementById("totalMiktar").textContent = "0.000";
+	document.getElementById("totalTutar").textContent = "0.00";
 
 	const tableBody = document.getElementById("tbody");
 	tableBody.innerHTML = "";
 	rowCounter = 0;
 	initializeRows();
+}
+
+async function sonfis() {
+	document.getElementById("errorDiv").style.display = "none";
+	document.getElementById("errorDiv").innerText = '';
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck('stok/zaisonfis', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const data = response;
+		const fisNoInput = document.getElementById('fisno');
+		const errorDiv = document.getElementById('errorDiv');
+
+		fisNoInput.value = data.fisno;
+		if (data.fisNo === 0) {
+			alert('Hata: Evrak numarası bulunamadı.');
+			errorDiv.innerText = data.errorMessage;
+			return;
+		}
+			zaiOku();
+		} catch (error) {
+			document.getElementById("errorDiv").style.display = "block";
+			document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+		} finally {
+			document.body.style.cursor = "default";
+		}
+}
+
+async function yeniFis() {
+	document.body.style.cursor = "wait";
+	const errorDiv = document.getElementById('errorDiv');
+	errorDiv.innerText = "";
+	clearInputs();
+	try {
+		const response = await fetchWithSessionCheck('stok/zaiyenifis', {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const fisNoInput = document.getElementById('fisno');
+		fisNoInput.value = response.fisno;
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		errorDiv.style.display = 'none';
+		document.body.style.cursor = "default";
+	}
+}
+
+async function zaiOku() {
+	const fisno = document.getElementById("fisno").value;
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = '';
+
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck("stok/zaiOku", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ fisno: fisno }),
+		});
+		const data = response;
+		clearInputs();
+
+		const table = document.getElementById('zaiTable');
+		const rowss = table.querySelectorAll('tbody tr');
+		if (data.data.length > rowss.length) {
+			const additionalRows = data.data.length - rowss.length;
+			for (let i = 0; i < additionalRows; i++) {
+				satirekle();
+			}
+		}
+		const rows = table.querySelectorAll('tbody tr');
+		data.data.forEach((item, index) => {
+			const cells = rows[index].cells;
+				const barkodInput = cells[1]?.querySelector('input');
+				if (barkodInput) barkodInput.value = item.Barkod || "";
+				const urunKoduInput = cells[2]?.querySelector('input');
+				if (urunKoduInput) urunKoduInput.value = item.Urun_Kodu || "";
+				const depoSelect = cells[3]?.querySelector('select');
+				if (depoSelect) depoSelect.value = item.Depo || "";
+				const fiatInput = cells[4]?.querySelector('input');
+				if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
+				const miktarInput = cells[5]?.querySelector('input');
+				if (miktarInput) miktarInput.value = formatNumber3(item.Miktar * -1);
+				setLabelContent(cells[6], item.Birim || '');
+				const tutarInput = cells[7]?.querySelector('input');
+				if (tutarInput) tutarInput.value = formatNumber2(item.Tutar * -1);
+				const izahatInput = cells[8]?.querySelector('input');
+				if (izahatInput) izahatInput.value = item.Izahat || "";
+		});
+		for (let i = 0; i < data.data.length; i++) {
+			const item = data.data[i];
+				document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
+				document.getElementById("anagrp").value = item.Ana_Grup || '';
+				await anagrpChanged(document.getElementById("anagrp"));
+				document.getElementById("altgrp").value = item.Alt_Grup || ''
+				break;
+		}
+		document.getElementById("a1").value = data.aciklama1;
+		document.getElementById("a2").value = data.aciklama2;
+
+		updateColumnTotal();
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+	}
+}
+
+function prepareureKayit() {
+	const zaiDTO = {
+		fisno: document.getElementById("fisno").value || "",
+		tarih: document.getElementById("fisTarih").value || "",
+		anagrup: document.getElementById("anagrp").value || "",
+		altgrup: document.getElementById("altgrp").value || "",
+		acik1: document.getElementById("a1").value || "",
+		acik2: document.getElementById("a2").value || "",
+	};
+	tableData = getTableData();
+	return { zaiDTO, tableData, };
+}
+
+function getTableData() {
+	const table = document.getElementById('zaiTable');
+	const rows = table.querySelectorAll('tbody tr');
+	const data = [];
+	rows.forEach((row) => {
+		const cells = row.querySelectorAll('td');
+		const firstColumnValue = cells[2]?.querySelector('input')?.value || "";
+		if (firstColumnValue.trim()) {
+			const rowData = {
+				ukodu: firstColumnValue,
+				depo: cells[3]?.querySelector('select')?.value || "",
+				fiat: parseLocaleNumber(cells[4]?.querySelector('input')?.value),
+				miktar: parseLocaleNumber(cells[5]?.querySelector('input')?.value),
+				tutar: parseLocaleNumber(cells[7]?.querySelector('input')?.value),
+				izahat: cells[8]?.querySelector('input')?.value || "",
+			};
+			data.push(rowData);
+		}
+	});
+	return data;
+}
+
+async function zaiKayit() {
+	const fisno = document.getElementById("fisno").value;
+
+	const table = document.getElementById('zaiTable');
+	const rows = table.rows;
+	if (!fisno || fisno === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarası giriniz.");
+		return;
+	}
+	const zaikayitDTO = prepareureKayit();
+	const errorDiv = document.getElementById('errorDiv');
+	const $kaydetButton = $('#zaikaydetButton');
+	$kaydetButton.prop('disabled', true).text('İşleniyor...');
+
+	document.body.style.cursor = 'wait';
+	try {
+		const response = await fetchWithSessionCheck('stok/zaiKayit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(zaikayitDTO),
+		});
+		if (response.errorMessage.trim() !== "") {
+			throw new Error(response.errorMessage);
+		}
+		clearInputs();
+		document.getElementById("fisno").value = "";
+		document.getElementById("errorDiv").innerText = "";
+		errorDiv.style.display = 'none';
+	} catch (error) {
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+		errorDiv.style.display = 'block';
+	} finally {
+		document.body.style.cursor = 'default';
+		$kaydetButton.prop('disabled', false).text('Kaydet');
+	}
+}
+
+async function zaiYoket() {
+	const fisNoInput = document.getElementById('fisno');
+	if (["0", ""].includes(fisNoInput.value)) {
+		return;
+	}
+	const confirmDelete = confirm("Bu Uretim fisi silinecek ?");
+	if (!confirmDelete) {
+		return;
+	}
+	document.body.style.cursor = "wait";
+	const $silButton = $('#zaisilButton');
+	$silButton.prop('disabled', true).text('Siliniyor...');
+	try {
+		const response = await fetchWithSessionCheck("stok/zaiYoket", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ fisno: fisNoInput.value }),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		clearInputs();
+		document.getElementById("fisno").value = "";
+		document.getElementById("errorDiv").style.display = "none";
+		document.getElementById("errorDiv").innerText = "";
+	} catch (error) {
+		document.getElementById("errorDiv").style.display = "block";
+		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+		$silButton.prop('disabled', false).text('Sil');
+	}
 }

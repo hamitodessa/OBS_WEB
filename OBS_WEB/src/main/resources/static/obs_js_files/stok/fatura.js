@@ -436,13 +436,14 @@ async function fatOku() {
 		if (dataSize === 0) return;
 
 		const table = document.getElementById('fatTable');
-		const rows = table.querySelectorAll('tbody tr');
-		if (data.data.length > rows.length) {
-			const additionalRows = data.data.length - rows.length;
+		const rowss = table.querySelectorAll('tbody tr');
+		if (data.data.length > rowss.length) {
+			const additionalRows = data.data.length - rowss.length;
 			for (let i = 0; i < additionalRows; i++) {
 				satirekle();
 			}
 		}
+		const rows = table.querySelectorAll('tbody tr');
 		data.data.forEach((item, index) => {
 			const cells = rows[index].cells;
 			const barkodInput = cells[1]?.querySelector('input');

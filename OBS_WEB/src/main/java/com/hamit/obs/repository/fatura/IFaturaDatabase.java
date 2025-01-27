@@ -59,4 +59,7 @@ public interface IFaturaDatabase {
 	void rec_sil(String rno,ConnectionDetails faturaConnDetails);
 	void kod_recete_yaz(String ukodu,String rec,ConnectionDetails faturaConnDetails);
 	void recete_kayit(String recno,boolean durum,String tur,String kodu ,double miktar ,int anagrp,int altgrup ,String usr,ConnectionDetails faturaConnDetails);
+	String zayi_son_bordro_no_al(ConnectionDetails faturaConnDetails);
+	int zayi_fisno_al(ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> zayi_oku(String eno,String cins,ConnectionDetails faturaConnDetails);
 }
