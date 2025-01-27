@@ -61,7 +61,7 @@ async function anagrpChanged(anagrpElement) {
 	}
 }
 
-async function urnaramaYap() {
+async function urnaramaYap(kodbarkod) {
 
 	const aramaInput = document.getElementById("girenurnkod").value;
 	if (!aramaInput || aramaInput === "") {
@@ -71,18 +71,19 @@ async function urnaramaYap() {
 	document.getElementById("errorDiv").style.display = "none";
 	errorDiv.innerText = "";
 	try {
-		const response = await fetchWithSessionCheck("stok/urnArama", {
+		const response = await fetchWithSessionCheck("stok/urnbilgiArama", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
-			body: new URLSearchParams({ arama: aramaInput })
+			body: new URLSearchParams({ deger: aramaInput , kodbarkod:kodbarkod })
 		});
-		const dto = response;
-		if (dto.errorMessage === "Bu Numarada Urun Yok") {
-			document.getElementById("errorDiv").innerText = dto.errorMessage;
+		
+		if (response.errorMessage === "Bu Numarada Urun Yok") {
+			document.getElementById("errorDiv").innerText = response.errorMessage;
 			return;
 		}
+		const dto = response.urun;
 		document.getElementById("recetekod").value = dto.recete;
 		document.getElementById("adi").innerText = dto.adi;
 		document.getElementById("birim").innerText = dto.birim;
@@ -225,7 +226,7 @@ async function uretimOku() {
 			}
 		}
 		document.getElementById("aciklama").value = data.aciklama;
-		await urnaramaYap();
+		await urnaramaYap("Kodu");
 		updateColumnTotal();
 		errorDiv.style.display = "none";
 		errorDiv.innerText = "";

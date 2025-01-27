@@ -71,7 +71,6 @@ public class SendEmailController {
 			response.put("success", "");
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.put("success", "");
 			response.put("errorMessage", e.getMessage());
 		}

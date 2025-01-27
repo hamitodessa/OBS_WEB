@@ -215,7 +215,6 @@ async function updateRowValues(inputElement,kodbarkod) {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		console.info(response);
 		const row = inputElement.closest('tr');
 		const cells = row.querySelectorAll('td');
 

@@ -80,7 +80,7 @@ $(document).ready(function () {
 		"/kambiyo/cekrapor": kambiyoBaslik,
 		"/stok/urunkart": () => {
 			stokBaslik();
-			urnaramaYap();
+			urnaramaYap("Kodu");
 			document.getElementById("arama").value = "";
 		},
 		"/stok/uretim": () => {

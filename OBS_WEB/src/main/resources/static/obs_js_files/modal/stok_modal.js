@@ -69,22 +69,18 @@ function urnselectValue(inputId, selectedBarkod, selectedKodu, secondnerden, bar
 		}
 	}
 	if (secondnerden === "imalat") {
-		urnaramaYap();
+		urnaramaYap("Kodu");
 	}
 	else if (secondnerden === "imalatsatir") {
 		const event = new Event('change', { bubbles: true });
 		inputElementm.dispatchEvent(event);
 	}
   else if (secondnerden === "recetealt") {
-    console.info("recetealt");
 		const event = new Event('change', { bubbles: true });
 		inputElementm.dispatchEvent(event);
 	}
   else if (secondnerden === "recetesatir") {
-    console.info("recetesatir");
 		const event = new Event('change', { bubbles: true });
 		inputElementm.dispatchEvent(event);
 	}
-
 }
-

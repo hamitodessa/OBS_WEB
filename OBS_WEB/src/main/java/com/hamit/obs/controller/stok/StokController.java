@@ -61,5 +61,4 @@ public class StokController {
 		}
 		return response;
 	}
-
 }

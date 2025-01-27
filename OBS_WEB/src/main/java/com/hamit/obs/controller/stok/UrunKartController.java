@@ -1,13 +1,11 @@
 package com.hamit.obs.controller.stok;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -80,33 +78,9 @@ public class UrunKartController {
 	    } catch (ServiceException e) {
 	        model.addAttribute("errorMessage", e.getMessage());
 	    } catch (Exception e) {
-	    	e.printStackTrace();
 	        model.addAttribute("errorMessage", "Hata: " + e.getMessage());
 	    }
 	    return model;
-	}
-	
-	@PostMapping("stok/urnArama")
-	@ResponseBody
-	public ResponseEntity<?> hsplnArama(@RequestParam String arama) {
-		urunDTO urunDTO = new urunDTO();
-		try {
-			urunDTO =  faturaService.stk_urun("Kodu",arama);
-			if (urunDTO.getKodu() == null || urunDTO.getKodu().isEmpty()) {
-	            throw new ServiceException("Bu Kodda Urun Yok");
-	        }
-	        if (urunDTO.getImage() != null) {
-	            String base64Image = Base64.getEncoder().encodeToString(urunDTO.getImage());
-	            urunDTO.setBase64Resim(base64Image);
-	            urunDTO.setImage(null) ;
-	        }
-	        urunDTO.setErrorMessage(""); 
-	    } catch (ServiceException e) {
-	    	urunDTO.setErrorMessage(e.getMessage());
-	    } catch (Exception e) {
-	    	urunDTO.setErrorMessage("Hata: " + e.getMessage());
-	    }
-	    return ResponseEntity.ok(urunDTO);
 	}
 
 	@PostMapping("stok/altgrup")

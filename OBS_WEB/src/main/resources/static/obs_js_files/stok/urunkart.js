@@ -120,7 +120,7 @@ function geturnDTO() {
 	};
 }
 
-async function urnaramaYap() {
+async function urnaramaYap(kodbarkod) {
 	
 	document.getElementById("kodKontrol").innerText = "" ;
 	const aramaInput = document.getElementById("arama").value;
@@ -131,18 +131,17 @@ async function urnaramaYap() {
 	document.getElementById("errorDiv").style.display = "none";
 	errorDiv.innerText = "";
 	try {
-		const response = await fetchWithSessionCheck("stok/urnArama", {
+		const response = await fetchWithSessionCheck("stok/urnbilgiArama", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
-			body: new URLSearchParams({ arama: aramaInput })
+			body: new URLSearchParams({ deger: aramaInput,kodbarkod:kodbarkod })
 		});
-		const dto = response;
-		if (dto.errorMessage === "Bu Numarada Kayıtlı Hesap Yok") {
-			document.getElementById("errorDiv").innerText = dto.errorMessage;
-			return;
+		if (response.errorMessage === "Bu Numarada Kayıtlı Hesap Yok") {
+			throw new Error(response.errorMessage);
 		}
+		const dto = response.urun;
 		document.getElementById("kodu").value = dto.kodu; 
 		document.getElementById("adi").value = dto.adi;
 		document.getElementById("birim").value = dto.birim; 
@@ -200,7 +199,7 @@ function urnGeri() {
 		if (index > 0) {
 			const previousValue = options[index - 1].value;
 			document.getElementById("arama").value = previousValue;
-			urnaramaYap();
+			urnaramaYap("Kodu");
 			document.getElementById("arama").value = "";
 		} else {
 			return null;
@@ -229,7 +228,7 @@ function urnIleri() {
 		if (index < options.length - 1) {
 			const nextValue = options[index + 1].value; // Bir sonraki indexin değeri
 			document.getElementById("arama").value = nextValue;
-			urnaramaYap();
+			urnaramaYap("Kodu");
 			document.getElementById("arama").value = "";
 		} else {
 			return null; // Son index ise geri null döndür
@@ -250,7 +249,7 @@ function urnIlk() {
 	}
 	const firstValue = options[0].value;
 	document.getElementById("arama").value = firstValue;
-	urnaramaYap();
+	urnaramaYap("Kodu");
 	document.getElementById("arama").value = "";
 }
 
@@ -303,7 +302,7 @@ async function sayfaYukle() {
 		} else {
 			document.getElementById('ara_content').innerHTML = data;
 			stokBaslik();
-			urnaramaYap();
+			urnaramaYap("Kodu");
 			document.getElementById("arama").value = "";
 		}
 	} catch (error) {

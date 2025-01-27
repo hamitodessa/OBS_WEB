@@ -43,7 +43,6 @@ public class ReceteController {
 		} catch (ServiceException e) {
 			model.addAttribute("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			model.addAttribute("errorMessage", "Hata: " + e.getMessage());
 		}
 		return model;
@@ -59,7 +58,6 @@ public class ReceteController {
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
@@ -123,7 +121,6 @@ public class ReceteController {
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
@@ -141,7 +138,6 @@ public class ReceteController {
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;

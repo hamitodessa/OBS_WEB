@@ -204,7 +204,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			stmt.setString(23, urunDTO.getUsr());
 			stmt.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
 		}
 	}
@@ -743,11 +742,9 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
