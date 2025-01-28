@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.KusurYuvarla;
+import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.stok.zaiDTO;
 import com.hamit.obs.dto.stok.zaidetayDTO;
 import com.hamit.obs.dto.stok.zaikayitDTO;
@@ -135,7 +136,7 @@ public class ZayiController {
 		try {
 			zaiDTO dto = zaikayitDTO.getZaiDTO();
 			List<zaidetayDTO> tableData = zaikayitDTO.getTableData();
-			
+			String tarih = Tarih_Cevir.dateFormaterSaatli(dto.getTarih());
 			String mesajlog = "Zai Stok Silme" ;
 			faturaService.stok_sil(dto.getFisno(), "ZAI", "C",mesajlog);
 			faturaService.aciklama_sil("ZAI", dto.getFisno().trim(), "C");
@@ -165,7 +166,7 @@ public class ZayiController {
 					izahat = dto.getFisno() + " Nolu Zayiat Fisi..." ;
 				
 				mesajlog = "Zayiat Stok Kayit  Kod:" + row.getUkodu()  + " Miktar:" + row.getMiktar() + " Fiat:" + row.getFiat() ;
-				faturaService.stk_kaydet(dto.getFisno(),"ZAI", dto.getTarih(), dpo, row.getUkodu(),
+				faturaService.stk_kaydet(dto.getFisno(),"ZAI",tarih, dpo, row.getUkodu(),
 						row.getMiktar() *-1, row.getFiat(), KusurYuvarla.round(row.getTutar() *-1,2), KusurYuvarla.round(row.getTutar() *-1,2), 
 						"C",izahat, ana, alt, 0, "", "", "", userrString,mesajlog);
 			}
