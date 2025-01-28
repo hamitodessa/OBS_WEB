@@ -24,6 +24,7 @@
 	margin: 10px;
 	width: 98%;
 	box-sizing: border-box;
+	overflow-x: auto; /* Yatay kaydırma ekler */
 }
 
 .child {
@@ -118,7 +119,7 @@ datalist {
 			<div class="group-box">
 				<div style="display: flex; align-items: center; ">
 					<label style="min-width:85px;">Fis No</label>
-					<div style="position: relative;min-width: 100px;">
+					<div style="min-width: 120px;max-width: 120px;">
 						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') fatOku()" ondblclick="yeniFis();">
 					</div>
 					<span style="padding-left: 5px;"></span>
@@ -155,7 +156,7 @@ datalist {
 			<!-- 2 SATIR  -->
 			<div style="display: flex; align-items: center;margin-top:10px; ">
 					<label style="min-width:85px;">Cari Kod</label>
-					<div style="position: relative;min-width: 100px;">
+					<div style="min-width: 120px;max-width: 120px;">
 						<input class="form-control" style="font-weight: bold;" id="carikod"
 						  ondblclick="openSecondModal('carikod', 'fatura')"
 								maxlength="12" 
