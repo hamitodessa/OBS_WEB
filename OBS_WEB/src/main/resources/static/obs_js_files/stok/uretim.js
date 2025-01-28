@@ -483,6 +483,11 @@ function clearInputs() {
 
 	const tableBody = document.getElementById("tbody");
 	tableBody.innerHTML = "";
+
+	const imgElement = document.getElementById("resimGoster");
+	imgElement.src = "";
+	imgElement.style.display = "none";
+
 	rowCounter = 0;
 	initializeRows();
 	const totalTutarCell = document.getElementById("totalTutar");

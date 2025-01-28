@@ -114,7 +114,7 @@ function satirekle() {
 		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
 		</td>
         <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"
+		     <input class="form-control" onfocus="selectAllContent(this)" 
 		     onkeydown="focusNextRow(event, this)" value="" style="text-align:right;">
 		</td>
 		<td style="display: none;"></td>
@@ -348,7 +348,7 @@ function focusNextCell(event, element) {
 		let currentCell = element.closest('td');
 		let nextCell = currentCell.nextElementSibling;
 		while (nextCell) {
-			const focusableElement = nextCell.querySelector('input, select');
+			const focusableElement = nextCell.querySelector('input');
 			if (focusableElement) {
 				focusableElement.focus();
 				if (focusableElement.select) {
