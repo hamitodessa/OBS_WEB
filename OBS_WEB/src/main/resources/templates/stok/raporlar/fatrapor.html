@@ -1,0 +1,120 @@
+
+<link rel="stylesheet" href="style/yenihsppln.css" />
+<style>
+/* .container için tasarım */
+.container {
+	height: 100vh; /* Yükseklik tüm ekran yüksekliği */
+	display: flex; /* Flexbox düzeni */
+	flex-direction: column; /* Dikey yerleşim */
+	margin-top: 10px; /* Üstten boşluk */
+	padding: 0px; /* İç kenar boşluğu */
+	width: 100%; /* Genişliği tam ekran */
+	max-width: 100%; /* Maksimum genişliği sınırlıyoruz */
+	box-sizing: border-box; /* Padding ve border genişliğe dahil */
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+.details-row {
+	display: none;
+}
+
+.expandable:hover {
+	cursor: pointer;
+}
+
+.toggle-button {
+	font-weight: bold;
+	font-size: 16px;
+	cursor: pointer;
+	width: 20px;
+	text-align: center;
+}
+
+.toggle-button:hover {
+	color: #007BFF;
+}
+
+.table-container {
+	flex-grow: 1;
+	overflow-y: auto;
+	border: 1px solid #ccc;
+	margin-top: 10px;
+}
+
+.details-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+}
+
+.details-table th, .details-table td {
+	border: 1px solid #ccc;
+	padding: 6px;
+}
+
+.double-column {
+	text-align: right;
+}
+
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+.table .thead-dark th {
+	color: #fff;
+	background: #214162;
+}
+</style>
+	<div class="card p-4">
+		<div style="display: flex; align-items: center;">
+			<button class="btn btn-primary" type="button" id="tahrapyenileButton"
+				style="margin-left: 10px;" onclick="openFirstModal('tahsilatrapor')">Filtre</button>
+			<select id="tahrapreportFormat" class="form-control"
+				style="width: 150px; margin-left: 10px;"
+				onchange="tahrapdownloadReport(this.value)" disabled>
+				<option value="" disabled selected>Excel Indir</option>
+				<option value="xlsx">Excel (XLSX)</option>
+			</select>
+			<button class="btn btn-primary" style="margin-left: 10px;"
+				type="button" id="tahrapmailButton" onclick="tahrapmailAt()"
+				disabled>Email Gonder</button>
+		</div>
+	</div>
+	<div id="errorDiv"
+		style="display: none; color: red; font-weight: bold;"></div>
+	<div class="container">
+		<div class="table-container">
+			<table id="main-table" class="table table-bordered table-hover">
+				<thead class="thead-dark">
+					<tr>
+						<th></th>
+						<th>FATURA NO</th>
+						<th>HAREKET</th>
+                        <th>TARIH</th>
+						<th>CARI_HESAP</th>
+                        <th>ADRES_HESAP</th>
+						<th>DOVIZ</th>
+                        <th class="double-column">MIKTAR</th>
+						<th class="double-column">TUTAR</th>
+                        <th class="double-column">ISK. TUTAR</th>
+					</tr>
+				</thead>
+				<tbody id="mainTableBody">
+				</tbody>
+			</table>
+		</div>
+	</div>
+<input type="hidden" id="fatrapBilgi" name="fatrapBilgi" value="initialValue">
+
+<script src="/obs_js_files/stok/fatrapor.js"></script>
+<div th:replace="~{modal/stok/fatraporfiltre :: modalfatrap}"></div>
