@@ -6,9 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.hamit.obs.dto.server.serverBilgiDTO;
-
 
 public class createPGSQL {
 
@@ -918,7 +920,6 @@ public class createPGSQL {
 				+ "	\"MESAJ\" CHARACTER VARYING (100) NOT NULL,"
 				+ "	\"EVRAK\" CHARACTER VARYING (15) NOT NULL,"
 				+ "	\"USER_NAME\" nchar(15) NULL)";
-
 		String createIndexSql = "CREATE INDEX \"IX_LOGLAMA\" ON \"LOGLAMA\" (\"TARIH\",\"EVRAK\",\"USER_NAME\");";
 		try (Statement stmt = connection.createStatement()) {
 			stmt.executeUpdate(createTableSql);
@@ -927,4 +928,72 @@ public class createPGSQL {
 			throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
 		}
 	}
+	
+	public void job_sil_S(String jobName,serverBilgiDTO sbilgi) throws SQLException {
+		try {
+			Statement stmt = null;
+			String connectionString =  "jdbc:postgresql://" + sbilgi.getUser_ip() + "/" + sbilgi.getSuperviser() ;
+			Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+			stmt = conn.createStatement();
+			String sql = "DELETE FROM pgagent.pga_job WHERE jobname = '" + jobName + "_JOB'";
+			stmt.execute(sql);
+			stmt.close();
+			conn.close();
+		} catch (Exception e)
+		{
+			throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
+		}
+	}
+	public void job_olustur_S(String jobName, String dosya, String indexISIM, serverBilgiDTO sbilgi) throws SQLException {
+		try {
+			Class.forName("org.postgresql.Driver");
+			Statement stmt = null;
+			String connectionString =  "jdbc:postgresql://" + sbilgi.getUser_ip() + "/" + sbilgi.getSuperviser() ;
+			Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+			stmt = conn.createStatement();
+			Date date = Calendar.getInstance().getTime();  
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+			String tarih = dateFormat.format(date);  
+			String sql = "DO $$ " +
+					" DECLARE " +
+					" jid integer;" +
+					" scid integer;" +
+					" BEGIN " +
+					" INSERT INTO pgagent.pga_job( " +
+					" jobjclid, jobname, jobdesc, jobhostagent, jobenabled " +
+					" ) VALUES ( " + 
+					" 1::integer, '" + jobName + "_JOB'::text, ''::text, ''::text, true " +
+					" ) RETURNING jobid INTO jid; " +
+					" INSERT INTO pgagent.pga_jobstep ( " +
+					" jstjobid, jstname, jstenabled, jstkind," +
+					" jstconnstr, jstdbname, jstonerror, "+
+					" jstcode, jstdesc " +
+					" ) VALUES ( " +
+					" jid, '" + jobName + "_STEP'::text, true, 's'::character(1), " +
+					"    ''::text, '" + dosya + "'::name, 'f'::character(1), " +
+					"    '" + indexISIM + "'::text, ''::text " +
+					" ); " +
+					" INSERT INTO pgagent.pga_schedule( " +
+					" jscjobid, jscname, jscdesc, jscenabled, " +
+					" jscstart,     jscminutes, jschours, jscweekdays, jscmonthdays, jscmonths " +
+					" ) VALUES ( " +
+					"  jid, '" + jobName + "_SCHEDULER'::text, ''::text, true, " +
+					"    ' " + tarih + "'::timestamp with time zone, " + 
+					"    '{t,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[], "+
+					"    '{t,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[], " +
+					"    '{t,f,f,f,f,f,f}'::bool[]::boolean[], " +
+					"    '{f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[], " +
+					"    '{f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[] ) RETURNING jscid INTO scid; " +
+					" END " +
+					"  $$ ; " ;
+			stmt.execute(sql);
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e)
+		{  
+			throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
+		}  
+	}
+
 }

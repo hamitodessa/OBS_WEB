@@ -543,38 +543,38 @@ public class FaturaPgSQL implements IFaturaDatabase {
 
 	@Override
 	public void urun_degisken_eski(String fieldd, String degiskenAdi, String nerden, String sno, int id,
-	        ConnectionDetails faturaConnDetails) {
-	    String sql = "UPDATE \"" + nerden + "\"  SET \"" + fieldd + "\"  = ? WHERE \"" + sno + "\"  = ? ";
-	    try (Connection connection = DriverManager.getConnection(
-	            faturaConnDetails.getJdbcUrl(),
-	            faturaConnDetails.getUsername(),
-	            faturaConnDetails.getPassword());
-	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-	        preparedStatement.setString(1, degiskenAdi);
-	        preparedStatement.setInt(2, id);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        throw new ServiceException("Ürün değişken güncelleme başarısız", e);
-	    }
+			ConnectionDetails faturaConnDetails) {
+		String sql = "UPDATE \"" + nerden + "\"  SET \"" + fieldd + "\"  = ? WHERE \"" + sno + "\"  = ? ";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, degiskenAdi);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
+		}
 	}
 
 	@Override
 	public void urun_degisken_alt_grup_eski(String alt_grup, int ana_grup, int id,
 			ConnectionDetails faturaConnDetails) {
-		    String sql = "UPDATE \"ALT_GRUP_DEGISKEN\"  SET \"ALT_GRUP\"  = ? , \"ANA_GRUP\"  = ?  WHERE \"ALID_Y\" = ?";
-		    try (Connection connection = DriverManager.getConnection(
-		            faturaConnDetails.getJdbcUrl(),
-		            faturaConnDetails.getUsername(),
-		            faturaConnDetails.getPassword());
-		         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-		        preparedStatement.setString(1, alt_grup);
-		        preparedStatement.setInt(2, ana_grup);
-		        preparedStatement.setInt(3, id);
-		        preparedStatement.executeUpdate();
-		    } catch (SQLException e) {
-		        throw new ServiceException("Ürün değişken alt grup güncelleme başarısız", e);
-		    }
+		String sql = "UPDATE \"ALT_GRUP_DEGISKEN\"  SET \"ALT_GRUP\"  = ? , \"ANA_GRUP\"  = ?  WHERE \"ALID_Y\" = ?";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, alt_grup);
+			preparedStatement.setInt(2, ana_grup);
+			preparedStatement.setInt(3, id);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken alt grup güncelleme başarısız", e);
 		}
+	}
 
 	@Override
 	public void urun_degisken_kayit(String fieldd, String nerden, String degisken_adi, String sira,
@@ -591,7 +591,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				maks = resultSet.getInt("maks");
 			}
 			sql = "INSERT INTO \"" + nerden + "\" (\"" + fieldd + "\",\"" + degisken_adi + "\",\"USER\") " +
-						" VALUES (?,?,?)" ;
+					" VALUES (?,?,?)" ;
 			try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
 				insertStatement.setInt(1, maks + 1);
 				insertStatement.setString(2, sira);
@@ -621,7 +621,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				maks = (count != 0) ? resultSet.getInt("ALID_Y") : 0;
 			}
 			sql = "INSERT INTO \"ALT_GRUP_DEGISKEN\" (\"ALID_Y\",\"ALT_GRUP\",\"ANA_GRUP\",\"USER\") " +
-				" VALUES (?,?,?,?)" ;
+					" VALUES (?,?,?,?)" ;
 			try (PreparedStatement insertStatement = connection.prepareStatement(sql)) {
 				insertStatement.setInt(1,maks + 1);
 				insertStatement.setString(2, alt_grup);
@@ -638,34 +638,34 @@ public class FaturaPgSQL implements IFaturaDatabase {
 
 	@Override
 	public boolean alt_grup_kontrol(int anagrp, int altgrp, ConnectionDetails faturaConnDetails) {
-		   boolean result = true;
-		    String[] sqlQueries = {
-		        "SELECT * FROM \"MAL\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?",
-		        "SELECT * FROM \"FATURA\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?",
-		        "SELECT * FROM \"IRSALIYE\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?",
-		        "SELECT * FROM \"RECETE\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?",
-		        "SELECT * FROM \"STOK\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?"
-		    };
-		    try (Connection connection = DriverManager.getConnection(
-		            faturaConnDetails.getJdbcUrl(),
-		            faturaConnDetails.getUsername(),
-		            faturaConnDetails.getPassword())) {
-		        for (String sql : sqlQueries) {
-		            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-		                preparedStatement.setInt(1, anagrp);
-		                preparedStatement.setInt(2, altgrp);
-		                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-		                    if (!resultSet.isBeforeFirst()) {
-		                        result = false;
-		                        break; 
-		                    }
-		                }
-		            }
-		        }
-		    } catch (SQLException e) {
-		        throw new ServiceException("Alt grup kontrolü sırasında bir hata oluştu");
-		    }		
-		    return result;
+		boolean result = true;
+		String[] sqlQueries = {
+				"SELECT * FROM \"MAL\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?",
+				"SELECT * FROM \"FATURA\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?",
+				"SELECT * FROM \"IRSALIYE\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?",
+				"SELECT * FROM \"RECETE\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?",
+				"SELECT * FROM \"STOK\" WHERE \"Ana_Grup\" = ? AND \"Alt_Grup\" = ?"
+		};
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword())) {
+			for (String sql : sqlQueries) {
+				try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+					preparedStatement.setInt(1, anagrp);
+					preparedStatement.setInt(2, altgrp);
+					try (ResultSet resultSet = preparedStatement.executeQuery()) {
+						if (!resultSet.isBeforeFirst()) {
+							result = false;
+							break; 
+						}
+					}
+				}
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Alt grup kontrolü sırasında bir hata oluştu");
+		}		
+		return result;
 	}
 
 	@Override
@@ -717,7 +717,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return fiat;
-
 	}
 
 	@Override
@@ -769,7 +768,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return dipnot; 
-
 	}
 
 	@Override
@@ -812,49 +810,49 @@ public class FaturaPgSQL implements IFaturaDatabase {
 
 	@Override
 	public void fat_giris_sil(String fno, String cins, ConnectionDetails faturaConnDetails) {
-	    String sqlFatura = " DELETE " +
+		String sqlFatura = " DELETE " +
 				" FROM \"FATURA\" " +
 				" WHERE \"Fatura_No\"  =? " +
 				" AND \"Gir_Cik\" = ? ";
-	    String sqlStok = " DELETE " +
+		String sqlStok = " DELETE " +
 				" FROM \"STOK\" " +
 				" WHERE \"Evrak_No\"  = ? " +
 				" AND \"Hareket\" = ? " +
 				" AND \"Evrak_Cins\" = 'FAT' ";
-	    try (Connection connection = DriverManager.getConnection(
-	            faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword())) {
-	        try (PreparedStatement stmt = connection.prepareStatement(sqlFatura)) {
-	            stmt.setString(1, fno);
-	            stmt.setString(2, cins);
-	            stmt.executeUpdate();
-	        }
-	        try (PreparedStatement stmt = connection.prepareStatement(sqlStok)) {
-	            stmt.setString(1, fno);
-	            stmt.setString(2, cins);
-	            stmt.executeUpdate();
-	        }
-	    } catch (Exception e) {
-	        throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
-	    }
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword())) {
+			try (PreparedStatement stmt = connection.prepareStatement(sqlFatura)) {
+				stmt.setString(1, fno);
+				stmt.setString(2, cins);
+				stmt.executeUpdate();
+			}
+			try (PreparedStatement stmt = connection.prepareStatement(sqlStok)) {
+				stmt.setString(1, fno);
+				stmt.setString(2, cins);
+				stmt.executeUpdate();
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+		}
 	}
 
 	@Override
 	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails faturaConnDetails) {
-	    String sql = " DELETE " +
+		String sql = " DELETE " +
 				" FROM \"DPN\" " +
 				" WHERE \"Evrak_No\" = ? " +
 				" AND \"Tip\" = ? " +
 				" AND \"Gir_Cik\" = ?";
-	    try (Connection connection = DriverManager.getConnection(
-	            faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-	         PreparedStatement stmt = connection.prepareStatement(sql)) {
-	        stmt.setString(1, ino);
-	        stmt.setString(2, cins);
-	        stmt.setString(3, gircik);
-	        stmt.executeUpdate();
-	    } catch (Exception e) {
-	        throw new ServiceException("Dipnot silme sırasında bir hata oluştu.", e);
-	    }
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, ino);
+			stmt.setString(2, cins);
+			stmt.setString(3, gircik);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Dipnot silme sırasında bir hata oluştu.", e);
+		}
 	}
 
 	@Override
@@ -982,7 +980,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		} catch (Exception e) {
 			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
 		}
-
 	}
 
 	@Override
@@ -995,7 +992,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		} catch (Exception e) {
 			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
 		}
-
 	}
 
 	@Override
@@ -1018,7 +1014,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		} catch (Exception e) {
 			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
 		}
-
 	}
 
 	@Override
@@ -1054,12 +1049,11 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
 		}
 		return evrakNo;
-
 	}
 
 	@Override
 	public List<Map<String, Object>> zayi_oku(String eno, String cins, ConnectionDetails faturaConnDetails) {
-				String sql = "SELECT \"Evrak_No\" ,\"Evrak_Cins\",\"Tarih\",\"Urun_Kodu\",\"Miktar\",\"Fiat\" ,\"Tutar\", \"Hareket\" , " +
+		String sql = "SELECT \"Evrak_No\" ,\"Evrak_Cins\",\"Tarih\",\"Urun_Kodu\",\"Miktar\",\"Fiat\" ,\"Tutar\", \"Hareket\" , " +
 				" (SELECT \"DEPO\" from \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID_Y\" = \"STOK\".\"Depo\" ) as \"Depo\" , " +
 				" (SELECT \"ANA_GRUP\" from \"ANA_GRUP_DEGISKEN\" WHERE \"AGID_Y\" = \"STOK\".\"Ana_Grup\" ) as \"Ana_Grup\" , " +
 				" (SELECT \"ALT_GRUP\" from \"ALT_GRUP_DEGISKEN\" WHERE \"ALID_Y\" = \"STOK\".\"Alt_Grup\" ) as \"Alt_Grup\" , " +
@@ -1080,6 +1074,5 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	} 
 }

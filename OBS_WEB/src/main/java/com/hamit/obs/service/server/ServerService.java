@@ -1,5 +1,7 @@
 package com.hamit.obs.service.server;
 
+import java.sql.SQLException;
+
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.createnewDB.createMSSQL;
@@ -74,4 +76,50 @@ public class ServerService {
         }
 		return result;
 	}
+	
+	public void job_sil_S(String jobName, String dosya,serverBilgiDTO serverBilgiDTO) throws SQLException {
+		
+		if(serverBilgiDTO.getHangi_sql().equals("MS SQL"))
+        {
+        	createMSSQL createMSSQL = new createMSSQL();
+        	createMSSQL.job_sil_S(jobName,serverBilgiDTO);
+        }
+		else if(serverBilgiDTO.getHangi_sql().equals("MY SQL"))
+        {
+        	createMYSQL createMYSQL = new createMYSQL();
+        	createMYSQL.job_sil_S(jobName,serverBilgiDTO);
+        }
+		else if(serverBilgiDTO.getHangi_sql().equals("PG SQL"))
+        {
+        	createPGSQL createPGSQL = new createPGSQL();
+        	createPGSQL.job_sil_S(jobName,serverBilgiDTO);
+        }
+	}
+	
+	public void job_olustur_S(String jobName, String dosya,String indexISIM , serverBilgiDTO serverBilgiDTO) throws SQLException {
+		if(serverBilgiDTO.getHangi_sql().equals("MS SQL"))
+        {
+        	createMSSQL createMSSQL = new createMSSQL();
+        	createMSSQL.job_olustur_S(jobName,dosya,indexISIM,serverBilgiDTO);
+        }
+		else if(serverBilgiDTO.getHangi_sql().equals("MY SQL"))
+        {
+        	createMYSQL createMYSQL = new createMYSQL();
+        	createMYSQL.job_olustur_S(jobName,dosya,indexISIM,serverBilgiDTO);
+        }
+		else if(serverBilgiDTO.getHangi_sql().equals("PG SQL"))
+        {
+        	createPGSQL createPGSQL = new createPGSQL();
+        	createPGSQL.job_olustur_S(jobName,dosya,indexISIM,serverBilgiDTO);
+        }
+	}
+	
+	public void job_baslat_S(String jobName, serverBilgiDTO serverBilgiDTO) throws SQLException {
+		if(serverBilgiDTO.getHangi_sql().equals("MS SQL"))
+        {
+        	createMSSQL createMSSQL = new createMSSQL();
+        	createMSSQL.job_baslat_S(jobName,serverBilgiDTO);
+        }
+	}
+	
 }

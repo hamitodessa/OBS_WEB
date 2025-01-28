@@ -915,4 +915,40 @@ public class createMYSQL {
 	        throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
 	    }
 	}
+	
+	public void job_sil_S(String jobName,serverBilgiDTO sbilgi) throws SQLException  {
+		try {
+			Statement stmt = null;
+			String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
+		    Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+			stmt = conn.createStatement();
+			stmt.execute("DROP EVENT IF EXISTS " + jobName + ";");
+			stmt.close();
+			conn.close();
+		} catch (Exception e)
+		{
+			 throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
+		}
+	}
+
+	public void job_olustur_S(String jobName, String dosya,String indexISIM, serverBilgiDTO sbilgi) throws SQLException  {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Statement stmt = null;
+			String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
+		    Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+			stmt = conn.createStatement();
+			String sql = "CREATE EVENT IF NOT EXISTS " + jobName
+					+ " ON SCHEDULE EVERY '1' DAY"
+					+ "	STARTS CONCAT(DATE(NOW()+INTERVAL 1 DAY),' 00:00:00')"
+					+ "	DO"
+					+ indexISIM  ;
+			stmt.execute(sql);
+			stmt.close();
+			conn.close();
+		} catch (Exception e)
+		{
+			 throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
+		}
+	}
 }

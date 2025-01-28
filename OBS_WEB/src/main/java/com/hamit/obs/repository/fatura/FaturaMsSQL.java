@@ -546,38 +546,38 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public void urun_degisken_eski(String fieldd, String degiskenAdi, String nerden, String sno, int id,
-	        ConnectionDetails faturaConnDetails) {
-	    String sql = "UPDATE " + nerden + " SET " + fieldd + " = ? WHERE " + sno + " = ?";
-	    try (Connection connection = DriverManager.getConnection(
-	            faturaConnDetails.getJdbcUrl(),
-	            faturaConnDetails.getUsername(),
-	            faturaConnDetails.getPassword());
-	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-	        preparedStatement.setString(1, degiskenAdi);
-	        preparedStatement.setInt(2, id);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        throw new ServiceException("Ürün değişken güncelleme başarısız", e);
-	    }
+			ConnectionDetails faturaConnDetails) {
+		String sql = "UPDATE " + nerden + " SET " + fieldd + " = ? WHERE " + sno + " = ?";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, degiskenAdi);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
+		}
 	}
 
 	@Override
 	public void urun_degisken_alt_grup_eski(String alt_grup, int ana_grup, int id,
 			ConnectionDetails faturaConnDetails) {
-		    String sql = "UPDATE ALT_GRUP_DEGISKEN SET ALT_GRUP = ?, ANA_GRUP = ? WHERE ALID_Y = ?";
-		    try (Connection connection = DriverManager.getConnection(
-		            faturaConnDetails.getJdbcUrl(),
-		            faturaConnDetails.getUsername(),
-		            faturaConnDetails.getPassword());
-		         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-		        preparedStatement.setString(1, alt_grup);
-		        preparedStatement.setInt(2, ana_grup);
-		        preparedStatement.setInt(3, id);
-		        preparedStatement.executeUpdate();
-		    } catch (SQLException e) {
-		        throw new ServiceException("Ürün değişken alt grup güncelleme başarısız", e);
-		    }
+		String sql = "UPDATE ALT_GRUP_DEGISKEN SET ALT_GRUP = ?, ANA_GRUP = ? WHERE ALID_Y = ?";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, alt_grup);
+			preparedStatement.setInt(2, ana_grup);
+			preparedStatement.setInt(3, id);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken alt grup güncelleme başarısız", e);
 		}
+	}
 
 	@Override
 	public void urun_degisken_kayit(String fieldd, String nerden, String degisken_adi, String sira,
@@ -636,42 +636,40 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("Ürün değişken kayıt işlemi başarısız", e);
 		}
-
 	}
 
 	@Override
 	public boolean alt_grup_kontrol(int anagrp, int altgrp, ConnectionDetails faturaConnDetails) {
-		   boolean result = true;
-		    String[] sqlQueries = {
-		        "SELECT * FROM MAL WHERE Ana_Grup = ? AND Alt_Grup = ?",
-		        "SELECT * FROM FATURA WHERE Ana_Grup = ? AND Alt_Grup = ?",
-		        "SELECT * FROM IRSALIYE WHERE Ana_Grup = ? AND Alt_Grup = ?",
-		        "SELECT * FROM RECETE WHERE Ana_Grup = ? AND Alt_Grup = ?",
-		        "SELECT * FROM STOK WHERE Ana_Grup = ? AND Alt_Grup = ?"
-		    };
-		    try (Connection connection = DriverManager.getConnection(
-		            faturaConnDetails.getJdbcUrl(),
-		            faturaConnDetails.getUsername(),
-		            faturaConnDetails.getPassword())) {
+		boolean result = true;
+		String[] sqlQueries = {
+				"SELECT * FROM MAL WHERE Ana_Grup = ? AND Alt_Grup = ?",
+				"SELECT * FROM FATURA WHERE Ana_Grup = ? AND Alt_Grup = ?",
+				"SELECT * FROM IRSALIYE WHERE Ana_Grup = ? AND Alt_Grup = ?",
+				"SELECT * FROM RECETE WHERE Ana_Grup = ? AND Alt_Grup = ?",
+				"SELECT * FROM STOK WHERE Ana_Grup = ? AND Alt_Grup = ?"
+		};
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword())) {
 
-		        for (String sql : sqlQueries) {
-		            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-		                preparedStatement.setInt(1, anagrp);
-		                preparedStatement.setInt(2, altgrp);
+			for (String sql : sqlQueries) {
+				try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+					preparedStatement.setInt(1, anagrp);
+					preparedStatement.setInt(2, altgrp);
 
-		                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-		                    if (!resultSet.isBeforeFirst()) {
-		                        result = false;
-		                        break; 
-		                    }
-		                }
-		            }
-		        }
-
-		    } catch (SQLException e) {
-		        throw new ServiceException("Alt grup kontrolü sırasında bir hata oluştu", e);
-		    }		return result;
-
+					try (ResultSet resultSet = preparedStatement.executeQuery()) {
+						if (!resultSet.isBeforeFirst()) {
+							result = false;
+							break; 
+						}
+					}
+				}
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Alt grup kontrolü sırasında bir hata oluştu", e);
+		}		
+		return result;
 	}
 
 	@Override
@@ -687,7 +685,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
 		}
-
 	}
 
 	@Override
@@ -703,7 +700,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
 		}
-
 	}
 
 	@Override
@@ -764,7 +760,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" WHERE Evrak_NO = N'" + ino + "'" +
 				" AND DPN.Tip = N'" + cins + "'" +
 				" AND Gir_Cik = '" + gircik + "'";
-		
+
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -794,7 +790,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return son_no;
-
 	}
 
 	@Override
@@ -822,38 +817,38 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public void fat_giris_sil(String fno, String cins, ConnectionDetails faturaConnDetails) {
-	    String sqlFatura = "DELETE FROM FATURA WHERE Fatura_No = ? AND Gir_Cik = ?";
-	    String sqlStok = "DELETE FROM STOK WHERE Evrak_No = ? AND Hareket = ? AND Evrak_Cins = 'FAT'";
-	    try (Connection connection = DriverManager.getConnection(
-	            faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword())) {
-	        try (PreparedStatement stmt = connection.prepareStatement(sqlFatura)) {
-	            stmt.setString(1, fno);
-	            stmt.setString(2, cins);
-	            stmt.executeUpdate();
-	        }
-	        try (PreparedStatement stmt = connection.prepareStatement(sqlStok)) {
-	            stmt.setString(1, fno);
-	            stmt.setString(2, cins);
-	            stmt.executeUpdate();
-	        }
-	    } catch (Exception e) {
-	        throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
-	    }
+		String sqlFatura = "DELETE FROM FATURA WHERE Fatura_No = ? AND Gir_Cik = ?";
+		String sqlStok = "DELETE FROM STOK WHERE Evrak_No = ? AND Hareket = ? AND Evrak_Cins = 'FAT'";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword())) {
+			try (PreparedStatement stmt = connection.prepareStatement(sqlFatura)) {
+				stmt.setString(1, fno);
+				stmt.setString(2, cins);
+				stmt.executeUpdate();
+			}
+			try (PreparedStatement stmt = connection.prepareStatement(sqlStok)) {
+				stmt.setString(1, fno);
+				stmt.setString(2, cins);
+				stmt.executeUpdate();
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+		}
 	}
 
 	@Override
 	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails faturaConnDetails) {
-	    String sql = "DELETE FROM DPN WHERE Evrak_NO = ? AND Tip = ? AND Gir_Cik = ?";
-	    try (Connection connection = DriverManager.getConnection(
-	            faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-	         PreparedStatement stmt = connection.prepareStatement(sql)) {
-	        stmt.setString(1, ino);
-	        stmt.setString(2, cins);
-	        stmt.setString(3, gircik);
-	        stmt.executeUpdate();
-	    } catch (Exception e) {
-	        throw new ServiceException("Dipnot silme sırasında bir hata oluştu.", e);
-	    }
+		String sql = "DELETE FROM DPN WHERE Evrak_NO = ? AND Tip = ? AND Gir_Cik = ?";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, ino);
+			stmt.setString(2, cins);
+			stmt.setString(3, gircik);
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Dipnot silme sırasında bir hata oluştu.", e);
+		}
 	}
 
 	@Override
@@ -908,7 +903,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		} catch (Exception e) {
 			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
 		}
-
 	}
 
 	@Override
@@ -949,7 +943,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("REceto no alma.",e); 
 		}
 		return E_NUMBER;
-
 	}
 
 	@Override
@@ -968,7 +961,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("REceto no alma.",e); 
 		}
 		return E_NUMBER;
-
 	}
 
 	@Override
@@ -1076,6 +1068,5 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 }

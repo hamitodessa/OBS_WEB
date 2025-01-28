@@ -165,6 +165,17 @@ async function createnewDB() {
 			setTimeout(() => {
 				alert("Dosya Oluşturuldu");
 			}, 100);
+
+			if (data.indexolustuDurum === "true") {
+				setTimeout(() => {
+					alert("Indexleme Oluşturuldu");
+				}, 100);
+			}
+			else {
+				setTimeout(() => {
+					alert("Indexleme Oluştururken hata olustu");
+				}, 100);
+			}
 		} else {
 			errorDiv.style.display = "block";
 			errorDiv.innerText = data.errorMessage || "Dosya oluşturulamadı.";
