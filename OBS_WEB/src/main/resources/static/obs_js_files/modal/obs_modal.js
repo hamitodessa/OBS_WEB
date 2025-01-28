@@ -239,7 +239,38 @@ function saveToMain() {
 	    const hesapKodu = $('#ckodu').val() || "";
 	    const hiddenField = $('#ara_content #faturaBilgi');
 	    hiddenField.val(hesapKodu);
-	 }
+	}
+	else if (nerden === "fatrapor") {
+		const cekno1 = $('#cekno1').val() || "";
+		const cekno2 = $('#cekno2').val() || "";
+		const durum1 = $('#durum1').val() || "";
+		const durum2 = $('#durum2').val() || "";
+		const vade1 = $('#vade1').val() || "";
+		const vade2 = $('#vade2').val() || "";
+		const ttar1 = $('#ttar1').val() || "";
+		const ttar2 = $('#ttar2').val() || "";
+		const gbor1 = $('#gbor1').val() || "";
+		const gbor2 = $('#gbor2').val() || "";
+		const gozel = $('#gozel').val() || "";
+		const cozel = $('#cozel').val() || "";
+		const gtar1 = $('#gtar1').val() || "";
+		const gtar2 = $('#gtar2').val() || "";
+		const cins1 = $('#cins1').val() || "";
+		const cins2 = $('#cins2').val() || "";
+		const cbor1 = $('#cbor1').val() || "";
+		const cbor2 = $('#cbor2').val() || "";
+		const ches1 = $('#ches1').val() || "";
+		const ches2 = $('#ches2').val() || "";
+		const ctar1 = $('#ctar1').val() || "";
+		const ctar2 = $('#ctar2').val() || "";
+		const hangi_tur = $('#hangi_tur').val() || "";
+		const ghes1 = $('#ghes1').val() || "";
+		const ghes2 = $('#ghes2').val() || "";
+		const degerler = [cekno1, cekno2, durum1, durum2, vade1, vade2, ttar1, ttar2, gbor1, gbor2, gozel, cozel, gtar1, gtar2
+			, cins1, cins2, cbor1, cbor2, ches1, ches2, ctar1, ctar2, hangi_tur, ghes1, ghes2].join(",");
+		const hiddenField = $('#ara_content #fatrapBilgi');
+		hiddenField.val(degerler);
+	}
 
 
 
