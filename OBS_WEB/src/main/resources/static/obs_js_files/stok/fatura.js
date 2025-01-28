@@ -480,9 +480,9 @@ async function fatOku() {
 			document.getElementById("altgrp").value = item.Alt_Grup || ''
 			document.getElementById("ozelkod").value = item.Ozel_Kod || ''
 			document.getElementById("tevoran").value = item.Tevkifat || '0'
-			document.getElementById("tevoran").value
 			document.getElementById("carikod").value = item.Cari_Firma || '';
 			document.getElementById("adreskod").value = item.Adres_Firma || '';
+			document.getElementById("dovizcins").value = item.Doviz || '';
 			break;
 		}
 		document.getElementById("a1").value = data.a1;

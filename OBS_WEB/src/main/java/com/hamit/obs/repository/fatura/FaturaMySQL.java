@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
-import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 
@@ -477,7 +476,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, evrno);
 			stmt.setString(2, evrcins);
-			stmt.setTimestamp(3, Timestamp.valueOf(Tarih_Cevir.dateFormaterSaatli(tarih)));
+			stmt.setTimestamp(3, Timestamp.valueOf(tarih));
 			stmt.setInt(4, depo);
 			stmt.setString(5, urnkodu);
 			stmt.setDouble(6, miktar);
@@ -900,7 +899,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 			stmt.setDouble(8, tutar);
 			stmt.setDouble(9, iskonto);
 			stmt.setDouble(10, kdv);
-			stmt.setTimestamp(11, Timestamp.valueOf(Tarih_Cevir.dateFormaterSaatli(tarih)));
+			stmt.setTimestamp(11, Timestamp.valueOf(tarih));
 			stmt.setString(12, izah);
 			stmt.setString(13, doviz);
 			stmt.setString(14, adrfirma);

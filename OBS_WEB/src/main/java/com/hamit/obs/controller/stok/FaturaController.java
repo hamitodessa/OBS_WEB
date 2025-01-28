@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.yardimci.Formatlama;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
+import com.hamit.obs.custom.yardimci.KusurYuvarla;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.dto.stok.faturaDTO;
@@ -228,6 +229,7 @@ public class FaturaController {
 		try {
 			faturaDTO dto = faturakayitDTO.getFaturaDTO();
 			List<faturadetayDTO> tableData = faturakayitDTO.getTableData();
+			String tarih = Tarih_Cevir.dateFormaterSaatli(dto.getTarih());
 			String mesajlog = "";
 			if (dto.getFatcins().toString().equals("SATIS")) {
 				faturaService.fat_giris_sil(dto.getFisno().trim(), "C");
@@ -285,7 +287,7 @@ public class FaturaController {
 				kdv = row.getKdv();
 				faturaService.fat_kaydet(dto.getFisno().trim(), row.getUkodu().trim(), dpo,fiat , tevk,
 						miktar, gircik, tutar ,isk,kdv,
-						dto.getTarih(), izahat, dto.getDvzcins(),dto.getAdreskod().trim(), dto.getCarikod().trim(), 
+						tarih, izahat, dto.getDvzcins(),dto.getAdreskod().trim(), dto.getCarikod().trim(), 
 						dto.getOzelkod(), kur, "", ana, alt, userrString);
 			}
 			
@@ -350,8 +352,8 @@ public class FaturaController {
 				}
 				mesajlog = "Fatura Stok Kayit  H:"+ har + "   Kod:" + row.getUkodu().trim() + " Miktar:" + miktar + " Fiat:" + row.getFiat() ;
 
-				faturaService.stk_kaydet(dto.getFisno().trim(), "FAT", dto.getTarih(), dpo, row.getUkodu().trim(), miktar, row.getFiat()
-						,(double) Math.round(tutar), kdvlitut, har, izah, ana, alt, dto.getKur(), "",dto.getDvzcins(), dto.getCarikod().trim(),userrString,mesajlog);	
+				faturaService.stk_kaydet(dto.getFisno().trim(), "FAT", tarih, dpo, row.getUkodu().trim(), miktar, row.getFiat()
+						,KusurYuvarla.round(tutar,2),KusurYuvarla.round(kdvlitut,2) , har, izah, ana, alt, dto.getKur(), "",dto.getDvzcins(), dto.getCarikod().trim(),userrString,mesajlog);	
 			}
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
@@ -368,7 +370,7 @@ public class FaturaController {
 		double_1 = (tutar * isk) / 100  ; //' iskonto
 		double_2 = ((tutar - (tutar * isk) / 100) * kdv) / 100 ; //' kdv
 		//'**********Tevkif Islemi **********************************************************
-		double_0 = ((double) Math.round(tutar) - (double) Math.round(double_1)) + ((double) Math.round(double_2) - ((double) Math.round(double_2) / 10) * (double) Math.round(tev));
+		double_0 = ( tutar -  double_1) + ( double_2 - ( double_2 / 10) *  tev);
 		return double_0;
 	}
 	

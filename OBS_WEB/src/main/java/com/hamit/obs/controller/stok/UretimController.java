@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.KusurYuvarla;
+import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.stok.uretimDTO;
 import com.hamit.obs.dto.stok.uretimdetayDTO;
 import com.hamit.obs.dto.stok.uretimkayitDTO;
@@ -187,7 +188,7 @@ public class UretimController {
 		try {
 			uretimDTO dto = uretimkayitDTO.getUretimDTO();
 			List<uretimdetayDTO> tableData = uretimkayitDTO.getTableData();
-			
+			String tarih = Tarih_Cevir.dateFormaterSaatli(dto.getTarih());
 			String mesajlog = "Imalat Stok Silme" ;
 			faturaService.stok_sil(dto.getFisno(), "URE", "C",mesajlog);
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -215,7 +216,7 @@ public class UretimController {
 					izahat = dto.getFisno() + " Nolu Uretimde Cikan " ;
 				
 				mesajlog = "Imalat Stok Cikan Kayit  Kod:" + row.getUkodu() + " Miktar:" + row.getMiktar() + " Fiat:" +  row.getFiat() ;
-				faturaService.stk_kaydet(dto.getFisno(),"URE", dto.getTarih(), dpo, row.getUkodu(),
+				faturaService.stk_kaydet(dto.getFisno(),"URE", tarih, dpo, row.getUkodu(),
 						row.getMiktar() *-1, row.getFiat(), KusurYuvarla.round(row.getTutar() *-1,2), KusurYuvarla.round(row.getTutar() *-1,2), 
 						"C",izahat, ana, alt, 0, "", dto.getDvzcins(), "", userrString,mesajlog);
 			}
@@ -231,7 +232,7 @@ public class UretimController {
 			double fiat =tutar  / (miktar == 0 ? 1 :miktar);
 			
 			mesajlog =  "Imalat Stok Giren Kayit  Kod:" + dto.getFisno()  + " Miktar:" + miktar + " Fiat:" + fiat;
-			faturaService.stk_kaydet(dto.getFisno(),"URE", dto.getTarih(), dpo, dto.getGirenurkodu(),
+			faturaService.stk_kaydet(dto.getFisno(),"URE", tarih, dpo, dto.getGirenurkodu(),
 					dto.getUremiktar(), fiat, KusurYuvarla.round(tutar,2), KusurYuvarla.round(tutar,2), 
 					"G",dto.getFisno().trim() + " Nolu Fis Ile Uretim " , ana, alt, 0, "", dto.getDvzcins(), "", userrString,mesajlog);
 			faturaService.aciklama_sil("URE", dto.getFisno().trim(), "G");
