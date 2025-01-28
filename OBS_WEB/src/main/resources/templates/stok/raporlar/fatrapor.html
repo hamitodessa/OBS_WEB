@@ -79,8 +79,7 @@ th, td {
 		<div style="display: flex; align-items: center;">
 			<button class="btn btn-primary" type="button" id="fatrapyenileButton"
 				style="margin-left: 10px;" onclick="openFirstModal('fatrapor')">Filtre</button>
-			<select id="fatrapreportFormat" class="form-control"
-				style="width: 150px; margin-left: 10px;"
+			<select id="fatrapreportFormat" class="form-control" style="width: 150px; margin-left: 10px;"
 				onchange="fatrapdownloadReport(this.value)" disabled>
 				<option value="" disabled selected>Excel Indir</option>
 				<option value="xlsx">Excel (XLSX)</option>
@@ -114,7 +113,9 @@ th, td {
 			</table>
 		</div>
 	</div>
-<input type="hidden" id="fatrapBilgi" name="fatrapBilgi" value="initialValue">
+<input type="hidden" id="fatrapBilgi" name="fatrapBilgi" value="" />
 
-<script src="/obs_js_files/stok/fatrapor.js"></script>
+<script src="/obs_js_files/stok/raporlar/fatrapor.js"></script>
 <div th:replace="~{modal/stok/fatraporfiltre :: modalfatrap}"></div>
+<div th:replace="~{modal/yenihsppln :: secondModal}"></div>
+<div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

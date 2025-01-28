@@ -1,7 +1,9 @@
 package com.hamit.obs.controller.stok;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,4 +63,30 @@ public class StokController {
 		}
 		return response;
 	}
+	
+	@PostMapping("stok/anadepo")
+	@ResponseBody
+	public Map<String, Object>  anadepo() {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> anaKodlari = faturaService.stk_kod_degisken_oku("ANA_GRUP", "AGID_Y", "ANA_GRUP_DEGISKEN") ;
+			Map<String, Object> anaDeger = new HashMap<>();
+			anaDeger.put("ANA_GRUP", ""); 
+			anaKodlari.add(0, anaDeger);
+			response.put("anaKodlari", (anaKodlari != null) ? anaKodlari : new ArrayList<>());
+
+			List<Map<String, Object>> depoKodlari = faturaService.stk_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
+			Map<String, Object> depoDeger = new HashMap<>();
+			depoDeger.put("DEPO", ""); 
+			depoKodlari.add(0, depoDeger);
+			response.put("depoKodlari", (depoKodlari != null) ? depoKodlari : new ArrayList<>());
+			response.put("errorMessage","");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage()); // Hata mesajı
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
 }

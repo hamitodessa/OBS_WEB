@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.dto.stok.urunDTO;
+import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 
 public interface IFaturaDatabase {
 
@@ -62,4 +63,5 @@ public interface IFaturaDatabase {
 	String zayi_son_bordro_no_al(ConnectionDetails faturaConnDetails);
 	int zayi_fisno_al(ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> zayi_oku(String eno,String cins,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO,ConnectionDetails faturaConnDetails);
 }

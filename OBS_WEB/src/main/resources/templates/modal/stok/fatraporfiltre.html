@@ -49,8 +49,7 @@
 					<div style="position: relative; width: 150px;">
 						<select class="form-control cins_bold"
 							style="width: 100%; padding-right: 30px;" id="anagrp" onchange="anagrpChanged(this)">
-							<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}"
-								th:text="${kod.ANA_GRUP}"></option>
+							
 						</select> 
 						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 					</div>
@@ -67,7 +66,7 @@
 						value="2100-12-31"> 
 					<span style="padding-left: 5px;"></span>
 					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Al Grup</span>
+						<span class="input-group-text" style="width: 130px;">Alt Grup</span>
 					</div>
 					<span style="padding-left: 5px;"></span>
 					<div style="position: relative; width: 150px;">
@@ -92,7 +91,7 @@
 					<span style="padding-left: 5px;"></span>
 					<div style="position: relative; width: 150px;">
 						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="depo">
-							<option th:each="kod : ${depoKodlari}" th:value="${kod.DEPO}" th:text="${kod.DEPO}"></option>
+							
 						</select> 
 						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 					</div>
@@ -126,11 +125,12 @@
 						<span class="input-group-text" style="width: 130px;">Ilk Son Urun kodu</span>
 					</div>
 					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="ukod1" style="max-width: 120px;" class="form-control">
+					<input type="text" id="ukod1" style="max-width: 120px;" class="form-control"
+					ondblclick="openurunkodlariModal('ukod1', 'fatrapor','ukodukod')">
 					<span style="padding-left: 5px;"></span> 
 					<input type="text" id="ukod2" style="max-width: 120px;"
 						value="ZZZZZZZZZZZZ" class="form-control"
-						ondblclick="openSecondModal('ches2')">
+						ondblclick="openurunkodlariModal('ukod2', 'fatrapor','ukodukod')">
 				</div>
 				<div class="input-group" style="padding: 2px;">
 					<div class="input-group-prepend">
@@ -138,13 +138,10 @@
 							Son Tevkifat</span>
 					</div>
 
-					<span style="padding-left: 5px;"></span> <input type="text"
-						id="tev1" style="max-width: 120px;" aria-label="Ilk Cins"
-						class="form-control" ondblclick="openSecondModal('ches1')">
-					<span style="padding-left: 5px;"></span> <input type="text"
-						id="tev2" style="max-width: 120px;" aria-label="Son Cins"
-						value="ZZZZZZZZZZZZ" class="form-control"
-						ondblclick="openSecondModal('ches2')">
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="tev1" style="max-width: 120px;" class="form-control" >
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="tev2" style="max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control">
 				</div>
 
 				<div class="input-group" style="padding: 2px;">
@@ -153,25 +150,20 @@
 							Son Ozel kod</span>
 					</div>
 
-					<span style="padding-left: 5px;"></span> <input type="text"
-						id="okod1" style="max-width: 120px;" class="form-control"
-						ondblclick="openSecondModal('ches1')"> <span
-						style="padding-left: 5px;"></span> <input type="text" id="okod2"
-						style="max-width: 120px;" value="ZZZZZZZZZZZZ"
-						class="form-control" ondblclick="openSecondModal('ches2')">
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="okod1" style="max-width: 120px;" class="form-control" > 
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="okod2" style="max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control" >
 					<span style="padding-left: 5px;"></span>
 					<div class="input-group-prepend">
 						<span class="input-group-text" style="width: 130px;">Gruplama</span>
 					</div>
 					<span style="padding-left: 5px;"></span>
 					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold"
-							style="width: 100%; padding-right: 30px;" id="gruplama">
-							<option value=""></option>
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="gruplama">
 							<option value="fno">Fatura No</option>
 							<option value="fkodu">Firma Kodu</option>
 							<option value="fnotar">Fatura_No_Tarih</option>
-
 						</select> <span
 							style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
 							▼ </span>
@@ -180,27 +172,21 @@
 
 				<div class="input-group" style="padding: 2px;">
 					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Ilk
-							Son Doviz</span>
+						<span class="input-group-text" style="width: 130px;">Ilk Son Doviz</span>
 					</div>
-					<span style="padding-left: 5px;"></span> <input type="text"
-						id="dvz1" style="max-width: 120px;" class="form-control"
-						ondblclick="openSecondModal('ghes1')"> <span
-						style="padding-left: 5px;"></span> <input type="text" id="dvz2"
-						style="max-width: 120px;" value="ZZZZZZZZZZ" class="form-control"
-						ondblclick="openSecondModal('ghes2')"> <span
-						style="padding-left: 5px;"></span>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="dvz1" style="max-width: 120px;" class="form-control" > 
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="dvz2" style="max-width: 120px;" value="ZZZZZZZZZZ" class="form-control" > 
+					<span style="padding-left: 5px;"></span>
 					<div class="input-group-prepend">
 						<span class="input-group-text" style="width: 130px;">Turu</span>
 					</div>
 					<span style="padding-left: 5px;"></span>
 					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold"
-							style="width: 100%; padding-right: 30px;" id="caradr">
-							<option value=""></option>
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="caradr">
 							<option value="cfirma">Cari_Firma</option>
 							<option value="afirma">Adres_Firma</option>
-
 						</select> <span
 							style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
 							▼ </span>

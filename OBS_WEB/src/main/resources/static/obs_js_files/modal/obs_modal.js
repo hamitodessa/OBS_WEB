@@ -24,6 +24,9 @@ function openFirstModal(nerdenGeldi) {
 	if (nerden === "tahsilatrapor") {
 		opentahrapModal(modal);
 	}
+	else 	if (nerden === "fatrapor") {
+	    openfatrapModal(modal);
+	  }
 	else {
 		$(modal).modal('show');
 	}
@@ -241,33 +244,30 @@ function saveToMain() {
 	    hiddenField.val(hesapKodu);
 	}
 	else if (nerden === "fatrapor") {
-		const cekno1 = $('#cekno1').val() || "";
-		const cekno2 = $('#cekno2').val() || "";
-		const durum1 = $('#durum1').val() || "";
-		const durum2 = $('#durum2').val() || "";
-		const vade1 = $('#vade1').val() || "";
-		const vade2 = $('#vade2').val() || "";
-		const ttar1 = $('#ttar1').val() || "";
-		const ttar2 = $('#ttar2').val() || "";
-		const gbor1 = $('#gbor1').val() || "";
-		const gbor2 = $('#gbor2').val() || "";
-		const gozel = $('#gozel').val() || "";
-		const cozel = $('#cozel').val() || "";
-		const gtar1 = $('#gtar1').val() || "";
-		const gtar2 = $('#gtar2').val() || "";
-		const cins1 = $('#cins1').val() || "";
-		const cins2 = $('#cins2').val() || "";
-		const cbor1 = $('#cbor1').val() || "";
-		const cbor2 = $('#cbor2').val() || "";
-		const ches1 = $('#ches1').val() || "";
-		const ches2 = $('#ches2').val() || "";
-		const ctar1 = $('#ctar1').val() || "";
-		const ctar2 = $('#ctar2').val() || "";
-		const hangi_tur = $('#hangi_tur').val() || "";
-		const ghes1 = $('#ghes1').val() || "";
-		const ghes2 = $('#ghes2').val() || "";
-		const degerler = [cekno1, cekno2, durum1, durum2, vade1, vade2, ttar1, ttar2, gbor1, gbor2, gozel, cozel, gtar1, gtar2
-			, cins1, cins2, cbor1, cbor2, ches1, ches2, ctar1, ctar2, hangi_tur, ghes1, ghes2].join(",");
+		const fatno1 = $('#fatno1').val() || "";
+		const fatno2 = $('#fatno2').val() || "";
+		const anagrp = $('#anagrp').val() || "";
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const ckod1 = $('#ckod1').val() || "";
+		const ckod2 = $('#ckod2').val() || "";
+		const depo = $('#depo').val() || "";
+		const adr1 = $('#adr1').val() || "";
+		const adr2 = $('#adr2').val() || "";
+		const turu = $('#turu').val() || "";
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const tev1 = $('#tev1').val() || "";
+		const tev2 = $('#tev2').val() || "";
+		const okod1 = $('#okod1').val() || "";
+		const okod2 = $('#okod2').val() || "";
+		const gruplama = $('#gruplama').val() || "";
+		const dvz1 = $('#dvz1').val() || "";
+		const dvz2 = $('#dvz2').val() || "";
+		const caradr = $('#caradr').val() || "";
+		const degerler = [fatno1, fatno2, anagrp,tar1,tar2,altgrp,ckod1,ckod2,depo,adr1,adr2,turu,ukod1,ukod2,tev1,tev2,okod1,okod2
+			,gruplama,dvz1,dvz2,caradr].join(",");
 		const hiddenField = $('#ara_content #fatrapBilgi');
 		hiddenField.val(degerler);
 	}
@@ -331,6 +331,13 @@ function saveToMain() {
 	else if (nerden === "fatura") {
 	    fatcariIsle();
 	}
+	else if (nerden === "fatrapor") {
+		fatfetchTableData();
+		const mailButton = document.getElementById("fatrapmailAt");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("fatrapreportFormat");
+		reportFormat.disabled = false;
+	}
 }
 
 async function opentahrapModal(modal) {
@@ -367,6 +374,55 @@ async function opentahrapModal(modal) {
 			option.value = item.BANKA;
 			option.textContent = item.BANKA;
 			posSelect.appendChild(option);
+		});
+	} catch (error) {
+		const modalError = document.getElementById("errorDiv");
+		modalError.style.display = "block";
+		modalError.innerText = `Bir hata oluştu: ${error.message}`;
+	} finally {
+		document.body.style.cursor = "default";
+	}
+}
+
+async function openfatrapModal(modal) {
+	$(modal).modal('show');
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck("stok/anadepo", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const ana = response.anaKodlari;
+		const dpo = response.depoKodlari;
+		const anaSelect = document.getElementById("anagrp");
+		const dpoSelect = document.getElementById("depo");
+		anaSelect.innerHTML = ""; 
+		dpoSelect.innerHTML = ""; 
+
+		const optionbos = document.createElement("option");
+		optionbos.value = "";
+		optionbos.textContent = "";
+		anaSelect.appendChild(optionbos);
+		ana.forEach(item => {
+			const option = document.createElement("option");
+			option.value = item.ANA_GRUP;
+			option.textContent = item.ANA_GRUP;
+			anaSelect.appendChild(option);
+		});
+
+		optionbos.value = "";
+		optionbos.textContent = "";
+		dpoSelect.appendChild(optionbos);
+		dpo.forEach(item => {
+			const option = document.createElement("option");
+			option.value = item.DEPO;
+			option.textContent = item.DEPO;
+			dpoSelect.appendChild(option);
 		});
 	} catch (error) {
 		const modalError = document.getElementById("errorDiv");

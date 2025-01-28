@@ -18,6 +18,7 @@ import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.urunDTO;
+import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
 @Component
@@ -1067,5 +1068,38 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+		String sql = " SELECT Fatura_No ,IIF(Gir_Cik = 'C','Satis','Alis') as Hareket,Tarih ,Cari_Firma ,Adres_Firma,Doviz , sum(Miktar) as Miktar ,sum(Fiat * Miktar) as Tutar, " +
+				" SUM(Fiat * Miktar) - sum(((Fiat * Miktar) * Iskonto)/100) as Iskontolu_Tutar " +
+				" FROM FATURA WITH (INDEX (IX_FATURA)) " +
+				" WHERE FATURA.Fatura_No >= N'" + fatraporDTO.getFatno1() + "' AND  FATURA.Fatura_No <= N'" + fatraporDTO.getFatno2() + "'" +
+				" AND FATURA.Tarih >= '" + fatraporDTO.getTar1() + "' AND  FATURA.Tarih <= '" + fatraporDTO.getTar2() + " 23:59:59.998'" +
+				" AND FATURA.Cari_Firma >= N'" + fatraporDTO.getCkod1() + "' AND  FATURA.Cari_Firma <= N'" + fatraporDTO.getCkod2() + "' " +
+				" AND FATURA.Adres_Firma >= N'" + fatraporDTO.getAdr1() + "' AND  FATURA.Adres_Firma <= N'" + fatraporDTO.getAdr2() + "' " +
+				" AND FATURA.Kodu >= N'" + fatraporDTO.getUkod1() + "' AND FATURA.Kodu <= N'" + fatraporDTO.getUkod2() + "' " +
+				" AND FATURA.Doviz >= N'" + fatraporDTO.getDvz1() + "' AND FATURA.Doviz <= N'" + fatraporDTO.getDvz2() + "' " +
+				" AND FATURA.Tevkifat >= '" + fatraporDTO.getTev1() + "' AND FATURA.Tevkifat <= '" + fatraporDTO.getTev2() + "' " +
+				" AND FATURA.Ozel_Kod >= N'" + fatraporDTO.getOkod1() + "' AND FATURA.Ozel_Kod <= N'" + fatraporDTO.getOkod2() + "' " +
+				" AND FATURA.Ana_Grup " + fatraporDTO.getAnaint() +
+				" AND FATURA.Alt_Grup " + fatraporDTO.getAltint() +
+				" AND FATURA.Depo " + fatraporDTO.getDpoint() +
+				" AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'" +
+				" GROUP BY Fatura_No,Gir_Cik,Tarih ,Cari_Firma,Adres_Firma,Doviz  " +
+				" ORDER BY  Fatura_No";
+		System.out.println(sql);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
 	}
 }
