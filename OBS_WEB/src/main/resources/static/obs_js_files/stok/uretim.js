@@ -605,8 +605,8 @@ function prepareureKayit() {
 
 		aciklama: document.getElementById("aciklama").value || "",
 		dvzcins: document.getElementById("dvzcins").value || "",
-		uremiktar: parseLocaleNumber(document.getElementById("uretmiktar")?.value),
-		toptutar: parseLocaleNumber(document.getElementById("totalTutar")?.value),
+		uremiktar: parseLocaleNumber(document.getElementById("uretmiktar")?.value || 0),
+		toptutar: parseLocaleNumber(document.getElementById("totalTutar")?.value || 0),
 
 	};
 	tableData = getTableData();
@@ -625,9 +625,9 @@ function getTableData() {
 				ukodu: firstColumnValue,
 				izahat: cells[4]?.querySelector('input')?.value || "",
 				depo: cells[5]?.querySelector('select')?.value || "",
-				miktar: parseLocaleNumber(cells[6]?.querySelector('input')?.value),
-				fiat: parseLocaleNumber(cells[8]?.querySelector('input')?.value),
-				tutar: parseLocaleNumber(cells[9]?.querySelector('input')?.value),
+				miktar: parseLocaleNumber(cells[6]?.querySelector('input')?.value || 0),
+				fiat: parseLocaleNumber(cells[8]?.querySelector('input')?.value || 0),
+				tutar: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
 			};
 			data.push(rowData);
 		}

@@ -388,7 +388,8 @@ function clearInputs() {
 
 	document.getElementById("uygulananfiat").selectedIndex = 0;
 	document.getElementById("adreskod").value = '';
-	document.getElementById("doviz").value = 'TL';
+
+	document.getElementById("dovizcins").value = 'TL';
 	document.getElementById("kur").value = '0.0000';
 
 	document.getElementById("not1").value = '';
@@ -580,12 +581,12 @@ async function fatYoket() {
 	if (["0", ""].includes(fisNoInput.value)) {
 		return;
 	}
-	const confirmDelete = confirm("Bu Uretim fisi silinecek ?");
+	const confirmDelete = confirm("Bu Fatura silinecek ?");
 	if (!confirmDelete) {
 		return;
 	}
 	document.body.style.cursor = "wait";
-	const $silButton = $('#uresilButton');
+	const $silButton = $('#fatsilButton');
 	$silButton.prop('disabled', true).text('Siliniyor...');
 	try {
 		const response = await fetchWithSessionCheck("stok/fatYoket", {
@@ -622,8 +623,8 @@ function prepareureKayit() {
 		carikod: document.getElementById("carikod").value || "",
 		adreskod: document.getElementById("adreskod").value || "",
 
-		dvzcins: document.getElementById("doviz").value || "",
-		kur: document.getElementById("kur").value || "",
+		dvzcins: document.getElementById("dovizcins").value || "",
+		kur: parseLocaleNumber(document.getElementById("kur").value) || 0,
 		tevoran: parseLocaleNumber(document.getElementById("tevoran").value) || 0,
 
 		not1: document.getElementById("not1").value || "",
@@ -674,7 +675,7 @@ async function fatKayit() {
 	}
 	const faturakayitDTO = prepareureKayit();
 	const errorDiv = document.getElementById('errorDiv');
-	const $kaydetButton = $('#urekaydetButton');
+	const $kaydetButton = $('#fatkaydetButton');
 	$kaydetButton.prop('disabled', true).text('İşleniyor...');
 
 	document.body.style.cursor = 'wait';
@@ -711,6 +712,9 @@ async function fatcariIsle() {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
+	const $carkaydetButton = $('#carkaydetButton');
+	$carkaydetButton.prop('disabled', true).text('İşleniyor...');
+
 	const faturaDTO = {
 		fisno: document.getElementById("fisno").value || "",
 		tarih: document.getElementById("fisTarih").value || "",
@@ -739,6 +743,7 @@ async function fatcariIsle() {
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
 		errorDiv.style.display = 'block';
 	} finally {
+		$carkaydetButton.prop('disabled', false).text('Cari Kaydet');
 		document.body.style.cursor = 'default';
 	}
 }
