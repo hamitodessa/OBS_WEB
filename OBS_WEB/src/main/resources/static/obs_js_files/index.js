@@ -99,5 +99,7 @@ $(document).ready(function () {
 			stokBaslik();
 			fetchkod();
 		},
+		"/stok/imarapor": stokBaslik,
+		"/stok/fatrapor": stokBaslik,
 	}
 });

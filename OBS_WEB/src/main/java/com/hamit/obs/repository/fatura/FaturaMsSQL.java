@@ -19,6 +19,7 @@ import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
+import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
 @Component
@@ -1196,6 +1197,41 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'" +
 				" GROUP BY " + fatraporDTO.getUc() + "" +
 				" ORDER BY  " + fatraporDTO.getUc() + "";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> imalat_rapor(imaraporDTO imaraporDTO, ConnectionDetails faturaConnDetails) {
+		String sql = "SELECT Evrak_No, Tarih,Urun_Kodu, Adi , " +
+				" Miktar,  Birim ,(Miktar * Mal.Agirlik) as Agirlik ," +
+				" (SELECT DEPO from DEPO_DEGISKEN WHERE DPID_Y = STOK.DEPO ) as Depo , " +
+				" (SELECT ANA_GRUP from ANA_GRUP_DEGISKEN WHERE AGID_Y = STOK.Ana_Grup ) as Ana_Grup , " +
+				" (SELECT ALT_GRUP from ALT_GRUP_DEGISKEN WHERE ALID_Y = STOK.Alt_Grup ) as Alt_Grup  , " +
+				" Barkod  , " +
+				" Recete ,STOK.[USER]" +
+				" FROM STOK WITH (INDEX (IX_STOK)) ,MAL WITH (INDEX (IX_MAL))" +
+				" WHERE Evrak_Cins = 'URE' " +
+				" AND MAL.Ana_Grup " + imaraporDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + imaraporDTO.getUraltgrp() +
+				" AND Hareket = 'G' " +
+				" AND Stok.Urun_Kodu = MAL.Kodu  " +
+				" AND STOK.Evrak_No >= '" + imaraporDTO.getEvrno1() + "' AND  STOK.Evrak_No <= '" + imaraporDTO.getEvrno2() + "'" +
+				" AND Tarih >= '" + imaraporDTO.getTar1() + "' AND  Tarih <= '" + imaraporDTO.getTar2() + " 23:59:59.998'" +
+				" AND STOK.Urun_Kodu >= N'" + imaraporDTO.getUkod1() + "' AND  STOK.Urun_Kodu <= N'" + imaraporDTO.getUkod2() + "' " +
+				" AND Recete >= N'" + imaraporDTO.getRec1() + "' AND Recete <= N'" + imaraporDTO.getRec2() + "' " +
+				" AND Barkod >= N'" + imaraporDTO.getBkod1() + "' AND Barkod <= N'" + imaraporDTO.getBkod2() + "' " +
+				" AND STOK.Ana_Grup " + imaraporDTO.getAnagrp() +
+				" AND STOK.Alt_Grup " + imaraporDTO.getAltgrp() +
+				" AND STOK.Depo " + imaraporDTO.getDepo() +
+				" ORDER BY Evrak_No ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

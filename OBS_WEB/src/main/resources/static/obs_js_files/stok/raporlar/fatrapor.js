@@ -301,3 +301,54 @@ function updateTableHeadersfkodu(headers) {
 	});
 	thead.appendChild(tr);
 }
+
+
+async function openfatrapModal(modal) {
+	$(modal).modal('show');
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck("stok/anadepo", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const ana = response.anaKodlari;
+		const dpo = response.depoKodlari;
+		const anaSelect = document.getElementById("anagrp");
+		const dpoSelect = document.getElementById("depo");
+		anaSelect.innerHTML = ""; 
+		dpoSelect.innerHTML = ""; 
+
+		const optionbos = document.createElement("option");
+		optionbos.value = "";
+		optionbos.textContent = "";
+		anaSelect.appendChild(optionbos);
+		ana.forEach(item => {
+			const option = document.createElement("option");
+			option.value = item.ANA_GRUP;
+			option.textContent = item.ANA_GRUP;
+			anaSelect.appendChild(option);
+		});
+
+		optionbos.value = "";
+		optionbos.textContent = "";
+		dpoSelect.appendChild(optionbos);
+		dpo.forEach(item => {
+			const option = document.createElement("option");
+			option.value = item.DEPO;
+			option.textContent = item.DEPO;
+			dpoSelect.appendChild(option);
+		});
+	} catch (error) {
+		const modalError = document.getElementById("errorDiv");
+		modalError.style.display = "block";
+		modalError.innerText = `Bir hata oluştu: ${error.message}`;
+	} finally {
+		document.body.style.cursor = "default";
+	}
+}
+

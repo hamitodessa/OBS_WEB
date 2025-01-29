@@ -274,6 +274,26 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #fatrapBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "imarapor") {
+		const evrno1 = $('#evrno1').val() || "";
+		const evrno2 = $('#evrno2').val() || "";
+		const uranagrp = $('#uranagrp').val() || "";
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const uraltgrp = $('#uraltgrp').val() || "";
+		const bkod1 = $('#bkod1').val() || "";
+		const bkod2 = $('#bkod2').val() || "";
+		const depo = $('#depo').val() || "";
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const rec1 = $('#rec1').val() || "";
+		const rec2 = $('#rec2').val() || "";
+		const anagrp = $('#anagrp').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const degerler = [evrno1, evrno2, uranagrp,tar1,tar2,uraltgrp,bkod1,bkod2,depo,ukod1,ukod2,rec1,rec2,anagrp,altgrp].join(",");
+		const hiddenField = $('#ara_content #imarapBilgi');
+		hiddenField.val(degerler);
+	}
 
 
 
@@ -350,151 +370,3 @@ function saveToMain() {
 	}
 }
 
-async function opentahrapModal(modal) {
-	$(modal).modal('show');
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("cari/tahsilatrappos", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const result = response;
-		const data = result.data; // Gelen liste
-		const posSelect = document.getElementById("pos");
-		posSelect.innerHTML = ""; // Önce eski seçenekleri temizle
-		if (data.length === 0) {
-			const modalError = document.getElementById("errorDiv");
-			if (modalError) {
-				modalError.style.display = "block";
-				modalError.innerText = "Hiç veri bulunamadı.";
-			}
-			return;
-		}
-		const optionbos = document.createElement("option");
-		optionbos.value = "";
-		optionbos.textContent = "";
-		posSelect.appendChild(optionbos);
-		data.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.BANKA;
-			option.textContent = item.BANKA;
-			posSelect.appendChild(option);
-		});
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
-
-async function openfatrapModal(modal) {
-	$(modal).modal('show');
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("stok/anadepo", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const ana = response.anaKodlari;
-		const dpo = response.depoKodlari;
-		const anaSelect = document.getElementById("anagrp");
-		const dpoSelect = document.getElementById("depo");
-		anaSelect.innerHTML = ""; 
-		dpoSelect.innerHTML = ""; 
-
-		const optionbos = document.createElement("option");
-		optionbos.value = "";
-		optionbos.textContent = "";
-		anaSelect.appendChild(optionbos);
-		ana.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.ANA_GRUP;
-			option.textContent = item.ANA_GRUP;
-			anaSelect.appendChild(option);
-		});
-
-		optionbos.value = "";
-		optionbos.textContent = "";
-		dpoSelect.appendChild(optionbos);
-		dpo.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.DEPO;
-			option.textContent = item.DEPO;
-			dpoSelect.appendChild(option);
-		});
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
-
-async function openimarapModal(modal) {
-    $(modal).modal('show');
-    document.body.style.cursor = "wait";
-    
-    try {
-        const response = await fetchWithSessionCheck("stok/anadepo", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (response.errorMessage) {
-            throw new Error(response.errorMessage);
-        }
-
-        const ana = response.anaKodlari;
-		const dpo = response.depoKodlari;
-        const uranaSelect = document.getElementById("uranagrp");
-        const anaSelect = document.getElementById("anagrp");
-		const dpoSelect = document.getElementById("depo");
-        // Seçenekleri temizle
-        anaSelect.innerHTML = ""; 
-        uranaSelect.innerHTML = ""; 
-		dpoSelect.innerHTML = ""; 
-
- 
-        // Gelen veriyi selectlere ekle
-        ana.forEach(item => {
-            const optionAna = document.createElement("option");
-            optionAna.value = item.ANA_GRUP;
-            optionAna.textContent = item.ANA_GRUP;
-            anaSelect.appendChild(optionAna);
-
-            const optionUrana = document.createElement("option");
-            optionUrana.value = item.ANA_GRUP;
-            optionUrana.textContent = item.ANA_GRUP;
-            uranaSelect.appendChild(optionUrana);
-        });
-		
-		dpo.forEach(item => {
-		const option = document.createElement("option");
-		option.value = item.DEPO;
-		option.textContent = item.DEPO;
-			dpoSelect.appendChild(option);
-				});
-
-    } catch (error) {
-        const modalError = document.getElementById("errorDiv");
-        modalError.style.display = "block";
-        modalError.innerText = `Bir hata oluştu: ${error.message}`;
-    } finally {
-        document.body.style.cursor = "default";
-    }
-}

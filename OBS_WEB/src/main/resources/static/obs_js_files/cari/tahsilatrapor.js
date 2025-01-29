@@ -160,3 +160,47 @@ async function tahrapfetchTableData() {
 		document.body.style.cursor = "default";
 	}
 }
+
+async function opentahrapModal(modal) {
+	$(modal).modal('show');
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck("cari/tahsilatrappos", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const result = response;
+		const data = result.data; // Gelen liste
+		const posSelect = document.getElementById("pos");
+		posSelect.innerHTML = ""; // Önce eski seçenekleri temizle
+		if (data.length === 0) {
+			const modalError = document.getElementById("errorDiv");
+			if (modalError) {
+				modalError.style.display = "block";
+				modalError.innerText = "Hiç veri bulunamadı.";
+			}
+			return;
+		}
+		const optionbos = document.createElement("option");
+		optionbos.value = "";
+		optionbos.textContent = "";
+		posSelect.appendChild(optionbos);
+		data.forEach(item => {
+			const option = document.createElement("option");
+			option.value = item.BANKA;
+			option.textContent = item.BANKA;
+			posSelect.appendChild(option);
+		});
+	} catch (error) {
+		const modalError = document.getElementById("errorDiv");
+		modalError.style.display = "block";
+		modalError.innerText = `Bir hata oluştu: ${error.message}`;
+	} finally {
+		document.body.style.cursor = "default";
+	}
+}
