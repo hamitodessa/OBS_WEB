@@ -1,91 +1,105 @@
 async function anagrpChanged(anagrpElement) {
-  const anagrup = anagrpElement.value;
-  const errorDiv = document.getElementById("errorDiv");
-  const selectElement = document.getElementById("altgrp");
-  selectElement.innerHTML = '';
-  if (anagrup === "") {
-    selectElement.disabled = true;
-    return;
-  }
-  document.body.style.cursor = "wait";
-  errorDiv.style.display = "none";
-  errorDiv.innerText = "";
-  try {
-    const response = await fetchWithSessionCheck("stok/altgrup", {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ anagrup: anagrup }),
-    });
-    if (response.errorMessage) {
-      throw new Error(response.errorMessage);
-    }
-    response.altKodlari.forEach(kod => {
-      const option = document.createElement("option");
-      option.value = kod.ALT_GRUP;
-      option.textContent = kod.ALT_GRUP;
-      selectElement.appendChild(option);
-    });
-    selectElement.disabled = selectElement.options.length === 0;
-  } catch (error) {
-    selectElement.disabled = true;
-    errorDiv.style.display = "block";
-    errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-  } finally {
-    document.body.style.cursor = "default";
-  }
+	const anagrup = anagrpElement.value;
+	const errorDiv = document.getElementById("errorDiv");
+	const selectElement = document.getElementById("altgrp");
+	selectElement.innerHTML = '';
+	if (anagrup === "") {
+		selectElement.disabled = true;
+		return;
+	}
+	document.body.style.cursor = "wait";
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+	try {
+		const response = await fetchWithSessionCheck("stok/altgrup", {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: new URLSearchParams({ anagrup: anagrup }),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		response.altKodlari.forEach(kod => {
+			const option = document.createElement("option");
+			option.value = kod.ALT_GRUP;
+			option.textContent = kod.ALT_GRUP;
+			selectElement.appendChild(option);
+		});
+		selectElement.disabled = selectElement.options.length === 0;
+	} catch (error) {
+		selectElement.disabled = true;
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+	}
 }
 
 async function fatfetchTableData() {
-  const hiddenFieldValue = $('#fatrapBilgi').val();
-  const parsedValues = hiddenFieldValue.split(",");
-  const fatraporDTO = {
-    fatno1: parsedValues[0],
-    fatno2: parsedValues[1],
-    anagrp: parsedValues[2],
-    tar1: parsedValues[3],
-    tar2: parsedValues[4],
-    altgrp: parsedValues[5],
-    ckod1: parsedValues[6],
-    ckod2: parsedValues[7],
-    depo: parsedValues[8],
-    adr1: parsedValues[9],
-    adr2: parsedValues[10],
-    turu: parsedValues[11],
-    ukod1: parsedValues[12],
-    ukod2: parsedValues[13],
-    tev1: parsedValues[14],
-    tev2: parsedValues[15],
-    okod1: parsedValues[16],
-    okod2: parsedValues[17],
-    gruplama: parsedValues[18],
-    dvz1: parsedValues[19],
-    dvz2: parsedValues[20],
-    caradr: parsedValues[21],
-  };
-  const errorDiv = document.getElementById("errorDiv");
-  document.body.style.cursor = "wait";
-  const $yenileButton = $('#fatrapyenileButton');
-  $yenileButton.prop('disabled', true).text('İşleniyor...');
-  const mainTableBody = document.getElementById("mainTableBody");
-  mainTableBody.innerHTML = "";
+	const hiddenFieldValue = $('#fatrapBilgi').val();
+	const parsedValues = hiddenFieldValue.split(",");
+	const fatraporDTO = {
+		fatno1: parsedValues[0],
+		fatno2: parsedValues[1],
+		anagrp: parsedValues[2],
+		tar1: parsedValues[3],
+		tar2: parsedValues[4],
+		altgrp: parsedValues[5],
+		ckod1: parsedValues[6],
+		ckod2: parsedValues[7],
+		depo: parsedValues[8],
+		adr1: parsedValues[9],
+		adr2: parsedValues[10],
+		turu: parsedValues[11],
+		ukod1: parsedValues[12],
+		ukod2: parsedValues[13],
+		tev1: parsedValues[14],
+		tev2: parsedValues[15],
+		okod1: parsedValues[16],
+		okod2: parsedValues[17],
+		gruplama: parsedValues[18],
+		dvz1: parsedValues[19],
+		dvz2: parsedValues[20],
+		caradr: parsedValues[21],
+	};
+	const errorDiv = document.getElementById("errorDiv");
+	document.body.style.cursor = "wait";
+	const $yenileButton = $('#fatrapyenileButton');
+	$yenileButton.prop('disabled', true).text('İşleniyor...');
+	const mainTableBody = document.getElementById("mainTableBody");
+	mainTableBody.innerHTML = "";
 
-  try {
-    const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(fatraporDTO),
-    });
-    data = response;
-    let sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "MIKTAR", "TUTAR", "ISK. TUTAR"];
-    updateTableHeaders(sqlHeaders);
+	try {
+		const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(fatraporDTO),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		data = response;
+		let sqlHeaders = "";
 
-    data.data.forEach(rowData => {
-      const row = document.createElement('tr');
-      row.classList.add('expandable');
-      row.classList.add("table-row-height");
-      row.innerHTML = `
+		if (response.raporturu === 'fno') {
+			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "MIKTAR", "TUTAR", "ISK. TUTAR"];
+			updateTableHeaders(sqlHeaders);
+		} else if (response.raporturu === 'fkodu') {
+			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISKONTOLU_TUTAR", "KDV_TUTAR", "TOPLAM_TUTAR"];
+			updateTableHeadersfkodu(sqlHeaders);
+		} else if (response.raporturu === 'fnotar') {
+			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISKONTOLU_TUTAR", "KDV_TUTAR", "TOPLAM_TUTAR"];
+			updateTableHeadersfkodu(sqlHeaders);
+		}
+
+		data.data.forEach(rowData => {
+			const row = document.createElement('tr');
+			row.classList.add('expandable');
+			row.classList.add("table-row-height");
+			if (response.raporturu === 'fno') {
+				row.innerHTML = `
                     <td class="toggle-button">+</td>
                     <td>${rowData.Fatura_No || ''}</td>
                     <td>${rowData.Hareket || ''}</td>
@@ -97,22 +111,52 @@ async function fatfetchTableData() {
                     <td class="double-column">${formatNumber3(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
                 `;
-      mainTableBody.appendChild(row);
-      const detailsRow = document.createElement('tr');
-      detailsRow.classList.add('details-row');
-      detailsRow.innerHTML = `<td colspan="12"></td>`;
-      mainTableBody.appendChild(detailsRow);
-      row.addEventListener('click', async () => {
-        const toggleButton = row.querySelector('.toggle-button');
-        const isVisible = detailsRow.style.display === 'table-row';
-        detailsRow.style.display = isVisible ? 'none' : 'table-row';
-        toggleButton.textContent = isVisible ? '+' : '-';
-        document.body.style.cursor = "wait";
-        if (!isVisible) {
-          try {
-            const details = await fetchDetails(rowData.Fatura_No, rowData.Hareket);
-            const data = details.data;
-            let detailsTable = `
+			}
+			else if (response.raporturu === 'fkodu') {
+				row.innerHTML = `
+                    
+                    <td>${rowData.Fatura_No || ''}</td>
+                    <td>${rowData.Hareket || ''}</td>
+                    <td>${rowData.Unvan || ''}</td>
+                    <td>${rowData.Vergi_No || ''}</td>
+                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
+                `;
+			} if (response.raporturu === 'fnotar') {
+				row.innerHTML = `
+                    <td class="toggle-button">+</td>
+                    <td>${rowData.Fatura_No || ''}</td>
+                    <td>${rowData.Hareket || ''}</td>
+                    <td>${formatDate(rowData.Tarih)}</td>
+                    <td>${rowData.Unvan || ''}</td>
+                    <td>${rowData.Vergi_No || ''}</td>
+                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
+                `;
+			}
+			mainTableBody.appendChild(row);
+			const detailsRow = document.createElement('tr');
+			detailsRow.classList.add('details-row');
+			detailsRow.innerHTML = `<td colspan="24"></td>`;
+			mainTableBody.appendChild(detailsRow);
+			if (response.raporturu != 'fkodu') {
+				row.addEventListener('click', async () => {
+					const toggleButton = row.querySelector('.toggle-button');
+					const isVisible = detailsRow.style.display === 'table-row';
+					detailsRow.style.display = isVisible ? 'none' : 'table-row';
+					toggleButton.textContent = isVisible ? '+' : '-';
+					document.body.style.cursor = "wait";
+					if (!isVisible) {
+						try {
+							const details = await fetchDetails(rowData.Fatura_No, rowData.Hareket);
+							const data = details.data;
+							let detailsTable = `
                                 <table class="details-table table table-bordered table-hover">
                                     <thead class="thead-dark">
                                         <tr>
@@ -144,8 +188,8 @@ async function fatfetchTableData() {
                                     </thead>
                                     <tbody>
                             `;
-            data.forEach(item => {
-              detailsTable += `
+							data.forEach(item => {
+								detailsTable += `
                                     <tr>
                                         <td style="min-width:80px;">${item.Kodu || ''}</td>
                                         <td style="min-width:200px;">${item.Adi || ''}</td>
@@ -173,70 +217,87 @@ async function fatfetchTableData() {
                                         <td >${item.USER}</td>
                                     </tr>
                                 `;
-            });
-            detailsTable += `
+							});
+							detailsTable += `
                                     </tbody>
                                 </table>
                             `;
-            detailsRow.children[0].classList.add("table-row-height");
-            detailsRow.children[0].innerHTML = detailsTable;
-            document.body.style.cursor = "default";
-          } catch (error) {
-            detailsRow.children[0].innerHTML = `
+							detailsRow.children[0].classList.add("table-row-height");
+							detailsRow.children[0].innerHTML = detailsTable;
+							document.body.style.cursor = "default";
+						} catch (error) {
+							detailsRow.children[0].innerHTML = `
                                 <strong>Hata:</strong> Detay bilgileri alınamadı.
                             `;
-            document.body.style.cursor = "default";
-          }
-        }
-        document.body.style.cursor = "default";
-      });
-    });
-    document.body.style.cursor = "default";
-  } catch (error) {
-    errorDiv.style.display = "block";
-    errorDiv.innerText = error;
-  } finally {
-    $yenileButton.prop('disabled', false).text('Yenile');
-    document.body.style.cursor = "default";
-  }
+							document.body.style.cursor = "default";
+						}
+					}
+					document.body.style.cursor = "default";
+				});
+			}
+		});
+		document.body.style.cursor = "default";
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error;
+	} finally {
+		$yenileButton.prop('disabled', false).text('Yenile');
+		document.body.style.cursor = "default";
+	}
 }
 
 async function fetchDetails(evrakNo, cins) {
-  try {
-    let gircik = "";
-    if (cins === "Alis") {
-      gircik = "G";
-    } else {
-      gircik = "C";
-    }
-    const response = await fetchWithSessionCheck("stok/fatdetay", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({ evrakNo: evrakNo, gircik: gircik }),
-    });
-    data = await response;
-    return await response;
-  } catch (error) {
-    throw error;
-  }
+	try {
+		let gircik = "";
+		if (cins === "Alis") {
+			gircik = "G";
+		} else {
+			gircik = "C";
+		}
+		const response = await fetchWithSessionCheck("stok/fatdetay", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ evrakNo: evrakNo, gircik: gircik }),
+		});
+		data = await response;
+		return await response;
+	} catch (error) {
+		throw error;
+	}
 }
 
 function updateTableHeaders(headers) {
-  let thead = document.querySelector("#main-table thead");
-  thead.innerHTML = "";
-  let tr = document.createElement("tr");
-  tr.classList.add("thead-dark");
-  headers.forEach((header, index) => {
-    let th = document.createElement("th");
-    th.textContent = header;
+	let thead = document.querySelector("#main-table thead");
+	thead.innerHTML = "";
+	let tr = document.createElement("tr");
+	tr.classList.add("thead-dark");
+	headers.forEach((header, index) => {
+		let th = document.createElement("th");
+		th.textContent = header;
 
-    // **Son 3 başlığa double-column class'ını ekle**
-    if (index >= headers.length - 3) {
-      th.classList.add("double-column");
-    }
-    tr.appendChild(th);
-  });
-  thead.appendChild(tr); 
+		// **Son 3 başlığa double-column class'ını ekle**
+		if (index >= headers.length - 3) {
+			th.classList.add("double-column");
+		}
+		tr.appendChild(th);
+	});
+	thead.appendChild(tr);
+}
+
+function updateTableHeadersfkodu(headers) {
+	let thead = document.querySelector("#main-table thead");
+	thead.innerHTML = "";
+	let tr = document.createElement("tr");
+	tr.classList.add("thead-dark");
+	headers.forEach((header, index) => {
+		let th = document.createElement("th");
+		th.textContent = header;
+		if (index >= headers.length - 5) {
+			th.classList.add("double-column");
+		}
+		tr.appendChild(th);
+	});
+	thead.appendChild(tr);
 }

@@ -1144,5 +1144,82 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+		fatraporDTO.setDepo(fatraporDTO.getDepo().replace("Like", "::text Like"));
+		fatraporDTO.setAnagrp(fatraporDTO.getAnagrp().replace("Like", "::text Like"));
+		fatraporDTO.setAltgrp(fatraporDTO.getAltgrp().replace("Like", "::text Like"));
+		String sql = " SELECT \"Fatura_No\" ,CASE WHEN \"Gir_Cik\" = 'C' THEN 'Satis'  ELSE  'Alis' END as \"Hareket\",\"Tarih\" " +
+				" " + fatraporDTO.getBir() + "" +
+				" " + fatraporDTO.getIki() + "" +
+				" ,sum(\"Miktar\") as \"Miktar\" " +
+				" ,sum(\"Fiat\" * \"Miktar\") as \"Tutar\" " +
+				" ,sum((\"Fiat\" * \"Miktar\") - ((\"Fiat\" * \"Miktar\") * \"Iskonto\")/100) as \"Iskontolu_Tutar\"  " +
+				" ,sum((((\"Fiat\" * \"Miktar\") - ((\"Fiat\" * \"Miktar\") * \"Iskonto\")/100) * \"Kdv\")/100)  AS \"Kdv_Tutar\" " +
+				" ,sum((\"Fiat\" * \"Miktar\") - ((\"Fiat\" * \"Miktar\") * \"Iskonto\")/100 +   (((\"Fiat\" * \"Miktar\") - ((\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"Kdv\" ) / 100)    as \"Toplam_Tutar\" " +
+				" FROM \"FATURA\"  " +
+				" WHERE \"Fatura_No\" >= N'" + fatraporDTO.getFatno1() + "' AND   \"Fatura_No\" <= N'" + fatraporDTO.getFatno2() + "'" +
+				" AND \"Tarih\" >= '" + fatraporDTO.getTar1() + "' AND   \"Tarih\" <= '" + fatraporDTO.getTar2() + " 23:59:59.998'" +
+				" AND \"Cari_Firma\" >= N'" + fatraporDTO.getCkod1() + "' AND   \"Cari_Firma\" <= N'" + fatraporDTO.getCkod2() + "' " +
+				" AND \"Adres_Firma\" >= N'" + fatraporDTO.getAdr1() + "' AND   \"Adres_Firma\" <= N'" + fatraporDTO.getAdr2() + "' " +
+				" AND \"Kodu\" >= N'" + fatraporDTO.getUkod1() + "' AND  \"Kodu\" <= N'" + fatraporDTO.getUkod2() + "' " +
+				" AND \"Doviz\" >= N'" + fatraporDTO.getDvz1() + "' AND  \"Doviz\" <= N'" + fatraporDTO.getDvz2() + "' " +
+				" AND \"Tevkifat\" >= '" + fatraporDTO.getTev1() + "' AND  \"Tevkifat\" <= '" + fatraporDTO.getTev2() + "' " +
+				" AND \"Ozel_Kod\" >= N'" + fatraporDTO.getOkod1() + "' AND  \"Ozel_Kod\" <= N'" + fatraporDTO.getOkod2() + "' " +
+				" AND \"Ana_Grup\" " + fatraporDTO.getAnagrp() +
+				" AND \"Alt_Grup\" " + fatraporDTO.getAltgrp() +
+				" AND \"Depo\" " + fatraporDTO.getDepo() +
+				" AND \"Gir_Cik\"::text Like '" + fatraporDTO.getTuru() + "%'" +
+				" GROUP BY " + fatraporDTO.getUc() + "" +
+				" ORDER BY  " + fatraporDTO.getUc() + "";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+				fatraporDTO.setDepo(fatraporDTO.getDepo().replace("Like", "::text Like"));
+		fatraporDTO.setAnagrp(fatraporDTO.getAnagrp().replace("Like", "::text Like"));
+		fatraporDTO.setAltgrp(fatraporDTO.getAltgrp().replace("Like", "::text Like"));
+		String sql = " SELECT  " + fatraporDTO.getUc() + " ,CASE WHEN \"Gir_Cik\" = 'C' THEN 'Satis' ELSE 'Alis' END as \"Hareket\" " + //
+				"  " + fatraporDTO.getBir() + " " +
+				" ,sum(\"Miktar\") as \"Miktar\" " +
+				" ,sum(\"Fiat\" * \"Miktar\") as \"Tutar\" " +
+				" ,sum((\"Fiat\" * \"Miktar\") - ((\"Fiat\" * \"Miktar\") * \"Iskonto\")/100) as \"Iskontolu_Tutar\"  " +
+				" ,sum((((\"Fiat\" * \"Miktar\") - ((\"Fiat\" * \"Miktar\") * \"Iskonto\")/100) * \"Kdv\")/100)  AS \"Kdv_Tutar\" " +
+				" ,sum((\"Fiat\" * \"Miktar\") - ((\"Fiat\" * \"Miktar\") * \"Iskonto\")/100 +   (((\"Fiat\" * \"Miktar\") - ((\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"Kdv\" ) / 100)    as \"Toplam_Tutar\" " +
+				" FROM \"FATURA\"  " +
+				" WHERE \"Fatura_No\" >= N'" + fatraporDTO.getFatno1() + "' AND   \"Fatura_No\" <= N'" + fatraporDTO.getFatno2() + "'" +
+				" AND \"Tarih\" >= '" + fatraporDTO.getTar1() + "' AND   \"Tarih\" <= '" + fatraporDTO.getTar2() + " 23:59:59.998'" +
+				" AND \"Cari_Firma\" >= N'" + fatraporDTO.getCkod1() + "' AND   \"Cari_Firma\" <= N'" + fatraporDTO.getCkod2() + "' " +
+				" AND \"Adres_Firma\" >= N'" + fatraporDTO.getAdr1() + "' AND   \"Adres_Firma\" <= N'" + fatraporDTO.getAdr2() + "' " +
+				" AND \"Kodu\" >= N'" + fatraporDTO.getUkod1() + "' AND  \"Kodu\" <= N'" + fatraporDTO.getUkod2() + "' " +
+				" AND \"Doviz\" >= N'" + fatraporDTO.getDvz1() + "' AND  \"Doviz\" <= N'" + fatraporDTO.getDvz2() + "' " +
+				" AND \"Tevkifat\" >= '" + fatraporDTO.getTev1() + "' AND  \"Tevkifat\" <= '" + fatraporDTO.getTev2() + "' " +
+				" AND \"Ozel_Kod\" >= N'" + fatraporDTO.getOkod1() + "' AND  \"Ozel_Kod\" <= N'" + fatraporDTO.getOkod2() + "' " +
+				" AND \"Ana_Grup\" " + fatraporDTO.getAnagrp() +
+				" AND \"Alt_Grup\" " + fatraporDTO.getAltgrp() +
+				" AND \"Depo\" " + fatraporDTO.getDepo() +
+				" AND \"Gir_Cik\"::text Like '" + fatraporDTO.getTuru() + "%'" +
+				" GROUP BY " + fatraporDTO.getUc() + "" +
+				" ORDER BY  " + fatraporDTO.getUc() + "";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	} 
 }

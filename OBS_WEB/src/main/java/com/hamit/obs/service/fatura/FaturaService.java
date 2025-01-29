@@ -937,4 +937,36 @@ public class FaturaService {
 			throw new ServiceException(detailedMessage);
 		}
 	}
+	
+	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.fat_rapor_fat_tar(fatraporDTO,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
+	
+	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.fat_rapor_cari_kod(fatraporDTO,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
 }
