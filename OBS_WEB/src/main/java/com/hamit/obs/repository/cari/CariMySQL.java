@@ -930,8 +930,6 @@ public class CariMySQL implements ICariDatabase{
 					" AND EVRAK >= '" + tahrapDTO.getEvrak1() + "' AND EVRAK < '" + tahrapDTO.getEvrak2() + "'" + 
 					" AND C_HES >= '" + tahrapDTO.getHkodu1() + "' AND C_HES < '" + tahrapDTO.getHkodu2() + "'" + 
 					" ORDER BY TARIH,EVRAK" ;
-			
-			System.out.println(sql);
 			try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 					PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 				ResultSet resultSet = preparedStatement.executeQuery();

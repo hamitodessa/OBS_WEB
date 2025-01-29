@@ -138,7 +138,6 @@ public class DegiskenlerController {
 			String idacik = request.get("idacik");
 			String degisken = request.get("degisken");
 			String altgrpAna = request.get("altgrpAna");
-			System.out.println(aciklama +"=="+ idacik+"=="+ degisken +"==" + altgrpAna);
 			if( ! idacik.equals(""))//  ' ESKI KAYIT
 			{ 
 				if (degisken.equals("mensei"))
@@ -150,7 +149,6 @@ public class DegiskenlerController {
 					int in1  = 0;
 					String qwe =  faturaService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN",altgrpAna);
 					in1 = Integer.parseInt(qwe);
-					System.out.println(in1);
 					faturaService.urun_degisken_alt_grup_eski(aciklama.trim(), in1, Integer.parseInt(idacik));
 				}
 				else  if (degisken.equals("depo"))

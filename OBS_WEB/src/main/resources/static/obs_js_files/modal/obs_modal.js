@@ -333,7 +333,7 @@ function saveToMain() {
 	}
 	else if (nerden === "fatrapor") {
 		fatfetchTableData();
-		const mailButton = document.getElementById("fatrapmailAt");
+		const mailButton = document.getElementById("tahrapmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("fatrapreportFormat");
 		reportFormat.disabled = false;

@@ -29,9 +29,4 @@ public class fatraporDTO {
 	String dvz1;
 	String dvz2;
 	String caradr;
-	
-	int anaint ;
-	int altint;
-	int dpoint;
-
 }

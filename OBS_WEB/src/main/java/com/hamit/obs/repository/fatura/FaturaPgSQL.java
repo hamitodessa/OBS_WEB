@@ -1078,7 +1078,71 @@ public class FaturaPgSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		fatraporDTO.setDepo(fatraporDTO.getDepo().replace("Like", "::text Like"));
+		fatraporDTO.setAnagrp(fatraporDTO.getAnagrp().replace("Like", "::text Like"));
+		fatraporDTO.setAltgrp(fatraporDTO.getAltgrp().replace("Like", "::text Like"));
+		String sql = " SELECT \"Fatura_No\" ,CASE WHEN \"Gir_Cik\" = 'C' THEN 'Satis'  ELSE  'Alis' END as \"Hareket\",\"Tarih\" ,\"Cari_Firma\" ,\"Adres_Firma\",\"Doviz\" , sum(\"Miktar\") as \"Miktar\" ,sum(\"Fiat\"  * \"Miktar\") as \"Tutar\", " +
+				" SUM(\"Fiat\" * \"Miktar\") - sum(((\"Fiat\" * \"Miktar\") * \"Iskonto\")/100) as \"Iskontolu_Tutar\" ,count(\"Fatura_No\") as fatsayi " +
+				" FROM \"FATURA\"  " +
+				" WHERE \"Fatura_No\" >= N'" + fatraporDTO.getFatno1() + "' AND   \"Fatura_No\" <= N'" + fatraporDTO.getFatno2() + "'" +
+				" AND \"Tarih\" >= '" + fatraporDTO.getTar1() + "' AND   \"Tarih\" <= '" + fatraporDTO.getTar2() + " 23:59:59.998'" +
+				" AND \"Cari_Firma\" >= N'" + fatraporDTO.getCkod1() + "' AND   \"Cari_Firma\" <= N'" + fatraporDTO.getCkod2() + "' " +
+				" AND \"Adres_Firma\" >= N'" + fatraporDTO.getAdr1() + "' AND   \"Adres_Firma\" <= N'" + fatraporDTO.getAdr2() + "' " +
+				" AND \"Kodu\" >= N'" + fatraporDTO.getUkod1() + "' AND  \"Kodu\" <= N'" + fatraporDTO.getUkod2() + "' " +
+				" AND \"Doviz\" >= N'" + fatraporDTO.getDvz1() + "' AND  \"Doviz\" <= N'" + fatraporDTO.getDvz2() + "' " +
+				" AND \"Tevkifat\" >= '" + fatraporDTO.getTev1() + "' AND  \"Tevkifat\" <= '" + fatraporDTO.getTev2() + "' " +
+				" AND \"Ozel_Kod\" >= N'" + fatraporDTO.getOkod1() + "' AND  \"Ozel_Kod\" <= N'" + fatraporDTO.getOkod2() + "' " +
+				" AND \"Ana_Grup\" " + fatraporDTO.getAnagrp() +
+				" AND \"Alt_Grup\" " + fatraporDTO.getAltgrp() +
+				" AND \"Depo\" " + fatraporDTO.getDepo() +
+				" AND \"Gir_Cik\"::text Like '" + fatraporDTO.getTuru() + "%'" +
+				" GROUP BY \"Fatura_No\",\"Gir_Cik\",\"Tarih\" ,\"Cari_Firma\",\"Adres_Firma\",\"Doviz\"  " +
+				" ORDER BY \"Fatura_No\"";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> fat_detay_rapor(String fno, String turu, ConnectionDetails faturaConnDetails) {
+		String sql =  "SELECT  \"FATURA\".\"Kodu\", " +
+				" (SELECT \"Adi\" FROM \"MAL\" WHERE \"FATURA\".\"Kodu\" = \"MAL\".\"Kodu\" ) AS \"Adi\" , " +
+				"  \"Miktar\" , " +
+				" (SELECT \"Birim\" FROM \"MAL\" WHERE \"FATURA\".\"Kodu\" = \"MAL\".\"Kodu\" ) AS \"Birim\" , " +
+				" \"FATURA\".\"Fiat\" ,\"Doviz\",\"FATURA\".\"Fiat\" * \"Miktar\" as \"Tutar\" , " +
+				" \"Iskonto\" , " +
+				" ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100 as \"Iskonto_Tutar\" , " +
+				" (\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100 as \"Iskontolu_Tutar\" , " +
+				" \"FATURA\".\"Kdv\" , " +
+				" (((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"FATURA\".\"Kdv\" ) / 100  AS \"Kdv_Tutar\" , " +
+				" \"Tevkifat\" , " +
+				" (((((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"FATURA\".\"Kdv\" ) / 100)/ 10 ) * \"Tevkifat\" as \"Tev_Edilen_KDV\" , " +
+				" ((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) + ((((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"FATURA\".\"Kdv\" ) / 100) as \"Tev_Dah_Top_Tutar\" , " +
+				" ((((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"FATURA\".\"Kdv\" ) / 100) - ((((((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"FATURA\".\"Kdv\" ) / 100)/ 10 ) * \"Tevkifat\" ) as \"Beyan_Edilen_KDV\" , " +
+				" (((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) + ((((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"FATURA\".\"Kdv\" ) / 100)) - ((((((\"FATURA\".\"Fiat\" * \"Miktar\") - ((\"FATURA\".\"Fiat\" * \"Miktar\") * \"Iskonto\") / 100) * \"FATURA\".\"Kdv\" ) / 100)/ 10 ) * \"Tevkifat\") as \"Tev_Har_Top_Tutar\" , " +
+				" COALESCE((SELECT \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"MAL\".\"Ana_Grup\"),'') AS \"Ana_Grup\"  , " +
+				" COALESCE((SELECT \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"MAL\".\"Alt_Grup\"),'') AS \"Alt_Grup\"  , " +
+				" COALESCE((SELECT \"DEPO\" FROM \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID_Y\" = \"FATURA\".\"Depo\"),'') AS \"Depo\" , " +
+				" \"Ozel_Kod\" ,\"Izahat\", CASE \"Gir_Cik\"  WHEN  'C' THEN 'Satis' ELSE 'Alis' END as \"Hareket\" ,\"FATURA\".\"USER\"" +
+				" FROM \"FATURA\",\"MAL\" " +     //
+				" WHERE \"FATURA\".\"Fatura_No\" = '" + fno + "' " + 
+				" AND \"FATURA\".\"Gir_Cik\"::text Like '" + turu + "%'" +
+				" AND \"FATURA\".\"Kodu\" = \"MAL\".\"Kodu\" " ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	} 
 }

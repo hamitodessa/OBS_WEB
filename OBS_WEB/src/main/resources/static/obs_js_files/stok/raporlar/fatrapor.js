@@ -40,7 +40,7 @@ async function fatfetchTableData() {
 	const parsedValues = hiddenFieldValue.split(",");
 	const fatraporDTO = {
 		fatno1: parsedValues[0],
-		fatno22: parsedValues[1],
+		fatno2: parsedValues[1],
 		anagrp: parsedValues[2],
 		tar1: parsedValues[3],
 		tar2: parsedValues[4],
@@ -78,13 +78,12 @@ async function fatfetchTableData() {
           body: JSON.stringify(fatraporDTO),
         });
         data = response;
-        if (data.success) {
           data.data.forEach(rowData => {
             const row = document.createElement('tr');
             row.classList.add('expandable');
             row.classList.add("table-row-height");
             row.innerHTML = `
-              <td class="toggle-button">+</td>
+                    <td class="toggle-button">+</td>
                     <td>${rowData.Fatura_No || ''}</td>
                     <td>${rowData.Hareket || ''}</td>
                     <td>${formatDate(rowData.Tarih)}</td>
@@ -100,7 +99,7 @@ async function fatfetchTableData() {
             detailsRow.classList.add('details-row');
             detailsRow.innerHTML = `<td colspan="12"></td>`;
             mainTableBody.appendChild(detailsRow);
-           
+            
               row.addEventListener('click', async () => {
                 const toggleButton = row.querySelector('.toggle-button');
                 const isVisible = detailsRow.style.display === 'table-row';
@@ -146,13 +145,13 @@ async function fatfetchTableData() {
                     data.forEach(item => {
                       detailsTable += `
                                     <tr>
-                                        <td>${item.Kodu || ''}</td>
-                                        <td>${item.Adi || ''}</td>
-                                        <td style="text-align: right;">${formatNumber3(item.Miktar)}</td>
+                                        <td style="min-width:80px;">${item.Kodu || ''}</td>
+                                        <td style="min-width:200px;">${item.Adi || ''}</td>
+                                        <td style="text-align: right;min-width:80px;">${formatNumber3(item.Miktar)}</td>
                                         <td>${item.Birim || ''}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Fiat)}</td>
+                                        <td style="text-align: right;min-width:60px;">${formatNumber2(item.Fiat)}</td>
                                         <td>${item.Doviz || ''}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Tutar)}</td>
+                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Tutar)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Iskonto)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Iskonto_Tutar)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Iskontolu_Tutar)}</td>
@@ -172,7 +171,7 @@ async function fatfetchTableData() {
                                         <td >${item.USER}</td>
                                     </tr>
                                 `;
-                              });
+                    });
                     detailsTable += `
                                     </tbody>
                                 </table>
@@ -189,12 +188,8 @@ async function fatfetchTableData() {
                 }
                 document.body.style.cursor = "default";
               });
-           
+            
           });
-        } else {
-          errorDiv.style.display = "block";
-          errorDiv.innerText = data.errorMessage || "Bir hata oluştu.";
-        }
         document.body.style.cursor = "default";
       } catch (error) {
         errorDiv.style.display = "block";
@@ -203,4 +198,26 @@ async function fatfetchTableData() {
         $yenileButton.prop('disabled', false).text('Yenile');
         document.body.style.cursor = "default";
       }
+}
+    
+async function fetchDetails(evrakNo, cins) {
+  try {
+    let gircik = "";
+    if (cins === "Alis") {
+      gircik = "G";
+    } else {
+      gircik = "C";
     }
+    const response = await fetchWithSessionCheck("stok/fatdetay", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ evrakNo: evrakNo, gircik: gircik }),
+    });
+    data = await response;
+    return await response;
+  } catch (error) {
+    throw error;
+  }
+}

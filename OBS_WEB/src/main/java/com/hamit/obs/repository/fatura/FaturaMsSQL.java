@@ -1073,7 +1073,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
 		String sql = " SELECT Fatura_No ,IIF(Gir_Cik = 'C','Satis','Alis') as Hareket,Tarih ,Cari_Firma ,Adres_Firma,Doviz , sum(Miktar) as Miktar ,sum(Fiat * Miktar) as Tutar, " +
-				" SUM(Fiat * Miktar) - sum(((Fiat * Miktar) * Iskonto)/100) as Iskontolu_Tutar " +
+				" SUM(Fiat * Miktar) - sum(((Fiat * Miktar) * Iskonto)/100) as Iskontolu_Tutar,count(Fatura_No) as fatsayi " +
 				" FROM FATURA WITH (INDEX (IX_FATURA)) " +
 				" WHERE FATURA.Fatura_No >= N'" + fatraporDTO.getFatno1() + "' AND  FATURA.Fatura_No <= N'" + fatraporDTO.getFatno2() + "'" +
 				" AND FATURA.Tarih >= '" + fatraporDTO.getTar1() + "' AND  FATURA.Tarih <= '" + fatraporDTO.getTar2() + " 23:59:59.998'" +
@@ -1083,23 +1083,56 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND FATURA.Doviz >= N'" + fatraporDTO.getDvz1() + "' AND FATURA.Doviz <= N'" + fatraporDTO.getDvz2() + "' " +
 				" AND FATURA.Tevkifat >= '" + fatraporDTO.getTev1() + "' AND FATURA.Tevkifat <= '" + fatraporDTO.getTev2() + "' " +
 				" AND FATURA.Ozel_Kod >= N'" + fatraporDTO.getOkod1() + "' AND FATURA.Ozel_Kod <= N'" + fatraporDTO.getOkod2() + "' " +
-				" AND FATURA.Ana_Grup " + fatraporDTO.getAnaint() +
-				" AND FATURA.Alt_Grup " + fatraporDTO.getAltint() +
-				" AND FATURA.Depo " + fatraporDTO.getDpoint() +
+				" AND FATURA.Ana_Grup " + fatraporDTO.getAnagrp() +
+				" AND FATURA.Alt_Grup " + fatraporDTO.getAltgrp() +
+				" AND FATURA.Depo " + fatraporDTO.getDepo() +
 				" AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'" +
 				" GROUP BY Fatura_No,Gir_Cik,Tarih ,Cari_Firma,Adres_Firma,Doviz  " +
 				" ORDER BY  Fatura_No";
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
+	}
 
+	@Override
+	public List<Map<String, Object>> fat_detay_rapor(String fno, String turu, ConnectionDetails faturaConnDetails) {
+		String sql = "SELECT  Fatura.Kodu, " +
+				" (SELECT Adi FROM MAL WHERE FATURA.Kodu = MAL.KODU ) AS Adi , " +
+				"  Miktar , " +
+				" (SELECT Birim FROM MAL WHERE FATURA.KODU = MAL.KODU ) AS Birim , " +
+				" Fatura.Fiat ,Doviz,Fatura.Fiat * Miktar as Tutar , " +
+				" Iskonto , " +
+				" ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100 as Iskonto_Tutar , " +
+				" (Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100 as Iskontolu_Tutar , " +
+				" Fatura.Kdv , " +
+				" (((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100  AS Kdv_Tutar , " +
+				" Tevkifat , " +
+				" (((((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100)/ 10 ) * [Tevkifat] as Tev_Edilen_KDV , " +
+				" ((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) + ((((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100) as Tev_Dah_Top_Tutar , " +
+				" ((((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100) - ((((((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100)/ 10 ) * [Tevkifat] ) as Beyan_Edilen_KDV , " +
+				" (((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) + ((((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100)) - ((((((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100)/ 10 ) * [Tevkifat]) as Tev_Har_Top_Tutar , " +
+				" ISNULL((SELECT Ana_Grup FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup),'') AS Ana_Grup  , " +
+				" ISNULL((SELECT Alt_Grup FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup),'') AS Alt_Grup  , " +
+				" ISNULL((SELECT Depo FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = FATURA.Depo),'') AS Depo , " +
+				" Ozel_Kod ,Izahat, IIF(Gir_Cik = 'C','Satis','Alis') as Hareket ,FATURA.[USER]" +
+				" FROM FATURA,MAL " +
+				" WHERE FATURA.Fatura_No = '" + fno + "' " + 
+				" AND FATURA.Gir_Cik Like '" + turu + "%'" +
+				" AND FATURA .Kodu = mal.Kodu " ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 }

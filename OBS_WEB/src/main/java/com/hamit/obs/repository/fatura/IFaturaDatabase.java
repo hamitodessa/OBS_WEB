@@ -64,4 +64,5 @@ public interface IFaturaDatabase {
 	int zayi_fisno_al(ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> zayi_oku(String eno,String cins,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> fat_detay_rapor(String fno , String turu,ConnectionDetails faturaConnDetails);
 }
