@@ -26,7 +26,10 @@ function openFirstModal(nerdenGeldi) {
 	}
 	else 	if (nerden === "fatrapor") {
 	    openfatrapModal(modal);
-	  }
+	}
+	else if (nerden === "imarapor") {
+		openimarapModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -338,6 +341,13 @@ function saveToMain() {
 		const reportFormat = document.getElementById("fatrapreportFormat");
 		reportFormat.disabled = false;
 	}
+	else if (nerden === "imarapor") {
+		imafetchTableData();
+		const mailButton = document.getElementById("imarapmailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("imarapreportFormat");
+		reportFormat.disabled = false;
+	}
 }
 
 async function opentahrapModal(modal) {
@@ -431,4 +441,60 @@ async function openfatrapModal(modal) {
 	} finally {
 		document.body.style.cursor = "default";
 	}
+}
+
+async function openimarapModal(modal) {
+    $(modal).modal('show');
+    document.body.style.cursor = "wait";
+    
+    try {
+        const response = await fetchWithSessionCheck("stok/anadepo", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.errorMessage) {
+            throw new Error(response.errorMessage);
+        }
+
+        const ana = response.anaKodlari;
+		const dpo = response.depoKodlari;
+        const uranaSelect = document.getElementById("uranagrp");
+        const anaSelect = document.getElementById("anagrp");
+		const dpoSelect = document.getElementById("depo");
+        // Seçenekleri temizle
+        anaSelect.innerHTML = ""; 
+        uranaSelect.innerHTML = ""; 
+		dpoSelect.innerHTML = ""; 
+
+ 
+        // Gelen veriyi selectlere ekle
+        ana.forEach(item => {
+            const optionAna = document.createElement("option");
+            optionAna.value = item.ANA_GRUP;
+            optionAna.textContent = item.ANA_GRUP;
+            anaSelect.appendChild(optionAna);
+
+            const optionUrana = document.createElement("option");
+            optionUrana.value = item.ANA_GRUP;
+            optionUrana.textContent = item.ANA_GRUP;
+            uranaSelect.appendChild(optionUrana);
+        });
+		
+		dpo.forEach(item => {
+		const option = document.createElement("option");
+		option.value = item.DEPO;
+		option.textContent = item.DEPO;
+			dpoSelect.appendChild(option);
+				});
+
+    } catch (error) {
+        const modalError = document.getElementById("errorDiv");
+        modalError.style.display = "block";
+        modalError.innerText = `Bir hata oluştu: ${error.message}`;
+    } finally {
+        document.body.style.cursor = "default";
+    }
 }
