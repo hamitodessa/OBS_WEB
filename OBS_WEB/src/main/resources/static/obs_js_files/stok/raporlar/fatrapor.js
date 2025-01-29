@@ -36,53 +36,56 @@ async function anagrpChanged(anagrpElement) {
 }
 
 async function fatfetchTableData() {
-	const hiddenFieldValue = $('#fatrapBilgi').val();
-	const parsedValues = hiddenFieldValue.split(",");
-	const fatraporDTO = {
-		fatno1: parsedValues[0],
-		fatno2: parsedValues[1],
-		anagrp: parsedValues[2],
-		tar1: parsedValues[3],
-		tar2: parsedValues[4],
-		altgrp: parsedValues[5],
-		ckod1: parsedValues[6],
-		ckod2: parsedValues[7],
-		depo: parsedValues[8],
-		adr1: parsedValues[9],
-		adr2: parsedValues[10],
-		turu: parsedValues[11],
-		ukod1: parsedValues[12],
-		ukod2: parsedValues[13],
-		tev1: parsedValues[14],
-		tev2: parsedValues[15],
-		okod1: parsedValues[16],
-		okod2: parsedValues[17],
-		gruplama: parsedValues[18],
-		dvz1: parsedValues[19],
-		dvz2: parsedValues[20],
-		caradr: parsedValues[21],
-			};
-      const errorDiv = document.getElementById("errorDiv");
-      document.body.style.cursor = "wait";
-      const $yenileButton = $('#fatrapyenileButton');
-      $yenileButton.prop('disabled', true).text('İşleniyor...');
-      const mainTableBody = document.getElementById("mainTableBody");
-      mainTableBody.innerHTML = "";
-    
-      try {
-        const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fatraporDTO),
-        });
-        data = response;
-          data.data.forEach(rowData => {
-            const row = document.createElement('tr');
-            row.classList.add('expandable');
-            row.classList.add("table-row-height");
-            row.innerHTML = `
+  const hiddenFieldValue = $('#fatrapBilgi').val();
+  const parsedValues = hiddenFieldValue.split(",");
+  const fatraporDTO = {
+    fatno1: parsedValues[0],
+    fatno2: parsedValues[1],
+    anagrp: parsedValues[2],
+    tar1: parsedValues[3],
+    tar2: parsedValues[4],
+    altgrp: parsedValues[5],
+    ckod1: parsedValues[6],
+    ckod2: parsedValues[7],
+    depo: parsedValues[8],
+    adr1: parsedValues[9],
+    adr2: parsedValues[10],
+    turu: parsedValues[11],
+    ukod1: parsedValues[12],
+    ukod2: parsedValues[13],
+    tev1: parsedValues[14],
+    tev2: parsedValues[15],
+    okod1: parsedValues[16],
+    okod2: parsedValues[17],
+    gruplama: parsedValues[18],
+    dvz1: parsedValues[19],
+    dvz2: parsedValues[20],
+    caradr: parsedValues[21],
+  };
+  const errorDiv = document.getElementById("errorDiv");
+  document.body.style.cursor = "wait";
+  const $yenileButton = $('#fatrapyenileButton');
+  $yenileButton.prop('disabled', true).text('İşleniyor...');
+  const mainTableBody = document.getElementById("mainTableBody");
+  mainTableBody.innerHTML = "";
+
+  try {
+    const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fatraporDTO),
+    });
+    data = response;
+    let sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "MIKTAR", "TUTAR", "ISK. TUTAR"];
+    updateTableHeaders(sqlHeaders);
+
+    data.data.forEach(rowData => {
+      const row = document.createElement('tr');
+      row.classList.add('expandable');
+      row.classList.add("table-row-height");
+      row.innerHTML = `
                     <td class="toggle-button">+</td>
                     <td>${rowData.Fatura_No || ''}</td>
                     <td>${rowData.Hareket || ''}</td>
@@ -94,23 +97,22 @@ async function fatfetchTableData() {
                     <td class="double-column">${formatNumber3(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
                 `;
-            mainTableBody.appendChild(row);
-            const detailsRow = document.createElement('tr');
-            detailsRow.classList.add('details-row');
-            detailsRow.innerHTML = `<td colspan="12"></td>`;
-            mainTableBody.appendChild(detailsRow);
-            
-              row.addEventListener('click', async () => {
-                const toggleButton = row.querySelector('.toggle-button');
-                const isVisible = detailsRow.style.display === 'table-row';
-                detailsRow.style.display = isVisible ? 'none' : 'table-row';
-                toggleButton.textContent = isVisible ? '+' : '-';
-                document.body.style.cursor = "wait";
-                if (!isVisible) {
-                  try {
-                    const details = await fetchDetails(rowData.Fatura_No, rowData.Hareket);
-                    const data = details.data;
-                    let detailsTable = `
+      mainTableBody.appendChild(row);
+      const detailsRow = document.createElement('tr');
+      detailsRow.classList.add('details-row');
+      detailsRow.innerHTML = `<td colspan="12"></td>`;
+      mainTableBody.appendChild(detailsRow);
+      row.addEventListener('click', async () => {
+        const toggleButton = row.querySelector('.toggle-button');
+        const isVisible = detailsRow.style.display === 'table-row';
+        detailsRow.style.display = isVisible ? 'none' : 'table-row';
+        toggleButton.textContent = isVisible ? '+' : '-';
+        document.body.style.cursor = "wait";
+        if (!isVisible) {
+          try {
+            const details = await fetchDetails(rowData.Fatura_No, rowData.Hareket);
+            const data = details.data;
+            let detailsTable = `
                                 <table class="details-table table table-bordered table-hover">
                                     <thead class="thead-dark">
                                         <tr>
@@ -142,8 +144,8 @@ async function fatfetchTableData() {
                                     </thead>
                                     <tbody>
                             `;
-                    data.forEach(item => {
-                      detailsTable += `
+            data.forEach(item => {
+              detailsTable += `
                                     <tr>
                                         <td style="min-width:80px;">${item.Kodu || ''}</td>
                                         <td style="min-width:200px;">${item.Adi || ''}</td>
@@ -171,35 +173,34 @@ async function fatfetchTableData() {
                                         <td >${item.USER}</td>
                                     </tr>
                                 `;
-                    });
-                    detailsTable += `
+            });
+            detailsTable += `
                                     </tbody>
                                 </table>
                             `;
-                    detailsRow.children[0].classList.add("table-row-height");
-                    detailsRow.children[0].innerHTML = detailsTable;
-                    document.body.style.cursor = "default";
-                  } catch (error) {
-                    detailsRow.children[0].innerHTML = `
+            detailsRow.children[0].classList.add("table-row-height");
+            detailsRow.children[0].innerHTML = detailsTable;
+            document.body.style.cursor = "default";
+          } catch (error) {
+            detailsRow.children[0].innerHTML = `
                                 <strong>Hata:</strong> Detay bilgileri alınamadı.
                             `;
-                    document.body.style.cursor = "default";
-                  }
-                }
-                document.body.style.cursor = "default";
-              });
-            
-          });
+            document.body.style.cursor = "default";
+          }
+        }
         document.body.style.cursor = "default";
-      } catch (error) {
-        errorDiv.style.display = "block";
-        errorDiv.innerText = error;
-      } finally {
-        $yenileButton.prop('disabled', false).text('Yenile');
-        document.body.style.cursor = "default";
-      }
+      });
+    });
+    document.body.style.cursor = "default";
+  } catch (error) {
+    errorDiv.style.display = "block";
+    errorDiv.innerText = error;
+  } finally {
+    $yenileButton.prop('disabled', false).text('Yenile');
+    document.body.style.cursor = "default";
+  }
 }
-    
+
 async function fetchDetails(evrakNo, cins) {
   try {
     let gircik = "";
@@ -220,4 +221,22 @@ async function fetchDetails(evrakNo, cins) {
   } catch (error) {
     throw error;
   }
+}
+
+function updateTableHeaders(headers) {
+  let thead = document.querySelector("#main-table thead");
+  thead.innerHTML = "";
+  let tr = document.createElement("tr");
+  tr.classList.add("thead-dark");
+  headers.forEach((header, index) => {
+    let th = document.createElement("th");
+    th.textContent = header;
+
+    // **Son 3 başlığa double-column class'ını ekle**
+    if (index >= headers.length - 3) {
+      th.classList.add("double-column");
+    }
+    tr.appendChild(th);
+  });
+  thead.appendChild(tr); 
 }
