@@ -39,8 +39,15 @@ public class FaturaRaporController {
 			fatraporDTO.setAltgrp(turuString[1]);
 			fatraporDTO.setDepo(turuString[2]);
 			fatraporDTO.setTuru(turuString[3]);
-
-			List<Map<String, Object>> fat_listele = faturaService.fat_rapor(fatraporDTO);
+			List<Map<String, Object>> fat_listele = new ArrayList<>();
+			if (fatraporDTO.getGruplama().equals("fno"))
+				fat_listele = faturaService.fat_rapor(fatraporDTO);
+			else if (fatraporDTO.getGruplama().equals("fkodu"))
+				fat_listele = faturaService.fat_rapor(fatraporDTO);
+			else
+				fat_listele = faturaService.fat_rapor(fatraporDTO);
+			
+			
 			response.put("data", (fat_listele != null) ? fat_listele : new ArrayList<>());
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {
