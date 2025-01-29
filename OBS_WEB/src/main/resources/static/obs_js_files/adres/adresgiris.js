@@ -42,7 +42,7 @@ function adrclearInputs() {
 	const imgElement = document.getElementById("resimGoster");
 	imgElement.src = "";
 	imgElement.style.display = "none";
-	const kodKontrol = document.getElementById("kodKontrol") ;
+	const kodKontrol = document.getElementById("kodKontrol");
 	kodKontrol.innerText = ""
 }
 
@@ -159,7 +159,7 @@ function adrgetDTO() {
 
 async function adraramaYap() {
 	const aramaInput = document.getElementById("arama").value;
-	document.getElementById("kodKontrol").innerText = "" ;
+	document.getElementById("kodKontrol").innerText = "";
 	if (!aramaInput || aramaInput === "") {
 		return;
 	}
@@ -217,8 +217,6 @@ async function adraramaYap() {
 		}
 		adrdisableInputs();
 		adrenableDuzeltmeInputs();
-
-		
 		document.getElementById("errorDiv").style.display = "none";
 		document.getElementById("errorDiv").innerText = "";
 	} catch (error) {
@@ -338,5 +336,4 @@ function resimSil() {
 	const imgElementLogo = document.getElementById("resimGoster");
 	imgElementLogo.src = "";
 	imgElementLogo.style.display = "none";
-
 }

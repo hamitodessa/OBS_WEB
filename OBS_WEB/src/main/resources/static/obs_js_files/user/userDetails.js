@@ -1,5 +1,5 @@
 document.getElementById("createdbMenuLink").addEventListener("click", function () {
-    document.querySelector('.changeLink[data-url="/user/createdb"]').click();
+	document.querySelector('.changeLink[data-url="/user/createdb"]').click();
 });
 
 async function detailoku() {
@@ -79,7 +79,6 @@ async function detailoku() {
 
 function setFormValues(row) {
 	const cells = row.cells;
-
 	document.getElementById("hiddenId").value = cells[0].textContent.trim() || "";
 	document.getElementById("user_prog_kodu").value = cells[1].textContent.trim() || "";
 	document.getElementById("user_server").value = cells[2].textContent.trim() || "";

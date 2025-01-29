@@ -13,19 +13,19 @@ function openFirstModal(nerdenGeldi) {
 		}
 	}
 	else if (nerdenGeldi === "fatura") {
-	    const fisno = document.getElementById("fisno").value.trim();
-	    if (!fisno || fisno === "0") {
-	      return;
-	    }
-	  }
+		const fisno = document.getElementById("fisno").value.trim();
+		if (!fisno || fisno === "0") {
+			return;
+		}
+	}
 
 	const modal = document.getElementById('firstModal');
 	nerden = nerdenGeldi;
 	if (nerden === "tahsilatrapor") {
 		opentahrapModal(modal);
 	}
-	else 	if (nerden === "fatrapor") {
-	    openfatrapModal(modal);
+	else if (nerden === "fatrapor") {
+		openfatrapModal(modal);
 	}
 	else if (nerden === "imarapor") {
 		openimarapModal(modal);
@@ -242,9 +242,9 @@ function saveToMain() {
 		hiddenField.val(hesapKodu);
 	}
 	else if (nerden === "fatura") {
-	    const hesapKodu = $('#ckodu').val() || "";
-	    const hiddenField = $('#ara_content #faturaBilgi');
-	    hiddenField.val(hesapKodu);
+		const hesapKodu = $('#ckodu').val() || "";
+		const hiddenField = $('#ara_content #faturaBilgi');
+		hiddenField.val(hesapKodu);
 	}
 	else if (nerden === "fatrapor") {
 		const fatno1 = $('#fatno1').val() || "";
@@ -269,8 +269,8 @@ function saveToMain() {
 		const dvz1 = $('#dvz1').val() || "";
 		const dvz2 = $('#dvz2').val() || "";
 		const caradr = $('#caradr').val() || "";
-		const degerler = [fatno1, fatno2, anagrp,tar1,tar2,altgrp,ckod1,ckod2,depo,adr1,adr2,turu,ukod1,ukod2,tev1,tev2,okod1,okod2
-			,gruplama,dvz1,dvz2,caradr].join(",");
+		const degerler = [fatno1, fatno2, anagrp, tar1, tar2, altgrp, ckod1, ckod2, depo, adr1, adr2, turu, ukod1, ukod2, tev1, tev2, okod1, okod2
+			, gruplama, dvz1, dvz2, caradr].join(",");
 		const hiddenField = $('#ara_content #fatrapBilgi');
 		hiddenField.val(degerler);
 	}
@@ -290,12 +290,10 @@ function saveToMain() {
 		const rec2 = $('#rec2').val() || "";
 		const anagrp = $('#anagrp').val() || "";
 		const altgrp = $('#altgrp').val() || "";
-		const degerler = [evrno1, evrno2, uranagrp,tar1,tar2,uraltgrp,bkod1,bkod2,depo,ukod1,ukod2,rec1,rec2,anagrp,altgrp].join(",");
+		const degerler = [evrno1, evrno2, uranagrp, tar1, tar2, uraltgrp, bkod1, bkod2, depo, ukod1, ukod2, rec1, rec2, anagrp, altgrp].join(",");
 		const hiddenField = $('#ara_content #imarapBilgi');
 		hiddenField.val(degerler);
 	}
-
-
 
 	$('#firstModal').modal('hide');
 
@@ -352,7 +350,7 @@ function saveToMain() {
 		tahcariIsle();
 	}
 	else if (nerden === "fatura") {
-	    fatcariIsle();
+		fatcariIsle();
 	}
 	else if (nerden === "fatrapor") {
 		fatfetchTableData();
@@ -369,4 +367,3 @@ function saveToMain() {
 		reportFormat.disabled = false;
 	}
 }
-

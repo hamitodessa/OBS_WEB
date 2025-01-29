@@ -196,7 +196,6 @@ async function deleteUserDetailsiz() {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ id, hesap })
 		});
-
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}

@@ -18,12 +18,12 @@
 <script src="js/custom.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
 
-
+<!-- Bootstrap CSS
 <style>
 
 .hidden {
     display: none;
-}
+} -->
 
 
 </style>
@@ -49,11 +49,8 @@
 									th:src="'data:image/jpeg;base64,' + ${profileImage}" alt="#" />
 							</div>
 							<div class="user_info">
-								<span sec:authorize="isAuthenticated()"
-									sec:authentication="name"></span>
-								<p>
-									<span class="online_animation"></span> Online
-								</p>
+								<span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+								<p><span class="online_animation"></span> Online </p>
 							</div>
 						</div>
 					</div>
@@ -64,47 +61,29 @@
 						<li class="active"><a href="#carihesap"	data-toggle="collapse" aria-expanded="false"
 							class="dropdown-toggle"> <i	class="fa fa-dashboard yellow_color"></i> <span>Cari Hesap</span></a>
 							<ul class="collapse list-unstyled" id="carihesap">
-								<li><a href="" class="changeLink"
-									data-url="/cari/hspplngiris"><span>Hesap Plani Giris</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/hspplnliste"><span>Hesap Plani</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/dekont"> <span>Dekont</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/tahsilat"> <span>Tahsilat Fisi</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/ekstre"> <span>Cari Ekstre</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/mizan"> <span>Cari Mizan</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/ozelmizan"> <span>Cari Ozel Mizan</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/dvzcevirme"> <span>Cari Dovize Cevirme</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/gunlukkontrol"> <span>Gunluk Takip</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/tahsilatrapor"> <span>Tahsilat Raporlama</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/tahsilatdegerleri"> <span>Tahsilat Degerleri</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/ornekhesapplani"> <span>Ornek Hesap Plani</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/cari/carikoddegis"> <span>Kod Degistirme</span></a></li>
-								<li><a href="" onclick="firmaIsmi('cari', event)"
-									> <span>Firma Ismi Degistirme</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/hspplngiris"><span>Hesap Plani Giris</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/hspplnliste"><span>Hesap Plani</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/dekont"> <span>Dekont</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/tahsilat"> <span>Tahsilat Fisi</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/ekstre"> <span>Cari Ekstre</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/mizan"> <span>Cari Mizan</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/ozelmizan"> <span>Cari Ozel Mizan</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/dvzcevirme"> <span>Cari Dovize Cevirme</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/gunlukkontrol"> <span>Gunluk Takip</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/tahsilatrapor"> <span>Tahsilat Raporlama</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/tahsilatdegerleri"> <span>Tahsilat Degerleri</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/ornekhesapplani"> <span>Ornek Hesap Plani</span></a></li>
+								<li><a href="" class="changeLink" data-url="/cari/carikoddegis"> <span>Kod Degistirme</span></a></li>
+								<li><a href="" onclick="firmaIsmi('cari', event)"><span>Firma Ismi Degistirme</span></a></li>
 							</ul>
 						</li>
 						<li class="active"><a href="#doviz" data-toggle="collapse"
-							aria-expanded="false" class="dropdown-toggle"> <i
-								class="fa fa-money orange_color"></i> <span>Kur Islemleri</span></a>
+							aria-expanded="false" class="dropdown-toggle"> <i class="fa fa-money orange_color"></i> <span>Kur Islemleri</span></a>
 							<ul class="collapse list-unstyled" id="doviz">
-								<li><a href="" class="changeLink"
-									data-url="/kur/kurgiris"><span>Kur Giris</span></a></li>
-								<li><a href="" class="changeLink"
-									data-url="/kur/kurrapor"><span>Kur Raporlama</span></a></li>
+								<li><a href="" class="changeLink" data-url="/kur/kurgiris"><span>Kur Giris</span></a></li>
+								<li><a href="" class="changeLink" data-url="/kur/kurrapor"><span>Kur Raporlama</span></a></li>
 							</ul>
 						</li>
-							
 						<li class="active"><a href="#adres" data-toggle="collapse"
 							aria-expanded="false" class="dropdown-toggle"> <i class="fa fa-envelope-o blue2_color"></i> <span>Adres Islemleri</span></a>
 							<ul class="collapse list-unstyled" id="adres">
@@ -114,7 +93,6 @@
 								<li><a href="" onclick="firmaIsmi('adres', event)"><span>Firma Ismi Degistirme</span></a></li>
 							</ul>
 						</li>
-						
 						<li class="active"><a href="#kambiyo" data-toggle="collapse"
 							aria-expanded="false" class="dropdown-toggle"> <i
 								class="fa fa-table purple_color2"></i> <span>Kambiyo Islemleri</span></a>
@@ -126,7 +104,6 @@
 								<li><a href="" onclick="firmaIsmi('kambiyo', event)"><span>Firma Ismi Degistirme</span></a></li>
 							</ul>
 						</li>
-						
 						<li class="active"><a href="#stok" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"> 
 							<i class="fa fa-clone yellow_color"></i><span>Stok Islemleri</span></a>
 							<ul class="collapse list-unstyled" id="stok">
@@ -141,7 +118,6 @@
 								<li><a href="" onclick="firmaIsmi('fatura', event)"><span>Firma Ismi Degistirme</span></a></li>
 							</ul>
 						</li>
-						
 						<li class="active"><a href="#kereste" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
 						 <i class="fa fa-paper-plane red_color"></i> <span>Kereste Islemleri</span></a>
 							<ul class="collapse list-unstyled" id="kereste">
@@ -185,8 +161,7 @@ class="fa fa-bar-chart-o green_color"
 				<div class="topbar">
 					<nav class="navbar navbar-expand-lg navbar-light">
 						<div class="full">
-							<button type="button" id="sidebarCollapse" class="sidebar_toggle">
-								<i class="fa fa-bars"></i>
+							<button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i>
 							</button>
 							<div class="logo_section">
 							<!--	<a href="index"><img class="img-responsive"	src="images/logo/obs_logo.png" alt="#" /></a>   -->
@@ -204,7 +179,7 @@ class="fa fa-bar-chart-o green_color"
     								</ul>
     								<ul>
         								<li>
-                								<span>     </span>
+                								<span></span>
         								</li>
     								</ul>
 

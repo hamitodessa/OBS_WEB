@@ -9,7 +9,6 @@ async function etiketListele() {
 				'Content-Type': 'text/html',
 			},
 		});
-
 		if (!response.ok) {
 			const errorText = await response.text();
 			throw new Error(errorText || "Bir hata oluştu.");
@@ -111,4 +110,3 @@ function aramaYap() {
      rows[i].style.display = shouldDisplay ? "" : "none";
    }
  }
- 

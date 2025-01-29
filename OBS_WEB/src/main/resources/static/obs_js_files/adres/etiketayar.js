@@ -19,8 +19,7 @@ async function ayarKayit() {
 	submitButton.textContent = 'İşleniyor...';
 
 	try {
-		const response = await
-			fetchWithSessionCheck("adres/etiketsettings_save", {
+		const response = await fetchWithSessionCheck("adres/etiketsettings_save", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -44,7 +43,7 @@ async function ayarKayit() {
 async function etsayfaYukle() {
 	const url = "adres/etiketayar";
 	try {
-		document.body.style.cursor = "wait"; // İşaretçiyi bekleme durumuna getir
+		document.body.style.cursor = "wait";
 		const response = await fetch(url, { method: "GET" });
 		if (!response.ok) {
 			throw new Error(`Bir hata oluştu: ${response.statusText}`);
@@ -60,6 +59,6 @@ async function etsayfaYukle() {
 		errorDiv.innerText = error;
 		document.getElementById('ara_content').innerHTML = `<h2>${error.message}</h2>`;
 	} finally {
-		document.body.style.cursor = "default"; // İşaretçiyi sıfırla
+		document.body.style.cursor = "default"; 
 	}
 }

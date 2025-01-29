@@ -1,4 +1,4 @@
-async function openurunkodlariModal(inputId, secondnerden,barkodurunkodu) {
+async function openurunkodlariModal(inputId, secondnerden, barkodurunkodu) {
   $('#urnsecondModal').modal('show');
   const modalError = document.getElementById("urnsecond-errorDiv");
   modalError.style.display = "none";
@@ -33,7 +33,7 @@ async function openurunkodlariModal(inputId, secondnerden,barkodurunkodu) {
 									 <td>${row.Ana_Grup || ""}</td>
 									 <td>${row.Alt_Grup || ""}</td>
                `;
-      tr.onclick = () => urnselectValue(inputId,row.Barkod , row.Kodu, secondnerden,barkodurunkodu);
+      tr.onclick = () => urnselectValue(inputId, row.Barkod, row.Kodu, secondnerden, barkodurunkodu);
       tableBody.appendChild(tr);
     });
   } catch (error) {
@@ -57,30 +57,30 @@ function stkfilterTable() {
 }
 
 function urnselectValue(inputId, selectedBarkod, selectedKodu, secondnerden, barkodurunkodu) {
-	const inputElementm = document.getElementById(inputId);
-	document.getElementById("urnsecond-modalSearch").value = "";
-	$('#urnsecondModal').modal('hide');
+  const inputElementm = document.getElementById(inputId);
+  document.getElementById("urnsecond-modalSearch").value = "";
+  $('#urnsecondModal').modal('hide');
 
-	if (inputElementm) {
-		if (barkodurunkodu === "ukodukod") {
-			inputElementm.value = selectedKodu;
-		} else if (barkodurunkodu === "barkod") {
-			inputElementm.value = selectedBarkod;
-		}
-	}
-	if (secondnerden === "imalat") {
-		urnaramaYap("Kodu");
-	}
-	else if (secondnerden === "imalatsatir") {
-		const event = new Event('change', { bubbles: true });
-		inputElementm.dispatchEvent(event);
-	}
+  if (inputElementm) {
+    if (barkodurunkodu === "ukodukod") {
+      inputElementm.value = selectedKodu;
+    } else if (barkodurunkodu === "barkod") {
+      inputElementm.value = selectedBarkod;
+    }
+  }
+  if (secondnerden === "imalat") {
+    urnaramaYap("Kodu");
+  }
+  else if (secondnerden === "imalatsatir") {
+    const event = new Event('change', { bubbles: true });
+    inputElementm.dispatchEvent(event);
+  }
   else if (secondnerden === "recetealt") {
-		const event = new Event('change', { bubbles: true });
-		inputElementm.dispatchEvent(event);
-	}
+    const event = new Event('change', { bubbles: true });
+    inputElementm.dispatchEvent(event);
+  }
   else if (secondnerden === "recetesatir") {
-		const event = new Event('change', { bubbles: true });
-		inputElementm.dispatchEvent(event);
-	}
+    const event = new Event('change', { bubbles: true });
+    inputElementm.dispatchEvent(event);
+  }
 }

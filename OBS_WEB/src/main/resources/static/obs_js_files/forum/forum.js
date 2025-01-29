@@ -8,7 +8,6 @@ async function loadSubjects() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-
 	try {
 		const response = await fetchWithSessionCheck('/getSubjects', {
 			method: 'GET',

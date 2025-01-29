@@ -4,7 +4,7 @@ async function lograpor() {
 	const endDate = document.getElementById("endDate").value;
 	const aciklama = document.getElementById("aciklama").value;
 	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none"; // Hata mesajını gizle
+	errorDiv.style.display = "none";
 	try {
 		const response = await fetchWithSessionCheck("user/loglistele", {
 			method: 'POST',
@@ -33,7 +33,7 @@ async function lograpor() {
 			});
 		}
 	} catch (error) {
-		errorDiv.style.display = "block"; // Hata mesajını göster
+		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
 	}
 }
