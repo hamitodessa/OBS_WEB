@@ -304,11 +304,11 @@ function satirekle() {
 }
 
 function handleBlur3(input) {
-	input.value = formatNumber3(input.value);
+	input.value = formatNumber3(parseLocaleNumber(input.value));
 	updateColumnTotal();
 }
 function handleBlur(input) {
-	input.value = formatNumber2(input.value);
+	input.value = formatNumber2(parseLocaleNumber(input.value));
 	updateColumnTotal();
 }
 

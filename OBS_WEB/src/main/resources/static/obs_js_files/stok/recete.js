@@ -116,7 +116,7 @@ function satirekle() {
 }
 
 function handleBlur3(input) {
-	input.value = formatNumber3(input.value);
+	input.value = formatNumber3(parseLocaleNumber(input.value));
 	updateColumnTotal();
 }
 

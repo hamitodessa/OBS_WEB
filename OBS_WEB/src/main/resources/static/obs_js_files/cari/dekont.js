@@ -455,7 +455,6 @@ async function dekkurOku(dvz_turu, cinsElement, targetInput) {
 	const yazilacakInput = document.getElementById(targetInput);
 
 	const tar = document.getElementById("dekontTarih").value;
-	//////////////////////////
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
