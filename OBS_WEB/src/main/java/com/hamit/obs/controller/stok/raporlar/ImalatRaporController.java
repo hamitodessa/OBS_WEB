@@ -30,7 +30,6 @@ public class ImalatRaporController {
 	@PostMapping("stok/imarapdoldur")
 	@ResponseBody
 	public Map<String, Object> imarapordoldur(@RequestBody imaraporDTO imaraporDTO) {
-		System.out.println("34");
 		Map<String, Object> response = new HashMap<>();
 		try {
 			String turuString[] =  grup_cevir(imaraporDTO.getAnagrp(),imaraporDTO.getAltgrp(),imaraporDTO.getDepo(),imaraporDTO.getUranagrp(),imaraporDTO.getUraltgrp());

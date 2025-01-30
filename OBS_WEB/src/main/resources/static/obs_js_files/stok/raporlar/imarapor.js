@@ -38,7 +38,6 @@ async function anagrpChanged(anagrpElement, altgrpElement) {
 async function openimarapModal(modal) {
     $(modal).modal('show');
     document.body.style.cursor = "wait";
-
     try {
         const response = await fetchWithSessionCheck("stok/anadepo", {
             method: "POST",
@@ -46,42 +45,33 @@ async function openimarapModal(modal) {
                 "Content-Type": "application/json"
             }
         });
-
         if (response.errorMessage) {
             throw new Error(response.errorMessage);
         }
-
         const ana = response.anaKodlari;
         const dpo = response.depoKodlari;
         const uranaSelect = document.getElementById("uranagrp");
         const anaSelect = document.getElementById("anagrp");
         const dpoSelect = document.getElementById("depo");
-        // Seçenekleri temizle
         anaSelect.innerHTML = "";
         uranaSelect.innerHTML = "";
         dpoSelect.innerHTML = "";
-
-
-        // Gelen veriyi selectlere ekle
         ana.forEach(item => {
             const optionAna = document.createElement("option");
             optionAna.value = item.ANA_GRUP;
             optionAna.textContent = item.ANA_GRUP;
             anaSelect.appendChild(optionAna);
-
             const optionUrana = document.createElement("option");
             optionUrana.value = item.ANA_GRUP;
             optionUrana.textContent = item.ANA_GRUP;
             uranaSelect.appendChild(optionUrana);
         });
-
         dpo.forEach(item => {
             const option = document.createElement("option");
             option.value = item.DEPO;
             option.textContent = item.DEPO;
             dpoSelect.appendChild(option);
         });
-
     } catch (error) {
         const modalError = document.getElementById("errorDiv");
         modalError.style.display = "block";
@@ -94,7 +84,6 @@ async function openimarapModal(modal) {
 async function imafetchTableData() {
     const hiddenFieldValue = $('#imarapBilgi').val();
     const parsedValues = hiddenFieldValue.split(",");
- 
     const imaraporDTO = {
         evrno1: parsedValues[0],
         evrno2: parsedValues[1],
@@ -144,6 +133,7 @@ async function imafetchTableData() {
                                     <td>${item.Birim || ''}</td>
                                     <td class="double-column">${formatNumber3(item.Agirlik)}</td>
 									<td>${item.Depo || ''}</td>
+                                    <td>${item.Ana_Grup || ''}</td>
 									<td>${item.Alt_Grup || ''}</td>
 									<td>${item.Barkod || ''}</td>
 									<td>${item.Recete || ''}</td>
@@ -151,7 +141,6 @@ async function imafetchTableData() {
 				                `;
             tableBody.appendChild(row);
         });
-
     } catch (error) {
         errorDiv.style.display = "block";
         errorDiv.innerText = error.message;
@@ -160,4 +149,3 @@ async function imafetchTableData() {
         document.body.style.cursor = "default";
     }
 }
-

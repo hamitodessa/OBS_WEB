@@ -162,7 +162,7 @@ async function fatfetchTableData() {
                                         <tr>
                                             <th>Kodu</th>
                                             <th>Adi</th>
-                                            <th>Miktar</th>
+                                            <th style="text-align: right;">Miktar</th>
                                             <th>Birim</th>
                                             <th style="text-align: right;">Fiat</th>
                                             <th>Doviz</th>
@@ -192,10 +192,10 @@ async function fatfetchTableData() {
 								detailsTable += `
                                     <tr>
                                         <td style="min-width:80px;">${item.Kodu || ''}</td>
-                                        <td style="min-width:200px;">${item.Adi || ''}</td>
+                                        <td style="min-width:250px;">${item.Adi || ''}</td>
                                         <td style="text-align: right;min-width:80px;">${formatNumber3(item.Miktar)}</td>
                                         <td>${item.Birim || ''}</td>
-                                        <td style="text-align: right;min-width:60px;">${formatNumber2(item.Fiat)}</td>
+                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Fiat)}</td>
                                         <td>${item.Doviz || ''}</td>
                                         <td style="text-align: right;min-width:80px;">${formatNumber2(item.Tutar)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Iskonto)}</td>
