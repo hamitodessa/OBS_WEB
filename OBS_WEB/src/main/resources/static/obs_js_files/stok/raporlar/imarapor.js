@@ -121,6 +121,8 @@ async function imafetchTableData() {
             throw new Error(response.errorMessage);
         }
         console.info(response);
+        let totalmiktar = 0;
+        let totalagirlik = 0;
         response.data.forEach(item => {
             const row = document.createElement("tr");
             row.classList.add("table-row-height");
@@ -139,7 +141,17 @@ async function imafetchTableData() {
 									<td>${item.Recete || ''}</td>
 				                    <td>${item.USER || ''}</td>
 				                `;
+            totalmiktar += item.Miktar;
+            totalagirlik += item.Agirlik
             tableBody.appendChild(row);
+        });
+        const totalMiktarCell = document.getElementById("totalMiktar");
+        const totalAgirlikCell = document.getElementById("totalAgirlik");
+        totalMiktarCell.textContent = totalmiktar.toLocaleString(undefined, {
+            minimumFractionDigits: 3, maximumFractionDigits: 3
+        });
+        totalAgirlikCell.textContent = totalagirlik.toLocaleString(undefined, {
+            minimumFractionDigits: 3, maximumFractionDigits: 3
         });
     } catch (error) {
         errorDiv.style.display = "block";
