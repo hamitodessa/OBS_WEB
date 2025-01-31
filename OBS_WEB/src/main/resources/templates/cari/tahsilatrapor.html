@@ -92,20 +92,21 @@ th, td {
 	<div id="errorDiv"
 		style="display: none; color: red; font-weight: bold;"></div>
 	<div class="container">
-		<div class="table-container">
+		<div class="table-container" >
+
 			<table id="main-table" class="table table-bordered table-hover">
 				<thead class="thead-dark">
 					<tr>
 						<th></th>
 						<th>EVRAK</th>
 						<th>TARIH</th>
-						<th>CARI_HESAP</th>
-						<th>UNVAN</th>
+						<th style="min-width:100px;">CARI_HESAP</th>
+						<th style="min-width:200px;">UNVAN</th>
 						<th>ADRES_HESAP</th>
 						<th>ADRES_UNVAN</th>
 						<th>CINS</th>
-						<th>TUR</th>
-						<th>POS_BANKA</th>
+						<th style="min-width:100px;">TUR</th>
+						<th style="min-width:200px;">POS_BANKA</th>
 						<th>DVZ_CINS</th>
 						<th class="double-column">TUTAR</th>
 					</tr>
@@ -113,6 +114,7 @@ th, td {
 				<tbody id="mainTableBody">
 				</tbody>
 			</table>
+
 		</div>
 	</div>
 <input type="hidden" id="tahrapBilgi" name="tahrapBilgi" value="initialValue">

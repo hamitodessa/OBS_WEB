@@ -858,7 +858,7 @@ public class CariMsSQL implements ICariDatabase{
 				cinString = " CINS = '" + (tahrapDTO.getTah_ted() - 1) + "' AND";
 			if(tahrapDTO.getHangi_tur() != 0)
 				turString = " TUR = '" + (tahrapDTO.getHangi_tur() -1) + "' AND";
-			if(! tahrapDTO.getPos().equals("Hepsi"))
+			if(! tahrapDTO.getPos().equals(""))
 				posString = " POS_BANKA = '" + tahrapDTO.getPos() + "' AND";
 			String sql = "SELECT EVRAK,TARIH,C_HES as CARI_HESAP," + 
 					" (SELECT UNVAN FROM HESAP WHERE HESAP = C_HES ) AS UNVAN,"+ 
