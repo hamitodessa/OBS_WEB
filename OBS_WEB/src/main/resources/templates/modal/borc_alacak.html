@@ -1,33 +1,27 @@
 <style>
-    /* Modal boyutunu sınırla */
     .modal-dialog {
-     	height: 500px; /* Modal yüksekliği */
-        margin: 0 auto; /* Modalı ortalar */
+     	height: 500px;
+        margin: 0 auto;
     }
 
     .modal-content {
-        overflow-y: auto; /* Fazla içerik için kaydırma */
+        overflow-y: auto;
     }
 
-    /* Üst üste açılan modallar için */
     .modal-backdrop {
-        z-index: 1040 !important; /* Birinci modalın üstüne çıkacak */
+        z-index: 1040 !important;
     }
     #secondModal {
-        z-index: 1050 !important; /* İkinci modal birinciden daha yukarıda */
+        z-index: 1050 !important;
     }
 </style>
-
-<!-- Modal -->
  <div class="modal fade" th:fragment="modalborcalacak" id="firstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" >
     <div class="modal-content">
-    
       	<div class="modal-header">
        			 <h5 class="modal-title" id="exampleModalLabel">Karsi Hesap</h5>
         		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       	</div>
-		
       <div class="modal-body">
   		<div class="input-group" style="padding:2px;">
   			<div class="input-group-prepend">
@@ -41,7 +35,6 @@
 			<label id="lblborcalacak" class="form-control" style="font-weight: bold;">...</label>
 		</div>
       </div>
-      
       <div class="modal-footer">
         <button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Kaydet</button>
       </div>
