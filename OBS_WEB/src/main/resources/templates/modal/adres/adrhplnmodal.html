@@ -1,0 +1,23 @@
+<div class="modal fade" th:fragment="adrsecondModal" id="adrsecondModal" tabindex="-2" aria-labelledby="secondModalLabel" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 35%;">
+        <div class="modal-content" style="height: 600px; overflow-y: hidden;">
+            <div class="modal-header">
+                <input type="text" class="form-control" id="adrsecond-modalSearch" placeholder="Search..." oninput="adrfilterTable()">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="adrsecond-errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+            <div class="adrsecond-modall-table-container">
+                <table id="adrsecond-modalTable" class="table adrsecond-modal-table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th style="min-width:20%;">KODU</th>
+                            <th>UNVAN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adrsecond-modalTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

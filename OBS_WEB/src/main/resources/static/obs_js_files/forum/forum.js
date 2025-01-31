@@ -23,8 +23,8 @@ async function loadSubjects() {
 		}
 		if (response.success) {
 			const subjects = response.subjects;
-			allSubjects = subjects; // Global değişken
-			renderSubjects(subjects); // Gelen veriyi render etmek
+			allSubjects = subjects;
+			renderSubjects(subjects);
 		} else {
 			errorDiv.style.display = "block";
 			errorDiv.innerText = "Bir hata oluştu.";
@@ -51,11 +51,7 @@ function renderSubjects(subjects) {
                 <h4 style="font-weight: bold;">${subject.subjectTitle}</h4>
                 <p style="border: 1px solid #ddd; padding: 10px; border-radius: 4px;">${subject.subjectDescription}</p>
                 <button onclick="toggleCommentForm(${subject.subjectID})">Yorum Ekle</button>
-
-                <!-- Commits Göstermek/Gizlemek için Buton -->
                 <button onclick="toggleCommits(${subject.subjectID})" style="margin-top: 10px;">Yorumları Göster</button>
-
-                <!-- Yorumlar -->
                 <div id="commits-${subject.subjectID}" class="commits" style="display: none; margin-top: 10px;border: 1px solid #ddd;">
                     ${commits
 				.map(
@@ -67,8 +63,6 @@ function renderSubjects(subjects) {
 				)
 				.join('')}
                 </div>
-
-                <!-- Yorum Formu -->
                 <div id="comment-form-${subject.subjectID}" class="comment-form" style="display: none; margin-top: 10px;">
                     <textarea id="comment-text-${subject.subjectID}" placeholder="Yorum Yaz..." rows="3" style="width: 100%; padding: 10px;" maxlength="255"></textarea>
                     <button onclick="submitComment(${subject.subjectID})" style="margin-top: 5px; padding: 10px; background-color: #6200ea; color: white; border: none; border-radius: 4px;">Yorum Kaydet</button>

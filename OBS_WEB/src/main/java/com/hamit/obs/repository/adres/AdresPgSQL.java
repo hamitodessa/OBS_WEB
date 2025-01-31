@@ -214,4 +214,19 @@ public class AdresPgSQL implements IAdresDatabase {
 		}
 		return resultList; 
 	}
+
+	@Override
+	public List<Map<String, Object>> adr_hpl(ConnectionDetails adresConnDetails) {
+		String sql =  "SELECT \"M_KODU\" as \"M_Kodu\" ,\"ADI\" as \"Adi\" FROM \"ADRES\" ORDER BY \"M_KODU\"";
+		List<Map<String, Object>> resultList = new ArrayList<>(); 
+		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException("MS adrService genel hatası.", e);
+		}
+		return resultList; 
+	}
 }

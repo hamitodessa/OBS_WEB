@@ -166,6 +166,4 @@ public class IForumRepository  {
 			throw new ServiceException( e.getMessage()); 
 		}
 	}
-
-	
 }

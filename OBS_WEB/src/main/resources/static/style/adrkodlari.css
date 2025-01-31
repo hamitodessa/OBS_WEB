@@ -1,0 +1,51 @@
+.adrsecond-modall-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#adrsecond-modalTableBody {
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.adrsecond-modall-table-container {
+    overflow-y: auto;
+    overflow-x: auto;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+#adrsecond-searchInputContainer {
+    flex: 0 0 auto;
+    background-color: white;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    z-index: 1;
+}
+
+.adrsecond-modal-table th,
+.adrsecond-modal-table td {
+    text-align: left;
+}
+
+.adrsecond-modal-table tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.adrsecond-table .thead-dark th {
+    color: #fff;
+    background: #214162;
+}
+
+.adrsecond-modal-table.table-hover tbody tr:hover {
+    background-color: #ced4da !important;
+    color: inherit !important;
+}
+
+.adrsecond-modal-table .table-row-height td {
+    height: 10px;
+    line-height: 10px;
+}
+

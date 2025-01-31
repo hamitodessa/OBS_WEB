@@ -70,9 +70,7 @@ datalist {
 		</li>
 	</ul>
 </div>	
-	<!-- Tab Content -->
 	<div class="tab-content" id="myTabContent">
-		<!-- Tab 1 Content -->
 		<div class="tab-pane fade show active" id="tab1" role="tabpanel"
 			aria-labelledby="tab1-tab">
 			<div class="child">
@@ -105,22 +103,26 @@ datalist {
 				
 				<div class="group-box">
 					<div class="form-row">
+						<div style="position: relative; width: 150px;">
 						<select class="form-control" id="tah_ted" name="tah_ted">
 							<option value="Tahsilat">Tahsilat</option>
 							<option value="Tediye">Tediye</option>
-						</select> <span style="padding-left: 8%;"></span> 
-						<select
-							class="form-control" id="tur" name="tur"
-							onchange=turChange()>
+						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+						</div>
+						<span style="padding-left: 8%;"></span> 
+
+						<div style="position: relative; width: 150px;">
+						<select class="form-control" id="tur" name="tur" onchange=turChange()>
 							<option value="Nakit">Nakit</option>
 							<option value="Cek">Cek</option>
 							<option value="Kredi Karti">Kredi Karti</option>
 						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+						</div>
 						<span style="padding-left: 15%;"></span> 
-						<input type="text"
-							id="tutar" onblur="formatInputBox2(this)"
-							class="form-control saga-bold" value="0.00"
-							style="width: 150px; text-align: right;">
+						<input type="text" id="tutar" onblur="formatInputBox2(this)"
+							class="form-control saga-bold" value="0.00" style="width: 150px; text-align: right;">
 					</div>
 				</div>
 				<!-- ****************************************************************************************************** -->
@@ -128,14 +130,13 @@ datalist {
 					<div style="display: flex; align-items: center; gap: 10px;">
 						<label for="label5" style="width: 75px;">Cari Kodu</label>
 						<div style="position: relative; width: 125px;">
-							<input class="form-control cins_bold"
-								ondblclick="openSecondModal('tcheskod', 'tahsilat')"
+							<input class="form-control cins_bold" ondblclick="openSecondModal('tcheskod', 'tahsilat')"
 								list="chkoduOptions" maxlength="12" id="tcheskod"
 								oninput="hesapAdiOgren(this.value, 'lblcheskod'); validateAutoSearch('tcheskod', 'chkoduOptions')">
 							<datalist id="chkoduOptions">
 								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option> 
 							</datalist>
-							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 						</div>
 						<span style="padding-left: 80px;"></span>
 						<label for="label5" style="width: 100px;">Adres Kodu</label>
@@ -144,7 +145,7 @@ datalist {
 								oninput="adrhesapAdiOgren('adresheskod','lbladrheskod')"
 								list="adreskoduOptions" maxlength="12" id="adresheskod">
 							<datalist id="adreskoduOptions"></datalist>
-							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
+							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 						</div>
 					</div>
 					<div style="display: flex; align-items: center; gap: 10px;margin-top:7px;">
@@ -172,12 +173,15 @@ datalist {
 						<!-- İkinci Satır: 3 Input -->
 						<div class="row mb-2">
 							<div class="col">
-								<select class="form-control" id="dvz_cins" name="dvz_cins" style="width: 100px">
-									<option value="TL">TL</option>
-									<option value="USD">USD</option>
-									<option value="EUR">EUR</option>
-									<option value="RUB">RUB</option>
-								</select>
+								<div style="position: relative; width: 100px;">
+									<select class="form-control" id="dvz_cins" name="dvz_cins" style="width: 100px">
+										<option value="TL">TL</option>
+										<option value="USD">USD</option>
+										<option value="EUR">EUR</option>
+										<option value="RUB">RUB</option>
+									</select>
+									<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+								</div>
 							</div>
 							<div class="col" id="cekbilgidiv" style="display: none;">
 								<label id="ceksayisi" class="form-control" style="width: 100px">0</label>

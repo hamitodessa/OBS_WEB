@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
 
@@ -21,6 +22,9 @@ public class ModalController {
 	
 	@Autowired
 	private FaturaService faturaService;
+	
+	@Autowired
+	private AdresService adresService;
 
 	@GetMapping("/modal/hsppln")
 	@ResponseBody
@@ -47,4 +51,19 @@ public class ModalController {
 			throw new ServiceException("Modal verileri alınırken bir hata oluştu.", e);
 		}
 	}
+	
+	@GetMapping("/modal/adrhsppln")
+	@ResponseBody
+	public List<Map<String, Object>> getModalDataadr() {
+		try {
+			List<Map<String, Object>> modalData = adresService.adr_hpl();
+			return (modalData != null) ? modalData : new ArrayList<>();
+		} catch (ServiceException e) {
+			throw e; 
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException("Modal verileri alınırken bir hata oluştu.", e);
+		}
+	}
+
 }

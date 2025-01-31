@@ -1,134 +1,131 @@
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            width: 90%;
-            margin: 10px auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 10px;
-        }
-
-        .header {
-            text-align: center;
-            padding: 10px;
-            background-color: #214162;
-            color: white;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .subject {
-            padding: 10px;
-            margin-bottom: 5px;
-            border: 1px solid #ddd;
-        }
-
-        .subject:hover {
-            background-color: #f9f9f9;
-        }
-
-        .subject h3 {
-            margin: 0;
-        }
-
-        .subject button {
-            margin-top: 10px;
-            padding: 5px 10px;
-            background-color:  #214162;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .subject button:hover {
-            background-color: #5300c9;
-        }
-
-        .commits {
-            margin-top: 10px;
-            padding-left: 20px;
-            border-left: 2px solid #ddd;
-        }
-
-        .commit {
-            padding: 10px;
-            margin-right: 20px;
-            
-            border-bottom: 1px solid #ddd;
-        }
-
-        .commit:last-child {
-            border-bottom: none;
-        }
-
-        .commit h4 {
-            margin: 0;
-            font-size: 14px;
-            color:  #214162;
-        }
-
-        .commit p {
-            margin: 5px 0;
-        }
-
-        .form {
-            margin-top: 20px;
-        }
-
-        .form input, .form textarea, .form button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .form button {
-            background-color:  #214162;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .form button:hover {
-            background-color: #5300c9;
-        }
-    </style>
+<style>
+  body {
+/*   font-family: Arial, sans-serif;  */
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  .container {
+    width: 90%;
+    margin: 10px auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+  }
+  
+  .header {
+    text-align: center;
+    padding: 10px;
+    background-color: #214162;
+    color: white;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .subject {
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .subject:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .subject h3 {
+    margin: 0;
+  }
+  
+  .subject button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #214162;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .subject button:hover {
+    background-color: #5300c9;
+  }
+  
+  .commits {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 2px solid #ddd;
+  }
+  
+  .commit {
+    padding: 10px;
+    margin-right: 20px;
+  
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .commit:last-child {
+    border-bottom: none;
+  }
+  
+  .commit h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #214162;
+  }
+  
+  .commit p {
+    margin: 5px 0;
+  }
+  
+  .form {
+    margin-top: 20px;
+  }
+  
+  .form input,
+  .form textarea,
+  .form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form button {
+    background-color: #214162;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .form button:hover {
+    background-color: #5300c9;
+  }
+</style>
 <div class="card p-4">
-    <div class="container">
-        <div class="header">
-            <h4 style="font-weight: bold;">Forum</h4>
-        </div>
-
-		<div class="search-container" style="margin-bottom: 10px;margin-top: 20px;">
-    		<input
-        	type="text"
-        	id="search-input"
-        	placeholder="Konuları ara..."
-        	onkeyup="filterSubjects()"
-       		style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"/>
-		</div>
-		<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-        <!-- Subjects Section -->
-        <div class="subject-section">
-            <!-- Subjects dinamik olarak yüklenecek -->
-        </div>
-
-        <!-- Add a New Subject -->
-        <div class="form">
-            <h4>Yeni Konu Ekle</h4>
-            <input type="text" id="subject-title" placeholder="Konu Basligi" required maxlength="255">
-            <textarea id="subject-description" placeholder="Konu Detayi" rows="4" required maxlength="300"></textarea>
-            <button onclick="addSubject()" id="saveButton">Kaydet</button>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h4 style="font-weight: bold;">Forum</h4>
     </div>
+
+    <div class="search-container" style="margin-bottom: 10px;margin-top: 20px;">
+      <input type="text" id="search-input" placeholder="Konuları ara..." onkeyup="filterSubjects()" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+    </div>
+    <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+    <!-- Subjects Section -->
+    <div class="subject-section">
+      <!-- Subjects dinamik olarak yüklenecek -->
+    </div>
+
+    <!-- Add a New Subject -->
+    <div class="form">
+      <h4>Yeni Konu Ekle</h4>
+      <input type="text" id="subject-title" placeholder="Konu Basligi" required maxlength="255" />
+      <textarea id="subject-description" placeholder="Konu Detayi" rows="4" required maxlength="300"></textarea>
+      <button onclick="addSubject()" id="saveButton">Kaydet</button>
+    </div>
+  </div>
 </div>
 <script src="/obs_js_files/forum/forum.js"></script>

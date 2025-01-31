@@ -17,5 +17,6 @@ public interface IAdresDatabase {
 	String[] adr_etiket_arama_kod(String kodu, ConnectionDetails adresConnDetails);
 	void adres_firma_adi_kayit(String fadi,ConnectionDetails adresConnDetails);
 	List<Map<String, Object>> adr_etiket(String siralama,ConnectionDetails adresConnDetails);
+	List<Map<String, Object>> adr_hpl(ConnectionDetails adresConnDetails);
 	
 }

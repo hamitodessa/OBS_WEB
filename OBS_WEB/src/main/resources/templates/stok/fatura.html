@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="style/yenihsppln.css" />
 <link rel="stylesheet" href="style/urnkodlari.css" />
+<link rel="stylesheet" href="style/adrkodlari.css" />
 
 <style>
 .editable-cell {
@@ -70,20 +71,20 @@ datalist {
 }
 
 .resimdiv {
-  width: 100%; /* Sabit genişlik */
-    min-height: 100%; /* Sabit yükseklik */
+  width: 100%; 
+    min-height: 100%;
     border: 1px solid #ddd; 
-    overflow: hidden; /* Resmin taşmasını engelle */
-    background-color: #f8f9fa; /* Arka plan rengi */
-    display: flex; /* İçeriği ortalamak için */
-    justify-content: center; /* Yatay merkezleme */
-    align-items: center; /* Dikey merkezleme */
+    overflow: hidden;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .resimgoster {
-    max-width: 100%; /* Resmi genişlik olarak sınırlamak için */
-    max-height: 100%; /* Resmi yükseklik olarak sınırlamak için */
-     object-fit: contain; /* Resmi divin içine sığdırırken orantıyı korur */
-    background-color: #f8f9fa; /* Arka plan rengi */
+    max-width: 100%;
+    max-height: 100%;
+     object-fit: contain; 
+    background-color: #f8f9fa;
     
 }
 </style>
@@ -165,7 +166,7 @@ datalist {
 					<span style="padding-left: 187px;"></span> 
 					<label style="width:70px;">Adres Kod</label>
 					<span style="padding-left: 5px;"></span> 
-					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')"  style="width: 120px; font-weight: bold;" />
+					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')" ondblclick="openadrkodlariModal('adreskod', 'fatura')"  style="width: 120px; font-weight: bold;" />
 					<span style="padding-left: 35px;"></span> 	
 					<label style="width:80px;">Varsayilan</label>	
 					<div style="position: relative; width: 150px;">
@@ -358,5 +359,8 @@ datalist {
 <div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>
+<div th:replace="~{modal/adres/adrhplnmodal :: adrsecondModal}"></div>
+
+
 
 <script src="/obs_js_files/stok/fatura.js"></script>
