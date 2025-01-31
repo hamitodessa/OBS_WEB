@@ -106,6 +106,10 @@ async function imafetchTableData() {
     errorDiv.innerText = "";
     const tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
+	
+	document.getElementById("totalMiktar").textContent = '0.000';
+	document.getElementById("totalAgirlik").textContent = '0.000';
+			
     document.body.style.cursor = "wait";
     const $yenileButton = $('#imayenileButton');
     $yenileButton.prop('disabled', true).text('İşleniyor...');
