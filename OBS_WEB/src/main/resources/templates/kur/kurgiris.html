@@ -1,13 +1,12 @@
 <style>
 .centered-div {
-	width: 45%; /* Genişlik %80 */
-	margin: 0 auto; /* Ekran ortasında konumlandırma */
+	width: 45%;
+	margin: 0 auto;
 	padding: 4px;
 	border: 1px solid #ccc; 
 	box-sizing: border-box;
 	align-items: center;
-	/* Padding ve border genişlik içinde hesaplansın */
-	text-align: center; /* İçerikleri ortala (opsiyonel) */
+	text-align: center; 
 }
 
 .buttonBolum {
@@ -15,7 +14,7 @@
 	width: 100%;
 	box-sizing: border-box;
 	display: flex;
-	justify-content: flex-start; /* Elemanları sola hizalar */
+	justify-content: flex-start;
 	gap: 10px;
 }
 
@@ -25,7 +24,7 @@
 	display: flex;
 	align-items: center;
 	border: 1px solid #ccc;
-	height: 50px; /* Yüksekliği sabitledim */
+	height: 50px;
 }
 .group-box {
 	padding: 1px;
@@ -34,20 +33,20 @@
 	
 	display: flex;
 	align-items: center;
-/*	border: 1px solid #ccc;   */
+
 }
 
 div::-webkit-scrollbar {
-    width: 8px; /* Kaydırma çubuğu genişliği */
+    width: 8px;
 }
 
 div::-webkit-scrollbar-thumb {
-    background-color: #888; /* Kaydırma çubuğu rengi */
-    border-radius: 4px; /* Köşeleri yuvarla */
+    background-color: #888;
+    border-radius: 4px; 
 }
 
 div::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Hover efekti */
+    background: #555;
 }
 
 
@@ -106,31 +105,28 @@ th:nth-child(7), td:nth-child(7) {
 	<div class="centered-div">
 		<div class="aramagroup-box">
 			<span style="padding-left: 5px;"></span> 
-			<select
-				style="width: 100px;" class="form-control" id="doviz_tur" onchange=kurSatirOku()
-				name="doviz_tur">
-				<option value="USD">USD</option>
-				<option value="EUR">EUR</option>
-				<option value="RUB">RUB</option>
-			</select> <span style="padding-left: 50px;"></span>
+			<div style="position: relative; width: 150px;">
+				<select style="width: 100%;" class="form-control" id="doviz_tur" onchange=kurSatirOku() name="doviz_tur">
+					<option value="USD">USD</option>
+					<option value="EUR">EUR</option>
+					<option value="RUB">RUB</option>
+				</select> 
+				<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+			</div>
+			<span style="padding-left: 50px;"></span>
 			<button type="button" id="geriButton" class="btn btn-secondary ml-2" onclick="tarihGeri()">
 				<i class="fa fa-backward"></i>
 			</button>
-			
 			<span style="width: 10px;"></span> 
 			<input type="date" id="tarih" class="form-control" style="width: 150px; font-weight: bold;" th:value="${tarih}" onkeypress="checkEnter(event)" /> 
 			<span style="width: 10px;"></span>
-			
 			<button type="button" id="ileriButton" onclick="tarihIleri()" class="btn btn-secondary ml-2" >	
 			<i class="fa fa-forward"></i>
 			</button>
-			
-<!-- 		<span style="padding-left: 50px;"></span>
-			<button type="button" id="geriButton" class="btn btn-secondary ml-2"
-				onclick="merkezOku()">
-				<i class="fa fa-bank"></i>
+	 		<span style="padding-left: 50px;"></span>
+			<button type="button" id="merkezokuButton" class="btn btn-secondary ml-2"
+				onclick="merkezOku()"><i class="fa fa-bank"></i>
 			</button>
- -->	
 		</div>
 		<br>
 		<div
@@ -149,16 +145,12 @@ th:nth-child(7), td:nth-child(7) {
 				<span style="padding-left: 5px;"></span> 
 				<span class="input-group-text" style="min-width: 100px;">Alis</span> <span
 					style="padding-left: 5px;"></span> 
-					
 					<input id="ma" style="max-width: 150px;" type="number" value="0.0000" class="form-control saga-bold"> 
 					<span style="padding-left: 5px;"></span> 
-					
 					<input id="ba" style="max-width: 150px;" type="number" value="0.0000" class="form-control saga-bold"> 
 					<span style="padding-left: 5px;"></span>
-					
 					<input id="sa" style="max-width: 150px;" type="number" value="0.0000" class="form-control saga-bold"> 
 					<span style="padding-left: 5px;"></span>
-					
 			</div>
 			<div class="group-box" style="margin-top: 5px;margin-bottom: 5px;">
 				<span style="padding-left: 5px;"></span> <span
@@ -192,18 +184,13 @@ th:nth-child(7), td:nth-child(7) {
 					</tr>
 				</thead>
 				<tbody id="tableBody">
-					<!-- Dinamik içerik burada yüklenecek -->
 				</tbody>
 			</table>
 		</div>
-		
 		<div class="buttonBolum">
-				<button class="btn btn-primary" type="button" id="kaydetButton"
-					onclick="kurKayit()">Kaydet</button>
-				<button class="btn btn-primary" type="button" id="silButton" 
-					onclick="kurYoket()">Sil</button>
+				<button class="btn btn-primary" type="button" id="kaydetButton"	onclick="kurKayit()">Kaydet</button>
+				<button class="btn btn-primary" type="button" id="silButton" onclick="kurYoket()">Sil</button>
 		</div>
-			
 	</div>
 </div>
 <script src="/obs_js_files/kur/kurgiris.js"></script>
