@@ -68,7 +68,7 @@ async function fatfetchTableData() {
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
 	const mainTableBody = document.getElementById("mainTableBody");
 	mainTableBody.innerHTML = "";
-
+	clearTfoot();
 	try {
 		const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
 			method: "POST",
@@ -82,18 +82,18 @@ async function fatfetchTableData() {
 		}
 		data = response;
 		let sqlHeaders = "";
-
 		if (response.raporturu === 'fno') {
 			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "MIKTAR", "TUTAR", "ISK. TUTAR"];
-			updateTableHeaders(sqlHeaders);
+			updateTableHeadersfno(sqlHeaders);
 		} else if (response.raporturu === 'fkodu') {
 			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISKONTOLU_TUTAR", "KDV_TUTAR", "TOPLAM_TUTAR"];
 			updateTableHeadersfkodu(sqlHeaders);
 		} else if (response.raporturu === 'fnotar') {
 			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISKONTOLU_TUTAR", "KDV_TUTAR", "TOPLAM_TUTAR"];
-			updateTableHeadersfkodu(sqlHeaders);
+			updateTableHeadersfnotar(sqlHeaders);
 		}
-
+		let totalmiktar = 0;
+		let totaltutar = 0;
 		data.data.forEach(rowData => {
 			const row = document.createElement('tr');
 			row.classList.add('expandable');
@@ -111,6 +111,8 @@ async function fatfetchTableData() {
                     <td class="double-column">${formatNumber3(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
                 `;
+				totalmiktar += rowData.Miktar;
+				totaltutar += rowData.Iskontolu_Tutar;
 			}
 			else if (response.raporturu === 'fkodu') {
 				row.innerHTML = `
@@ -125,6 +127,8 @@ async function fatfetchTableData() {
                     <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
                 `;
+				totalmiktar += rowData.Miktar;
+				totaltutar += rowData.Toplam_Tutar;
 			} if (response.raporturu === 'fnotar') {
 				row.innerHTML = `
                     <td class="toggle-button">+</td>
@@ -139,6 +143,8 @@ async function fatfetchTableData() {
                     <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
                 `;
+				totalmiktar += rowData.Miktar;
+				totaltutar += rowData.Toplam_Tutar;
 			}
 			mainTableBody.appendChild(row);
 			const detailsRow = document.createElement('tr');
@@ -236,6 +242,19 @@ async function fatfetchTableData() {
 				});
 			}
 		});
+		if (response.raporturu === 'fno') {
+			document.getElementById("toplam-7").innerText = formatNumber3(totalmiktar);
+			document.getElementById("toplam-9").innerText = formatNumber2(totaltutar);
+
+		}
+		else if (response.raporturu === 'fkodu') {
+			document.getElementById("toplam-4").innerText = formatNumber3(totalmiktar);
+			document.getElementById("toplam-8").innerText = formatNumber2(totaltutar);
+		}
+		else if (response.raporturu === 'fnotar') {
+			document.getElementById("toplam-6").innerText = formatNumber3(totalmiktar);
+			document.getElementById("toplam-10").innerText = formatNumber2(totaltutar);
+		}
 		document.body.style.cursor = "default";
 	} catch (error) {
 		errorDiv.style.display = "block";
@@ -243,6 +262,17 @@ async function fatfetchTableData() {
 	} finally {
 		$yenileButton.prop('disabled', false).text('Yenile');
 		document.body.style.cursor = "default";
+	}
+}
+
+function clearTfoot() {
+	let table = document.querySelector("#main-table");
+	let tfoot = table.querySelector("tfoot");
+	if (tfoot) {
+		let cells = tfoot.querySelectorAll("th");
+		for (let i = 0; i < cells.length; i++) {
+			cells[i].textContent = "";
+		}
 	}
 }
 
@@ -268,61 +298,125 @@ async function fetchDetails(evrakNo, cins) {
 	}
 }
 
-function updateTableHeaders(headers) {
-    let thead = document.querySelector("#main-table thead");
-    let table = document.querySelector("#main-table");
-    let tfoot = table.querySelector("tfoot");
-    if (!tfoot) {
-        tfoot = document.createElement("tfoot");
-        table.appendChild(tfoot);
-    }
-    thead.innerHTML = "";
-    let trHead = document.createElement("tr");
-    trHead.classList.add("thead-dark");
-    headers.forEach((header, index) => {
-        let th = document.createElement("th");
-        th.textContent = header;
-        if (index >= headers.length - 3) {
-            th.classList.add("double-column");
-        }
-        trHead.appendChild(th);
-    });
-    thead.appendChild(trHead);
-    tfoot.innerHTML = "";
-    let trFoot = document.createElement("tr");
-    headers.forEach((header, index) => {
-        let th = document.createElement("th");
-        if (index === 7 || index === 8) {
+function updateTableHeadersfno(headers) {
+	let thead = document.querySelector("#main-table thead");
+	let table = document.querySelector("#main-table");
+	let tfoot = table.querySelector("tfoot");
+	if (!tfoot) {
+		tfoot = document.createElement("tfoot");
+		table.appendChild(tfoot);
+	}
+	thead.innerHTML = "";
+	let trHead = document.createElement("tr");
+	trHead.classList.add("thead-dark");
+	headers.forEach((header, index) => {
+		let th = document.createElement("th");
+		th.textContent = header;
+
+		if (index >= headers.length - 3) {
+			th.classList.add("double-column");
+		}
+		trHead.appendChild(th);
+	});
+	thead.appendChild(trHead);
+	tfoot.innerHTML = "";
+	let trFoot = document.createElement("tr");
+	headers.forEach((_, index) => {
+		let th = document.createElement("th");
+		if (index === 7) {
 			th.textContent = "0.000";
-            th.id = "total-col-" + index;
-           th.classList.add("double-column");
-        }
-		if (index === 9) {
-					th.textContent = "0.00";
-		            th.id = "total-col-" + index;
-		           th.classList.add("double-column");
-		        }
-        trFoot.appendChild(th);
-    });
-    tfoot.appendChild(trFoot);
+			th.id = "toplam-" + index;
+			th.classList.add("double-column");
+		} else if (index === 9) {
+			th.textContent = "0.00";
+			th.id = "toplam-" + index;
+			th.classList.add("double-column");
+		} else {
+			th.textContent = "";
+		}
+		trFoot.appendChild(th);
+	});
+	tfoot.appendChild(trFoot);
 }
 
 function updateTableHeadersfkodu(headers) {
 	let thead = document.querySelector("#main-table thead");
+	let table = document.querySelector("#main-table");
+	let tfoot = table.querySelector("tfoot");
+	if (!tfoot) {
+		tfoot = document.createElement("tfoot");
+		table.appendChild(tfoot);
+	}
 	thead.innerHTML = "";
-	let tr = document.createElement("tr");
-	tr.classList.add("thead-dark");
+	let trHead = document.createElement("tr");
+	trHead.classList.add("thead-dark");
 	headers.forEach((header, index) => {
 		let th = document.createElement("th");
 		th.textContent = header;
 		if (index >= headers.length - 5) {
 			th.classList.add("double-column");
 		}
-		tr.appendChild(th);
+		trHead.appendChild(th);
 	});
-	thead.appendChild(tr);
+	thead.appendChild(trHead);
+	tfoot.innerHTML = "";
+	let trFoot = document.createElement("tr");
+	headers.forEach((_, index) => {
+		let th = document.createElement("th");
+		if (index === 4) {
+			th.textContent = "0.000";
+			th.id = "toplam-" + index;
+			th.classList.add("double-column");
+		} else if (index === 8) {
+			th.textContent = "0.00";
+			th.id = "toplam-" + index;
+			th.classList.add("double-column");
+		} else {
+			th.textContent = "";
+		}
+		trFoot.appendChild(th);
+	});
+	tfoot.appendChild(trFoot);
 }
-
+function updateTableHeadersfnotar(headers) {
+	let thead = document.querySelector("#main-table thead");
+	let table = document.querySelector("#main-table");
+	let tfoot = table.querySelector("tfoot");
+	if (!tfoot) {
+		tfoot = document.createElement("tfoot");
+		table.appendChild(tfoot);
+	}
+	thead.innerHTML = "";
+	let trHead = document.createElement("tr");
+	trHead.classList.add("thead-dark");
+	headers.forEach((header, index) => {
+		let th = document.createElement("th");
+		th.textContent = header;
+		if (index >= headers.length - 5) {
+			th.classList.add("double-column");
+		}
+		trHead.appendChild(th);
+	});
+	thead.appendChild(trHead);
+	tfoot.innerHTML = "";
+	let trFoot = document.createElement("tr");
+	headers.forEach((_, index) => {
+		let th = document.createElement("th");
+		if (index === 6) {
+			th.textContent = "0.000";
+			th.id = "toplam-" + index;
+			th.classList.add("double-column");
+		} else if (index === 10) {
+			th.textContent = "0.00";
+			th.id = "toplam-" + index;
+			th.classList.add("double-column");
+		} else {
+			th.textContent = "";
+		}
+		trFoot.appendChild(th);
+	});
+	tfoot.appendChild(trFoot);
+}
 
 async function openfatrapModal(modal) {
 	$(modal).modal('show');
@@ -341,8 +435,8 @@ async function openfatrapModal(modal) {
 		const dpo = response.depoKodlari;
 		const anaSelect = document.getElementById("anagrp");
 		const dpoSelect = document.getElementById("depo");
-		anaSelect.innerHTML = ""; 
-		dpoSelect.innerHTML = ""; 
+		anaSelect.innerHTML = "";
+		dpoSelect.innerHTML = "";
 
 		const optionbos = document.createElement("option");
 		optionbos.value = "";
@@ -354,7 +448,6 @@ async function openfatrapModal(modal) {
 			option.textContent = item.ANA_GRUP;
 			anaSelect.appendChild(option);
 		});
-
 		optionbos.value = "";
 		optionbos.textContent = "";
 		dpoSelect.appendChild(optionbos);
@@ -372,4 +465,3 @@ async function openfatrapModal(modal) {
 		document.body.style.cursor = "default";
 	}
 }
-
