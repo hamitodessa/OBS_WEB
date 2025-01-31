@@ -269,21 +269,42 @@ async function fetchDetails(evrakNo, cins) {
 }
 
 function updateTableHeaders(headers) {
-	let thead = document.querySelector("#main-table thead");
-	thead.innerHTML = "";
-	let tr = document.createElement("tr");
-	tr.classList.add("thead-dark");
-	headers.forEach((header, index) => {
-		let th = document.createElement("th");
-		th.textContent = header;
-
-		// **Son 3 başlığa double-column class'ını ekle**
-		if (index >= headers.length - 3) {
-			th.classList.add("double-column");
-		}
-		tr.appendChild(th);
-	});
-	thead.appendChild(tr);
+    let thead = document.querySelector("#main-table thead");
+    let table = document.querySelector("#main-table");
+    let tfoot = table.querySelector("tfoot");
+    if (!tfoot) {
+        tfoot = document.createElement("tfoot");
+        table.appendChild(tfoot);
+    }
+    thead.innerHTML = "";
+    let trHead = document.createElement("tr");
+    trHead.classList.add("thead-dark");
+    headers.forEach((header, index) => {
+        let th = document.createElement("th");
+        th.textContent = header;
+        if (index >= headers.length - 3) {
+            th.classList.add("double-column");
+        }
+        trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    tfoot.innerHTML = "";
+    let trFoot = document.createElement("tr");
+    headers.forEach((header, index) => {
+        let th = document.createElement("th");
+        if (index === 7 || index === 8) {
+			th.textContent = "0.000";
+            th.id = "total-col-" + index;
+           th.classList.add("double-column");
+        }
+		if (index === 9) {
+					th.textContent = "0.00";
+		            th.id = "total-col-" + index;
+		           th.classList.add("double-column");
+		        }
+        trFoot.appendChild(th);
+    });
+    tfoot.appendChild(trFoot);
 }
 
 function updateTableHeadersfkodu(headers) {
