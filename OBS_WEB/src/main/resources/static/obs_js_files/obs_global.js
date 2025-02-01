@@ -162,7 +162,7 @@ adrhesapAdiOgren = async function (inputId, targetLabelId1) {
 
 async function mailsayfasiYukle(url) {
 	try {
-		$('body').css('cursor', 'wait');
+		$('html, body').css('cursor', 'wait');
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -189,7 +189,7 @@ async function mailsayfasiYukle(url) {
 			`<h2>Bir hata oluştu: ${error.message}</h2>`
 		);
 	} finally {
-		$('body').css('cursor', 'default'); // Hata oluşsa bile cursor sıfırlanır
+		$('body').css('cursor', 'default');
 	}
 }
 

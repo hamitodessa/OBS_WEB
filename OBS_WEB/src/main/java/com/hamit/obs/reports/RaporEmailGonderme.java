@@ -3,6 +3,8 @@ package com.hamit.obs.reports;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -52,12 +54,33 @@ public class RaporEmailGonderme {
 		this.raporEmailDegiskenler = raporEmailDegiskenler;
 		boolean durum = false ;
 		try {
-			gonder_jasper();
+			if(raporEmailDegiskenler.getNerden().equals("fatrapor")) {
+				gonder_excell();
+			}
+			else {
+				gonder_jasper();
+			}
+			
 			durum = true ;
 		} catch (Exception e) {
 			throw new ServiceException( e.getMessage());
 		}
 		return durum ;
+	}
+	private void gonder_excell() {
+		try {
+			
+			String raporAdi = raporEmailDegiskenler.getNerden();
+			ExcellToDataSource excellToDataSource = new ExcellToDataSource();
+			List<Map<String, String>> tableData = raporEmailDegiskenler.getExceList();
+			ByteArrayDataSource ds = excellToDataSource.export_excell(tableData);
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm");
+			String zaman = dtf.format(LocalDateTime.now());
+			String rapor_dos_adi = raporAdi + zaman + ".xlsx";
+			son_gonderme(ds, rapor_dos_adi);
+		} catch (Exception ex) {
+			throw new ServiceException(ex.getMessage());
+		}
 	}
 	private void gonder_jasper() {
 		try {

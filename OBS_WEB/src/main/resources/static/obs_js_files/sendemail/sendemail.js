@@ -1,3 +1,13 @@
+tabloyukle();
+function tabloyukle() {
+	document.getElementById("extraValue").value = '';
+	let storedData = localStorage.getItem("tableData");
+	if (storedData) {
+		let parsedData = JSON.parse(storedData);
+		document.getElementById("extraValue").value = JSON.stringify(parsedData.rows);
+	}
+};
+
 async function sendmailAt() {
 	const RaporEmailDegiskenler = {
 		hesap: document.getElementById("hesap").value || "",
@@ -10,6 +20,15 @@ async function sendmailAt() {
 		degerler: document.getElementById("degerler").value || "",
 		format: document.getElementById("format") ? document.getElementById("format").value : ""
 	}
+	if (document.getElementById("extraValue").value != "") {
+		let extraValue = document.getElementById("extraValue").value;
+		try {
+			RaporEmailDegiskenler.exceList = JSON.parse(extraValue);
+		} catch (error) {
+			throw new Error("JSON dönüşüm hatası:", error);
+		}
+	}
+
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -50,6 +69,7 @@ async function sendmailAt() {
 		errorDiv.style.color = "red";
 		errorDiv.innerText = error.message || "Bir hata oluştu.";
 	} finally {
+		localStorage.removeItem("tableData");
 		document.body.style.cursor = "default";
 		$mailButton.prop('disabled', false).text('Gönder');
 	}

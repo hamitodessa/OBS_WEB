@@ -86,10 +86,10 @@ async function fatfetchTableData() {
 			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "MIKTAR", "TUTAR", "ISK. TUTAR"];
 			updateTableHeadersfno(sqlHeaders);
 		} else if (response.raporturu === 'fkodu') {
-			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISKONTOLU_TUTAR", "KDV_TUTAR", "TOPLAM_TUTAR"];
+			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfkodu(sqlHeaders);
 		} else if (response.raporturu === 'fnotar') {
-			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISKONTOLU_TUTAR", "KDV_TUTAR", "TOPLAM_TUTAR"];
+			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfnotar(sqlHeaders);
 		}
 		let totalmiktar = 0;
@@ -108,7 +108,7 @@ async function fatfetchTableData() {
                     <td>${rowData.Adres_Firma || ''}</td>
                     <td>${rowData.Doviz || ''}</td>
                     <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
-                    <td class="double-column">${formatNumber3(rowData.Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
                 `;
 				totalmiktar += rowData.Miktar;
@@ -122,7 +122,7 @@ async function fatfetchTableData() {
                     <td>${rowData.Unvan || ''}</td>
                     <td>${rowData.Vergi_No || ''}</td>
                     <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
-                    <td class="double-column">${formatNumber3(rowData.Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
@@ -138,7 +138,7 @@ async function fatfetchTableData() {
                     <td>${rowData.Unvan || ''}</td>
                     <td>${rowData.Vergi_No || ''}</td>
                     <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
-                    <td class="double-column">${formatNumber3(rowData.Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
@@ -464,4 +464,90 @@ async function openfatrapModal(modal) {
 	} finally {
 		document.body.style.cursor = "default";
 	}
+}
+
+async function fatrapdownloadReport() {
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+
+	document.body.style.cursor = "wait";
+	const $indirButton = $('#indirButton');
+	$indirButton.prop('disabled', true).text('İşleniyor...');
+	const $yenileButton = $('#yenileButton');
+	$yenileButton.prop('disabled', true);
+
+	let table = document.querySelector("#main-table");
+	let headers = [];
+	let rows = [];
+	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+	table.querySelectorAll("tbody tr").forEach(tr => {
+		let rowData = {};
+		let isEmpty = true;
+		tr.querySelectorAll("td").forEach((td, index) => {
+			let value = td.innerText.trim();
+			if (value !== "") {
+				isEmpty = false;
+			}
+			rowData[headers[index]] = value;
+		});
+		if (!isEmpty) {
+			rows.push(rowData);
+		}
+	});
+	try {
+		const response = await fetchWithSessionCheckForDownload('stok/fatrap_download', {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(rows)
+		});
+		if (response.blob) {
+			const disposition = response.headers.get('Content-Disposition');
+			const fileName = disposition.match(/filename="(.+)"/)[1];
+			const url = window.URL.createObjectURL(response.blob);
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = fileName;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			window.URL.revokeObjectURL(url);
+		} else {
+			throw new Error("Dosya indirilemedi.");
+		}
+
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
+	} finally {
+		$indirButton.prop('disabled', false).text('Rapor İndir');
+		$yenileButton.prop('disabled', false);
+		document.body.style.cursor = "default";
+	}
+}
+
+async function fatrapmailAt() {
+	document.body.style.cursor = "wait";
+	let table = document.querySelector("#main-table");
+		let headers = [];
+		let rows = [];
+		table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+		table.querySelectorAll("tbody tr").forEach(tr => {
+			let rowData = {};
+			let isEmpty = true;
+			tr.querySelectorAll("td").forEach((td, index) => {
+				let value = td.innerText.trim();
+				if (value !== "") {
+					isEmpty = false;
+				}
+				rowData[headers[index]] = value;
+			});
+			if (!isEmpty) {
+				rows.push(rowData);
+			}
+		});
+	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
+	const degerler = "fatrapor";
+	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+	mailsayfasiYukle(url);
 }

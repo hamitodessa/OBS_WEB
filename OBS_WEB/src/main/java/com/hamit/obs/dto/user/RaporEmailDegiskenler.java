@@ -1,5 +1,8 @@
 package com.hamit.obs.dto.user;
 
+import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +19,5 @@ public class RaporEmailDegiskenler {
     String nerden;
     String degerler;
     String format ;
+    List<Map<String, String>> exceList;
 }

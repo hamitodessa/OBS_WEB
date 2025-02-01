@@ -98,6 +98,7 @@ public class RaporOlustur {
 			JasperPrint jp = prepareJasperPrint("CAR_EKSTRE.jrxml", parameters, ekstreData,UygulamaSabitleri.CariRaporYeri);
 			return exportRapor(jp, uzanti);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServiceException("Cari Rapor Olusturma", e);
 		}
 	}
@@ -324,6 +325,12 @@ public class RaporOlustur {
 		} catch (Exception e) {
 			throw new ServiceException( e.getMessage());
 		}
+	}
+	
+	public ByteArrayDataSource fatrap(List<Map<String, String>> tableData)  throws Exception {
+			ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
+			return excellToDataSource.export_excell(tableData);
+		
 	}
 
 

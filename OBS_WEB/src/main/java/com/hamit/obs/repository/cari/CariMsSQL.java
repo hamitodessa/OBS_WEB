@@ -76,27 +76,21 @@ public class CariMsSQL implements ICariDatabase{
 			}
 			if (!t1.equals("1900-01-01")) {
 				List<Map<String, Object>> mizanList = ekstre_mizan(
-						hesap,
-						"1900-01-01",
-						Tarih_Cevir.tarihEksi1(t1) + " 23:59:59.000",
-						"   ", "ZZZ",
-						"     ", "ZZZZZ",
-						cariConnDetails
-						);
+						hesap,"1900-01-01",Tarih_Cevir.tarihEksi1(t1) + " 23:59:59.000","   ", "ZZZ","     ", "ZZZZZ",cariConnDetails);
 				if (!mizanList.isEmpty()) {
 					Map<String, Object> newRow = new HashMap<>();
 					double borc = (double) mizanList.get(0).getOrDefault("ISLEM", 0.0);
 					double alacak = (double) mizanList.get(0).getOrDefault("ISLEM2", 0.0);
 					double bakiye = alacak - borc;
 					newRow.put("TARIH", new Date());
-					newRow.put("EVRAK", "0");
+					newRow.put("EVRAK", 0);
 					newRow.put("IZAHAT", "Devir");
-					newRow.put("KODU", "");
+					newRow.put("KOD", "");
 					newRow.put("KUR", 0.0);
 					newRow.put("BORC", borc);
 					newRow.put("ALACAK", alacak);
 					newRow.put("BAKIYE", bakiye);
-					newRow.put("USER", "hmt");
+					newRow.put("USER", "");
 					resultList.add(0, newRow);
 					borc = 0.00;
 					alacak = 0.00;

@@ -60,7 +60,7 @@ public class SendEmailController {
 	public Map<String, String> sendEmail(@RequestBody RaporEmailDegiskenler raporEmailDegiskenler) {
 		Map<String, String> response = new HashMap<>();
 		try {
-			boolean durum =  raporEmailGonderme.EmailGonderme(raporEmailDegiskenler);
+			boolean durum = raporEmailGonderme.EmailGonderme(raporEmailDegiskenler);
 			if (durum) {
 				response.put("success", "E-posta başarıyla gönderildi.");
 				response.put("errorMessage", "");

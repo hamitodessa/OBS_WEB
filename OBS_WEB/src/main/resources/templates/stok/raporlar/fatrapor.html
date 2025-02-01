@@ -78,11 +78,10 @@ th, td {
 		<div style="display: flex; align-items: center;">
 			<button class="btn btn-primary" type="button" id="fatrapyenileButton"
 				style="margin-left: 10px;" onclick="openFirstModal('fatrapor')">Filtre</button>
-			<select id="fatrapreportFormat" class="form-control" style="width: 150px; margin-left: 10px;"
-				onchange="fatrapdownloadReport(this.value)" disabled>
-				<option value="" disabled selected>Excel Indir</option>
-				<option value="xlsx">Excel (XLSX)</option>
-			</select>
+			
+			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="fatrapreportFormat"
+			 onclick="fatrapdownloadReport()" disabled>Excel Indir</button>
+
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="tahrapmailButton"
 			 onclick="fatrapmailAt()" disabled>Email Gonder</button>
 		</div>
