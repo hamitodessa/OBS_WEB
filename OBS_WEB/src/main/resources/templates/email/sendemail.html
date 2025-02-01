@@ -38,18 +38,16 @@
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	width: 100%;
+	
 }
 
 .form-row label {
 	width: 80px;
 }
 
-.input-width {
-	width: 300px;
-}
-
 .aciklama-width {
-	width: 80%;
+	width: 40%;
 }
 
 .group-box {
@@ -57,7 +55,7 @@
 	padding: 15px;
 	border-radius: 5px;
 	margin-top: 10px;
-	width:49%;
+	width:50%;
 }
 
 .long-box {
@@ -82,31 +80,31 @@
 }
 </style>
 <div class="container mt-5">
-	<div class="card p-4 mb-4">
+	<div class="card p-4 mb-4" style="width:70%;">
 		<form id="sendEmail" enctype="multipart/form-data">
 			<div class="group-row">
-				<div class="group-box">
-					<h4>Gonderen</h4>
-					<div class="form-row">
-						<label class="form-check-label" for="hesap">Hesap</label> <input
-							class="form-control input-width" type="email" id="hesap"
-							name="hesap" th:value="${hesap}">
+				<div class="form-row">
+					<div class="group-box">
+						<h4>Gonderen</h4>
+						<div class="form-row">
+						<label class="form-check-label" for="hesap">Hesap</label> 
+						<input class="form-control input-width" type="email" id="hesap" name="hesap" th:value="${hesap}">
+						</div>
+						<div class="form-row" style="padding-top: 5px;">
+						<label class="form-check-label" for="isim">Isim</label> 
+							<input class="form-control input-width" type="text" id="isim" name="isim" th:value="${isim}">
+						</div>
 					</div>
-					<div class="form-row" style="padding-top: 5px;">
-						<label class="form-check-label" for="isim">Isim</label> <input
-							class="form-control input-width" type="text" id="isim"
-							name="isim" th:value="${isim}">
-					</div>
-				</div>
-				<div class="group-box">
-					<h4>Alici</h4>
-					<div class="form-row" style="padding-top: 5px;">
-						<label class="form-check-label" for="to">To</label> <input
-							class="form-control input-width" type="text" id="too" name="too">
-					</div>
-					<div class="form-row" style="padding-top: 5px;">
-						<label class="form-check-label" for="cc">Cc</label> <input
-							class="form-control input-width" type="email" id="ccc" name="ccc">
+					<div class="group-box">
+							<h4>Alici</h4>
+						<div class="form-row">
+							<label class="form-check-label" for="to">To</label> 
+							<input class="form-control input-width" type="text" id="too" name="too">
+						</div>
+						<div class="form-row" style="padding-top: 5px;">
+							<label class="form-check-label" for="cc">Cc</label> 
+							<input class="form-control input-width" type="email" id="ccc" name="ccc">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -114,20 +112,19 @@
 			<div class="group-row">
 				<div class="group-box long-box">
 					<div class="form-row">
-						<label class="form-check-label" for="konu">Konu</label> <input
-							class="form-control input-width" type="text" id="konu"
-							name="konu">
+						<label class="form-check-label" for="konu">Konu</label> 
+						<input class="form-control aciklama-width" type="text" id="konu"name="konu">
 					</div>
 					<div class="form-row" style="padding-top: 5px;">
 						<label class="form-check-label" for="aciklama">Aciklama</label>
 						<textarea class="form-control aciklama-width" rows="4" cols="50"
-							placeholder="Yorumunuzu buraya yazın..." id="aciklama"
-							name="aciklama"></textarea>
+							placeholder="Yorumunuzu buraya yazın..." id="aciklama" name="aciklama">
+						</textarea>
 					</div>
 				</div>
 			</div>
 			<div class="group-row">
-				<div class="form-row" style="padding-top: 5px;padding-left: 5px;">
+				<div class="form-row" style="padding-top: 5px;">
 					<select class="form-control"  id="format"
 						name="format">
 						<option value="pdf">PDF</option>
@@ -137,7 +134,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="form-row" style="padding-top: 5px;padding-left: 5px;">
+			<div class="form-row" style="padding-top: 5px;">
 				<button class="btn btn-primary" 
 					type="button" id="mailButton" onclick="sendmailAt()">Gonder</button>
 			</div>
