@@ -54,7 +54,8 @@ public class RaporEmailGonderme {
 		this.raporEmailDegiskenler = raporEmailDegiskenler;
 		boolean durum = false ;
 		try {
-			if(raporEmailDegiskenler.getNerden().equals("fatrapor")) {
+			String nerden = raporEmailDegiskenler.getNerden(); 
+			if(nerden.equals("fatrapor") || nerden.equals("imarapor")) {
 				gonder_excell();
 			}
 			else {

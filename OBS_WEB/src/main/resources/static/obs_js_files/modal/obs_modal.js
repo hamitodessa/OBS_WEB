@@ -363,7 +363,7 @@ function saveToMain() {
 		imafetchTableData();
 		const mailButton = document.getElementById("imarapmailButton");
 		mailButton.disabled = false;
-		const reportFormat = document.getElementById("imarapreportFormat");
+		const reportFormat = document.getElementById("imarapdownloadButton");
 		reportFormat.disabled = false;
 	}
 }

@@ -181,7 +181,7 @@ async function mailsayfasiYukle(url) {
 				}
 			},
 			complete: function () {
-				$('body').css('cursor', 'default');
+				//$('body').css('cursor', 'default');
 			}
 		});
 	} catch (error) {
@@ -189,7 +189,7 @@ async function mailsayfasiYukle(url) {
 			`<h2>Bir hata oluştu: ${error.message}</h2>`
 		);
 	} finally {
-		$('body').css('cursor', 'default');
+		//$('body').css('cursor', 'default');
 	}
 }
 

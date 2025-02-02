@@ -25,10 +25,10 @@ public class ExcellToDataSource {
 
 	public ByteArrayDataSource export_excell(List<Map<String, String>> tableData) throws Exception {
 		try (XSSFWorkbook workbook = new XSSFWorkbook()) {
-			Sheet sheet = workbook.createSheet("Fatura_Rapor");
+			Sheet sheet = workbook.createSheet("Excell_Rapor");
 			if (!tableData.isEmpty()) {
 				List<String> headers = new ArrayList<>(tableData.get(0).keySet());
-				List<String> rightAlignedColumns = List.of("MIKTAR", "TUTAR", "ISK. TUTAR","TOPLAM TUTAR","KDV TUTAR");
+				List<String> rightAlignedColumns = List.of("MIKTAR", "TUTAR", "ISK. TUTAR","TOPLAM TUTAR","KDV TUTAR","AGIRLIK");
 				Map<String, Double> columnSums = new HashMap<>();
 				for (String col : rightAlignedColumns) {
 					columnSums.put(col, 0.0);
@@ -74,7 +74,7 @@ public class ExcellToDataSource {
 					String columnName = headers.get(i);
 					Cell cell = totalRow.createCell(i);
 					if (columnSums.containsKey(columnName)) {
-						if(columnName.equals("MIKTAR"))
+						if(columnName.equals("MIKTAR") || columnName.equals("AGIRLIK"))
 						{
 							cell.setCellValue(Formatlama.doub_3(columnSums.get(columnName)));
 						}

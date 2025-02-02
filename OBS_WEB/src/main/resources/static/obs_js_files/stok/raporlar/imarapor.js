@@ -111,7 +111,7 @@ async function imafetchTableData() {
 	document.getElementById("totalAgirlik").textContent = '0.000';
 			
     document.body.style.cursor = "wait";
-    const $yenileButton = $('#imayenileButton');
+    const $yenileButton = $('#imarapyenileButton');
     $yenileButton.prop('disabled', true).text('İşleniyor...');
     try {
         const response = await fetchWithSessionCheck("stok/imarapdoldur", {
@@ -164,4 +164,90 @@ async function imafetchTableData() {
         $yenileButton.prop('disabled', false).text('Yenile');
         document.body.style.cursor = "default";
     }
+}
+
+async function imarapdownloadReport() {
+	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+
+	document.body.style.cursor = "wait";
+	const $indirButton = $('#imarapreportFormatbutton');
+	$indirButton.prop('disabled', true).text('İşleniyor...');
+	const $yenileButton = $('#imarapyenileButton');
+	$yenileButton.prop('disabled', true);
+
+	let table = document.querySelector("#main-table");
+	let headers = [];
+	let rows = [];
+	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+	table.querySelectorAll("tbody tr").forEach(tr => {
+		let rowData = {};
+		let isEmpty = true;
+		tr.querySelectorAll("td").forEach((td, index) => {
+			let value = td.innerText.trim();
+			if (value !== "") {
+				isEmpty = false;
+			}
+			rowData[headers[index]] = value;
+		});
+		if (!isEmpty) {
+			rows.push(rowData);
+		}
+	});
+	try {
+		const response = await fetchWithSessionCheckForDownload('stok/imarap_download', {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(rows)
+		});
+		if (response.blob) {
+			const disposition = response.headers.get('Content-Disposition');
+			const fileName = disposition.match(/filename="(.+)"/)[1];
+			const url = window.URL.createObjectURL(response.blob);
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = fileName;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			window.URL.revokeObjectURL(url);
+		} else {
+			throw new Error("Dosya indirilemedi.");
+		}
+
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
+	} finally {
+		$indirButton.prop('disabled', false).text('Rapor İndir');
+		$yenileButton.prop('disabled', false);
+		document.body.style.cursor = "default";
+	}
+}
+
+async function imarapmailAt() {
+	document.body.style.cursor = "wait";
+	let table = document.querySelector("#main-table");
+		let headers = [];
+		let rows = [];
+		table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+		table.querySelectorAll("tbody tr").forEach(tr => {
+			let rowData = {};
+			let isEmpty = true;
+			tr.querySelectorAll("td").forEach((td, index) => {
+				let value = td.innerText.trim();
+				if (value !== "") {
+					isEmpty = false;
+				}
+				rowData[headers[index]] = value;
+			});
+			if (!isEmpty) {
+				rows.push(rowData);
+			}
+		});
+	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
+	const degerler = "imarapor";
+	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+	mailsayfasiYukle(url);
 }

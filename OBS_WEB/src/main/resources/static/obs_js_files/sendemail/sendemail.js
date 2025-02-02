@@ -1,11 +1,13 @@
 tabloyukle();
 function tabloyukle() {
+	document.body.style.cursor = "wait"
 	document.getElementById("extraValue").value = '';
 	let storedData = localStorage.getItem("tableData");
 	if (storedData) {
 		let parsedData = JSON.parse(storedData);
 		document.getElementById("extraValue").value = JSON.stringify(parsedData.rows);
 	}
+	document.body.style.cursor = "default"
 };
 
 async function sendmailAt() {

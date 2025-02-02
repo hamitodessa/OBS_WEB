@@ -330,9 +330,12 @@ public class RaporOlustur {
 	public ByteArrayDataSource fatrap(List<Map<String, String>> tableData)  throws Exception {
 			ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 			return excellToDataSource.export_excell(tableData);
-		
 	}
-
+	
+	public ByteArrayDataSource imarap(List<Map<String, String>> tableData)  throws Exception {
+		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
+		return excellToDataSource.export_excell(tableData);
+	}
 
 	private JasperPrint prepareJasperPrint(String jrxmlPath, Map<String, Object> parameters, List<Map<String, Object>> data , String raporyeri) throws Exception {
 		ClassPathResource resource = new ClassPathResource(raporyeri + "/" + jrxmlPath);
