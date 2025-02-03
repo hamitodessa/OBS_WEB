@@ -33,6 +33,7 @@ import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
+import com.hamit.obs.service.user.UserService;
 
 @Controller
 public class FaturaController {
@@ -42,6 +43,9 @@ public class FaturaController {
 	
 	@Autowired
 	private CariService cariservice;
+	
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping("stok/fatura")
 	public Model fatura(Model model) {
@@ -57,7 +61,7 @@ public class FaturaController {
 			ozelDeger.put("Ozel_Kod", ""); 
 			ozelKodlari.add(0, ozelDeger);
 			model.addAttribute("ozelKodlari", (ozelKodlari != null) ? ozelKodlari : new ArrayList<>());
-			
+			model.addAttribute("doviz", userService.getCurrentUser().getCalisandvzcins()); 
 			LocalDate today = LocalDate.now(); 
 			model.addAttribute("fisTarih", today); 
 			model.addAttribute("errorMessage", "");

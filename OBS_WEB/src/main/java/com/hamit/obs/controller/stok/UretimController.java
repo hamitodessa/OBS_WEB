@@ -27,12 +27,16 @@ import com.hamit.obs.dto.stok.uretimkayitDTO;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.fatura.FaturaService;
+import com.hamit.obs.service.user.UserService;
 
 @Controller
 public class UretimController {
 
 	@Autowired
 	private FaturaService faturaService;
+	
+	@Autowired
+	private UserService userService;
 
 	@GetMapping("stok/uretim")
 	public Model uretim(Model model) {
@@ -49,6 +53,7 @@ public class UretimController {
 		model.addAttribute("depoKodlari", (depoKodlari != null) ? depoKodlari : new ArrayList<>());
 		LocalDate today = LocalDate.now(); 
 		model.addAttribute("tarih", today); 
+		model.addAttribute("doviz", userService.getCurrentUser().getCalisandvzcins()); 
 		return model;
 	}
 
