@@ -133,7 +133,11 @@ async function envfetchTableData() {
 			updateTableHeadersfnotar(sqlHeaders);
 		}
 		let totalmiktar = 0;
+		let totalcmiktar = 0;
+		let totalgtutar = 0;
 		let totaltutar = 0;
+		let totalstok = 0;
+		let totalctutar = 0;
 		data.data.forEach(rowData => {
 			const row = document.createElement('tr');
 			row.classList.add('expandable');
@@ -151,17 +155,24 @@ async function envfetchTableData() {
                     <td class="double-column">${rowData.Stok_Miktari}</td>
                     <td class="double-column">${formatNumber2(rowData.Maliyet)}</td>
                     <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-                    
                 `;
-				totalmiktar += rowData.Giris_Miktari;
+				totalmiktar += parseLocaleNumber(rowData.Giris_Miktari);
+				totalcmiktar += parseLocaleNumber(rowData.Cikis_Miktari);
+				totalstok += parseLocaleNumber(rowData.Stok_Miktari);
 				totaltutar += rowData.Tutar;
+				totalctutar += rowData.Cikis_Tutar;
+				totalgtutar += rowData.Giris_Tutar;
 			}
 			mainTableBody.appendChild(row);
 		});
-		console.info(response.raporturu);
+		
 		if (response.raporturu === 'normal') {
-			//document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
-			//document.getElementById("toplam-10").innerText = formatNumber2(totaltutar);
+			document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
+			document.getElementById("toplam-4").innerText = formatNumber2(totalgtutar);
+			document.getElementById("toplam-5").innerText = formatNumber3(totalcmiktar);
+			document.getElementById("toplam-6").innerText = formatNumber3(totalctutar);
+			document.getElementById("toplam-8").innerText = formatNumber3(totalstok);
+			document.getElementById("toplam-10").innerText = formatNumber2(totaltutar);
 		}
 		document.body.style.cursor = "default";
 	} catch (error) {
@@ -212,7 +223,7 @@ function updateTableHeadersnormal(headers) {
 	headers.forEach((_, index) => {
 		let th = document.createElement("th");
 		if (index === 3) {
-			th.textContent = "0.000"; // gmiktari
+			th.textContent = "0.000";
 			th.id = "toplam-" + index;
 			th.classList.add("double-column");
 		} else if (index === 4) {
@@ -227,16 +238,8 @@ function updateTableHeadersnormal(headers) {
 			th.textContent = "0.00";
 			th.id = "toplam-" + index;
 			th.classList.add("double-column");
-		} else if (index === 7) {
-			th.textContent = "0.00";
-			th.id = "toplam-" + index;
-			th.classList.add("double-column");
 		} else if (index === 8) {
 			th.textContent = "0.000";
-			th.id = "toplam-" + index;
-			th.classList.add("double-column");
-		} else if (index === 9) {
-			th.textContent = "0.00";
 			th.id = "toplam-" + index;
 			th.classList.add("double-column");
 		} else if (index === 10) {
@@ -250,8 +253,6 @@ function updateTableHeadersnormal(headers) {
 	});
 	tfoot.appendChild(trFoot);
 }
-
-
 
 async function openfatrapModal(modal) {
 	$(modal).modal('show');
@@ -301,7 +302,7 @@ async function openfatrapModal(modal) {
 	}
 }
 
-async function fatrapdownloadReport() {
+async function envanterdownloadReport() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -331,7 +332,7 @@ async function fatrapdownloadReport() {
 		}
 	});
 	try {
-		const response = await fetchWithSessionCheckForDownload('stok/fatrap_download', {
+		const response = await fetchWithSessionCheckForDownload('stok/envanter_download', {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(rows)
@@ -382,7 +383,7 @@ async function fatrapmailAt() {
 			}
 		});
 	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
-	const degerler = "fatrapor";
+	const degerler = "envanter";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
 }
