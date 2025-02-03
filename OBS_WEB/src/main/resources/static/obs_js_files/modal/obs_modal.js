@@ -30,6 +30,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "imarapor") {
 		openimarapModal(modal);
 	}
+	else if (nerden === "envanter") {
+		openenvModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -294,6 +297,27 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #imarapBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "envanter") {
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const uranagrp = $('#uranagrp').val() || "";
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const uraltgrp = $('#uraltgrp').val() || "";
+		const evrno1 = $('#evrno1').val() || "";
+		const evrno2 = $('#evrno2').val() || "";
+		const anagrp = $('#anagrp').val() || "";
+		const gruplama = $('#gruplama').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const depo = $('#depo').val() || "";
+		const fiatlama = $('#fiatlama').val() || "";
+		const depohardahil = $('#depohardahil').checked;
+		const uretfisdahil = $('#uretfisdahil').checked;
+		
+		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, evrno1, evrno2, anagrp, gruplama, altgrp, depo, fiatlama, depohardahil, uretfisdahil ].join(",");
+		const hiddenField = $('#ara_content #envanterBilgi');
+		hiddenField.val(degerler);
+	}
 
 	$('#firstModal').modal('hide');
 
@@ -364,6 +388,13 @@ function saveToMain() {
 		const mailButton = document.getElementById("imarapmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("imarapdownloadButton");
+		reportFormat.disabled = false;
+	}
+	else if (nerden === "envanter") {
+		envfetchTableData();
+		const mailButton = document.getElementById("envmailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("envDownloadButton");
 		reportFormat.disabled = false;
 	}
 }

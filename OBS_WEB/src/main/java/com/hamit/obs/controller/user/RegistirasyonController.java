@@ -36,6 +36,7 @@ public class RegistirasyonController {
 			@RequestParam MultipartFile image,
 			@RequestParam String role,
 			@RequestParam String adminemail,
+			@RequestParam String calisandvzcinsi,
 			RedirectAttributes redirectAttrs) {
 		try {
 			RolEnum userRole;
@@ -45,6 +46,7 @@ public class RegistirasyonController {
 			user.setPassword(password);
 			user.setFirstName(firstName);
 			user.setLastName(lastName);
+			user.setCalisandvzcins(calisandvzcinsi);
 
 			if (userRole == RolEnum.USER) {
 				user.setAdmin_hesap(adminemail);

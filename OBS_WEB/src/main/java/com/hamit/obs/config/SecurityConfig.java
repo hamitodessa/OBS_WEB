@@ -35,22 +35,22 @@ public class SecurityConfig {
 				.permitAll()
 				)
 		.logout(logout -> logout
-				.logoutUrl("/logout") // Çıkış işlemi
-				.logoutSuccessUrl("/login") // Çıkış sonrası yönlendirme
-				.invalidateHttpSession(true) // Oturum sonlandır
-				.deleteCookies("JSESSIONID") // Çerezleri sil
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/login")
+				.invalidateHttpSession(true)
+				.deleteCookies("JSESSIONID")
 				.addLogoutHandler((request, response, authentication) -> {
 		            if (authentication != null) {
-		                String username = authentication.getName(); // Çıkış yapan kullanıcı adı
-		                UserSessionManager.removeUserSessionsByUsername(username); // Kullanıcı oturum bilgilerini temizle
+		                String username = authentication.getName();
+		                UserSessionManager.removeUserSessionsByUsername(username);
 		            }
 		        })
 				.permitAll()
 				)
 		.sessionManagement(session -> session
-				.invalidSessionUrl("/session-expired") // Oturum süresi dolmuşsa yönlendirme
+				.invalidSessionUrl("/session-expired")
 				)
-		.userDetailsService(customUserDetails); // Kullanıcı detayları servisi
+		.userDetailsService(customUserDetails);
 		return http.build();
 	}
 

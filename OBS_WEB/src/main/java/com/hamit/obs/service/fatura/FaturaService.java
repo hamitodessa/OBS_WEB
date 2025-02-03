@@ -13,6 +13,7 @@ import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.dto.stok.urunDTO;
+import com.hamit.obs.dto.stok.raporlar.envanterDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -976,6 +977,22 @@ public class FaturaService {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.imalat_rapor(imaraporDTO,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
+	
+	public List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.envanter_rapor(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
 			Throwable cause = e.getCause();

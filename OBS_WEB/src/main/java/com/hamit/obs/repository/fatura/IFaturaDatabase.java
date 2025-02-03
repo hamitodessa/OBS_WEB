@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.dto.stok.urunDTO;
+import com.hamit.obs.dto.stok.raporlar.envanterDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 
@@ -69,4 +70,5 @@ public interface IFaturaDatabase {
 	List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> imalat_rapor(imaraporDTO imaraporDTO,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO , ConnectionDetails faturaConnDetails);
 }

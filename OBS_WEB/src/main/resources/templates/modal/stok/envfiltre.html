@@ -1,0 +1,172 @@
+<style>
+.modal-dialog {
+	height: 500px; 
+	margin: 0 auto; 
+}
+
+.modal-content {
+	overflow-y: auto;
+}
+
+.modal-backdrop {
+	z-index: 1040 !important;
+}
+
+#secondModal {
+	z-index: 1050 !important;
+}
+
+.form-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+}
+</style>
+
+<div class="modal fade" th:fragment="modalenv" id="firstModal"
+	data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered"
+		style="min-width: 790px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Envanter Raporlama</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk Son Tarih</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="date" id="tar1" style="max-width: 150px;"  
+						class="form-control" value="1900-01-01"> 
+					<span style="padding-left: 5px;"></span> 
+					<input type="date" id="tar2" style="max-width: 130px;" class="form-control"
+						value="2100-12-31"> 
+					<span style="padding-left: 5px;"></span>
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ana Grup</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<div style="position: relative; width: 150px;">
+						<select class="form-control cins_bold"
+							style="width: 100%; padding-right: 30px;" id="uranagrp" onchange="anagrpChanged(this,'uraltgrp')">
+						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+					</div>
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk Son Urun kodu</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="ukod1" style="max-width: 150px;" class="form-control"
+					ondblclick="openurunkodlariModal('ukod1', 'fatrapor','ukodukod')">
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="ukod2" style="max-width: 130px;" value="ZZZZZZZZZZZZ" class="form-control"
+						ondblclick="openurunkodlariModal('ukod2', 'fatrapor','ukodukod')">
+					<span style="padding-left: 5px;"></span>
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Alt Grup</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<div style="position: relative; width: 150px;">
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="uraltgrp" disabled>
+						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+					</div>
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk ve Son Evrak</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="evrno1" style="max-width: 150px;" class="form-control"> 
+					<span style="padding-left: 5px;"></span>
+					<input type="text" id="evrno2" style="max-width: 130px;" value="ZZZZZZZZZZ" class="form-control">
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ana Grup</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<div style="position: relative; width: 150px;">
+						<select class="form-control cins_bold"
+							style="width: 100%; padding-right: 30px;" id="anagrp" onchange="anagrpChanged(this,'altgrp')">
+						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+					</div>
+					<span style="padding-left: 140px;"></span>
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Gruplama</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<div style="position: relative; width: 150px;">
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="gruplama">
+							<option value="Urun Kodu">Urun Kodu</option>
+						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+					</div>
+				</div>
+                <div class="input-group" style="padding: 2px;">
+					
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Alt Grup</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<div style="position: relative; width: 150px;">
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="altgrp" disabled>
+						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+					</div>
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Depo</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<div style="position: relative; width: 150px;">
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="depo">
+						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+					</div>
+					<span style="padding-left: 140px;"></span>
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Fiatlandirma</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<div style="position: relative; width: 150px;">
+						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="fiatlama">
+							<option value="agort">Agirlik. Ortalama</option>
+							<option value="fifo">FIFO</option>
+							<option value="lifo">LIFO</option>
+						</select> 
+						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+					</div>
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<span style="padding-left: 135px;"></span>
+					<div class="form-row">
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="depohardahil" >
+							<label class="form-check-label" for="izinlimi">Depo Hareketleri Dahil</label>
+						</div>
+					</div>
+				<div class="input-group" style="padding: 2px;">
+					<span style="padding-left: 135px;"></span>
+					<div class="form-row">
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="uretfisdahil" checked>
+							<label class="form-check-label" for="izinlimi">Uretim Fisleri Dahil</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Raporla</button>
+			</div>
+		</div>
+	</div>
+</div>

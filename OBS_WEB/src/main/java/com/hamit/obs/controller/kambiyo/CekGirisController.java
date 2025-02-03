@@ -35,11 +35,15 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
+import com.hamit.obs.service.user.UserService;
 
 
 @Controller
 public class CekGirisController {
 
+	@Autowired
+	private UserService userService;
+	
 	@Autowired
 	private CariService cariservice;
 	
@@ -56,6 +60,7 @@ public class CekGirisController {
 			model.addAttribute("ozelKodlar", (kambiyoService.ozel_kodlar("Giris_Ozel_Kod") != null) ? kambiyoService.ozel_kodlar("Giris_Ozel_Kod") : new ArrayList<>());
 			LocalDate today = LocalDate.now(); 
 			model.addAttribute("evrakTarih", today); 
+			model.addAttribute("doviz", userService.getCurrentUser().getCalisandvzcins()); 
 			model.addAttribute("errorMessage", "");
 		} catch (ServiceException e) {
 			model.addAttribute("errorMessage", e.getMessage());

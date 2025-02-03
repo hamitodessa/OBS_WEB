@@ -23,10 +23,11 @@
 
 .hidden {
     display: none;
-} -->
+} 
 
 
 </style>
+-->
 
 </head>
 <body class="dashboard dashboard_1">
@@ -113,6 +114,7 @@
 								<li><a href="" class="changeLink" data-url="/stok/zayi"><span>Zayi</span></a></li>
 								<li><a href="" class="changeLink" data-url="/stok/recete"><span>Recete</span></a></li>
 								<li><a href="" class="changeLink" data-url="/stok/fatrapor"><span>Fatura Rapor</span></a></li>
+								<li><a href="" class="changeLink" data-url="/stok/envanter"><span>Envanter</span></a></li>
 								<li><a href="" class="changeLink" data-url="/stok/imarapor"><span>Imalat Rapor</span></a></li>
 								<li><a href="" class="changeLink" data-url="/stok/degiskenler"><span>Degiskenler</span></a></li>
 								<li><a href="" onclick="firmaIsmi('fatura', event)"><span>Firma Ismi Degistirme</span></a></li>
@@ -134,8 +136,7 @@
 								<li><a href="" class="changeLink" data-url="/user/user_pwd_change"> <span>Sifre Degis</span></a></li>
 								<li><a href="" class="changeLink" data-url="/user/user_update"> <span>Isim Degis</span></a></li>
 								<li><a href="" class="changeLink" data-url="/user/userdetails"> <span>Kullanici Detaylari</span></a></li>
-								<li th:if="${menuitemvisible}">
-   										 <a href="" class="changeLink" data-url="/user/userizinler">
+								<li th:if="${menuitemvisible}"><a href="" class="changeLink" data-url="/user/userizinler">
         								<span>Admin İşlemleri</span></a>
 								</li>
 								<li><a href="" class="changeLink" data-url="/user/emailsettings"> <span>E Mail Ayarlari</span></a></li>

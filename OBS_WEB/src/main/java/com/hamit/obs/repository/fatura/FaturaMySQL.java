@@ -18,6 +18,7 @@ import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.urunDTO;
+import com.hamit.obs.dto.stok.raporlar.envanterDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -1271,5 +1272,12 @@ public class FaturaMySQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

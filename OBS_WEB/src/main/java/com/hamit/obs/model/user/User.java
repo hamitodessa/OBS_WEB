@@ -43,6 +43,9 @@ public class User {
     @Email
     @Column(length = 50)
     private String admin_hesap;
+    
+	@Column(length = 5)
+	private String calisandvzcins;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -63,5 +66,5 @@ public class User {
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Gonderilmis_Mailler> gonderilmisMailler = new ArrayList<>();
-
+    
 }
