@@ -122,15 +122,11 @@ async function envfetchTableData() {
 		}
 		data = response;
 		let sqlHeaders = "";
+		sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI", "MALIYET", "TUTAR"];
+		updateTableHeadersnormal(sqlHeaders);
+
 		if (response.raporturu === 'normal') {
-			sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI", "MALIYET", "TUTAR"];
-			updateTableHeadersnormal(sqlHeaders);
-		} else if (response.raporturu === 'fkodu') {
-			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
-			updateTableHeadersfkodu(sqlHeaders);
-		} else if (response.raporturu === 'fnotar') {
-			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
-			updateTableHeadersfnotar(sqlHeaders);
+			
 		}
 		let totalmiktar = 0;
 		let totalcmiktar = 0;
@@ -338,4 +334,13 @@ function extractTableData(tableId) {
         }
     }
     return rows;
+}
+
+function fiatlamaChanged() {
+	const fiatlama = document.getElementById("fiatlama").value;
+	if (fiatlama === "agort") {
+		document.getElementById("ukod2").style.visibility = "visible";
+	} else {
+		document.getElementById("ukod2").style.visibility = "hidden";
+	}
 }
