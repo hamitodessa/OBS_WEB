@@ -7,7 +7,7 @@ document.querySelector('table').addEventListener('focusin', (event) => {
 		document.getElementById("anaalt").innerText = cells[12]?.textContent;
 
 		const imgElement = document.getElementById("resimGoster");
-		if (cells[13]?.textContent !== "") {
+		if (cells[13]?.textContent != '') {
 			const base64String = 'data:image/jpeg;base64,' + cells[13]?.textContent.trim();
 			imgElement.src = base64String;
 			imgElement.style.display = "block";
@@ -180,11 +180,8 @@ function updateColumnTotal() {
 			const fia = parseLocaleNumber(fiat.value) || 0;
 			const mik = parseLocaleNumber(miktar.value) || 0;
 			const result = fia * mik;
-
-			tutar.value = result.toLocaleString(undefined, {
-				minimumFractionDigits: 2, maximumFractionDigits: 2
-			});
-
+			
+			tutar.value = formatNumber2(result);
 			totalmik += mik;
 			if (result > 0) {
 				total += result;
@@ -468,7 +465,7 @@ async function fatOku() {
 			if (izahatInput) izahatInput.value = item.Izahat || "";
 			cells[11].innerText = item.Adi || '';
 			cells[12].innerText = item.Ur_AnaGrup + " / " + item.Ur_AltGrup;
-			cells[13].innerText = item.base64Resim;
+			cells[13].innerText = item.base64Resim || '';
 		});
 
 		for (let i = 0; i < data.data.length; i++) {
