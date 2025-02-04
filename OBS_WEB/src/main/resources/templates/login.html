@@ -34,6 +34,11 @@
 									<label class="label_field">Password</label> <input 
 										type="password" name="password" placeholder="Password" />
 								</div>
+								<div class="field forgot" th:if="${param.error}">
+    								<label class="label_field hidden"></label>
+    								<label style="font-weight:bold;">Kullanıcı adı veya şifre hatalı!</label>
+								</div>
+
 								<div class="field margin_0">
 									<label class="label_field hidden">hidden label</label>
 									<button class="main_bt" type="submit" >Giris Yap</button>
@@ -55,6 +60,7 @@
 										<label class="label_field hidden">hidden label</label>
 										<a class="register" th:href="@{/user/register}">Hesabınız yok mu?</a>
 								</div>
+								
 							</fieldset>
 						</form>
 						<a class="register" style="font-weight:bold;" href="http://www.okumus.gen.tr" target="_blank">OBS Masaüstü versiyon indirme</a>
