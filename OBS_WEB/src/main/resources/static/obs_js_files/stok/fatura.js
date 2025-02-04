@@ -389,7 +389,7 @@ function clearInputs() {
 	document.getElementById("uygulananfiat").selectedIndex = 0;
 	document.getElementById("adreskod").value = '';
 
-	document.getElementById("dovizcins").value = 'TL';
+	document.getElementById("dovizcins").value = document.getElementById("defaultdvzcinsi").value || 'TL';        
 	document.getElementById("kur").value = '0.0000';
 
 	document.getElementById("not1").value = '';

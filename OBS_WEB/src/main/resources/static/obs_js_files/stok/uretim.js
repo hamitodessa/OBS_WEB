@@ -467,7 +467,7 @@ function clearInputs() {
 	document.getElementById("uretmiktar").value = "0";
 	document.getElementById("birimfiati").innerText = "0.00";
 	document.getElementById("aciklama").value = "";
-	document.getElementById("dvzcins").value = "TL";
+	document.getElementById("dvzcins").value = document.getElementById("defaultdvzcinsi").value || 'TL';      
 
 	document.getElementById("adi").innerText = "";
 	document.getElementById("birim").innerText = "";
