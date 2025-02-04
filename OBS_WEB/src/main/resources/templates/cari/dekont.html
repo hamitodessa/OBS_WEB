@@ -209,16 +209,15 @@
 							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 						</div>
 						<label for="cins" class="width-50 cins_bold" id="borcluHesapCins"></label> 
-						<div style="position: relative; width: 100px;">
-						<select class="form-control" style="width: 100px" id="borcKurCins" disabled onchange="dekkurOku('borcluHesapCins',this,'borcKur')">
+						
+						<select class="form-select" style="width: 100px;" id="borcKurCins" disabled onchange="dekkurOku('borcluHesapCins',this,'borcKur')">
 							<option value="">Kur Cinsi</option>
 							<option value="MA">MA</option>
 							<option value="MS">MS</option>
 							<option value="SA">SA</option>
 							<option value="SS">SS</option>
 						</select> 
-							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-						</div>
+						
 						<span style="padding-left: 10px;"></span>
 						<input class="form-control saga-bold" style="width: 100px" type="number" id="borcKur" value="1.0000" disabled /> 
 						<input class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)" id="borcTutar" value="0.00" ondblclick="tutarKontrolBorc()" disabled />
@@ -247,16 +246,15 @@
 							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
 						</div>
 						<label for="cins" id="alacakliHesapCins" class="width-50 cins_bold"></label> 
-						<div style="position: relative; width: 100px;">
-						<select class="form-control"style="width: 100px" id="alacakKurCins" disabled onchange="dekkurOku('alacakliHesapCins',this,'alacakKur')">
+						
+						<select class="form-select" style="width: 100px" id="alacakKurCins" disabled onchange="dekkurOku('alacakliHesapCins',this,'alacakKur')">
 							<option value="">Kur Cinsi</option>
 							<option value="MA">MA</option>
 							<option value="MS">MS</option>
 							<option value="SA">SA</option>
 							<option value="SS">SS</option>
 						</select> 
-							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-						</div>
+							
 						<span style="padding-left: 10px;"></span>
 						<input class="form-control saga-bold" style="width: 100px" type="number" id="alacakKur" value="1.0000" disabled />
 						<input	ondblclick="tutarKontrolAlacak()" class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)"	id="alacakTutar" value="0.00" disabled />

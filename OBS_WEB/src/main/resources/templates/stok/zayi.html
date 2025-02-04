@@ -97,20 +97,18 @@ datalist {
 					<input type="date" id="fisTarih" class="form-control" th:value="${fisTarih}" style="width: 125px; font-weight: bold;" />
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Ana Grup</label>	
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="anagrp" onchange="anagrpChanged(this)">
+					
+						<select class="form-select cins_bold" style="width: 150px; " id="anagrp" onchange="anagrpChanged(this)">
     						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Alt Grup</label>	
-					<div style="position: relative; width: 165px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="altgrp" disabled>
+					
+						<select class="form-select cins_bold" style="width: 165px; " id="altgrp" disabled>
     						
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 				</div>
 			</div>
 			<div class="group-box">

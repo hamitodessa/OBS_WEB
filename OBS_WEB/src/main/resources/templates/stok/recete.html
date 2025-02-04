@@ -85,26 +85,20 @@
                     </button>
                     <span style="padding-left: 10px;"></span>
                     <label style="min-width:75px;">Ana Grup</label>
-                    <div style="position: relative; width: 150px;">
-                        <select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="anagrp"
+                    
+                        <select class="form-select cins_bold" style="width: 150px;" id="anagrp"
                             onchange="anagrpChanged(this)">
                             <option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}">
                             </option>
                         </select>
-                        <span
-                            style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
-                            ▼ </span>
-                    </div>
+                        
                     <span style="padding-left: 10px;"></span>
                     <label style="min-width:75px;">Alt Grup</label>
-                    <div style="position: relative; width: 150px;">
-                        <select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="altgrp"
+                    
+                        <select class="form-select cins_bold" style="width: 150px; " id="altgrp"
                             disabled>
                         </select>
-                        <span
-                            style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
-                            ▼ </span>
-                    </div>
+                        
                 </div>
                 <div style="display: flex;align-items:center;margin-top:15px;">
                     <label style="width: 76px;">Aciklama</label>
@@ -113,15 +107,12 @@
                         style="width:400px;min-height:50px;"></textarea>
 
                     <span style="padding-left: 80px;"></span>
-                    <div style="position: relative; width: 150px;">
-                        <select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="durum">
+                   
+                        <select class="form-select cins_bold" style="width: 150px;" id="durum">
                             <option value="A">Aktif</option>
                             <option value="P">Pasif</option>
                         </select>
-                        <span
-                            style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
-                            ▼ </span>
-                    </div>
+                       
                 </div>
             </div>
             <div class="group-box">

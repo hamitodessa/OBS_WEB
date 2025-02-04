@@ -105,14 +105,13 @@ th:nth-child(7), td:nth-child(7) {
 	<div class="centered-div">
 		<div class="aramagroup-box">
 			<span style="padding-left: 5px;"></span> 
-			<div style="position: relative; width: 150px;">
-				<select style="width: 100%;" class="form-control" id="doviz_tur" onchange=kurSatirOku() name="doviz_tur">
+			
+				<select style="width: 150px;" class="form-select" id="doviz_tur" onchange=kurSatirOku() name="doviz_tur">
 					<option value="USD">USD</option>
 					<option value="EUR">EUR</option>
 					<option value="RUB">RUB</option>
 				</select> 
-				<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-			</div>
+				
 			<span style="padding-left: 50px;"></span>
 			<button type="button" id="geriButton" class="btn btn-secondary ml-2" onclick="tarihGeri()">
 				<i class="fa fa-backward"></i>

@@ -72,16 +72,15 @@ th:nth-child(6), td:nth-child(6) {
 <div class="card p-4">
 <div style="display: flex; align-items: center;">
 		<button class="btn btn-primary" type="button" id="ozmizyenileButton" style="margin-left: 10px;"	onclick="openFirstModal('ozelmizan')">Filtre</button>
-		<div style="position: relative; width: 150px;margin-left: 10px;">		 
-		<select id="reportFormat" class="form-control"	style="width: 100%;" onchange="ozmizdownloadReport(this.value)"  disabled>
+			 
+		<select id="reportFormat" class="form-select"	style="width: 150px;margin-left: 10px;" onchange="ozmizdownloadReport(this.value)"  disabled>
 				<option value="" disabled selected>Rapor Indir</option>
 				<option value="pdf">PDF</option>
 				<option value="xlsx">Excel (XLSX)</option>
 				<option value="docx">Word (DOCX)</option>
 				<option value="xml">XML</option>
 		</select>
-			<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		</div>
+		
 		<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="mailButton" onclick="ozmizmailAt()"  disabled>Email Gonder</button>		
 	</div>
 </div>

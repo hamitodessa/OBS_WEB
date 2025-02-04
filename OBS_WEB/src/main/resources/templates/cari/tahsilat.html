@@ -103,23 +103,20 @@ datalist {
 				
 				<div class="group-box">
 					<div class="form-row">
-						<div style="position: relative; width: 150px;">
-						<select class="form-control" id="tah_ted" name="tah_ted">
+						
+						<select class="form-select" style="width: 150px;" id="tah_ted" name="tah_ted">
 							<option value="Tahsilat">Tahsilat</option>
 							<option value="Tediye">Tediye</option>
 						</select> 
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-						</div>
+						
 						<span style="padding-left: 8%;"></span> 
-
-						<div style="position: relative; width: 150px;">
-						<select class="form-control" id="tur" name="tur" onchange=turChange()>
+						
+						<select class="form-select" style="width: 150px;" id="tur" name="tur" onchange=turChange()>
 							<option value="Nakit">Nakit</option>
 							<option value="Cek">Cek</option>
 							<option value="Kredi Karti">Kredi Karti</option>
 						</select> 
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-						</div>
+						
 						<span style="padding-left: 15%;"></span> 
 						<input type="text" id="tutar" onblur="formatInputBox2(this)"
 							class="form-control saga-bold" value="0.00" style="width: 150px; text-align: right;">
@@ -173,15 +170,14 @@ datalist {
 						<!-- İkinci Satır: 3 Input -->
 						<div class="row mb-2">
 							<div class="col">
-								<div style="position: relative; width: 100px;">
-									<select class="form-control" id="dvz_cins" name="dvz_cins" style="width: 100px">
+								
+									<select class="form-select" style="width: 100px;" id="dvz_cins" name="dvz_cins" >
 										<option value="TL">TL</option>
 										<option value="USD">USD</option>
 										<option value="EUR">EUR</option>
 										<option value="RUB">RUB</option>
 									</select>
-									<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-								</div>
+									
 							</div>
 							<div class="col" id="cekbilgidiv" style="display: none;">
 								<label id="ceksayisi" class="form-control" style="width: 100px">0</label>

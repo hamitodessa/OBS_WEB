@@ -35,21 +35,19 @@
 						<span class="input-group-text" style="width: 130px;">Ilk ve Son Evrak</span>
 					</div>
 					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="evrno1" style="max-width: 120px;" class="form-control"> 
+					<input type="text" id="evrno1" style="min-width: 120px;max-width: 120px;" class="form-control"> 
 					<span style="padding-left: 5px;"></span>
-					<input type="text" id="evrno2" style="max-width: 120px;" value="ZZZZZZZZZZ" class="form-control">
+					<input type="text" id="evrno2" style="min-width: 120px;max-width: 120px;" value="ZZZZZZZZZZ" class="form-control">
 					<span style="padding-left: 5px;"></span>
 					<div class="input-group-prepend">
 						<span class="input-group-text" style="width: 130px;">Urun Ana Grup</span>
 					</div>
 					<span style="padding-left: 5px;"></span>
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold"
-							style="width: 100%; padding-right: 30px;" id="uranagrp" onchange="anagrpChanged(this,'uraltgrp')">
-							
+					
+						<select class="form-select cins_bold"
+							style="width: 150px;" id="uranagrp" onchange="anagrpChanged(this,'uraltgrp')">
 						</select> 
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 				</div>
 				<div class="input-group" style="padding: 2px;">
 					<span style="padding-left: 5px;"></span>
@@ -57,21 +55,17 @@
 						<span class="input-group-text" style="width: 130px;">Ilk Son Tarih</span>
 					</div>
 					<span style="padding-left: 5px;"></span> 
-					<input type="date" id="tar1" style="max-width: 120px;"  
-						class="form-control" value="1900-01-01"> 
+					<input type="date" id="tar1" style="min-width: 120px;max-width: 120px;"  class="form-control" value="1900-01-01"> 
 					<span style="padding-left: 5px;"></span> 
-					<input type="date" id="tar2" style="max-width: 120px;" class="form-control"
+					<input type="date" id="tar2" style="min-width: 120px;max-width: 120px;" class="form-control"
 						value="2100-12-31"> 
 					<span style="padding-left: 5px;"></span>
 					<div class="input-group-prepend">
 						<span class="input-group-text" style="width: 130px;">Urun Alt Grup</span>
 					</div>
 					<span style="padding-left: 5px;"></span>
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="uraltgrp" disabled>
-						</select> 
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+					<select class="form-select cins_bold" style="width: 150px;" id="uraltgrp" disabled></select> 
+						
 				</div>
 				<div class="input-group" style="padding: 2px;">
 					<span style="padding-left: 5px;"></span>
@@ -79,20 +73,19 @@
 						<span class="input-group-text" style="width: 130px;">Ilk Son Barkod</span>
 					</div>
 					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="bkod1" style="max-width: 120px;" class="form-control">
+					<input type="text" id="bkod1" style="min-width: 120px;max-width: 120px;" class="form-control">
 					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="bkod2" style="max-width: 120px;" value="ZZZZZZZZZZ"
+					<input type="text" id="bkod2" style="min-width: 120px;max-width: 120px;" value="ZZZZZZZZZZ"
 						class="form-control" > 
 					<span style="padding-left: 5px;"></span>
 					<div class="input-group-prepend">
 						<span class="input-group-text" style="width: 130px;">Depo</span>
 					</div>
 					<span style="padding-left: 5px;"></span>
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="depo">
+					
+						<select class="form-select cins_bold" style="width: 150px; " id="depo">
 						</select> 
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 				</div>
 				<div class="input-group" style="padding: 2px;">
 					<span style="padding-left: 5px;"></span>
@@ -100,9 +93,9 @@
 						<span class="input-group-text" style="width: 130px;">Ilk Son Ur.Kodu</span>
 					</div>
 					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="ukod1" style="max-width: 120px;" class="form-control">
+					<input type="text" id="ukod1" style="min-width: 120px;max-width: 120px;" class="form-control">
 					<span style="padding-left: 5px;"></span>
-					<input type="text" id="ukod2" style="max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control"> 
+					<input type="text" id="ukod2" style="min-width: 120px;max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control"> 
 				</div>
 				<div class="input-group" style="padding: 2px;">
                     <span style="padding-left: 5px;"></span>
@@ -110,9 +103,9 @@
 						<span class="input-group-text" style="width: 130px;">Ilk Son Recete</span>
 					</div>
 					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="rec1" style="max-width: 120px;" class="form-control" >
+					<input type="text" id="rec1" style="min-width: 120px;max-width: 120px;" class="form-control" >
 					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="rec2" style="max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control" >
+					<input type="text" id="rec2" style="min-width: 120px;max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control" >
 				</div>
 				<div class="input-group" style="padding: 2px;">
 					<span style="padding-left: 5px;"></span>
@@ -120,13 +113,11 @@
 						<span class="input-group-text" style="width: 130px;">Ana Grup</span>
 					</div>
 					<span style="padding-left: 5px;"></span>
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold"
-							style="width: 100%; padding-right: 30px;" id="anagrp" onchange="anagrpChanged(this,'altgrp')">
-							
+					
+						<select class="form-select cins_bold"
+							style="min-width: 175px;max-width: 175px;" id="anagrp" onchange="anagrpChanged(this,'altgrp')">
 						</select> 
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 				</div>
                 <div class="input-group" style="padding: 2px;">
 					<span style="padding-left: 5px;"></span>
@@ -134,11 +125,10 @@
 						<span class="input-group-text" style="width: 130px;">Alt Grup</span>
 					</div>
 					<span style="padding-left: 5px;"></span>
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="altgrp" disabled>
+					
+						<select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="altgrp" disabled>
 						</select> 
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 				</div>
 			</div>
 			<div class="modal-footer">

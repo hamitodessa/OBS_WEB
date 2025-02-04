@@ -29,16 +29,15 @@
 		<div style="display: flex; align-items: center;">
 		<button class="btn btn-primary" type="button" id="rapyenileButton" style="margin-left: 10px;"
 			onclick="openFirstModal('cekrapor')">Yenile</button>
-		<div style="position: relative; width: 150px;margin-left: 10px;">			
-		 	<select id="reportFormat" class="form-control" style="width: 100%;" onchange="rapdownloadReport(this.value)"  disabled>
+					
+		 	<select id="reportFormat" class="form-select" style="width: 150px;margin-left: 10px;" onchange="rapdownloadReport(this.value)"  disabled>
 				<option value="" disabled selected>Rapor Indir</option>
 				<option value="pdf">PDF</option>
 				<option value="xlsx">Excel (XLSX)</option>
 				<option value="docx">Word (DOCX)</option>
 				<option value="xml">XML</option>
 			</select>
-			<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		</div>
+			
 	</div>
 </div>
 <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>

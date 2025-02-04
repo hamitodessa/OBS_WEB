@@ -121,28 +121,25 @@ datalist {
 					
 					<span style="padding-left: 10px;"></span> 	
 					<label style="min-width:75px;">Depo</label>	
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="depo" >
+					
+						<select class="form-select cins_bold" style="width: 150px; " id="depo" >
     						<option th:each="kod : ${depoKodlari}" th:value="${kod.DEPO}" th:text="${kod.DEPO}"></option>
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 					<span style="padding-left: 10px;"></span> 	
 					<label style="min-width:75px;">Ana Grup</label>	
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="anagrp" onchange="anagrpChanged(this)">
+					
+						<select class="form-select cins_bold" style="width: 150px;" id="anagrp" onchange="anagrpChanged(this)">
     						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 					<span style="padding-left: 10px;"></span> 	
 					<label style="min-width:75px;">Alt Grup</label>	
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="altgrp" disabled>
+					
+						<select class="form-select cins_bold" style="width: 150px; " id="altgrp" disabled>
     						
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 				</div>
 				
 				<!-- 				Uretim Bilgileri -->
@@ -174,8 +171,8 @@ datalist {
 				<div style="display: flex;align-items:center;margin-top:7px;">
 					<label style="width: 150px;">Uygulanacak Fiat</label>
 					<span style="padding-left: 10px;"></span>
-					<div style="position: relative; width: 150px;">
-					<select class="form-control" id="uygulananfiat" onchange="uygulananfiatchange()" style="width: 150px;">
+					
+					<select class="form-select" id="uygulananfiat" onchange="uygulananfiatchange()" style="width: 150px;">
 						<option value=""></option>
 						<option value="ortfiat">Ortalama_Gris_Fiati</option>
 						<option value="sonimalat">Son_Imalat</option>
@@ -183,8 +180,7 @@ datalist {
 						<option value="fiat2">Fiat_2</option>
 						<option value="fiat3">Fiat_3</option>
 					</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 					<span style="padding-left: 10px;"></span>
 					<label id="datlabel"  style="visibility:hidden">Dikkatae Alinacak Tarih</label>
 					<span style="padding-left: 10px;"></span>

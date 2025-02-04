@@ -131,28 +131,25 @@ datalist {
 					<input type="date" id="fisTarih" class="form-control" th:value="${fisTarih}" style="width: 125px; font-weight: bold;" />
 					<span style="padding-left: 10px;"></span> 
 					<label style="width:75px;">Ozel Kod</label>	
-					<div style="position: relative; width: 150px;">
-						<select class="form-control" style="width: 100%; padding-right: 30px;" id="ozelkod" >
+					
+						<select class="form-select" style=" width: 150px; " id="ozelkod" >
     						<option th:each="kod : ${ozelKodlari}" th:value="${kod.Ozel_Kod}" th:text="${kod.Ozel_Kod}"></option>
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Ana Grup</label>	
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="anagrp" onchange="anagrpChanged(this)">
+					
+						<select class="form-select cins_bold" style="width: 150px; " id="anagrp" onchange="anagrpChanged(this)">
     						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Alt Grup</label>	
-					<div style="position: relative; width: 165px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="altgrp" disabled>
+					
+						<select class="form-select cins_bold" style="width: 165px; " id="altgrp" disabled>
     						
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 				</div>
 			<!-- 2 SATIR  -->
 			<div style="display: flex; align-items: center;margin-top:10px; ">
@@ -169,16 +166,15 @@ datalist {
 					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')" ondblclick="openadrkodlariModal('adreskod', 'fatura')"  style="width: 120px; font-weight: bold;" />
 					<span style="padding-left: 35px;"></span> 	
 					<label style="width:80px;">Varsayilan</label>	
-					<div style="position: relative; width: 150px;">
-						<select class="form-control cins_bold" style="width: 100%; padding-right: 30px;" id="uygulananfiat" >
+					
+						<select class="form-select cins_bold" style="width: 150px; " id="uygulananfiat" >
     						<option value=""></option>
     						<option value="fiat1">Fiat 1</option>
     						<option value="fiat2">Fiat 2</option>
     						<option value="fiat3">Fiat 3</option>
     						<option value="sonsatis">Son Satis Fiati</option>
 						</select>
-						<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+						
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Doviz</label>	
 					<input id="dovizcins" class="form-control" style="width: 50px;" th:value="${doviz}"/>
@@ -206,13 +202,12 @@ datalist {
 					<span style="padding-left: 5px;"></span>
 					<button class="btn btn-primary" type="button" id="carkayitButton"	onclick="openFirstModal('fatura')">Cari Kaydet</button>
 					<span style="padding-left: 25%;"></span>
-					<div style="position: relative; width: 150px;">
-							<select class="form-control" style="width: 100%; padding-right: 30px;font-weight: bold;" id="gircik" >
+					
+							<select class="form-select" style="width: 150px;font-weight: bold;" id="gircik" >
     							<option value="SATIS">SATIS</option>
     							<option value="ALIS">ALIS</option>
 							</select>
-							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-					</div>
+					
 				</div>
 			</div>
 		</div>
