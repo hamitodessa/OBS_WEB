@@ -24,9 +24,9 @@ public class PasswordController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("user/user_pwd_change")
+    @GetMapping("/user/user_pwd_change")
     public String showChangePasswordForm() {
-        return "/user/user_pwd_change"; 
+        return "user/user_pwd_change"; 
     }
 
     @PostMapping("user/user_pwd_change")
