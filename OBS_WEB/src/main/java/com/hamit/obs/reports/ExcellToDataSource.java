@@ -19,16 +19,18 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.hamit.obs.custom.yardimci.Formatlama;
+import com.hamit.obs.exception.ServiceException;
 
 public class ExcellToDataSource {
 
-	public ByteArrayDataSource export_excell(List<Map<String, String>> tableData) throws Exception {
+	public ByteArrayDataSource export_excell(List<Map<String, String>> tableData) {
+		ByteArrayDataSource ds = null ;
 		try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 			Sheet sheet = workbook.createSheet("Excell_Rapor");
 			if (!tableData.isEmpty()) {
 				List<String> headers = new ArrayList<>(tableData.get(0).keySet());
-				List<String> rightAlignedColumns = List.of("MIKTAR", "TUTAR", "ISK. TUTAR","TOPLAM TUTAR","KDV TUTAR","AGIRLIK");
+				List<String> rightAlignedColumns = List.of("MIKTAR", "TUTAR", "ISK. TUTAR","TOPLAM TUTAR","KDV TUTAR","AGIRLIK",
+						"GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI","MALIYET");
 				Map<String, Double> columnSums = new HashMap<>();
 				for (String col : rightAlignedColumns) {
 					columnSums.put(col, 0.0);
@@ -63,12 +65,14 @@ public class ExcellToDataSource {
 								Number number = formatter.parse((String) cellValue);
 								double value = number.doubleValue();
 								columnSums.put(columnName, columnSums.get(columnName) + value);
-							} catch (NumberFormatException e) {
+							} catch (Exception e) {
+								throw new ServiceException(e.getMessage());
 							}
 						}
 					}
 					rowNum++;
 				}
+/*				
 				Row totalRow = sheet.createRow(rowNum++);
 				for (int i = 0; i < headers.size(); i++) {
 					String columnName = headers.get(i);
@@ -86,6 +90,7 @@ public class ExcellToDataSource {
 						cell.setCellValue("");
 					}
 				}
+*/
 				for (int i = 0; i < headers.size(); i++) {
 					sheet.autoSizeColumn(i);
 				}
@@ -94,9 +99,12 @@ public class ExcellToDataSource {
 			workbook.write(bos);
 			byte[] byteArray = bos.toByteArray();
 			InputStream in = new ByteArrayInputStream(byteArray);
-			ByteArrayDataSource ds = new ByteArrayDataSource(in, "application/x-any");
+			ds = new ByteArrayDataSource(in, "application/x-any");
 			bos.close();
-			return ds;
+			
+		} catch (Exception ex) {
+			throw new ServiceException(ex.getMessage());
 		}
+		return ds;
 	}
 }

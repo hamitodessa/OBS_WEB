@@ -332,6 +332,11 @@ public class RaporOlustur {
 			return excellToDataSource.export_excell(tableData);
 	}
 	
+	public ByteArrayDataSource envanter(List<Map<String, String>> tableData)  throws Exception {
+		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
+		return excellToDataSource.export_excell(tableData);
+}
+	
 	public ByteArrayDataSource imarap(List<Map<String, String>> tableData)  throws Exception {
 		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);

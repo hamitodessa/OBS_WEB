@@ -123,7 +123,7 @@ async function envfetchTableData() {
 		data = response;
 		let sqlHeaders = "";
 		if (response.raporturu === 'normal') {
-			sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI","MALIYET","TUTAR"];
+			sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI", "MALIYET", "TUTAR"];
 			updateTableHeadersnormal(sqlHeaders);
 		} else if (response.raporturu === 'fkodu') {
 			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
@@ -165,7 +165,7 @@ async function envfetchTableData() {
 			}
 			mainTableBody.appendChild(row);
 		});
-		
+
 		if (response.raporturu === 'normal') {
 			document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
 			document.getElementById("toplam-4").innerText = formatNumber2(totalgtutar);
@@ -254,63 +254,15 @@ function updateTableHeadersnormal(headers) {
 	tfoot.appendChild(trFoot);
 }
 
-async function openfatrapModal(modal) {
-	$(modal).modal('show');
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("stok/anadepo", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const ana = response.anaKodlari;
-		const dpo = response.depoKodlari;
-		const anaSelect = document.getElementById("anagrp");
-		const dpoSelect = document.getElementById("depo");
-		anaSelect.innerHTML = "";
-		dpoSelect.innerHTML = "";
-
-		const optionbos = document.createElement("option");
-		optionbos.value = "";
-		optionbos.textContent = "";
-		anaSelect.appendChild(optionbos);
-		ana.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.ANA_GRUP;
-			option.textContent = item.ANA_GRUP;
-			anaSelect.appendChild(option);
-		});
-		optionbos.value = "";
-		optionbos.textContent = "";
-		dpoSelect.appendChild(optionbos);
-		dpo.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.DEPO;
-			option.textContent = item.DEPO;
-			dpoSelect.appendChild(option);
-		});
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
-
-async function envanterdownloadReport() {
+async function envdownloadReport() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
 
 	document.body.style.cursor = "wait";
-	const $indirButton = $('#indirButton');
+	const $indirButton = $('#envDownloadButton');
 	$indirButton.prop('disabled', true).text('İşleniyor...');
-	const $yenileButton = $('#yenileButton');
+	const $yenileButton = $('#envyenileButton');
 	$yenileButton.prop('disabled', true);
 
 	let table = document.querySelector("#main-table");
@@ -319,20 +271,35 @@ async function envanterdownloadReport() {
 	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
 	table.querySelectorAll("tbody tr").forEach(tr => {
 		let rowData = {};
-		let isEmpty = true;
+		let nonEmptyCount = 0;
 		tr.querySelectorAll("td").forEach((td, index) => {
 			let value = td.innerText.trim();
 			if (value !== "") {
-				isEmpty = false;
+				nonEmptyCount++;
 			}
 			rowData[headers[index]] = value;
 		});
-		if (!isEmpty) {
+		if (nonEmptyCount > 0) {
 			rows.push(rowData);
 		}
 	});
+	let tfoot = table.querySelector("tfoot");
+	if (tfoot) {
+		let tfootRowData = {};
+		let nonEmptyCount = 0;
+		tfoot.querySelectorAll("th").forEach((th, index) => {
+			let value = th.innerText.trim();
+			if (value !== "") {
+				nonEmptyCount++;
+			}
+			tfootRowData[headers[index]] = value;
+		});
+		if (nonEmptyCount > 0) {
+			rows.push(tfootRowData);
+		}
+	}
 	try {
-		const response = await fetchWithSessionCheckForDownload('stok/envanter_download', {
+		const response = await fetchWithSessionCheckForDownload('stok/env_download', {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(rows)
@@ -362,26 +329,26 @@ async function envanterdownloadReport() {
 	}
 }
 
-async function fatrapmailAt() {
+async function envmailAt() {
 	document.body.style.cursor = "wait";
 	let table = document.querySelector("#main-table");
-		let headers = [];
-		let rows = [];
-		table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
-		table.querySelectorAll("tbody tr").forEach(tr => {
-			let rowData = {};
-			let isEmpty = true;
-			tr.querySelectorAll("td").forEach((td, index) => {
-				let value = td.innerText.trim();
-				if (value !== "") {
-					isEmpty = false;
-				}
-				rowData[headers[index]] = value;
-			});
-			if (!isEmpty) {
-				rows.push(rowData);
+	let headers = [];
+	let rows = [];
+	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+	table.querySelectorAll("tbody tr").forEach(tr => {
+		let rowData = {};
+		let isEmpty = true;
+		tr.querySelectorAll("td").forEach((td, index) => {
+			let value = td.innerText.trim();
+			if (value !== "") {
+				isEmpty = false;
 			}
+			rowData[headers[index]] = value;
 		});
+		if (!isEmpty) {
+			rows.push(rowData);
+		}
+	});
 	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
 	const degerler = "envanter";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
