@@ -61,12 +61,15 @@ public class ExcellToDataSource {
 						if (rightAlignedColumns.contains(columnName)) {
 							cell.setCellStyle(rightAlignStyle);
 							try {
-								NumberFormat formatter = NumberFormat.getInstance();
-								Number number = formatter.parse((String) cellValue);
-								double value = number.doubleValue();
-								columnSums.put(columnName, columnSums.get(columnName) + value);
+							    if (cellValue == null || cellValue.toString().trim().isEmpty()) {
+							        cellValue = "0";
+							    }
+							    NumberFormat formatter = NumberFormat.getInstance();
+							    Number number = formatter.parse(cellValue.toString());
+							    double value = number.doubleValue();
+							    columnSums.put(columnName, columnSums.getOrDefault(columnName, 0.0) + value);
 							} catch (Exception e) {
-								throw new ServiceException(e.getMessage());
+							    throw new ServiceException(e.getMessage());
 							}
 						}
 					}

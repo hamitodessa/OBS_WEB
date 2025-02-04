@@ -258,46 +258,12 @@ async function envdownloadReport() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-
 	document.body.style.cursor = "wait";
 	const $indirButton = $('#envDownloadButton');
 	$indirButton.prop('disabled', true).text('İşleniyor...');
 	const $yenileButton = $('#envyenileButton');
 	$yenileButton.prop('disabled', true);
-
-	let table = document.querySelector("#main-table");
-	let headers = [];
-	let rows = [];
-	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
-	table.querySelectorAll("tbody tr").forEach(tr => {
-		let rowData = {};
-		let nonEmptyCount = 0;
-		tr.querySelectorAll("td").forEach((td, index) => {
-			let value = td.innerText.trim();
-			if (value !== "") {
-				nonEmptyCount++;
-			}
-			rowData[headers[index]] = value;
-		});
-		if (nonEmptyCount > 0) {
-			rows.push(rowData);
-		}
-	});
-	let tfoot = table.querySelector("tfoot");
-	if (tfoot) {
-		let tfootRowData = {};
-		let nonEmptyCount = 0;
-		tfoot.querySelectorAll("th").forEach((th, index) => {
-			let value = th.innerText.trim();
-			if (value !== "") {
-				nonEmptyCount++;
-			}
-			tfootRowData[headers[index]] = value;
-		});
-		if (nonEmptyCount > 0) {
-			rows.push(tfootRowData);
-		}
-	}
+	let rows = extractTableData("main-table");
 	try {
 		const response = await fetchWithSessionCheckForDownload('stok/env_download', {
 			method: "POST",
@@ -318,7 +284,6 @@ async function envdownloadReport() {
 		} else {
 			throw new Error("Dosya indirilemedi.");
 		}
-
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
@@ -331,26 +296,46 @@ async function envdownloadReport() {
 
 async function envmailAt() {
 	document.body.style.cursor = "wait";
-	let table = document.querySelector("#main-table");
-	let headers = [];
-	let rows = [];
-	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
-	table.querySelectorAll("tbody tr").forEach(tr => {
-		let rowData = {};
-		let isEmpty = true;
-		tr.querySelectorAll("td").forEach((td, index) => {
-			let value = td.innerText.trim();
-			if (value !== "") {
-				isEmpty = false;
-			}
-			rowData[headers[index]] = value;
-		});
-		if (!isEmpty) {
-			rows.push(rowData);
-		}
-	});
+	let rows = extractTableData("main-table");
 	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
 	const degerler = "envanter";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
+}
+
+function extractTableData(tableId) {
+    let table = document.querySelector(`#${tableId}`);
+    let headers = [];
+    let rows = [];
+    table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+    table.querySelectorAll("tbody tr").forEach(tr => {
+        let rowData = {};
+        let nonEmptyCount = 0;
+        tr.querySelectorAll("td").forEach((td, index) => {
+            let value = td.innerText.trim();
+            if (value !== "") {
+                nonEmptyCount++;
+            }
+            rowData[headers[index]] = value;
+        });
+        if (nonEmptyCount > 0) {
+            rows.push(rowData);
+        }
+    });
+    let tfoot = table.querySelector("tfoot");
+    if (tfoot) {
+        let tfootRowData = {};
+        let nonEmptyCount = 0;
+        tfoot.querySelectorAll("th").forEach((th, index) => {
+            let value = th.innerText.trim();
+            if (value !== "") {
+                nonEmptyCount++;
+            }
+            tfootRowData[headers[index]] = value;
+        });
+        if (nonEmptyCount > 0) {
+            rows.push(tfootRowData);
+        }
+    }
+    return rows;
 }

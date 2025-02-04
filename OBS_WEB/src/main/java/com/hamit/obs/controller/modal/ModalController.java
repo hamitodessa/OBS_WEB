@@ -61,7 +61,6 @@ public class ModalController {
 		} catch (ServiceException e) {
 			throw e; 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("Modal verileri alınırken bir hata oluştu.", e);
 		}
 	}

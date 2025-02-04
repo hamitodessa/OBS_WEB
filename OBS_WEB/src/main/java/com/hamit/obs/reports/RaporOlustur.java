@@ -98,7 +98,6 @@ public class RaporOlustur {
 			JasperPrint jp = prepareJasperPrint("CAR_EKSTRE.jrxml", parameters, ekstreData,UygulamaSabitleri.CariRaporYeri);
 			return exportRapor(jp, uzanti);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("Cari Rapor Olusturma", e);
 		}
 	}

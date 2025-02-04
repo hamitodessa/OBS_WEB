@@ -124,7 +124,6 @@ async function imafetchTableData() {
         if (response.errorMessage) {
             throw new Error(response.errorMessage);
         }
-        console.info(response);
         let totalmiktar = 0;
         let totalagirlik = 0;
         response.data.forEach(item => {
