@@ -1280,4 +1280,24 @@ public class FaturaMySQL implements IFaturaDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO, 
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> envanter_rapor_fifo_2(envanterDTO envanterDTO,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double envanter_rapor_lifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

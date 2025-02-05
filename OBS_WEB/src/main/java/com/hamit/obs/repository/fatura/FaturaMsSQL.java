@@ -1511,4 +1511,261 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		}
 		return resultList; 
 	}
+
+	@Override
+	public List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO,
+			ConnectionDetails faturaConnDetails) {
+		
+		String calisanpara= envanterDTO.getDoviz() ;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql = "WITH cteStockSum AS (   " +
+				" SELECT " +
+				"     stk.[Urun_Kodu]," +  
+				"     mal.[Adi], " +
+				"     (SELECT [Birim] FROM [MAL] WHERE [Kodu] = stk.[Urun_Kodu]) AS [Simge]," + 
+				"     (SELECT SUM([Miktar]) FROM [STOK] WHERE [Hareket] = 'G' AND [Urun_Kodu] = stk.[Urun_Kodu]) AS [Giris_Miktari]," + 
+				"     (SELECT SUM([Tutar]) FROM [STOK] WHERE [Hareket] = 'G' AND [Urun_Kodu] = stk.[Urun_Kodu]) AS [Giris_Tutari], " +
+				"     COALESCE((SELECT SUM(ABS([Miktar])) FROM [STOK] WHERE [Hareket] = 'C' AND [Urun_Kodu] = stk.[Urun_Kodu]), 0) AS [Cikis_Miktari]," + 
+				"     COALESCE((SELECT SUM(CASE WHEN [Doviz] = '" + calisanpara + "' THEN [Tutar] ELSE ([Tutar] * [Kur]) END)" +
+				"               FROM [STOK] " +
+				"               WHERE [Hareket] = 'C' AND [Urun_Kodu] = stk.[Urun_Kodu]), 0) AS [Cikis_Tutari]," + 
+				"     COALESCE((" +
+				"         SELECT cum_sold_cost FROM (" +
+				"             SELECT " +
+				"                 tneg.[Urun_Kodu]," +
+				"                 tneg.[Tarih]," +
+				"                 tpos.prev_total_cost + ((tneg.cum_sold - tpos.prev_bought) / " + 
+				"                 (tpos.qty_bought - tpos.prev_bought)) * (tpos.total_cost - tpos.prev_total_cost) AS cum_sold_cost " +  
+				"             FROM ( " +
+				"                 SELECT " + 
+				"                     [Urun_Kodu]," + 
+				"                     [Tarih], " +
+				"                     ABS([Miktar]) AS qty_sold," +
+				"                     SUM(ABS([Miktar])) OVER (PARTITION BY [Urun_Kodu] ORDER BY [Tarih]) AS cum_sold" +  
+				"                 FROM [STOK] " +
+				"                 WHERE [STOK].[Urun_Kodu] = stk.[Urun_Kodu] AND [Miktar] < 0 " +
+				"             ) tneg " +
+				"             LEFT JOIN (" +
+				"                 SELECT " +
+				"                     [Urun_Kodu]," + 
+				"                     SUM([Miktar]) OVER (PARTITION BY [Urun_Kodu] ORDER BY [Tarih]) AS qty_bought," +
+				"                     COALESCE(SUM([Miktar]) OVER (PARTITION BY [Urun_Kodu] ORDER BY [Tarih] ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING), 0) AS prev_bought," + 
+				"                     [Miktar] * [Fiat] AS cost," +
+				"                     SUM([Miktar] * [Fiat]) OVER (PARTITION BY [Urun_Kodu] ORDER BY [Tarih]) AS total_cost," +
+				"                     COALESCE(SUM([Miktar] * [Fiat]) OVER (PARTITION BY [Urun_Kodu] ORDER BY [Tarih] ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING), 0) AS prev_total_cost" +  
+				"                 FROM [STOK]  " +
+				"                 WHERE [STOK].[Urun_Kodu] = stk.[Urun_Kodu] AND [Miktar] > 0 " +
+				"             ) tpos " +
+				"             ON tneg.cum_sold BETWEEN tpos.prev_bought AND tpos.qty_bought " + 
+				"             AND tneg.[Urun_Kodu] = tpos.[Urun_Kodu] " +
+				"         ) t " +
+				"         ORDER BY [Tarih] DESC " + 
+				"         OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY " +
+				"     ), 0) AS [Cikis_Maliyet], " +
+				"     SUM([Miktar]) AS [Stok_Miktari] " +
+				" FROM [STOK] stk " +
+				" JOIN [MAL] mal ON stk.[Urun_Kodu] = mal.[Kodu] " +
+				" WHERE " +
+				" stk . Tarih  BETWEEN  '" + envanterDTO.getTar1() + "' AND   '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND  Urun_Kodu  = N'" + envanterDTO.getUkod1() + "'" +
+				" AND  Evrak_No  >= '" + envanterDTO.getEvrno1() + "' AND  Evrak_No  <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND  stk . Ana_Grup   " + envanterDTO.getAnagrp() +
+				" AND  MAL . Ana_Grup    " + envanterDTO.getUranagrp() + " " +
+				" AND  MAL . Alt_Grup    " + envanterDTO.getUraltgrp() + " " +
+				" AND  stk . Alt_Grup   " + envanterDTO.getAltgrp() +
+				" AND  stk . Depo   " + envanterDTO.getDepo() +
+				" AND  Evrak_Cins  " + wee +
+				" AND  Evrak_Cins   " + ure1 +
+				" GROUP BY stk.[Urun_Kodu], mal.[Adi] " +
+				" )," +
+				" cteReverseInSum AS ( " +
+				" SELECT " +
+				"     s.[Urun_Kodu]," + 
+				"     s.[Tarih], " +
+				"     SUM(s.[Miktar]) OVER (PARTITION BY [Urun_Kodu] ORDER BY s.[Tarih] ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS RollingStock, " +
+				"     s.[Miktar] AS ThisStock " +
+				" FROM [STOK] s " +
+				" WHERE s.[Miktar] > 0 " +
+				" ), " +
+				" cteWithLastTranDate AS ( " +
+				" SELECT DISTINCT " +
+				"     w.[Urun_Kodu], " +
+				"     w.[Adi], " +
+				"     w.[Simge], " +
+				"     w.[Giris_Miktari]," +
+				"     w.[Giris_Tutari]," +
+				"     w.[Cikis_Miktari]," +
+				"     w.[Cikis_Tutari]," +
+				"     w.[Cikis_Maliyet]," +
+				"     w.[Stok_Miktari]," +
+				"     LAST_VALUE(z.[Tarih]) OVER (PARTITION BY w.[Urun_Kodu] ORDER BY z.[Tarih] ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) AS [Tarih] " +
+				" FROM cteStockSum w " +
+				" JOIN cteReverseInSum z ON w.[Urun_Kodu] = z.[Urun_Kodu] AND z.RollingStock >= w.[Stok_Miktari] " +
+				" )" +
+				" SELECT " + 
+				" y.[Urun_Kodu], " +
+				" e.[Adi]," +
+				" e.[Simge]," +
+				" e.[Giris_Miktari], " +
+				" e.[Giris_Tutari]," +
+				" e.[Cikis_Miktari], " +
+				" e.[Cikis_Tutari]," +
+				" e.[Cikis_Maliyet]," +
+				" e.[Stok_Miktari]," +
+				" Price.[Fiat] AS [Maliyet]," +
+				" SUM(CASE WHEN e.[Tarih] = y.[Tarih] THEN e.[Stok_Miktari] - (y.RollingStock - y.ThisStock) ELSE y.ThisStock END * Price.[Fiat]) AS [Tutar] " +
+				" FROM cteReverseInSum y " +
+				" JOIN cteWithLastTranDate e ON e.[Urun_Kodu] = y.[Urun_Kodu]" +
+				" CROSS APPLY ( " +
+				"  SELECT TOP 1 p.[Fiat] " + 
+				"  FROM [STOK] p " +
+				"  WHERE p.[Urun_Kodu] = e.[Urun_Kodu] AND p.[Tarih] <= e.[Tarih] AND p.[Miktar] > 0 " +
+				"  ORDER BY p.[Tarih] DESC  " +
+				" ) AS Price " +
+				" WHERE y.[Tarih] >= e.[Tarih]" +
+				" GROUP BY y.[Urun_Kodu], e.[Adi], e.[Simge], e.[Giris_Miktari], e.[Giris_Tutari], e.[Cikis_Miktari], e.[Cikis_Tutari], e.[Cikis_Maliyet], Price.[Fiat], e.[Stok_Miktari] " +
+				" ORDER BY y.[Urun_Kodu];" ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> envanter_rapor_fifo_2(envanterDTO envanterDTO,
+			ConnectionDetails faturaConnDetails) {
+		String calisanpara= envanterDTO.getDoviz() ;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql = " SELECT Urun_Kodu ,Evrak_No , " +
+				" iif(STOK.Evrak_Cins= 'URE','',Hesap_Kodu), " +
+				" Evrak_Cins,Tarih ,Miktar ,  Birim , STOK.Fiat , " +
+				" SUM(Miktar) OVER(ORDER BY Tarih  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as Miktar_Bakiye , " +
+				" Tutar ,Doviz," +
+				" iif(Doviz = '" + calisanpara + "',Tutar,(Tutar * Kur)) as " + calisanpara + "_Tutar ," +
+				" SUM(iif(Doviz = '" + calisanpara + "',Tutar,(Tutar * Kur))) OVER(ORDER BY Tarih  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as Tutar_Bakiye , " +
+				" stok.[USER],MAL.Kusurat " +
+				" FROM STOK ,MAL " +
+				" WHERE  mal.kodu = stok.Urun_Kodu " +
+				" AND MAL.Ana_Grup " + envanterDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + envanterDTO.getUraltgrp() +
+				" AND STOK.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND  STOK.Evrak_No <= '" + envanterDTO.getEvrno2() + "'" +
+				" AND STOK.Tarih BETWEEN '" + envanterDTO.getTar1() + "' AND  '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND STOK.Urun_Kodu = N'" + envanterDTO.getUkod1() + "'" +
+				" AND STOK.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND STOK.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND STOK.Depo " + envanterDTO.getDepo() +
+				" AND Evrak_Cins " + wee +
+				" AND Evrak_Cins " + ure1 +
+				" Order by Tarih " ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
+	}
+
+	@Override
+	public double envanter_rapor_lifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails) {
+		
+		double maliyet = 0 ;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql = "WITH InventoryRanked AS (			" +
+				" SELECT " +
+				"    STOK.Urun_Kodu, " +
+				"    STOK.Hareket," +
+				"    STOK.Miktar," +
+				"    STOK.Fiat," +
+				"    STOK.Tarih," +
+				"    ROW_NUMBER() OVER (PARTITION BY STOK.Urun_Kodu ORDER BY STOK.Tarih DESC) AS rn " +
+				" FROM " +
+				"    STOK " +
+				"    INNER JOIN MAL ON MAL.Kodu = STOK.Urun_Kodu " +
+				" WHERE  " +
+				"   STOK.Tarih  BETWEEN  '" + envanterDTO.getTar1() + "' AND   '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" 	AND  Urun_Kodu  = N'" + envanterDTO.getUkod1() + "'" +
+				" 	AND  Evrak_No  >= '" + envanterDTO.getEvrno1() + "' AND  Evrak_No  <= '" + envanterDTO.getEvrno2() + "' " +
+				" 	AND  STOK . Ana_Grup  " + envanterDTO.getAnagrp() +
+				" 	AND  MAL . Ana_Grup   " + envanterDTO.getUranagrp() + " " +
+				" 	AND  MAL . Alt_Grup   " + envanterDTO.getUraltgrp() + " " +
+				" 	AND  STOK . Alt_Grup  " + envanterDTO.getAltgrp() +
+				" 	AND  STOK . Depo  " + envanterDTO.getDepo() +
+				" 	AND  Evrak_Cins  " + wee +
+				" 	AND  Evrak_Cins  " + ure1 +
+				" 	), " +
+				" StockCalculation AS ( " +
+				" SELECT " +
+				"    Urun_Kodu," +
+				"    Hareket," +
+				"    Miktar," +
+				"    Fiat," +
+				"    Tarih," +
+				"    ROW_NUMBER() OVER (PARTITION BY Urun_Kodu ORDER BY Tarih DESC) AS qwe, " +
+				"    SUM(CASE WHEN Hareket = 'G' THEN Miktar ELSE Miktar END) " +
+				"        OVER (PARTITION BY Urun_Kodu ORDER BY rn) AS kalan_stok," +
+				"    CASE " +
+				"        WHEN Hareket = 'G' THEN Miktar * Fiat " +
+				"        ELSE Miktar * ( " +
+				"            SELECT TOP 1 Fiat " + 
+				"            FROM STOK AS inv " +
+				"            WHERE inv.Urun_Kodu = InventoryRanked.Urun_Kodu " + 
+				"            AND Hareket = 'G' " +
+				"            ORDER BY inv.Tarih DESC " +
+				"        ) " +
+				"    END AS transaction_value " +
+				" FROM InventoryRanked " +
+				" ) " +
+				" SELECT TOP 1 " +
+				" Urun_Kodu, " +
+				" SUM(transaction_value) OVER (PARTITION BY Urun_Kodu ORDER BY qwe) / kalan_stok AS maliyet " +
+				" FROM StockCalculation " +
+				" ORDER BY Tarih desc;" ;
+		
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				maliyet = resultSet.getDouble("maliyet");   
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return maliyet; 
+	}
 }

@@ -81,7 +81,6 @@ async function openenvModal(modal) {
 	}
 }
 
-
 async function envfetchTableData() {
 	const hiddenFieldValue = $('#envanterBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
@@ -108,6 +107,8 @@ async function envfetchTableData() {
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
 	const mainTableBody = document.getElementById("mainTableBody");
 	mainTableBody.innerHTML = "";
+	const secondTableBody = document.getElementById("secondTableBody");
+	secondTableBody.innerHTML = "";
 	clearTfoot();
 	try {
 		const response = await fetchWithSessionCheck("stok/envanterdoldur", {
@@ -122,11 +123,18 @@ async function envfetchTableData() {
 		}
 		data = response;
 		let sqlHeaders = "";
-		sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI", "MALIYET", "TUTAR"];
-		updateTableHeadersnormal(sqlHeaders);
-
 		if (response.raporturu === 'normal') {
-			
+			sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI", "MALIYET", "TUTAR"];
+			updateTableHeadersnormal(sqlHeaders);
+		} else {
+			const mailButton = document.getElementById("envmailButton");
+			mailButton.disabled = true;
+			const reportFormat = document.getElementById("envDownloadButton");
+			reportFormat.disabled = true;
+			sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI", "MALIYET", "TUTAR"];
+			updateTableHeadersfifofirst(sqlHeaders);
+			sqlHeaders = ["URUN KODU", "EVRAK NO", "HES_KODU", "EVR CINS", "TARIH", "MIKTAR", "BIRIM", "FIAT", "MIKTAR BAKIYE", "TUTAR", "DOVIZ", "_TUTAR", "TUTAR BAKIYE", "USER"];
+			updateTableHeadersfifo(sqlHeaders);
 		}
 		let totalmiktar = 0;
 		let totalcmiktar = 0;
@@ -134,11 +142,13 @@ async function envfetchTableData() {
 		let totaltutar = 0;
 		let totalstok = 0;
 		let totalctutar = 0;
-		data.data.forEach(rowData => {
-			const row = document.createElement('tr');
-			row.classList.add('expandable');
-			row.classList.add("table-row-height");
-			if (response.raporturu === 'normal') {
+		if (response.raporturu === 'normal') {
+			document.getElementById("second-table-container").style.visibility = "hidden";
+			data.data.forEach(rowData => {
+				const row = document.createElement('tr');
+				row.classList.add('expandable');
+				row.classList.add("table-row-height");
+				//				if (response.raporturu === 'normal') {
 				row.innerHTML = `
                     <td>${rowData.Kodu || ''}</td>
                     <td>${rowData.Adi || ''}</td>
@@ -158,10 +168,61 @@ async function envfetchTableData() {
 				totaltutar += rowData.Tutar;
 				totalctutar += rowData.Cikis_Tutar;
 				totalgtutar += rowData.Giris_Tutar;
-			}
-			mainTableBody.appendChild(row);
-		});
-
+				//				}
+				mainTableBody.appendChild(row);
+			});
+		}
+		else if (response.raporturu === 'fifo') {
+			document.getElementById("second-table-container").style.visibility = "visible";
+			data.fifo.forEach(rowData => {
+				const row = document.createElement('tr');
+				row.classList.add('expandable');
+				row.classList.add("table-row-height");
+				row.innerHTML = `
+                    <td>${rowData.Urun_Kodu || ''}</td>
+                    <td>${rowData.Adi || ''}</td>
+                    <td>${rowData.Simge || ''}</td>
+                    <td class="double-column">${rowData.Giris_Miktari}</td>
+					<td class="double-column">${formatNumber2(rowData.Giris_Tutar)}</td>
+					<td class="double-column">${rowData.Cikis_Miktari}</td>
+					<td class="double-column">${formatNumber2(rowData.Cikis_Tutar)}</td>
+					<td class="double-column">${formatNumber2(rowData.Cikis_Maliyet)}</td>
+                    <td class="double-column">${rowData.Stok_Miktari}</td>
+                    <td class="double-column">${formatNumber2(rowData.Maliyet)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+                `;
+				mainTableBody.appendChild(row);
+			});
+			/// 2 Tablo Doldur///////////////////////////////////////////////////////////////////////
+			data.fifo2.forEach(rowData => {
+				const row = document.createElement('tr');
+				row.classList.add('expandable', 'table-row-height');
+				const miktarCell = document.createElement('td');
+				miktarCell.classList.add('double-column');
+				miktarCell.textContent = rowData.Miktar;
+				if (rowData.Miktar < 0) {
+					miktarCell.style.backgroundColor = 'red'; // Burada istediğin rengi verebilirsin
+					miktarCell.style.color = 'white'; // Yazıyı beyaz yaparak görünürlüğü artırıyorum
+				}
+				row.innerHTML = `
+        			<td>${rowData.Urun_Kodu || ''}</td>
+        			<td>${rowData.Evrak_No || ''}</td>
+        			<td>${rowData.Hes_Kodu || ''}</td> 
+        			<td>${rowData.Evrak_Cins || ''}</td> 
+        			<td>${formatDate(rowData.Tarih)}</td>
+        			<td class="double-column">${formatNumber2(rowData.Fiat)}</td>
+        			<td>${rowData.Birim || ''}</td> 
+        			<td class="double-column">${formatNumber3(rowData.Miktar_Bakiye)}</td>
+        			<td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+        			<td>${rowData.Doviz || ''}</td> 
+        			<td class="double-column">${formatNumber2(findTutarField(rowData) || 0)}</td>
+       				 <td class="double-column">${formatNumber2(rowData.Tutar_Bakiye)}</td>
+        			<td>${rowData.USER || ''}</td> 
+    			`;
+				row.insertBefore(miktarCell, row.children[6]); // 6. index'te Miktar var, yerine koyuyoruz.
+				secondTableBody.appendChild(row);
+			});
+		}
 		if (response.raporturu === 'normal') {
 			document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
 			document.getElementById("toplam-4").innerText = formatNumber2(totalgtutar);
@@ -180,6 +241,15 @@ async function envfetchTableData() {
 	}
 }
 
+function findTutarField(rowData) {
+	for (let key in rowData) {
+		if (key.includes("_Tutar")) {
+			return rowData[key];
+		}
+	}
+	return null;
+}
+
 function clearTfoot() {
 	let table = document.querySelector("#main-table");
 	let tfoot = table.querySelector("tfoot");
@@ -191,9 +261,7 @@ function clearTfoot() {
 	}
 }
 
-
 function updateTableHeadersnormal(headers) {
-
 	let thead = document.querySelector("#main-table thead");
 	let table = document.querySelector("#main-table");
 	let tfoot = table.querySelector("tfoot");
@@ -207,7 +275,6 @@ function updateTableHeadersnormal(headers) {
 	headers.forEach((header, index) => {
 		let th = document.createElement("th");
 		th.textContent = header;
-
 		if (index >= headers.length - 8) {
 			th.classList.add("double-column");
 		}
@@ -248,6 +315,60 @@ function updateTableHeadersnormal(headers) {
 		trFoot.appendChild(th);
 	});
 	tfoot.appendChild(trFoot);
+}
+
+function updateTableHeadersfifofirst(headers) {
+
+	let thead = document.querySelector("#main-table thead");
+	let table = document.querySelector("#main-table");
+	let tfoot = table.querySelector("tfoot");
+	if (!tfoot) {
+		tfoot = document.createElement("tfoot");
+		table.appendChild(tfoot);
+	}
+	thead.innerHTML = "";
+	let trHead = document.createElement("tr");
+	trHead.classList.add("thead-dark");
+	headers.forEach((header, index) => {
+		let th = document.createElement("th");
+		th.textContent = header;
+
+		if (index >= headers.length - 8) {
+			th.classList.add("double-column");
+		}
+		trHead.appendChild(th);
+	});
+	thead.appendChild(trHead);
+	tfoot.innerHTML = "";
+	let trFoot = document.createElement("tr");
+	headers.forEach((_, index) => {
+		let th = document.createElement("th");
+		th.textContent = "";
+		trFoot.appendChild(th);
+	});
+	tfoot.appendChild(trFoot);
+}
+function updateTableHeadersfifo(headers) {
+
+	let thead = document.querySelector("#second-table thead");
+	let table = document.querySelector("#second-table");
+	let tfoot = table.querySelector("tfoot");
+	if (!tfoot) {
+		tfoot = document.createElement("tfoot");
+		table.appendChild(tfoot);
+	}
+	thead.innerHTML = "";
+	let trHead = document.createElement("tr");
+	trHead.classList.add("thead-dark");
+	headers.forEach((header, index) => {
+		let th = document.createElement("th");
+		th.textContent = header;
+		if (index == 5 || index == 7 || index == 8 || index == 9 || index == 11 || index == 12) {
+			th.classList.add("double-column");
+		}
+		trHead.appendChild(th);
+	});
+	thead.appendChild(trHead);
 }
 
 async function envdownloadReport() {
@@ -300,40 +421,40 @@ async function envmailAt() {
 }
 
 function extractTableData(tableId) {
-    let table = document.querySelector(`#${tableId}`);
-    let headers = [];
-    let rows = [];
-    table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
-    table.querySelectorAll("tbody tr").forEach(tr => {
-        let rowData = {};
-        let nonEmptyCount = 0;
-        tr.querySelectorAll("td").forEach((td, index) => {
-            let value = td.innerText.trim();
-            if (value !== "") {
-                nonEmptyCount++;
-            }
-            rowData[headers[index]] = value;
-        });
-        if (nonEmptyCount > 0) {
-            rows.push(rowData);
-        }
-    });
-    let tfoot = table.querySelector("tfoot");
-    if (tfoot) {
-        let tfootRowData = {};
-        let nonEmptyCount = 0;
-        tfoot.querySelectorAll("th").forEach((th, index) => {
-            let value = th.innerText.trim();
-            if (value !== "") {
-                nonEmptyCount++;
-            }
-            tfootRowData[headers[index]] = value;
-        });
-        if (nonEmptyCount > 0) {
-            rows.push(tfootRowData);
-        }
-    }
-    return rows;
+	let table = document.querySelector(`#${tableId}`);
+	let headers = [];
+	let rows = [];
+	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+	table.querySelectorAll("tbody tr").forEach(tr => {
+		let rowData = {};
+		let nonEmptyCount = 0;
+		tr.querySelectorAll("td").forEach((td, index) => {
+			let value = td.innerText.trim();
+			if (value !== "") {
+				nonEmptyCount++;
+			}
+			rowData[headers[index]] = value;
+		});
+		if (nonEmptyCount > 0) {
+			rows.push(rowData);
+		}
+	});
+	let tfoot = table.querySelector("tfoot");
+	if (tfoot) {
+		let tfootRowData = {};
+		let nonEmptyCount = 0;
+		tfoot.querySelectorAll("th").forEach((th, index) => {
+			let value = th.innerText.trim();
+			if (value !== "") {
+				nonEmptyCount++;
+			}
+			tfootRowData[headers[index]] = value;
+		});
+		if (nonEmptyCount > 0) {
+			rows.push(tfootRowData);
+		}
+	}
+	return rows;
 }
 
 function fiatlamaChanged() {

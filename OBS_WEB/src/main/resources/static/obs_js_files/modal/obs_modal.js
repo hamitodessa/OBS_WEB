@@ -311,8 +311,8 @@ function saveToMain() {
 		const altgrp = $('#altgrp').val() || "";
 		const depo = $('#depo').val() || "";
 		const fiatlama = $('#fiatlama').val() || "";
-		const depohardahil = $('#depohardahil').checked;
-		const uretfisdahil = $('#uretfisdahil').checked;
+		const depohardahil = $('#depohardahil').prop('checked');
+		const uretfisdahil = $('#uretfisdahil').prop('checked');
 		
 		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, evrno1, evrno2, anagrp, gruplama, altgrp, depo, fiatlama, depohardahil, uretfisdahil ].join(",");
 		const hiddenField = $('#ara_content #envanterBilgi');

@@ -1003,4 +1003,52 @@ public class FaturaService {
 			throw new ServiceException(detailedMessage);
 		}
 	}
+	
+	public List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO ){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.envanter_rapor_fifo(envanterDTO,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
+	
+	public List<Map<String, Object>> envanter_rapor_fifo_2(envanterDTO envanterDTO){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.envanter_rapor_fifo_2(envanterDTO,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
+	
+	public double envanter_rapor_lifo(envanterDTO envanterDTO) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.envanter_rapor_lifo(envanterDTO,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
 }

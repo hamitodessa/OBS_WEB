@@ -71,4 +71,7 @@ public interface IFaturaDatabase {
 	List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> imalat_rapor(imaraporDTO imaraporDTO,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO , ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> envanter_rapor_fifo_2(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
+	double envanter_rapor_lifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
 }

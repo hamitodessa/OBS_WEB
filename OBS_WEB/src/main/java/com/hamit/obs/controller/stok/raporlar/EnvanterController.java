@@ -55,9 +55,37 @@ public class EnvanterController {
 			envanterDTO.setUranagrp(turuString[3]);
 			envanterDTO.setUraltgrp(turuString[4]);
 			envanterDTO.setDoviz(userService.getCurrentUser().getCalisandvzcins());
-			List<Map<String, Object>> envanter = faturaService.envanter_rapor(envanterDTO);
-			response.put("data", (envanter != null) ? envanter : new ArrayList<>());
-			response.put("raporturu","normal");
+			
+			if(envanterDTO.getFiatlama().equals("agort"))
+			{
+				List<Map<String, Object>> envanter = faturaService.envanter_rapor(envanterDTO);
+				response.put("data", (envanter != null) ? envanter : new ArrayList<>());
+				response.put("raporturu","normal");
+			}
+			else if(envanterDTO.getFiatlama().equals("fifo"))
+			{
+				List<Map<String, Object>> fifo = faturaService.envanter_rapor_fifo(envanterDTO);
+				response.put("fifo", (fifo != null) ? fifo : new ArrayList<>());
+				List<Map<String, Object>> fifo2 = faturaService.envanter_rapor_fifo_2(envanterDTO);
+				response.put("fifo2", (fifo2 != null) ? fifo2 : new ArrayList<>());
+				response.put("raporturu","fifo");
+			}
+			else if(envanterDTO.getFiatlama().equals("lifo"))
+			{
+				List<Map<String, Object>> lifo = faturaService.envanter_rapor_fifo(envanterDTO);
+				double lifo2 = faturaService.envanter_rapor_lifo(envanterDTO);
+				for (Map<String, Object> row : lifo) {
+				    row.put("Maliyet", lifo2);
+				    Object kolon8 = row.get("Stok_Miktari");
+				    double kolon8Deger = (kolon8 instanceof Number) ? ((Number) kolon8).doubleValue() : 0.0;
+				    double kolon9Deger = lifo2;
+				    row.put("Tutar", kolon8Deger * kolon9Deger);
+				}
+				response.put("fifo", (lifo != null) ? lifo : new ArrayList<>());
+				List<Map<String, Object>> fifo2 = faturaService.envanter_rapor_fifo_2(envanterDTO);
+				response.put("fifo2", (fifo2 != null) ? fifo2 : new ArrayList<>());
+				response.put("raporturu","fifo");
+			}
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {
 			response.put("data", Collections.emptyList());
