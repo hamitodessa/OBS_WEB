@@ -40,7 +40,7 @@ public class RaporEmailGonderme {
 
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Autowired
 	private GidenRaporService gidenRaporService;
 
@@ -55,13 +55,14 @@ public class RaporEmailGonderme {
 		boolean durum = false ;
 		try {
 			String nerden = raporEmailDegiskenler.getNerden(); 
-			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter")) {
+			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter")
+					|| nerden.equals("stok")) {
 				gonder_excell();
 			}
 			else {
 				gonder_jasper();
 			}
-			
+
 			durum = true ;
 		} catch (Exception e) {
 			throw new ServiceException( e.getMessage());
@@ -70,7 +71,7 @@ public class RaporEmailGonderme {
 	}
 	private void gonder_excell() {
 		try {
-			
+
 			String raporAdi = raporEmailDegiskenler.getNerden();
 			ExcellToDataSource excellToDataSource = new ExcellToDataSource();
 			List<Map<String, String>> tableData = raporEmailDegiskenler.getExceList();
@@ -209,8 +210,7 @@ public class RaporEmailGonderme {
 		ByteArrayDataSource ds = raporOlustur.cekbordroCikis(bordroPrinter);
 		return ds ;
 	}
-	
-	
+
 	private void son_gonderme(ByteArrayDataSource ds,String rapdosadi) 
 	{
 		try {

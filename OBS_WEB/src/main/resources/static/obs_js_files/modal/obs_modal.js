@@ -36,6 +36,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "stokrapor") {
 		openenvModal(modal);
 	}
+	else if (nerden === "grprapor") {
+		openenvModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -426,6 +429,13 @@ function saveToMain() {
 		const mailButton = document.getElementById("stokrapmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("stokrapreportDownload");
+		reportFormat.disabled = false;
+	}
+	else if (nerden === "grprapor") {
+		grpfetchTableData();
+		const mailButton = document.getElementById("grprapmailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("grprapreportDownload");
 		reportFormat.disabled = false;
 	}
 }

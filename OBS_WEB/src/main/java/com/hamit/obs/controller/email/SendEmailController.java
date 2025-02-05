@@ -24,37 +24,37 @@ public class SendEmailController {
 
 	@Autowired
 	private EmailService emailService; 
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private RaporEmailGonderme raporEmailGonderme;
-	
+
 
 	@GetMapping("/send_email")
 	public String mailGondermeSayfa(@RequestParam String degerler, Model model) {
 		try {
-	        User user = userService.getCurrentUser();
-	        if (user == null) {
-	            throw new ServiceException("Kullanıcı oturumu bulunamadı.");
-	        }
-	        Email_Details email_Details = emailService.findByEmail(user.getEmail());
-	        if (email_Details == null) {
-	            throw new ServiceException("Kullanıcıya ait e-posta bilgisi bulunamadı.");
-	        }
-	        model.addAttribute("degerler", degerler);
-	        model.addAttribute("hesap", email_Details.getHesap());
-	        model.addAttribute("isim", email_Details.getGon_isim());
-	        model.addAttribute("nerden", degerler.substring(degerler.lastIndexOf(",") + 1));
-	    } catch (ServiceException e) {
-	        model.addAttribute("error", e.getMessage());
-	    } catch (Exception e) {
-	        model.addAttribute("error", "Beklenmeyen bir hata oluştu: " + e.getMessage());
-	    }
-	    return "email/sendemail";
+			User user = userService.getCurrentUser();
+			if (user == null) {
+				throw new ServiceException("Kullanıcı oturumu bulunamadı.");
+			}
+			Email_Details email_Details = emailService.findByEmail(user.getEmail());
+			if (email_Details == null) {
+				throw new ServiceException("Kullanıcıya ait e-posta bilgisi bulunamadı.");
+			}
+			model.addAttribute("degerler", degerler);
+			model.addAttribute("hesap", email_Details.getHesap());
+			model.addAttribute("isim", email_Details.getGon_isim());
+			model.addAttribute("nerden", degerler.substring(degerler.lastIndexOf(",") + 1));
+		} catch (ServiceException e) {
+			model.addAttribute("error", e.getMessage());
+		} catch (Exception e) {
+			model.addAttribute("error", "Beklenmeyen bir hata oluştu: " + e.getMessage());
+		}
+		return "email/sendemail";
 	}
-	
+
 	@PostMapping("send_email_gonder")
 	@ResponseBody
 	public Map<String, String> sendEmail(@RequestBody RaporEmailDegiskenler raporEmailDegiskenler) {

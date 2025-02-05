@@ -84,18 +84,18 @@ public class StokRaporController {
 		return response;
 	}
 
-	@PostMapping("stok/stok_download")
-	public ResponseEntity<byte[]> downloadReport(@RequestBody List<Map<String, String>> tableData) {
+	@PostMapping("stok/stk_download")
+	public ResponseEntity<byte[]> stk_download(@RequestBody List<Map<String, String>> tableData) {
 		ByteArrayDataSource dataSource ;
 		try {
-			dataSource =  raporOlustur.envanter(tableData);
+			dataSource =  raporOlustur.stokrap(tableData);
 			if (dataSource == null) {
 				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");
 			}
 			byte[] fileContent = dataSource.getInputStream().readAllBytes();
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			String fileName = "Envanter_Rapor.xlsx";
+			String fileName = "Stok_Rapor.xlsx";
 			headers.setContentDispositionFormData("attachment", fileName);
 			return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
 		} catch (ServiceException e) {
@@ -169,5 +169,4 @@ public class StokRaporController {
 		deger[4] = qwq5; 
 		return deger;
 	}
-
 }

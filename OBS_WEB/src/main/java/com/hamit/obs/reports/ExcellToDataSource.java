@@ -30,18 +30,20 @@ public class ExcellToDataSource {
 			if (!tableData.isEmpty()) {
 				List<String> headers = new ArrayList<>(tableData.get(0).keySet());
 				List<String> rightAlignedColumns = List.of("MIKTAR", "TUTAR", "ISK. TUTAR","TOPLAM TUTAR","KDV TUTAR","AGIRLIK",
-						"GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI","MALIYET");
+						"GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI","MALIYET",
+						"GIRIS AGIRLIK",  "CIKIS AGIRLIK", "STOK AGIRLIK","ONCEKI BAKIYE", "PERY. GIRIS AGIRLIK", "PERY. CIKIS AGIRLIK",
+						"PERY. STOK AGIRLIK", "BAKIYE");
 				Map<String, Double> columnSums = new HashMap<>();
 				for (String col : rightAlignedColumns) {
 					columnSums.put(col, 0.0);
 				}
 				XSSFCellStyle rightAlignStyle = workbook.createCellStyle();
 				rightAlignStyle.setAlignment(HorizontalAlignment.RIGHT);
-				
+
 				XSSFCellStyle toplamStyle = workbook.createCellStyle();
 				toplamStyle.setAlignment(HorizontalAlignment.RIGHT);
 				toplamStyle.setBorderTop(BorderStyle.MEDIUM);
-				
+
 				Row headerRow = sheet.createRow(0);
 				for (int i = 0; i < headers.size(); i++) {
 					Cell headerCell = headerRow.createCell(i);
@@ -61,21 +63,21 @@ public class ExcellToDataSource {
 						if (rightAlignedColumns.contains(columnName)) {
 							cell.setCellStyle(rightAlignStyle);
 							try {
-							    if (cellValue == null || cellValue.toString().trim().isEmpty()) {
-							        cellValue = "0";
-							    }
-							    NumberFormat formatter = NumberFormat.getInstance();
-							    Number number = formatter.parse(cellValue.toString());
-							    double value = number.doubleValue();
-							    columnSums.put(columnName, columnSums.getOrDefault(columnName, 0.0) + value);
+								if (cellValue == null || cellValue.toString().trim().isEmpty()) {
+									cellValue = "0";
+								}
+								NumberFormat formatter = NumberFormat.getInstance();
+								Number number = formatter.parse(cellValue.toString());
+								double value = number.doubleValue();
+								columnSums.put(columnName, columnSums.getOrDefault(columnName, 0.0) + value);
 							} catch (Exception e) {
-							    throw new ServiceException(e.getMessage());
+								throw new ServiceException(e.getMessage());
 							}
 						}
 					}
 					rowNum++;
 				}
-/*				
+				/*				
 				Row totalRow = sheet.createRow(rowNum++);
 				for (int i = 0; i < headers.size(); i++) {
 					String columnName = headers.get(i);
@@ -93,7 +95,7 @@ public class ExcellToDataSource {
 						cell.setCellValue("");
 					}
 				}
-*/
+				 */
 				for (int i = 0; i < headers.size(); i++) {
 					sheet.autoSizeColumn(i);
 				}
@@ -104,7 +106,7 @@ public class ExcellToDataSource {
 			InputStream in = new ByteArrayInputStream(byteArray);
 			ds = new ByteArrayDataSource(in, "application/x-any");
 			bos.close();
-			
+
 		} catch (Exception ex) {
 			throw new ServiceException(ex.getMessage());
 		}

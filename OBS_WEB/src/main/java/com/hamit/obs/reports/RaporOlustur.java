@@ -325,18 +325,23 @@ public class RaporOlustur {
 			throw new ServiceException( e.getMessage());
 		}
 	}
-	
+
 	public ByteArrayDataSource fatrap(List<Map<String, String>> tableData)  throws Exception {
-			ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
-			return excellToDataSource.export_excell(tableData);
+		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
+		return excellToDataSource.export_excell(tableData);
 	}
-	
+
 	public ByteArrayDataSource envanter(List<Map<String, String>> tableData)  throws Exception {
 		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
-}
-	
+	}
+
 	public ByteArrayDataSource imarap(List<Map<String, String>> tableData)  throws Exception {
+		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
+		return excellToDataSource.export_excell(tableData);
+	}
+
+	public ByteArrayDataSource stokrap(List<Map<String, String>> tableData)  throws Exception {
 		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
 	}

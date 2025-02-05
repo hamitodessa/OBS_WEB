@@ -420,7 +420,7 @@ function updateTableHeadersanaalt(headers) {
 }
 
 
-async function stkdownloadReport() {
+async function stokdownloadReport() {
     const errorDiv = document.getElementById("errorDiv");
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
@@ -460,11 +460,11 @@ async function stkdownloadReport() {
     }
 }
 
-async function stkmailAt() {
+async function stokmailAt() {
     document.body.style.cursor = "wait";
     let rows = extractTableData("main-table");
     localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
-    const degerler = "envanter";
+    const degerler = "stok";
     const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
     mailsayfasiYukle(url);
 }
