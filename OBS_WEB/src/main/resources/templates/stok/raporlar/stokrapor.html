@@ -1,5 +1,3 @@
-
-<link rel="stylesheet" href="style/yenihsppln.css" />
 <style>
 .container {
 	height: 100vh; 
@@ -74,16 +72,16 @@ th, td {
 	background: #214162;
 }
 </style>
-	<div class="card p-4">
+	<div class="card p-1">
 		<div style="display: flex; align-items: center;">
-			<button class="btn btn-primary" type="button" id="fatrapyenileButton"
-				style="margin-left: 10px;" onclick="openFirstModal('fatrapor')">Filtre</button>
+			<button class="btn btn-primary" type="button" id="stokyenileButton"
+				style="margin-left: 10px;" onclick="openFirstModal('stokrapor')">Filtre</button>
 			
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="fatrapreportFormat"
-			 onclick="fatrapdownloadReport()" disabled>Excel Indir</button>
+			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="stokrapreportDownload"
+			 onclick="stokrapdownloadReport()" disabled>Excel Indir</button>
 
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="fatrapmailButton"
-			 onclick="fatrapmailAt()" disabled>Email Gonder</button>
+			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="stokrapmailButton"
+			 onclick="stokrapmailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>
 	<div id="errorDiv"
@@ -100,9 +98,8 @@ th, td {
 			</table>
 		</div>
 	</div>
-<input type="hidden" id="fatrapBilgi" name="fatrapBilgi" value="" />
+<input type="hidden" id="stokrapBilgi" name="stokrapBilgi" value="" />
 
-<script src="/obs_js_files/stok/raporlar/fatrapor.js"></script>
-<div th:replace="~{modal/stok/fatraporfiltre :: modalfatrap}"></div>
-<div th:replace="~{modal/yenihsppln :: secondModal}"></div>
+<script src="/obs_js_files/stok/raporlar/stokrapor.js"></script>
+<div th:replace="~{modal/stok/stokfiltre :: modalstok}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

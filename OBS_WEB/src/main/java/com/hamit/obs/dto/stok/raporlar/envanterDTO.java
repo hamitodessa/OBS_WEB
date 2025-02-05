@@ -22,5 +22,6 @@ public class envanterDTO {
 	String fiatlama;
 	boolean depohardahil;
 	boolean uretfisdahil;
+	boolean oncekitarih;
 	String doviz;
 }

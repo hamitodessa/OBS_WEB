@@ -33,6 +33,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "envanter") {
 		openenvModal(modal);
 	}
+	else if (nerden === "stokrapor") {
+		openenvModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -318,6 +321,27 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #envanterBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "stokrapor") {
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const uranagrp = $('#uranagrp').val() || "";
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const uraltgrp = $('#uraltgrp').val() || "";
+		const evrno1 = $('#evrno1').val() || "";
+		const evrno2 = $('#evrno2').val() || "";
+		const anagrp = $('#anagrp').val() || "";
+		const gruplama = $('#gruplama').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const depo = $('#depo').val() || "";
+		const oncekitarih = $('#oncekitarih').prop('checked');
+		const depohardahil = $('#depohardahil').prop('checked');
+		const uretfisdahil = $('#uretfisdahil').prop('checked');
+
+		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, evrno1, evrno2, anagrp, gruplama, altgrp, depo, oncekitarih, depohardahil, uretfisdahil].join(",");
+		const hiddenField = $('#ara_content #stokBilgi');
+		hiddenField.val(degerler);
+	}
 
 	$('#firstModal').modal('hide');
 
@@ -378,7 +402,7 @@ function saveToMain() {
 	}
 	else if (nerden === "fatrapor") {
 		fatfetchTableData();
-		const mailButton = document.getElementById("tahrapmailButton");
+		const mailButton = document.getElementById("fatrapmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("fatrapreportFormat");
 		reportFormat.disabled = false;
@@ -395,6 +419,13 @@ function saveToMain() {
 		const mailButton = document.getElementById("envmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("envDownloadButton");
+		reportFormat.disabled = false;
+	}
+	else if (nerden === "stokrapor") {
+		stokfetchTableData();
+		const mailButton = document.getElementById("stokrapmailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("stokrapreportDownload");
 		reportFormat.disabled = false;
 	}
 }

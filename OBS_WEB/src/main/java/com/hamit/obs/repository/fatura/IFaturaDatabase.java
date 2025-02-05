@@ -74,4 +74,7 @@ public interface IFaturaDatabase {
 	List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> envanter_rapor_fifo_2(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
 	double envanter_rapor_lifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> envanter_rapor_u_kodu_oncekitarih(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> envanter_rapor_u_kodu(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> envanter_rapor_ana_grup_alt_grup(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);
 }
