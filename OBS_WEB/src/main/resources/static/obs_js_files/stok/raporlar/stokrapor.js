@@ -131,14 +131,13 @@ async function stokfetchTableData() {
         } else if (response.raporturu === 'anaalt') {
             sqlHeaders = ["ANA GRUP", "ALT GRUP", "GIRIS MIKTARI", "GIRIS AGIRLIK", "CIKIS MIKTARI", "CIKIS AGIRLIK", "STOK MIKTARI", "STOK AGIRLIK"];
             updateTableHeadersanaalt(sqlHeaders);
-
-    }
+        }
         let totalmiktar = 0;
+        let totalgagirlik = 0;
         let totalcmiktar = 0;
-        let totalgtutar = 0;
-        let totaltutar = 0;
-        let totalstok = 0;
-        let totalctutar = 0;
+        let totalcagirlik = 0;
+        let totalstokmik = 0;
+        let totalstokagi = 0;
         if (response.raporturu === 'stokkodu') {
             data.data.forEach(rowData => {
                 const row = document.createElement('tr');
@@ -156,15 +155,16 @@ async function stokfetchTableData() {
                     <td class="double-column">${formatNumber3(rowData.Stok_Agirlik)}</td>
                 `;
                 totalmiktar += rowData.Giris_Miktari;
+                totalgagirlik += rowData.Giris_Agirlik;
                 totalcmiktar += rowData.Cikis_Miktari;
-                totalstok += rowData.Stok_Agirlik;
-                
-                //				}
+                totalcagirlik += rowData.Cikis_Agirlik;
+                totalstokmik += rowData.Stok_Miktari;
+                totalstokagi += rowData.Stok_Agirlik;
                 mainTableBody.appendChild(row);
             });
         }
         else if (response.raporturu === 'stokkoduonceki') {
-           
+
             data.data.forEach(rowData => {
                 const row = document.createElement('tr');
                 row.classList.add('expandable');
@@ -179,11 +179,15 @@ async function stokfetchTableData() {
 					<td class="double-column">${formatNumber3(rowData.Periyot_Stok_Agirlik)}</td>
                     <td class="double-column">${formatNumber3(rowData.BAKIYE)}</td>
                  `;
+                totalmiktar += rowData.Onceki_Bakiye;
+                totalgagirlik += rowData.Periyot_Giris_Agirlik;
+                totalcmiktar += rowData.Periyot_Cikis_Agirlik;
+                totalcagirlik += rowData.Periyot_Stok_Agirlik;
+                totalstokmik += rowData.BAKIYE;
                 mainTableBody.appendChild(row);
             });
         }
         else if (response.raporturu === 'anaalt') {
-
             data.data.forEach(rowData => {
                 const row = document.createElement('tr');
                 row.classList.add('expandable');
@@ -198,13 +202,35 @@ async function stokfetchTableData() {
                     <td class="double-column">${formatNumber3(rowData.Stok_Miktar)}</td>
                     <td class="double-column">${formatNumber3(rowData.Stok_Agirlik)}</td>
                 `;
+                totalmiktar += rowData.Giris_Miktar;
+                totalgagirlik += rowData.Giris_Agirlik;
+                totalcmiktar += rowData.Cikis_Miktar;
+                totalcagirlik += rowData.Cikis_Agirlik;
+                totalstokmik += rowData.Stok_Miktar;
+                totalstokagi += rowData.Stok_Agirlik;
                 mainTableBody.appendChild(row);
             });
         }
         if (response.raporturu === 'stokkodu') {
             document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
+            document.getElementById("toplam-4").innerText = formatNumber3(totalgagirlik);
             document.getElementById("toplam-5").innerText = formatNumber3(totalcmiktar);
-            document.getElementById("toplam-8").innerText = formatNumber3(totalstok);
+            document.getElementById("toplam-6").innerText = formatNumber3(totalcagirlik);
+            document.getElementById("toplam-7").innerText = formatNumber3(totalstokmik);
+            document.getElementById("toplam-8").innerText = formatNumber3(totalstokagi);
+        } else if (response.raporturu === 'stokkodu') {
+            document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
+            document.getElementById("toplam-4").innerText = formatNumber3(totalgagirlik);
+            document.getElementById("toplam-5").innerText = formatNumber3(totalcmiktar);
+            document.getElementById("toplam-6").innerText = formatNumber3(totalcagirlik);
+            document.getElementById("toplam-7").innerText = formatNumber3(totalstokmik);
+        } else if (response.raporturu === 'anaalt') {
+            document.getElementById("toplam-2").innerText = formatNumber3(totalmiktar);
+            document.getElementById("toplam-3").innerText = formatNumber3(totalgagirlik);
+            document.getElementById("toplam-4").innerText = formatNumber3(totalcmiktar);
+            document.getElementById("toplam-5").innerText = formatNumber3(totalcagirlik);
+            document.getElementById("toplam-6").innerText = formatNumber3(totalstokmik);
+            document.getElementById("toplam-7").innerText = formatNumber3(totalstokagi);
         }
         document.body.style.cursor = "default";
     } catch (error) {
@@ -390,7 +416,7 @@ function updateTableHeadersanaalt(headers) {
         trFoot.appendChild(th);
     });
     tfoot.appendChild(trFoot);
-    
+
 }
 
 
