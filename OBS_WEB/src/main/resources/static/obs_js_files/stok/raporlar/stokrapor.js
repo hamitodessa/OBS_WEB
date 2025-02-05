@@ -123,13 +123,16 @@ async function stokfetchTableData() {
         data = response;
         let sqlHeaders = "";
         if (response.raporturu === 'stokkodu') {
-            sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI", "MALIYET", "TUTAR"];
+            sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS AGIRLIK", "CIKIS MIKTARI", "CIKIS AGIRLIK", "STOK MIKTARI", "STOK AGIRLIK"];
             updateTableHeadersstokkodu(sqlHeaders);
-        } else {
-            sqlHeaders = ["KODU", "ADI", "SIMGE", "GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI", "MALIYET", "TUTAR"];
+        } else if (response.raporturu === 'stokkoduonceki') {
+            sqlHeaders = ["KODU", "ADI", "SIMGE", "ONCEKI BAKIYE", "PERY. GIRIS AGIRLIK", "PERY. CIKIS AGIRLIK", "PERY. STOK AGIRLIK", "BAKIYE"];
+            updateTableHeadersstokkoduonceki(sqlHeaders);
+        } else if (response.raporturu === 'anaalt') {
+            sqlHeaders = ["ANA GRUP", "ALT GRUP", "GIRIS MIKTARI", "GIRIS AGIRLIK", "CIKIS MIKTARI", "CIKIS AGIRLIK", "STOK MIKTARI", "STOK AGIRLIK"];
             updateTableHeadersanaalt(sqlHeaders);
-           
-        }
+
+    }
         let totalmiktar = 0;
         let totalcmiktar = 0;
         let totalgtutar = 0;
@@ -137,64 +140,71 @@ async function stokfetchTableData() {
         let totalstok = 0;
         let totalctutar = 0;
         if (response.raporturu === 'stokkodu') {
-            
             data.data.forEach(rowData => {
                 const row = document.createElement('tr');
                 row.classList.add('expandable');
                 row.classList.add("table-row-height");
-                
                 row.innerHTML = `
                     <td>${rowData.Kodu || ''}</td>
                     <td>${rowData.Adi || ''}</td>
                     <td>${rowData.Simge || ''}</td>
-                    <td class="double-column">${rowData.Giris_Miktari}</td>
-					<td class="double-column">${formatNumber2(rowData.Giris_Tutar)}</td>
-					<td class="double-column">${rowData.Cikis_Miktari}</td>
-					<td class="double-column">${formatNumber2(rowData.Cikis_Tutar)}</td>
-					<td class="double-column">${formatNumber2(rowData.Cikis_Maliyet)}</td>
-                    <td class="double-column">${rowData.Stok_Miktari}</td>
-                    <td class="double-column">${formatNumber2(rowData.Maliyet)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.Giris_Miktari)}</td>
+					<td class="double-column">${formatNumber3(rowData.Giris_Agirlik)}</td>
+					<td class="double-column">${formatNumber3(rowData.Cikis_Miktari)}</td>
+					<td class="double-column">${formatNumber3(rowData.Cikis_Agirlik)}</td>
+					<td class="double-column">${formatNumber3(rowData.Stok_Miktari)}</td>
+                    <td class="double-column">${formatNumber3(rowData.Stok_Agirlik)}</td>
                 `;
-                totalmiktar += parseLocaleNumber(rowData.Giris_Miktari);
-                totalcmiktar += parseLocaleNumber(rowData.Cikis_Miktari);
-                totalstok += parseLocaleNumber(rowData.Stok_Miktari);
-                totaltutar += rowData.Tutar;
-                totalctutar += rowData.Cikis_Tutar;
-                totalgtutar += rowData.Giris_Tutar;
+                totalmiktar += rowData.Giris_Miktari;
+                totalcmiktar += rowData.Cikis_Miktari;
+                totalstok += rowData.Stok_Agirlik;
+                
                 //				}
                 mainTableBody.appendChild(row);
             });
         }
-        else  {
+        else if (response.raporturu === 'stokkoduonceki') {
            
-            data.fifo.forEach(rowData => {
+            data.data.forEach(rowData => {
                 const row = document.createElement('tr');
                 row.classList.add('expandable');
                 row.classList.add("table-row-height");
                 row.innerHTML = `
-                    <td>${rowData.Urun_Kodu || ''}</td>
+                    <td>${rowData.Kodu || ''}</td>
                     <td>${rowData.Adi || ''}</td>
                     <td>${rowData.Simge || ''}</td>
-                    <td class="double-column">${rowData.Giris_Miktari}</td>
-					<td class="double-column">${formatNumber2(rowData.Giris_Tutar)}</td>
-					<td class="double-column">${rowData.Cikis_Miktari}</td>
-					<td class="double-column">${formatNumber2(rowData.Cikis_Tutar)}</td>
-					<td class="double-column">${formatNumber2(rowData.Cikis_Maliyet)}</td>
-                    <td class="double-column">${rowData.Stok_Miktari}</td>
-                    <td class="double-column">${formatNumber2(rowData.Maliyet)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.Onceki_Bakiye)}</td>
+					<td class="double-column">${formatNumber3(rowData.Periyot_Giris_Agirlik)}</td>
+					<td class="double-column">${formatNumber3(rowData.Periyot_Cikis_Agirlik)}</td>
+					<td class="double-column">${formatNumber3(rowData.Periyot_Stok_Agirlik)}</td>
+                    <td class="double-column">${formatNumber3(rowData.BAKIYE)}</td>
+                 `;
+                mainTableBody.appendChild(row);
+            });
+        }
+        else if (response.raporturu === 'anaalt') {
+
+            data.data.forEach(rowData => {
+                const row = document.createElement('tr');
+                row.classList.add('expandable');
+                row.classList.add("table-row-height");
+                row.innerHTML = `
+                    <td>${rowData.ANA_GRUP || ''}</td>
+                    <td>${rowData.ALT_GRUP || ''}</td>
+                    <td class="double-column">${formatNumber3(rowData.Giris_Miktar)}</td>
+					<td class="double-column">${formatNumber3(rowData.Giris_Agirlik)}</td>
+					<td class="double-column">${formatNumber3(rowData.Cikis_Miktar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.Cikis_Agirlik)}</td>
+                    <td class="double-column">${formatNumber3(rowData.Stok_Miktar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.Stok_Agirlik)}</td>
                 `;
                 mainTableBody.appendChild(row);
             });
         }
-        if (response.raporturu === 'normal') {
+        if (response.raporturu === 'stokkodu') {
             document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
-            document.getElementById("toplam-4").innerText = formatNumber2(totalgtutar);
             document.getElementById("toplam-5").innerText = formatNumber3(totalcmiktar);
-            document.getElementById("toplam-6").innerText = formatNumber3(totalctutar);
             document.getElementById("toplam-8").innerText = formatNumber3(totalstok);
-            document.getElementById("toplam-10").innerText = formatNumber2(totaltutar);
         }
         document.body.style.cursor = "default";
     } catch (error) {
@@ -231,7 +241,7 @@ function updateTableHeadersstokkodu(headers) {
     headers.forEach((header, index) => {
         let th = document.createElement("th");
         th.textContent = header;
-        if (index >= headers.length - 8) {
+        if (index >= headers.length - 6) {
             th.classList.add("double-column");
         }
         trHead.appendChild(th);
@@ -246,7 +256,7 @@ function updateTableHeadersstokkodu(headers) {
             th.id = "toplam-" + index;
             th.classList.add("double-column");
         } else if (index === 4) {
-            th.textContent = "0.00";
+            th.textContent = "0.000";
             th.id = "toplam-" + index;
             th.classList.add("double-column");
         } else if (index === 5) {
@@ -254,15 +264,15 @@ function updateTableHeadersstokkodu(headers) {
             th.id = "toplam-" + index;
             th.classList.add("double-column");
         } else if (index === 6) {
-            th.textContent = "0.00";
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 7) {
+            th.textContent = "0.000";
             th.id = "toplam-" + index;
             th.classList.add("double-column");
         } else if (index === 8) {
             th.textContent = "0.000";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else if (index === 10) {
-            th.textContent = "0.00";
             th.id = "toplam-" + index;
             th.classList.add("double-column");
         } else {
@@ -273,8 +283,8 @@ function updateTableHeadersstokkodu(headers) {
     tfoot.appendChild(trFoot);
 }
 
-function updateTableHeadersanaalt(headers) {
 
+function updateTableHeadersstokkoduonceki(headers) {
     let thead = document.querySelector("#main-table thead");
     let table = document.querySelector("#main-table");
     let tfoot = table.querySelector("tfoot");
@@ -288,8 +298,7 @@ function updateTableHeadersanaalt(headers) {
     headers.forEach((header, index) => {
         let th = document.createElement("th");
         th.textContent = header;
-
-        if (index >= headers.length - 8) {
+        if (index >= headers.length - 5) {
             th.classList.add("double-column");
         }
         trHead.appendChild(th);
@@ -299,10 +308,89 @@ function updateTableHeadersanaalt(headers) {
     let trFoot = document.createElement("tr");
     headers.forEach((_, index) => {
         let th = document.createElement("th");
-        th.textContent = "";
+        if (index === 3) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 4) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 5) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 6) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 7) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else {
+            th.textContent = "";
+        }
         trFoot.appendChild(th);
     });
     tfoot.appendChild(trFoot);
+}
+
+function updateTableHeadersanaalt(headers) {
+    let thead = document.querySelector("#main-table thead");
+    let table = document.querySelector("#main-table");
+    let tfoot = table.querySelector("tfoot");
+    if (!tfoot) {
+        tfoot = document.createElement("tfoot");
+        table.appendChild(tfoot);
+    }
+    thead.innerHTML = "";
+    let trHead = document.createElement("tr");
+    trHead.classList.add("thead-dark");
+    headers.forEach((header, index) => {
+        let th = document.createElement("th");
+        th.textContent = header;
+        if (index >= headers.length - 6) {
+            th.classList.add("double-column");
+        }
+        trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    tfoot.innerHTML = "";
+    let trFoot = document.createElement("tr");
+    headers.forEach((_, index) => {
+        let th = document.createElement("th");
+        if (index === 2) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 3) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 4) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 5) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 6) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 7) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else {
+            th.textContent = "";
+        }
+        trFoot.appendChild(th);
+    });
+    tfoot.appendChild(trFoot);
+    
 }
 
 
@@ -393,10 +481,11 @@ function extractTableData(tableId) {
 }
 
 function gruplamaChanged() {
-    const fiatlama = document.getElementById("gruplama").value;
-    if (fiatlama === "Urun Kodu") {
-        document.getElementById("oncekitarih").disabled = true;
+    const gruplama = document.getElementById("gruplama").value;
+    const oncekitarih = document.getElementById("oncekitarih"); // Checkbox'ı al
+    if (gruplama === "Urun Kodu") {
+        oncekitarih.disabled = false; // Checkbox'ı aktif yap
     } else {
-        document.getElementById("oncekitarih").disabled = false;
+        oncekitarih.disabled = true; // Checkbox'ı devre dışı bırak
     }
 }

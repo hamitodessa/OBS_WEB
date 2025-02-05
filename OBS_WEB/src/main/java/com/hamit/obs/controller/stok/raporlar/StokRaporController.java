@@ -68,7 +68,7 @@ public class StokRaporController {
 					response.put("raporturu","stokkodu");
 				}
 			}
-			else if(envanterDTO.getFiatlama().equals("Ana_Grup_Alt_Grup"))
+			else if(envanterDTO.getGruplama().equals("Ana_Grup_Alt_Grup"))
 			{
 				List<Map<String, Object>> fifo = faturaService.envanter_rapor_ana_grup_alt_grup(envanterDTO);
 				response.put("data", (fifo != null) ? fifo : new ArrayList<>());
@@ -84,7 +84,7 @@ public class StokRaporController {
 		return response;
 	}
 
-	@PostMapping("stok/env_download")
+	@PostMapping("stok/stok_download")
 	public ResponseEntity<byte[]> downloadReport(@RequestBody List<Map<String, String>> tableData) {
 		ByteArrayDataSource dataSource ;
 		try {
