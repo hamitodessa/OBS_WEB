@@ -29,18 +29,18 @@ public class GrupRaporController {
 
 	@Autowired
 	private FaturaService faturaService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private RaporOlustur raporOlustur;
-	
+
 	@GetMapping("/stok/grprapor")
 	public String stokrapor() {
 		return "stok/raporlar/gruprapor";
 	}
-	
+
 	@PostMapping("stok/grpdoldur")
 	@ResponseBody
 	public Map<String, Object> grpdoldur(@RequestBody grupraporDTO grupraporDTO) {
@@ -48,14 +48,15 @@ public class GrupRaporController {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
+
 			String turuString[] =  grup_cevir(grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),grupraporDTO.getUrozkod());
-			
+
 			grupraporDTO.setUranagrp(turuString[0]);
 			grupraporDTO.setUraltgrp(turuString[1]);
 			grupraporDTO.setUrozkod(turuString[2]);
-			
-			
+
+
 			String[] baslikbakStrings = {"",""};
 			String[] deg_cevirString = {"","","","","",""};
 			String ozelgrp[][] = new String[7][2];
@@ -80,17 +81,248 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-					
+
 					if(grupraporDTO.getBirim().equals("Tutar")) {
 						response.put("format",2);
 					}
 					else {
 						response.put("format",3);
 					}
-					System.out.println(baslikbakStrings[0]);
 					response.put("baslik","Urun_Kodu, Urun_Adi , Birim , " + baslikbakStrings[0]);  
 					response.put("sabitkolonsayisi",3);
-					response.put("raporturu","normal");
+				}
+			}
+			else if (grupraporDTO.getGruplama().equals("Urun Kodu-Yil"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if (! baslikbakStrings[0].equals(""))
+				{
+					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					{
+						ozelgrp = new String[7][2];
+						ozelgrp[0][0] = "\"MAL\".\"Kodu\""; 
+						ozelgrp[0][1] = "Urun_Kodu"; 
+						ozelgrp[1][0] = "\"MAL\".\"Adi\""; 
+						ozelgrp[1][1] = "Urun_Adi";
+						ozelgrp[2][0] = "\"Birim\"" ; 
+						ozelgrp[2][1] = "Birim";
+						ozelgrp[3][0] = "TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ; 
+						ozelgrp[3][1] = "Yil";
+					}
+					List<Map<String, Object>> grup = faturaService.grp_urn_kodlu_yil(
+							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
+							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+					response.put("data", (grup != null) ? grup : new ArrayList<>());
+
+					if(grupraporDTO.getBirim().equals("Tutar")) {
+						response.put("format",2);
+					}
+					else {
+						response.put("format",3);
+					}
+					response.put("baslik","Urun_Kodu,Urun_Adi,Birim,Yil, " + baslikbakStrings[0]);  
+					response.put("sabitkolonsayisi",4);
+				}
+			}
+			else if (grupraporDTO.getGruplama().equals("Hesap Kodu"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if (! baslikbakStrings[0].equals(""))
+				{
+					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					{
+						ozelgrp = new String[7][2];
+						ozelgrp[0][0] = "\"Hesap_Kodu\""; 
+						ozelgrp[0][1] = "Musteri_Kodu"; 
+
+						String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+						String adrString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
+								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
+								" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
+								" WHERE \"HESAP\" = \"STOK\".\"Hesap_Kodu\"  )";
+						ozelgrp[1][0] = adrString; 
+						ozelgrp[1][1] = "Unvan"; 
+					}
+					List<Map<String, Object>> grup = faturaService.grp_mus_kodlu(
+							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
+							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+					response.put("data", (grup != null) ? grup : new ArrayList<>());
+
+					if(grupraporDTO.getBirim().equals("Tutar")) {
+						response.put("format",2);
+					}
+					else {
+						response.put("format",3);
+					}
+					response.put("baslik","Hesap_Kodu,Unvan, " + baslikbakStrings[0]);  
+					response.put("sabitkolonsayisi",2);
+				}
+			}
+			else if (grupraporDTO.getGruplama().equals("Hesap Kodu-Yil"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if (! baslikbakStrings[0].equals(""))
+				{
+					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					{
+						ozelgrp = new String[7][2];
+						ozelgrp[0][0] = "\"Hesap_Kodu\""; 
+						ozelgrp[0][1] = "Musteri_Kodu"; 
+						String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+						String adrString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
+								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
+								" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
+								" WHERE \"HESAP\" = \"STOK\".\"Hesap_Kodu\"  )";
+						ozelgrp[1][0] = adrString; 
+						ozelgrp[1][1] = "Unvan"; 
+						ozelgrp[2][0] = "TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ; 
+						ozelgrp[2][1] = "Yil";
+					}
+					List<Map<String, Object>> grup = faturaService.grp_mus_kodlu_yil(
+							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
+							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+					response.put("data", (grup != null) ? grup : new ArrayList<>());
+
+					if(grupraporDTO.getBirim().equals("Tutar")) {
+						response.put("format",2);
+					}
+					else {
+						response.put("format",3);
+					}
+
+					response.put("baslik","Musteri_Kodu,Unvan,Yil, " + baslikbakStrings[0]);  
+					response.put("sabitkolonsayisi",3);
+				}
+			}
+			else if (grupraporDTO.getGruplama().equals("Yil_Ay"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if (! baslikbakStrings[0].equals(""))
+				{
+					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					{
+						ozelgrp = new String[7][2];
+						ozelgrp[0][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
+						ozelgrp[0][1] = "Yil"; 
+						ozelgrp[1][0] = "TO_CHAR(\"STOK\".\"Tarih\",'MM')"; 
+						ozelgrp[1][1] = "Ay"; 
+					}
+					List<Map<String, Object>> grup = faturaService.grp_yil_ay(
+							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
+							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+					response.put("data", (grup != null) ? grup : new ArrayList<>());
+
+					if(grupraporDTO.getBirim().equals("Tutar")) {
+						response.put("format",2);
+					}
+					else {
+						response.put("format",3);
+					}
+
+					response.put("baslik","Yil,Ay, " + baslikbakStrings[0]);  
+					response.put("sabitkolonsayisi",2);
+				}
+			}
+			else if (grupraporDTO.getGruplama().equals("Yil"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if (! baslikbakStrings[0].equals(""))
+				{
+					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					{
+						ozelgrp = new String[7][2];
+						ozelgrp[0][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
+						ozelgrp[0][1] = "Yil"; 
+
+					}
+					List<Map<String, Object>> grup = faturaService.grp_yil(
+							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
+							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+					response.put("data", (grup != null) ? grup : new ArrayList<>());
+
+					if(grupraporDTO.getBirim().equals("Tutar")) {
+						response.put("format",2);
+					}
+					else {
+						response.put("format",3);
+					}
+
+					response.put("baslik","Yil, " + baslikbakStrings[0]);  
+					response.put("sabitkolonsayisi",1);
+				}
+			}
+			else if (grupraporDTO.getGruplama().equals("Urun_Ana_Grup"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if (! baslikbakStrings[0].equals(""))
+				{
+					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					{
+						ozelgrp = new String[7][2];
+						ozelgrp[0][0] = " (SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"MAL\".\"Ana_Grup\" )" ;
+						ozelgrp[0][1] = "Ana_Grup"; 
+						ozelgrp[1][0] = " (SELECT DISTINCT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"MAL\".\"Alt_Grup\" )" ;
+						ozelgrp[1][1] = "Alt_Grup"; 
+
+					}
+					List<Map<String, Object>> grup = faturaService.grp_ana_grup(
+							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
+							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+					response.put("data", (grup != null) ? grup : new ArrayList<>());
+
+					if(grupraporDTO.getBirim().equals("Tutar")) {
+						response.put("format",2);
+					}
+					else {
+						response.put("format",3);
+					}
+					response.put("baslik","Ana_Grup,Alt_Grup, " + baslikbakStrings[0]);  
+					response.put("sabitkolonsayisi",2);
+				}
+			}
+			else if (grupraporDTO.getGruplama().equals("Urun_Ana_Grup_Yil"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if (! baslikbakStrings[0].equals(""))
+				{
+					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					{
+						ozelgrp = new String[7][2];
+						ozelgrp[0][0] = " (SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"MAL\".\"Ana_Grup\" )" ;
+						ozelgrp[0][1] = "Ana_Grup"; 
+						ozelgrp[1][0] = " (SELECT DISTINCT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"MAL\".\"Alt_Grup\" )" ;
+						ozelgrp[1][1] = "Alt_Grup"; 
+						ozelgrp[2][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
+						ozelgrp[2][1] = "Yil"; 
+
+					}
+					List<Map<String, Object>> grup = faturaService.grp_ana_grup_yil(
+							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
+							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+					response.put("data", (grup != null) ? grup : new ArrayList<>());
+
+					if(grupraporDTO.getBirim().equals("Tutar")) {
+						response.put("format",2);
+					}
+					else {
+						response.put("format",3);
+					}
+					response.put("baslik","Ana_Grup,Alt_Grup,Yil, " + baslikbakStrings[0]);  
+					response.put("sabitkolonsayisi",3);
 				}
 			}
 			response.put("errorMessage", ""); 
@@ -102,7 +334,7 @@ public class GrupRaporController {
 		}
 		return response;
 	}
-	
+
 	private String[] baslik_bak(grupraporDTO grupraporDTO)
 	{
 		String[] baslikbakStrings = {"",""};
@@ -113,7 +345,7 @@ public class GrupRaporController {
 			String sstr_2 = "" ;
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			
+
 			if(fatConnDetails.getHangisql().equals("PG SQL"))
 			{
 				if (grupraporDTO.getTuru().equals("CIKAN"))
@@ -129,7 +361,7 @@ public class GrupRaporController {
 					jkj = " STOK.Hareket = 'G' " ;
 				ch1 = " Evrak_Cins = 'FAT' " ;
 			}
-			
+
 			if (grupraporDTO.getStunlar().equals("Yil"))
 			{
 				if(fatConnDetails.getHangisql().equals("MS SQL"))
@@ -279,16 +511,16 @@ public class GrupRaporController {
 			String sstr_1 = "";
 			StringBuilder text = new StringBuilder();
 			for (Map<String, Object> row : baslik) {
-			    row.forEach((key, value) -> text.append("[").append(value).append("],"));
+				row.forEach((key, value) -> text.append("[").append(value).append("],"));
 			}
 			sstr_1 = text.length() > 0 ? text.substring(0, text.length() - 1) : "";
-			
+
 			baslikbakStrings[0] = sstr_1;
 			baslikbakStrings[1] = sstr_2;
 		}
 		catch (Exception ex)
 		{
-			
+
 		}
 		return baslikbakStrings;
 	}
@@ -330,20 +562,20 @@ public class GrupRaporController {
 			qwq3 = "=" + ozs1;
 		}
 		deger[2] = qwq3; 
-		
+
 		return deger;
 	}
-	
+
 	private String[] deg_cevir(grupraporDTO grupraporDTO )
 	{
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
-		
+
 		String[] deg_cevirString = {"","","","","",""};
 		String harekString = "" ;
 		String jkj = "" ,jkj1 = "" ,ch1 = "",sstr_4 = "" , sstr_5 = "" , kur_dos = "" ;
-		
+
 		if (grupraporDTO.getTuru().equals("CIKAN"))
 			harekString = "C";
 		else
@@ -439,7 +671,6 @@ public class GrupRaporController {
 					}else{
 						kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
 					}
-					
 					String kurcString = grupraporDTO.getDvzturu();
 					String kurcesitString = grupraporDTO.getDoviz();
 					kur_dos = " left join  (SELECT * FROM  dblink ('" + kurServer + "'," + 
@@ -453,19 +684,12 @@ public class GrupRaporController {
 		}
 		else
 			kur_dos = "" ;
-		
-		//
-		
-		//String jkj = "" ,jkj1 = "" ,ch1 = "",sstr_4 = "" , sstr_5 = "" , kur_dos = "" ;
 		deg_cevirString[0] = jkj ;
 		deg_cevirString[1] = jkj1 ;
 		deg_cevirString[2] = ch1 ;
 		deg_cevirString[3] = sstr_4 ;
 		deg_cevirString[4] = sstr_5 ;
 		deg_cevirString[5] = kur_dos ;
-		//
 		return deg_cevirString;
 	}
-	
-
 }

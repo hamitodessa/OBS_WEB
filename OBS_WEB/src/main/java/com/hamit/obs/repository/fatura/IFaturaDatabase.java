@@ -81,4 +81,20 @@ public interface IFaturaDatabase {
 	List<Map<String, Object>> baslik_bak(String baslik,String ordr,String jkj,String ch1,String k1,String k2,String f1,String f2,String t1,String t2, ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> grp_urn_kodlu(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
 			String sstr_5,String sstr_1,String ozelgrp[][],ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> grp_urn_kodlu_yil(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
+			String sstr_5,String sstr_1,String ozelgrp[][],ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> grp_mus_kodlu(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
+			String sstr_5,String sstr_1,String ozelgrp[][],ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails);
+	List<Map<String, Object>> grp_mus_kodlu_yil(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
+			String sstr_5,String sstr_1,String ozelgrp[][],ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails);
+	List<Map<String, Object>> grp_yil_ay(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
+			String sstr_5,String sstr_1,String ozelgrp[][],ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> grp_yil(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
+			String sstr_5,String sstr_1,String ozelgrp[][],ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> grp_ana_grup(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
+			String sstr_5,String sstr_1,String ozelgrp[][],ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> grp_ana_grup_yil(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
+			String sstr_5,String sstr_1,String ozelgrp[][],ConnectionDetails faturaConnDetails);
+
+
 }

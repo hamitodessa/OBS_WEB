@@ -158,7 +158,7 @@ public class RaporOlustur {
 				parameters.put("Borc_Alacak","Cari Hesabınıza Mahsuben ALACAK olarak Kaydedilmiştir.");
 			else
 				parameters.put("Borc_Alacak","Cari Hesabınıza Mahsuben BORÇ olarak Kaydedilmiştir.");
-			String qwe = Double.toString(aqw);
+			String qwe = String.format("%.2f", aqw);
 			String cnt  = "" ;
 			if (tahsilatDTO.getDvz_cins().equals("TL"))
 				cnt = "KURUŞ" ;
@@ -216,7 +216,7 @@ public class RaporOlustur {
 				parameters.put("Borc_Alacak","Cari Hesabınıza Mahsuben ALACAK olarak Kaydedilmiştir.");
 			else
 				parameters.put("Borc_Alacak","Cari Hesabınıza Mahsuben BORÇ olarak Kaydedilmiştir.");
-			String qwe = Double.toString(aqw);
+			String qwe = String.format("%.2f", aqw);
 			String cnt  = "" ;
 			if (tahsilatDTO.getDvz_cins().equals("TL"))
 				cnt = "KURUŞ" ;

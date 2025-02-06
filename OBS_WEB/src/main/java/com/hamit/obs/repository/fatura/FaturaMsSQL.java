@@ -24,6 +24,7 @@ import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
+
 @Component
 public class FaturaMsSQL implements IFaturaDatabase {
 
@@ -1248,7 +1249,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
-		
+
 		String calisanpara= envanterDTO.getDoviz() ;
 		String wee  = "" ;
 		if (envanterDTO.isDepohardahil())
@@ -1503,20 +1504,20 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND stok.Evrak_Cins " + ure1 +
 				" GROUP BY mal.kodu,mal.barkod,mal.adi,mal.birim,mal.kusurat " +
 				" ORDER BY mal.kodu ";		List<Map<String, Object>> resultList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
-		}
-		return resultList; 
+				try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+						PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+					ResultSet resultSet = preparedStatement.executeQuery();
+					resultList = ResultSetConverter.convertToList(resultSet); 
+				} catch (Exception e) {
+					throw new ServiceException("MS stkService genel hatası.", e);
+				}
+				return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
-		
+
 		String calisanpara= envanterDTO.getDoviz() ;
 		String wee  = "" ;
 		if (envanterDTO.isDepohardahil())
@@ -1695,7 +1696,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public double envanter_rapor_lifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails) {
-		
+
 		double maliyet = 0 ;
 		String wee  = "" ;
 		if (envanterDTO.isDepohardahil())
@@ -1757,7 +1758,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" SUM(transaction_value) OVER (PARTITION BY Urun_Kodu ORDER BY qwe) / kalan_stok AS maliyet " +
 				" FROM StockCalculation " +
 				" ORDER BY Tarih desc;" ;
-		
+
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -1971,7 +1972,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND  STOK.Tarih BETWEEN '" + t1 + "'" +
 				" AND  '"  + t2 + " 23:59:59.998'" +
 				" " + ordr + " ";
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -2010,7 +2010,286 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				"    ) " +
 				" AS p" +
 				" ORDER BY Urun_Kodu ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_urn_kodlu_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			ConnectionDetails faturaConnDetails) {
+		String sql =   "SELECT * " +
+				" FROM  (SELECT MAL.Kodu as Urun_Kodu, Adi as Urun_Adi , Birim ," +
+				" DATEPART(yyyy,STOK.Tarih) as Yil  , " + sstr_2 + " as  degisken , " + sstr_4 +
+				"  FROM STOK " + kur_dos + ",MAL " +
+				" WHERE " + jkj +
+				"  AND " + ch1 +
+				" AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
+				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
+				" AND STOK.Urun_Kodu = MAL.Kodu " +
+				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
+				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
+				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				"  ) as s  " +
+				" PIVOT " +
+				" ( " +
+				" SUM(" + sstr_5 + ") " +
+				" FOR degisken " +
+				" IN ( " + sstr_1 + ") " +
+				"    ) " +
+				" AS p" +
+				" ORDER BY Urun_Kodu, Yil ";
 		System.out.println(sql);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_mus_kodlu(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
+		String sql =   "SELECT * " +
+				" FROM  (SELECT Hesap_Kodu  , " + 
+				"  (SELECT DISTINCT  UNVAN FROM [OK_Car" +  cariConnDetails.getDatabaseName() + "].[dbo].[HESAP] WHERE hesap.hesap = STOK.Hesap_Kodu  ) as Unvan , " +
+				sstr_2 + " as  degisken , " + sstr_4 +
+				"  FROM STOK " + kur_dos + ",MAL " +
+				" WHERE " + jkj +
+				"  AND " + ch1 +
+				" AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
+				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
+				" AND STOK.Urun_Kodu = MAL.Kodu " +
+				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
+				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
+				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				"  ) as s  " +
+				" PIVOT " +
+				" ( " +
+				" SUM(" + sstr_5 + ") " +
+				" FOR degisken " +
+				" IN ( " + sstr_1 + ") " +
+				"    ) " +
+				" AS p" +
+				" ORDER BY Hesap_Kodu ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_mus_kodlu_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
+		String sql =   "SELECT * " +
+				" FROM (SELECT  Hesap_Kodu as Musteri_Kodu  ," +
+				"  (SELECT DISTINCT  UNVAN FROM [OK_Car" +  cariConnDetails.getDatabaseName() + "].[dbo].[HESAP] WHERE hesap.hesap = STOK.Hesap_Kodu  ) as Unvan  " +
+				" ,datepart(yyyy,STOK.Tarih) as Yil  , " + sstr_2 + " as  degisken , " + sstr_4 +
+				"  FROM STOK " + kur_dos + ",MAL " +
+				" WHERE " + jkj +
+				"  AND " + ch1 +
+				" AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
+				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
+				" AND STOK.Urun_Kodu = MAL.Kodu " +
+				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
+				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
+				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				"  ) as s  " +
+				" PIVOT " +
+				" ( " +
+				" SUM(" + sstr_5 + ") " +
+				" FOR degisken " +
+				" IN ( " + sstr_1 + ") " +
+				"    ) " +
+				" AS p" +
+				" ORDER BY Musteri_Kodu, Yil ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_yil_ay(grupraporDTO grupraporDTO, String sstr_2, String sstr_4, String kur_dos,
+			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			ConnectionDetails faturaConnDetails) {
+		String sql =   "SELECT * " +
+				" FROM  (SELECT datepart(yy,STOK.Tarih) as Yil , datepart(mm,STOK.Tarih) as Ay  " +
+				" ,  " + sstr_2 + " as  degisken , " + sstr_4 +
+				"  FROM STOK " + kur_dos + ",MAL " +
+				" WHERE " + jkj +
+				"  AND " + ch1 +
+				" AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
+				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
+				" AND STOK.Urun_Kodu = MAL.Kodu " +
+				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
+				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
+				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				"  ) as s  " +
+				" PIVOT " +
+				" ( " +
+				" SUM(" + sstr_5 + ") " +
+				" FOR degisken " +
+				" IN ( " + sstr_1 + ") " +
+				"    ) " +
+				" AS p" +
+				" ORDER BY Yil,Ay ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4, String kur_dos,
+			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			ConnectionDetails faturaConnDetails) {
+		String sql =   "SELECT * " +
+				" FROM  (SELECT  datepart(yyyy,STOK.Tarih) as Yil , " + sstr_2 + " as  degisken , " + sstr_4 +
+				"  FROM STOK " + kur_dos + ",MAL " +
+				" WHERE " + jkj +
+				"  AND " + ch1 +
+				" AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
+				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
+				" AND STOK.Urun_Kodu = MAL.Kodu " +
+				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
+				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
+				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				"  ) as s  " +
+				" PIVOT " +
+				" ( " +
+				" SUM(" + sstr_5 + ") " +
+				" FOR degisken " +
+				" IN ( " + sstr_1 + ") " +
+				"    ) " +
+				" AS p" +
+				" ORDER BY Yil ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_ana_grup(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			ConnectionDetails faturaConnDetails) {
+		String sql =   "SELECT * " +
+				" FROM  (SELECT  (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  " +
+				" ,(SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup, " +
+				" " + sstr_2 + " as  degisken , " + sstr_4 +
+				"  FROM STOK " + kur_dos + ",MAL " +
+				" WHERE " + jkj +
+				"  AND " + ch1 +
+				" AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
+				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
+				" AND STOK.Urun_Kodu = MAL.Kodu " +
+				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
+				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
+				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				"  ) as s  " +
+				" PIVOT " +
+				" ( " +
+				" SUM(" + sstr_5 + ") " +
+				" FOR degisken " +
+				" IN ( " + sstr_1 + ") " +
+				"    ) " +
+				" AS p" +
+				" ORDER BY Ana_Grup ,Alt_Grup";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_ana_grup_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			ConnectionDetails faturaConnDetails) {
+		String sql =   "SELECT * " +
+				" FROM  (SELECT  (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  " +
+				" ,(SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup, " +
+				" datepart(yyyy,STOK.Tarih) as Yil  , " +
+				" " + sstr_2 + " as  degisken , " + sstr_4 +
+				"  FROM STOK " + kur_dos + ",MAL " +
+				" WHERE " + jkj +
+				"  AND " + ch1 +
+				" AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
+				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
+				" AND STOK.Urun_Kodu = MAL.Kodu " +
+				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
+				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
+				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				"  ) as s  " +
+				" PIVOT " +
+				" ( " +
+				" SUM(" + sstr_5 + ") " +
+				" FOR degisken " +
+				" IN ( " + sstr_1 + ") " +
+				"    ) " +
+				" AS p" +
+				" ORDER BY Ana_Grup ,Alt_Grup, Yil";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
