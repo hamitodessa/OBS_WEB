@@ -25,4 +25,6 @@ public class grupraporDTO {
 	String dvzturu;
 	String turu;
 	boolean istenenaychc;
+	String sinif1;
+	String sinif2;
 }

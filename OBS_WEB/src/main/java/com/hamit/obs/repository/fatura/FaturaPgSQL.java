@@ -20,6 +20,7 @@ import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.dto.stok.raporlar.envanterDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
+import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
@@ -1309,6 +1310,21 @@ public class FaturaPgSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> envanter_rapor_ana_grup_alt_grup(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String ch1, String k1,
+			String k2, String f1, String f2, String t1, String t2, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_urn_kodlu(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
+			String kur_dos, String jkj, String ch1, String jkj1,  String sstr_5, String sstr_1,
+			String[][] ozelgrp, ConnectionDetails faturaConnDetails) {
 		// TODO Auto-generated method stub
 		return null;
 	} 

@@ -15,6 +15,7 @@ import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.dto.stok.raporlar.envanterDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
+import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.fatura.IFaturaDatabase;
@@ -1089,6 +1090,39 @@ public class FaturaService {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.envanter_rapor_ana_grup_alt_grup(envanterDTO,fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
+	
+	public List<Map<String, Object>> baslik_bak(String baslik,String ordr,String jkj,String ch1,String k1,String k2,String f1,String f2,String t1,String t2){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.baslik_bak(baslik, ordr, jkj, ch1, k1, k2, f1, f2, t1, t2, fatConnDetails);
+		} catch (ServiceException e) {
+			String originalMessage = e.getMessage();
+			Throwable cause = e.getCause();
+			String detailedMessage = originalMessage;
+			if (cause != null) {
+				detailedMessage += " - " + cause.getMessage();
+			}
+			throw new ServiceException(detailedMessage);
+		}
+	}
+	
+	public List<Map<String, Object>> grp_urn_kodlu(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
+			String sstr_5,String sstr_1,String ozelgrp[][]){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.grp_urn_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
 			Throwable cause = e.getCause();

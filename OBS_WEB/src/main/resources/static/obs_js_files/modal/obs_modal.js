@@ -363,8 +363,10 @@ function saveToMain() {
 		const dvzturu = $('#dvzturu').val() || ""; 
 		const turu = $('#turu').val() || ""; 
 		const istenenaychc = $('#istenenaychc').prop('checked');
+		const sinif1 = $('#sinif1').val() || "";
+		const sinif2 = $('#sinif2').val() || "";
 		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, ckod1, ckod2, urozkod, birim, istenenay, gruplama, dvzcevirchc, doviz,
-			stunlar,dvzturu,turu,istenenaychc].join(",");
+			stunlar,dvzturu,turu,istenenaychc,sinif1,sinif2].join(",");
 		const hiddenField = $('#ara_content #grpBilgi');
 		hiddenField.val(degerler);
 	}

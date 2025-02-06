@@ -97,7 +97,7 @@ function dvzcevirChanged() {
 }
 
 async function grpfetchTableData() {
-	const hiddenFieldValue = $('#envanterBilgi').val();
+	const hiddenFieldValue = $('#grpBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
 
     
@@ -120,6 +120,8 @@ async function grpfetchTableData() {
         dvzturu: parsedValues[15],
 		turu: parsedValues[16],
 		istenenaychc: parsedValues[17],
+		sinif1: parsedValues[18],
+		sinif2: parsedValues[19],
 	};
 	const errorDiv = document.getElementById("errorDiv");
 	document.body.style.cursor = "wait";
@@ -139,6 +141,7 @@ async function grpfetchTableData() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
+		console.info(response);
 		data = response;
 		let sqlHeaders = "";
 		
@@ -292,7 +295,7 @@ function updateTableHeadersnormal(headers,kolonbaslangic,format) {
 	tfoot.appendChild(trFoot);
 }
 
-async function envdownloadReport() {
+async function grpdownloadReport() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -332,7 +335,7 @@ async function envdownloadReport() {
 	}
 }
 
-async function envmailAt() {
+async function grpmailAt() {
 	document.body.style.cursor = "wait";
 	let rows = extractTableData("main-table");
 	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
@@ -376,4 +379,15 @@ function extractTableData(tableId) {
 		}
 	}
 	return rows;
+}
+
+function clearTfoot() {
+	let table = document.querySelector("#main-table");
+	let tfoot = table.querySelector("tfoot");
+	if (tfoot) {
+		let cells = tfoot.querySelectorAll("th");
+		for (let i = 0; i < cells.length; i++) {
+			cells[i].textContent = "";
+		}
+	}
 }
