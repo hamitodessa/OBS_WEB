@@ -145,104 +145,51 @@ async function grpfetchTableData() {
 		data = response;
 		let sqlHeaders = "";
 		
-			sqlHeaders = data.basliklar;
-			updateTableHeaders(sqlHeaders);
-		
 		let totalmiktar = 0;
 		let totalcmiktar = 0;
 		let totalgtutar = 0;
 		let totaltutar = 0;
 		let totalstok = 0;
 		let totalctutar = 0;
-		if (response.raporturu === 'normal') {
-			document.getElementById("second-table-container").style.visibility = "hidden";
-			data.data.forEach(rowData => {
-				const row = document.createElement('tr');
-				row.classList.add('expandable');
-				row.classList.add("table-row-height");
-				//				if (response.raporturu === 'normal') {
-				row.innerHTML = `
-                    <td>${rowData.Kodu || ''}</td>
-                    <td>${rowData.Adi || ''}</td>
-                    <td>${rowData.Simge || ''}</td>
-                    <td class="double-column">${rowData.Giris_Miktari}</td>
-					<td class="double-column">${formatNumber2(rowData.Giris_Tutar)}</td>
-					<td class="double-column">${rowData.Cikis_Miktari}</td>
-					<td class="double-column">${formatNumber2(rowData.Cikis_Tutar)}</td>
-					<td class="double-column">${formatNumber2(rowData.Cikis_Maliyet)}</td>
-                    <td class="double-column">${rowData.Stok_Miktari}</td>
-                    <td class="double-column">${formatNumber2(rowData.Maliyet)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-                `;
-				totalmiktar += parseLocaleNumber(rowData.Giris_Miktari);
-				totalcmiktar += parseLocaleNumber(rowData.Cikis_Miktari);
-				totalstok += parseLocaleNumber(rowData.Stok_Miktari);
-				totaltutar += rowData.Tutar;
-				totalctutar += rowData.Cikis_Tutar;
-				totalgtutar += rowData.Giris_Tutar;
-				//				}
-				mainTableBody.appendChild(row);
-			});
-		}
-		else if (response.raporturu === 'fifo') {
-			document.getElementById("second-table-container").style.visibility = "visible";
-			data.fifo.forEach(rowData => {
-				const row = document.createElement('tr');
-				row.classList.add('expandable');
-				row.classList.add("table-row-height");
-				row.innerHTML = `
-                    <td>${rowData.Urun_Kodu || ''}</td>
-                    <td>${rowData.Adi || ''}</td>
-                    <td>${rowData.Simge || ''}</td>
-                    <td class="double-column">${rowData.Giris_Miktari}</td>
-					<td class="double-column">${formatNumber2(rowData.Giris_Tutar)}</td>
-					<td class="double-column">${rowData.Cikis_Miktari}</td>
-					<td class="double-column">${formatNumber2(rowData.Cikis_Tutar)}</td>
-					<td class="double-column">${formatNumber2(rowData.Cikis_Maliyet)}</td>
-                    <td class="double-column">${rowData.Stok_Miktari}</td>
-                    <td class="double-column">${formatNumber2(rowData.Maliyet)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-                `;
-				mainTableBody.appendChild(row);
-			});
-			/// 2 Tablo Doldur///////////////////////////////////////////////////////////////////////
-			data.fifo2.forEach(rowData => {
-				const row = document.createElement('tr');
-				row.classList.add('expandable', 'table-row-height');
-				const miktarCell = document.createElement('td');
-				miktarCell.classList.add('double-column');
-				miktarCell.textContent = rowData.Miktar;
-				if (rowData.Miktar < 0) {
-					miktarCell.style.backgroundColor = 'red'; // Burada istediğin rengi verebilirsin
-					miktarCell.style.color = 'white'; // Yazıyı beyaz yaparak görünürlüğü artırıyorum
+		sqlHeaders = data.baslik.split(',').map(header => header.trim().replace(/\[|\]/g, ""));
+		
+		const sabitKolonlar = sqlHeaders.slice(0, data.sabitkolonsayisi);
+
+		const tumKolonlar = data.data.length > 0 ? Object.keys(data.data[0]) : [];
+		const dinamikKolonlar = tumKolonlar.filter(kolon => !sabitKolonlar.includes(kolon));
+
+		const headers = [...sabitKolonlar, ...dinamikKolonlar];
+		const kolonbaslangic = sabitKolonlar.length;
+		
+
+		updateTableHeaders(headers, data.sabitkolonsayisi, response.format);
+		
+		data.data.forEach(rowData => {
+			const row = document.createElement('tr');
+			row.classList.add('expandable', 'table-row-height');
+			let rowContent = headers.map((key, index) => {
+				let cellValue = rowData[key] !== null ? rowData[key] : 0; 
+				let td = "";
+				if (index >= kolonbaslangic) {
+					if (response.format === 2) {
+						td = `<td class="double-column">${formatNumber2(cellValue)}</td>`;
+					} else if (response.format === 3) {
+						td = `<td class="double-column">${formatNumber3(cellValue)}</td>`;
+					} else {
+						td = `<td class="double-column">${cellValue}</td>`;
+					}
+				} else {
+					// 📌 Sabit kolonlar için normal değer yazdır
+					td = `<td>${cellValue}</td>`;
 				}
-				row.innerHTML = `
-        			<td>${rowData.Urun_Kodu || ''}</td>
-        			<td>${rowData.Evrak_No || ''}</td>
-        			<td>${rowData.Hes_Kodu || ''}</td> 
-        			<td>${rowData.Evrak_Cins || ''}</td> 
-        			<td>${formatDate(rowData.Tarih)}</td>
-        			<td class="double-column">${formatNumber2(rowData.Fiat)}</td>
-        			<td>${rowData.Birim || ''}</td> 
-        			<td class="double-column">${formatNumber3(rowData.Miktar_Bakiye)}</td>
-        			<td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-        			<td>${rowData.Doviz || ''}</td> 
-        			<td class="double-column">${formatNumber2(findTutarField(rowData) || 0)}</td>
-       				 <td class="double-column">${formatNumber2(rowData.Tutar_Bakiye)}</td>
-        			<td>${rowData.USER || ''}</td> 
-    			`;
-				row.insertBefore(miktarCell, row.children[6]); // 6. index'te Miktar var, yerine koyuyoruz.
-				secondTableBody.appendChild(row);
-			});
-		}
-		if (response.raporturu === 'normal') {
-			document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
-			document.getElementById("toplam-4").innerText = formatNumber2(totalgtutar);
-			document.getElementById("toplam-5").innerText = formatNumber3(totalcmiktar);
-			document.getElementById("toplam-6").innerText = formatNumber3(totalctutar);
-			document.getElementById("toplam-8").innerText = formatNumber3(totalstok);
-			document.getElementById("toplam-10").innerText = formatNumber2(totaltutar);
-		}
+				return td;
+			}).join("");
+
+			row.innerHTML = rowContent;
+			mainTableBody.appendChild(row);
+		});
+		
+		
 		document.body.style.cursor = "default";
 	} catch (error) {
 		errorDiv.style.display = "block";
@@ -253,7 +200,7 @@ async function grpfetchTableData() {
 	}
 }
 
-function updateTableHeadersnormal(headers,kolonbaslangic,format) {
+function updateTableHeaders(headers,kolonbaslangic,format) {
 	let thead = document.querySelector("#main-table thead");
 	let table = document.querySelector("#main-table");
 	let tfoot = table.querySelector("tfoot");
@@ -267,7 +214,9 @@ function updateTableHeadersnormal(headers,kolonbaslangic,format) {
 	headers.forEach((header, index) => {
 		let th = document.createElement("th");
 		th.textContent = header;
+		console.info(index + "--" + header + "--" + kolonbaslangic);
 		if (index >= kolonbaslangic) {
+			
 			th.classList.add("double-column");
 		}
 		trHead.appendChild(th);
@@ -284,7 +233,6 @@ function updateTableHeadersnormal(headers,kolonbaslangic,format) {
             else if (format === '3'){
                 th.textContent = "0.000";
             }
-			
 			th.id = "toplam-" + index;
 			th.classList.add("double-column");
 		} else {

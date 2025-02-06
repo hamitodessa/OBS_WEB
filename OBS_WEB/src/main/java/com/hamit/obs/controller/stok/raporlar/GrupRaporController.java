@@ -80,6 +80,16 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
+					
+					if(grupraporDTO.getBirim().equals("Tutar")) {
+						response.put("format",2);
+					}
+					else {
+						response.put("format",3);
+					}
+					System.out.println(baslikbakStrings[0]);
+					response.put("baslik","Urun_Kodu, Urun_Adi , Birim , " + baslikbakStrings[0]);  
+					response.put("sabitkolonsayisi",3);
 					response.put("raporturu","normal");
 				}
 			}
