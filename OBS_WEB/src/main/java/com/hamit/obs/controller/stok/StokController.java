@@ -88,5 +88,44 @@ public class StokController {
 		}
 		return response;
 	}
+	
+	@PostMapping("stok/ana")
+	@ResponseBody
+	public Map<String, Object>  ana() {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> anaKodlari = faturaService.stk_kod_degisken_oku("ANA_GRUP", "AGID_Y", "ANA_GRUP_DEGISKEN") ;
+			Map<String, Object> anaDeger = new HashMap<>();
+			anaDeger.put("ANA_GRUP", ""); 
+			anaKodlari.add(0, anaDeger);
+			response.put("anaKodlari", (anaKodlari != null) ? anaKodlari : new ArrayList<>());
+			response.put("errorMessage","");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage()); // Hata mesajı
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@PostMapping("stok/oz1")
+	@ResponseBody
+	public Map<String, Object>  oz1() {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> oz1Kodlari = faturaService.stk_kod_degisken_oku("OZEL_KOD_1", "OZ1ID_Y", "OZ_KOD_1_DEGISKEN") ;
+			Map<String, Object> ozDeger = new HashMap<>();
+			ozDeger.put("OZEL_KOD_1", ""); 
+			oz1Kodlari.add(0, ozDeger);
+			response.put("anaKodlari", (oz1Kodlari != null) ? oz1Kodlari : new ArrayList<>());
+			response.put("errorMessage","");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage()); // Hata mesajı
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
 
 }

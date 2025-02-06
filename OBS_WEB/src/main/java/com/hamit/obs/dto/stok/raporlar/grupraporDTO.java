@@ -5,27 +5,24 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class envanterDTO {
-	
+public class grupraporDTO {
+
 	String tar1;
 	String tar2;
 	String uranagrp;
 	String ukod1;
 	String ukod2;
 	String uraltgrp;
-	String evrno1;
-	String evrno2;
-	String anagrp;
-	String gruplama;
-	String altgrp;
-	String depo;
-	String fiatlama;
-	boolean depohardahil;
-	boolean uretfisdahil;
-	boolean oncekitarih;
-	String doviz;
 	String ckod1;
 	String ckod2;
 	String urozkod;
 	String birim;
+	String istenenay;
+	String gruplama;
+	boolean dvzcevirchc;
+	String doviz;
+	String stunlar;
+	String dvzturu;
+	String turu;
+	boolean istenenaychc;
 }

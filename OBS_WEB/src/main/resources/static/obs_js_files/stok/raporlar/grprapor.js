@@ -40,7 +40,7 @@ async function openenvModal(modal) {
     $(modal).modal('show');
     document.body.style.cursor = "wait";
     try {
-        const response = await fetchWithSessionCheck("stok/anadepo", {
+        const response = await fetchWithSessionCheck("stok/ana", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -50,18 +50,9 @@ async function openenvModal(modal) {
             throw new Error(response.errorMessage);
         }
         const ana = response.anaKodlari;
-        //const dpo = response.depoKodlari;
         const uranaSelect = document.getElementById("uranagrp");
-        //const anaSelect = document.getElementById("anagrp");
-        //const dpoSelect = document.getElementById("depo");
-        //anaSelect.innerHTML = "";
         uranaSelect.innerHTML = "";
-        //dpoSelect.innerHTML = "";
         ana.forEach(item => {
-            //const optionAna = document.createElement("option");
-            //optionAna.value = item.ANA_GRUP;
-           //optionAna.textContent = item.ANA_GRUP;
-            //anaSelect.appendChild(optionAna);
             const optionUrana = document.createElement("option");
             optionUrana.value = item.ANA_GRUP;
             optionUrana.textContent = item.ANA_GRUP;
@@ -73,5 +64,25 @@ async function openenvModal(modal) {
         modalError.innerText = `Bir hata oluştu: ${error.message}`;
     } finally {
         document.body.style.cursor = "default";
+    }
+}
+
+function istenenayChanged() {
+    const istenenay = document.getElementById("istenenaychc").checked;
+    if (istenenay) {
+        document.getElementById("istenenay").style.visibility = "visible";
+    } else {
+        document.getElementById("istenenay").style.visibility = "hidden";
+    }
+}
+
+function dvzcevirChanged() {
+    const dvzcevir = document.getElementById("dvzcevirchc").checked;
+    if (dvzcevir) {
+        document.getElementById("dvzcins").style.visibility = "visible";
+        document.getElementById("dvzturu").style.visibility = "visible";
+    } else {
+        document.getElementById("dvzcins").style.visibility = "hidden";
+        document.getElementById("dvzturu").style.visibility = "hidden";
     }
 }
