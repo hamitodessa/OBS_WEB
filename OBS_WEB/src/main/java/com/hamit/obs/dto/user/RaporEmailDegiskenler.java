@@ -20,4 +20,6 @@ public class RaporEmailDegiskenler {
     String degerler;
     String format ;
     List<Map<String, String>> exceList;
+    String tableString;
+    String baslik;
 }

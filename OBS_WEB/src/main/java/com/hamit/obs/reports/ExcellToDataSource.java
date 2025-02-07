@@ -106,7 +106,58 @@ public class ExcellToDataSource {
 			InputStream in = new ByteArrayInputStream(byteArray);
 			ds = new ByteArrayDataSource(in, "application/x-any");
 			bos.close();
+		} catch (Exception ex) {
+			throw new ServiceException(ex.getMessage());
+		}
+		return ds;
+	}
 
+	public ByteArrayDataSource export_excell_grp(List<Map<String, String>> tableData,int sabitkolon) {
+		ByteArrayDataSource ds = null ;
+		try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+			Sheet sheet = workbook.createSheet("Excell_Rapor");
+			if (!tableData.isEmpty()) {
+				List<String> headers = new ArrayList<>(tableData.get(0).keySet());
+				XSSFCellStyle rightAlignStyle = workbook.createCellStyle();
+				rightAlignStyle.setAlignment(HorizontalAlignment.RIGHT);
+				XSSFCellStyle toplamStyle = workbook.createCellStyle();
+				toplamStyle.setAlignment(HorizontalAlignment.RIGHT);
+				toplamStyle.setBorderTop(BorderStyle.MEDIUM);
+				Row headerRow = sheet.createRow(0);
+				for (int i = 0; i < headers.size(); i++) {
+					Cell headerCell = headerRow.createCell(i);
+					headerCell.setCellValue(headers.get(i));
+					if (i > sabitkolon) {
+						headerCell.setCellStyle(rightAlignStyle);
+					}
+				}
+				int rowNum = 1;
+				for (Map<String, String> row : tableData) {
+					Row excelRow = sheet.createRow(rowNum);
+					for (int i = 0; i < headers.size(); i++) {
+						String columnName = headers.get(i);
+						Cell cell = excelRow.createCell(i);
+						String cellValue = row.get(columnName) == null ? "" : row.get(columnName).trim();
+						cell.setCellValue(cellValue);
+						if (i > sabitkolon) {
+							cell.setCellStyle(rightAlignStyle);
+						}
+						if(tableData.size() == rowNum) {
+							cell.setCellStyle(toplamStyle);
+						}
+					}
+					rowNum++;
+				}
+				for (int i = 0; i < headers.size(); i++) {
+					sheet.autoSizeColumn(i);
+				}
+			}
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			workbook.write(bos);
+			byte[] byteArray = bos.toByteArray();
+			InputStream in = new ByteArrayInputStream(byteArray);
+			ds = new ByteArrayDataSource(in, "application/x-any");
+			bos.close();
 		} catch (Exception ex) {
 			throw new ServiceException(ex.getMessage());
 		}

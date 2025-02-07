@@ -346,9 +346,9 @@ public class RaporOlustur {
 		return excellToDataSource.export_excell(tableData);
 	}
 	
-	public ByteArrayDataSource grprap(List<Map<String, String>> tableData)  throws Exception {
+	public ByteArrayDataSource grprap(List<Map<String, String>> tableData,int sabitkolon)  throws Exception {
 		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
-		return excellToDataSource.export_excell(tableData);
+		return excellToDataSource.export_excell_grp(tableData,sabitkolon);
 	}
 
 	private JasperPrint prepareJasperPrint(String jrxmlPath, Map<String, Object> parameters, List<Map<String, Object>> data , String raporyeri) throws Exception {

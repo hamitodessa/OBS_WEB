@@ -11,69 +11,63 @@ import java.util.Map;
 
 public class ResultSetConverter {
 	public static List<Map<String, Object>> convertToList(ResultSet resultSet) throws SQLException {
-        List<Map<String, Object>> resultList = new ArrayList<>();
-        ResultSetMetaData metaData = resultSet.getMetaData();
-        int columnCount = metaData.getColumnCount();
-        while (resultSet.next()) {
-            Map<String, Object> rowMap = new HashMap<>();
-            for (int i = 1; i <= columnCount; i++) {
-                String columnName = metaData.getColumnLabel(i);
-                Object columnValue = resultSet.getObject(i);
-                rowMap.put(columnName, columnValue);
-            }
-            resultList.add(rowMap);
-        }
-        return resultList;
-    }
-	
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		ResultSetMetaData metaData = resultSet.getMetaData();
+		int columnCount = metaData.getColumnCount();
+		while (resultSet.next()) {
+			Map<String, Object> rowMap = new HashMap<>();
+			for (int i = 1; i <= columnCount; i++) {
+				String columnName = metaData.getColumnLabel(i);
+				Object columnValue = resultSet.getObject(i);
+				rowMap.put(columnName, columnValue);
+			}
+			resultList.add(rowMap);
+		}
+		return resultList;
+	}
+
 	public static List<Map<String, Object>> convertToListPIVOT(ResultSet resultSet) throws SQLException {
-	    List<Map<String, Object>> resultList = new ArrayList<>();
-	    ResultSetMetaData metaData = resultSet.getMetaData();
-	    int columnCount = metaData.getColumnCount();
-	    while (resultSet.next()) {
-	        Map<String, Object> rowMap = new LinkedHashMap<>(); 
-	        double toplam = 0.0;
-	        for (int i = 1; i <= columnCount; i++) {
-	            String columnName = metaData.getColumnLabel(i);
-	            Object columnValue = resultSet.getObject(i);
-	            rowMap.put(columnName, columnValue);
-	            if (columnValue instanceof Number) {
-	                toplam += ((Number) columnValue).doubleValue();
-	            }
-	        }
-	        rowMap.put("TOPLAM", toplam);
-	        resultList.add(rowMap);
-	    }
-	    return resultList;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		ResultSetMetaData metaData = resultSet.getMetaData();
+		int columnCount = metaData.getColumnCount();
+		while (resultSet.next()) {
+			Map<String, Object> rowMap = new LinkedHashMap<>(); 
+			double toplam = 0.0;
+			for (int i = 1; i <= columnCount; i++) {
+				String columnName = metaData.getColumnLabel(i);
+				Object columnValue = resultSet.getObject(i);
+				rowMap.put(columnName, columnValue);
+				if (columnValue instanceof Number) {
+					toplam += ((Number) columnValue).doubleValue();
+				}
+			}
+			rowMap.put("TOPLAM", toplam);
+			resultList.add(rowMap);
+		}
+		return resultList;
 	}
-	
+
 	public static List<Map<String, Object>> copyPivotList1(List<Map<String, Object>> originalList) {
-	    List<Map<String, Object>> copiedList = new ArrayList<>();
+		List<Map<String, Object>> copiedList = new ArrayList<>();
 
-	    for (Map<String, Object> row : originalList) {
-	        Map<String, Object> copiedRow = new LinkedHashMap<>(row);
-	        copiedList.add(copiedRow);
-	    }
-
-	    return copiedList;
+		for (Map<String, Object> row : originalList) {
+			Map<String, Object> copiedRow = new LinkedHashMap<>(row);
+			copiedList.add(copiedRow);
+		}
+		return copiedList;
 	}
-	
+
 	public static List<Map<String, String>> parseTableData(String data, List<String> headers) {
-	    List<Map<String, String>> resultList = new ArrayList<>();
-
-	    String[] rows = data.split("\n"); 
-
-	    for (String row : rows) {
-	        String[] values = row.split("\\|\\|");
-	        Map<String, String> rowData = new LinkedHashMap<>();
-
-	        for (int i = 0; i < headers.size(); i++) {
-	            rowData.put(headers.get(i), values[i]);
-	        }
-
-	        resultList.add(rowData);
-	    }
-
-	    return resultList;
+		List<Map<String, String>> resultList = new ArrayList<>();
+		String[] rows = data.split("\n"); 
+		for (String row : rows) {
+			String[] values = row.split("\\|\\|");
+			Map<String, String> rowData = new LinkedHashMap<>();
+			for (int i = 0; i < headers.size(); i++) {
+				rowData.put(headers.get(i), values[i]);
+			}
+			resultList.add(rowData);
+		}
+		return resultList;
 	}
 }

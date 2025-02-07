@@ -2,7 +2,6 @@ package com.hamit.obs.controller.stok.raporlar;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
@@ -32,18 +29,14 @@ import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.fatura.FaturaService;
-import com.hamit.obs.service.user.UserService;
 
 
 @Controller
 public class GrupRaporController {
 
 	@Autowired
-	private UserService userService;
-	
-	@Autowired
 	private RaporOlustur raporOlustur;
-	
+
 	@Autowired
 	private FaturaService faturaService;
 
@@ -126,7 +119,6 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-
 					if(grupraporDTO.getBirim().equals("Tutar")) {
 						response.put("format",2);
 					}
@@ -148,7 +140,6 @@ public class GrupRaporController {
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"Hesap_Kodu\""; 
 						ozelgrp[0][1] = "Musteri_Kodu"; 
-
 						String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 						String adrString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
 								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
@@ -162,7 +153,6 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-
 					if(grupraporDTO.getBirim().equals("Tutar")) {
 						response.put("format",2);
 					}
@@ -199,14 +189,12 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-
 					if(grupraporDTO.getBirim().equals("Tutar")) {
 						response.put("format",2);
 					}
 					else {
 						response.put("format",3);
 					}
-
 					response.put("baslik","Musteri_Kodu,Unvan,Yil, " + baslikbakStrings[0]);  
 					response.put("sabitkolonsayisi",3);
 				}
@@ -237,7 +225,6 @@ public class GrupRaporController {
 					else {
 						response.put("format",3);
 					}
-
 					response.put("baslik","Yil,Ay, " + baslikbakStrings[0]);  
 					response.put("sabitkolonsayisi",2);
 				}
@@ -253,26 +240,18 @@ public class GrupRaporController {
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
 						ozelgrp[0][1] = "Yil"; 
-
 					}
 					List<Map<String, Object>> grup = faturaService.grp_yil(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-
-					System.out.println("🚀 **Sunucudan Gelen JSON:**");
-					for (Map<String, Object> row : grup) {
-					    System.out.println(row);
-					}
-									    
 					if(grupraporDTO.getBirim().equals("Tutar")) {
 						response.put("format",2);
 					}
 					else {
 						response.put("format",3);
 					}
-
 					response.put("baslik","Yil, " + baslikbakStrings[0] + ",TOPLAM");  
 					response.put("sabitkolonsayisi",1);
 				}
@@ -290,7 +269,6 @@ public class GrupRaporController {
 						ozelgrp[0][1] = "Ana_Grup"; 
 						ozelgrp[1][0] = " (SELECT DISTINCT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"MAL\".\"Alt_Grup\" )" ;
 						ozelgrp[1][1] = "Alt_Grup"; 
-
 					}
 					List<Map<String, Object>> grup = faturaService.grp_ana_grup(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
@@ -323,7 +301,6 @@ public class GrupRaporController {
 						ozelgrp[1][1] = "Alt_Grup"; 
 						ozelgrp[2][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
 						ozelgrp[2][1] = "Yil"; 
-
 					}
 					List<Map<String, Object>> grup = faturaService.grp_ana_grup_yil(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
@@ -350,20 +327,18 @@ public class GrupRaporController {
 		}
 		return response;
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	@PostMapping("stok/grp_download")
-	public ResponseEntity<byte[]> downloadReport(@RequestBody String tableDataString) {
+	@ResponseBody
+	public ResponseEntity<byte[]> downloadReport(@RequestBody Map<String, Object> requestBody) {
 		ByteArrayDataSource dataSource ;
 		try {
-			
-			List<String> header = Arrays.asList("Yil", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "TOPLAM");
-
-	        // 📌 **String'i JSON'a Parse Et**
-			List<Map<String, String>> tableData = ResultSetConverter.parseTableData(tableDataString, header);
-			
-			
-			 
-			dataSource =  raporOlustur.grprap(tableData);
+			List<String> header =  (List<String>) requestBody.get("headers");  
+			String tableString = (String) requestBody.get("data");
+			int sabitkolon = (int) requestBody.get("sabitkolon");
+			List<Map<String, String>> tableData = ResultSetConverter.parseTableData(tableString, header);
+			dataSource =  raporOlustur.grprap(tableData,sabitkolon);
 			if (dataSource == null) {
 				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");
 			}
@@ -376,13 +351,14 @@ public class GrupRaporController {
 		} catch (ServiceException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().getBytes(StandardCharsets.UTF_8));
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Beklenmeyen bir hata oluştu.".getBytes(StandardCharsets.UTF_8));
 		} finally {
 			dataSource = null;
 		}	
 	}
 
-	
+
 
 	private String[] baslik_bak(grupraporDTO grupraporDTO)
 	{

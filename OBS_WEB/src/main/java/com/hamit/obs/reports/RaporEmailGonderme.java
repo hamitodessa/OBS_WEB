@@ -2,6 +2,7 @@ package com.hamit.obs.reports;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.dto.cari.mizanDTO;
 import com.hamit.obs.dto.kambiyo.bordroPrinter;
@@ -56,13 +59,15 @@ public class RaporEmailGonderme {
 		try {
 			String nerden = raporEmailDegiskenler.getNerden(); 
 			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter")
-					|| nerden.equals("stok")) {
+					|| nerden.equals("stok") ) {
 				gonder_excell();
+			}
+			else if(nerden.equals("gruprapor")) {
+				gonder_excell_grup();
 			}
 			else {
 				gonder_jasper();
 			}
-
 			durum = true ;
 		} catch (Exception e) {
 			throw new ServiceException( e.getMessage());
@@ -71,11 +76,27 @@ public class RaporEmailGonderme {
 	}
 	private void gonder_excell() {
 		try {
-
 			String raporAdi = raporEmailDegiskenler.getNerden();
 			ExcellToDataSource excellToDataSource = new ExcellToDataSource();
 			List<Map<String, String>> tableData = raporEmailDegiskenler.getExceList();
 			ByteArrayDataSource ds = excellToDataSource.export_excell(tableData);
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm");
+			String zaman = dtf.format(LocalDateTime.now());
+			String rapor_dos_adi = raporAdi + zaman + ".xlsx";
+			son_gonderme(ds, rapor_dos_adi);
+		} catch (Exception ex) {
+			throw new ServiceException(ex.getMessage());
+		}
+	}
+	private void gonder_excell_grup() {
+		try {
+			String raporAdi = raporEmailDegiskenler.getNerden();
+			ExcellToDataSource excellToDataSource = new ExcellToDataSource();
+			String[] values = raporEmailDegiskenler.getDegerler().split(",");
+			List<String> header = Arrays.asList(raporEmailDegiskenler.getBaslik().split(","));  
+			String tableString = raporEmailDegiskenler.getTableString();
+			List<Map<String, String>> tableData = ResultSetConverter.parseTableData(tableString, header);
+			ByteArrayDataSource ds = excellToDataSource.export_excell_grp(tableData,Integer.valueOf(values[0]));
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm");
 			String zaman = dtf.format(LocalDateTime.now());
 			String rapor_dos_adi = raporAdi + zaman + ".xlsx";

@@ -15,7 +15,7 @@ incrementRowCounter = function () {
 };
 
 formatInputBox2 = function (input) {
-	input.value = formatNumber2( parseLocaleNumber(input.value));
+	input.value = formatNumber2(parseLocaleNumber(input.value));
 }
 
 formatInputBox4 = function (input) {

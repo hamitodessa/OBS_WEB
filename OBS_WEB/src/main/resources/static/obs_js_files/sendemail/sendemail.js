@@ -3,9 +3,17 @@ function tabloyukle() {
 	document.body.style.cursor = "wait"
 	document.getElementById("extraValue").value = '';
 	let storedData = localStorage.getItem("tableData");
+	let data = localStorage.getItem("grprapor");
+
+	let tablobaslik = localStorage.getItem("tablobaslik");
+
 	if (storedData) {
 		let parsedData = JSON.parse(storedData);
 		document.getElementById("extraValue").value = JSON.stringify(parsedData.rows);
+	}
+	if (data) {
+		document.getElementById("grprapor").value = data;
+		document.getElementById("tablobaslik").value = tablobaslik;
 	}
 	document.body.style.cursor = "default"
 };
@@ -20,12 +28,21 @@ async function sendmailAt() {
 		aciklama: document.getElementById("aciklama").value || "",
 		nerden: document.getElementById("nerden").value || "",
 		degerler: document.getElementById("degerler").value || "",
+		baslik: document.getElementById("tablobaslik").value || "",
 		format: document.getElementById("format") ? document.getElementById("format").value : ""
 	}
 	if (document.getElementById("extraValue").value != "") {
 		let extraValue = document.getElementById("extraValue").value;
 		try {
 			RaporEmailDegiskenler.exceList = JSON.parse(extraValue);
+		} catch (error) {
+			throw new Error("JSON dönüşüm hatası:", error);
+		}
+	}
+	if (document.getElementById("grprapor").value != "") {
+		let extraValue = document.getElementById("grprapor").value;
+		try {
+			RaporEmailDegiskenler.tableString = extraValue;
 		} catch (error) {
 			throw new Error("JSON dönüşüm hatası:", error);
 		}

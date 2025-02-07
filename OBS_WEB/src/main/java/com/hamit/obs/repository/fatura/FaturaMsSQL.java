@@ -1691,7 +1691,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -1758,7 +1757,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" SUM(transaction_value) OVER (PARTITION BY Urun_Kodu ORDER BY qwe) / kalan_stok AS maliyet " +
 				" FROM StockCalculation " +
 				" ORDER BY Tarih desc;" ;
-
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -1854,7 +1852,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -1900,7 +1897,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -2019,7 +2015,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -2050,7 +2045,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				"    ) " +
 				" AS p" +
 				" ORDER BY Urun_Kodu, Yil ";
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -2179,7 +2173,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -2209,14 +2202,11 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				"    ) " +
 				" AS p" +
 				" ORDER BY Yil ";
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
-		
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
-			
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2302,6 +2292,5 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 }

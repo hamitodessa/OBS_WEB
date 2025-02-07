@@ -1,153 +1,202 @@
 <style>
-.pmessage {
-	opacity: 0;
-	transition: opacity 0.3s ease;
-}
+  .pmessage {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
-.psuccess {
-	color: green;
-}
+  .psuccess {
+    color: green;
+  }
 
-.perror {
-	color: red;
-}
+  .perror {
+    color: red;
+  }
 
-.pvisible {
-	opacity: 1;
-}
+  .pvisible {
+    opacity: 1;
+  }
 
-.centered-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border: 1px solid #ced4da;
-	padding: 10px;
-	border-radius: 5px;
-}
+  .centered-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    border-radius: 5px;
+  }
 
-.form-container {
-	display: block; /* Elemanları alt alta yerleştirmek için */
-	gap: 10px; /* Satırlar arası boşluk */
-}
+  .form-container {
+    display: block; /* Elemanları alt alta yerleştirmek için */
+    gap: 10px; /* Satırlar arası boşluk */
+  }
 
-.form-container .form-row+.form-row {
-	margin-top: 10px;
-}
+  .form-container .form-row + .form-row {
+    margin-top: 10px;
+  }
 
-.form-row {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	width: 100%;
-	
-}
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
 
-.form-row label {
-	width: 80px;
-}
+  .form-row label {
+    width: 80px;
+  }
 
-.aciklama-width {
-	width: 40%;
-}
+  .aciklama-width {
+    width: 40%;
+  }
 
-.group-box {
-	border: 1px solid #ced4da;
-	padding: 15px;
-	border-radius: 5px;
-	margin-top: 10px;
-	width:50%;
-}
+  .group-box {
+    border: 1px solid #ced4da;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 50%;
+  }
 
-.long-box {
-	flex: 2;
-}
+  .long-box {
+    flex: 2;
+  }
 
-.short-box {
-	flex: 1;
-}
+  .short-box {
+    flex: 1;
+  }
 
-.group-box h4 {
-	margin-top: 0;
-	font-size: 16px;
-	color: #333;
-	text-align: center;
-}
+  .group-box h4 {
+    margin-top: 0;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+  }
 
-.group-row {
-	display: flex;
-	gap: 10px;
-	flex-wrap: wrap;
-}
+  .group-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
 </style>
 <div class="container mt-5">
-	<div class="card p-4 mb-4" style="width:70%;">
-		<form id="sendEmail" enctype="multipart/form-data">
-			<div class="group-row">
-				<div class="form-row">
-					<div class="group-box">
-						<h4>Gonderen</h4>
-						<div class="form-row">
-						<label class="form-check-label" for="hesap">Hesap</label> 
-						<input class="form-control input-width" type="email" id="hesap" name="hesap" th:value="${hesap}">
-						</div>
-						<div class="form-row" style="padding-top: 5px;">
-						<label class="form-check-label" for="isim">Isim</label> 
-							<input class="form-control input-width" type="text" id="isim" name="isim" th:value="${isim}">
-						</div>
-					</div>
-					<div class="group-box">
-							<h4>Alici</h4>
-						<div class="form-row">
-							<label class="form-check-label" for="to">To</label> 
-							<input class="form-control input-width" type="text" id="too" name="too">
-						</div>
-						<div class="form-row" style="padding-top: 5px;">
-							<label class="form-check-label" for="cc">Cc</label> 
-							<input class="form-control input-width" type="email" id="ccc" name="ccc">
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- İkinci iki grup kutusu (Konu Aciklama ve Format Turu) -->
-			<div class="group-row">
-				<div class="group-box long-box">
-					<div class="form-row">
-						<label class="form-check-label" for="konu">Konu</label> 
-						<input class="form-control aciklama-width" type="text" id="konu"name="konu">
-					</div>
-					<div class="form-row" style="padding-top: 5px;">
-						<label class="form-check-label" for="aciklama">Aciklama</label>
-						<textarea class="form-control aciklama-width" rows="4" cols="50"
-							placeholder="Yorumunuzu buraya yazın..." id="aciklama" name="aciklama">
-						</textarea>
-					</div>
-				</div>
-			</div>
-			<div class="group-row">
-				<div class="form-row" style="padding-top: 5px;">
-					<select class="form-select"  id="format" name="format">
-						<option value="pdf">PDF</option>
-						<option value="xlsx">Excel (XLSX)</option>
-						<option value="docx">Word (DOCX)</option>
-						<option value="xml">XML</option>
-					</select>
-				</div>
-			</div>
-			<div class="form-row" style="padding-top: 5px;">
-				<button class="btn btn-primary" 
-					type="button" id="mailButton" onclick="sendmailAt()">Gonder</button>
-			</div>
-			<div class="field">
-				<label id="error" th:if="${error}" class="forgot" th:text="${error}"></label>
-				<span id="message" style="font-weight: bold;"></span>
-			</div>
-			<input type="hidden" id="nerden" name="nerden" th:value="${nerden}">
-			<input type="hidden" id="degerler" name="degerler"
-				th:value="${degerler}">
-			<input type="hidden" id="extraValue">
-		</form>
-	</div>
+  <div class="card p-4 mb-4" style="width: 70%">
+    <form id="sendEmail" enctype="multipart/form-data">
+      <div class="group-row">
+        <div class="form-row">
+          <div class="group-box">
+            <h4>Gonderen</h4>
+            <div class="form-row">
+              <label class="form-check-label" for="hesap">Hesap</label>
+              <input
+                class="form-control input-width"
+                type="email"
+                id="hesap"
+                name="hesap"
+                th:value="${hesap}"
+              />
+            </div>
+            <div class="form-row" style="padding-top: 5px">
+              <label class="form-check-label" for="isim">Isim</label>
+              <input
+                class="form-control input-width"
+                type="text"
+                id="isim"
+                name="isim"
+                th:value="${isim}"
+              />
+            </div>
+          </div>
+          <div class="group-box">
+            <h4>Alici</h4>
+            <div class="form-row">
+              <label class="form-check-label" for="to">To</label>
+              <input
+                class="form-control input-width"
+                type="text"
+                id="too"
+                name="too"
+              />
+            </div>
+            <div class="form-row" style="padding-top: 5px">
+              <label class="form-check-label" for="cc">Cc</label>
+              <input
+                class="form-control input-width"
+                type="email"
+                id="ccc"
+                name="ccc"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- İkinci iki grup kutusu (Konu Aciklama ve Format Turu) -->
+      <div class="group-row">
+        <div class="group-box long-box">
+          <div class="form-row">
+            <label class="form-check-label" for="konu">Konu</label>
+            <input
+              class="form-control aciklama-width"
+              type="text"
+              id="konu"
+              name="konu"
+            />
+          </div>
+          <div class="form-row" style="padding-top: 5px">
+            <label class="form-check-label" for="aciklama">Aciklama</label>
+            <textarea
+              class="form-control aciklama-width"
+              rows="4"
+              cols="50"
+              placeholder="Yorumunuzu buraya yazın..."
+              id="aciklama"
+              name="aciklama"
+            >
+            </textarea>
+          </div>
+        </div>
+      </div>
+      <div class="group-row">
+        <div class="form-row" style="padding-top: 5px">
+          <select class="form-select" id="format" name="format">
+            <option value="pdf">PDF</option>
+            <option value="xlsx">Excel (XLSX)</option>
+            <option value="docx">Word (DOCX)</option>
+            <option value="xml">XML</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row" style="padding-top: 5px">
+        <button
+          class="btn btn-primary"
+          type="button"
+          id="mailButton"
+          onclick="sendmailAt()"
+        >
+          Gonder
+        </button>
+      </div>
+      <div class="field">
+        <label
+          id="error"
+          th:if="${error}"
+          class="forgot"
+          th:text="${error}"
+        ></label>
+        <span id="message" style="font-weight: bold"></span>
+      </div>
+      <input type="hidden" id="nerden" name="nerden" th:value="${nerden}" />
+      <input
+        type="hidden"
+        id="degerler"
+        name="degerler"
+        th:value="${degerler}"
+      />
+      <input type="hidden" id="extraValue" />
+      <input type="hidden" id="grprapor" />
+      <input type="hidden" id="tablobaslik" />
+    </form>
+  </div>
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
 
 <script src="/obs_js_files/sendemail/sendemail.js"></script>

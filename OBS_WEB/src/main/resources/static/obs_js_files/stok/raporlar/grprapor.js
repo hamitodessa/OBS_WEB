@@ -35,7 +35,6 @@ async function anagrpChanged(anagrpElement, altgrpElement) {
 	}
 }
 
-
 async function openenvModal(modal) {
 	$(modal).modal('show');
 	document.body.style.cursor = "wait";
@@ -127,8 +126,6 @@ async function grpfetchTableData() {
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
 	const mainTableBody = document.getElementById("mainTableBody");
 	mainTableBody.innerHTML = "";
-	let table = document.querySelector("#main-table");
-	let tfoot = table.querySelector("tfoot");
 	clearTfoot();
 	try {
 		const response = await fetchWithSessionCheck("stok/grpdoldur", {
@@ -145,8 +142,9 @@ async function grpfetchTableData() {
 		updateTableHeaders(data.baslik, data.sabitkolonsayisi);
 		let headers = data.baslik
 			.split(',')
-			.map(header => header.trim().replace(/\[|\]/g, "")); // ✅ **Köşeli parantezleri temizle**
+			.map(header => header.trim().replace(/\[|\]/g, ""));
 		tablobaslik = headers;
+		rowCounter = data.sabitkolonsayisi;
 		updateTable(data.data, headers, data.format, data.sabitkolonsayisi);
 		document.body.style.cursor = "default";
 	} catch (error) {
@@ -175,11 +173,11 @@ function updateTable(data, headers, format, kolonbaslangic) {
 			let td = document.createElement("td");
 			let cellValue = rowData[header] !== null ? rowData[header] : "";
 			if (index >= kolonbaslangic) {
-				let numericValue = parseFloat(cellValue); // ✅ **Sayısal olup olmadığını kontrol et**
+				let numericValue = parseFloat(cellValue);
 				if (!isNaN(numericValue)) {
 					td.textContent = format == 2 ? formatNumber2(numericValue) : formatNumber3(numericValue);
-					td.classList.add("double-column"); // ✅ **Formatlanan kolonlara ekstra class ekleyelim**
-					kolonToplamlari[index] += numericValue; // ✅ **Kolon toplamına ekle**
+					td.classList.add("double-column");
+					kolonToplamlari[index] += numericValue;
 				} else {
 					td.textContent = cellValue;
 				}
@@ -199,7 +197,7 @@ function updateTable(data, headers, format, kolonbaslangic) {
 			th.textContent = format == 2 ? formatNumber2(kolonToplamlari[index]) : formatNumber3(kolonToplamlari[index]);
 			th.classList.add("double-column");
 		} else {
-			th.textContent = ""; // ✅ **Sabit kolonlara boş değer koy**
+			th.textContent = "";
 		}
 		footerRow.appendChild(th);
 	});
@@ -213,7 +211,7 @@ function updateTableHeaders(baslikString, kolonbaslangic) {
 	trHead.classList.add("thead-dark");
 	let headers = baslikString
 		.split(',')
-		.map(header => header.trim().replace(/\[|\]/g, "")); // ✅ **Köşeli parantezleri temizle**
+		.map(header => header.trim().replace(/\[|\]/g, ""));
 	headers.forEach((header, index) => {
 		let th = document.createElement("th");
 		th.textContent = header;
@@ -238,8 +236,8 @@ async function grpdownloadReport() {
 	try {
 		const response = await fetchWithSessionCheckForDownload('stok/grp_download', {
 			method: "POST",
-			headers: { 'Content-Type': 'text/plain' }, 
-			body: tableString
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ headers: tablobaslik, data: tableString, sabitkolon: rowCounter }),
 		});
 		if (response.blob) {
 			const disposition = response.headers.get('Content-Disposition');
@@ -252,11 +250,9 @@ async function grpdownloadReport() {
 			a.click();
 			a.remove();
 			window.URL.revokeObjectURL(url);
-
 		} else {
 			throw new Error("Dosya indirilemedi.");
 		}
-		
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
@@ -269,58 +265,41 @@ async function grpdownloadReport() {
 
 async function grpmailAt() {
 	document.body.style.cursor = "wait";
-	let rows = extractTableData("main-table");
-	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
-	const degerler = "gruprapor";
+	let rows = extractTableData(tablobaslik);
+	localStorage.setItem("grprapor", rows);
+	localStorage.setItem("tablobaslik", tablobaslik);
+	const degerler = rowCounter + "," + "gruprapor";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
 }
 
 function extractTableData(headers) {
-	let rowsString = ""; // ✅ **Tüm veriyi önce `string` olarak tutuyoruz!**
+	let rowsString = "";
 	let table = document.querySelector("#main-table tbody");
-
-	if (!table) {
-		console.error("❌ Hata: Tablo bulunamadı!");
-		return "";
-	}
-
 	let tbodyRows = table.querySelectorAll("tr");
-
 	tbodyRows.forEach(tr => {
 		let rowString = "";
 		let tds = Array.from(tr.querySelectorAll("td"));
-
 		headers.forEach((header, index) => {
 			let td = tds[index];
 			let cellValue = td ? td.innerText.trim() : "";
-			rowString += cellValue + "||"; // ✅ **Özel ayırıcı ile birleştiriyoruz!**
+			rowString += cellValue + "||";
 		});
-
-		rowsString += rowString.slice(0, -2) + "\n"; // ✅ Satır sonuna `\n` koyuyoruz!
+		rowsString += rowString.slice(0, -2) + "\n";
 	});
-
-	// 📌 **Footer (Toplam Satırı) de Ekleyelim**
 	let footer = document.querySelector("#main-table tfoot");
 	if (footer) {
 		let footerString = "";
 		let ths = Array.from(footer.querySelectorAll("th"));
-
 		headers.forEach((header, index) => {
 			let th = ths[index];
 			let footerValue = th ? th.innerText.trim() : "";
 			footerString += footerValue + "||";
 		});
-
 		rowsString += footerString.slice(0, -2) + "\n";
 	}
-
-	console.info("🚀 **Tablodan String'e Çevrilen Veri (Sunucuda Parse Etmek İçin!):**", rowsString);
 	return rowsString;
 }
-
-
-
 
 function clearTfoot() {
 	let table = document.querySelector("#main-table");
