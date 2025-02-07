@@ -2,6 +2,7 @@ package com.hamit.obs.controller.stok.raporlar;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +22,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
+import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.reports.RaporOlustur;
@@ -257,6 +261,11 @@ public class GrupRaporController {
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 
+					System.out.println("🚀 **Sunucudan Gelen JSON:**");
+					for (Map<String, Object> row : grup) {
+					    System.out.println(row);
+					}
+									    
 					if(grupraporDTO.getBirim().equals("Tutar")) {
 						response.put("format",2);
 					}
@@ -264,7 +273,7 @@ public class GrupRaporController {
 						response.put("format",3);
 					}
 
-					response.put("baslik","Yil, " + baslikbakStrings[0]);  
+					response.put("baslik","Yil, " + baslikbakStrings[0] + ",TOPLAM");  
 					response.put("sabitkolonsayisi",1);
 				}
 			}
@@ -343,9 +352,17 @@ public class GrupRaporController {
 	}
 	
 	@PostMapping("stok/grp_download")
-	public ResponseEntity<byte[]> downloadReport(@RequestBody List<Map<String, String>> tableData) {
+	public ResponseEntity<byte[]> downloadReport(@RequestBody String tableDataString) {
 		ByteArrayDataSource dataSource ;
 		try {
+			
+			List<String> header = Arrays.asList("Yil", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "TOPLAM");
+
+	        // 📌 **String'i JSON'a Parse Et**
+			List<Map<String, String>> tableData = ResultSetConverter.parseTableData(tableDataString, header);
+			
+			
+			 
 			dataSource =  raporOlustur.grprap(tableData);
 			if (dataSource == null) {
 				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");

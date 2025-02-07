@@ -7,6 +7,7 @@ ozelkodlar = [];
 urnkodlar = [];
 rowCounter = 0;
 lastFocusedRow = null;
+tablobaslik = "";
 
 
 incrementRowCounter = function () {

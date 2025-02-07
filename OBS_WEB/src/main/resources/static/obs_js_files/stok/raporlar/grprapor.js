@@ -141,69 +141,13 @@ async function grpfetchTableData() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		
 		data = response;
-		rowCounter = data.sabitkolonsayisi;
-		let sqlHeaders = "";
-		sqlHeaders = data.baslik.split(',').map(header => header.trim().replace(/\[|\]/g, ""));
-		const sabitKolonlar = sqlHeaders.slice(0, data.sabitkolonsayisi);
-		const tumKolonlar = data.data.length > 0 ? Object.keys(data.data[0]) : [];
-		const dinamikKolonlar = tumKolonlar.filter(kolon => !sabitKolonlar.includes(kolon));
-		const headers = [...sabitKolonlar, ...dinamikKolonlar];
-		const kolonbaslangic = sabitKolonlar.length;
-
-		updateTableHeaders(headers, data.sabitkolonsayisi);
-
-		let kolonToplamlari = new Array(headers.length + 1).fill(0);
-		data.data.forEach(rowData => {
-			const row = document.createElement('tr');
-			row.classList.add('expandable', 'table-row-height');
-			let satirToplami = 0;
-			let rowContent = headers.map((key, index) => {
-				let cellValue = rowData[key] !== null ? rowData[key] : 0;
-				let numericValue = isNaN(cellValue) ? 0 : parseFloat(cellValue);
-				let td = "";
-				if (index >= kolonbaslangic) {
-					if (response.format === 2) {
-						td = `<td class="double-column">${formatNumber2(numericValue)}</td>`;
-					} else if (response.format === 3) {
-						td = `<td class="double-column">${formatNumber3(numericValue)}</td>`;
-					} else {
-						td = `<td class="double-column">${numericValue}</td>`;
-					}
-					satirToplami += numericValue;
-					kolonToplamlari[index] += numericValue; 
-				} else {
-					td = `<td>${cellValue}</td>`;
-				}
-				return td;
-			}).join("");
-
-			rowContent += `<td class="double-column">${formatNumber2(satirToplami)}</td>`;
-			kolonToplamlari[kolonToplamlari.length - 1] += satirToplami;
-			row.innerHTML = rowContent;
-			mainTableBody.appendChild(row);
-		});
-		let tableHeaderRow = document.querySelector("#main-table thead tr");
-		let toplamTh = document.createElement("th");
-		toplamTh.classList.add("double-column");
-		toplamTh.textContent = "TOPLAM";
-		tableHeaderRow.appendChild(toplamTh);
-		let footerRow = document.createElement('tr');
-		footerRow.classList.add('table-footer');
-		let footerContent = headers.map((_, index) => {
-			if (index >= kolonbaslangic) {
-				return `<td class="double-column" id="toplam-${index}">${formatNumber2(kolonToplamlari[index])}</td>`;
-			} else {
-				return `<td></td>`;
-			}
-		}).join("");
-		footerContent += `<td class="double-column">${formatNumber2(kolonToplamlari[kolonToplamlari.length - 1])}</td>`;
-		footerRow.innerHTML = footerContent;
-
-		tfoot.innerHTML = ""; 
-		tfoot.appendChild(footerRow);
-
+		updateTableHeaders(data.baslik, data.sabitkolonsayisi);
+		let headers = data.baslik
+			.split(',')
+			.map(header => header.trim().replace(/\[|\]/g, "")); // ✅ **Köşeli parantezleri temizle**
+		tablobaslik = headers;
+		updateTable(data.data, headers, data.format, data.sabitkolonsayisi);
 		document.body.style.cursor = "default";
 	} catch (error) {
 		errorDiv.style.display = "block";
@@ -214,22 +158,66 @@ async function grpfetchTableData() {
 	}
 }
 
-function updateTableHeaders(headers, kolonbaslangic) {
-	let thead = document.querySelector("#main-table thead");
-	let table = document.querySelector("#main-table");
-	let tfoot = table.querySelector("tfoot");
+function updateTable(data, headers, format, kolonbaslangic) {
+	let table = document.querySelector("#main-table tbody");
+	let tfoot = document.querySelector("#main-table tfoot");
+	table.innerHTML = "";
 	if (!tfoot) {
 		tfoot = document.createElement("tfoot");
-		table.appendChild(tfoot);
+		document.querySelector("#main-table").appendChild(tfoot);
 	}
+	tfoot.innerHTML = "";
+	let kolonToplamlari = new Array(headers.length).fill(0);
+	data.forEach(rowData => {
+		let row = document.createElement("tr");
+		row.classList.add("table-row-height");
+		headers.forEach((header, index) => {
+			let td = document.createElement("td");
+			let cellValue = rowData[header] !== null ? rowData[header] : "";
+			if (index >= kolonbaslangic) {
+				let numericValue = parseFloat(cellValue); // ✅ **Sayısal olup olmadığını kontrol et**
+				if (!isNaN(numericValue)) {
+					td.textContent = format == 2 ? formatNumber2(numericValue) : formatNumber3(numericValue);
+					td.classList.add("double-column"); // ✅ **Formatlanan kolonlara ekstra class ekleyelim**
+					kolonToplamlari[index] += numericValue; // ✅ **Kolon toplamına ekle**
+				} else {
+					td.textContent = cellValue;
+				}
+			} else {
+				td.textContent = cellValue;
+			}
+			row.appendChild(td);
+		});
+		table.appendChild(row);
+	});
+
+	let footerRow = document.createElement("tr");
+	footerRow.classList.add("table-footer");
+	headers.forEach((header, index) => {
+		let th = document.createElement("th");
+		if (index >= kolonbaslangic) {
+			th.textContent = format == 2 ? formatNumber2(kolonToplamlari[index]) : formatNumber3(kolonToplamlari[index]);
+			th.classList.add("double-column");
+		} else {
+			th.textContent = ""; // ✅ **Sabit kolonlara boş değer koy**
+		}
+		footerRow.appendChild(th);
+	});
+	tfoot.appendChild(footerRow);
+}
+
+function updateTableHeaders(baslikString, kolonbaslangic) {
+	let thead = document.querySelector("#main-table thead");
 	thead.innerHTML = "";
 	let trHead = document.createElement("tr");
 	trHead.classList.add("thead-dark");
+	let headers = baslikString
+		.split(',')
+		.map(header => header.trim().replace(/\[|\]/g, "")); // ✅ **Köşeli parantezleri temizle**
 	headers.forEach((header, index) => {
 		let th = document.createElement("th");
 		th.textContent = header;
 		if (index >= kolonbaslangic) {
-
 			th.classList.add("double-column");
 		}
 		trHead.appendChild(th);
@@ -246,12 +234,12 @@ async function grpdownloadReport() {
 	$indirButton.prop('disabled', true).text('İşleniyor...');
 	const $yenileButton = $('#grpyenileButton');
 	$yenileButton.prop('disabled', true);
-	let rows = extractTableData("main-table", rowCounter);
+	let tableString = extractTableData(tablobaslik);
 	try {
 		const response = await fetchWithSessionCheckForDownload('stok/grp_download', {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(rows)
+			headers: { 'Content-Type': 'text/plain' }, 
+			body: tableString
 		});
 		if (response.blob) {
 			const disposition = response.headers.get('Content-Disposition');
@@ -264,9 +252,11 @@ async function grpdownloadReport() {
 			a.click();
 			a.remove();
 			window.URL.revokeObjectURL(url);
+
 		} else {
 			throw new Error("Dosya indirilemedi.");
 		}
+		
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
@@ -286,45 +276,50 @@ async function grpmailAt() {
 	mailsayfasiYukle(url);
 }
 
-function extractTableData(tableId) {
-	let table = document.querySelector(`#${tableId}`);
-	let headers = Array.from(table.querySelectorAll("thead th")).map(th => th.innerText.trim());
-	let rows = [];
+function extractTableData(headers) {
+	let rowsString = ""; // ✅ **Tüm veriyi önce `string` olarak tutuyoruz!**
+	let table = document.querySelector("#main-table tbody");
 
-	console.log("Başlıklar:", headers); // 📌 Kontrol için ekledik
+	if (!table) {
+		console.error("❌ Hata: Tablo bulunamadı!");
+		return "";
+	}
 
-	table.querySelectorAll("tbody tr").forEach(tr => {
-		let rowData = {};
+	let tbodyRows = table.querySelectorAll("tr");
+
+	tbodyRows.forEach(tr => {
+		let rowString = "";
 		let tds = Array.from(tr.querySelectorAll("td"));
 
 		headers.forEach((header, index) => {
-			let td = tds[index]; // Doğru `td` hücresini al
-			let cellValue = td ? td.innerText.trim() : ""; // Boşsa boş string ata
-			rowData[header] = cellValue; // 📌 Key olarak başlık ismini kullan
+			let td = tds[index];
+			let cellValue = td ? td.innerText.trim() : "";
+			rowString += cellValue + "||"; // ✅ **Özel ayırıcı ile birleştiriyoruz!**
 		});
 
-		rows.push(rowData);
+		rowsString += rowString.slice(0, -2) + "\n"; // ✅ Satır sonuna `\n` koyuyoruz!
 	});
 
-	// 📌 FOOTER (Toplam satırlarını ekleyelim)
-	let tfoot = table.querySelector("tfoot");
-	if (tfoot) {
-		let footerData = {};
-		let ths = Array.from(tfoot.querySelectorAll("th"));
+	// 📌 **Footer (Toplam Satırı) de Ekleyelim**
+	let footer = document.querySelector("#main-table tfoot");
+	if (footer) {
+		let footerString = "";
+		let ths = Array.from(footer.querySelectorAll("th"));
 
 		headers.forEach((header, index) => {
-			let th = ths[index]; // Doğru `th` hücresini al
+			let th = ths[index];
 			let footerValue = th ? th.innerText.trim() : "";
-			footerData[header] = footerValue;
+			footerString += footerValue + "||";
 		});
 
-		rows.push(footerData);
+		rowsString += footerString.slice(0, -2) + "\n";
 	}
 
-	console.log("Dönüştürülen JSON:", rows); // 📌 Kontrol için JSON'u yazdır
-
-	return rows;
+	console.info("🚀 **Tablodan String'e Çevrilen Veri (Sunucuda Parse Etmek İçin!):**", rowsString);
+	return rowsString;
 }
+
+
 
 
 function clearTfoot() {
