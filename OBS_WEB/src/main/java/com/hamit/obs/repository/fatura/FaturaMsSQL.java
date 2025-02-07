@@ -2010,7 +2010,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2049,7 +2049,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2089,7 +2089,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2129,7 +2129,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2168,7 +2168,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2246,7 +2246,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2287,7 +2287,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet);  
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}

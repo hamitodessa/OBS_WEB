@@ -92,7 +92,7 @@ public class GrupRaporController {
 					else {
 						response.put("format",3);
 					}
-					response.put("baslik","Urun_Kodu, Urun_Adi , Birim , " + baslikbakStrings[0]);  
+					response.put("baslik","Urun_Kodu, Urun_Adi , Birim , " + baslikbakStrings[0] + ",TOPLAM");   
 					response.put("sabitkolonsayisi",3);
 				}
 			}
@@ -125,7 +125,7 @@ public class GrupRaporController {
 					else {
 						response.put("format",3);
 					}
-					response.put("baslik","Urun_Kodu,Urun_Adi,Birim,Yil, " + baslikbakStrings[0]);  
+					response.put("baslik","Urun_Kodu,Urun_Adi,Birim,Yil, " + baslikbakStrings[0] + ",TOPLAM");   
 					response.put("sabitkolonsayisi",4);
 				}
 			}
@@ -159,7 +159,7 @@ public class GrupRaporController {
 					else {
 						response.put("format",3);
 					}
-					response.put("baslik","Hesap_Kodu,Unvan, " + baslikbakStrings[0]);  
+					response.put("baslik","Hesap_Kodu,Unvan, " + baslikbakStrings[0] + ",TOPLAM");   
 					response.put("sabitkolonsayisi",2);
 				}
 			}
@@ -195,7 +195,7 @@ public class GrupRaporController {
 					else {
 						response.put("format",3);
 					}
-					response.put("baslik","Musteri_Kodu,Unvan,Yil, " + baslikbakStrings[0]);  
+					response.put("baslik","Musteri_Kodu,Unvan,Yil, " + baslikbakStrings[0] + ",TOPLAM");    
 					response.put("sabitkolonsayisi",3);
 				}
 			}
@@ -225,7 +225,7 @@ public class GrupRaporController {
 					else {
 						response.put("format",3);
 					}
-					response.put("baslik","Yil,Ay, " + baslikbakStrings[0]);  
+					response.put("baslik","Yil,Ay, " + baslikbakStrings[0] + ",TOPLAM");   
 					response.put("sabitkolonsayisi",2);
 				}
 			}
@@ -282,7 +282,7 @@ public class GrupRaporController {
 					else {
 						response.put("format",3);
 					}
-					response.put("baslik","Ana_Grup,Alt_Grup, " + baslikbakStrings[0]);  
+					response.put("baslik","Ana_Grup,Alt_Grup, " + baslikbakStrings[0] + ",TOPLAM");    
 					response.put("sabitkolonsayisi",2);
 				}
 			}
@@ -314,7 +314,7 @@ public class GrupRaporController {
 					else {
 						response.put("format",3);
 					}
-					response.put("baslik","Ana_Grup,Alt_Grup,Yil, " + baslikbakStrings[0]);  
+					response.put("baslik","Ana_Grup,Alt_Grup,Yil, " + baslikbakStrings[0] + ",TOPLAM");    
 					response.put("sabitkolonsayisi",3);
 				}
 			}

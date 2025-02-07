@@ -47,16 +47,6 @@ public class ResultSetConverter {
 		return resultList;
 	}
 
-	public static List<Map<String, Object>> copyPivotList1(List<Map<String, Object>> originalList) {
-		List<Map<String, Object>> copiedList = new ArrayList<>();
-
-		for (Map<String, Object> row : originalList) {
-			Map<String, Object> copiedRow = new LinkedHashMap<>(row);
-			copiedList.add(copiedRow);
-		}
-		return copiedList;
-	}
-
 	public static List<Map<String, String>> parseTableData(String data, List<String> headers) {
 		List<Map<String, String>> resultList = new ArrayList<>();
 		String[] rows = data.split("\n"); 
