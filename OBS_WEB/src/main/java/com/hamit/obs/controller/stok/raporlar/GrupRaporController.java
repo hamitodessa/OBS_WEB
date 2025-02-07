@@ -1,12 +1,19 @@
 package com.hamit.obs.controller.stok.raporlar;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.util.ByteArrayDataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +35,13 @@ import com.hamit.obs.service.user.UserService;
 public class GrupRaporController {
 
 	@Autowired
-	private FaturaService faturaService;
-
-	@Autowired
 	private UserService userService;
-
+	
 	@Autowired
 	private RaporOlustur raporOlustur;
+	
+	@Autowired
+	private FaturaService faturaService;
 
 	@GetMapping("/stok/grprapor")
 	public String stokrapor() {
@@ -334,6 +341,31 @@ public class GrupRaporController {
 		}
 		return response;
 	}
+	
+	@PostMapping("stok/grp_download")
+	public ResponseEntity<byte[]> downloadReport(@RequestBody List<Map<String, String>> tableData) {
+		ByteArrayDataSource dataSource ;
+		try {
+			dataSource =  raporOlustur.grprap(tableData);
+			if (dataSource == null) {
+				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");
+			}
+			byte[] fileContent = dataSource.getInputStream().readAllBytes();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			String fileName = "Grup_Rapor.xlsx";
+			headers.setContentDispositionFormData("attachment", fileName);
+			return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+		} catch (ServiceException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().getBytes(StandardCharsets.UTF_8));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Beklenmeyen bir hata oluştu.".getBytes(StandardCharsets.UTF_8));
+		} finally {
+			dataSource = null;
+		}	
+	}
+
+	
 
 	private String[] baslik_bak(grupraporDTO grupraporDTO)
 	{

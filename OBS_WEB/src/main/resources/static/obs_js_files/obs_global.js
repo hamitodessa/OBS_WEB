@@ -8,6 +8,7 @@ urnkodlar = [];
 rowCounter = 0;
 lastFocusedRow = null;
 
+
 incrementRowCounter = function () {
 	rowCounter++;
 };

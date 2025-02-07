@@ -141,8 +141,9 @@ async function grpfetchTableData() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		console.info(response);
+		
 		data = response;
+		rowCounter = data.sabitkolonsayisi;
 		let sqlHeaders = "";
 		sqlHeaders = data.baslik.split(',').map(header => header.trim().replace(/\[|\]/g, ""));
 		const sabitKolonlar = sqlHeaders.slice(0, data.sabitkolonsayisi);
@@ -151,7 +152,7 @@ async function grpfetchTableData() {
 		const headers = [...sabitKolonlar, ...dinamikKolonlar];
 		const kolonbaslangic = sabitKolonlar.length;
 
-		updateTableHeaders(headers, data.sabitkolonsayisi, response.format);
+		updateTableHeaders(headers, data.sabitkolonsayisi);
 
 		let kolonToplamlari = new Array(headers.length + 1).fill(0);
 		data.data.forEach(rowData => {
@@ -213,7 +214,7 @@ async function grpfetchTableData() {
 	}
 }
 
-function updateTableHeaders(headers, kolonbaslangic, format) {
+function updateTableHeaders(headers, kolonbaslangic) {
 	let thead = document.querySelector("#main-table thead");
 	let table = document.querySelector("#main-table");
 	let tfoot = table.querySelector("tfoot");
@@ -227,7 +228,6 @@ function updateTableHeaders(headers, kolonbaslangic, format) {
 	headers.forEach((header, index) => {
 		let th = document.createElement("th");
 		th.textContent = header;
-		console.info(index + "--" + header + "--" + kolonbaslangic);
 		if (index >= kolonbaslangic) {
 
 			th.classList.add("double-column");
@@ -246,7 +246,7 @@ async function grpdownloadReport() {
 	$indirButton.prop('disabled', true).text('İşleniyor...');
 	const $yenileButton = $('#grpyenileButton');
 	$yenileButton.prop('disabled', true);
-	let rows = extractTableData("main-table");
+	let rows = extractTableData("main-table", rowCounter);
 	try {
 		const response = await fetchWithSessionCheckForDownload('stok/grp_download', {
 			method: "POST",
@@ -288,40 +288,44 @@ async function grpmailAt() {
 
 function extractTableData(tableId) {
 	let table = document.querySelector(`#${tableId}`);
-	let headers = [];
+	let headers = Array.from(table.querySelectorAll("thead th")).map(th => th.innerText.trim());
 	let rows = [];
-	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+
+	console.log("Başlıklar:", headers); // 📌 Kontrol için ekledik
+
 	table.querySelectorAll("tbody tr").forEach(tr => {
 		let rowData = {};
-		let nonEmptyCount = 0;
-		tr.querySelectorAll("td").forEach((td, index) => {
-			let value = td.innerText.trim();
-			if (value !== "") {
-				nonEmptyCount++;
-			}
-			rowData[headers[index]] = value;
+		let tds = Array.from(tr.querySelectorAll("td"));
+
+		headers.forEach((header, index) => {
+			let td = tds[index]; // Doğru `td` hücresini al
+			let cellValue = td ? td.innerText.trim() : ""; // Boşsa boş string ata
+			rowData[header] = cellValue; // 📌 Key olarak başlık ismini kullan
 		});
-		if (nonEmptyCount > 0) {
-			rows.push(rowData);
-		}
+
+		rows.push(rowData);
 	});
+
+	// 📌 FOOTER (Toplam satırlarını ekleyelim)
 	let tfoot = table.querySelector("tfoot");
 	if (tfoot) {
-		let tfootRowData = {};
-		let nonEmptyCount = 0;
-		tfoot.querySelectorAll("th").forEach((th, index) => {
-			let value = th.innerText.trim();
-			if (value !== "") {
-				nonEmptyCount++;
-			}
-			tfootRowData[headers[index]] = value;
+		let footerData = {};
+		let ths = Array.from(tfoot.querySelectorAll("th"));
+
+		headers.forEach((header, index) => {
+			let th = ths[index]; // Doğru `th` hücresini al
+			let footerValue = th ? th.innerText.trim() : "";
+			footerData[header] = footerValue;
 		});
-		if (nonEmptyCount > 0) {
-			rows.push(tfootRowData);
-		}
+
+		rows.push(footerData);
 	}
+
+	console.log("Dönüştürülen JSON:", rows); // 📌 Kontrol için JSON'u yazdır
+
 	return rows;
 }
+
 
 function clearTfoot() {
 	let table = document.querySelector("#main-table");

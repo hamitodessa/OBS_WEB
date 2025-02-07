@@ -66,13 +66,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.fat_firma_adi(fatConnDetails) ;
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<Map<String, Object>> urun_kodlari(){
@@ -81,13 +75,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.urun_kodlari(fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -97,13 +85,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.stk_urun(sira,arama, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -113,13 +95,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.urun_kod_degisken_ara(fieldd,sno,nerden,arama, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -129,13 +105,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.stk_kod_degisken_oku(fieldd,sno,nerden,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -145,13 +115,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.stk_kod_alt_grup_degisken_oku(sno,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public String ur_kod_bak(String kodu) {
@@ -160,13 +124,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.ur_kod_bak(kodu,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -176,13 +134,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.stk_ur_sil(kodu,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -192,13 +144,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.stk_ur_kayit(urunDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -214,13 +160,7 @@ public class FaturaService {
 			
 			strategy.stk_firma_adi_kayit(fadi,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public String uret_son_bordro_no_al() {
@@ -229,13 +169,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.uret_son_bordro_no_al(fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -245,13 +179,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.stok_oku(eno,cins,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public String aciklama_oku(String evrcins, int satir, String evrno, String gircik) {
@@ -260,13 +188,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.aciklama_oku(evrcins, satir,evrno,gircik,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -276,13 +198,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.urun_adi_oku(kodu, kodbarcode,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -292,13 +208,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.son_imalat_fiati_oku(kodu,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -308,13 +218,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.uret_ilk_tarih(baslangic,tar,ukodu,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public double gir_ort_fiati_oku(String kodu, String ilkt, String tarih) {
@@ -323,13 +227,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.gir_ort_fiati_oku(kodu,ilkt,tarih,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -339,13 +237,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.uretim_fisno_al(fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -355,13 +247,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.recete_oku(rno,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -377,13 +263,7 @@ public class FaturaService {
 			
 			strategy.stok_sil(eno,ecins,cins,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -402,13 +282,7 @@ public class FaturaService {
 			strategy.stk_kaydet(evrno,evrcins,tarih,depo,urnkodu,miktar,fiat,tutar,kdvlitut,hareket,izah,anagrp,altgrp,kur,
 					b1,doviz,hspkodu,usr,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -424,13 +298,7 @@ public class FaturaService {
 			
 			strategy.aciklama_yaz(evrcins,satir,evrno,aciklama,gircik,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -446,13 +314,7 @@ public class FaturaService {
 			
 			strategy.aciklama_sil(evrcins,evrno,cins,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -462,13 +324,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.urun_arama(fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -478,13 +334,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.urun_degisken_eski(fieldd,degisken_adi,nerden,sno,ID,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -494,13 +344,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.urun_degisken_alt_grup_eski(alt_grup,ana_grup,ID,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -510,13 +354,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.urun_degisken_kayit(fieldd,nerden,degisken_adi,sira,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -526,13 +364,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.urun_degisken_alt_grup_kayit(alt_grup,ana_grup,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -542,13 +374,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.alt_grup_kontrol(anagrp,altgrp,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -564,13 +390,7 @@ public class FaturaService {
 			
 			strategy.urun_degisken_alt_grup_sil(id,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -585,13 +405,7 @@ public class FaturaService {
 			
 			strategy.urun_kod_degisken_sil(hangi_Y,nerden,sira,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public double son_satis_fiati_oku(String kodu,String muskodu,String gircik) {
@@ -600,13 +414,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.son_satis_fiati_oku(kodu,muskodu,gircik,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -616,13 +424,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.fatura_oku(fno,cins,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -632,13 +434,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.dipnot_oku(ino,cins,gircik,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -648,13 +444,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.son_no_al(cins,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -664,13 +454,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.fatura_no_al(cins,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -686,13 +470,7 @@ public class FaturaService {
 			
 			strategy.fat_giris_sil(fno,cins,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -700,7 +478,6 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			
 			loglamaDTO.setEvrak(ino);
 			loglamaDTO.setmESAJ("Fatura Dip Not Sil "  + ino);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
@@ -708,13 +485,7 @@ public class FaturaService {
 			
 			strategy.dipnot_sil(ino,cins,gircik,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -724,13 +495,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.fat_oz_kod(cins,fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -741,21 +506,13 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			
 			loglamaDTO.setEvrak(fatno);
 			loglamaDTO.setmESAJ(gircik + " Fatura Kayit " +  kodu + " Mik=" + miktar + " Tut=" + tutar);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
 			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
-			
 			strategy.fat_kaydet(fatno, kodu, depo, fiat, tevkifat, miktar, gircik, tutar, iskonto, kdv, tarih, izah, doviz, adrfirma, carfirma, ozkod, kur, cins, anagrp, altgrp, usr, fatConnDetails);		
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -763,21 +520,13 @@ public class FaturaService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			
 			loglamaDTO.setEvrak(eno);
 			loglamaDTO.setmESAJ("Fatura Dip Not Yaz : "  + bir);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
 			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
-			
 			strategy.dipnot_yaz(eno, bir, iki, uc, tip, gircik, usr, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -787,13 +536,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.recete_son_bordro_no_al(fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -803,13 +546,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.recete_no_al(fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -819,13 +556,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.rec_sil(rno,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -835,13 +566,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.kod_recete_yaz(ukodu,rec,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -851,13 +576,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			strategy.recete_kayit(recno, durum, tur, kodu, miktar, anagrp, altgrup, usr, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -867,13 +586,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.zayi_son_bordro_no_al(fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -883,13 +596,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.zayi_fisno_al(fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -899,13 +606,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.zayi_oku(eno,cins,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -915,13 +616,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.fat_rapor(fatraporDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -931,13 +626,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.fat_detay_rapor(fno,turu,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -947,13 +636,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.fat_rapor_fat_tar(fatraporDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -963,13 +646,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.fat_rapor_cari_kod(fatraporDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -979,13 +656,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.imalat_rapor(imaraporDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -995,13 +666,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.envanter_rapor(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1011,13 +676,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.envanter_rapor_fifo(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1027,13 +686,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.envanter_rapor_fifo_2(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1043,13 +696,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.envanter_rapor_lifo(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1059,13 +706,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.envanter_rapor_u_kodu_oncekitarih(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1075,13 +716,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.envanter_rapor_u_kodu(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1091,13 +726,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.envanter_rapor_ana_grup_alt_grup(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1107,13 +736,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.baslik_bak(baslik, ordr, jkj, ch1, k1, k2, f1, f2, t1, t2, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1124,13 +747,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.grp_urn_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1141,13 +758,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.grp_urn_kodlu_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1159,13 +770,7 @@ public class FaturaService {
 			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.grp_mus_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1177,13 +782,7 @@ public class FaturaService {
 			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.grp_mus_kodlu_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1194,13 +793,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.grp_yil_ay(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1211,13 +804,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.grp_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1228,13 +815,7 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.grp_ana_grup(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -1245,13 +826,17 @@ public class FaturaService {
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.grp_ana_grup_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
+	}
+	
+	private String errorMessages(ServiceException e) {
+		String originalMessage = e.getMessage();
+		Throwable cause = e.getCause();
+		String detailedMessage = originalMessage;
+		if (cause != null) {
+			detailedMessage += " - " + cause.getMessage();
+		}
+		return detailedMessage;
 	}
 }

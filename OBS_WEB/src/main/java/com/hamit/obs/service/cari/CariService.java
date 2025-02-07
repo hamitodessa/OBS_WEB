@@ -75,13 +75,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hesap_adi_oku(hesap,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2){
@@ -90,13 +84,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.ekstre(hesap, t1, t2,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<Map<String, Object>> hesap_kodlari(){
@@ -105,13 +93,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hesap_kodlari(cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<Map<String, Object>> hp_pln(){
@@ -120,13 +102,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hp_pln(cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -136,13 +112,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.cari_sonfisno(cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -163,13 +133,7 @@ public class CariService {
 			loglamaRepository.log_kaydet(loglamaDTO, cariConnDetails);
 			return strategy.cari_dekont_kaydet(dBilgi,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<dekontDTO> fiskon(int fisNo){
@@ -178,13 +142,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.fiskon(fisNo,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public int yenifisno() {
@@ -193,13 +151,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.yenifisno(cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public void evrak_yoket(int evrakno,String user) {
@@ -212,13 +164,7 @@ public class CariService {
 			loglamaRepository.log_kaydet(loglamaDTO, cariConnDetails);
 			strategy.evrak_yoket(evrakno, cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -228,13 +174,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.mizan(mizanDTO,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -244,13 +184,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.cari_firma_adi(cariConnDetails) ;
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public void hsp_sil(String hesap)
@@ -260,13 +194,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.hsp_sil(hesap,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -277,13 +205,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.hpln_kayit(hesapplaniDTO,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -294,13 +216,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.hpln_detay_kayit(hesapplaniDTO,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public hesapplaniDTO hsp_pln(String hesap){
@@ -309,13 +225,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hsp_pln(hesap,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -325,13 +235,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.ozel_mizan(mizanDTO,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -341,13 +245,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.dvzcevirme(dvzcevirmeDTO,cariConnDetails,kurService.conn_details());
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -357,13 +255,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.banka_sube(nerden,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -373,13 +265,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tahfiskon(fisNo,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -389,13 +275,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tah_cek_doldur(fisNo,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -405,13 +285,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.cari_tahsonfisno(tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -421,13 +295,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.cari_tah_fisno_al(tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -437,13 +305,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.tah_kayit(tahsilatDTO,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -457,13 +319,7 @@ public class CariService {
 			loglamaRepository.log_kaydet(loglamaDTO, cariConnDetails);
 			strategy.tah_cek_sil(tahsilatDTO,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -473,13 +329,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.tah_cek_kayit(tahsilatTableRowDTO,fisno,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -494,13 +344,7 @@ public class CariService {
 			loglamaRepository.log_kaydet(loglamaDTO, cariConnDetails);
 			strategy.tah_sil(fisno,tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -510,13 +354,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tah_listele(tahrapDTO,cariConnDetails,adresService.conn_details());
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -526,13 +364,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tahayaroku(cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -543,13 +375,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.tahayar_kayit(tahayarDTO,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -559,13 +385,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tah_ayar_oku(cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -575,13 +395,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.tah_cek_kayit_aktar(fisno, tah_ted,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -591,13 +405,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			strategy.cari_firma_adi_kayit(fadi,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<Map<String, Object>> hsppln_liste(){
@@ -606,13 +414,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hsppln_liste(cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -622,13 +424,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.hesap_plani_kayit_adedi(cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -642,13 +438,7 @@ public class CariService {
 			loglamaRepository.log_kaydet(loglamaDTO, cariConnDetails);
 			strategy.cari_kod_degis_hesap(eskikod,yenikod,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -662,13 +452,7 @@ public class CariService {
 			loglamaRepository.log_kaydet(loglamaDTO, cariConnDetails);
 			strategy.cari_kod_degis_satirlar(eskikod,yenikod,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -682,13 +466,7 @@ public class CariService {
 			loglamaRepository.log_kaydet(loglamaDTO, cariConnDetails);
 			strategy.cari_kod_degis_tahsilat(eskikod,yenikod,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<Map<String, Object>> kasa_kontrol(String hesap, String t1){
@@ -697,13 +475,7 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.kasa_kontrol(hesap,t1,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<Map<String, Object>> kasa_mizan(String kod, String ilktarih, String sontarih){
@@ -712,13 +484,17 @@ public class CariService {
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 			return strategy.kasa_mizan(kod,ilktarih,sontarih ,cariConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
+	}
+	
+	private String errorMessages(ServiceException e) {
+		String originalMessage = e.getMessage();
+		Throwable cause = e.getCause();
+		String detailedMessage = originalMessage;
+		if (cause != null) {
+			detailedMessage += " - " + cause.getMessage();
+		}
+		return detailedMessage;
 	}
 }
