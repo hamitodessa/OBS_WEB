@@ -37,9 +37,8 @@ public class ResultSetConverter {
 				String columnName = metaData.getColumnLabel(i);
 				Object columnValue = resultSet.getObject(i);
 				rowMap.put(columnName, columnValue);
-				if (columnValue instanceof Number) {
+				if (columnValue instanceof Number)
 					toplam += ((Number) columnValue).doubleValue();
-				}
 			}
 			rowMap.put("TOPLAM", toplam);
 			resultList.add(rowMap);
@@ -53,9 +52,8 @@ public class ResultSetConverter {
 		for (String row : rows) {
 			String[] values = row.split("\\|\\|");
 			Map<String, String> rowData = new LinkedHashMap<>();
-			for (int i = 0; i < headers.size(); i++) {
+			for (int i = 0; i < headers.size(); i++)
 				rowData.put(headers.get(i), values[i]);
-			}
 			resultList.add(rowData);
 		}
 		return resultList;

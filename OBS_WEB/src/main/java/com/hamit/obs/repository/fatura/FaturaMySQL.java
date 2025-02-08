@@ -24,7 +24,6 @@ import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
-
 @Component
 public class FaturaMySQL implements IFaturaDatabase {
 
@@ -1278,119 +1277,1148 @@ public class FaturaMySQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String calisanpara= envanterDTO.getDoviz() ;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql =    " SELECT mal.Kodu As Kodu ,mal.Adi as Adi, mal.Birim as Simge, " +
+				"case when mal.Kusurat = 0 then Format( IFNULL((SELECT sum(Miktar) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu AND d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ) ,0),0) " + // N0
+				" when mal.Kusurat = 1 then Format( IFNULL((SELECT sum(Miktar) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu And d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ) ,0),1) " + // N1
+				" when mal.Kusurat = 2 then Format( IFNULL((SELECT sum(Miktar) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu And d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ) ,0),2) " + // N2
+				" ELSE Format( IFNULL((SELECT sum(Miktar) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu And d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ) ,0),3) " +
+				" End  As Giris_Miktari  , " +
+				" IFNULL((Select  sum(Tutar) " +
+				" FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu And  d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0) as Giris_Tutar, " +
+				" CASE WHEN kusurat = 0 THEN format(IFNULL((SELECT sum(abs(miktar)) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu AND  d.Hareket ='C' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0),0) " +
+				" WHEN kusurat = 1 THEN format(IFNULL((SELECT sum(abs(miktar)) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu And  d.Hareket ='C' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0),1) " +
+				" WHEN kusurat = 2 THEN format(IFNULL((SELECT sum(abs(miktar)) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu And  d.Hareket ='C' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0),2) " +
+				" ELSE format(IFNULL((SELECT sum(abs(miktar)) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu And  d.Hareket ='C' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0),3) " +
+				" End As Cikis_Miktari , " +
+				" IFNULL((Select sum(IF(d.Doviz = '" + calisanpara + "',abs(Tutar),abs(Tutar)* d.Kur))  " +
+				" FROM STOK d " +  
+				" WHERE  d.Urun_Kodu=mal.kodu And  d.Hareket='C' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0) as Cikis_Tutar, " +
+				" IFNULL((SELECT sum(abs(miktar)) FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu AND  d.Hareket ='C' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0) *  " +
+				" IFNULL((SELECT  sum(Tutar)/ sum(IF(miktar=0 ,1,miktar)) " +
+				" FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu AND  d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0) as Cikis_Maliyet, " +
+				"" + 
+				"  CASE WHEN kusurat = 0 THEN format( IFNULL((SELECT ROUND(SUM(CASE when Hareket = 'G' then miktar else 0 END - CASE when Hareket= 'C' then abs(miktar) else 0 END),3) " +
+				" FROM STOK d WHERE  d.Urun_Kodu=mal.kodu " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0),0) " +
+				" WHEN kusurat = 1 THEN format( IFNULL((SELECT ROUND(SUM(CASE when Hareket = 'G' then miktar else 0 END - CASE when Hareket= 'C' then abs(miktar) else 0 END),3) " +
+				" FROM STOK d WHERE  d.Urun_Kodu=mal.kodu " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0),1) " +
+				" WHEN kusurat = 2 THEN format( IFNULL((SELECT ROUND(SUM(CASE when Hareket = 'G' then miktar else 0 END - CASE when Hareket= 'C' then abs(miktar) else 0 END),3) " +
+				" FROM STOK d WHERE  d.Urun_Kodu=mal.kodu " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0),2) " +
+				" ELSE format( IFNULL((SELECT ROUND(SUM(CASE when Hareket = 'G' then miktar else 0 END - CASE when Hareket= 'C' then abs(miktar) else 0 END),3) " +
+				" FROM STOK d WHERE  d.Urun_Kodu=mal.kodu " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0),3) " +
+				" End  As Stok_Miktari, " +
+				" IFNULL((Select  sum(Tutar)/ sum(IF(miktar=0 ,1,miktar)) " +
+				" FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu And  d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0) as Maliyet, " +
+				" IFNULL(((IFNULL((SELECT sum(miktar) FROM STOK d " +
+				"  WHERE  d.Urun_Kodu=mal.kodu AND  d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ) ,0) )  - ( IFNULL((SELECT sum(abs(miktar)) FROM STOK d  " +
+				" WHERE  d.Urun_Kodu=mal.kodu AND  d.Hareket='C' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" ),0) ) ) * ((SELECT  sum(Tutar)/ sum(IF(miktar=0 ,1,miktar)) " +
+				" FROM STOK d " +
+				" WHERE  d.Urun_Kodu=mal.kodu AND  d.Hareket='G' " +
+				" AND d.Tarih >= '" + envanterDTO.getTar1() + "' AND  d.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND d.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND d.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND d.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND d.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND d.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND d.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND d.Depo " + envanterDTO.getDepo() +
+				" AND d.Evrak_Cins " + wee +
+				" AND d.Evrak_Cins " + ure1 +
+				" )),0) AS Tutar " +
+				" FROM MAL USE INDEX (IX_MAL) " +
+				" WHERE   Kodu >= N'" + envanterDTO.getUkod1() + "' AND  Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND Stok.Urun_Kodu = MAL.Kodu " +
+				" AND MAL.Ana_Grup " + envanterDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + envanterDTO.getUraltgrp() +
+				" AND Stok.Tarih >= '" + envanterDTO.getTar1() + "' AND  Stok.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.999'" +
+				" AND Stok.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND Stok.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND Stok.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND Stok.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND Stok.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND Stok.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND Stok.Depo " + envanterDTO.getDepo()+
+				" AND stok.Evrak_Cins " + wee +
+				" AND stok.Evrak_Cins " + ure1 +
+				" GROUP BY mal.kodu,mal.barkod,mal.adi,mal.birim,mal.kusurat " +
+				" ORDER BY mal.kodu ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+				try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+						PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+					ResultSet resultSet = preparedStatement.executeQuery();
+					resultList = ResultSetConverter.convertToList(resultSet); 
+				} catch (Exception e) {
+					throw new ServiceException("MS stkService genel hatası.", e);
+				}
+				return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO, 
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String calisanpara= envanterDTO.getDoviz() ;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String	sql = " WITH    cteStockSum  " +
+				" AS ( SELECT   " +
+				"  Urun_Kodu  , " +
+				"  Adi  , " +
+				" (Select  Birim  FROM  MAL  WHERE   Kodu  = stk. Urun_Kodu  ) AS  Simge , " +
+				" COALESCE((Select SUM( Miktar ) FROM  STOK  WHERE  Hareket  = 'G' and  Urun_Kodu  = stk. Urun_Kodu  ),0) AS  Giris_Miktari , " +
+				" COALESCE((Select SUM( Tutar ) FROM  STOK  WHERE  Hareket  = 'G' and  Urun_Kodu  = stk. Urun_Kodu  ),0) AS  Giris_Tutari ," +
+				" COALESCE((Select SUM(abs( Miktar )) FROM  STOK  WHERE  Hareket  = 'C' and  Urun_Kodu  = stk. Urun_Kodu  ),0) AS  Cikis_Miktari , " +  
+				" COALESCE((Select SUM(CASE WHEN  Doviz  = '" + calisanpara + "' THEN  Tutar  ELSE ( Tutar  *  Kur ) END ) FROM  STOK  WHERE  Hareket  = 'C' and  Urun_Kodu  = stk. Urun_Kodu  ),0) AS  Cikis_Tutari ," +
+				" COALESCE((SELECT   cum_sold_cost " +
+				" FROM (   " +
+				" SELECT  tneg. Urun_Kodu , Tarih , " + 
+				" prev_total_cost + ((tneg.cum_sold - tpos.prev_bought)/(tpos.qty_bought - tpos.prev_bought))*(total_cost-prev_total_cost) as cum_sold_cost  " +
+				" FROM ( " +
+				" SELECT   Urun_Kodu ,  Tarih , abs( Miktar ) as qty_sold ,sum(abs( Miktar )) over w as cum_sold " +
+				" FROM      STOK   " +
+				" WHERE     STOK . Urun_Kodu  = stk. Urun_Kodu  AND  Miktar  < 0 " +
+				" WINDOW w AS (PARTITION BY  Urun_Kodu  ORDER BY  Tarih )) tneg " +
+				" LEFT JOIN ( " +
+				" SELECT  Urun_Kodu , sum( Miktar ) over w as qty_bought " +
+				"      , coalesce(sum( Miktar ) over prevw, 0) as prev_bought " +
+				"      ,  Miktar  *  STOK . Fiat  as cost " +                              
+				"      , sum( Miktar  *  STOK . Fiat ) over w as total_cost  " +
+				"      , coalesce(sum( Miktar  *  STOK . Fiat ) over prevw, 0) as prev_total_cost " +
+				" FROM      STOK  " +
+				" WHERE     STOK . Urun_Kodu  = stk. Urun_Kodu  AND  Miktar  > 0  " +
+				" WINDOW w AS (PARTITION BY  Urun_Kodu  ORDER BY  Tarih ) " +
+				"     , prevw AS (PARTITION BY  Urun_Kodu  ORDER BY  Tarih  ROWS BETWEEN unbounded preceding AND 1 preceding) " +
+				" ) tpos " +
+				" ON tneg.cum_sold BETWEEN tpos.prev_bought AND tpos.qty_bought AND tneg. Urun_Kodu  = tpos. Urun_Kodu ) t " +
+				" WINDOW w AS (PARTITION BY  Urun_Kodu  ORDER BY  Tarih ) " +
+				" ORDER BY  Tarih  DESC LIMIT 1),0) as  Cikis_Maliyet , " +
+				" SUM( Miktar ) AS  Stok_Miktari  " +
+				"    FROM      STOK  stk , MAL   " +
+				"	WHERE    Urun_Kodu  =  MAL . Kodu  " +
+				" AND  stk . Tarih  BETWEEN  '" + envanterDTO.getTar1()+ "' AND   '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND  Urun_Kodu  = N'" + envanterDTO.getUkod1() + "'" +
+				" AND  Evrak_No  >= '" + envanterDTO.getEvrno1() + "' AND  Evrak_No  <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND  stk . Ana_Grup   " + envanterDTO.getAnagrp() +
+				" and  MAL . Ana_Grup    " + envanterDTO.getUranagrp() + " " +
+				" and  MAL . Alt_Grup    " + envanterDTO.getUraltgrp() + " " +
+				" AND  stk . Alt_Grup   " + envanterDTO.getAltgrp() +
+				" AND  stk . Depo   " + envanterDTO.getDepo() +
+				" AND  Evrak_Cins  " + wee +
+				" AND  Evrak_Cins   " + ure1 +
+				" GROUP BY  Urun_Kodu , Adi ), " +
+				" cteReverseInSum	AS ( SELECT  " +
+				" s. Urun_Kodu  , " + 
+				" s. Tarih  , " +
+				" sum(s. Miktar ) over (partition by  Urun_Kodu  order by s. Tarih   rows between current row and unbounded following) as RollingStock,s. Miktar  AS ThisStock " +
+				" FROM     STOK  AS s  " +
+				" WHERE   s. Miktar  > 0 ), cteWithLastTranDate  AS ( select distinct " + 
+				" w. Urun_Kodu , " +
+				" w. Adi  , " +
+				" w. Simge  , " +
+				" w. Giris_Miktari , " +
+				" w. Giris_Tutari , " +
+				" w. Cikis_Miktari , " +
+				" w. Cikis_Tutari , " +
+				" Cikis_Maliyet , " +
+				" w. Stok_Miktari , " +
+				" last_value( Tarih ) over (partition by w. Urun_Kodu  order by z. Tarih  rows between current row and unbounded following) as  Tarih  " +
+				" from cteStockSum w " +
+				" join cteReverseInSum z " +
+				" on w. Urun_Kodu  = z. Urun_Kodu  " +
+				" and z.RollingStock >= w. Stok_Miktari ) " +
+				" SELECT  " +
+				" y. Urun_Kodu , " +
+				" e. Adi , " +
+				" e. Simge , " +
+				" e. Giris_Miktari , " +
+				" e. Giris_Tutari , " + 
+				" e. Cikis_Miktari , " +
+				" e. Cikis_Tutari ,  " +
+				" Cikis_Maliyet , " +
+				" e. Stok_Miktari , " +
+				" Price. Fiat  AS  Maliyet , " +
+				" SUM(CASE WHEN e. Tarih  = y. Tarih  THEN e. Stok_Miktari  - (y.RollingStock - y.ThisStock) " + 
+				" ELSE y.ThisStock  END * Price. Fiat ) AS  Tutar   " +
+				" FROM cteReverseInSum AS y " +
+				" join cteWithLastTranDate e " +
+				" ON e. Urun_Kodu  = y. Urun_Kodu  " +
+				" CROSS JOIN LATERAL (  " +
+				" SELECT " +
+				" p. Fiat   FROM  STOK  AS p " +
+				" WHERE   p. Urun_Kodu  = e. Urun_Kodu  " +
+				" AND p. Tarih  <= e. Tarih    AND p. Miktar  > 0 " +
+				" ORDER BY p. Tarih  DESC  LIMIT 1  ) AS Price WHERE     y. Tarih  >= e. Tarih  " +
+				" GROUP BY y. Urun_Kodu , " +
+				" e. Adi ," +
+				" e. Simge , " +
+				" e. Giris_Miktari , " +
+				" e. Giris_Tutari  ," +
+				" e. Cikis_Miktari ," +
+				" e. Cikis_Tutari ," +
+				" Cikis_Maliyet ," +
+				" Price. Fiat   " +
+				" ,e. Stok_Miktari   " +
+				" ORDER BY y. Urun_Kodu  " ;	
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor_fifo_2(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String calisanpara= envanterDTO.getDoviz() ;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql = " SELECT Urun_Kodu ,Evrak_No , " +
+				" CASE WHEN STOK.Evrak_Cins = 'URE' THEN'' ELSE Hesap_Kodu END, " +
+				" Evrak_Cins,Tarih ,Miktar ,  Birim , STOK.Fiat , " +
+				" SUM(Miktar) OVER(ORDER BY Tarih  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as Miktar_Bakiye , " +
+				" Tutar ,Doviz," +
+				" CASE WHEN Doviz = '" + calisanpara + "' THEN Tutar ELSE (Tutar * Kur) END as " + calisanpara + "_Tutar ," +
+				" SUM(CASE WHEN Doviz = '" + calisanpara + "' THEN Tutar ELSE (Tutar * Kur) END ) OVER(ORDER BY Tarih  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as Tutar_Bakiye , " +
+				" stok. USER ,MAL.Kusurat " +
+				" FROM STOK ,MAL " +
+				" WHERE  mal.kodu = stok.Urun_Kodu " +
+				" AND MAL.Ana_Grup " + envanterDTO.getUranagrp() +
+				" AND MAL.Alt_Grup " + envanterDTO.getUraltgrp() +
+				" AND STOK.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND  STOK.Evrak_No <= '" + envanterDTO.getEvrno2() + "'" +
+				" AND STOK.Tarih BETWEEN '" + envanterDTO.getTar1() + "' AND  '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND STOK.Urun_Kodu = N'" + envanterDTO.getUkod1() + "'" +
+				" AND STOK.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND STOK.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND STOK.Depo " + envanterDTO.getDepo() +
+				" AND Evrak_Cins " + wee +
+				" AND Evrak_Cins " + ure1 +
+				" Order by Tarih " ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public double envanter_rapor_lifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return 0;
+		double maliyet = 0 ;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql = "WITH InventoryRanked AS (    " +
+				" SELECT  Urun_Kodu , Hareket , Miktar , STOK . Fiat , Tarih , " +
+				" ROW_NUMBER() OVER (PARTITION BY  Urun_Kodu  ORDER BY  Tarih  DESC) AS rn " +
+				"FROM  STOK  , MAL  " +
+				" WHERE   MAL . Kodu  =  STOK . Urun_Kodu  "  + 
+				" AND  STOK . Tarih  BETWEEN  '" + envanterDTO.getTar1() + "' AND   '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND  Urun_Kodu  = N'" + envanterDTO.getUkod1() + "'" +
+				" AND  Evrak_No  >= '" + envanterDTO.getEvrno1() + "' AND  Evrak_No  <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND  STOK . Ana_Grup  " + envanterDTO.getAnagrp() +
+				" and  MAL . Ana_Grup   " + envanterDTO.getUranagrp() + " " +
+				" and  MAL . Alt_Grup   " + envanterDTO.getUraltgrp() + " " +
+				" AND  STOK . Alt_Grup  " + envanterDTO.getAltgrp() +
+				" AND  STOK . Depo  " + envanterDTO.getDepo() +
+				" AND  Evrak_Cins  " + wee +
+				" AND  Evrak_Cins  " + ure1 +
+				" ) ,   " +
+				" StockCalculation AS (  " +
+				" SELECT  Urun_Kodu , Hareket , Miktar , Fiat , Tarih ,  " +
+				" ROW_NUMBER() OVER (PARTITION BY  Urun_Kodu  ORDER BY  Tarih  DESC) AS qwe,   " +
+				" SUM(CASE WHEN  Hareket  = 'G' THEN  Miktar  ELSE  Miktar  END) OVER (PARTITION BY  Urun_Kodu  ORDER BY rn) AS kalan_stok,  " +
+				" CASE WHEN  Hareket  = 'G' THEN  Miktar  *  Fiat   "   +
+				" ELSE  Miktar  * (SELECT  Fiat  FROM  STOK  AS inv  " +
+				" WHERE inv. Urun_Kodu  = InventoryRanked. Urun_Kodu  AND  Hareket  = 'G'  " + 
+				" ORDER BY inv. Tarih  DESC LIMIT 1 )  "   + //
+				" END AS transaction_value  " +
+				" FROM InventoryRanked )  " +
+				" SELECT     " +
+				"   Urun_Kodu ,   " + 
+				//    kalan_stok,    
+				//    SUM(transaction_value) OVER (PARTITION BY "Urun_Kodu" ORDER BY qwe) AS current_value ,
+				" SUM(transaction_value) OVER (PARTITION BY  Urun_Kodu  ORDER BY qwe) / kalan_stok  as maliyet  " +
+				" FROM StockCalculation  " +
+				" ORDER BY  Tarih desc  LIMIT 1 " ;	
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				maliyet = resultSet.getDouble("maliyet");   
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return maliyet; 
 	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor_u_kodu_oncekitarih(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql =   " SELECT m.Kodu as Kodu  , m.Adi ,m.Birim as Simge, " + 
+				" IFNULL(((SELECT SUM(IF( Hareket = 'G' , miktar , 0 ) * m.Agirlik )   FROM STOK s USE INDEX (IX_STOK)  " +
+				" where   m.Kodu = s.Urun_Kodu " +
+				" AND s.Tarih < '" + envanterDTO.getTar1() + "' " +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				" ) - " +
+				" (SELECT SUM(IF( Hareket = 'C' , abs(miktar) , 0 ) * m.Agirlik )   FROM STOK s USE INDEX (IX_STOK)   " +
+				" where m.Kodu = s.Urun_Kodu " +
+				" AND s.Tarih < '" + envanterDTO.getTar1() + "' " +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				" )),0) as Onceki_Bakiye ," +  // Onceki_Bakiye
+				
+				//******************************************************************
+				" IFNULL((SELECT SUM(IF( Hareket = 'G' , miktar , 0 ) * m.Agirlik )   FROM  STOK s USE INDEX (IX_STOK)  " +
+				" where m.Kodu = s.Urun_Kodu " +
+				" AND s.Tarih >= '" + envanterDTO.getTar1() + "' AND  s.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				"  ),0) as Periyot_Giris_Agirlik," + // Periyot_Giris_Agirlik
+				
+				
+				" IFNULL((SELECT SUM(IF( Hareket = 'C' ,abs( miktar) , 0 ) * m.Agirlik )   FROM  STOK s  USE INDEX(IX_STOK)  " +
+				" where m.Kodu = s.Urun_Kodu  " +
+				" AND s.Tarih >= '" + envanterDTO.getTar1() + "' AND  s.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				"  ),0) as Periyot_Cikis_Agirlik, " + // Periyot_Cikis_Agirlik
+				//
+				" IFNULL((SELECT SUM(IF( Hareket = 'G' , miktar , 0 ) * m.Agirlik )   FROM  STOK s USE INDEX (IX_STOK) " +
+				" where m.Kodu = s.Urun_Kodu " +
+				" AND s.Tarih >= '" + envanterDTO.getTar1() + "' AND  s.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				"  ) - " +
+				" (SELECT SUM(IF( Hareket = 'C' ,abs( miktar) , 0 ) * m.Agirlik )   FROM  STOK s USE INDEX (IX_STOK)  " +
+				" where m.Kodu = s.Urun_Kodu  " +
+				" AND s.Tarih >= '" + envanterDTO.getTar1() + "' AND  s.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				"  ),0)  as Periyot_Stok_Agirlik , " +
+				//
+				//" SUM(IF( Hareket = 'G' ,miktar, 0 )* mal.Agirlik) -  SUM(IF(Hareket = 'C',abs( miktar), 0 )* mal.Agirlik)     as Periyot_Stok_Agirlik , " + //Periyot_Stok_Agirlik
+				" IFNULL(((SELECT SUM(IF( Hareket = 'G' , miktar , 0 ) * m.Agirlik )   " +
+				" FROM  STOK s USE INDEX (IX_STOK) "+ 
+				" where m.Kodu = s.Urun_Kodu   " +
+				" AND s.Tarih < '" + envanterDTO.getTar1() + "' " +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				"   ) -  (SELECT SUM(IF( Hareket = 'C' , abs(miktar) , 0 ) * m.Agirlik )   "+
+				" FROM  STOK s USE INDEX(IX_STOK)   where m.Kodu = s.Urun_Kodu  "+
+				" AND s.Tarih < '" + envanterDTO.getTar1() + "' " +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				"   ) +  " +
+				" IFNULL((SELECT SUM(IF( Hareket = 'G' , miktar , 0 ) * m.Agirlik )   FROM  STOK s USE INDEX (IX_STOK)  " + 
+				" where m.Kodu = s.Urun_Kodu  " + 
+				" AND s.Tarih >= '" + envanterDTO.getTar1() + "' AND  s.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				"  ) -  " +
+				" (SELECT SUM(IF( Hareket = 'C' ,abs( miktar) , 0 ) * m.Agirlik )   FROM  STOK s USE INDEX (IX_STOK)  " + 
+				" where m.Kodu = s.Urun_Kodu  " + 
+				" AND s.Tarih >= '" + envanterDTO.getTar1() + "' AND  s.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				"  ) " +
+				" ,0)),0) as BAKIYE " +  
+				//" SUM(IF( Hareket = 'G' ,miktar, 0 )* mal.Agirlik) -  SUM(IF(Hareket = 'C',abs( miktar), 0 )* mal.Agirlik)),0) as BAKIYE " +
+				" From   MAL m  USE INDEX (IX_MAL) " +
+				" where   m.Kodu >= N'" + envanterDTO.getUkod1() + "' AND  m.Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND m.Ana_Grup " + envanterDTO.getUranagrp() +
+				" AND m.Alt_Grup " + envanterDTO.getUraltgrp() +
+				" Group by m.Kodu, m.Adi ,m.Birim " +
+				" ORDER by m.Kodu, m.Adi ,m.Birim ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor_u_kodu(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql =   " SELECT STOK.Urun_Kodu as Kodu  , mal.Adi ,Mal.Birim as Simge, SUM(IF( Hareket = 'G' ,miktar, 0 )) as Giris_Miktari," +
+				" SUM(IF( Hareket = 'G' , miktar , 0 ) * mal.Agirlik )  as Giris_Agirlik," +
+				" SUM(IF(Hareket = 'C', abs(miktar), 0 )) as Cikis_Miktari, " +
+				" SUM(IF(Hareket = 'C', abs(miktar), 0 ) * MAL.Agirlik)  as Cikis_Agirlik, " +
+				" SUM(IF( Hareket = 'G' ,miktar, 0 )) -  SUM(IF(Hareket = 'C',abs( miktar), 0 )) as Stok_Miktari," +
+				" SUM(IF( Hareket = 'G' ,miktar, 0 )* mal.Agirlik) -  SUM(IF(Hareket = 'C',abs( miktar), 0 )* mal.Agirlik)     as Stok_Agirlik  " +
+				" From STOK USE INDEX (IX_STOK) ,MAL USE INDEX (IX_MAL) " +
+				" where mal.Kodu = stok.Urun_Kodu " +
+				" And   Kodu >= N'" + envanterDTO.getUkod1() + "' AND  Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND Mal.Ana_Grup " + envanterDTO.getUranagrp() +
+				" AND Mal.Alt_Grup " + envanterDTO.getUraltgrp() +
+				" AND Stok.Tarih >= '" + envanterDTO.getTar1() + "' AND  Stok.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND Stok.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND Stok.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND Stok.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND Stok.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND Stok.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND Stok.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND Stok.Depo " + envanterDTO.getDepo() +
+				" AND Stok.Evrak_Cins " + wee +
+				" AND Stok.Evrak_Cins " + ure1 +
+				" Group by STOK.Urun_Kodu, Mal.Adi ,Mal.Birim " +
+				" ORDER by STOK.Urun_Kodu, Mal.Adi ,Mal.Birim ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor_ana_grup_alt_grup(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String wee  = "" ;
+		if (envanterDTO.isDepohardahil())
+			wee = " Like '%' " ;
+		else
+			wee = " <> 'DPO' ";
+		String ure1 = "";
+		if (envanterDTO.isUretfisdahil() )
+			ure1 = " Like '%' " ;
+		else
+			ure1 = " <> 'URE' " ;
+		String sql =   " SELECT anaDegisken.ANA_GRUP ,  altDegisken.ALT_GRUP, " +
+				" SUM(t.Giris_Miktar) as Giris_Miktar,  " +
+				" SUM(t.Giris_Agirlik ) as Giris_Agirlik,  " +
+				" SUM(t.Cikis_Miktar) as Cikis_Miktar, " +
+				" SUM(t.Cikis_Agirlik ) as Cikis_Agirlik, " +
+				" SUM(t.Giris_Miktar - abs(t.Cikis_Miktar)) as Stok_Miktar, " +
+				" SUM(t.Stok_Agirlik) as Stok_Agirlik " +
+				" FROM " +
+				" ((SELECT m.KODU,  " +
+				" SUM(CASE WHEN s.Hareket = 'G' THEN s.miktar ELSE 0 END) as Giris_Miktar, " +
+				" SUM(CASE WHEN s.Hareket = 'G' THEN s.miktar ELSE 0 END) * m.Agirlik  as Giris_Agirlik, " +
+				" SUM(CASE WHEN s.Hareket = 'C' THEN abs(s.miktar) ELSE 0 END) as Cikis_Miktar, " +
+				" SUM(CASE WHEN s.Hareket = 'C' THEN abs(s.miktar) ELSE 0 END) * m.Agirlik  as Cikis_Agirlik, " +
+				" (SUM(CASE WHEN s.Hareket = 'G' THEN s.miktar ELSE 0 END) -  SUM(CASE WHEN s.Hareket = 'C' THEN abs(s.miktar) ELSE 0 END)) * m.Agirlik as Stok_Agirlik, " +
+				" m.Ana_Grup,   m.Alt_Grup " +
+				" From MAL m LEFT OUTER JOIN STOK s ON m.Kodu = s.Urun_Kodu " +
+				" WHERE   Kodu >= N'" + envanterDTO.getUkod1() + "' AND  Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND m.Ana_Grup " + envanterDTO.getUranagrp() +
+				" AND m.Alt_Grup " + envanterDTO.getUraltgrp() +
+				" AND s.Tarih >= '" + envanterDTO.getTar1() + "' AND  s.Tarih <= '" + envanterDTO.getTar2() + " 23:59:59.998'" +
+				" AND s.Urun_Kodu >= N'" + envanterDTO.getUkod1() + "' AND s.Urun_Kodu <= N'" + envanterDTO.getUkod2() + "' " +
+				" AND s.Evrak_No >= '" + envanterDTO.getEvrno1() + "' AND s.Evrak_No <= '" + envanterDTO.getEvrno2() + "' " +
+				" AND s.Ana_Grup " + envanterDTO.getAnagrp() +
+				" AND s.Alt_Grup " + envanterDTO.getAltgrp() +
+				" AND s.Depo " + envanterDTO.getDepo() +
+				" AND s.Evrak_Cins " + wee +
+				" AND s.Evrak_Cins " + ure1 +
+				" Group by m.Kodu, m.Agirlik,m.Ana_Grup, m.Alt_Grup " +
+				" ) as t  " +
+				" LEFT OUTER JOIN ANA_GRUP_DEGISKEN anaDegisken on t.Ana_Grup = anaDegisken.AGID_Y) " +
+				" LEFT OUTER JOIN ALT_GRUP_DEGISKEN altDegisken on t.Alt_Grup = altDegisken.ALID_Y " +
+				" Group BY anaDegisken.ANA_GRUP, altDegisken.ALT_GRUP " +
+				" ORDER BY ANA_GRUP,ALT_GRUP ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String ch1, String k1,
 			String k2, String f1, String f2, String t1, String t2, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql =   "SELECT " + baslik + "  FROM STOK  " +
+				" WHERE " + jkj +
+				" AND " + ch1 +
+				" AND Urun_Kodu between N'" + k1 + "' and N'" + k2 + "'" +
+				" AND Hesap_Kodu between N'" + f1 + "' and N'" + f2 + "'" +
+				" AND Tarih BETWEEN '" + t1 + "'" +
+				" AND  '"  + t2 + " 23:59:59.998'" +
+				" " + ordr + " ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_urn_kodlu(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1,  String sstr_5, String sstr_1,
 			String[][] ozelgrp, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String replaceString=sstr_1.replace("[","");
+		String replaceString2=replaceString.replace("]","");
+		String[] tokens =replaceString2.split(",");
+
+		if(sstr_4.equals(" (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik"))
+			sstr_4 =  "(ABS(STOK.Miktar) * MAL.Agirlik)" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar) as Tutar"))
+			sstr_4 =  "(ABS(Tutar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Miktar) as Miktar"))
+			sstr_4 =  "(ABS(Miktar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar / IF(k. " + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +")) as Tutar "))
+			sstr_4 =  " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +"))" ;
+		String cASE = "" ;
+		for (String t : tokens)
+			cASE  = cASE + "Sum(CASE WHEN  " + sstr_2 + "  = '"  + t.trim() + "' THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+		cASE = cASE.substring(0, cASE.length() - 1);
+		String sql = 
+				"  SELECT "
+						+ "    MAL.Kodu as Urun_Kodu, Adi as Urun_Adi , Birim ,  " + 	cASE
+						+ " FROM STOK " + kur_dos + ",MAL " 
+						+ " WHERE   " + jkj 
+						+ " AND " + ch1 
+						+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+						+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() 
+						+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+						+ " AND STOK.Urun_Kodu = MAL.Kodu " 
+						+ " AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" 
+						+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" 
+						+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" 
+						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
+						+" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
+						+ "  GROUP BY Urun_Kodu , Urun_Adi , Birim  ORDER BY  Urun_Kodu  ;";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_urn_kodlu_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String replaceString=sstr_1.replace("[","");
+		String replaceString2=replaceString.replace("]","");
+		String[] tokens =replaceString2.split(",");
+
+		if(sstr_4.equals(" (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik"))
+			sstr_4 =  "(ABS(STOK.Miktar) * MAL.Agirlik)" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar) as Tutar"))
+			sstr_4 =  "(ABS(Tutar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Miktar) as Miktar"))
+			sstr_4 =  "(ABS(Miktar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar / IF(k. " + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +")) as Tutar "))
+			sstr_4 =  " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +"))" ;
+		String cASE = "" ;
+		for (String t : tokens)
+			cASE  = cASE + "Sum(CASE WHEN  " + sstr_2 + "  = '"  + t.trim() + "' THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+		cASE = cASE.substring(0, cASE.length() - 1);
+		String sql = "SELECT "
+						+ " MAL.Kodu as Urun_Kodu, Adi as Urun_Adi , Birim , YEAR(STOK.Tarih) as Yil ," + 	cASE
+						+ " FROM STOK " + kur_dos + ",MAL " 
+						+ " WHERE   " + jkj 
+						+ " AND " + ch1 
+						+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+						+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() 
+						+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+						+ " AND STOK.Urun_Kodu = MAL.Kodu " 
+						+ " AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" 
+						+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" 
+						+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" 
+						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
+						+ " AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
+						+ " GROUP BY  Urun_Kodu , Urun_Adi , Birim  ORDER BY Urun_Kodu  ;";
+		
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_mus_kodlu(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String replaceString=sstr_1.replace("[","");
+		String replaceString2=replaceString.replace("]","");
+		String[] tokens =replaceString2.split(",");
+
+		if(sstr_4.equals(" (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik"))
+			sstr_4 =  "(ABS(STOK.Miktar) * MAL.Agirlik)" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar) as Tutar"))
+			sstr_4 =  "(ABS(Tutar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Miktar) as Miktar"))
+			sstr_4 =  "(ABS(Miktar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar / IF(k. " + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +")) as Tutar "))
+			sstr_4 =  " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +"))" ;
+		String cASE = "" ;
+		for (String t : tokens)
+			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+		cASE = cASE.substring(0, cASE.length() - 1);
+		String sql =  "SELECT "
+						+ " Hesap_Kodu ,(SELECT DISTINCT  UNVAN FROM ok_car" +  cariConnDetails.getDatabaseName() + ".HESAP WHERE hesap.hesap = Hesap_Kodu  ) as Unvan  , " + 	cASE
+						+ " FROM STOK " + kur_dos + ",MAL " 
+						+ " WHERE   " + jkj 
+						+ " AND " + ch1 
+						+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+						+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() 
+						+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+						+ " AND STOK.Urun_Kodu = MAL.Kodu " 
+						+ " AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" 
+						+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" 
+						+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" 
+						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
+						+ " AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
+						+ " GROUP BY Hesap_Kodu ,Unvan order by Hesap_Kodu  ;";
+		
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_mus_kodlu_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String replaceString=sstr_1.replace("[","");
+		String replaceString2=replaceString.replace("]","");
+		String[] tokens =replaceString2.split(",");
+
+		if(sstr_4.equals(" (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik"))
+			sstr_4 =  "(ABS(STOK.Miktar) * MAL.Agirlik)" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar) as Tutar"))
+			sstr_4 =  "(ABS(Tutar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Miktar) as Miktar"))
+			sstr_4 =  "(ABS(Miktar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar / IF(k. " + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +")) as Tutar "))
+			sstr_4 =  " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +"))" ;
+		String cASE = "" ;
+		for (String t : tokens)
+			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+		cASE = cASE.substring(0, cASE.length() - 1);
+		String sql =  "SELECT "
+						+ " Hesap_Kodu  ,(SELECT DISTINCT  UNVAN FROM ok_car" +  cariConnDetails.getDatabaseName() + ".HESAP WHERE hesap.hesap = Hesap_Kodu  ) as Unvan  , YEAR(Tarih) as Yil, " + 	cASE
+						+ " FROM STOK " + kur_dos + ",MAL " 
+						+ " WHERE   " + jkj 
+						+ " AND " + ch1 
+						+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+						+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() 
+						+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+						+ " AND STOK.Urun_Kodu = MAL.Kodu " 
+						+ " AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" 
+						+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" 
+						+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" 
+						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
+						+ " AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
+						+ "  GROUP BY Hesap_Kodu ,Unvan,  YEAR(Tarih) order by Hesap_Kodu  ;";
+		
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_yil_ay(grupraporDTO grupraporDTO, String sstr_2, String sstr_4, String kur_dos,
 			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String replaceString=sstr_1.replace("[","");
+		String replaceString2=replaceString.replace("]","");
+		String[] tokens =replaceString2.split(",");
+
+		if(sstr_4.equals(" (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik"))
+			sstr_4 =  "(ABS(STOK.Miktar) * MAL.Agirlik)" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar) as Tutar"))
+			sstr_4 =  "(ABS(Tutar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Miktar) as Miktar"))
+			sstr_4 =  "(ABS(Miktar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar / IF(k. " + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +")) as Tutar "))
+			sstr_4 =  " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +"))" ;
+		String cASE = "" ;
+		for (String t : tokens)
+			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+		cASE = cASE.substring(0, cASE.length() - 1);
+		String sql =  "SELECT "
+						+ " YEAR(STOK.Tarih) as Yil ,MONTH(STOK.Tarih)as Ay ," + cASE
+						+ " FROM STOK " + kur_dos + ",MAL " 
+						+ " WHERE   " + jkj 
+						+ " AND " + ch1 
+						+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+						+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() 
+						+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+						+ " AND STOK.Urun_Kodu = MAL.Kodu " 
+						+ " AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" 
+						+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" 
+						+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" 
+						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
+						+ " AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
+						+ " GROUP BY Yil,Ay ORDER BY Yil,Ay  ;";
+		
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4, String kur_dos,
 			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String replaceString=sstr_1.replace("[","");
+		String replaceString2=replaceString.replace("]","");
+		String[] tokens =replaceString2.split(",");
+
+		if(sstr_4.equals(" (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik"))
+			sstr_4 =  "(ABS(STOK.Miktar) * MAL.Agirlik)" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar) as Tutar"))
+			sstr_4 =  "(ABS(Tutar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Miktar) as Miktar"))
+			sstr_4 =  "(ABS(Miktar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar / IF(k. " + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +")) as Tutar "))
+			sstr_4 =  " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +"))" ;
+		String cASE = "" ;
+		for (String t : tokens)
+			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+		cASE = cASE.substring(0, cASE.length() - 1);
+		String sql =  "SELECT "
+						+ " YEAR(STOK.Tarih) as Yil," + cASE
+						+ " FROM STOK " + kur_dos + ",MAL " 
+						+ " WHERE   " + jkj 
+						+ " AND " + ch1 
+						+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+						+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() 
+						+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+						+ " AND STOK.Urun_Kodu = MAL.Kodu " 
+						+ " AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" 
+						+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" 
+						+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" 
+						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
+						+ " AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
+						+ " GROUP BY Yil ORDER BY Yil;";
+		
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_ana_grup(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String replaceString=sstr_1.replace("[","");
+		String replaceString2=replaceString.replace("]","");
+		String[] tokens =replaceString2.split(",");
+
+		if(sstr_4.equals(" (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik"))
+			sstr_4 =  "(ABS(STOK.Miktar) * MAL.Agirlik)" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar) as Tutar"))
+			sstr_4 =  "(ABS(Tutar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Miktar) as Miktar"))
+			sstr_4 =  "(ABS(Miktar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar / IF(k. " + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +")) as Tutar "))
+			sstr_4 =  " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +"))" ;
+		String cASE = "" ;
+		for (String t : tokens)
+			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+		cASE = cASE.substring(0, cASE.length() - 1);
+		String sql =  "SELECT "
+						+ " (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup ," 
+						+ " (SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup , " + 	cASE
+						+ " FROM STOK " + kur_dos + ",MAL " 
+						+ " WHERE   " + jkj 
+						+ " AND " + ch1 
+						+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+						+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() 
+						+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+						+ " AND STOK.Urun_Kodu = MAL.Kodu " 
+						+ " AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" 
+						+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" 
+						+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" 
+						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
+						+ " AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
+						+ "  GROUP BY Ana_Grup , Alt_Grup  ORDER BY Ana_Grup , Alt_Grup ;";
+		
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_ana_grup_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String replaceString=sstr_1.replace("[","");
+		String replaceString2=replaceString.replace("]","");
+		String[] tokens =replaceString2.split(",");
+
+		if(sstr_4.equals(" (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik"))
+			sstr_4 =  "(ABS(STOK.Miktar) * MAL.Agirlik)" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar) as Tutar"))
+			sstr_4 =  "(ABS(Tutar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Miktar) as Miktar"))
+			sstr_4 =  "(ABS(Miktar))" ;
+		else  if(sstr_4.equals(" ABS(STOK.Tutar / IF(k. " + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +")) as Tutar "))
+			sstr_4 =  " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() +" = 0 ,1, k." + grupraporDTO.getDvzturu() +"))" ;
+		String cASE = "" ;
+		for (String t : tokens)
+			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+		cASE = cASE.substring(0, cASE.length() - 1);
+		String sql =  "SELECT "
+						+ " (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup ," 
+						+ " (SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup ,  YEAR(Tarih) as Yil" + 	cASE
+						+ " FROM STOK " + kur_dos + ",MAL " 
+						+ " WHERE   " + jkj 
+						+ " AND " + ch1 
+						+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+						+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() 
+						+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+						+ " AND STOK.Urun_Kodu = MAL.Kodu " 
+						+ " AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" 
+						+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" 
+						+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" 
+						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
+						+ " AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
+						+ "  GROUP BY Ana_Grup , Alt_Grup,Yil  ORDER BY  Ana_Grup , Alt_Grup,Yil   ;";
+		
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 }

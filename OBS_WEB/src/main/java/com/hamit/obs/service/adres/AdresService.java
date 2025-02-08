@@ -52,8 +52,6 @@ public class AdresService {
 		ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 		return adresConnDetails;
 	}
-
-
 	
 	public List<Map<String, Object>> hesap_kodlari(){
 		try {
@@ -61,13 +59,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			return strategy.hesap_kodlari(adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -77,13 +69,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			return strategy.hsp_pln(hesap,adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -93,13 +79,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			return strategy.adres_firma_adi(adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -109,13 +89,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			strategy.adres_kayit(adresDTO,adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -125,13 +99,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			strategy.adres_sil(id,adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -141,13 +109,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			return strategy.kod_ismi(kodu,adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -157,13 +119,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			return strategy.adr_etiket_arama_kod(kodu,adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public void adres_firma_adi_kayit(String fadi) {
@@ -172,13 +128,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");;
 			strategy.adres_firma_adi_kayit(fadi,adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -188,13 +138,7 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			return strategy.adr_etiket(siralama,adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -204,13 +148,17 @@ public class AdresService {
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 			return strategy.adr_hpl(adresConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
+	}
+	
+	private String errorMessages(ServiceException e) {
+		String originalMessage = e.getMessage();
+		Throwable cause = e.getCause();
+		String detailedMessage = originalMessage;
+		if (cause != null) {
+			detailedMessage += " - " + cause.getMessage();
+		}
+		return detailedMessage;
 	}
 }

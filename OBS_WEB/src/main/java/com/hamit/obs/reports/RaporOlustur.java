@@ -182,7 +182,6 @@ public class RaporOlustur {
 			InputStream jrxmlInput = resource.getInputStream();
 			JasperDesign jasper = JRXmlLoader.load(jrxmlInput);
 			JasperReport jr = JasperCompileManager.compileReport(jasper);
-
 			Map<String, Object> parameters = new HashMap<>();
 			String cinString = "" ;
 			if(tahsilatDTO.getTah_ted() == 0)

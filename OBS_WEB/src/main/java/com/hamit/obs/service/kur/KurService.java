@@ -55,20 +55,13 @@ public class KurService {
 		return kurConnDetails;
 	}
 
-
 	public List<Map<String, Object>> kur_liste(String tarih){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
 			return strategy.kur_liste(tarih,kurConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public void kur_sil (String tarih,String kur_turu) {
@@ -77,13 +70,7 @@ public class KurService {
 			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
 			strategy.kur_sil(tarih,kur_turu,kurConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -93,13 +80,7 @@ public class KurService {
 			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
 			return strategy.kur_kayit(kurgirisDTO,kurConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -109,13 +90,7 @@ public class KurService {
 			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
 			return strategy.kur_rapor(kurraporDTO,kurConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -125,13 +100,17 @@ public class KurService {
 			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
 			return strategy.kur_oku(kurgirisDTO,kurConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
+	}
+	
+	private String errorMessages(ServiceException e) {
+		String originalMessage = e.getMessage();
+		Throwable cause = e.getCause();
+		String detailedMessage = originalMessage;
+		if (cause != null) {
+			detailedMessage += " - " + cause.getMessage();
+		}
+		return detailedMessage;
 	}
 }

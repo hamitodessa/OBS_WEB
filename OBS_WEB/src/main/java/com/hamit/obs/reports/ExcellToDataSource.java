@@ -39,18 +39,15 @@ public class ExcellToDataSource {
 				}
 				XSSFCellStyle rightAlignStyle = workbook.createCellStyle();
 				rightAlignStyle.setAlignment(HorizontalAlignment.RIGHT);
-
 				XSSFCellStyle toplamStyle = workbook.createCellStyle();
 				toplamStyle.setAlignment(HorizontalAlignment.RIGHT);
 				toplamStyle.setBorderTop(BorderStyle.MEDIUM);
-
 				Row headerRow = sheet.createRow(0);
 				for (int i = 0; i < headers.size(); i++) {
 					Cell headerCell = headerRow.createCell(i);
 					headerCell.setCellValue(headers.get(i));
-					if (rightAlignedColumns.contains(headers.get(i))) {
+					if (rightAlignedColumns.contains(headers.get(i)))
 						headerCell.setCellStyle(rightAlignStyle);
-					}
 				}
 				int rowNum = 1;
 				for (Map<String, String> row : tableData) {
@@ -63,9 +60,8 @@ public class ExcellToDataSource {
 						if (rightAlignedColumns.contains(columnName)) {
 							cell.setCellStyle(rightAlignStyle);
 							try {
-								if (cellValue == null || cellValue.toString().trim().isEmpty()) {
+								if (cellValue == null || cellValue.toString().trim().isEmpty())
 									cellValue = "0";
-								}
 								NumberFormat formatter = NumberFormat.getInstance();
 								Number number = formatter.parse(cellValue.toString());
 								double value = number.doubleValue();
@@ -96,9 +92,8 @@ public class ExcellToDataSource {
 					}
 				}
 				 */
-				for (int i = 0; i < headers.size(); i++) {
+				for (int i = 0; i < headers.size(); i++)
 					sheet.autoSizeColumn(i);
-				}
 			}
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);
@@ -127,9 +122,8 @@ public class ExcellToDataSource {
 				for (int i = 0; i < headers.size(); i++) {
 					Cell headerCell = headerRow.createCell(i);
 					headerCell.setCellValue(headers.get(i));
-					if (i > sabitkolon) {
+					if (i > sabitkolon)
 						headerCell.setCellStyle(rightAlignStyle);
-					}
 				}
 				int rowNum = 1;
 				for (Map<String, String> row : tableData) {
@@ -139,18 +133,15 @@ public class ExcellToDataSource {
 						Cell cell = excelRow.createCell(i);
 						String cellValue = row.get(columnName) == null ? "" : row.get(columnName).trim();
 						cell.setCellValue(cellValue);
-						if (i > sabitkolon) {
+						if (i > sabitkolon)
 							cell.setCellStyle(rightAlignStyle);
-						}
-						if(tableData.size() == rowNum) {
+						if(tableData.size() == rowNum)
 							cell.setCellStyle(toplamStyle);
-						}
 					}
 					rowNum++;
 				}
-				for (int i = 0; i < headers.size(); i++) {
+				for (int i = 0; i < headers.size(); i++)
 					sheet.autoSizeColumn(i);
-				}
 			}
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);

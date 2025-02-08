@@ -1489,6 +1489,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND d.Evrak_Cins " + wee +
 				" AND d.Evrak_Cins " + ure1 +
 				" )),0) AS Tutar " +
+				
 				" FROM MAL WITH (INDEX (IX_MAL)) ,STOK WITH (INDEX (IX_STOK)) " +
 				" WHERE   Kodu >= N'" + envanterDTO.getUkod1() + "' AND  Kodu <= N'" + envanterDTO.getUkod2() + "' " +
 				" AND Stok.Urun_Kodu = MAL.Kodu " +
@@ -1503,7 +1504,8 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND stok.Evrak_Cins " + wee +
 				" AND stok.Evrak_Cins " + ure1 +
 				" GROUP BY mal.kodu,mal.barkod,mal.adi,mal.birim,mal.kusurat " +
-				" ORDER BY mal.kodu ";		List<Map<String, Object>> resultList = new ArrayList<>();
+				" ORDER BY mal.kodu ";		
+		List<Map<String, Object>> resultList = new ArrayList<>();
 				try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 						PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 					ResultSet resultSet = preparedStatement.executeQuery();
@@ -1959,13 +1961,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String ch1, String k1,
 			String k2, String f1, String f2, String t1, String t2, ConnectionDetails faturaConnDetails) {
-		String sql =   "SELECT " + baslik + "  FROM STOK ,MAL " +
-				" WHERE  STOK.Ana_Grup = MAL.Ana_Grup " +
-				" AND " + jkj +
+		String sql =   "SELECT " + baslik + "  FROM STOK  " +
+				" WHERE  " +  jkj +
 				" AND " + ch1 +
 				" AND Urun_Kodu between N'" + k1 + "' and N'" + k2 + "'" +
 				" AND Hesap_Kodu between N'" + f1 + "' and N'" + f2 + "'" +
-				" AND  STOK.Tarih BETWEEN '" + t1 + "'" +
+				" AND Tarih BETWEEN '" + t1 + "'" +
 				" AND  '"  + t2 + " 23:59:59.998'" +
 				" " + ordr + " ";
 		List<Map<String, Object>> resultList = new ArrayList<>();

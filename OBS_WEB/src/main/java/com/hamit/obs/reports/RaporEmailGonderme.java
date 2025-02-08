@@ -58,16 +58,12 @@ public class RaporEmailGonderme {
 		boolean durum = false ;
 		try {
 			String nerden = raporEmailDegiskenler.getNerden(); 
-			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter")
-					|| nerden.equals("stok") ) {
+			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter") || nerden.equals("stok"))
 				gonder_excell();
-			}
-			else if(nerden.equals("gruprapor")) {
+			else if(nerden.equals("gruprapor"))
 				gonder_excell_grup();
-			}
-			else {
+			else
 				gonder_jasper();
-			}
 			durum = true ;
 		} catch (Exception e) {
 			throw new ServiceException( e.getMessage());

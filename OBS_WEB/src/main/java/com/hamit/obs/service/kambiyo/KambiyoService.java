@@ -62,13 +62,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.ozel_kodlar(gir_cik,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public List<Map<String, Object>> banka_sube(String nerden){
@@ -77,13 +71,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.banka_sube(nerden,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -93,13 +81,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.kambiyo_firma_adi(kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -109,13 +91,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.kam_son_bordro_no_al(cek_sen,gir_cik,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -125,13 +101,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.bordroOku(bordroNo, cek_sen, gir_cik,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -141,13 +111,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.kam_aciklama_oku(cek_sen, satir, bordroNo,gircik ,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 
@@ -161,13 +125,7 @@ public class KambiyoService {
 			loglamaRepository.log_kaydet(loglamaDTO, kambiyoConnDetails);
 			strategy.bordro_sil(bordroNo, cek_sen,gir_cik ,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -181,13 +139,7 @@ public class KambiyoService {
 			loglamaRepository.log_kaydet(loglamaDTO, kambiyoConnDetails);
 			strategy.cek_kayit(row ,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -197,13 +149,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			strategy.kam_aciklama_yaz(cek_sen, satir,bordroNo,aciklama,gircik ,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -213,13 +159,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			strategy.kam_aciklama_sil(cek_sen, bordroNo,gircik ,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public int kam_bordro_no_al(String cins) {
@@ -228,13 +168,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.kam_bordro_no_al(cins,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -244,13 +178,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.kalan_cek_liste(kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -260,13 +188,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.cek_kontrol(cekno,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -276,13 +198,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.cek_dokum(cekno,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -296,13 +212,7 @@ public class KambiyoService {
 			loglamaRepository.log_kaydet(loglamaDTO, kambiyoConnDetails);
 			strategy.bordro_cikis_sil(bordroNo,cek_sen ,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -313,13 +223,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			strategy.bordro_cikis_yaz(cek_sen, ceksencins_where, cekno,cmus,cbor,ctar,ozkod,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -329,13 +233,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.cek_rapor(cekraporDTO,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public void kambiyo_firma_adi_kayit(String fadi) {
@@ -344,13 +242,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			strategy.kambiyo_firma_adi_kayit(fadi,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	public bordrodetayDTO cektakipkontrol(String cekno) {
@@ -359,13 +251,7 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			return strategy.cektakipkontrol(cekno,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
@@ -375,13 +261,17 @@ public class KambiyoService {
 			ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
 			strategy.kam_durum_yaz(cekno,ceksen_from,ceksen_where,durum,ttarih,kambiyoConnDetails);
 		} catch (ServiceException e) {
-			String originalMessage = e.getMessage();
-			Throwable cause = e.getCause();
-			String detailedMessage = originalMessage;
-			if (cause != null) {
-				detailedMessage += " - " + cause.getMessage();
-			}
-			throw new ServiceException(detailedMessage);
+			throw new ServiceException(errorMessages(e));
 		}
+	}
+	
+	private String errorMessages(ServiceException e) {
+		String originalMessage = e.getMessage();
+		Throwable cause = e.getCause();
+		String detailedMessage = originalMessage;
+		if (cause != null) {
+			detailedMessage += " - " + cause.getMessage();
+		}
+		return detailedMessage;
 	}
 }

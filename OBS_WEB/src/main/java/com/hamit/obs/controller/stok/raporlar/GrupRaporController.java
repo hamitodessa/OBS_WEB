@@ -53,9 +53,7 @@ public class GrupRaporController {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
-
 			String turuString[] =  grup_cevir(grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),grupraporDTO.getUrozkod());
-
 			grupraporDTO.setUranagrp(turuString[0]);
 			grupraporDTO.setUraltgrp(turuString[1]);
 			grupraporDTO.setUrozkod(turuString[2]);
@@ -85,13 +83,10 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-
-					if(grupraporDTO.getBirim().equals("Tutar")) {
+					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
-					}
-					else {
+					else
 						response.put("format",3);
-					}
 					response.put("baslik","Urun_Kodu, Urun_Adi , Birim , " + baslikbakStrings[0] + ",TOPLAM");   
 					response.put("sabitkolonsayisi",3);
 				}
@@ -119,12 +114,10 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-					if(grupraporDTO.getBirim().equals("Tutar")) {
+					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
-					}
-					else {
+					else
 						response.put("format",3);
-					}
 					response.put("baslik","Urun_Kodu,Urun_Adi,Birim,Yil, " + baslikbakStrings[0] + ",TOPLAM");   
 					response.put("sabitkolonsayisi",4);
 				}
@@ -153,12 +146,10 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-					if(grupraporDTO.getBirim().equals("Tutar")) {
+					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
-					}
-					else {
+					else
 						response.put("format",3);
-					}
 					response.put("baslik","Hesap_Kodu,Unvan, " + baslikbakStrings[0] + ",TOPLAM");   
 					response.put("sabitkolonsayisi",2);
 				}
@@ -189,12 +180,10 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-					if(grupraporDTO.getBirim().equals("Tutar")) {
+					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
-					}
-					else {
+					else
 						response.put("format",3);
-					}
 					response.put("baslik","Musteri_Kodu,Unvan,Yil, " + baslikbakStrings[0] + ",TOPLAM");    
 					response.put("sabitkolonsayisi",3);
 				}
@@ -218,13 +207,10 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-
-					if(grupraporDTO.getBirim().equals("Tutar")) {
+					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
-					}
-					else {
+					else
 						response.put("format",3);
-					}
 					response.put("baslik","Yil,Ay, " + baslikbakStrings[0] + ",TOPLAM");   
 					response.put("sabitkolonsayisi",2);
 				}
@@ -246,12 +232,10 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-					if(grupraporDTO.getBirim().equals("Tutar")) {
+					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
-					}
-					else {
+					else
 						response.put("format",3);
-					}
 					response.put("baslik","Yil, " + baslikbakStrings[0] + ",TOPLAM");  
 					response.put("sabitkolonsayisi",1);
 				}
@@ -275,13 +259,10 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-
-					if(grupraporDTO.getBirim().equals("Tutar")) {
+					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
-					}
-					else {
+					else
 						response.put("format",3);
-					}
 					response.put("baslik","Ana_Grup,Alt_Grup, " + baslikbakStrings[0] + ",TOPLAM");    
 					response.put("sabitkolonsayisi",2);
 				}
@@ -307,13 +288,10 @@ public class GrupRaporController {
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
 							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
-
-					if(grupraporDTO.getBirim().equals("Tutar")) {
+					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
-					}
-					else {
+					else
 						response.put("format",3);
-					}
 					response.put("baslik","Ana_Grup,Alt_Grup,Yil, " + baslikbakStrings[0] + ",TOPLAM");    
 					response.put("sabitkolonsayisi",3);
 				}
@@ -339,9 +317,8 @@ public class GrupRaporController {
 			int sabitkolon = (int) requestBody.get("sabitkolon");
 			List<Map<String, String>> tableData = ResultSetConverter.parseTableData(tableString, header);
 			dataSource =  raporOlustur.grprap(tableData,sabitkolon);
-			if (dataSource == null) {
+			if (dataSource == null)
 				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");
-			}
 			byte[] fileContent = dataSource.getInputStream().readAllBytes();
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -351,14 +328,11 @@ public class GrupRaporController {
 		} catch (ServiceException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().getBytes(StandardCharsets.UTF_8));
 		} catch (Exception e) {
-			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Beklenmeyen bir hata oluştu.".getBytes(StandardCharsets.UTF_8));
 		} finally {
 			dataSource = null;
 		}	
 	}
-
-
 
 	private String[] baslik_bak(grupraporDTO grupraporDTO)
 	{
@@ -370,7 +344,6 @@ public class GrupRaporController {
 			String sstr_2 = "" ;
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-
 			if(fatConnDetails.getHangisql().equals("PG SQL"))
 			{
 				if (grupraporDTO.getTuru().equals("CIKAN"))
@@ -398,9 +371,7 @@ public class GrupRaporController {
 					sstr_2 = " datepart(yyyy,STOK.Tarih)" ;
 				}
 				else if(fatConnDetails.getHangisql().equals("MY SQL"))
-				{
 					sstr_2 = "YEAR(STOK.Tarih)" ;
-				}
 				else if(fatConnDetails.getHangisql().equals("PG SQL"))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT TO_CHAR(\"STOK\".\"Tarih\",'YYYY') ","order by TO_CHAR(\"STOK\".\"Tarih\",'YYYY')",jkj,ch1,
@@ -445,7 +416,6 @@ public class GrupRaporController {
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getCkod1(),grupraporDTO.getCkod2() ,
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
-
 					sstr_2 = "datepart(dd,STOK.Tarih)" ;
 				}
 				else  if(fatConnDetails.getHangisql().equals("MY SQL"))
@@ -470,7 +440,7 @@ public class GrupRaporController {
 				String ifnul = "";
 				if(fatConnDetails.getHangisql().equals("MS SQL"))
 					ifnul = "ISNULL";
-				else  if(fatConnDetails.getHangisql().equals("MY SQL"))
+				else if(fatConnDetails.getHangisql().equals("MY SQL"))
 					ifnul = "IFNULL";
 				if(fatConnDetails.getHangisql().equals("PG SQL"))
 				{
@@ -494,7 +464,7 @@ public class GrupRaporController {
 				String ifnul = "";
 				if(fatConnDetails.getHangisql().equals("MS SQL"))
 					ifnul = "ISNULL";
-				else  if(fatConnDetails.getHangisql().equals("MY SQL"))
+				else if(fatConnDetails.getHangisql().equals("MY SQL"))
 					ifnul = "IFNULL";
 				if(fatConnDetails.getHangisql().equals("PG SQL"))
 				{
@@ -531,21 +501,18 @@ public class GrupRaporController {
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
 					sstr_2 = "  CASE WHEN  Hesap_Kodu ='' THEN '---' else  Hesap_Kodu END " ;
 				}
-
 			}
 			String sstr_1 = "";
 			StringBuilder text = new StringBuilder();
-			for (Map<String, Object> row : baslik) {
+			for (Map<String, Object> row : baslik)
 				row.forEach((key, value) -> text.append("[").append(value).append("],"));
-			}
 			sstr_1 = text.length() > 0 ? text.substring(0, text.length() - 1) : "";
-
 			baslikbakStrings[0] = sstr_1;
 			baslikbakStrings[1] = sstr_2;
 		}
 		catch (Exception ex)
 		{
-
+			throw new ServiceException(ex.getMessage());
 		}
 		return baslikbakStrings;
 	}
@@ -691,11 +658,10 @@ public class GrupRaporController {
 				{
 					String kurServer = "" ; 
 					String[] ipogren = Global_Yardimci.ipCevir(kurConnDetails.getServerIp());
-					if (fatConnDetails.getServerIp().equals(kurConnDetails.getServerIp())) {
+					if (fatConnDetails.getServerIp().equals(kurConnDetails.getServerIp()))
 						kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
-					}else{
+					else
 						kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
-					}
 					String kurcString = grupraporDTO.getDvzturu();
 					String kurcesitString = grupraporDTO.getDoviz();
 					kur_dos = " left join  (SELECT * FROM  dblink ('" + kurServer + "'," + 

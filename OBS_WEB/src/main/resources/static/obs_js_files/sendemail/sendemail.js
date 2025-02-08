@@ -4,9 +4,7 @@ function tabloyukle() {
 	document.getElementById("extraValue").value = '';
 	let storedData = localStorage.getItem("tableData");
 	let data = localStorage.getItem("grprapor");
-
 	let tablobaslik = localStorage.getItem("tablobaslik");
-
 	if (storedData) {
 		let parsedData = JSON.parse(storedData);
 		document.getElementById("extraValue").value = JSON.stringify(parsedData.rows);
@@ -89,6 +87,8 @@ async function sendmailAt() {
 		errorDiv.innerText = error.message || "Bir hata oluştu.";
 	} finally {
 		localStorage.removeItem("tableData");
+		localStorage.removeItem("grprapor");
+		localStorage.removeItem("tablobaslik");
 		document.body.style.cursor = "default";
 		$mailButton.prop('disabled', false).text('Gönder');
 	}

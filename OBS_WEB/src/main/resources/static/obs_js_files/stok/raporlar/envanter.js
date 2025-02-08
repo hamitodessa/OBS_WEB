@@ -148,7 +148,6 @@ async function envfetchTableData() {
 				const row = document.createElement('tr');
 				row.classList.add('expandable');
 				row.classList.add("table-row-height");
-				//				if (response.raporturu === 'normal') {
 				row.innerHTML = `
                     <td>${rowData.Kodu || ''}</td>
                     <td>${rowData.Adi || ''}</td>
@@ -168,7 +167,6 @@ async function envfetchTableData() {
 				totaltutar += rowData.Tutar;
 				totalctutar += rowData.Cikis_Tutar;
 				totalgtutar += rowData.Giris_Tutar;
-				//				}
 				mainTableBody.appendChild(row);
 			});
 		}
@@ -201,8 +199,8 @@ async function envfetchTableData() {
 				miktarCell.classList.add('double-column');
 				miktarCell.textContent = rowData.Miktar;
 				if (rowData.Miktar < 0) {
-					miktarCell.style.backgroundColor = 'red'; // Burada istediğin rengi verebilirsin
-					miktarCell.style.color = 'white'; // Yazıyı beyaz yaparak görünürlüğü artırıyorum
+					miktarCell.style.backgroundColor = 'red'; 
+					miktarCell.style.color = 'white'; 
 				}
 				row.innerHTML = `
         			<td>${rowData.Urun_Kodu || ''}</td>
