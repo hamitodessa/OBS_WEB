@@ -39,6 +39,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "grprapor") {
 		openenvModal(modal);
 	}
+	else if (nerden === "imagrprapor") {
+		openenvModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -370,7 +373,26 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #grpBilgi');
 		hiddenField.val(degerler);
 	}
-
+	else if (nerden === "imagrprapor") {
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const sinif1 = $('#sinif1').val() || "";
+		const sinif2 = $('#sinif2').val() || "";
+		const uranagrp = $('#uranagrp').val() || "";
+		const uraltgrp = $('#uraltgrp').val() || "";
+		const birim = $('#birim').val() || ""; 
+		const gruplama = $('#gruplama').val() || "";
+		const stunlar = $('#stunlar').val() || "";
+		const turu = $('#turu').val() || ""; 
+		const anagrp = $('#anagrp').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const degerler = [ukod1, ukod2,tar1, tar2, sinif1,sinif2 ,uranagrp,  uraltgrp, birim,  gruplama, stunlar,turu,anagrp,altgrp].join(",");
+		const hiddenField = $('#ara_content #imagrpBilgi');
+		hiddenField.val(degerler);
+	}
+	
 
 	$('#firstModal').modal('hide');
 
@@ -464,4 +486,12 @@ function saveToMain() {
 		const reportFormat = document.getElementById("grprapreportDownload");
 		reportFormat.disabled = false;
 	}
+	else if (nerden === "imagrprapor") {
+		imagrpfetchTableData();
+		const mailButton = document.getElementById("imagrprapmailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("imagrprapreportDownload");
+		reportFormat.disabled = false;
+	}
 }
+

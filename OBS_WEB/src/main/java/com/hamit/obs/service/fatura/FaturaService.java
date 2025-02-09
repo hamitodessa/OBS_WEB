@@ -830,6 +830,29 @@ public class FaturaService {
 		}
 	}
 	
+	public List<Map<String, Object>> ima_baslik_bak(String bas ,String jkj,String ch1,String qwq6,
+			String qwq7,String qwq8,String qwq9,String k1,String k2,String t1,String t2,String ordrr){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.ima_baslik_bak(bas, jkj, ch1, qwq6, qwq7, qwq8, qwq9, k1, k2, t1, t2, ordrr, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> ima_alt_kod(String slct,String sstr_5,String sstr_2,String sstr_4,String jkj,String ch1,String qwq6,
+			String qwq7,String qwq8,String qwq9,String s1 ,String s2,String k1,String k2,String t1,String t2,
+			String sstr_1,String ordrr,String sstr_55,String ozelgrp[][]){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.ima_alt_kod(slct, sstr_5, sstr_2, sstr_4, jkj, ch1, qwq6, qwq7, qwq8, qwq9, s1, s2, k1, k2, t1, t2, sstr_1, ordrr, sstr_55, ozelgrp, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();
 		Throwable cause = e.getCause();

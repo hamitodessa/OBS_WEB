@@ -27,4 +27,6 @@ public class grupraporDTO {
 	boolean istenenaychc;
 	String sinif1;
 	String sinif2;
+	String anagrp;
+	String altgrp;
 }

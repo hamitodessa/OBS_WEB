@@ -2686,5 +2686,22 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> ima_baslik_bak(String bas, String jkj, String ch1, String qwq6, String qwq7,
+			String qwq8, String qwq9, String k1, String k2, String t1, String t2, String ordrr,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> ima_alt_kod(String slct, String sstr_5, String sstr_2, String sstr_4, String jkj,
+			String ch1, String qwq6, String qwq7, String qwq8, String qwq9, String s1, String s2, String k1, String k2,
+			String t1, String t2, String sstr_1, String ordrr, String sstr_55, String[][] ozelgrp,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
 	} 
 }
