@@ -72,6 +72,22 @@ async function openenvModal(modal) {
 			option.textContent = item.DEPO;
 			dpoSelect.appendChild(option);
 		});
+
+		const newOption = document.createElement("option");
+		newOption.value = "Bos Olanlar";
+		newOption.textContent = "Bos Olanlar"; 
+
+		const newOption1 = document.createElement("option");
+		newOption1.value = "Bos Olanlar";
+		newOption1.textContent = "Bos Olanlar";
+
+		const newOption2 = document.createElement("option");
+		newOption2.value = "Bos Olanlar";
+		newOption2.textContent = "Bos Olanlar";
+
+		anaSelect.insertBefore(newOption, anaSelect.options[1]);
+		uranaSelect.insertBefore(newOption1, uranaSelect.options[1]);
+		dpoSelect.insertBefore(newOption2, dpoSelect.options[1]);
 	} catch (error) {
 		const modalError = document.getElementById("errorDiv");
 		modalError.style.display = "block";
