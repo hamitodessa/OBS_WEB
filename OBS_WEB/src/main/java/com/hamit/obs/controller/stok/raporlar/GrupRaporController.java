@@ -2,10 +2,13 @@ package com.hamit.obs.controller.stok.raporlar;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.mail.util.ByteArrayDataSource;
 
@@ -78,10 +81,11 @@ public class GrupRaporController {
 						ozelgrp[2][0] = "\"Birim\"" ; 
 						ozelgrp[2][1] = "Birim";
 					}
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Urun_Kodu", "Urun_Adi", "Birim")); // ✅ Sabit kolonları ekle
 					List<Map<String, Object>> grup = faturaService.grp_urn_kodlu(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
-							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
@@ -109,10 +113,12 @@ public class GrupRaporController {
 						ozelgrp[3][0] = "TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ; 
 						ozelgrp[3][1] = "Yil";
 					}
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Urun_Kodu", "Urun_Adi", "Birim","Yil"));
+
 					List<Map<String, Object>> grup = faturaService.grp_urn_kodlu_yil(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
-							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
@@ -141,10 +147,11 @@ public class GrupRaporController {
 						ozelgrp[1][0] = adrString; 
 						ozelgrp[1][1] = "Unvan"; 
 					}
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Hesap_Kodu", "Unvan"));
 					List<Map<String, Object>> grup = faturaService.grp_mus_kodlu(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
-							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
@@ -175,10 +182,11 @@ public class GrupRaporController {
 						ozelgrp[2][0] = "TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ; 
 						ozelgrp[2][1] = "Yil";
 					}
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Musteri_Kodu","Unvan","Yil"));
 					List<Map<String, Object>> grup = faturaService.grp_mus_kodlu_yil(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
-							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
@@ -202,10 +210,11 @@ public class GrupRaporController {
 						ozelgrp[1][0] = "TO_CHAR(\"STOK\".\"Tarih\",'MM')"; 
 						ozelgrp[1][1] = "Ay"; 
 					}
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Yil","Ay"));
 					List<Map<String, Object>> grup = faturaService.grp_yil_ay(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
-							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
@@ -227,10 +236,11 @@ public class GrupRaporController {
 						ozelgrp[0][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
 						ozelgrp[0][1] = "Yil"; 
 					}
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Yil"));
 					List<Map<String, Object>> grup = faturaService.grp_yil(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
-							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
@@ -254,10 +264,11 @@ public class GrupRaporController {
 						ozelgrp[1][0] = " (SELECT DISTINCT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"MAL\".\"Alt_Grup\" )" ;
 						ozelgrp[1][1] = "Alt_Grup"; 
 					}
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Ana_Grup","Alt_Grup"));
 					List<Map<String, Object>> grup = faturaService.grp_ana_grup(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
-							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
@@ -283,10 +294,11 @@ public class GrupRaporController {
 						ozelgrp[2][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
 						ozelgrp[2][1] = "Yil"; 
 					}
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Ana_Grup","Alt_Grup","Yil"));
 					List<Map<String, Object>> grup = faturaService.grp_ana_grup_yil(
 							grupraporDTO,baslikbakStrings[1],deg_cevirString[3], 
 							deg_cevirString[5], deg_cevirString[0], deg_cevirString[2],deg_cevirString[1],
-							deg_cevirString[4], baslikbakStrings[0],ozelgrp);
+							deg_cevirString[4], baslikbakStrings[0],ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(grupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);

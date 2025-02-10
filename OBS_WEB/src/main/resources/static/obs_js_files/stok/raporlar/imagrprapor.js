@@ -107,6 +107,9 @@ async function imagrpfetchTableData() {
 		altgrp: parsedValues[13],
 	};
 	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+
 	document.body.style.cursor = "wait";
 	const $yenileButton = $('#imagrpyenileButton');
 	$yenileButton.prop('disabled', true).text('İşleniyor...');

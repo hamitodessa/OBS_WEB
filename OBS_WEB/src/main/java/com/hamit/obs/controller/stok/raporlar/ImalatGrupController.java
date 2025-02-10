@@ -2,9 +2,12 @@ package com.hamit.obs.controller.stok.raporlar;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.mail.util.ByteArrayDataSource;
 
@@ -34,7 +37,7 @@ public class ImalatGrupController {
 
 	@Autowired
 	private RaporOlustur raporOlustur;
-	
+
 	@Autowired
 	private FaturaService faturaService;
 
@@ -76,7 +79,7 @@ public class ImalatGrupController {
 				grupraporDTO.setUraltgrp(turuString[3]);
 				String sstr_55 = deg_cevirString[1] ;
 				deg_cevirString[1] = ",'" + deg_cevirString[1] + "' as Birim," ;
-				
+				Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Urun_Kodu", "Urun_Adi"));
 				imagrup = faturaService.ima_alt_kod("MAL.Kodu as Urun_Kodu, Adi as Urun_Adi",deg_cevirString[1],
 						baslikbakStrings[1],deg_cevirString[0], baslikbakStrings[2], baslikbakStrings[3],  
 						grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),
@@ -85,7 +88,7 @@ public class ImalatGrupController {
 						grupraporDTO.getUkod1(),grupraporDTO.getUkod2(),
 						grupraporDTO.getTar1(),
 						grupraporDTO.getTar2(),
-						baslikbakStrings[0],"Urun_Kodu",sstr_55,ozelgrp);
+						baslikbakStrings[0],"Urun_Kodu",sstr_55,ozelgrp,sabitKolonlar);
 				response.put("data", (imagrup != null) ? imagrup : new ArrayList<>());
 				if(grupraporDTO.getBirim().equals("Tutar"))
 					response.put("format",2);
@@ -93,12 +96,303 @@ public class ImalatGrupController {
 					response.put("format",3);
 				response.put("baslik","Urun_Kodu, Urun_Adi , " + baslikbakStrings[0] + ",TOPLAM");   
 				response.put("sabitkolonsayisi",2);
-				
+			}
+			else if (grupraporDTO.getGruplama().equals("Depo"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				{
+					ozelgrp = new String[10][10];
+					ozelgrp[0][0] = "(SELECT DISTINCT  \"DEPO\" FROM \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID_Y\" = \"STOK\".\"Depo\" )"; 
+					ozelgrp[0][1] = "Depo"; 
+					ozelgrp[1][0] = "\"Birim\""; 
+					ozelgrp[1][1] = "Birim";
+				}
+				grupraporDTO.setAnagrp(turuString[0]);
+				grupraporDTO.setAltgrp(turuString[1]);
+				grupraporDTO.setUranagrp(turuString[2]);
+				grupraporDTO.setUraltgrp(turuString[3]);
+				String sstr_55 = deg_cevirString[1] ;
+				deg_cevirString[1] = ",'" + deg_cevirString[1] + "' as Birim," ;
+				Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Depo"));
+				imagrup = faturaService.ima_alt_kod("(SELECT DISTINCT  DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = STOK.Depo ) as Depo",deg_cevirString[1],
+						baslikbakStrings[1],deg_cevirString[0], baslikbakStrings[2], baslikbakStrings[3],  
+						grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),
+						grupraporDTO.getAnagrp(),  grupraporDTO.getAltgrp(),
+						grupraporDTO.getSinif1(), grupraporDTO.getSinif2(),
+						grupraporDTO.getUkod1(),grupraporDTO.getUkod2(),
+						grupraporDTO.getTar1(),
+						grupraporDTO.getTar2(),
+						baslikbakStrings[0],"Depo",sstr_55,ozelgrp,sabitKolonlar);
+				response.put("data", (imagrup != null) ? imagrup : new ArrayList<>());
+				if(grupraporDTO.getBirim().equals("Tutar"))
+					response.put("format",2);
+				else
+					response.put("format",3);
+				response.put("baslik","Depo, " + baslikbakStrings[0] + ",TOPLAM");   
+				response.put("sabitkolonsayisi",1);
+			}
+			else if (grupraporDTO.getGruplama().equals("Yil"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				String slctString = "";
+				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				{
+					ozelgrp = new String[10][10];
+					ozelgrp[0][0] = "TO_CHAR(\"STOK\".\"Tarih\",'YYYY')"; 
+					ozelgrp[0][1] = "Yil"; 
+					slctString = "YEAR(STOK.Tarih) as Yil";
+				}
+				else if(fatConnDetails.getHangisql().equals("MS SQL"))
+					slctString = "datepart(yyyy,STOK.Tarih) as Yil, ";
+				else if(fatConnDetails.getHangisql().equals("MY SQL"))
+					slctString = "YEAR(STOK.Tarih) as Yil";
+				grupraporDTO.setAnagrp(turuString[0]);
+				grupraporDTO.setAltgrp(turuString[1]);
+				grupraporDTO.setUranagrp(turuString[2]);
+				grupraporDTO.setUraltgrp(turuString[3]);
+				String sstr_55 = deg_cevirString[1] ;
+				deg_cevirString[1] = "" ;
+				Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Yil"));
+				imagrup = faturaService.ima_alt_kod(slctString,deg_cevirString[1],
+						baslikbakStrings[1],deg_cevirString[0], baslikbakStrings[2], baslikbakStrings[3],  
+						grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),
+						grupraporDTO.getAnagrp(),  grupraporDTO.getAltgrp(),
+						grupraporDTO.getSinif1(), grupraporDTO.getSinif2(),
+						grupraporDTO.getUkod1(),grupraporDTO.getUkod2(),
+						grupraporDTO.getTar1(),
+						grupraporDTO.getTar2(),
+						baslikbakStrings[0],"Yil",sstr_55,ozelgrp,sabitKolonlar);
+				response.put("data", (imagrup != null) ? imagrup : new ArrayList<>());
+				if(grupraporDTO.getBirim().equals("Tutar"))
+					response.put("format",2);
+				else
+					response.put("format",3);
+				response.put("baslik","Yil, " + baslikbakStrings[0] + ",TOPLAM");   
+				response.put("sabitkolonsayisi",1);
+			}
+			else if (grupraporDTO.getGruplama().equals("Ana_Grup"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				{
+					ozelgrp = new String[10][10];
+					ozelgrp[0][0] = "(SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"STOK\".\"Ana_Grup\"  )"; 
+					ozelgrp[0][1] = "Ana_Grup"; 
+					ozelgrp[1][0] ="\"Birim\"";
+					ozelgrp[1][1] = "Birim";
+				}
+				grupraporDTO.setAnagrp(turuString[0]);
+				grupraporDTO.setAltgrp(turuString[1]);
+				grupraporDTO.setUranagrp(turuString[2]);
+				grupraporDTO.setUraltgrp(turuString[3]);
+				String sstr_55 = deg_cevirString[1] ;
+				deg_cevirString[1] = ",'" + deg_cevirString[1] + "' as Birim," ;
+				Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Ana_Grup"));
+				imagrup = faturaService.ima_alt_kod("(SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = STOK.Ana_Grup ) as Ana_Grup  ",deg_cevirString[1],
+						baslikbakStrings[1],deg_cevirString[0], baslikbakStrings[2], baslikbakStrings[3],  
+						grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),
+						grupraporDTO.getAnagrp(),  grupraporDTO.getAltgrp(),
+						grupraporDTO.getSinif1(), grupraporDTO.getSinif2(),
+						grupraporDTO.getUkod1(),grupraporDTO.getUkod2(),
+						grupraporDTO.getTar1(),
+						grupraporDTO.getTar2(),
+						baslikbakStrings[0],"Ana_Grup",sstr_55,ozelgrp,sabitKolonlar);
+				response.put("data", (imagrup != null) ? imagrup : new ArrayList<>());
+				if(grupraporDTO.getBirim().equals("Tutar"))
+					response.put("format",2);
+				else
+					response.put("format",3);
+				response.put("baslik","Ana_Grup, " + baslikbakStrings[0] + ",TOPLAM");   
+				response.put("sabitkolonsayisi",1);
+			}
+			else if (grupraporDTO.getGruplama().equals("Alt_Grup"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				{
+					ozelgrp = new String[10][10];
+					ozelgrp[0][0] = "(SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"STOK\".\"Ana_Grup\"  )"; 
+					ozelgrp[0][1] = "Ana_Grup"; 
+					ozelgrp[1][0] = "(SELECT DISTINCT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID\" = \"STOK\".\"Alt_Grup\"  )"; 
+					ozelgrp[1][1] = "Alt_Grup"; 
+					ozelgrp[2][0] = "\"Birim\"";
+					ozelgrp[2][1] = "Birim";
+				}
+				grupraporDTO.setAnagrp(turuString[0]);
+				grupraporDTO.setAltgrp(turuString[1]);
+				grupraporDTO.setUranagrp(turuString[2]);
+				grupraporDTO.setUraltgrp(turuString[3]);
+				String sstr_55 = deg_cevirString[1] ;
+				deg_cevirString[1] = ",'" + deg_cevirString[1] + "' as Birim," ;
+				Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Ana_Grup" , "Alt_Grup"));
+				imagrup = faturaService.ima_alt_kod("(SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = STOK.Ana_Grup ) as Ana_Grup , "
+						+ " (SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID = STOK.Alt_Grup ) as Alt_Grup " ,deg_cevirString[1],
+						baslikbakStrings[1],deg_cevirString[0], baslikbakStrings[2], baslikbakStrings[3],  
+						grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),
+						grupraporDTO.getAnagrp(),  grupraporDTO.getAltgrp(),
+						grupraporDTO.getSinif1(), grupraporDTO.getSinif2(),
+						grupraporDTO.getUkod1(),grupraporDTO.getUkod2(),
+						grupraporDTO.getTar1(),
+						grupraporDTO.getTar2(),
+						baslikbakStrings[0],"Ana_Grup",sstr_55,ozelgrp,sabitKolonlar);
+				response.put("data", (imagrup != null) ? imagrup : new ArrayList<>());
+				if(grupraporDTO.getBirim().equals("Tutar"))
+					response.put("format",2);
+				else
+					response.put("format",3);
+				response.put("baslik","Ana_Grup , Alt_Grup, " + baslikbakStrings[0] + ",TOPLAM");   
+				response.put("sabitkolonsayisi",2);
+			}
+			else if (grupraporDTO.getGruplama().equals("Alt_Grup_Yil"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				String slctString = "";
+				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				{
+					ozelgrp = new String[10][10];
+					ozelgrp[0][0] = "(SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"STOK\".\"Ana_Grup\"  )"; 
+					ozelgrp[0][1] = "Ana_Grup"; 
+					ozelgrp[1][0] = "(SELECT DISTINCT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID\" = \"STOK\".\"Alt_Grup\"  )"; 
+					ozelgrp[1][1] = "Alt_Grup"; 
+					ozelgrp[2][0] = "TO_CHAR(\"STOK\".\"Tarih\",'YYYY')"; 
+					ozelgrp[2][1] = "Yil"; 
+					ozelgrp[3][0] = "\"Birim\"";
+					ozelgrp[3][1] = "Birim";
+					slctString = "";
+				}
+				else if(fatConnDetails.getHangisql().equals("MS SQL"))
+					slctString = "(SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID = STOK.Ana_Grup ) as Ana_Grup  ,"  + 
+							" (SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID = STOK.Alt_Grup ) as Alt_Grup , "  + 
+							"  datepart(yyyy,STOK.Tarih) as Yil,";
+				else if(fatConnDetails.getHangisql().equals("MY SQL"))
+					slctString = "(SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID = STOK.Ana_Grup ) as Ana_Grup  ,"  + 
+							" (SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID = STOK.Alt_Grup ) as Alt_Grup , "  + 
+							"  YEAR(STOK.Tarih) as Yil,";
+				grupraporDTO.setAnagrp(turuString[0]);
+				grupraporDTO.setAltgrp(turuString[1]);
+				grupraporDTO.setUranagrp(turuString[2]);
+				grupraporDTO.setUraltgrp(turuString[3]);
+				String sstr_55 = deg_cevirString[1] ;
+				deg_cevirString[1] = "" ;
+				Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Ana_Grup" , "Alt_Grup","Yil"));
+				imagrup = faturaService.ima_alt_kod(slctString,deg_cevirString[1],
+						baslikbakStrings[1],deg_cevirString[0], baslikbakStrings[2], baslikbakStrings[3],  
+						grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),
+						grupraporDTO.getAnagrp(),grupraporDTO.getAltgrp(),
+						grupraporDTO.getSinif1(),grupraporDTO.getSinif2(),
+						grupraporDTO.getUkod1(),grupraporDTO.getUkod2(),
+						grupraporDTO.getTar1(),
+						grupraporDTO.getTar2(),
+						baslikbakStrings[0],"Yil,Ana_Grup ,Alt_Grup",sstr_55,ozelgrp,sabitKolonlar);
+				response.put("data", (imagrup != null) ? imagrup : new ArrayList<>());
+				if(grupraporDTO.getBirim().equals("Tutar"))
+					response.put("format",2);
+				else
+					response.put("format",3);
+				response.put("baslik","Ana_Grup ,Alt_Grup,Yil, " + baslikbakStrings[0] + ",TOPLAM");   
+				response.put("sabitkolonsayisi",3);
+			}
+			else if (grupraporDTO.getGruplama().equals("Alt_Grup_Yil_Ay"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				String slctString = "";
+				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				{
+					ozelgrp = new String[10][10];
+					ozelgrp[0][0] = "(SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"STOK\".\"Ana_Grup\"  )"; 
+					ozelgrp[0][1] = "Ana_Grup"; 
+					ozelgrp[1][0] = "(SELECT DISTINCT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID\" = \"STOK\".\"Alt_Grup\"  )"; 
+					ozelgrp[1][1] = "Alt_Grup"; 
+					ozelgrp[2][0] = "TO_CHAR(\"STOK\".\"Tarih\",'YYYY / MM')"; 
+					ozelgrp[2][1] = "Yil-Ay"; 
+					ozelgrp[3][0] = "\"Birim\"";
+					ozelgrp[3][1] = "Birim";
+					slctString = "";
+				}
+				else if(fatConnDetails.getHangisql().equals("MS SQL"))
+					slctString = "(SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID = STOK.Ana_Grup ) as Ana_Grup  ,"  + 
+							" (SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID = STOK.Alt_Grup ) as Alt_Grup , "  + 
+							" format (stok.tarih,'yyyy / MM') as Yil_Ay,";
+				else if(fatConnDetails.getHangisql().equals("MY SQL"))
+					slctString = "(SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID = STOK.Ana_Grup ) as Ana_Grup  ,"  + 
+							" (SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID = STOK.Alt_Grup ) as Alt_Grup , "  + 
+							" DATE_FORMAT(stok.tarih, '%Y / %m') as Yil_Ay,";
+				grupraporDTO.setAnagrp(turuString[0]);
+				grupraporDTO.setAltgrp(turuString[1]);
+				grupraporDTO.setUranagrp(turuString[2]);
+				grupraporDTO.setUraltgrp(turuString[3]);
+				String sstr_55 = deg_cevirString[1] ;
+				deg_cevirString[1] = "" ;
+				Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Ana_Grup" , "Alt_Grup","Yil_Ay"));
+				imagrup = faturaService.ima_alt_kod(slctString,deg_cevirString[1],
+						baslikbakStrings[1],deg_cevirString[0], baslikbakStrings[2], baslikbakStrings[3],  
+						grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),
+						grupraporDTO.getAnagrp(),grupraporDTO.getAltgrp(),
+						grupraporDTO.getSinif1(),grupraporDTO.getSinif2(),
+						grupraporDTO.getUkod1(),grupraporDTO.getUkod2(),
+						grupraporDTO.getTar1(),
+						grupraporDTO.getTar2(),
+						baslikbakStrings[0],"Yil_Ay,Ana_Grup ,Alt_Grup",sstr_55,ozelgrp,sabitKolonlar);
+				response.put("data", (imagrup != null) ? imagrup : new ArrayList<>());
+				if(grupraporDTO.getBirim().equals("Tutar"))
+					response.put("format",2);
+				else
+					response.put("format",3);
+				response.put("baslik","Ana_Grup ,Alt_Grup,Yil_Ay, " + baslikbakStrings[0] + ",TOPLAM");   
+				response.put("sabitkolonsayisi",3);
+			}
+			else if (grupraporDTO.getGruplama().equals("Yil_Ay"))
+			{
+				baslikbakStrings = baslik_bak(grupraporDTO);
+				deg_cevirString = deg_cevir(grupraporDTO);
+				String slctString = "";
+				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				{
+					ozelgrp = new String[10][10];
+					ozelgrp[1][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')"; 
+					ozelgrp[1][1] = "Yil"; 
+					ozelgrp[2][0] = " TO_CHAR(\"STOK\".\"Tarih\",'MM')"; 
+					ozelgrp[2][1] = "Ay"; 
+					slctString = "";
+				}
+				else if(fatConnDetails.getHangisql().equals("MS SQL"))
+					slctString = " datepart(yyyy,STOK.Tarih) as Yil ,datepart(mm,STOK.Tarih) as Ay,";
+				else if(fatConnDetails.getHangisql().equals("MY SQL"))
+					slctString = "YEAR(STOK.Tarih) as Yil ,MONTH(STOK.Tarih) as Ay, ";
+				grupraporDTO.setAnagrp(turuString[0]);
+				grupraporDTO.setAltgrp(turuString[1]);
+				grupraporDTO.setUranagrp(turuString[2]);
+				grupraporDTO.setUraltgrp(turuString[3]);
+				String sstr_55 = deg_cevirString[1] ;
+				deg_cevirString[1] = "" ;
+				Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Yil","Ay"));
+				imagrup = faturaService.ima_alt_kod(slctString,deg_cevirString[1],
+						baslikbakStrings[1],deg_cevirString[0], baslikbakStrings[2], baslikbakStrings[3],  
+						grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),
+						grupraporDTO.getAnagrp(),grupraporDTO.getAltgrp(),
+						grupraporDTO.getSinif1(),grupraporDTO.getSinif2(),
+						grupraporDTO.getUkod1(),grupraporDTO.getUkod2(),
+						grupraporDTO.getTar1(),
+						grupraporDTO.getTar2(),
+						baslikbakStrings[0],"Yil,Ay",sstr_55,ozelgrp,sabitKolonlar);
+				response.put("data", (imagrup != null) ? imagrup : new ArrayList<>());
+				if(grupraporDTO.getBirim().equals("Tutar"))
+					response.put("format",2);
+				else
+					response.put("format",3);
+				response.put("baslik","Yil,Ay," + baslikbakStrings[0] + ",TOPLAM");   
+				response.put("sabitkolonsayisi",2);
 			}
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
@@ -131,7 +425,7 @@ public class ImalatGrupController {
 			dataSource = null;
 		}	
 	}
-	
+
 	private String[] grup_cevir(String ana,String alt,String urana,String uralt)
 	{
 		String deger[] = {"","","","",""};
@@ -192,7 +486,6 @@ public class ImalatGrupController {
 			grupraporDTO.setAltgrp(turuString[1]);
 			grupraporDTO.setUranagrp(turuString[2]);
 			grupraporDTO.setUraltgrp(turuString[3]);
-
 			String jkj  = "" ;
 			String ch1 = "" ;
 			String sstr_2 = "" ;
@@ -241,7 +534,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"order by TO_CHAR(\"STOK\".\"Tarih\",'YYYY')");
+							grupraporDTO.getTar2(),"order by TO_CHAR(\"STOK\".\"Tarih\",'YYYY')");
 					sstr_2 =" TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
 				}
 			}
@@ -253,7 +546,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"order by datepart(mm,STOK.Tarih)");
+							grupraporDTO.getTar2(),"order by datepart(mm,STOK.Tarih)");
 					sstr_2 = "datepart(mm,STOK.Tarih)";
 				}
 				else if(fatConnDetails.getHangisql().equals( "MY SQL"))
@@ -262,7 +555,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"order by MONTH(STOK.Tarih)");
+							grupraporDTO.getTar2(),"order by MONTH(STOK.Tarih)");
 					sstr_2 = " MONTH(STOK.Tarih)";
 				}
 				else if(fatConnDetails.getHangisql().equals("PG SQL"))
@@ -271,7 +564,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"order by TO_CHAR(\"STOK\".\"Tarih\",'MM')");
+							grupraporDTO.getTar2(),"order by TO_CHAR(\"STOK\".\"Tarih\",'MM')");
 					sstr_2 =" TO_CHAR(\"STOK\".\"Tarih\",'MM')" ;
 				}
 			}
@@ -283,7 +576,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"order by datepart(dd,STOK.Tarih)");
+							grupraporDTO.getTar2(),"order by datepart(dd,STOK.Tarih)");
 					sstr_2 = "datepart(dd,STOK.Tarih)";
 				}
 				else if(fatConnDetails.getHangisql().equals("MY SQL"))
@@ -292,7 +585,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"order by DAY(STOK.Tarih)");
+							grupraporDTO.getTar2()," order by DAY(STOK.Tarih)");
 					sstr_2 = "DAY(STOK.Tarih)";
 				}
 				else if(fatConnDetails.getHangisql().equals("PG SQL"))
@@ -301,7 +594,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"order by TO_CHAR(\"STOK\".\"Tarih\",'DD')");
+							grupraporDTO.getTar2()," order by TO_CHAR(\"STOK\".\"Tarih\",'DD')");
 					sstr_2 =" TO_CHAR(\"STOK\".\"Tarih\",'DD')" ;
 				}
 			}
@@ -313,7 +606,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							" order by Depo ");
+							grupraporDTO.getTar2()," order by Depo ");
 					sstr_2 = " ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y= STOK.Depo) ,'---') ";
 				}
 				else  if(fatConnDetails.getHangisql().equals("MY SQL"))
@@ -322,7 +615,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							" order by Depo ");
+							grupraporDTO.getTar2()," order by Depo ");
 					sstr_2 = " IFNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y= STOK.Depo) ,'---') ";
 				}
 				else if(fatConnDetails.getHangisql().equals("PG SQL"))
@@ -331,7 +624,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"order by \"Depo\"");
+							grupraporDTO.getTar2(),"order by \"Depo\"");
 					sstr_2 =" COALESCE((SELECT \"DEPO\" FROM \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID\" = \"STOK\".\"Depo\"),'---')" ;
 				}
 			}
@@ -343,7 +636,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"  order by Ana_Grup  ");
+							grupraporDTO.getTar2()," order by Ana_Grup  ");
 					sstr_2 = "  ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = STOK.Ana_Grup),'---')  ";
 				}
 				else  if(fatConnDetails.getHangisql().equals("MY SQL"))
@@ -352,7 +645,7 @@ public class ImalatGrupController {
 							turuString[2],turuString[3],turuString[0],turuString[1],
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getTar1(),
-							grupraporDTO.getTar2(),							"  order by Ana_Grup  ");
+							grupraporDTO.getTar2()," order by Ana_Grup  ");
 					sstr_2 = "  IFNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = STOK.Ana_Grup),'---')  ";
 				}
 				else if(fatConnDetails.getHangisql().equals("PG SQL"))
@@ -377,7 +670,6 @@ public class ImalatGrupController {
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
 			throw new ServiceException(ex.getMessage());
 		}
 		return baslikbakStrings;

@@ -2,6 +2,7 @@ package com.hamit.obs.service.fatura;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -741,90 +742,90 @@ public class FaturaService {
 	}
 	
 	public List<Map<String, Object>> grp_urn_kodlu(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
-			String sstr_5,String sstr_1,String ozelgrp[][]){
+			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.grp_urn_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
+			return strategy.grp_urn_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
 	public List<Map<String, Object>> grp_urn_kodlu_yil(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
-			String sstr_5,String sstr_1,String ozelgrp[][]){
+			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.grp_urn_kodlu_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
+			return strategy.grp_urn_kodlu_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
 	public List<Map<String, Object>> grp_mus_kodlu(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
-			String sstr_5,String sstr_1,String ozelgrp[][]){
+			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, "Cari Hesap");
-			return strategy.grp_mus_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails,cariConnDetails);
+			return strategy.grp_mus_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails,cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
 	public List<Map<String, Object>> grp_mus_kodlu_yil(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
-			String sstr_5,String sstr_1,String ozelgrp[][]){
+			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, "Cari Hesap");
-			return strategy.grp_mus_kodlu_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails,cariConnDetails);
+			return strategy.grp_mus_kodlu_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails,cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
 	public List<Map<String, Object>> grp_yil_ay(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
-			String sstr_5,String sstr_1,String ozelgrp[][]){
+			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.grp_yil_ay(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
+			return strategy.grp_yil_ay(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
 	public List<Map<String, Object>> grp_yil(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
-			String sstr_5,String sstr_1,String ozelgrp[][]){
+			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.grp_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
+			return strategy.grp_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
 	public List<Map<String, Object>> grp_ana_grup(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
-			String sstr_5,String sstr_1,String ozelgrp[][]){
+			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.grp_ana_grup(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
+			return strategy.grp_ana_grup(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
 	public List<Map<String, Object>> grp_ana_grup_yil(grupraporDTO grupraporDTO,String sstr_2,String sstr_4,String kur_dos,String jkj,String ch1,String jkj1,
-			String sstr_5,String sstr_1,String ozelgrp[][]){
+			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.grp_ana_grup_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp, fatConnDetails);
+			return strategy.grp_ana_grup_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
@@ -843,11 +844,11 @@ public class FaturaService {
 	
 	public List<Map<String, Object>> ima_alt_kod(String slct,String sstr_5,String sstr_2,String sstr_4,String jkj,String ch1,String qwq6,
 			String qwq7,String qwq8,String qwq9,String s1 ,String s2,String k1,String k2,String t1,String t2,
-			String sstr_1,String ordrr,String sstr_55,String ozelgrp[][]){
+			String sstr_1,String ordrr,String sstr_55,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.ima_alt_kod(slct, sstr_5, sstr_2, sstr_4, jkj, ch1, qwq6, qwq7, qwq8, qwq9, s1, s2, k1, k2, t1, t2, sstr_1, ordrr, sstr_55, ozelgrp, fatConnDetails);
+			return strategy.ima_alt_kod(slct, sstr_5, sstr_2, sstr_4, jkj, ch1, qwq6, qwq7, qwq8, qwq9, s1, s2, k1, k2, t1, t2, sstr_1, ordrr, sstr_55, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

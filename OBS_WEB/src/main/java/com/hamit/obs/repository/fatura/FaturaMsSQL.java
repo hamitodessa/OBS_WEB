@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -1983,7 +1984,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> grp_urn_kodlu(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1,
-			String[][] ozelgrp, ConnectionDetails faturaConnDetails) {
+			String[][] ozelgrp,Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM  (SELECT MAL.Kodu as Urun_Kodu, Adi as Urun_Adi , Birim ," + sstr_2 + " as  degisken , " + sstr_4 +
 				" FROM STOK " + kur_dos + ",MAL " +
@@ -2011,7 +2012,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2021,7 +2022,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> grp_urn_kodlu_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
-			ConnectionDetails faturaConnDetails) {
+			Set<String> sabitkolonlar ,ConnectionDetails faturaConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM  (SELECT MAL.Kodu as Urun_Kodu, Adi as Urun_Adi , Birim ," +
 				" DATEPART(yyyy,STOK.Tarih) as Yil  , " + sstr_2 + " as  degisken , " + sstr_4 +
@@ -2050,7 +2051,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2059,7 +2060,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> grp_mus_kodlu(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
-			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM  (SELECT Hesap_Kodu  , " + 
@@ -2090,7 +2091,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2099,7 +2100,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> grp_mus_kodlu_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
-			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM (SELECT  Hesap_Kodu as Musteri_Kodu  ," +
@@ -2130,7 +2131,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2139,7 +2140,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> grp_yil_ay(grupraporDTO grupraporDTO, String sstr_2, String sstr_4, String kur_dos,
-			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM  (SELECT datepart(yy,STOK.Tarih) as Yil , datepart(mm,STOK.Tarih) as Ay  " +
@@ -2169,7 +2170,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2178,7 +2179,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> grp_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4, String kur_dos,
-			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM  (SELECT  datepart(yyyy,STOK.Tarih) as Yil , " + sstr_2 + " as  degisken , " + sstr_4 +
@@ -2207,7 +2208,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2216,7 +2217,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> grp_ana_grup(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
-			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM  (SELECT  (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  " +
@@ -2247,7 +2248,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2256,7 +2257,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> grp_ana_grup_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
-			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
+			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM  (SELECT  (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  " +
@@ -2288,7 +2289,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet);  
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar);  
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -2325,7 +2326,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> ima_alt_kod(String slct, String sstr_5, String sstr_2, String sstr_4, String jkj,
 			String ch1, String qwq6, String qwq7, String qwq8, String qwq9, String s1, String s2, String k1, String k2,
-			String t1, String t2, String sstr_1, String ordrr, String sstr_55, String[][] ozelgrp,
+			String t1, String t2, String sstr_1, String ordrr, String sstr_55, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
 		String sql = "SELECT * " +
 				" FROM  (SELECT " + slct + sstr_5  + sstr_2 + " as  degisken , " + sstr_4 +
@@ -2350,11 +2351,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				"    ) " +
 				" AS p" +
 				" ORDER BY  " + ordrr + " ";
+		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet); 
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
