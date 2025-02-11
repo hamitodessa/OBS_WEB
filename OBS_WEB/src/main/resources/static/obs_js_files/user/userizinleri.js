@@ -82,7 +82,7 @@ async function detailoku() {
 				document.getElementById("izinlimi").checked = cells[7].textContent.trim() === "Evet";
 				document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 				document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
-				document.getElementById("superviser").value = cells[3].textContent.trim() || "";
+				document.getElementById("superviser").value = cells[10].textContent.trim() || "";
 			} else {
 				clearFormModulsuz();
 			}
@@ -117,7 +117,7 @@ function setFormValues(row) {
 	document.getElementById("izinlimi").checked = cells[7].textContent.trim() === "Evet";
 	document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 	document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
-	document.getElementById("superviser").value = cells[4].textContent.trim() || "";
+	document.getElementById("superviser").value = cells[10].textContent.trim() || "";
 	sqlchanged();
 }
 
