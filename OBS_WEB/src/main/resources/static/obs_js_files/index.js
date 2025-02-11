@@ -103,5 +103,6 @@ $(document).ready(function () {
 		"/stok/fatrapor": stokBaslik,
 		"/stok/grprapor": stokBaslik,
 		"/stok/imagrprapor": stokBaslik,
+		"/stok/stokdetay": stokBaslik,
 	}
 });

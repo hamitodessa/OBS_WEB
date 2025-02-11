@@ -24,6 +24,7 @@ import com.hamit.obs.dto.stok.raporlar.envanterDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
+import com.hamit.obs.dto.stok.raporlar.stokdetayDTO;
 import com.hamit.obs.exception.ServiceException;
 
 @Component
@@ -2797,5 +2798,64 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> stok_rapor(stokdetayDTO stokdetayDTO, ConnectionDetails faturaConnDetails) {
+		
+		stokdetayDTO.setUranagrp(stokdetayDTO.getUranagrp().replace("Like", "::text Like"));
+		stokdetayDTO.setUraltgrp(stokdetayDTO.getUraltgrp().replace("Like", "::text Like"));
+		stokdetayDTO.setDepo(stokdetayDTO.getDepo().replace("Like", "::text Like"));
+		
+		stokdetayDTO.setAnagrp(stokdetayDTO.getAnagrp().replace("Like", "::text Like"));
+		stokdetayDTO.setAltgrp(stokdetayDTO.getAltgrp().replace("Like", "::text Like"));
+		
+		String wee  = "" ;
+		if (stokdetayDTO.isDepohardahil())
+			wee = " \"Evrak_Cins\"::text Like '%' " ;
+		else
+			wee = " \"Evrak_Cins\" <> 'DPO' " ;
+		String ure1 = "";
+		if (stokdetayDTO.isUretfisdahil())
+			ure1 =  " \"Evrak_Cins\"::text Like '%' ";
+		else
+			ure1 = " \"Evrak_Cins\" <> 'URE' " ;
+		
+		String sql =  " SELECT \"Urun_Kodu\" ,  \"Barkod\" , \"Adi\",  \"Izahat\",\"Evrak_No\" , " +
+				" CASE WHEN \"STOK\".\"Evrak_Cins\" = 'URE' THEN '' ELSE \"Hesap_Kodu\" END as \"Hesap_Kodu\", " +
+				" \"Evrak_Cins\",\"Tarih\" ,\"Miktar\" ,  \"Birim\" , \"STOK\".\"Fiat\" ,\"STOK\".\"Doviz\" , " +
+				" SUM(\"Miktar\") OVER(ORDER BY \"Tarih\"  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as \"Miktar_Bakiye\" , " +
+				" \"Tutar\" ," +
+				" SUM(\"Tutar\") OVER(ORDER BY \"Tarih\"  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as \"Tutar_Bakiye\" , " +
+				" COALESCE((SELECT \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"MAL\".\"Ana_Grup\"),'') \"Ana_Grup\" , " +
+				" COALESCE((SELECT \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"MAL\".\"Alt_Grup\"),'') AS \"Alt_Grup\" , " +
+				" COALESCE((SELECT \"DEPO\" FROM \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID_Y\" = \"STOK\".\"Depo\"),'') AS \"Depo\" ,\"STOK\".\"USER\" " +
+				" FROM \"STOK\"  ,\"MAL\"  " +
+				" WHERE  \"MAL\".\"Kodu\" = \"STOK\".\"Urun_Kodu\" " +
+				" AND \"MAL\".\"Ana_Grup\" " + stokdetayDTO.getUranagrp() +
+				" AND \"MAL\".\"Alt_Grup\" " + stokdetayDTO.getUraltgrp() +
+				" AND \"STOK\".\"Evrak_No\" >= '" + stokdetayDTO.getEvrno1() + "' AND  \"STOK\".\"Evrak_No\" <= '" + stokdetayDTO.getEvrno2() + "'" +
+				" AND \"STOK\".\"Tarih\" >= '" + stokdetayDTO.getTar1() + "' AND  \"STOK\".\"Tarih\" <= '" + stokdetayDTO.getTar2() + " 23:59:59.998'" +
+				" AND \"STOK\".\"Urun_Kodu\"  >= N'" + stokdetayDTO.getUkod1() + "' AND  \"STOK\".\"Urun_Kodu\"  <= N'" + stokdetayDTO.getUkod2() + "' " +
+				" AND \"STOK\".\"Ana_Grup\" " + stokdetayDTO.getAnagrp() +
+				" AND \"STOK\".\"Alt_Grup\" " + stokdetayDTO.getAltgrp() +
+				" AND \"STOK\".\"Depo\" " + stokdetayDTO.getDepo() +
+				" AND \"STOK\".\"Hesap_Kodu\"  >= N'" + stokdetayDTO.getCkod1() + "' AND  \"STOK\".\"Hesap_Kodu\"  <= N'" + stokdetayDTO.getCkod2() + "'" +
+				" AND " + wee +
+				" AND " + ure1 +
+				" AND \"STOK\".\"Hareket\"::text Like '" + stokdetayDTO.getTuru() + "%' " +
+				" Order by \"Tarih\" ";
+		System.out.println(sql);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException("PG stkService genel hatası.", e);
+		}
+		return resultList; 
+
 	} 
 }

@@ -58,7 +58,8 @@ public class RaporEmailGonderme {
 		boolean durum = false ;
 		try {
 			String nerden = raporEmailDegiskenler.getNerden(); 
-			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter") || nerden.equals("stok"))
+			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter") || nerden.equals("stok")
+					 || nerden.equals("stokdetay") )
 				gonder_excell();
 			else if(nerden.equals("gruprapor") || nerden.equals("imagruprapor"))
 				gonder_excell_grup();

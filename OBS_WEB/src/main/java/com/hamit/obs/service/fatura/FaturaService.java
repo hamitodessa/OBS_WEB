@@ -18,6 +18,7 @@ import com.hamit.obs.dto.stok.raporlar.envanterDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
+import com.hamit.obs.dto.stok.raporlar.stokdetayDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.fatura.IFaturaDatabase;
 import com.hamit.obs.repository.loglama.LoglamaRepository;
@@ -849,6 +850,16 @@ public class FaturaService {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
 			return strategy.ima_alt_kod(slct, sstr_5, sstr_2, sstr_4, jkj, ch1, qwq6, qwq7, qwq8, qwq9, s1, s2, k1, k2, t1, t2, sstr_1, ordrr, sstr_55, ozelgrp,sabitKolonlar, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> stok_rapor(stokdetayDTO stokdetayDTO){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.stok_rapor(stokdetayDTO, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

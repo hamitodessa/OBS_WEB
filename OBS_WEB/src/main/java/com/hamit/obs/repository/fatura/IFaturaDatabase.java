@@ -10,6 +10,7 @@ import com.hamit.obs.dto.stok.raporlar.envanterDTO;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
+import com.hamit.obs.dto.stok.raporlar.stokdetayDTO;
 
 public interface IFaturaDatabase {
 
@@ -101,5 +102,5 @@ public interface IFaturaDatabase {
 	List<Map<String, Object>> ima_alt_kod(String slct,String sstr_5,String sstr_2,String sstr_4,String jkj,String ch1,String qwq6,
 			String qwq7,String qwq8,String qwq9,String s1 ,String s2,String k1,String k2,String t1,String t2,
 			String sstr_1,String ordrr,String sstr_55,String ozelgrp[][],Set<String> sabitkolonlar,ConnectionDetails faturaConnDetails);
-
+	List<Map<String, Object>> stok_rapor(stokdetayDTO stokdetayDTO,ConnectionDetails faturaConnDetails);
 }

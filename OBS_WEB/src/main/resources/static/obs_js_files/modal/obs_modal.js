@@ -42,6 +42,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "imagrprapor") {
 		openenvModal(modal);
 	}
+	else if (nerden === "stokdetayrapor") {
+		openenvModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -392,6 +395,27 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #imagrpBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "stokdetayrapor") {
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const uranagrp = $('#uranagrp').val() || "";
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const uraltgrp = $('#uraltgrp').val() || "";
+		const evrno1 = $('#evrno1').val() || "";
+		const evrno2 = $('#evrno2').val() || "";
+		const ckod1 = $('#ckod1').val() || "";
+		const ckod2 = $('#ckod2').val() || "";
+		const anagrp = $('#anagrp').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const depo = $('#depo').val() || "";
+		const depohardahil = $('#depohardahil').prop('checked');
+		const uretfisdahil = $('#uretfisdahil').prop('checked');
+		const turu = $('#turu').val() || ""; 
+		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, evrno1, evrno2,ckod1,ckod2,anagrp,altgrp,depo,depohardahil, uretfisdahil,turu].join(",");
+		const hiddenField = $('#ara_content #stokdetayBilgi');
+		hiddenField.val(degerler);
+	}
 	
 
 	$('#firstModal').modal('hide');
@@ -491,6 +515,13 @@ function saveToMain() {
 		const mailButton = document.getElementById("imagrprapmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("imagrprapreportDownload");
+		reportFormat.disabled = false;
+	}
+	else if (nerden === "stokdetayrapor") {
+		stokdetayfetchTableData();
+		const mailButton = document.getElementById("stokdetaymailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("stokdetayreportDownload");
 		reportFormat.disabled = false;
 	}
 }
