@@ -156,7 +156,6 @@ public class EnvanterController {
 			qwq3 = "=" + dpos;
 		}
 		deger[2] = qwq3; 
-		
 		//***********************URUN ANA GRUP
 		if (urana.equals(""))
 			qwq4 = " Like  '%' " ;

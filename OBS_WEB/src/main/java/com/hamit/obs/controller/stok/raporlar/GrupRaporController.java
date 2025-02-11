@@ -61,14 +61,16 @@ public class GrupRaporController {
 			grupraporDTO.setUraltgrp(turuString[1]);
 			grupraporDTO.setUrozkod(turuString[2]);
 
-
 			String[] baslikbakStrings = {"",""};
 			String[] deg_cevirString = {"","","","","",""};
 			String ozelgrp[][] = new String[7][2];
+			
+			System.out.println(grupraporDTO.getGruplama());
 			if (grupraporDTO.getGruplama().equals("Urun Kodu"))
 			{
 				baslikbakStrings = baslik_bak(grupraporDTO);
 				deg_cevirString = deg_cevir(grupraporDTO);
+				System.out.println("bslk:" + baslikbakStrings[0]);
 				if (! baslikbakStrings[0].equals(""))
 				{
 					if(fatConnDetails.getHangisql().equals("PG SQL"))
@@ -313,6 +315,7 @@ public class GrupRaporController {
 			response.put("data", Collections.emptyList());
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
@@ -382,8 +385,13 @@ public class GrupRaporController {
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
 					sstr_2 = " datepart(yyyy,STOK.Tarih)" ;
 				}
-				else if(fatConnDetails.getHangisql().equals("MY SQL"))
-					sstr_2 = "YEAR(STOK.Tarih)" ;
+				else if(fatConnDetails.getHangisql().equals("MY SQL")) {
+					baslik = faturaService.baslik_bak("DISTINCT YEAR(STOK.Tarih)", "order by YEAR(STOK.Tarih)",jkj,ch1,
+							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
+							grupraporDTO.getCkod1(),grupraporDTO.getCkod2() ,
+							grupraporDTO.getTar1(),grupraporDTO.getTar2());
+					sstr_2 = " YEAR(STOK.Tarih)" ;
+				}
 				else if(fatConnDetails.getHangisql().equals("PG SQL"))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT TO_CHAR(\"STOK\".\"Tarih\",'YYYY') ","order by TO_CHAR(\"STOK\".\"Tarih\",'YYYY')",jkj,ch1,

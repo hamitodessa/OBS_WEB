@@ -131,6 +131,8 @@ async function grpfetchTableData() {
 		sinif2: parsedValues[19],
 	};
 	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
 	document.body.style.cursor = "wait";
 	const $yenileButton = $('#grpyenileButton');
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
@@ -149,6 +151,7 @@ async function grpfetchTableData() {
 			throw new Error(response.errorMessage);
 		}
 		data = response;
+		console.info(data);
 		updateTableHeaders(data.baslik, data.sabitkolonsayisi);
 		let headers = data.baslik
 			.split(',')

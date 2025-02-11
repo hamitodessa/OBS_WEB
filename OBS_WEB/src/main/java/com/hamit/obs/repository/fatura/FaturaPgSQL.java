@@ -3,6 +3,7 @@ package com.hamit.obs.repository.fatura;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,9 +36,8 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
-			if (resultSet.next()) {
+			if (resultSet.next())
 				firmaIsmi = resultSet.getString("FIRMA_ADI");
-			}
 		} catch (SQLException e) {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
@@ -54,7 +54,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -105,9 +105,8 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
-			if (resultSet.next()) {
+			if (resultSet.next())
 				deger = resultSet.getString(fieldd);
-			}
 		} catch (SQLException e) {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
@@ -126,7 +125,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -142,7 +141,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -154,9 +153,8 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
-			if (resultSet.next()) {
+			if (resultSet.next())
 				firmaIsmi = resultSet.getString("Adi");
-			}
 		} catch (SQLException e) {
 			throw new ServiceException("Urun okunamadı", e);
 		}
@@ -168,8 +166,8 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		String sql = "DELETE  FROM \"MAL\" WHERE \"Kodu\" = ?";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			preparedStatement.setString(1, kodu); // Parametreyi bağla
-			preparedStatement.executeUpdate(); // Doğru metot
+			preparedStatement.setString(1, kodu);
+			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			throw new ServiceException("Urun silme", e);
 		}
@@ -261,7 +259,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -425,7 +423,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -540,7 +538,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -745,7 +743,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -769,7 +767,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				}
 			}
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return dipnot; 
 	}
@@ -869,7 +867,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1075,7 +1073,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1109,7 +1107,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1145,7 +1143,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1184,7 +1182,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1222,7 +1220,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1262,7 +1260,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1537,7 +1535,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1669,7 +1667,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1723,7 +1721,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1787,7 +1785,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				maliyet = resultSet.getDouble("maliyet");   
 			}
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return maliyet; 
 	}
@@ -1880,7 +1878,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1933,7 +1931,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1998,7 +1996,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2019,7 +2017,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2103,7 +2101,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2186,7 +2184,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2269,7 +2267,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2352,7 +2350,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2435,7 +2433,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2518,7 +2516,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2601,7 +2599,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2660,7 +2658,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		grupraporDTO.setUranagrp(grupraporDTO.getUranagrp().replace("Like", "::text Like"));
 		grupraporDTO.setUraltgrp(grupraporDTO.getUraltgrp().replace("Like", "::text Like"));
 		grupraporDTO.setUrozkod(grupraporDTO.getUrozkod().replace("Like", "::text Like"));
-		
 
 		String sql = "SELECT  " + ustkolonString +
 				" FROM crosstab ($$ SELECT " + newselectString + " ," + sstr_2 + "  , " + sstr_4 +" " +
@@ -2684,7 +2681,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -2693,8 +2690,30 @@ public class FaturaPgSQL implements IFaturaDatabase {
 	public List<Map<String, Object>> ima_baslik_bak(String bas, String jkj, String ch1, String qwq6, String qwq7,
 			String qwq8, String qwq9, String k1, String k2, String t1, String t2, String ordrr,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		qwq6 = qwq6.replace("Like", "::text Like");
+		qwq7 = qwq7.replace("Like", "::text Like");
+		qwq8 = qwq8.replace("Like", "::text Like");
+		qwq9 = qwq9.replace("Like", "::text Like");
+		String sql =  "SELECT " + bas + "  from \"STOK\" ,\"MAL\" " +
+				" WHERE   " + jkj +
+				" AND " + ch1 +
+				" AND \"STOK\".\"Urun_Kodu\" = \"MAL\".\"Kodu\" " +
+				" AND \"MAL\".\"Ana_Grup\" " + qwq6 +
+				" AND \"MAL\".\"Alt_Grup\" " + qwq7 +
+				" AND \"STOK\".\"Ana_Grup\" " + qwq8 +
+				" AND \"STOK\".\"Alt_Grup\" " + qwq9 +
+				" AND \"Urun_Kodu\" between N'" + k1 + "' and N'" + k2 + "'" +
+				" AND \"STOK\".\"Tarih\" BETWEEN '" + t1 + "' AND '" + t2 + " 23:59:59.998'" +
+				"" + ordrr + " ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("PG stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
@@ -2702,7 +2721,81 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			String ch1, String qwq6, String qwq7, String qwq8, String qwq9, String s1, String s2, String k1, String k2,
 			String t1, String t2, String sstr_1, String ordrr, String sstr_55, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String grpString = "" ;
+		String ordString = "" ;
+		for (int i = 0; i <= ozelgrp.length-1;i++) {
+			if(ozelgrp[i][0] == null) break;
+			grpString = grpString + " " + ozelgrp[i][0].trim() +  "," ;
+		}
+		grpString = " satir ," ;
+		ordString = grpString;
+		sstr_1 = sstr_1.replace("[","('");
+		sstr_1 = sstr_1.replace("]","')");
+		String[] baslik = sstr_1.split(",");
+		String newselectString = " " ;
+		for (int i = 0; i <= ozelgrp.length-1;i++) {
+			if(ozelgrp[i][0] == null) break;
+			newselectString = newselectString + " " + ozelgrp[i][0].trim() + "::character varying ," ;
+		}
+		newselectString = newselectString.substring(0, newselectString.length() - 1);
+		newselectString = "ARRAY[" + newselectString + "] AS satir" ;
+		String ustselectString = " " ;
+		for (int i = 0; i <= ozelgrp.length-1;i++) {
+			if(ozelgrp[i][0] == null) break;
+			ustselectString = ustselectString + "satir[" + (i+1) + "] AS \"" + ozelgrp[i][1].trim() + "\" , " ;
+		}
+		String ustkolonString = "" ;
+		String[] baslik2 = sstr_1.split(",");
+		if (baslik2.length == 1)
+			ustkolonString =  ustselectString  + " \"" + baslik2[0].substring(2,baslik2[0].length()-2) + "\""  ;
+		else {
+			for(int i = 0;i<=baslik2.length-1;i++)
+				ustkolonString += "\""+ baslik2[i].trim().substring(2,baslik2[i].length()-2) + "\" , "  ;
+			ustkolonString = ustkolonString.substring(0,ustkolonString.length()-2);
+			String qazString = "" ;
+			for (int i = 0; i <= ozelgrp.length-1;i++) {
+				if(ozelgrp[i][0] == null) break;
+				qazString = qazString + " satir[" + (i+1) + "] AS  \"" + ozelgrp[i][1].trim() + "\" ," ;
+			}
+			ustkolonString = qazString + " "  + ustkolonString  ;
+		}
+		String altkolonString = "" ;
+		baslik = sstr_1.split(",");
+		if (baslik.length == 1)
+			altkolonString =  " satir character varying[] , \"" + baslik[0].substring(2,baslik[0].length()-2) + "\" DOUBLE PRECISION "  ;
+		else {
+			for(int i = 0;i<=baslik.length-1;i++)
+				altkolonString += "\"" + baslik[i].trim().substring(2,baslik[i].length()-2) + "\" DOUBLE PRECISION , "  ;
+			altkolonString =  " satir character varying[] ,"  + altkolonString.substring(0,altkolonString.length() - 2)  ;
+		}
+		qwq6 = qwq6.replace("Like", "::text Like");
+		qwq7 = qwq7.replace("Like", "::text Like");
+		qwq8 = qwq8.replace("Like", "::text Like");
+		qwq9 = qwq9.replace("Like", "::text Like");
+		String sql = "SELECT  " + ustkolonString +
+				" FROM crosstab ($$ SELECT " + newselectString + " ," + sstr_2 + "  , " + sstr_4 +" " +
+				" FROM \"STOK\" , \"MAL\" " +
+				" WHERE  " + jkj +
+				" AND " + ch1 +
+				" AND \"MAL\".\"Ana_Grup\" " + qwq6 +
+				" AND \"MAL\".\"Alt_Grup\" " + qwq7 +
+				" AND \"STOK\".\"Ana_Grup\" " + qwq8 +
+				" AND \"STOK\".\"Alt_Grup\" " + qwq9 +
+				" AND \"STOK\".\"Urun_Kodu\" = \"MAL\".\"Kodu\" " +
+				" AND \"MAL\".\"Sinif\" BETWEEN N'" + s1 + "' and N'" + s2 + "'" +
+				" AND \"Urun_Kodu\" between N'" + k1 + "' and N'" + k2 + "'" +
+				" AND \"STOK\".\"Tarih\" BETWEEN '" + t1 + "' AND '" + t2 + " 23:59:59.998'" +
+				" GROUP BY " +  grpString + " " + sstr_2  +
+				" ORDER BY  " + ordString + sstr_2  +
+				" $$, $$ VALUES  " + sstr_1  + "  $$)  AS ct (" + altkolonString+ ")" ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
+		} catch (Exception e) {
+			throw new ServiceException("PG stkService genel hatası.", e);
+		}
+		return resultList; 
 	} 
 }

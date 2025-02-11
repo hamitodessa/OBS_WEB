@@ -118,6 +118,8 @@ async function stokfetchTableData() {
         uretfisdahil: parsedValues[14],
     };
     const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
     document.body.style.cursor = "wait";
     const $yenileButton = $('#stokyenileButton');
     $yenileButton.prop('disabled', true).text('İşleniyor...');

@@ -63,6 +63,9 @@ async function fatfetchTableData() {
 		caradr: parsedValues[21],
 	};
 	const errorDiv = document.getElementById("errorDiv");
+	errorDiv.style.display = "none";
+	errorDiv.innerText = "";
+	
 	document.body.style.cursor = "wait";
 	const $yenileButton = $('#fatrapyenileButton');
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
