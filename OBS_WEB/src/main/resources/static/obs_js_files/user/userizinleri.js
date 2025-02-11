@@ -118,6 +118,7 @@ function setFormValues(row) {
 	document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 	document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
 	document.getElementById("superviser").value = cells[4].textContent.trim() || "";
+	sqlchanged();
 }
 
 function clearForm() {
