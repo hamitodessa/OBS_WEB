@@ -92,7 +92,7 @@ function setFormValues(row) {
 	document.getElementById("izinlimi").checked = cells[7].textContent.trim() === "Evet";
 	document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 	document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
-	document.getElementById("superviser").checked = cells[10].textContent.trim() || "";
+	document.getElementById("superviser").value = cells[10].textContent.trim() || "";
 	sqlchanged();
 	const dbButton = document.getElementById("savebutton");
 	dbButton.disabled = true;
