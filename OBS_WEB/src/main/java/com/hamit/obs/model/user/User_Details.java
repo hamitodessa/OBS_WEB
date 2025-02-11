@@ -56,6 +56,8 @@ public class User_Details {
 	@Column
 	private Boolean log;
 	
+	@Column(nullable = true, length = 30)
+	private String superviser;
 
 	@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

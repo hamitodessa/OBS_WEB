@@ -26,7 +26,7 @@
 	<div class="card p-1 mb-4">
 		<form id="userForm">
 			<div class="row">
-				<div class="form-group col-md-3"  style="width:250px;">
+				<div class="form-group"  style="width:200px;">
 					<label for="user_modul">User Modul:</label> 
 					<select   style="margin-top:10px;"
 						class="form-select" id="user_modul" name="user_modul"
@@ -40,17 +40,17 @@
 						<option value="Gunluk">Gunluk</option>
 					</select>
 				</div>
-				<div class="form-group col-md-3" style="width:250px;">
+				<div class="form-group" style="width:200px;">
 					<label for="user_role">Hangi Sql</label> 
 					<select style="margin-top:10px;"  
-						class="form-select" id="hangi_sql" name="hangi_sql">
+						class="form-select" id="hangi_sql" onchange="sqlchanged()" name="hangi_sql">
 						<option value="MS SQL">MS SQL</option>
 						<option value="MY SQL">MY SQL</option>
 						<option value="PG SQL">PG SQL</option>
 					</select>
 				</div>
 				
-				<div class="form-group col-md-3" style="width:250px;">
+				<div class="form-group" style="width:250px;">
 					<label for="user_role">Admin Hesaba Bagli Kullanici</label> 
 					<select style="margin-top:10px;" class="form-select" id="kullanici" name="kullanici" onchange=detailoku() >
 					</select>
@@ -59,40 +59,44 @@
 			</div>
 			<div class="row"  style="padding-top:5px;">
 				
-				<div class="form-group col-md-3" style="width:250px;">
+				<div class="form-group" style="width:200px;">
 					<label for="user_prog_kodu" >Program Kodu:</label> 
 					<input 	type="text" class="form-control" style="margin-top:10px;" id="user_prog_kodu"
 						maxlength="10">
 				</div>
-				<div class="form-group col-md-3" style="width:250px;">
+				<div class="form-group" style="width:200px;">
 					<label for="user_server">Server Kull</label> <input type="text" style="margin-top:10px;"
 						class="form-control" id="user_server" maxlength="50">
 				</div>
-				<div class="form-group col-md-3" style="width:250px;">
+				<div class="form-group" style="width:200px;">
 					<label for="user_pwd_server">Şifre Sunucu:</label> <input style="margin-top:10px;"
 						type="password" class="form-control" id="user_pwd_server"
 						maxlength="50">
 				</div>
-				<div class="form-group col-md-3" style="width:250px;">
+				<div class="form-group" style="width:200px;">
 					<label for="user_ip">IP:</label> <input type="text" style="margin-top:10px;"
 						class="form-control" id="user_ip" maxlength="50">
+				</div>
+				<div class="form-group" style="width:200px;visibility:hidden;" id="superviserdiv">
+					<label for="user_pwd_server">Superviser:</label> 
+					<input style="margin-top:10px;" class="form-control" id="superviser" maxlength="50">
 				</div>
 			</div>
 			<!-- Boolean Dropdownları Alt Alta -->
 			<div class="row mt-4" >
-				<div class="form-group col-md-3" style="width:250px;" id="izinlimidiv" >
+				<div class="form-group" style="width:200px;" id="izinlimidiv" >
 					<div class="form-check">
 						<input type="checkbox" class="form-check-input" id="izinlimi">
 						<label class="form-check-label" for="izinlimi">İzinli mi</label>
 					</div>
 				</div>
-				<div class="form-group col-md-3" style="width:250px;" id="calisanmidiv">
+				<div class="form-group" style="width:200px;" id="calisanmidiv">
 					<div class="form-check">
 						<input type="checkbox" class="form-check-input" id="calisanmi">
 						<label class="form-check-label" for="calisanmi">Çalışan mı</label>
 					</div>
 				</div>
-				<div class="form-group col-md-3" style="width:250px;" id="logiznidiv">
+				<div class="form-group" style="width:200px;" id="logiznidiv">
 					<div class="form-check">
 						<input type="checkbox" class="form-check-input" id="log">
 						<label class="form-check-label" for="log">Log</label>
@@ -139,6 +143,7 @@
 					<th>İzinli mi</th>
 					<th>Çalışan mı</th>
 					<th>Log</th>
+					<th>Superviser</th>
 				</tr>
 			</thead>
 			<tbody id="tableBody">

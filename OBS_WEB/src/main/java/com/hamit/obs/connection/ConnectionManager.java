@@ -89,7 +89,7 @@ public class ConnectionManager {
 		else if(details.getHangi_sql().equals("MY SQL"))
 			cnnString = "jdbc:mysql://" + details.getUser_ip() +  "/" + dosbaslangic + details.getUser_prog_kodu();
 		else if(details.getHangi_sql().equals("PG SQL"))
-			cnnString = "jdbc:postgresql://" + details.getUser_ip().substring(0, details.getUser_ip().indexOf("/")) +  "/" + dosbaslangic + details.getUser_prog_kodu();
+			cnnString = "jdbc:postgresql://" + details.getUser_ip() +  "/" + dosbaslangic + details.getUser_prog_kodu();
 		return cnnString ;
 	}
 
@@ -100,7 +100,7 @@ public class ConnectionManager {
 		else if(details.getHangi_sql().equals("MY SQL"))
 			cnnString = "jdbc:mysql://" + details.getUser_ip() +  "/" + dosbaslangic + details.getUser_prog_kodu()  + "_LOG";
 		else if(details.getHangi_sql().equals("PG SQL"))
-			cnnString = "jdbc:postgresql://" + details.getUser_ip().substring(0, details.getUser_ip().indexOf("/")) +  "/" + dosbaslangic + details.getUser_prog_kodu()  + "_log";
+			cnnString = "jdbc:postgresql://" + details.getUser_ip() +  "/" + dosbaslangic + details.getUser_prog_kodu()  + "_log";
 		return cnnString ;
 	}
 }

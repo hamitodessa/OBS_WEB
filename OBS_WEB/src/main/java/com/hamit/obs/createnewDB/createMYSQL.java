@@ -12,56 +12,54 @@ import com.hamit.obs.dto.server.serverBilgiDTO;
 public class createMYSQL {
 
 	public boolean serverKontrol(serverBilgiDTO sbilgi) {
-	    boolean result = false;
-	    String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
-	    try (Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
-	        DriverManager.setLoginTimeout(5);
-	        result = true; 
-	    } catch (Exception e) {
-	        result = false;
-	    }
-	    return result;
+		boolean result = false;
+		String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
+		try (Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
+			DriverManager.setLoginTimeout(5);
+			result = true; 
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
 	}
 
 	public boolean dosyaKontrol(serverBilgiDTO sbilgi) {
-	    boolean result = false;
-	    String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
-	    String query = "SHOW DATABASES WHERE `Database` = '" + sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu() + "';";
-	    try (Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
-	         PreparedStatement stmt = conn.prepareStatement(query)) {
-	        DriverManager.setLoginTimeout(5);
-	        
-	        try (ResultSet rs = stmt.executeQuery()) {
-	            if(rs.isBeforeFirst())
-	            {
-	            	rs.next();
-	    			int count=0;
-	    			count = rs.getRow();
-	    			result = count > 0 ;
-	            }
-	        }
-	    } catch (Exception e) {
-	    	result = false;
-	    }
-	    return result;
+		boolean result = false;
+		String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
+		String query = "SHOW DATABASES WHERE `Database` = '" + sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu() + "';";
+		try (Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+				PreparedStatement stmt = conn.prepareStatement(query)) {
+			DriverManager.setLoginTimeout(5);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				if(rs.isBeforeFirst())
+				{
+					rs.next();
+					result = rs.getRow() > 0;
+				}
+			}
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
 	}
 
 	public boolean tableKontrolS(serverBilgiDTO sbilgi, int beklenenTabloSayisi) {
-	    boolean result = false;
-	    String connectionString = "jdbc:mysql://" + sbilgi.getUser_ip() ;
-	    String query = "SELECT COUNT(TABLE_NAME) as SAYI"
+		boolean result = false;
+		String connectionString = "jdbc:mysql://" + sbilgi.getUser_ip() ;
+		String query = "SELECT COUNT(TABLE_NAME) as SAYI"
 				+ " FROM INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = '" + sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu() +"';";
 
-	    try (Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
-	         PreparedStatement stmt = conn.prepareStatement(query);
-	         ResultSet rs = stmt.executeQuery()) {
-	        DriverManager.setLoginTimeout(5);
-	        if (rs.next())
-	        	result = rs.getInt("SAYI") == beklenenTabloSayisi;
-	    } catch (SQLException e) {
-	    	result = false;
-	    }
-	    return result;
+		try (Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+				PreparedStatement stmt = conn.prepareStatement(query);
+				ResultSet rs = stmt.executeQuery()) {
+			DriverManager.setLoginTimeout(5);
+			if (rs.next())
+				result = rs.getInt("SAYI") == beklenenTabloSayisi;
+		} catch (SQLException e) {
+			result = false;
+		}
+		return result;
 	}
 
 	public boolean dosyaOlustur(serverBilgiDTO sbilgi) {
@@ -96,7 +94,6 @@ public class createMYSQL {
 					break;
 				}
 				}
-				
 			}
 			sifirdan_LOG(sbilgi);
 			result = true;
@@ -105,7 +102,7 @@ public class createMYSQL {
 		}
 		return result;
 	}
-	
+
 	public void createTableCari(Connection connection, String firmaAdi , String user_name) throws Exception {
 		String sql = null;
 		sql = "CREATE TABLE `HESAP` ("
@@ -119,8 +116,8 @@ public class createMYSQL {
 				+ " INDEX `IX_HESAP` (`HESAP` ASC) VISIBLE) " 
 				+ " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `HESAP_DETAY` ( "
 				+ " `D_HESAP` VARCHAR(12) NOT NULL,"
 				+ " `YETKILI` VARCHAR(30)  NULL,"
@@ -148,8 +145,8 @@ public class createMYSQL {
 				+ "  INDEX `IX_DHESAP` (`D_HESAP` ASC) VISIBLE)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `SATIRLAR` ("
 				+ " `SID` MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY ,"
 				+ " `HESAP` VARCHAR(12) NOT NULL,"
@@ -167,8 +164,8 @@ public class createMYSQL {
 				+ " INDEX `IXS_HESAP` (`HESAP` ASC  ) VISIBLE)"
 				+ " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `IZAHAT`(`EVRAK` int NOT NULL,`IZAHAT` VARCHAR(100) NULL,"
 				+ " PRIMARY KEY (`EVRAK`),"
 				+ " UNIQUE INDEX `EVRAK_UNIQUE` (`EVRAK` ASC) VISIBLE,"
@@ -176,12 +173,12 @@ public class createMYSQL {
 				+ " INDEX `IX_IZAHAT` ( `EVRAK` ASC) VISIBLE)"
 				+ " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `EVRAK_NO` (EID INTEGER AUTO_INCREMENT PRIMARY KEY ,`EVRAK` integer ) ;";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `OZEL` ("
 				+ " `OZID` INTEGER AUTO_INCREMENT PRIMARY KEY,"
 				+ " `YONETICI` VARCHAR(25) NULL,"
@@ -189,8 +186,8 @@ public class createMYSQL {
 				+ " `FIRMA_ADI` VARCHAR(50) NULL)"
 				+ " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `YETKILER`( "
 				+ " `YETID` INTEGER AUTO_INCREMENT PRIMARY KEY,"
 				+ " `KULLANICI` VARCHAR(25) NULL,"
@@ -199,29 +196,29 @@ public class createMYSQL {
 				+ " `GORUNTU` TINYINT NULL)"
 				+ " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql= "CREATE TABLE `ANA_GRUP_DEGISKEN` ("
 				+ " `ANA_GRUP` VARCHAR(25) NOT NULL,"
 				+ " `USER` VARCHAR(15) NULL,"
 				+ " PRIMARY KEY (`ANA_GRUP`))"
 				+ " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `ALT_GRUP_DEGISKEN`( "
 				+ " `ANA_GRUP` int NOT NULL, "
 				+ " `ALT_GRUP` VARCHAR(25) NOT NULL, "
 				+ " `USER` VARCHAR(15) NULL)"
 				+ " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		//TAHSIL FISI
 		sql = "CREATE TABLE `TAH_EVRAK`(`CINS` VARCHAR(3),`NO` integer );";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `TAH_AYARLAR`( " +
 				" `LOGO` MEDIUMBLOB NULL," +
 				" `FIR_ISMI` VARCHAR(50) NULL, " +
@@ -233,8 +230,8 @@ public class createMYSQL {
 				" `KASE` MEDIUMBLOB NULL)" +
 				" ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `TAH_DETAY`(" +
 				" `EVRAK` VARCHAR(15) NOT NULL," +
 				" `TARIH` datetime NULL," +
@@ -248,8 +245,8 @@ public class createMYSQL {
 				" `POS_BANKA` VARCHAR(40) NULL)" +
 				" ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `TAH_CEK` (" + 
 				" `EVRAK` VARCHAR(15),`CINS` SMALLINT, `BANKA` VARCHAR(40)  , " + 
 				" `SUBE` VARCHAR(40) ,`SERI` VARCHAR(20),`HESAP` VARCHAR(20)," + 
@@ -258,55 +255,55 @@ public class createMYSQL {
 				" `TUTAR` double) " +
 				"  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE PROCEDURE return_evrak (artino int)"
 				+ " BEGIN"
 				+ " UPDATE EVRAK_NO SET EVRAK = EVRAK + artino WHERE EID = 1;"
 				+ " SELECT EVRAK FROM EVRAK_NO WHERE EID = 1;"
 				+ " END";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE PROCEDURE return_tah_evrak (artino int,cins VARCHAR(10))"
 				+ " BEGIN"
 				+ " UPDATE TAH_EVRAK SET NO = NO + artino WHERE CINS = cins;"
 				+ " SELECT NO FROM TAH_EVRAK WHERE CINS = cins;"
 				+ " END";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
-		
+			stmt.executeUpdate(sql);
+		}
+
 		sql = "INSERT INTO `TAH_EVRAK`(`CINS`,`NO`) VALUES (?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-		    stmt.setString(1, "GIR");  // 1. Parametre -> CINS
-		    stmt.setInt(2, 0);         // 2. Parametre -> NO
-		    stmt.executeUpdate();
+			stmt.setString(1, "GIR");  // 1. Parametre -> CINS
+			stmt.setInt(2, 0);         // 2. Parametre -> NO
+			stmt.executeUpdate();
 		}
 
 		sql = "INSERT INTO TAH_EVRAK(CINS,NO) VALUES (?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-		    stmt.setString(1, "CIK");  // 1. Parametre -> CINS
-		    stmt.setInt(2, 0);         // 2. Parametre -> NO
-		    stmt.executeUpdate();
+			stmt.setString(1, "CIK");  // 1. Parametre -> CINS
+			stmt.setInt(2, 0);         // 2. Parametre -> NO
+			stmt.executeUpdate();
 		}
-		
+
 		// ***************EVRAK NO YAZ ************
 		sql = "INSERT INTO `EVRAK_NO` (`EVRAK`) VALUES (?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-		    stmt.setInt(1, 0);  // 1. Parametre -> EVRAK (int olarak)
-		    stmt.executeUpdate();
+			stmt.setInt(1, 0);  // 1. Parametre -> EVRAK (int olarak)
+			stmt.executeUpdate();
 		}
 		// ***************OZEL NO YAZ ************
 		sql = "INSERT INTO `OZEL` (`YONETICI`,`YON_SIFRE`,`FIRMA_ADI`) VALUES (?,?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-		    stmt.setString(1, user_name);  // 1. Parametre -> user_name
-		    stmt.setString(2, "12345");    // 2. Parametre -> Sabit değer "12345"
-		    stmt.setString(3, firmaAdi);   // 3. Parametre -> firmaAdi
-		    stmt.executeUpdate();
+			stmt.setString(1, user_name);  // 1. Parametre -> user_name
+			stmt.setString(2, "12345");    // 2. Parametre -> Sabit değer "12345"
+			stmt.setString(3, firmaAdi);   // 3. Parametre -> firmaAdi
+			stmt.executeUpdate();
 		}
 	}
-	
+
 	public void createTableKur(Connection connection) throws SQLException {
 		String sql = null;
 		sql = "CREATE TABLE `KURLAR`( id int AUTO_INCREMENT PRIMARY KEY ," 
@@ -320,8 +317,8 @@ public class createMYSQL {
 				+ " `BS` DOUBLE," 
 				+ "  INDEX `IX_KUR` (`Kur` ASC,Tarih ASC) VISIBLE);" ;
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 	}
 
 	public void createTableAdres(Connection connection, String firmaAdi , String user_name) throws SQLException {
@@ -359,8 +356,8 @@ public class createMYSQL {
 				+ "  INDEX `IX_Adres` (`M_Kodu` ASC , `Adi` ASC) VISIBLE)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `OZEL` ("
 				+ "  `OZID` INTEGER AUTO_INCREMENT PRIMARY KEY,"
 				+ "  `YONETICI` VARCHAR(25) NULL,"
@@ -368,8 +365,8 @@ public class createMYSQL {
 				+ "  `FIRMA_ADI` VARCHAR(50) NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `YETKILER`( "
 				+ " `YETID` INTEGER AUTO_INCREMENT PRIMARY KEY,"
 				+ "`KULLANICI` VARCHAR(25) NULL,"
@@ -378,18 +375,18 @@ public class createMYSQL {
 				+ "`GORUNTU` TINYINT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		// ***************OZEL NO YAZ ************
 		sql = "INSERT INTO `OZEL` (`YONETICI`,`YON_SIFRE`,`FIRMA_ADI`) VALUES (?,?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-		    stmt.setString(1, user_name);  // 1. Parametre -> user_name
-		    stmt.setString(2, "12345");    // 2. Parametre -> Sabit değer "12345"
-		    stmt.setString(3, firmaAdi);   // 3. Parametre -> firmaAdi
-		    stmt.executeUpdate();
+			stmt.setString(1, user_name);  // 1. Parametre -> user_name
+			stmt.setString(2, "12345");    // 2. Parametre -> Sabit değer "12345"
+			stmt.setString(3, firmaAdi);   // 3. Parametre -> firmaAdi
+			stmt.executeUpdate();
 		}
 	}
-	
+
 	public void createTableKambiyo(Connection connection, String firmaAdi , String user_name) throws SQLException {
 		String sql =null;
 		sql = "CREATE TABLE `CEK`(`Cek_No`  nvarchar(10)  PRIMARY KEY  ,`Vade` DATE , " + 
@@ -409,24 +406,24 @@ public class createMYSQL {
 				" `USER` nvarchar(15))"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `SENET`(`Senet_No`  nvarchar(10)  PRIMARY KEY,`Vade` DATE,`Giris_Bordro`  nvarchar(10),`Cikis_Bordro`  nvarchar(10) ," 
 				+ " `Giris_Tarihi` DATE , `Cikis_Tarihi` DATE , `Giris_Musteri` nvarchar(12),`Cikis_Musteri` nvarchar(12),`Tutar` DOUBLE ,`Cins` nvarchar(3), `Durum` nvarchar(1), "
 				+ " `T_Tarih` DATE , `Ilk_Borclu` nvarchar(30),`Sehir` nvarchar(15),`Giris_Ozel_Kod` nvarchar(15) ,`Cikis_Ozel_Kod` nvarchar(15),`USER` nvarchar(15))"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `EVRAK`(`EVRAK` varchar(5) ,`NO` integer )";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `ACIKLAMA`(`ACID`  INTEGER AUTO_INCREMENT PRIMARY KEY,`EVRAK_CINS` nvarchar(3) ,`SATIR` int ,`EVRAK_NO` nvarchar(10) ,`ACIKLAMA` varchar(50)  ,`Gir_Cik` nvarchar(1))"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `OZEL` ("
 				+ "  `OZID` INTEGER AUTO_INCREMENT PRIMARY KEY,"
 				+ "  `YONETICI` VARCHAR(25)  NULL,"
@@ -434,8 +431,8 @@ public class createMYSQL {
 				+ "  `FIRMA_ADI` VARCHAR(50)  NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `YETKILER`( "
 				+ " `YETID` INTEGER AUTO_INCREMENT PRIMARY KEY,"
 				+ "`KULLANICI` varchar(25)  NULL,"
@@ -444,43 +441,43 @@ public class createMYSQL {
 				+ "`GORUNTU` TINYINT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		// ***************OZEL NO YAZ *************************
 		sql = "INSERT INTO `OZEL` (`YONETICI`,`YON_SIFRE`,`FIRMA_ADI`) VALUES (?,?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-		    stmt.setString(1, user_name); 
-		    stmt.setString(2, "12345"); 
-		    stmt.setString(3, firmaAdi); 
-		    stmt.executeUpdate();
+			stmt.setString(1, user_name); 
+			stmt.setString(2, "12345"); 
+			stmt.setString(3, firmaAdi); 
+			stmt.executeUpdate();
 		}
 		// ***************CEK GIRIS EVRAK NO YAZ **************
 		sql = "INSERT INTO  `EVRAK`(`EVRAK`,`NO`) VALUES (?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, "CEK_G");
-		    stmt.setInt(2, 0);  
-		    stmt.executeUpdate();
+			stmt.setInt(2, 0);  
+			stmt.executeUpdate();
 		}
 		// ***************CEK CIKIS EVRAK NO YAZ **************
 		sql = "INSERT INTO  `EVRAK`(`EVRAK`,`NO`) VALUES (?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, "CEK_C");
-		    stmt.setInt(2, 0);  
-		    stmt.executeUpdate();
+			stmt.setInt(2, 0);  
+			stmt.executeUpdate();
 		}
 		// ***************SENET GIRIS EVRAK NO YAZ ************
 		sql = "INSERT INTO  `EVRAK`(`EVRAK`,`NO`) VALUES (?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, "SEN_G");
-		    stmt.setInt(2, 0);  
-		    stmt.executeUpdate();
+			stmt.setInt(2, 0);  
+			stmt.executeUpdate();
 		}
 		// ***************SENET CIKIS EVRAK NO YAZ ************
 		sql = "INSERT INTO  `EVRAK`(`EVRAK`,`NO`) VALUES (?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, "SEN_C");
-		    stmt.setInt(2, 0);  
-		    stmt.executeUpdate();
+			stmt.setInt(2, 0);  
+			stmt.executeUpdate();
 		}
 		sql = "CREATE PROCEDURE return_evrak (artino int,cins VARCHAR(10))"
 				+ " BEGIN"
@@ -488,8 +485,8 @@ public class createMYSQL {
 				+ " SELECT NO FROM EVRAK WHERE EVRAK = cins;"
 				+ " END " ;
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 	}
 	public void createTableFatura(Connection connection, String firmaAdi , String user_name) throws SQLException {
 		String sql = null;
@@ -505,8 +502,8 @@ public class createMYSQL {
 				+ "  INDEX `IX_DPN` (  `Evrak_No` ASC,  `Gir_Cik` ASC ) VISIBLE)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `GDY`( "
 				+ "  `GID`   INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
 				+ "  `Isim`  varchar (50)  NULL, "
@@ -517,8 +514,8 @@ public class createMYSQL {
 				+ "  INDEX `IX_GDY` (  `Isim` ASC,  `USER` ASC ) VISIBLE)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql= "CREATE TABLE `FATURA`( "
 				+ "`Fatura_No`  nvarchar (10) NOT NULL,"
 				+ " `Kodu`  varchar (12)  NULL,"
@@ -544,8 +541,8 @@ public class createMYSQL {
 				+ " INDEX `IX_FATURA`   (`Fatura_No`,`Kodu`,`Tarih`,`Cari_Firma`,`Gir_Cik`) VISIBLE)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `IRSALIYE`( "
 				+ " `Irsaliye_No`  nvarchar (10) NOT NULL,"
 				+ " `Kodu`  varchar (12)  NULL,"
@@ -572,8 +569,8 @@ public class createMYSQL {
 				+ " INDEX `IX_IRSALIYE`  (`Irsaliye_No`,`Kodu`,`Tarih`,`Firma`,`Hareket`) VISIBLE)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `MAL`( "
 				+ " `Kodu`  varchar (12)  PRIMARY KEY  NOT NULL,"
 				+ " `Adi`  varchar (40)  NULL,"
@@ -601,8 +598,8 @@ public class createMYSQL {
 				+ " INDEX `IX_MAL`  ( `Adi` ASC, `Ana_Grup` ASC,`Alt_Grup` ASC)  VISIBLE)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `RECETE`( "
 				+ " `Recete_No`  varchar (10)  NOT NULL,"
 				+ " `Ana_Grup`  int  NULL,"
@@ -614,16 +611,16 @@ public class createMYSQL {
 				+ " `USER`  varchar (15)  NOT NULL) "
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `OZEL` ("
 				+ "  `YONETICI` VARCHAR(25)  NULL,"
 				+ "  `YON_SIFRE` VARCHAR(15)  NULL,"
 				+ "  `FIRMA_ADI` VARCHAR(50)  NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `STOK`("
 				+ " `Evrak_No`  varchar (10)  NOT NULL,"
 				+ " `Evrak_Cins`  nvarchar (3) NULL,"
@@ -646,8 +643,8 @@ public class createMYSQL {
 				+ " INDEX IX_STOK  (`Urun_Kodu`,`Tarih`,`Hareket`) VISIBLE )"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `MENSEI_DEGISKEN`("
 				+ " `MEID` INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
 				+ " `MEID_Y`  int   NOT NULL,"   
@@ -655,8 +652,8 @@ public class createMYSQL {
 				+ " `USER`  varchar (15)  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE  `ANA_GRUP_DEGISKEN`("
 				+ " `AGID`  INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
 				+ " `AGID_Y`  int  NOT NULL,"  
@@ -664,8 +661,8 @@ public class createMYSQL {
 				+ " `USER`  varchar (15)  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE  `ALT_GRUP_DEGISKEN`("
 				+ " `ALID` INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
 				+ " `ALID_Y`  int  NOT NULL,"  
@@ -674,8 +671,8 @@ public class createMYSQL {
 				+ " `USER`  varchar (15)  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE  `ACIKLAMA`("
 				+ " `ACID`  INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
 				+ " `EVRAK_CINS`  nvarchar (3) NULL,"
@@ -686,8 +683,8 @@ public class createMYSQL {
 				+ " INDEX IX_ACIKLAMA  (`EVRAK_CINS` ASC, `EVRAK_NO` ASC, `Gir_Cik` ASC)  VISIBLE )"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE  `DEPO_DEGISKEN`("
 				+ " `DPID` INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
 				+ " `DPID_Y`  int   NOT NULL,"   
@@ -695,8 +692,8 @@ public class createMYSQL {
 				+ " `USER`  varchar (15)  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE  `OZ_KOD_1_DEGISKEN`("
 				+ " `OZ1ID`  INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
 				+ " `OZ1ID_Y`  int   NOT NULL,"  
@@ -704,8 +701,8 @@ public class createMYSQL {
 				+ " `USER`  varchar (15)  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `OZ_KOD_2_DEGISKEN`("
 				+ " `OZ2ID`   INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
 				+ " `OZ2ID_Y`  int  NOT NULL,"   
@@ -713,26 +710,26 @@ public class createMYSQL {
 				+ " `USER`  varchar (15)  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `DEPOEVRAK`("
 				+ " `E_No`  int  PRIMARY KEY  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `URET_EVRAK`("
 				+ " `E_No`  int PRIMARY KEY  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `ZAYI_EVRAK`("
 				+ " `E_No`  int PRIMARY KEY  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `YETKILER`("
 				+ " `KULLANICI`  varchar (25)  NULL,"
 				+ " `HESAP`  varchar (12)  NULL,"
@@ -742,8 +739,8 @@ public class createMYSQL {
 				+ " `USER`  varchar (15)  NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `IRS_EVRAK_FORMAT`("
 				+ " `SAT_SUT` nchar(5) NULL,"
 				+ " `TARIH`  DOUBLE  NULL,"
@@ -787,16 +784,16 @@ public class createMYSQL {
 				+ " `USER`  nvarchar (15) NOT NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "INSERT INTO  IRS_EVRAK_FORMAT(SAT_SUT ,TARIH,SEVK_TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO  ,GIDECEGI_YER,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,ALT_BOLUM, N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,`USER` ) VALUES ('SATIR','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "INSERT INTO  IRS_EVRAK_FORMAT(SAT_SUT ,TARIH,SEVK_TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO  ,GIDECEGI_YER,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,ALT_BOLUM, N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,`USER` ) VALUES ('SUTUN','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE `FAT_EVRAK_FORMAT`( "
 				+ " `SAT_SUT` nchar (5) NULL,"
 				+ " `TARIH`  DOUBLE  NULL,"
@@ -846,88 +843,88 @@ public class createMYSQL {
 				+ " `USER`  nvarchar (15) NULL)"
 				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "INSERT INTO  FAT_EVRAK_FORMAT(SAT_SUT,TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO ,GIDECEGI_YER ,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO ,IZAHAT,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,TEVKIFAT_ORANI ,AL_TAR_TEV_ED_KDV ,TEV_DAH_TOP_TUTAR , BEYAN_Ed_KDV ,TEV_HAR_TOP_TUT,TEV_KASESI,ALT_BOLUM,N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,USER ) VALUES " + " ('SATIR','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "INSERT INTO  FAT_EVRAK_FORMAT(SAT_SUT,TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO ,GIDECEGI_YER ,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO ,IZAHAT,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,TEVKIFAT_ORANI ,AL_TAR_TEV_ED_KDV ,TEV_DAH_TOP_TUTAR , BEYAN_Ed_KDV ,TEV_HAR_TOP_TUT,TEV_KASESI,ALT_BOLUM,N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,USER) VALUES " + " ('SUTUN','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		// ***************EVRAK NO YAZ ************
 		sql = "INSERT INTO  DEPOEVRAK(E_No) VALUES ('0')";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "INSERT INTO  URET_EVRAK(E_No) VALUES ('0')";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		sql = "INSERT INTO  ZAYI_EVRAK(E_No) VALUES ('0')";
 		try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    }
+			stmt.executeUpdate(sql);
+		}
 		// ***************OZEL NO YAZ *************************
 		sql = "INSERT INTO `OZEL` (`YONETICI`,`YON_SIFRE`,`FIRMA_ADI`) VALUES (?,?,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-		    stmt.setString(1, user_name); 
-		    stmt.setString(2, "12345"); 
-		    stmt.setString(3, firmaAdi); 
-		    stmt.executeUpdate();
+			stmt.setString(1, user_name); 
+			stmt.setString(2, "12345"); 
+			stmt.setString(3, firmaAdi); 
+			stmt.executeUpdate();
 		}
 	}
 	public void sifirdan_LOG(serverBilgiDTO sbilgi) {
-	    String databaseName = sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu() + "_log";
-	    String connectionUrl = "jdbc:mysql://" + sbilgi.getUser_ip() ;
-	    String createDatabaseSql =  "CREATE DATABASE " + databaseName ;
+		String databaseName = sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu() + "_log";
+		String connectionUrl = "jdbc:mysql://" + sbilgi.getUser_ip() ;
+		String createDatabaseSql =  "CREATE DATABASE " + databaseName ;
 
-    	sbilgi.setUser_prog_kodu(sbilgi.getUser_prog_kodu() +  "_log");
-        if (dosyaKontrol(sbilgi)) {
-            return;
-        }
-	    try (Connection initialConnection = DriverManager.getConnection(connectionUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
-	         Statement stmt = initialConnection.createStatement()) {
-	        stmt.executeUpdate(createDatabaseSql);
-	     
-	        String logDatabaseUrl =  "jdbc:mysql://" + sbilgi.getUser_ip() + "/" + databaseName;
-	        try (Connection logConnection = DriverManager.getConnection(logDatabaseUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
-	           
-	        	createTableLog(logConnection);
-	        }
-	    } catch (Exception e) {
-	        throw new RuntimeException("LOG veritabanı oluşturulamadı veya tablolar oluşturulamadı.", e);
-	    }
+		sbilgi.setUser_prog_kodu(sbilgi.getUser_prog_kodu() +  "_log");
+		if (dosyaKontrol(sbilgi)) {
+			return;
+		}
+		try (Connection initialConnection = DriverManager.getConnection(connectionUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+				Statement stmt = initialConnection.createStatement()) {
+			stmt.executeUpdate(createDatabaseSql);
+
+			String logDatabaseUrl =  "jdbc:mysql://" + sbilgi.getUser_ip() + "/" + databaseName;
+			try (Connection logConnection = DriverManager.getConnection(logDatabaseUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
+
+				createTableLog(logConnection);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException("LOG veritabanı oluşturulamadı veya tablolar oluşturulamadı.", e);
+		}
 	}
-	
+
 	private void createTableLog(Connection connection) throws SQLException  {
-	    String sql = "CREATE TABLE `LOGLAMA` ("
+		String sql = "CREATE TABLE `LOGLAMA` ("
 				+ " `TARIH` DATETIME NOT NULL,"
 				+ " `MESAJ` VARCHAR(100) NULL,"
 				+ " `EVRAK` VARCHAR(15) NULL,"
 				+ " `USER_NAME` VARCHAR(15) NULL,"
 				+ " INDEX `IX_LOGLAMA` (`TARIH` ASC,`USER_NAME` ASC) VISIBLE)"
 				+ " ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
-	    try (Statement stmt = connection.createStatement()) {
-	        stmt.executeUpdate(sql);
-	    } catch (SQLException e) {
-	        throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
-	    }
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
+		}
 	}
-	
+
 	public void job_sil_S(String jobName,serverBilgiDTO sbilgi) throws SQLException  {
 		try {
 			Statement stmt = null;
 			String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
-		    Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+			Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 			stmt = conn.createStatement();
 			stmt.execute("DROP EVENT IF EXISTS " + jobName + ";");
 			stmt.close();
 			conn.close();
 		} catch (Exception e)
 		{
-			 throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
+			throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
 		}
 	}
 
@@ -936,7 +933,7 @@ public class createMYSQL {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Statement stmt = null;
 			String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
-		    Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
+			Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 			stmt = conn.createStatement();
 			String sql = "CREATE EVENT IF NOT EXISTS " + jobName
 					+ " ON SCHEDULE EVERY '1' DAY"
@@ -948,7 +945,7 @@ public class createMYSQL {
 			conn.close();
 		} catch (Exception e)
 		{
-			 throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
+			throw new SQLException("Log tablosu veya index oluşturulurken hata oluştu.", e);
 		}
 	}
 }

@@ -28,7 +28,7 @@ public class createPGSQL {
 
 	public boolean dosyaKontrol(serverBilgiDTO sbilgi) {
 		boolean result = false;
-		String connectionString =  "jdbc:postgresql://" + sbilgi.getUser_ip() ;
+		String connectionString =  "jdbc:postgresql://" + sbilgi.getUser_ip() + "/" + sbilgi.getSuperviser() ;
 		String query = "SELECT datname FROM pg_database WHERE datname = ?";  
 		try (Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 				PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -36,9 +36,7 @@ public class createPGSQL {
 			stmt.setString(1, sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu());
 			try (ResultSet rs = stmt.executeQuery()) {
 				rs.next();
-				int count=0;
-				count = rs.getRow();
-				result = count > 0 ;
+				result = rs.getRow() > 0;
 			}
 		} catch (Exception e) {
 			result = false;

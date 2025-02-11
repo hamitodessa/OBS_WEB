@@ -64,6 +64,7 @@ async function detailoku() {
                     <td>${item.izinlimi ? "Evet" : "Hayır"}</td>
                     <td>${item.calisanmi ? "Evet" : "Hayır"}</td>
                     <td>${item.log ? "Evet" : "Hayır"}</td>
+										<td>${item.superviser || ""}</td>
                 `;
 				row.addEventListener("click", () => setFormValues(row));
 				tableBody.appendChild(row);
@@ -81,9 +82,11 @@ async function detailoku() {
 				document.getElementById("izinlimi").checked = cells[7].textContent.trim() === "Evet";
 				document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 				document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
+				document.getElementById("superviser").value = cells[3].textContent.trim() || "";
 			} else {
 				clearFormModulsuz();
 			}
+			sqlchanged();
 			if (data.roleName === "ADMIN") {
 				const logiznidiv = document.getElementById("logiznidiv");
 				logiznidiv.style.display = "block";
@@ -114,6 +117,7 @@ function setFormValues(row) {
 	document.getElementById("izinlimi").checked = cells[7].textContent.trim() === "Evet";
 	document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 	document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
+	document.getElementById("superviser").value = cells[4].textContent.trim() || "";
 }
 
 function clearForm() {
@@ -127,6 +131,7 @@ function clearForm() {
 	document.getElementById("izinlimi").checked = false;
 	document.getElementById("calisanmi").checked = false;
 	document.getElementById("log").checked = false;
+	document.getElementById("superviser").value = "";
 }
 function clearFormModulsuz() {
 	document.getElementById("hiddenId").value = "";
@@ -138,6 +143,7 @@ function clearFormModulsuz() {
 	document.getElementById("izinlimi").checked = false;
 	document.getElementById("calisanmi").checked = false;
 	document.getElementById("log").checked = false;
+	document.getElementById("superviser").value = "";
 }
 function clearTable() {
 	const tableBody = document.querySelector("#moduleTable tbody");
@@ -162,6 +168,7 @@ async function saveUserDetailsiz() {
 			calisanmi: document.getElementById("calisanmi").checked,
 			log: document.getElementById("log").checked,
 			email: document.getElementById("kullanici").value,
+			superviser : document.getElementById("superviser").value = "",
 		};
 		const response = await fetchWithSessionCheck("user/userizinsave", {
 			method: "POST",
@@ -206,4 +213,13 @@ async function deleteUserDetailsiz() {
 	} finally {
 		document.body.style.cursor = "default";
 	}
+}
+
+function sqlchanged() {
+  const hangi_sql = document.getElementById("hangi_sql").value;
+  if (hangi_sql === "PG SQL") {
+    document.getElementById("superviserdiv").style.visibility = "visible";
+  } else {
+    document.getElementById("superviserdiv").style.visibility = "hidden";
+  }
 }

@@ -37,6 +37,7 @@ async function detailoku() {
                     <td>${item.izinlimi ? "Evet" : "Hayır"}</td>
                     <td>${item.calisanmi ? "Evet" : "Hayır"}</td>
                     <td>${item.log ? "Evet" : "Hayır"}</td>
+										<td>${item.superviser || ""}</td>
                 `;
 				row.addEventListener("click", () => setFormValues(row));
 				tableBody.appendChild(row);
@@ -54,9 +55,11 @@ async function detailoku() {
 				document.getElementById("izinlimi").checked = cells[7].textContent.trim() === "Evet";
 				document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 				document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
+				document.getElementById("superviser").value = cells[10].textContent.trim() || "";
 			} else {
 				clearFormModulsuz();
 			}
+			sqlchanged();
 			if (data.roleName === "ADMIN") {
 				const logiznidiv = document.getElementById("logiznidiv");
 				logiznidiv.style.display = "block";
@@ -89,6 +92,7 @@ function setFormValues(row) {
 	document.getElementById("izinlimi").checked = cells[7].textContent.trim() === "Evet";
 	document.getElementById("calisanmi").checked = cells[8].textContent.trim() === "Evet";
 	document.getElementById("log").checked = cells[9].textContent.trim() === "Evet";
+	document.getElementById("superviser").checked = cells[10].textContent.trim() || "";
 	const dbButton = document.getElementById("savebutton");
 	dbButton.disabled = true;
 	const errorDiv = document.getElementById("errorDiv");
@@ -112,6 +116,7 @@ async function saveUserDetails() {
 			izinlimi: document.getElementById("izinlimi").checked,
 			calisanmi: document.getElementById("calisanmi").checked,
 			log: document.getElementById("log").checked,
+			superviser: document.getElementById("superviser").value,
 		};
 		const response = await fetchWithSessionCheck("user/user_details_save", {
 			method: "POST",
@@ -139,6 +144,7 @@ function clearForm() {
 	document.getElementById("izinlimi").checked = false;
 	document.getElementById("calisanmi").checked = false;
 	document.getElementById("log").checked = false;
+	document.getElementById("superviser").value = "";
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 }
@@ -152,6 +158,7 @@ function clearFormModulsuz() {
 	document.getElementById("izinlimi").checked = false;
 	document.getElementById("calisanmi").checked = false;
 	document.getElementById("log").checked = false;
+	document.getElementById("superviser").value = "";
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 }
@@ -199,7 +206,7 @@ async function checkFile() {
 		user_server: document.getElementById("user_server").value,
 		user_pwd_server: userPwdServer,
 		user_ip: document.getElementById("user_ip").value,
-		superviser: "",
+		superviser: document.getElementById("superviser").value,
 		id: document.getElementById("hiddenId").value,
 	};
 	const dbButton = document.getElementById("savebutton");
@@ -229,4 +236,13 @@ async function checkFile() {
 	} finally {
 		document.body.style.cursor = "default";
 	}
+}
+
+function sqlchanged() {
+  const hangi_sql = document.getElementById("hangi_sql").value;
+  if (hangi_sql === "PG SQL") {
+    document.getElementById("superviserdiv").style.visibility = "visible";
+  } else {
+    document.getElementById("superviserdiv").style.visibility = "hidden";
+  }
 }
