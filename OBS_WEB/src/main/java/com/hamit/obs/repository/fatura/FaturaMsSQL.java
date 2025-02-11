@@ -1490,7 +1490,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND d.Evrak_Cins " + wee +
 				" AND d.Evrak_Cins " + ure1 +
 				" )),0) AS Tutar " +
-				
+
 				" FROM MAL WITH (INDEX (IX_MAL)) ,STOK WITH (INDEX (IX_STOK)) " +
 				" WHERE   Kodu >= N'" + envanterDTO.getUkod1() + "' AND  Kodu <= N'" + envanterDTO.getUkod2() + "' " +
 				" AND Stok.Urun_Kodu = MAL.Kodu " +
@@ -1507,14 +1507,14 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" GROUP BY mal.kodu,mal.barkod,mal.adi,mal.birim,mal.kusurat " +
 				" ORDER BY mal.kodu ";		
 		List<Map<String, Object>> resultList = new ArrayList<>();
-				try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-						PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-					ResultSet resultSet = preparedStatement.executeQuery();
-					resultList = ResultSetConverter.convertToList(resultSet); 
-				} catch (Exception e) {
-					throw new ServiceException("MS stkService genel hatası.", e);
-				}
-				return resultList; 
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
@@ -2219,10 +2219,10 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	public List<Map<String, Object>> grp_ana_grup(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
-		String sql =   "SELECT * " +
-				" FROM  (SELECT  (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  " +
-				" ,(SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup, " +
-				" " + sstr_2 + " as  degisken , " + sstr_4 +
+		String sql = "SELECT * " +
+				" FROM (SELECT (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  " +
+				" ,(SELECT DISTINCT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup, " +
+				" " + sstr_2 + " as degisken , " + sstr_4 +
 				"  FROM STOK " + kur_dos + ",MAL " +
 				" WHERE " + jkj +
 				"  AND " + ch1 +
@@ -2230,18 +2230,18 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
 				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
 				" AND STOK.Urun_Kodu = MAL.Kodu " +
-				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
 				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
 				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
-				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
-				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
-				"  ) as s  " +
+				" AND STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				" ) as s  " +
 				" PIVOT " +
 				" ( " +
 				" SUM(" + sstr_5 + ") " +
 				" FOR degisken " +
 				" IN ( " + sstr_1 + ") " +
-				"    ) " +
+				" ) " +
 				" AS p" +
 				" ORDER BY Ana_Grup ,Alt_Grup";
 		List<Map<String, Object>> resultList = new ArrayList<>();
@@ -2259,9 +2259,9 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	public List<Map<String, Object>> grp_ana_grup_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
-		String sql =   "SELECT * " +
-				" FROM  (SELECT  (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  " +
-				" ,(SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup, " +
+		String sql = "SELECT * " +
+				" FROM (SELECT (SELECT DISTINCT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  " +
+				" ,(SELECT DISTINCT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup, " +
 				" datepart(yyyy,STOK.Tarih) as Yil  , " +
 				" " + sstr_2 + " as  degisken , " + sstr_4 +
 				"  FROM STOK " + kur_dos + ",MAL " +
@@ -2271,18 +2271,18 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp() +
 				" AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() +
 				" AND STOK.Urun_Kodu = MAL.Kodu " +
-				" AND  MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
+				" AND MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'" +
 				" AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'" +
 				" AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'" +
-				" AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
-				" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
-				"  ) as s  " +
+				" AND STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" +
+				" AND '" + grupraporDTO.getTar2() + " 23:59:59.998'" +
+				" ) as s " +
 				" PIVOT " +
 				" ( " +
 				" SUM(" + sstr_5 + ") " +
 				" FOR degisken " +
-				" IN ( " + sstr_1 + ") " +
-				"    ) " +
+				" IN (" + sstr_1 + ") " +
+				" ) " +
 				" AS p" +
 				" ORDER BY Ana_Grup ,Alt_Grup, Yil";
 		List<Map<String, Object>> resultList = new ArrayList<>();
@@ -2300,8 +2300,8 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	public List<Map<String, Object>> ima_baslik_bak(String bas, String jkj, String ch1, String qwq6, String qwq7,
 			String qwq8, String qwq9, String k1, String k2, String t1, String t2, String ordrr,
 			ConnectionDetails faturaConnDetails) {
-		String sql =  "SELECT "+ bas + "  from STOK ,MAL " +
-				" WHERE   " + jkj +
+		String sql = "SELECT "+ bas + "  from STOK ,MAL " +
+				" WHERE " + jkj +
 				" AND " + ch1 +
 				" AND STOK.Urun_Kodu = MAL.Kodu " +
 				" AND MAL.Ana_Grup " + qwq6 +
@@ -2309,8 +2309,8 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND STOK.Ana_Grup " + qwq8 +
 				" AND STOK.Alt_Grup " + qwq9 +
 				" AND Urun_Kodu between N'" + k1 + "' and N'" + k2 + "'" +
-				" AND  STOK.Tarih BETWEEN '" + t1 + "'" +
-				" AND  '" + t2 + " 23:59:59.998'" +
+				" AND STOK.Tarih BETWEEN '" + t1 + "'" +
+				" AND '" + t2 + " 23:59:59.998'" +
 				"" + ordrr + " ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
@@ -2329,26 +2329,26 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			String t1, String t2, String sstr_1, String ordrr, String sstr_55, String[][] ozelgrp,Set<String> sabitkolonlar,
 			ConnectionDetails faturaConnDetails) {
 		String sql = "SELECT * " +
-				" FROM  (SELECT " + slct + sstr_5  + sstr_2 + " as  degisken , " + sstr_4 +
+				" FROM (SELECT " + slct + sstr_5  + sstr_2 + " as  degisken , " + sstr_4 +
 				" FROM STOK,MAL " +
-				" WHERE   " + jkj +
+				" WHERE " + jkj +
 				" AND " + ch1 +
 				" AND MAL.Ana_Grup " + qwq6 +
 				" AND MAL.Alt_Grup " + qwq7 +
 				" AND STOK.Ana_Grup " + qwq8 +
 				" AND STOK.Alt_Grup " + qwq9 +
 				" AND STOK.Urun_Kodu = MAL.Kodu " +
-				" AND  MAL.Sinif BETWEEN N'" + s1 + "' and N'" + s2 + "'" +
+				" AND MAL.Sinif BETWEEN N'" + s1 + "' and N'" + s2 + "'" +
 				" AND Urun_Kodu between N'" + k1 + "' and N'" + k2 + "'" +
-				" AND  STOK.Tarih BETWEEN '" + t1 + "'" +
-				" AND  '" + t2 + " 23:59:59.998'" +
-				"  ) as s  " +
+				" AND STOK.Tarih BETWEEN '" + t1 + "'" +
+				" AND '" + t2 + " 23:59:59.998'" +
+				" ) as s  " +
 				" PIVOT " +
 				" ( " +
 				" SUM(" + sstr_55 + ") " +
 				" FOR degisken " +
 				" IN ( " + sstr_1 + ") " +
-				"    ) " +
+				" ) " +
 				" AS p" +
 				" ORDER BY  " + ordrr + " ";
 		System.out.println(sql);
