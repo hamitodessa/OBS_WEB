@@ -24,9 +24,8 @@ async function fetchDetails(evrakNo, cins) {
 }
 
 async function tahrapfetchTableData() {
-
-	const hiddenFieldValue = $('#tahrapBilgi').val(); // Hidden alanın değerini al
-	const parsedValues = hiddenFieldValue.split(","); // Virgüle göre ayır
+	const hiddenFieldValue = $('#tahrapBilgi').val();
+	const parsedValues = hiddenFieldValue.split(","); 
 	const tah_ted = parsedValues[0];
 	const hangi_tur = parsedValues[1];
 	const pos = parsedValues[2];
@@ -54,7 +53,6 @@ async function tahrapfetchTableData() {
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
 	const mainTableBody = document.getElementById("mainTableBody");
 	mainTableBody.innerHTML = "";
-
 	try {
 		const response = await fetchWithSessionCheck("cari/tahrapdoldur", {
 			method: "POST",
@@ -175,9 +173,9 @@ async function opentahrapModal(modal) {
 			throw new Error(response.errorMessage);
 		}
 		const result = response;
-		const data = result.data; // Gelen liste
+		const data = result.data; 
 		const posSelect = document.getElementById("pos");
-		posSelect.innerHTML = ""; // Önce eski seçenekleri temizle
+		posSelect.innerHTML = ""; 
 		if (data.length === 0) {
 			const modalError = document.getElementById("errorDiv");
 			if (modalError) {

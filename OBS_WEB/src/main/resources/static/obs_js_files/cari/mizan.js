@@ -11,7 +11,6 @@ async function mizfetchTableData() {
 	const karton2 = parsedValues[7];
 	const hangi_tur = parsedValues[8];
 	const errorDiv = document.getElementById("errorDiv");
-
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
 
@@ -28,15 +27,12 @@ async function mizfetchTableData() {
 	};
 	const tableBody = document.getElementById("tableBody");
 	tableBody.innerHTML = "";
-	
 	document.getElementById("totalBorc").textContent = "";
 	document.getElementById("totalAlacak").textContent = "";
 	document.getElementById("totalBakiye").textContent = "";
-
 	document.body.style.cursor = "wait";
 	const $yenileButton = $('#mizyenileButton');
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
-
 	try {
 		const data = await fetchWithSessionCheck("cari/mizanrapor", {
 			method: "POST",
@@ -96,25 +92,20 @@ async function mizdownloadReport(format) {
         karton2: parsedValues[7] || "",
         hangi_tur: parsedValues[8] || "",
     };
-
     const errorDiv = document.getElementById("errorDiv");
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
-
     document.body.style.cursor = "wait";
     const $indirButton = $('#indirButton');
     $indirButton.prop('disabled', true).text('İşleniyor...');
-
     const $yenileButton = $('#yenileButton');
     $yenileButton.prop('disabled', true);
-
     try {
 		const response = await fetchWithSessionCheckForDownload('cari/mizan_download', {
 		    method: 'POST',
 		    headers: { 'Content-Type': 'application/json' },
 		    body: JSON.stringify(Mizan_Request),
 		});
-
 		if (response.blob) {
 		    const disposition = response.headers.get('Content-Disposition');
 		    const fileName = disposition.match(/filename="(.+)"/)[1];

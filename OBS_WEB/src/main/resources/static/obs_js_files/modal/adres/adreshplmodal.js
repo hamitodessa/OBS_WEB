@@ -43,9 +43,9 @@ function adrselectValue(inputId, selectedKodu, secondnerden) {
     $('#adrsecondModal').modal('hide');
     const inputElementm = document.getElementById(inputId);
     document.getElementById("adrsecond-modalSearch").value = "";
-     inputElementm.value = selectedKodu;
-     if (secondnerden === "fatura") {
-         adrhesapAdiOgren(inputId, 'adresadilbl');
+    inputElementm.value = selectedKodu;
+    if (secondnerden === "fatura") {
+        adrhesapAdiOgren(inputId, 'adresadilbl');
     }
 }
 

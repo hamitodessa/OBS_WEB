@@ -163,7 +163,7 @@ function updateColumnTotal() {
 	totalTutarCell.textContent = "0.00";
 	totalMiktarCell.textContent = "0.000";
 	rows.forEach(row => {
-		const secondColumn = row.querySelector('td:nth-child(3) input'); // 2. kolon inputu
+		const secondColumn = row.querySelector('td:nth-child(3) input');
 
 		const fiat = row.querySelector('td:nth-child(5) input');
 		const iskonto = row.querySelector('td:nth-child(6) input');
@@ -180,7 +180,7 @@ function updateColumnTotal() {
 			const fia = parseLocaleNumber(fiat.value) || 0;
 			const mik = parseLocaleNumber(miktar.value) || 0;
 			const result = fia * mik;
-			
+
 			tutar.value = formatNumber2(result);
 			totalmik += mik;
 			if (result > 0) {
@@ -386,7 +386,7 @@ function clearInputs() {
 	document.getElementById("uygulananfiat").selectedIndex = 0;
 	document.getElementById("adreskod").value = '';
 
-	document.getElementById("dovizcins").value = document.getElementById("defaultdvzcinsi").value || 'TL';        
+	document.getElementById("dovizcins").value = document.getElementById("defaultdvzcinsi").value || 'TL';
 	document.getElementById("kur").value = '0.0000';
 
 	document.getElementById("not1").value = '';

@@ -1,4 +1,3 @@
-
 async function dvzfetchTableData() {
 	const hiddenFieldValue = $('#dvzcevirmeBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
@@ -15,8 +14,8 @@ async function dvzfetchTableData() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-	document.getElementById("dvzaciklama").innerText = "" ;
-	
+	document.getElementById("dvzaciklama").innerText = "";
+
 	if (!hesapKodu || !startDate || !endDate) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = "Lütfen tüm alanları doldurun.";
@@ -54,13 +53,13 @@ async function dvzfetchTableData() {
 					<td class="double-column">${formatNumber2(item.ALACAK)}</td>
 					<td>${item.USER || ''}</td>
 				`;
-				if(item.CEV_KUR === 1.0){
-						boskur +=1 ;
-					}
+				if (item.CEV_KUR === 1.0) {
+					boskur += 1;
+				}
 				tableBody.appendChild(row);
 			});
-			hesapAdiOgren(hesapKodu,'hesapAdi');
-			document.getElementById("dvzaciklama").innerText = "Bos Kur :" + boskur ;
+			hesapAdiOgren(hesapKodu, 'hesapAdi');
+			document.getElementById("dvzaciklama").innerText = "Bos Kur :" + boskur;
 		} else {
 			errorDiv.style.display = "block";
 			errorDiv.innerText = data.errorMessage || "Bir hata oluştu.";
@@ -83,13 +82,9 @@ async function dvzdownloadReport(format) {
 	const endDateField = parsedValues[2] || "";
 	const dvz_tur = parsedValues[3];
 	const dvz_cins = parsedValues[4];
-
 	const errorDiv = document.getElementById("errorDiv");
-
-	// Hata div'ini sıfırla
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-
 	if (!hesapKodu || !startDateField || !endDateField || !format) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = "Lütfen tüm alanları doldurun.";
@@ -116,7 +111,6 @@ async function dvzdownloadReport(format) {
 				dvz_cins: dvz_cins
 			}),
 		});
-
 		if (response.blob) {
 			const disposition = response.headers.get('Content-Disposition');
 			const fileName = disposition.match(/filename="(.+)"/)[1];
@@ -149,7 +143,6 @@ function dvzmailAt() {
 	const endDateField = parsedValues[2];
 	const dvz_tur = parsedValues[3];
 	const dvz_cins = parsedValues[4];
-
 	if (!hesapKodu) {
 		alert("Lütfen geçerli bir hesap kodu girin!");
 		return;
@@ -157,9 +150,4 @@ function dvzmailAt() {
 	const degerler = hesapKodu + "," + startDateField + "," + endDateField + "," + dvz_tur + "," + dvz_cins + ",cariekstre";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
-//	$('#ara_content').load(url, function(status, xhr) {
-//		if (status === "error") {
-//			$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
-//		}
-//	});
 }

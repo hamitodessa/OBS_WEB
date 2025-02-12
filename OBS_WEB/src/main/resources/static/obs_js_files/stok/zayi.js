@@ -201,7 +201,7 @@ function focusNextCell(event, element) {
 	}
 }
 
-async function updateRowValues(inputElement,kodbarkod) {
+async function updateRowValues(inputElement, kodbarkod) {
 	const selectedValue = inputElement.value;
 	document.body.style.cursor = "wait";
 	errorDiv.style.display = "none";
@@ -210,7 +210,7 @@ async function updateRowValues(inputElement,kodbarkod) {
 		const response = await fetchWithSessionCheck("stok/urnbilgiArama", {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: new URLSearchParams({ deger: selectedValue, kodbarkod:kodbarkod}),
+			body: new URLSearchParams({ deger: selectedValue, kodbarkod: kodbarkod }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -218,13 +218,13 @@ async function updateRowValues(inputElement,kodbarkod) {
 		const row = inputElement.closest('tr');
 		const cells = row.querySelectorAll('td');
 
-		
+
 		const birimCell = cells[6];
 		setLabelContent(birimCell, response.urun.birim);
-		document.getElementById("adil").innerText =  response.urun.adi || '';
-		document.getElementById("anagrpl").innerText =  response.urun.anagrup || '';
-		document.getElementById("altgrpl").innerText =  response.urun.altgrup || '';
-		
+		document.getElementById("adil").innerText = response.urun.adi || '';
+		document.getElementById("anagrpl").innerText = response.urun.anagrup || '';
+		document.getElementById("altgrpl").innerText = response.urun.altgrup || '';
+
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
@@ -269,13 +269,13 @@ function clearInputs() {
 	document.getElementById("anagrp").value = '';
 	document.getElementById("altgrp").innerHTML = '';
 	document.getElementById("altgrp").disabled = true;
-	
+
 	document.getElementById("a1").value = '';
 	document.getElementById("a2").value = '';
 
-	document.getElementById("adil").innerText =  '';
-	document.getElementById("anagrpl").innerText =  '';
-	document.getElementById("altgrpl").innerText =  '';
+	document.getElementById("adil").innerText = '';
+	document.getElementById("anagrpl").innerText = '';
+	document.getElementById("altgrpl").innerText = '';
 
 	document.getElementById("totalMiktar").textContent = "0.000";
 	document.getElementById("totalTutar").textContent = "0.00";
@@ -310,13 +310,13 @@ async function sonfis() {
 			errorDiv.innerText = data.errorMessage;
 			return;
 		}
-			zaiOku();
-		} catch (error) {
-			document.getElementById("errorDiv").style.display = "block";
-			document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-		} finally {
-			document.body.style.cursor = "default";
-		}
+		zaiOku();
+	} catch (error) {
+		document.getElementById("errorDiv").style.display = "block";
+		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+	}
 }
 
 async function yeniFis() {
@@ -374,29 +374,29 @@ async function zaiOku() {
 		const rows = table.querySelectorAll('tbody tr');
 		data.data.forEach((item, index) => {
 			const cells = rows[index].cells;
-				const barkodInput = cells[1]?.querySelector('input');
-				if (barkodInput) barkodInput.value = item.Barkod || "";
-				const urunKoduInput = cells[2]?.querySelector('input');
-				if (urunKoduInput) urunKoduInput.value = item.Urun_Kodu || "";
-				const depoSelect = cells[3]?.querySelector('select');
-				if (depoSelect) depoSelect.value = item.Depo || "";
-				const fiatInput = cells[4]?.querySelector('input');
-				if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
-				const miktarInput = cells[5]?.querySelector('input');
-				if (miktarInput) miktarInput.value = formatNumber3(item.Miktar * -1);
-				setLabelContent(cells[6], item.Birim || '');
-				const tutarInput = cells[7]?.querySelector('input');
-				if (tutarInput) tutarInput.value = formatNumber2(item.Tutar * -1);
-				const izahatInput = cells[8]?.querySelector('input');
-				if (izahatInput) izahatInput.value = item.Izahat || "";
+			const barkodInput = cells[1]?.querySelector('input');
+			if (barkodInput) barkodInput.value = item.Barkod || "";
+			const urunKoduInput = cells[2]?.querySelector('input');
+			if (urunKoduInput) urunKoduInput.value = item.Urun_Kodu || "";
+			const depoSelect = cells[3]?.querySelector('select');
+			if (depoSelect) depoSelect.value = item.Depo || "";
+			const fiatInput = cells[4]?.querySelector('input');
+			if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
+			const miktarInput = cells[5]?.querySelector('input');
+			if (miktarInput) miktarInput.value = formatNumber3(item.Miktar * -1);
+			setLabelContent(cells[6], item.Birim || '');
+			const tutarInput = cells[7]?.querySelector('input');
+			if (tutarInput) tutarInput.value = formatNumber2(item.Tutar * -1);
+			const izahatInput = cells[8]?.querySelector('input');
+			if (izahatInput) izahatInput.value = item.Izahat || "";
 		});
 		for (let i = 0; i < data.data.length; i++) {
 			const item = data.data[i];
-				document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
-				document.getElementById("anagrp").value = item.Ana_Grup || '';
-				await anagrpChanged(document.getElementById("anagrp"));
-				document.getElementById("altgrp").value = item.Alt_Grup || ''
-				break;
+			document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
+			document.getElementById("anagrp").value = item.Ana_Grup || '';
+			await anagrpChanged(document.getElementById("anagrp"));
+			document.getElementById("altgrp").value = item.Alt_Grup || ''
+			break;
 		}
 		document.getElementById("a1").value = data.aciklama1;
 		document.getElementById("a2").value = data.aciklama2;

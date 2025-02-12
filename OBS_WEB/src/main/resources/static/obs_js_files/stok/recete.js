@@ -467,4 +467,3 @@ async function recKayit() {
 		$kaydetButton.prop('disabled', false).text('Kaydet');
 	}
 }
-

@@ -4,9 +4,9 @@ async function raporYoket(raporid) {
 	if (!confirmDelete) {
 		return;
 	}
-	document.body.style.cursor = "wait"; // Fare imlecini "wait" yap
+	document.body.style.cursor = "wait";
 	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none"; // Hata mesajını gizle
+	errorDiv.style.display = "none";
 	try {
 		const response = await fetchWithSessionCheck("user/raporSil", {
 			method: 'POST',
@@ -23,17 +23,17 @@ async function raporYoket(raporid) {
 			$.ajax({
 				url: url,
 				type: "GET",
-				success: function(data) {
+				success: function (data) {
 					if (data.includes('<form') && data.includes('name="username"')) {
 						window.location.href = "/login";
 					} else {
 						$('#ara_content').html(data);
 					}
 				},
-				error: function(xhr) {
+				error: function (xhr) {
 					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
 				},
-				complete: function() {
+				complete: function () {
 					document.body.style.cursor = "default";
 				},
 			});
@@ -42,6 +42,6 @@ async function raporYoket(raporid) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
 	} finally {
-		document.body.style.cursor = "default"; // Fare imlecini varsayılana döndür
+		document.body.style.cursor = "default";
 	}
 }

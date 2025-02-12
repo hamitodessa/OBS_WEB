@@ -76,9 +76,9 @@ async function urnaramaYap(kodbarkod) {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
-			body: new URLSearchParams({ deger: aramaInput , kodbarkod:kodbarkod })
+			body: new URLSearchParams({ deger: aramaInput, kodbarkod: kodbarkod })
 		});
-		
+
 		if (response.errorMessage === "Bu Numarada Urun Yok") {
 			document.getElementById("errorDiv").innerText = response.errorMessage;
 			return;
@@ -241,7 +241,7 @@ async function uretimOku() {
 
 function initializeRows() {
 
-	rowCounter = 0; // Satır sayacını sıfırla
+	rowCounter = 0;
 	for (let i = 0; i < 5; i++) {
 		satirekle();
 	}
@@ -467,7 +467,7 @@ function clearInputs() {
 	document.getElementById("uretmiktar").value = "0";
 	document.getElementById("birimfiati").innerText = "0.00";
 	document.getElementById("aciklama").value = "";
-	document.getElementById("dvzcins").value = document.getElementById("defaultdvzcinsi").value || 'TL';      
+	document.getElementById("dvzcins").value = document.getElementById("defaultdvzcinsi").value || 'TL';
 
 	document.getElementById("adi").innerText = "";
 	document.getElementById("birim").innerText = "";

@@ -39,7 +39,7 @@ function urnclearInputs() {
 	const imgElement = document.getElementById("resimGoster");
 	imgElement.src = "";
 	imgElement.style.display = "none";
-	document.getElementById("kodKontrol").innerText = "" ;
+	document.getElementById("kodKontrol").innerText = "";
 }
 
 async function urnKayit() {
@@ -121,8 +121,8 @@ function geturnDTO() {
 }
 
 async function urnaramaYap(kodbarkod) {
-	
-	document.getElementById("kodKontrol").innerText = "" ;
+
+	document.getElementById("kodKontrol").innerText = "";
 	const aramaInput = document.getElementById("arama").value;
 	if (!aramaInput || aramaInput === "") {
 		return;
@@ -136,15 +136,15 @@ async function urnaramaYap(kodbarkod) {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
-			body: new URLSearchParams({ deger: aramaInput,kodbarkod:kodbarkod })
+			body: new URLSearchParams({ deger: aramaInput, kodbarkod: kodbarkod })
 		});
 		if (response.errorMessage === "Bu Numarada Kayıtlı Hesap Yok") {
 			throw new Error(response.errorMessage);
 		}
 		const dto = response.urun;
-		document.getElementById("kodu").value = dto.kodu; 
+		document.getElementById("kodu").value = dto.kodu;
 		document.getElementById("adi").value = dto.adi;
-		document.getElementById("birim").value = dto.birim; 
+		document.getElementById("birim").value = dto.birim;
 		document.getElementById("kusurat").value = dto.kusurat;
 		document.getElementById("sinif").value = dto.sinif;
 		document.getElementById("anagrup").value = dto.anagrup;
@@ -210,9 +210,9 @@ function urnGeri() {
 }
 
 function urnIleri() {
-	const arama = document.getElementById("kodu").value; // Input alanının değerini al
-	const datalist = document.getElementById("urnOptions"); // Datalist öğesini seç
-	const options = datalist.getElementsByTagName("option"); // Datalist içindeki option'ları al
+	const arama = document.getElementById("kodu").value;
+	const datalist = document.getElementById("urnOptions");
+	const options = datalist.getElementsByTagName("option");
 	if (options.length === 0) {
 		return null;
 	}
@@ -226,21 +226,21 @@ function urnIleri() {
 
 	if (index !== -1) {
 		if (index < options.length - 1) {
-			const nextValue = options[index + 1].value; // Bir sonraki indexin değeri
+			const nextValue = options[index + 1].value;
 			document.getElementById("arama").value = nextValue;
 			urnaramaYap("Kodu");
 			document.getElementById("arama").value = "";
 		} else {
-			return null; // Son index ise geri null döndür
+			return null;
 		}
 	} else {
-		return null; // Değer bulunamazsa null döndür
+		return null;
 	}
 }
 
 function urnIlk() {
 	const datalist = document.getElementById("urnOptions");
-	const options = datalist.getElementsByTagName("option"); 
+	const options = datalist.getElementsByTagName("option");
 
 	if (options.length === 0) {
 		urnclearInputs();
@@ -259,7 +259,7 @@ async function urnSil() {
 	if (["0", ""].includes(urnKodu.value)) {
 		return;
 	}
-	const message = "Kayit Dosyadan Silinecek ..?" ;
+	const message = "Kayit Dosyadan Silinecek ..?";
 	const confirmDelete = confirm(message);
 	if (!confirmDelete) {
 		return;
@@ -319,7 +319,7 @@ function resimSil() {
 }
 
 async function anaChanged(selectElement) {
-	const selectedValue = selectElement.value; // Seçilen değeri al
+	const selectedValue = selectElement.value;
 	document.body.style.cursor = "wait";
 	document.getElementById("errorDiv").style.display = "none";
 	errorDiv.innerText = "";
@@ -357,7 +357,7 @@ async function anaChanged(selectElement) {
 }
 
 function birimtipChanged(selectElement) {
-	const selectedValue = selectElement.value; // Seçilen değeri al
+	const selectedValue = selectElement.value;
 	const imgElementLogo = document.getElementById("birim");
 	imgElementLogo.value = selectedValue;
 

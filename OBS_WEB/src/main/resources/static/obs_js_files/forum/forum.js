@@ -1,4 +1,3 @@
-
 loadSubjects();
 async function loadSubjects() {
 	const mesajsayi = document.querySelector('#mesajadet');
@@ -36,7 +35,6 @@ async function loadSubjects() {
 		document.body.style.cursor = "default";
 	}
 };
-
 
 function renderSubjects(subjects) {
 	if (!subjects || !Array.isArray(subjects)) {
@@ -143,17 +141,17 @@ async function submitComment(subjectId) {
 			$.ajax({
 				url: url,
 				type: "GET",
-				success: function(data) {
+				success: function (data) {
 					if (data.includes('<form') && data.includes('name="username"')) {
 						window.location.href = "/login";
 					} else {
 						$('#ara_content').html(data);
 					}
 				},
-				error: function(xhr) {
+				error: function (xhr) {
 					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
 				},
-				complete: function() {
+				complete: function () {
 					document.body.style.cursor = "default";
 					saveButton.textContent = "Kaydet";
 					saveButton.disabled = false;
@@ -207,17 +205,17 @@ async function addSubject() {
 			$.ajax({
 				url: url,
 				type: "GET",
-				success: function(data) {
+				success: function (data) {
 					if (data.includes('<form') && data.includes('name="username"')) {
 						window.location.href = "/login";
 					} else {
 						$('#ara_content').html(data);
 					}
 				},
-				error: function(xhr) {
+				error: function (xhr) {
 					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
 				},
-				complete: function() {
+				complete: function () {
 					document.body.style.cursor = "default";
 					saveButton.textContent = "Kaydet";
 					saveButton.disabled = false;

@@ -36,7 +36,7 @@ async function kuroku() {
 						<td class="double-column">${formatNumber4(item.BA)}</td>
 						<td class="double-column">${formatNumber4(item.BS)}</td>
 					`;
-					row.addEventListener("click", function() {
+					row.addEventListener("click", function () {
 						setFormValues(row);
 					});
 					tableBody.appendChild(row);
@@ -95,32 +95,32 @@ function setFormValues(row) {
 	const cells = row.cells;
 	document.getElementById("doviz_tur").value = cells[0].textContent.trim();
 	document.getElementById("ma").value = cells[1].textContent.trim();
-	document.getElementById("ms").value = cells[2].textContent.trim();  
-	document.getElementById("sa").value = cells[3].textContent.trim(); 
-	document.getElementById("ss").value = cells[4].textContent.trim(); 
-	document.getElementById("ba").value = cells[5].textContent.trim();  
-	document.getElementById("bs").value = cells[6].textContent.trim(); 
+	document.getElementById("ms").value = cells[2].textContent.trim();
+	document.getElementById("sa").value = cells[3].textContent.trim();
+	document.getElementById("ss").value = cells[4].textContent.trim();
+	document.getElementById("ba").value = cells[5].textContent.trim();
+	document.getElementById("bs").value = cells[6].textContent.trim();
 }
 
 function kurSatirOku() {
 	let kur_turu = document.getElementById("doviz_tur").value;
 	const tableBody = document.getElementById("tableBody");
-	let matchedRow = null; 
+	let matchedRow = null;
 	for (let i = 0; i < tableBody.rows.length; i++) {
-		const row = tableBody.rows[i]; 
-		const firstColumnValue = row.cells[0].textContent.trim(); 
-		if (firstColumnValue === kur_turu) { 
-			matchedRow = row; 
-			break; 
+		const row = tableBody.rows[i];
+		const firstColumnValue = row.cells[0].textContent.trim();
+		if (firstColumnValue === kur_turu) {
+			matchedRow = row;
+			break;
 		}
 	}
 	if (matchedRow) {
 		document.getElementById("ma").value = matchedRow.cells[1].textContent.trim();
-		document.getElementById("ms").value = matchedRow.cells[2].textContent.trim(); 
-		document.getElementById("sa").value = matchedRow.cells[3].textContent.trim(); 
-		document.getElementById("ss").value = matchedRow.cells[4].textContent.trim(); 
-		document.getElementById("ba").value = matchedRow.cells[5].textContent.trim(); 
-		document.getElementById("bs").value = matchedRow.cells[6].textContent.trim();  
+		document.getElementById("ms").value = matchedRow.cells[2].textContent.trim();
+		document.getElementById("sa").value = matchedRow.cells[3].textContent.trim();
+		document.getElementById("ss").value = matchedRow.cells[4].textContent.trim();
+		document.getElementById("ba").value = matchedRow.cells[5].textContent.trim();
+		document.getElementById("bs").value = matchedRow.cells[6].textContent.trim();
 	} else {
 	}
 }
@@ -131,7 +131,7 @@ function formatNumber4(value) {
 		maximumFractionDigits: 4
 	});
 }
-//**********************************kur kayit ********************************************
+
 async function kurKayit() {
 	const kurgirisDTO = {
 		dvz_turu: document.getElementById("doviz_tur").value,
@@ -162,7 +162,7 @@ async function kurKayit() {
 	} catch (error) {
 		document.body.style.cursor = "default";
 		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message; // Hata mesajını göster
+		errorDiv.innerText = error.message;
 	}
 	finally {
 		document.body.style.cursor = "default";
@@ -187,10 +187,10 @@ async function sayfaYukle() {
 	} catch (error) {
 		document.getElementById('ara_content').innerHTML = `<h2>${error.message}</h2>`;
 	} finally {
-		document.body.style.cursor = "default"; 
+		document.body.style.cursor = "default";
 	}
 }
-//************************evrak sil ***********************************************
+
 async function kurYoket() {
 	const kurgirisDTO = {
 		dvz_turu: document.getElementById("doviz_tur").value,
@@ -240,7 +240,7 @@ async function merkezOku() {
 		}
 		document.getElementById("ma").value = formatNumber4(response.ma || 0);
 		document.getElementById("ms").value = formatNumber4(response.ms || 0);
-		
+
 	} catch (error) {
 		document.getElementById("errorDiv").style.display = "block";
 		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";

@@ -3,28 +3,22 @@ function turChange() {
 	if (cins === "Cek") {
 		document.getElementById("cekbilgidiv").style.display = "block";
 		document.getElementById("divcekbilgi").style.display = "block";
-
 		document.getElementById("posbilgidiv").style.display = "none";
 		document.getElementById("divposbilgi").style.display = "none";
-
 		document.getElementById("tab2-tab").disabled = false;
 	}
 	else if (cins === "Kredi Karti") {
 		document.getElementById("cekbilgidiv").style.display = "none";
 		document.getElementById("divcekbilgi").style.display = "none";
-
 		document.getElementById("posbilgidiv").style.display = "block";
 		document.getElementById("divposbilgi").style.display = "block";
-
 		document.getElementById("tab2-tab").disabled = true;
 	}
 	else {
 		document.getElementById("cekbilgidiv").style.display = "none";
 		document.getElementById("divcekbilgi").style.display = "none";
-
 		document.getElementById("posbilgidiv").style.display = "none";
 		document.getElementById("divposbilgi").style.display = "none";
-
 		document.getElementById("tab2-tab").disabled = true;
 	}
 }
@@ -90,22 +84,22 @@ function addRow() {
                 <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
             </div>
         </td>
-				<td>
-				      <input class="form-control" onkeydown="focusNextCell(event, this)">
-				</td>
-				<td>
-				      <input class="form-control" onkeydown="focusNextCell(event, this)">
-				</td>
-				<td>
-				      <input  class="form-control" onkeydown="focusNextCell(event, this)">
-				</td>
-				<td>
-				      <input type="date" class="form-control" onkeydown="focusNextCell(event, this)">
-				</td>
-				<td>
-				      <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-				      onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-				</td>
+		<td>
+	      <input class="form-control" onkeydown="focusNextCell(event, this)">
+		</td>
+		<td>
+  	        <input class="form-control" onkeydown="focusNextCell(event, this)">
+		</td>
+		<td>
+		    <input  class="form-control" onkeydown="focusNextCell(event, this)">
+		</td>
+		<td>
+		    <input type="date" class="form-control" onkeydown="focusNextCell(event, this)">
+		</td>
+		<td>
+		    <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
+		      onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
+		</td>
     `;
 }
 
@@ -347,7 +341,7 @@ function tahgerifisNo() {
 	const fisNoInput = document.getElementById('tahevrakNo');
 	const errorDiv = document.getElementById('errorDiv');
 	if (fisNoInput) {
-		const currentValue = parseInt(fisNoInput.value, 10) || 0; // Eğer değer geçersizse 0 kabul edilir
+		const currentValue = parseInt(fisNoInput.value, 10) || 0;
 		if (currentValue <= 0) {
 			return;
 		}
@@ -459,7 +453,7 @@ async function tahyenifis() {
 }
 
 function getTableData() {
-	const table = document.getElementById('cekTable'); // Tablo ID'sini değiştirin
+	const table = document.getElementById('cekTable');
 	const rows = table.querySelectorAll('tbody tr');
 	const data = [];
 	rows.forEach((row) => {
@@ -492,7 +486,7 @@ function prepareRequestPayload() {
 	} else if (document.getElementById("tur").value === "Cek") {
 		turu = 1;
 	} else {
-		turu = 2;   //Kredi KArti
+		turu = 2; 
 	}
 	let tah_ted = 0;
 	if (document.getElementById("tah_ted").value === "Tahsilat") {
@@ -538,10 +532,10 @@ async function tahfisKayit() {
 		turChange();
 		document.getElementById("tahevrakNo").value = "0";
 		document.getElementById("errorDiv").innerText = "";
-		errorDiv.style.display = 'none'; // Hata mesajını gizle
+		errorDiv.style.display = 'none'; 
 	} catch (error) {
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-		errorDiv.style.display = 'block'; // Hata mesajını görünür yap
+		errorDiv.style.display = 'block';
 	}
 }
 
@@ -592,7 +586,7 @@ async function tahfisYoket() {
 
 async function tahsilatdownloadReport() {
 	const tahsilatKayitDTO = prepareRequestPayload();
-	const errorDiv = document.getElementById("errorDiv"); // Hata mesajını göstermek için
+	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
 	document.body.style.cursor = "wait";
@@ -619,7 +613,7 @@ async function tahsilatdownloadReport() {
 			throw new Error("Dosya indirilemedi.");
 		}
 	} catch (error) {
-		errorDiv.style.display = "block"; // Hata mesajını göster
+		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
 	} finally {
 		$indirButton.prop('disabled', false).text('Rapor İndir');

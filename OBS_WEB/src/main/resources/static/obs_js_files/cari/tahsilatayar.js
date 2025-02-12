@@ -84,7 +84,6 @@ async function ayarKayit() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-
 		document.body.style.cursor = "default";
 		tahayarIlk();
 	} catch (error) {
@@ -108,14 +107,12 @@ function gettahayarDTO() {
 async function tahayarIlk() {
 	document.body.style.cursor = "wait";
 	try {
-
 		const response = await fetchWithSessionCheck("cari/tahayarYukle", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded"
 			},
 		});
-
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
@@ -130,7 +127,6 @@ async function tahayarIlk() {
 		document.getElementById("vdvn").value = dto.vdvn || "";
 		document.getElementById("mail").value = dto.mail || "";
 		document.getElementById("diger").value = dto.diger || "";
-
 		const imgElementlogo = document.getElementById("resimLogo");
 		if (dto.base64Resimlogo && dto.base64Resimlogo.trim() !== "") {
 			const base64Stringlogo = 'data:image/jpeg;base64,' + dto.base64Resimlogo.trim();
@@ -160,15 +156,15 @@ async function tahayarIlk() {
 	}
 }
 
-function logoSil(){
+function logoSil() {
 	const imgElementLogo = document.getElementById("resimLogo");
-		imgElementLogo.src = "";
-		imgElementLogo.style.display = "none";
-	
+	imgElementLogo.src = "";
+	imgElementLogo.style.display = "none";
+
 }
-function kaseSil(){
+function kaseSil() {
 	const imgElementLogo = document.getElementById("resimKase");
-		imgElementLogo.src = "";
-		imgElementLogo.style.display = "none";
-	
+	imgElementLogo.src = "";
+	imgElementLogo.style.display = "none";
+
 }

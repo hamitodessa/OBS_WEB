@@ -643,18 +643,18 @@ async function cekcariIsle() {
 }
 
 function gbmailAt() {
-	const bordroNo = document.getElementById("bordrono").value.trim(); // Boşlukları temizle
+	const bordroNo = document.getElementById("bordrono").value.trim();
 	if (!bordroNo || bordroNo === "0") {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
-	const table = document.getElementById('gbTable'); // Tablo ID'sini değiştirin
+	const table = document.getElementById('gbTable');
 	const rows = table.querySelectorAll('tbody tr');
 	toppara = 0;
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
 		const tutar = parseLocaleNumber(cells[9]?.textContent || "0");
-		toppara += tutar; // Toplam parayı artır
+		toppara += tutar;
 	});
 	const girisBordro = document.getElementById("bordrono").value;
 	const girisTarihi = document.getElementById('bordroTarih').value;

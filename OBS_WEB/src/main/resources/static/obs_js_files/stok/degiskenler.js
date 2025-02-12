@@ -1,4 +1,3 @@
-
 document.getElementById("arama").value = "";
 anagrpdoldur();
 
@@ -6,7 +5,6 @@ async function degiskenchange(grpElement) {
 	document.getElementById("aciklama").value = "";
 	document.getElementById("arama").value = "";
 	document.getElementById("idacik").value = "";
-
 	const grup = grpElement.value;
 	const altgrpdiv = document.getElementById("altgrpdiv");
 	document.getElementById("arama").value = "";
@@ -17,7 +15,6 @@ async function degiskenchange(grpElement) {
 	} else {
 		altgrpdiv.style.display = "none";
 	}
-
 	if (grup === "anagrp") {
 		anagrpdoldur();
 	}
@@ -355,9 +352,9 @@ async function degKayit() {
 
 async function degYoket() {
 	const confirmDelete = confirm(
-	    "Alt Grup Degisken Silinecek ..?\n" +
-	    "Silme operasyonu butun dosyayi etkileyecek...\n" +
-	    "Ilk once Degisken Yenileme Bolumunden degistirip sonra siliniz...."
+		"Alt Grup Degisken Silinecek ..?\n" +
+		"Silme operasyonu butun dosyayi etkileyecek...\n" +
+		"Ilk once Degisken Yenileme Bolumunden degistirip sonra siliniz...."
 	);
 	if (!confirmDelete) {
 		return;

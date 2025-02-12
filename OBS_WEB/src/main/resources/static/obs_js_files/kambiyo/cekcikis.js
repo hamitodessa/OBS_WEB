@@ -69,29 +69,29 @@ function selectAllContent(element) {
 }
 
 function updateColumnTotal() {
-    const cells = document.querySelectorAll('tr td:nth-child(10) span');
-    const totalTutarCell = document.getElementById("totalTutar");
-    const totalceksayisi = document.getElementById("ceksayisi");
-    let total = 0;
-    let totaladet = 0;
+	const cells = document.querySelectorAll('tr td:nth-child(10) span');
+	const totalTutarCell = document.getElementById("totalTutar");
+	const totalceksayisi = document.getElementById("ceksayisi");
+	let total = 0;
+	let totaladet = 0;
 
-    cells.forEach(span => {
-        const value = parseFloat(span.textContent.replace(/,/g, '').trim());
-        if (!isNaN(value) && value > 0) {
-            total += value;
-            totaladet += 1;
-        }
-    });
+	cells.forEach(span => {
+		const value = parseFloat(span.textContent.replace(/,/g, '').trim());
+		if (!isNaN(value) && value > 0) {
+			total += value;
+			totaladet += 1;
+		}
+	});
 
-    totalceksayisi.innerText = totaladet.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    });
+	totalceksayisi.innerText = totaladet.toLocaleString(undefined, {
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0
+	});
 
-    totalTutarCell.textContent = total.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
+	totalTutarCell.textContent = total.toLocaleString(undefined, {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2
+	});
 }
 
 function focusNextRow(event, element) {
@@ -242,26 +242,26 @@ async function bordroOku() {
 		const table = document.getElementById('gbTable');
 		const rows = table.querySelectorAll('tbody tr');
 		if (data.data.length > rows.length) {
-		    const additionalRows = data.data.length - rows.length;
-		    for (let i = 0; i < additionalRows +1 ; i++) {
-		        cekcikaddRow();
-		    }
+			const additionalRows = data.data.length - rows.length;
+			for (let i = 0; i < additionalRows + 1; i++) {
+				cekcikaddRow();
+			}
 		}
 		const rowss = table.querySelectorAll('tbody tr');
-		data.data.forEach((item,index) => {
-		        const cells = rowss[index].cells;
-				
-		        const ceknoInput = cells[1]?.querySelector('input');
-		        if (ceknoInput) ceknoInput.value = item.Cek_No || "";
-				
-		        setLabelContent(cells[2], formatDate(item.Vade) || '');
-				setLabelContent(cells[3], item.Banka || "");
-		        setLabelContent(cells[4], item.Sube || "");
-		        setLabelContent(cells[5], item.Seri_No || "");
-		        setLabelContent(cells[6], item.Ilk_Borclu || "");
-				setLabelContent(cells[7], item.Cek_Hesap_No || "");
-				setLabelContent(cells[8], item.Cins || "");
-				setLabelContent(cells[9], formatNumber2(item.Tutar));
+		data.data.forEach((item, index) => {
+			const cells = rowss[index].cells;
+
+			const ceknoInput = cells[1]?.querySelector('input');
+			if (ceknoInput) ceknoInput.value = item.Cek_No || "";
+
+			setLabelContent(cells[2], formatDate(item.Vade) || '');
+			setLabelContent(cells[3], item.Banka || "");
+			setLabelContent(cells[4], item.Sube || "");
+			setLabelContent(cells[5], item.Seri_No || "");
+			setLabelContent(cells[6], item.Ilk_Borclu || "");
+			setLabelContent(cells[7], item.Cek_Hesap_No || "");
+			setLabelContent(cells[8], item.Cins || "");
+			setLabelContent(cells[9], formatNumber2(item.Tutar));
 		});
 		getTableData();
 		updateColumnTotal();
@@ -409,11 +409,11 @@ function ortgun() {
 		const tutar = parseLocaleNumber(cells[9]?.querySelector('span')?.textContent || "0");
 		const vade = cells[2]?.querySelector('span')?.textContent;
 		if (tutar > 0 && vade && gunlukTarih) {
-				const gunfarki = tarihGunFarki(gunlukTarih, vade);
-				const faiz = (((tutar * faizoran) / 365) * gunfarki) / 100;
-				toppara += tutar;
-				tfaiz += faiz;
-				orgun = ((toppara * faizoran) / 365) / 100;
+			const gunfarki = tarihGunFarki(gunlukTarih, vade);
+			const faiz = (((tutar * faizoran) / 365) * gunfarki) / 100;
+			toppara += tutar;
+			tfaiz += faiz;
+			orgun = ((toppara * faizoran) / 365) / 100;
 		}
 	});
 	document.getElementById("lblortgun").innerText = (tfaiz / orgun).toLocaleString(undefined, {
@@ -572,8 +572,8 @@ function cbmailAt() {
 }
 
 function setLabelContent(cell, content) {
-    const span = cell.querySelector('label span');
-    if (span) {
-        span.textContent = content ? content : '\u00A0';
-    }
+	const span = cell.querySelector('label span');
+	if (span) {
+		span.textContent = content ? content : '\u00A0';
+	}
 }

@@ -325,8 +325,8 @@ function saveToMain() {
 		const fiatlama = $('#fiatlama').val() || "";
 		const depohardahil = $('#depohardahil').prop('checked');
 		const uretfisdahil = $('#uretfisdahil').prop('checked');
-		
-		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, evrno1, evrno2, anagrp, gruplama, altgrp, depo, fiatlama, depohardahil, uretfisdahil ].join(",");
+
+		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, evrno1, evrno2, anagrp, gruplama, altgrp, depo, fiatlama, depohardahil, uretfisdahil].join(",");
 		const hiddenField = $('#ara_content #envanterBilgi');
 		hiddenField.val(degerler);
 	}
@@ -359,20 +359,20 @@ function saveToMain() {
 		const uraltgrp = $('#uraltgrp').val() || "";
 		const ckod1 = $('#ckod1').val() || "";
 		const ckod2 = $('#ckod2').val() || "";
-		const urozkod = $('#urozkod').val() || ""; 
-		const birim = $('#birim').val() || ""; 
-		const istenenay = $('#istenenay').val() || ""; 
+		const urozkod = $('#urozkod').val() || "";
+		const birim = $('#birim').val() || "";
+		const istenenay = $('#istenenay').val() || "";
 		const gruplama = $('#gruplama').val() || "";
 		const dvzcevirchc = $('#dvzcevirchc').prop('checked');
-		const doviz = $('#dvzcins').val() || ""; 
+		const doviz = $('#dvzcins').val() || "";
 		const stunlar = $('#stunlar').val() || "";
-		const dvzturu = $('#dvzturu').val() || ""; 
-		const turu = $('#turu').val() || ""; 
+		const dvzturu = $('#dvzturu').val() || "";
+		const turu = $('#turu').val() || "";
 		const istenenaychc = $('#istenenaychc').prop('checked');
 		const sinif1 = $('#sinif1').val() || "";
 		const sinif2 = $('#sinif2').val() || "";
 		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, ckod1, ckod2, urozkod, birim, istenenay, gruplama, dvzcevirchc, doviz,
-			stunlar,dvzturu,turu,istenenaychc,sinif1,sinif2].join(",");
+			stunlar, dvzturu, turu, istenenaychc, sinif1, sinif2].join(",");
 		const hiddenField = $('#ara_content #grpBilgi');
 		hiddenField.val(degerler);
 	}
@@ -385,13 +385,13 @@ function saveToMain() {
 		const sinif2 = $('#sinif2').val() || "";
 		const uranagrp = $('#uranagrp').val() || "";
 		const uraltgrp = $('#uraltgrp').val() || "";
-		const birim = $('#birim').val() || ""; 
+		const birim = $('#birim').val() || "";
 		const gruplama = $('#gruplama').val() || "";
 		const stunlar = $('#stunlar').val() || "";
-		const turu = $('#turu').val() || ""; 
+		const turu = $('#turu').val() || "";
 		const anagrp = $('#anagrp').val() || "";
 		const altgrp = $('#altgrp').val() || "";
-		const degerler = [ukod1, ukod2,tar1, tar2, sinif1,sinif2 ,uranagrp,  uraltgrp, birim,  gruplama, stunlar,turu,anagrp,altgrp].join(",");
+		const degerler = [ukod1, ukod2, tar1, tar2, sinif1, sinif2, uranagrp, uraltgrp, birim, gruplama, stunlar, turu, anagrp, altgrp].join(",");
 		const hiddenField = $('#ara_content #imagrpBilgi');
 		hiddenField.val(degerler);
 	}
@@ -411,12 +411,12 @@ function saveToMain() {
 		const depo = $('#depo').val() || "";
 		const depohardahil = $('#depohardahil').prop('checked');
 		const uretfisdahil = $('#uretfisdahil').prop('checked');
-		const turu = $('#turu').val() || ""; 
-		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, evrno1, evrno2,ckod1,ckod2,anagrp,altgrp,depo,depohardahil, uretfisdahil,turu].join(",");
+		const turu = $('#turu').val() || "";
+		const degerler = [tar1, tar2, uranagrp, ukod1, ukod2, uraltgrp, evrno1, evrno2, ckod1, ckod2, anagrp, altgrp, depo, depohardahil, uretfisdahil, turu].join(",");
 		const hiddenField = $('#ara_content #stokdetayBilgi');
 		hiddenField.val(degerler);
 	}
-	
+
 
 	$('#firstModal').modal('hide');
 
@@ -525,4 +525,3 @@ function saveToMain() {
 		reportFormat.disabled = false;
 	}
 }
-

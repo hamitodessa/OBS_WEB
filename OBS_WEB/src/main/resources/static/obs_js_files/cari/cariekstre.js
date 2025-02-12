@@ -4,15 +4,9 @@ async function eksfetchTableData() {
 	const hesapKodu = parsedValues[0];
 	const startDate = parsedValues[1];
 	const endDate = parsedValues[2];
-
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-//	if (!hesapKodu || !startDate || !endDate) {
-//		errorDiv.style.display = "block";
-//		errorDiv.innerText = "Lütfen tüm alanları doldurun.";
-//		return;
-//	}
 	const tableBody = document.getElementById("tableBody");
 	tableBody.innerHTML = "";
 	document.getElementById("totalBorc").textContent = "";
@@ -70,27 +64,22 @@ async function eksfetchTableData() {
 async function ekstredownloadReport(format) {
 	const hiddenFieldValue = $('#ekstreBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
-
 	const hesapKodu = parsedValues[0] || "";
 	const startDateField = parsedValues[1] || "";
 	const endDateField = parsedValues[2] || "";
 	const errorDiv = document.getElementById("errorDiv");
-
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-
 	if (!hesapKodu || !startDateField || !endDateField || !format) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = "Lütfen tüm alanları doldurun.";
 		return;
 	}
-
 	document.body.style.cursor = "wait";
 	const $indirButton = $('#indirButton');
 	$indirButton.prop('disabled', true).text('İşleniyor...');
 	const $yenileButton = $('#yenileButton');
 	$yenileButton.prop('disabled', true);
-
 	try {
 		const response = await fetchWithSessionCheckForDownload('cari/ekstre_download', {
 			method: 'POST',
@@ -104,7 +93,6 @@ async function ekstredownloadReport(format) {
 				endDate: endDateField,
 			}),
 		});
-
 		if (response.blob) {
 			const disposition = response.headers.get('Content-Disposition');
 			const fileName = disposition.match(/filename="(.+)"/)[1];
@@ -119,7 +107,6 @@ async function ekstredownloadReport(format) {
 		} else {
 			throw new Error("Dosya indirilemedi.");
 		}
-
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
@@ -136,7 +123,6 @@ async function ekstremailAt() {
 	const hesapKodu = parsedValues[0];
 	const startDateField = parsedValues[1];
 	const endDateField = parsedValues[2];
-
 	if (!hesapKodu) {
 		alert("Lütfen geçerli bir hesap kodu girin!");
 		return;

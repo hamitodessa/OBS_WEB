@@ -75,7 +75,7 @@ async function openenvModal(modal) {
 
 		const newOption = document.createElement("option");
 		newOption.value = "Bos Olanlar";
-		newOption.textContent = "Bos Olanlar"; 
+		newOption.textContent = "Bos Olanlar";
 
 		const newOption1 = document.createElement("option");
 		newOption1.value = "Bos Olanlar";
@@ -215,8 +215,8 @@ async function envfetchTableData() {
 				miktarCell.classList.add('double-column');
 				miktarCell.textContent = rowData.Miktar;
 				if (rowData.Miktar < 0) {
-					miktarCell.style.backgroundColor = 'red'; 
-					miktarCell.style.color = 'white'; 
+					miktarCell.style.backgroundColor = 'red';
+					miktarCell.style.color = 'white';
 				}
 				row.innerHTML = `
         			<td>${rowData.Urun_Kodu || ''}</td>

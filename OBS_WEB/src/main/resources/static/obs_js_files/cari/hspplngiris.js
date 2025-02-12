@@ -4,7 +4,6 @@ function hspenableInputs() {
 	inputs.forEach(input => {
 		input.disabled = false;
 	});
-
 }
 
 function hspenableDuzeltmeInputs() {
@@ -13,7 +12,6 @@ function hspenableDuzeltmeInputs() {
 		if (input.id !== "kodu") {
 			input.disabled = false;
 		}
-
 	});
 }
 
@@ -23,7 +21,6 @@ function hspdisableInputs() {
 		if (input.id !== "arama") {
 			input.disabled = true;
 		}
-
 	});
 }
 
@@ -51,44 +48,35 @@ async function hsplnKayit() {
 	}
 	const hesapplaniDTO = getHesapPlaniDTO();
 	const formData = new FormData();
-
 	for (const key in hesapplaniDTO) {
 		formData.append(key, hesapplaniDTO[key]);
 	}
-
 	const fileInput = document.getElementById("resim");
 	const file = fileInput.files[0];
 	if (file) {
 		formData.append("resim", file);
 	}
-
 	const imgElement = document.getElementById("resimGoster");
-	let base64Data = imgElement.src.startsWith("data:image")
-		? imgElement.src.split(",")[1]
-		: null;
-
+	let base64Data = imgElement.src.startsWith("data:image") ? imgElement.src.split(",")[1]	: null;
 	if (base64Data) {
-		const byteCharacters = atob(base64Data); // Base64'ü çöz
+		const byteCharacters = atob(base64Data);
 		const byteNumbers = new Array(byteCharacters.length);
 		for (let i = 0; i < byteCharacters.length; i++) {
 			byteNumbers[i] = byteCharacters.charCodeAt(i);
 		}
 		const byteArray = new Uint8Array(byteNumbers);
 		const blob = new Blob([byteArray], { type: "image/jpeg" });
-		formData.append("resimGoster", blob, "base64Resim.jpg"); // Blob olarak ekle
+		formData.append("resimGoster", blob, "base64Resim.jpg");
 	}
-
 	const errorDiv = document.getElementById("errorDiv");
 	document.body.style.cursor = "wait";
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-
 	try {
 		const response = await fetchWithSessionCheck("cari/hsplnkayit", {
 			method: "POST",
 			body: formData
 		});
-
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
@@ -126,7 +114,6 @@ function getHesapPlaniDTO() {
 		kim: document.getElementById("kim").value,
 		acik: document.getElementById("acik").value,
 		sms: document.getElementById("sms").checked
-
 	};
 }
 
@@ -145,7 +132,6 @@ async function hsparamaYap() {
 			},
 			body: new URLSearchParams({ arama: aramaInput })
 		});
-
 		const dto = await response;
 		if (dto.errorMessage === "Bu Numarada Kayıtlı Hesap Yok") {
 			document.getElementById("errorDiv").innerText = dto.errorMessage;
@@ -211,7 +197,6 @@ function hsplnGeri() {
 			break;
 		}
 	}
-
 	if (index !== -1) {
 		if (index > 0) {
 			const previousValue = options[index - 1].value;
@@ -220,49 +205,45 @@ function hsplnGeri() {
 			hsparamaYap();
 			document.getElementById("arama").value = "";
 		} else {
-			return null; // İlk index ise geri null döndür
+			return null;
 		}
 	} else {
-		return null; // Değer bulunamazsa null döndür
+		return null;
 	}
 }
 
 function hsplnIleri() {
-	const arama = document.getElementById("kodu").value; // Input alanının değerini al
-	const datalist = document.getElementById("hesapOptions"); // Datalist öğesini seç
-	const options = datalist.getElementsByTagName("option"); // Datalist içindeki option'ları al
+	const arama = document.getElementById("kodu").value;
+	const datalist = document.getElementById("hesapOptions");
+	const options = datalist.getElementsByTagName("option");
 
 	if (options.length === 0) {
 		return null;
 	}
-
-	let index = -1; // Varsayılan olarak bulunamadı
-
+	let index = -1;
 	for (let i = 0; i < options.length; i++) {
 		if (options[i].value === arama) {
 			index = i;
 			break;
 		}
 	}
-
 	if (index !== -1) {
 		if (index < options.length - 1) {
-			const nextValue = options[index + 1].value; // Bir sonraki indexin değeri
+			const nextValue = options[index + 1].value;
 			document.getElementById("arama").value = nextValue;
 			hsparamaYap();
 			document.getElementById("arama").value = "";
 		} else {
-			return null; // Son index ise geri null döndür
+			return null;
 		}
 	} else {
-		return null; // Değer bulunamazsa null döndür
+		return null;
 	}
 }
 
 function hsplnIlk() {
 	const datalist = document.getElementById("hesapOptions");
 	const options = datalist.getElementsByTagName("option"); 
-
 	if (options.length === 0) {
 		hspclearInputs();
 		hspdisableInputs();
@@ -274,7 +255,6 @@ function hsplnIlk() {
 	document.getElementById("arama").value = "";
 }
 
-//************************evrak sil ***********************************************
 async function hsphesapSil() {
 	const hesapKodu = document.getElementById('kodu').value;
 	if (["0", ""].includes(hesapKodu.value)) {
@@ -311,9 +291,8 @@ async function hsphesapSil() {
 async function sayfaYukle() {
 	const url = "cari/hspplngiris";
 	try {
-		document.body.style.cursor = "wait"; // Bekleme işaretçisi
+		document.body.style.cursor = "wait";
 		const response = await fetch(url, { method: "GET" });
-
 		if (!response.ok) {
 			throw new Error(`Bir hata oluştu: ${response.statusText}`);
 		}

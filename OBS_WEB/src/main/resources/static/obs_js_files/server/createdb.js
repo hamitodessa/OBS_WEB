@@ -4,12 +4,12 @@ function serversuperviserdurum() {
 	if (drm === "PG SQL") {
 		superviserDiv.style.visibility = "visible";
 		superviserDiv.style.opacity = "1";
-		superviserDiv.style.height = "auto"; // Eğer dinamik yüksekliği varsa
+		superviserDiv.style.height = "auto";
 		document.getElementById("superviser").value = "";
 	} else {
 		superviserDiv.style.visibility = "hidden";
 		superviserDiv.style.opacity = "0";
-		superviserDiv.style.height = "0"; // Görünümü küçültmek için
+		superviserDiv.style.height = "0";
 	}
 }
 
@@ -52,12 +52,12 @@ async function serverKontrol() {
 				setTimeout(() => {
 					alert("Server Bağlantısı Sağlandı");
 				}, 100);
-				if (dbButton) dbButton.disabled = false; // DB Kontrol Butonunu etkinleştir
+				if (dbButton) dbButton.disabled = false;
 			} else {
 				setTimeout(() => {
 					alert("Server Bağlantısı Sağlanamadı!");
 				}, 100);
-				if (dbButton) dbButton.disabled = true; // DB Kontrol Butonunu devre dışı bırak
+				if (dbButton) dbButton.disabled = true;
 			}
 		}, 100);
 	} catch (error) {
@@ -67,7 +67,7 @@ async function serverKontrol() {
 		document.body.style.cursor = "default";
 	}
 }
-//****************************************DOSYA KONTROL ************************************************/
+
 async function databaseKontrol() {
 	const serverBilgiDTO = {
 		user_modul: document.getElementById("user_modul").value,
@@ -125,7 +125,7 @@ async function databaseKontrol() {
 		document.body.style.cursor = "default";
 	}
 }
-//**************************************** YENI DOSYA OLUSTUR  ************************************************/
+
 async function createnewDB() {
 	document.body.style.cursor = "default";
 	let firmaadi = "";

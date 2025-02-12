@@ -1,7 +1,7 @@
 
 async function ozmizfetchTableData() {
-	const hiddenFieldValue = $('#mizanBilgi').val(); // Hidden alanın değerini al
-	const parsedValues = hiddenFieldValue.split(","); // Virgüle göre ayır
+	const hiddenFieldValue = $('#mizanBilgi').val();
+	const parsedValues = hiddenFieldValue.split(","); 
 	const hkodu1 = parsedValues[0];
 	const hkodu2 = parsedValues[1];
 	const startDate = parsedValues[2];
@@ -12,11 +12,8 @@ async function ozmizfetchTableData() {
 	const karton2 = parsedValues[7];
 	const hangi_tur = parsedValues[8];
 	const errorDiv = document.getElementById("errorDiv");
-
-	// Hata divini temizle
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-
 	const Mizan_Request = {
 		hkodu1: hkodu1,
 		hkodu2: hkodu2,
@@ -28,8 +25,6 @@ async function ozmizfetchTableData() {
 		karton2: karton2,
 		hangi_tur: hangi_tur
 	};
-
-	// Tabloyu temizle
 	const tableBody = document.getElementById("tableBody");
 	tableBody.innerHTML = "";
 	document.getElementById("totalOncekiBakiye").textContent = "";
@@ -38,11 +33,9 @@ async function ozmizfetchTableData() {
 	document.getElementById("totalBakKvartal").textContent = "";
 	document.getElementById("totalBakiye").textContent = "";
 
-
 	document.body.style.cursor = "wait";
 	const $yenileButton = $('#yenileButton');
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
-
 	try {
 		const data = await fetchWithSessionCheck("cari/ozelmizan", {
 			method: "POST",
@@ -72,14 +65,12 @@ async function ozmizfetchTableData() {
                     <td class="double-column">${formatNumber2(item.BAKIYE)}</td>
                 `;
 				tableBody.appendChild(row);
-				// Toplamları hesapla
 				totalOncekiBakiye += item.ONCEKI_BAKIYE || 0;
 				totalBorc += item.BORC || 0;
 				totalAlacak += item.ALACAK || 0;
 				totalBakKvartal += item.BAK_KVARTAL || 0;
 				totalBakiye += item.BAKIYE || 0;
 			});
-			// Toplamları footera yaz   
 			document.getElementById("totalOncekiBakiye").textContent = formatNumber2(totalOncekiBakiye);
 			document.getElementById("totalBorc").textContent = formatNumber2(totalBorc);
 			document.getElementById("totalAlacak").textContent = formatNumber2(totalAlacak);
@@ -101,7 +92,6 @@ async function ozmizfetchTableData() {
 async function ozmizdownloadReport(format) {
     const hiddenFieldValue = $('#mizanBilgi').val(); // Hidden alanın değerini al
     const parsedValues = hiddenFieldValue.split(","); // Virgüle göre ayır
-
     const Mizan_Request = {
         format: format,
         hkodu1: parsedValues[0] || "",
@@ -114,7 +104,6 @@ async function ozmizdownloadReport(format) {
         karton2: parsedValues[7] || "",
         hangi_tur: parsedValues[8] || "",
     };
-
     const errorDiv = document.getElementById("errorDiv"); // Hata mesajını göstermek için
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
@@ -122,10 +111,8 @@ async function ozmizdownloadReport(format) {
     document.body.style.cursor = "wait";
     const $indirButton = $('#ozmizindirButton');
     $indirButton.prop('disabled', true).text('İşleniyor...');
-
     const $yenileButton = $('#ozmizyenileButton');
     $yenileButton.prop('disabled', true);
-
     try {
         const response = await fetchWithSessionCheckForDownload('cari/ozelmizan_download', {
             method: 'POST',
@@ -134,7 +121,6 @@ async function ozmizdownloadReport(format) {
             },
             body: JSON.stringify(Mizan_Request),
         });
-
 		if (response.blob) {
 		    const disposition = response.headers.get('Content-Disposition');
 		    const fileName = disposition.match(/filename="(.+)"/)[1];
@@ -151,7 +137,7 @@ async function ozmizdownloadReport(format) {
 		}
 
     } catch (error) {
-        errorDiv.style.display = "block"; // Hata mesajını göster
+        errorDiv.style.display = "block";
         errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
     } finally {
         $indirButton.prop('disabled', false).text('Rapor İndir');
@@ -161,9 +147,8 @@ async function ozmizdownloadReport(format) {
 }
 
 function ozmizmailAt() {
-
-	const hiddenFieldValue = $('#mizanBilgi').val(); // Hidden alanın değerini al
-	const parsedValues = hiddenFieldValue.split(","); // Virgüle göre ayır
+	const hiddenFieldValue = $('#mizanBilgi').val();
+	const parsedValues = hiddenFieldValue.split(",");
 	const hkodu1 = parsedValues[0];
 	const hkodu2 = parsedValues[1];
 	const startDate = parsedValues[2];
@@ -177,8 +162,4 @@ function ozmizmailAt() {
 	const degerler = hkodu1 + "," + hkodu2 + "," + startDate + "," + endDate + "," + cins1 + "," + cins2 + "," + karton1 + "," + karton2 + "," + hangi_tur + ",cariozelmizan";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
-//	$('#ara_content').load(url, function(response, status, xhr) {
-//		if (status === "error") {
-//			$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
-//		}	});
 }
