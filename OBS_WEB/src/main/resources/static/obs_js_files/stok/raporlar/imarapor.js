@@ -241,6 +241,9 @@ async function imarapdownloadReport() {
 }
 
 async function imarapmailAt() {
+    localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
 	document.body.style.cursor = "wait";
 	let table = document.querySelector("#main-table");
 		let headers = [];

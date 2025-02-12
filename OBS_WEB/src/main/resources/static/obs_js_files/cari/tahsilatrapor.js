@@ -100,6 +100,7 @@ async function tahrapfetchTableData() {
 								const details = await fetchDetails(rowData.EVRAK, rowData.CINS);
 								const data = details.data;
 								let detailsTable = `
+							<div class="table-container" >
                             <table class="details-table table table-bordered table-hover">
                                 <thead class="thead-dark">
                                     <tr>
@@ -130,6 +131,7 @@ async function tahrapfetchTableData() {
 								detailsTable += `
                                 </tbody>
                             </table>
+							</div>
                         `;
 								detailsRow.children[0].classList.add("table-row-height");
 								detailsRow.children[0].innerHTML = detailsTable;
@@ -201,4 +203,94 @@ async function opentahrapModal(modal) {
 	} finally {
 		document.body.style.cursor = "default";
 	}
+}
+
+async function tahrapdownloadReport() {
+    const errorDiv = document.getElementById("errorDiv");
+    errorDiv.style.display = "none";
+    errorDiv.innerText = "";
+    document.body.style.cursor = "wait";
+    const $indirButton = $('#tahrapreportFormat');
+    $indirButton.prop('disabled', true).text('İşleniyor...');
+    const $yenileButton = $('#tahrapyenileButton');
+    $yenileButton.prop('disabled', true);
+    let rows = extractTableData("main-table");
+    try {
+        const response = await fetchWithSessionCheckForDownload('cari/tahrap_download', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(rows)
+        });
+        if (response.blob) {
+            const disposition = response.headers.get('Content-Disposition');
+            const fileName = disposition.match(/filename="(.+)"/)[1];
+            const url = window.URL.createObjectURL(response.blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } else {
+            throw new Error("Dosya indirilemedi.");
+        }
+    } catch (error) {
+        errorDiv.style.display = "block";
+        errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
+    } finally {
+        $indirButton.prop('disabled', false).text('Rapor İndir');
+        $yenileButton.prop('disabled', false);
+        document.body.style.cursor = "default";
+    }
+}
+
+async function tahrapmailAt() {
+    document.body.style.cursor = "wait";
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
+    
+	let rows = extractTableData("main-table");
+    localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
+    const degerler = "tahrap";
+    const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+    mailsayfasiYukle(url);
+}
+
+function extractTableData(tableId) {
+    let table = document.querySelector(`#${tableId}`);
+    let headers = [];
+    let rows = [];
+    table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+    table.querySelectorAll("tbody tr").forEach(tr => {
+        let rowData = {};
+        let nonEmptyCount = 0;
+        tr.querySelectorAll("td").forEach((td, index) => {
+            let value = td.innerText.trim();
+            if (value !== "") {
+                nonEmptyCount++;
+            }
+            rowData[headers[index]] = value;
+        });
+        if (nonEmptyCount > 0) {
+            rows.push(rowData);
+        }
+    });
+    let tfoot = table.querySelector("tfoot");
+    if (tfoot) {
+        let tfootRowData = {};
+        let nonEmptyCount = 0;
+        tfoot.querySelectorAll("th").forEach((th, index) => {
+            let value = th.innerText.trim();
+            if (value !== "") {
+                nonEmptyCount++;
+            }
+            tfootRowData[headers[index]] = value;
+        });
+        if (nonEmptyCount > 0) {
+            rows.push(tfootRowData);
+        }
+    }
+    return rows;
 }

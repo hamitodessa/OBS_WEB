@@ -131,6 +131,9 @@ async function mizdownloadReport(format) {
 }
 
 function mizmailAt() {
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
 	const hiddenFieldValue = $('#mizanBilgi').val(); 
 	const parsedValues = hiddenFieldValue.split(",");
 	const hkodu1 = parsedValues[0];

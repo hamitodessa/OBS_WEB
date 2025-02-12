@@ -118,6 +118,9 @@ async function ekstredownloadReport(format) {
 }
 
 async function ekstremailAt() {
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
 	const hiddenFieldValue = $('#ekstreBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
 	const hesapKodu = parsedValues[0];

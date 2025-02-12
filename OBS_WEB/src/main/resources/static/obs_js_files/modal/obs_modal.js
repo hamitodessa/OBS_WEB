@@ -457,8 +457,12 @@ function saveToMain() {
 	}
 	else if (nerden === "cekrapor") {
 		cekfetchTableData();
-		const reportFormat = document.getElementById("reportFormat");
+		const reportFormat = document.getElementById("cekrapreportFormat");
 		reportFormat.disabled = false;
+		const mailButton = document.getElementById("cekrapmailButton");
+		mailButton.disabled = false;
+		
+
 	}
 	else if (nerden === "cekgir") {
 		cekcariIsle();

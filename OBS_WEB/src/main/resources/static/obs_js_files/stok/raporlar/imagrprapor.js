@@ -116,7 +116,6 @@ async function imagrpfetchTableData() {
 	const mainTableBody = document.getElementById("mainTableBody");
 	mainTableBody.innerHTML = "";
 	clearTfoot();
-	console.info(grupraporDTO);
 	try {
 		const response = await fetchWithSessionCheck("stok/imagrpdoldur", {
 			method: "POST",
@@ -265,6 +264,9 @@ async function imagrpdownloadReport() {
 }
 
 async function imagrpmailAt() {
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
 	document.body.style.cursor = "wait";
 	let rows = extractTableData(tablobaslik);
 	localStorage.setItem("grprapor", rows);

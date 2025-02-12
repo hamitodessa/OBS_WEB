@@ -345,6 +345,16 @@ public class RaporOlustur {
 		return excellToDataSource.export_excell(tableData);
 	}
 	
+	public ByteArrayDataSource tahrap(List<Map<String, String>> tableData)  throws Exception {
+		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
+		return excellToDataSource.export_excell(tableData);
+	}
+	
+	public ByteArrayDataSource cekrap(List<Map<String, String>> tableData)  throws Exception {
+		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
+		return excellToDataSource.export_excell(tableData);
+	}
+	
 	public ByteArrayDataSource grprap(List<Map<String, String>> tableData,int sabitkolon)  throws Exception {
 		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell_grp(tableData,sabitkolon);

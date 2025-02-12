@@ -478,6 +478,9 @@ async function stokdownloadReport() {
 }
 
 async function stokmailAt() {
+    localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
     document.body.style.cursor = "wait";
     let rows = extractTableData("main-table");
     localStorage.setItem("tableData", JSON.stringify({ rows: rows }));

@@ -8,11 +8,17 @@ function tabloyukle() {
 	if (storedData) {
 		let parsedData = JSON.parse(storedData);
 		document.getElementById("extraValue").value = JSON.stringify(parsedData.rows);
+		document.getElementById("format").value = "xlsx" ;
+		document.getElementById("format").disabled = true;
 	}
 	if (data) {
 		document.getElementById("grprapor").value = data;
 		document.getElementById("tablobaslik").value = tablobaslik;
+		document.getElementById("format").value = "xlsx" ;
+		document.getElementById("format").disabled = true;
 	}
+
+	
 	document.body.style.cursor = "default"
 };
 

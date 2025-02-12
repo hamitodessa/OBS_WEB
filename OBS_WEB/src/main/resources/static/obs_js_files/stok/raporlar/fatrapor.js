@@ -540,6 +540,9 @@ async function fatrapdownloadReport() {
 }
 
 async function fatrapmailAt() {
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
 	document.body.style.cursor = "wait";
 	let table = document.querySelector("#main-table");
 		let headers = [];

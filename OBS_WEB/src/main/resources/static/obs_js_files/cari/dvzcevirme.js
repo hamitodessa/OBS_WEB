@@ -136,6 +136,9 @@ async function dvzdownloadReport(format) {
 }
 
 function dvzmailAt() {
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
 	const hiddenFieldValue = $('#dvzcevirmeBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
 	const hesapKodu = parsedValues[0];

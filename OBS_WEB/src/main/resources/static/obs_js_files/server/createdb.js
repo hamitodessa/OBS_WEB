@@ -127,7 +127,9 @@ async function databaseKontrol() {
 }
 
 async function createnewDB() {
-	document.body.style.cursor = "default";
+	setTimeout(() => {
+		document.body.style.cursor = "default";
+	}, 100);
 	let firmaadi = "";
 	if (document.getElementById("user_modul").value != "Kur") {
 		firmaadi = prompt("Firma Ismi Giriniz :");
@@ -135,7 +137,9 @@ async function createnewDB() {
 			firmaadi = "";
 		}
 	}
-	document.body.style.cursor = "wait";
+	setTimeout(() => {
+		document.body.style.cursor = "wait";
+	}, 100);
 	const serverBilgiDTO = {
 		user_modul: document.getElementById("user_modul").value,
 		hangi_sql: document.getElementById("hangi_sql").value,
@@ -149,7 +153,6 @@ async function createnewDB() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
 	try {
 		const response = await fetchWithSessionCheck("server/dosyaolustur", {
 			method: "POST",
@@ -159,7 +162,6 @@ async function createnewDB() {
 			body: JSON.stringify(serverBilgiDTO),
 		});
 		const data = response;
-		document.body.style.cursor = "default";
 		await saveTo();
 		if (data.olustuDurum === "true") {
 			setTimeout(() => {

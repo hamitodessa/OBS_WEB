@@ -151,7 +151,6 @@ async function grpfetchTableData() {
 			throw new Error(response.errorMessage);
 		}
 		data = response;
-		console.info(data);
 		updateTableHeaders(data.baslik, data.sabitkolonsayisi);
 		let headers = data.baslik
 			.split(',')
@@ -277,6 +276,9 @@ async function grpdownloadReport() {
 }
 
 async function grpmailAt() {
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
 	document.body.style.cursor = "wait";
 	let rows = extractTableData(tablobaslik);
 	localStorage.setItem("grprapor", rows);
