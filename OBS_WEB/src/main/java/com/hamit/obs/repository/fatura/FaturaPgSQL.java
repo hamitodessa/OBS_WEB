@@ -2845,7 +2845,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				" AND " + ure1 +
 				" AND \"STOK\".\"Hareket\"::text Like '" + stokdetayDTO.getTuru() + "%' " +
 				" Order by \"Tarih\" ";
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

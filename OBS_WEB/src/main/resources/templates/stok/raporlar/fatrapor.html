@@ -13,13 +13,14 @@
 }
 
 table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+    }
 th, td {
-	border: 1px solid #ddd;
-	padding: 8px;
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap; 
 }
 
 .details-row {
@@ -53,11 +54,13 @@ th, td {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 10px;
+	table-layout: auto;
 }
 
 .details-table th, .details-table td {
 	border: 1px solid #ccc;
 	padding: 6px;
+	white-space: nowrap; 
 }
 
 .double-column {

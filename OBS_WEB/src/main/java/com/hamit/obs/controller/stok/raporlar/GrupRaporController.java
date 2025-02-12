@@ -65,12 +65,10 @@ public class GrupRaporController {
 			String[] deg_cevirString = {"","","","","",""};
 			String ozelgrp[][] = new String[7][2];
 			
-			System.out.println(grupraporDTO.getGruplama());
 			if (grupraporDTO.getGruplama().equals("Urun Kodu"))
 			{
 				baslikbakStrings = baslik_bak(grupraporDTO);
 				deg_cevirString = deg_cevir(grupraporDTO);
-				System.out.println("bslk:" + baslikbakStrings[0]);
 				if (! baslikbakStrings[0].equals(""))
 				{
 					if(fatConnDetails.getHangisql().equals("PG SQL"))
@@ -315,7 +313,6 @@ public class GrupRaporController {
 			response.put("data", Collections.emptyList());
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;

@@ -2036,14 +2036,12 @@ public class FaturaMySQL implements IFaturaDatabase {
 				" AND  '"  + t2 + " 23:59:59.998'" +
 				" " + ordr + " ";
 		
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
@@ -2085,14 +2083,12 @@ public class FaturaMySQL implements IFaturaDatabase {
 						+ " AND  STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" 
 						+" AND  '" + grupraporDTO.getTar2() + " 23:59:59.998'" 
 						+ "  GROUP BY Urun_Kodu , Urun_Adi , Birim  ORDER BY  Urun_Kodu  ;";
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 

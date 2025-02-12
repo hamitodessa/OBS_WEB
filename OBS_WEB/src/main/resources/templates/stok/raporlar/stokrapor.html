@@ -1,103 +1,92 @@
 <style>
-.container {
-	height: 100vh; 
-	display: flex;
-	flex-direction: column; 
-	margin-top: 10px;
-	padding: 0px;
-	width: 100%;
-	max-width: 100%;
-	box-sizing: border-box;
-}
+  .container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
 
-th, td {
-	border: 1px solid #ddd;
-	padding: 8px;
-}
+  th,  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap;
+  }
+  .table-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
 
-.details-row {
-	display: none;
-}
+  .double-column {
+    text-align: right;
+  }
 
-.expandable:hover {
-	cursor: pointer;
-}
+  .table-row-height td {
+    height: 10px;
+    line-height: 10px;
+  }
 
-.toggle-button {
-	font-weight: bold;
-	font-size: 16px;
-	cursor: pointer;
-	width: 20px;
-	text-align: center;
-}
-
-.toggle-button:hover {
-	color: #007BFF;
-}
-
-.table-container {
-	flex-grow: 1;
-	overflow-y: auto;
-	border: 1px solid #ccc;
-	margin-top: 10px;
-}
-
-.details-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 10px;
-}
-
-.details-table th, .details-table td {
-	border: 1px solid #ccc;
-	padding: 6px;
-}
-
-.double-column {
-	text-align: right;
-}
-
-.table-row-height td {
-	height: 10px;
-	line-height: 10px;
-}
-
-.table .thead-dark th {
-	color: #fff;
-	background: #214162;
-}
+  .table .thead-dark th {
+    color: #fff;
+    background: #214162;
+  }
 </style>
-	<div class="card p-1">
-		<div style="display: flex; align-items: center;">
-			<button class="btn btn-primary" type="button" id="stokyenileButton"
-				style="margin-left: 10px;" onclick="openFirstModal('stokrapor')">Filtre</button>
-			
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="stokrapreportDownload"
-			 onclick="stokdownloadReport()" disabled>Excel Indir</button>
+<div class="card p-1">
+  <div style="display: flex; align-items: center">
+    <button
+      class="btn btn-primary"
+      type="button"
+      id="stokyenileButton"
+      style="margin-left: 10px"
+      onclick="openFirstModal('stokrapor')"
+    >
+      Filtre
+    </button>
 
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="stokrapmailButton"
-			 onclick="stokmailAt()" disabled>Email Gonder</button>
-		</div>
-	</div>
-	<div id="errorDiv"
-		style="display: none; color: red; font-weight: bold;"></div>
-	<div class="container">
-		<div class="table-container">
-			<table id="main-table" class="table table-bordered table-hover">
-				<thead class="thead-dark">
-				</thead>
-				<tbody id="mainTableBody">
-				</tbody>
-				<tfoot>
-    			</tfoot>
-			</table>
-		</div>
-	</div>
+    <button
+      class="btn btn-primary"
+      style="margin-left: 10px"
+      type="button"
+      id="stokrapreportDownload"
+      onclick="stokdownloadReport()"
+      disabled
+    >
+      Excel Indir
+    </button>
+
+    <button
+      class="btn btn-primary"
+      style="margin-left: 10px"
+      type="button"
+      id="stokrapmailButton"
+      onclick="stokmailAt()"
+      disabled
+    >
+      Email Gonder
+    </button>
+  </div>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
+<div class="container">
+  <div class="table-container">
+    <table id="main-table" class="table table-bordered table-hover">
+      <thead class="thead-dark"></thead>
+      <tbody id="mainTableBody"></tbody>
+      <tfoot></tfoot>
+    </table>
+  </div>
+</div>
 <input type="hidden" id="stokBilgi" name="stokBilgi" value="" />
 
 <script src="/obs_js_files/stok/raporlar/stokrapor.js"></script>

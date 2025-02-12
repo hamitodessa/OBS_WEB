@@ -20,46 +20,31 @@
 	line-height: 10px;
 }
 
-th:nth-child(1), td:nth-child(1) {
-	width: 6%;
+table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+    }
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap; 
 }
-
-th:nth-child(2), td:nth-child(2) {
-	width: 4%;
+.table-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    margin-top: 10px;
 }
-
-th:nth-child(3), td:nth-child(3) {
-	width: 30%;
-}
-
-th:nth-child(4), td:nth-child(4) {
-	width: 5%;
-}
-
-th:nth-child(5), td:nth-child(5) {
-	width: 9%;
-}
-
-th:nth-child(6), td:nth-child(6) {
-	width: 9%;
-}
-
-th:nth-child(7), td:nth-child(7) {
-	width: 9%;
-}
-
-th:nth-child(8), td:nth-child(8) {
-	width: 5%;
-}
-
-th:nth-child(9), td:nth-child(9) {
-	width: 9%;
-}
-th:nth-child(10), td:nth-child(9) {
-	width: 9%;
-}
-th:nth-child(11), td:nth-child(9) {
-	width: 5%;
+.container {
+    height: 100vh; 
+    display: flex;
+    flex-direction: column; 
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 </style>
@@ -86,7 +71,8 @@ th:nth-child(11), td:nth-child(9) {
 	</div>
 </div>
 <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-<br>
+<div class="container">
+	<div class="table-container">
 	<table class="table table-bordered table-hover">
 		<thead class="thead-dark">
 			<tr>
@@ -121,7 +107,8 @@ th:nth-child(11), td:nth-child(9) {
         	</tr>
     	</tfoot>
 	</table>
-
+	</div>
+</div>
 <input type="hidden" id="dvzcevirmeBilgi" name="dvzcevirmeBilgi" value="initialValue">
 <div th:replace="~{modal/cari/dvzcevirmefiltre :: modaldvzcevirmefiltre}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
