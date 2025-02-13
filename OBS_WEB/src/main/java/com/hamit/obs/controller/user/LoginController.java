@@ -24,6 +24,7 @@ import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
 import com.hamit.obs.service.forum.ForumService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
+import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.kur.KurService;
 import com.hamit.obs.service.user.UserService;
 
@@ -48,6 +49,9 @@ public class LoginController {
 	
 	@Autowired
 	private FaturaService faturaService;
+	
+	@Autowired
+	private KeresteService keresteService;
 	
 	@Autowired
 	private ForumService forumService;
@@ -129,6 +133,14 @@ public class LoginController {
 	        dto.setHangi_sql(faturaService.conn_detail()[0]);
 	        dto.setProgkodu(faturaService.conn_detail()[1]);
 	        dto.setServer(faturaService.conn_detail()[2]);
+	        calismaDiziniDTO.add(dto);
+	        dto = new CalismaDiziniDTO();
+	      //dto.setFirma(keresteService.kereste_firma_adi());
+	        dto.setFirma("");
+	        dto.setModul("Kereste");
+	        dto.setHangi_sql(keresteService.conn_detail()[0]);
+	        dto.setProgkodu(keresteService.conn_detail()[1]);
+	        dto.setServer(keresteService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
 	        
 	        response.put("data", calismaDiziniDTO);

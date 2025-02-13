@@ -31,6 +31,8 @@ public class ConnectionManager {
 			return getConnect(userEmail,"Kambiyo");
 		case "Fatura":
 			return getConnect(userEmail,"Fatura");
+		case "Kereste":
+			return getConnect(userEmail,"Kereste");
 		default:
 			throw new IllegalArgumentException("Geçersiz modül adı: " + modul);
 		}
@@ -52,6 +54,9 @@ public class ConnectionManager {
 			break;
 		case "Fatura":
 			loadConnect(userEmail,modul,"ok_fat");
+			break;
+		case "Kereste":
+			loadConnect(userEmail,modul,"ok_ker");
 			break;
 		}
 	}

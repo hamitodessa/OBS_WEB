@@ -37,7 +37,7 @@ async function detailoku() {
                     <td>${item.izinlimi ? "Evet" : "Hayır"}</td>
                     <td>${item.calisanmi ? "Evet" : "Hayır"}</td>
                     <td>${item.log ? "Evet" : "Hayır"}</td>
-										<td>${item.superviser || ""}</td>
+					<td>${item.superviser || ""}</td>
                 `;
 				row.addEventListener("click", () => setFormValues(row));
 				tableBody.appendChild(row);

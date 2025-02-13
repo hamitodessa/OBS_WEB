@@ -16,6 +16,7 @@ import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
+import com.hamit.obs.service.kereste.KeresteService;
 
 @Controller
 public class ObsOrtakController {
@@ -31,6 +32,9 @@ public class ObsOrtakController {
 	
 	@Autowired
 	private FaturaService faturaService;
+	
+	@Autowired
+	private KeresteService keresteService;
 
 	@GetMapping("/obs/firmaismi")
 	public String firmaism() {
@@ -55,6 +59,9 @@ public class ObsOrtakController {
 			if(modul.trim().equals("fatura")) {
 				response.put("firmaismi", faturaService.fat_firma_adi());
 			}
+			if(modul.trim().equals("kereste")) {
+				response.put("firmaismi", keresteService.ker_firma_adi());
+			}
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
 			response.put("firmaismi", ""); 
@@ -78,6 +85,8 @@ public class ObsOrtakController {
 				kambiyoService.kambiyo_firma_adi_kayit(fismi);
 			else if(modul.trim().equals("fatura"))
 				faturaService.stk_firma_adi_kayit(fismi);
+			else if(modul.trim().equals("kereste"))
+				keresteService.ker_firma_adi_kayit(fismi);
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());

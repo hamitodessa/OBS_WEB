@@ -33,6 +33,10 @@ async function getWellcomeData() {
 				document.getElementById("fkod").innerText = item.progkodu;
 				document.getElementById("fserver").innerText = item.server;
 				document.getElementById("fhsql").innerText = item.hangi_sql;
+			} else if (item.modul === "Kereste") {
+				document.getElementById("kerkod").innerText = item.progkodu;
+				document.getElementById("kerserver").innerText = item.server;
+				document.getElementById("kerhsql").innerText = item.hangi_sql;
 			}
 		});
 	} catch (error) {

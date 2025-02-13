@@ -93,6 +93,10 @@ public class createMYSQL {
 					createTableFatura(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
 					break;
 				}
+				case "Kereste": {
+					createTableKereste(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
+					break;
+				}
 				}
 			}
 			sifirdan_LOG(sbilgi);
@@ -875,6 +879,306 @@ public class createMYSQL {
 			stmt.executeUpdate();
 		}
 	}
+	public void createTableKereste(Connection connection, String firmaAdi , String user_name) throws SQLException {
+		String sql = null;
+		sql = "CREATE TABLE `PAKET_NO`( "
+				+ "  `Pak_No` int NOT NULL,"
+				+ "  `Konsimento` varchar(15) PRIMARY KEY  NOT NULL,"
+				+ "  INDEX `IX_PKN` (  `Konsimento` ASC) VISIBLE)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `DPN`( "
+				+ " `DID`   INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
+				+ "  `Evrak_No` varchar (10) NOT NULL,"
+				+ "  `Tip`  nvarchar (1) NULL,"
+				+ "  `Bir`  varchar (40) NULL,"
+				+ "  `Iki`  varchar (40) NULL,"
+				+ "  `Uc`  varchar (40) NULL,"
+				+ " `Gir_Cik`  varchar (1) NULL,"
+				+ " `USER`  varchar (15) NOT NULL,"
+				+ "  INDEX `IX_DPN` (  `Evrak_No` ASC,  `Gir_Cik` ASC ) VISIBLE)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `NAKLIYECI`("
+				+ " `NAKID`  INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
+				+ " `NAKID_Y` int  NOT NULL,"  
+				+ " `UNVAN` varchar(50) NOT NULL,"
+				+ " `USER` varchar(15) NOT NULL,"
+				+ " INDEX `IX_NAKL` (  `NAKID_Y` ASC ) VISIBLE)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql= "CREATE TABLE `KERESTE`( "
+				+ "`Evrak_No` varchar(10) NULL,"
+				+ " `Barkod` nvarchar(20) NULL,"
+				+ " `Kodu` varchar(16) NOT NULL,"
+				+ " `Paket_No` varchar (10) NULL,"
+				+ " `Konsimento` varchar(15) NULL,"
+				+ " `Miktar` DOUBLE NULL,"
+				+ " `Tarih` datetime NULL,"
+				+ " `Kdv` DOUBLE NULL,"
+				+ " `Doviz` varchar(3) NULL,"
+				+ " `Fiat` DOUBLE NULL,"
+				+ " `Tutar` DOUBLE NULL,"
+				+ " `Kur` DOUBLE NULL,"
+				+ " `Cari_Firma` varchar(12) NULL,"
+				+ " `Adres_Firma` varchar(12) NULL,"
+				+ " `Iskonto` DOUBLE NULL,"
+				+ " `Tevkifat` DOUBLE NULL,"
+				+ " `Ana_Grup` int NULL,"
+				+ " `Alt_Grup` int NULL,"
+				+ " `Mensei` int NULL,"
+				+ " `Depo` int NULL,"
+				+ " `Ozel_Kod` varchar(10) NULL,"
+				+ " `Izahat` varchar(40) NULL,"
+				+ " `Nakliyeci` int NULL,"
+				+ " `USER` varchar(15) NOT NULL,"
+				+ " `Cikis_Evrak` varchar(10) NULL,"
+				+ " `CTarih` datetime NULL,"
+				+ " `CKdv` DOUBLE NULL,"
+				+ " `CDoviz` varchar(3) NULL,"
+				+ " `CFiat` DOUBLE NULL,"
+				+ " `CTutar` DOUBLE NULL,"
+				+ " `CKur` DOUBLE NULL,"
+				+ " `CCari_Firma` varchar(12) NULL,"
+				+ " `CAdres_Firma` varchar(12) NULL,"
+				+ " `CIskonto` DOUBLE NULL,"
+				+ " `CTevkifat` DOUBLE NULL,"
+				+ " `CAna_Grup` int NULL,"
+				+ " `CAlt_Grup` int NULL,"
+				+ " `CDepo` int NULL,"
+				+ " `COzel_Kod` varchar(10) NULL,"
+				+ " `CIzahat` varchar(40) NULL,"
+				+ " `CNakliyeci` int NULL,"
+				+ " `CUSER` varchar(15) NULL,"
+				+ " `Satir` int NOT NULL,"
+				+ " `CSatir` int NOT NULL,"
+				+ " INDEX `IX_KERESTE` (  `Evrak_No`,`Kodu`,`Tarih`,`Paket_No`,`Konsimento`,`Cari_Firma`,`Cikis_Evrak` ) VISIBLE)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `OZEL` ("
+				+ "  `OZID` INTEGER AUTO_INCREMENT PRIMARY KEY,"
+				+ "  `YONETICI` VARCHAR(25) NULL,"
+				+ "  `YON_SIFRE` VARCHAR(15) NULL,"
+				+ "  `FIRMA_ADI` VARCHAR(50) NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `MENSEI_DEGISKEN`("
+				+ " `MEID` INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
+				+ " `MEID_Y`  int   NOT NULL,"   
+				+ " `MENSEI`  varchar (25)   NOT NULL,"
+				+ " `USER`  varchar (15)   NOT NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE  `ANA_GRUP_DEGISKEN`("
+				+ " `AGID`  INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
+				+ " `AGID_Y`  int  NOT NULL,"  
+				+ " `ANA_GRUP`  varchar (25)   NOT NULL,"
+				+ " `USER`  varchar (15)   NOT NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE  `ALT_GRUP_DEGISKEN`("
+				+ " `ALID` INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
+				+ " `ALID_Y`  int  NOT NULL,"  
+				+ " `ANA_GRUP`  int  NOT NULL,"
+				+ " `ALT_GRUP`  varchar (25)   NOT NULL,"
+				+ " `USER`  varchar (15)   NOT NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE  `ACIKLAMA`("
+				+ " `ACID`  INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
+				+ " `EVRAK_CINS`  nvarchar (3) NULL,"
+				+ " `SATIR`  int  NULL,"
+				+ " `EVRAK_NO`  varchar (10)   NULL,"
+				+ " `ACIKLAMA`  varchar (50)   NULL,"
+				+ " `Gir_Cik`  varchar (1)   NULL,"
+				+ " INDEX IX_ACIKLAMA  (`EVRAK_CINS` ASC, `EVRAK_NO` ASC, `Gir_Cik` ASC)  VISIBLE )"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `KOD_ACIKLAMA`("
+				+ " `KOD` varchar(2)   NOT NULL,"
+				+ " `ACIKLAMA` varchar(50)   NULL,"
+				+ " INDEX IX_KOD_ACIKLAMA  (`KOD` ASC)  VISIBLE )"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `KONS_ACIKLAMA`("
+				+ " `KONS` varchar(10)   NOT NULL,"
+				+ " `ACIKLAMA` varchar(50)   NULL,"
+				+ " INDEX IX_KONS_ACIKLAMA  (`KONS` ASC)  VISIBLE )"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE  `DEPO_DEGISKEN`("
+				+ " `DPID` INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
+				+ " `DPID_Y`  int   NOT NULL,"   
+				+ " `DEPO`  varchar (25)   NOT NULL,"
+				+ " `USER`  varchar (15)   NOT NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE  `OZ_KOD_1_DEGISKEN`("
+				+ " `OZ1ID`  INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,"
+				+ " `OZ1ID_Y`  int   NOT NULL,"  
+				+ " `OZEL_KOD_1`  varchar (25)   NOT NULL,"
+				+ " `USER`  varchar (15)   NOT NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `YETKILER`("
+				+ " `KULLANICI`  varchar (25)   NULL,"
+				+ " `HESAP`  varchar (12)   NULL,"
+				+ " `TAM_YETKI` TINYINT NULL,"
+				+ " `GORUNTU` TINYINT NULL,"
+				+ " `LEVEL`  int  NOT NULL,"
+				+ " `USER`  varchar (15)   NOT NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `IRS_EVRAK_FORMAT`("
+				+ " `SAT_SUT` nchar(5) NULL,"
+				+ " `TARIH`  DOUBLE  NULL,"
+				+ " `SEVK_TARIH`  DOUBLE  NULL,"
+				+ " `FIRMA_KODU`  DOUBLE  NULL,"
+				+ " `FIRMA_UNVANI`  DOUBLE  NULL,"
+				+ " `VERGI_DAIRESI`  DOUBLE  NULL,"
+				+ " `VERGI_NO`  DOUBLE  NULL,"
+				+ " `GIDECEGI_YER`  DOUBLE  NULL,"
+				+ " `NOT_1`  DOUBLE  NULL,"
+				+ " `NOT_2`  DOUBLE  NULL,"
+				+ " `NOT_3`  DOUBLE  NULL,"
+				+ " `BASLIK_BOLUM`  DOUBLE  NULL,"
+				+ " `BARKOD`  DOUBLE  NULL,"
+				+ " `URUN_KODU`  DOUBLE  NULL,"
+				+ " `URUN_ADI`  DOUBLE  NULL,"
+				+ " `DEPO`  DOUBLE  NULL,"
+				+ " `SIMGE`  DOUBLE  NULL,"
+				+ " `BIRIM_FIAT`  DOUBLE  NULL,"
+				+ " `ISKONTO`  DOUBLE  NULL,"
+				+ " `MIKTAR`  DOUBLE  NULL,"
+				+ " `K_D_V`  DOUBLE  NULL,"
+				+ " `TUTAR`  DOUBLE  NULL,"
+				+ " `TUTAR_TOPLAM`  DOUBLE  NULL,"
+				+ " `ISKONTO_TOPLAMI`  DOUBLE  NULL,"
+				+ " `BAKIYE`  DOUBLE  NULL,"
+				+ " `K_D_V_TOPLAMI`  DOUBLE  NULL,"
+				+ " `BELGE_TOPLAMI`  DOUBLE  NULL,"
+				+ " `YAZI_ILE`  DOUBLE  NULL,"
+				+ " `ALT_BOLUM`  DOUBLE  NULL,"
+				+ " `N1`  DOUBLE  NULL,"
+				+ " `N2`  DOUBLE  NULL,"
+				+ " `N3`  DOUBLE  NULL,"
+				+ " `N4`  DOUBLE  NULL,"
+				+ " `N5`  DOUBLE  NULL,"
+				+ " `N6`  DOUBLE  NULL,"
+				+ " `N7`  DOUBLE  NULL,"
+				+ " `N8`  DOUBLE  NULL,"
+				+ " `N9`  DOUBLE  NULL,"
+				+ " `N10`  DOUBLE  NULL,"
+				+ " `USER`  nvarchar (15) NOT NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  IRS_EVRAK_FORMAT(SAT_SUT ,TARIH,SEVK_TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO  ,GIDECEGI_YER,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,ALT_BOLUM, N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,`USER` ) VALUES ('SATIR','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  IRS_EVRAK_FORMAT(SAT_SUT ,TARIH,SEVK_TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO  ,GIDECEGI_YER,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,ALT_BOLUM, N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,`USER` ) VALUES ('SUTUN','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE `FAT_EVRAK_FORMAT`( "
+				+ " `SAT_SUT` nchar (5) NULL,"
+				+ " `TARIH`  DOUBLE  NULL,"
+				+ " `FIRMA_KODU`  DOUBLE  NULL,"
+				+ " `FIRMA_UNVANI`  DOUBLE  NULL,"
+				+ " `VERGI_DAIRESI`  DOUBLE  NULL,"
+				+ " `VERGI_NO`  DOUBLE  NULL,"
+				+ " `GIDECEGI_YER`  DOUBLE  NULL,"
+				+ " `NOT_1`  DOUBLE  NULL,"
+				+ " `NOT_2`  DOUBLE  NULL,"
+				+ " `NOT_3`  DOUBLE  NULL,"
+				+ " `BASLIK_BOLUM`  DOUBLE  NULL,"
+				+ " `BARKOD`  DOUBLE  NULL,"
+				+ " `URUN_KODU`  DOUBLE  NULL,"
+				+ " `URUN_ADI`  DOUBLE  NULL,"
+				+ " `DEPO`  DOUBLE  NULL,"
+				+ " `IZAHAT`  DOUBLE  NULL,"
+				+ " `SIMGE`  DOUBLE  NULL,"
+				+ " `BIRIM_FIAT`  DOUBLE  NULL,"
+				+ " `ISKONTO`  DOUBLE  NULL,"
+				+ " `MIKTAR`  DOUBLE  NULL,"
+				+ " `K_D_V`  DOUBLE  NULL,"
+				+ " `TUTAR`  DOUBLE  NULL,"
+				+ " `TUTAR_TOPLAM`  DOUBLE  NULL,"
+				+ " `ISKONTO_TOPLAMI`  DOUBLE  NULL,"
+				+ " `BAKIYE`  DOUBLE  NULL,"
+				+ " `K_D_V_TOPLAMI`  DOUBLE  NULL,"
+				+ " `BELGE_TOPLAMI`  DOUBLE  NULL,"
+				+ " `TEVKIFAT_ORANI`  DOUBLE  NULL,"
+				+ " `AL_TAR_TEV_ED_KDV`  DOUBLE  NULL,"
+				+ " `TEV_DAH_TOP_TUTAR`  DOUBLE  NULL,"
+				+ " `BEYAN_ED_KDV`  DOUBLE  NULL,"
+				+ " `TEV_HAR_TOP_TUT`  DOUBLE  NULL,"
+				+ " `YAZI_ILE`  DOUBLE  NULL,"
+				+ " `TEV_KASESI`  DOUBLE  NULL,"
+				+ " `ALT_BOLUM`  DOUBLE  NULL,"
+				+ " `N1`  DOUBLE  NULL,"
+				+ " `N2`  DOUBLE  NULL,"
+				+ " `N3`  DOUBLE  NULL,"
+				+ " `N4`  DOUBLE  NULL,"
+				+ " `N5`  DOUBLE  NULL,"
+				+ " `N6`  DOUBLE  NULL,"
+				+ " `N7`  DOUBLE  NULL,"
+				+ " `N8`  DOUBLE  NULL,"
+				+ " `N9`  DOUBLE  NULL,"
+				+ " `N10`  DOUBLE  NULL,"
+				+ " `USER`  nvarchar (15) NULL)"
+				+ "  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_turkish_ci; ";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  FAT_EVRAK_FORMAT(SAT_SUT,TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO ,GIDECEGI_YER ,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO ,IZAHAT,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,TEVKIFAT_ORANI ,AL_TAR_TEV_ED_KDV ,TEV_DAH_TOP_TUTAR , BEYAN_ED_KDV ,TEV_HAR_TOP_TUT,TEV_KASESI,ALT_BOLUM,N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,USER ) VALUES " + " ('SATIR','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  FAT_EVRAK_FORMAT(SAT_SUT,TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO ,GIDECEGI_YER ,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO ,IZAHAT,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,TEVKIFAT_ORANI ,AL_TAR_TEV_ED_KDV ,TEV_DAH_TOP_TUTAR , BEYAN_ED_KDV ,TEV_HAR_TOP_TUT,TEV_KASESI,ALT_BOLUM,N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,USER) VALUES " + " ('SUTUN','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		// ***************OZEL NO YAZ *************************
+		sql = "INSERT INTO `OZEL` (`YONETICI`,`YON_SIFRE`,`FIRMA_ADI`) VALUES (?,?,?)";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, user_name); 
+			stmt.setString(2, "12345"); 
+			stmt.setString(3, firmaAdi); 
+			stmt.executeUpdate();
+		}
+	}
+	
 	public void sifirdan_LOG(serverBilgiDTO sbilgi) {
 		String databaseName = sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu() + "_log";
 		String connectionUrl = "jdbc:mysql://" + sbilgi.getUser_ip() ;

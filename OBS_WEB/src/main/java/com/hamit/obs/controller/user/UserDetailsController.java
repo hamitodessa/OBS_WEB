@@ -28,6 +28,7 @@ import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
+import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.kur.KurService;
 import com.hamit.obs.service.server.ServerService;
 import com.hamit.obs.service.user.UserDetailsService;
@@ -49,6 +50,8 @@ public class UserDetailsController {
     private KambiyoService kambiyoService;
 	@Autowired
     private FaturaService faturaService;
+	@Autowired
+	private KeresteService keresteService;
 	@Autowired
 	private ServerService serverService;
 	
@@ -153,6 +156,8 @@ public class UserDetailsController {
 					kambiyoService.initialize();
 				else if(userDetails.getUser_modul().equals("Fatura"))
 					faturaService.initialize();
+				else if(userDetails.getUser_modul().equals("Kereste"))
+					keresteService.initialize();
 			} else {
 				response.put("errorMessage", "Bu işlemi yapmaya yetkiniz yok...Adminden Yetki Aliniz");
 			}
@@ -190,6 +195,10 @@ public class UserDetailsController {
 			}
 			case "Fatura": {
 				serverBilgiDTO.setUser_modul_baslik("OK_Fat");
+				break;
+			}
+			case "Kereste": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Ker");
 				break;
 			}
 			}
@@ -240,6 +249,8 @@ public class UserDetailsController {
 				kambiyoService.initialize();
 			else if(userdetailsToRemove.getUser_modul().equals("Fatura"))
 				faturaService.initialize();
+			else if(userdetailsToRemove.getUser_modul().equals("Kereste"))
+				keresteService.initialize();
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {

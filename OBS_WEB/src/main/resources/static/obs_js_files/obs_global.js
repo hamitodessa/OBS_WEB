@@ -350,6 +350,24 @@ async function stokBaslik() {
 	}
 }
 
+async function keresteBaslik() {
+	try {
+		const response = await fetchWithSessionCheck("kereste/getBaslik");
+		const data = response;
+		if (data.errorMessage === "") {
+			document.getElementById("baslik").innerText = data.baslik;
+		} else {
+			const errorDiv = document.getElementById("errorDiv");
+			errorDiv.style.display = "block";
+			errorDiv.innerText = data.errorMessage;
+		}
+	} catch (error) {
+		const errorDiv = document.getElementById("errorDiv");
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message;
+	}
+}
+
 parseLocaleNumber = function (input) {
 	if (!input) return 0;
 	if (input.includes(",") && input.includes(".")) {

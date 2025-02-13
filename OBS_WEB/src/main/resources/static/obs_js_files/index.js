@@ -104,5 +104,7 @@ $(document).ready(function () {
 		"/stok/grprapor": stokBaslik,
 		"/stok/imagrprapor": stokBaslik,
 		"/stok/stokdetay": stokBaslik,
+		"/stok/degiskenler": stokBaslik,
+		"/kereste/degiskenler": keresteBaslik,
 	}
 });

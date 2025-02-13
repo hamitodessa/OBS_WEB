@@ -15,6 +15,7 @@ import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
+import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.kur.KurService;
 
 import java.io.IOException;
@@ -39,6 +40,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	@Autowired
 	private FaturaService faturaService;
 	
+	@Autowired
+	private KeresteService keresteService;
+	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
@@ -50,6 +54,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			adresService.initialize();
 			kambiyoService.initialize();
 			faturaService.initialize();
+			keresteService.initialize();
 			response.sendRedirect("/index");
 		} catch (Exception e) {
 			response.sendRedirect("/index?trigger=userdetails");

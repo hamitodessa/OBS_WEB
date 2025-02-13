@@ -1,0 +1,108 @@
+<style>
+    .centered-div {
+      width: 30%; /* Genişlik %80 */
+      margin: 0 auto; /* Ekran ortasında konumlandırma */
+    
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    
+    .group-box {
+      padding: 1px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+    }
+    
+      .tablegroup-box {
+      padding: 1px;
+      box-sizing: border-box;
+    }
+    
+    
+    .table .thead-dark th {
+    color: #fff;
+    background: #214162;
+  }
+  
+  .table-row-height td {
+      height: 10px;
+      line-height: 10px;
+  }
+  </style>
+  <div class="card p-4">
+    <div class="centered-div">
+      <div class="group-box" style="padding-top:10px;padding-bottom:10px;padding-right: 5px;">
+        <span style="padding-left: 5px;"></span>
+        <label class="form-control" style="width: 130px;text-align:left;">Degiskenler</label>
+        <span style="padding-left: 5px;"></span>
+        <select class="form-select" id="degiskenler" style="font-weight: bold;width: 100%;" onchange="degiskenchange(this)">
+          <option value="anagrp">Ana Grup</option>
+          <option value="altgrp">Alt Grup</option>
+          <option value="mensei">Mensei</option>
+          <option value="depo">Depo</option>
+          <option value="oz1">Ozel Kod 1</option>
+          <option value="nak">Nakliyeci</option>
+        </select>
+        
+      </div>
+    </div>
+     <div class="centered-div" style="display:none;margin-top:10px;margin-bottom:10px;" id="altgrpdiv">
+      <div class="group-box" style="padding-top:10px;padding-bottom:10px;padding-right: 5px;">
+        <span style="padding-left: 5px;"></span>
+        <label class="form-control" style="width: 130px;">Ana Grup</label>
+        <span style="padding-left: 5px;"></span>
+        <select class="form-select" id="altgrpAna" style="font-weight: bold;width: 100%;" onchange="altgrpdoldur()">
+            <option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
+        </select>
+      </div>
+    </div>
+    <div class="centered-div" style="margin-top:10px;margin-bottom:10px;">
+      <div class="group-box" style="padding-top:10px;padding-bottom:10px;padding-right: 5px;">
+        <span style="padding-left: 5px;"></span>
+        <label class="form-control" style="width: 130px;text-align:left;">Arama</label>
+        <span style="padding-left: 5px;"></span>
+        <input type="text" id="arama" class="form-control" oninput="filterTable()"/>
+      </div>
+    </div>
+    <div class="centered-div" style="margin-top:10px;margin-bottom:10px;">
+      <div class="group-box" style="padding-top:10px;padding-bottom:10px;padding-right: 5px;">
+        <span style="padding-left: 5px;"></span>
+        <label class="form-control" style="width: 130px;text-align:left;">Aciklama</label>
+        <span style="padding-left: 5px;"></span>
+        <input type="text" id="aciklama" style="font-weight: bold;" class="form-control" />
+        <input type="hidden" id="idacik"  >
+      </div>
+    </div>
+    <div class="centered-div" style="margin-top:10px;margin-bottom:10px;">
+      <div class="tablegroup-box"  style="padding-right: 5px;height:300px;overflow-y: auto;">
+          <span style="padding-left: 5px;"></span>
+            <table id="degiskenTable" class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th style="display: none;">id</th>
+                  <th>Aciklama</th>
+                </tr>
+              </thead>
+              <tbody id="degiskenTableBody"></tbody>
+            </table>
+      </div>
+    </div>
+    <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+      <div class="centered-div" style="margin-top:10px;margin-bottom:10px;">
+      <div class="group-box" style="padding-top:10px;padding-bottom:10px;padding-right: 5px;">
+            <span style="padding-left: 5px;"></span>
+            <button class="btn btn-primary" type="button" id="degkaydetButton"
+              onclick="degKayit()">Kaydet</button>
+          <span style="padding-left: 5px;"></span>
+          <button class="btn btn-primary" type="button" id="degsilButton"
+              onclick="degYoket()">Sil</button>
+          <span style="padding-left: 5px;"></span>
+          <button type="button" id="btnYeni" class="btn btn-primary" onclick="degyeni()" > + </button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/obs_js_files/kereste/degiskenler.js"></script>
+  
