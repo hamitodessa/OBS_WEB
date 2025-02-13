@@ -61,13 +61,8 @@
       Yenile
     </button>
 
-    <select
-      id="reportFormat"
-      class="form-select"
-      style="width: 150px; margin-left: 10px"
-      onchange="ekstredownloadReport(this.value)"
-      disabled
-    >
+    <select id="reportFormat" class="form-select" style="width: 150px; margin-left: 10px"
+      onchange="ekstredownloadReport(this.value)" disabled >
       <option value="" disabled selected>Rapor Indir</option>
       <option value="pdf">PDF</option>
       <option value="xlsx">Excel (XLSX)</option>
@@ -75,20 +70,9 @@
       <option value="xml">XML</option>
     </select>
 
-    <button
-      class="btn btn-primary"
-      style="margin-left: 10px"
-      type="button"
-      id="mailButton"
-      onclick="ekstremailAt()"
-      disabled
-    >
-      Email Gonder
-    </button>
-    <label
-      id="hesapAdi"
-      style="width: 300px; font-weight: bold; margin-left: 40px"
-      >.....</label
+    <button class="btn btn-primary" style="margin-left: 10px" type="button" id="mailButton"
+      onclick="ekstremailAt()" disabled >Email Gonder</button>
+    <label id="hesapAdi" style="width: 300px; font-weight: bold; margin-left: 40px">.....</label
     >
   </div>
 </div>

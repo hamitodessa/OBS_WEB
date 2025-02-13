@@ -25,18 +25,17 @@
 				<fieldset>
 					<div class="field">
 						<label class="label_field">Adi</label> 
-						<input type="text"
-							name="firstName" id="firstName" placeholder="Adi" 
+						<input type="text" name="firstName" id="firstName" placeholder="Adi" 
 							th:value="${user.firstName}" required />
 					</div>
 					<div class="field">
-						<label class="label_field">Soyadi</label> <input type="text"
-							name="lastName" id="lastName" placeholder="Soyadi"
+						<label class="label_field">Soyadi</label> 
+						<input type="text" name="lastName" id="lastName" placeholder="Soyadi"
 							th:value="${user.lastName}" required/>
 					</div>
 					<div class="field">
-						<label class="label_field hidden">hidden label</label> <label
-							id="error" th:if="${error}" class="forgot" th:text="${error}"></label>
+						<label class="label_field hidden">hidden label</label> 
+						<label id="error" th:if="${error}" class="forgot" th:text="${error}"></label>
 						<span id="message" style="font-weight: bold;"></span>
 					</div>
 					<div class="field">
@@ -62,11 +61,11 @@
 document.getElementById('image').addEventListener('change', function (event) {
     const file = event.target.files[0];
     const maxSizeInKB = 500; // Maksimum dosya boyutu (KB cinsinden)
-    const maxSizeInBytes = maxSizeInKB * 1024; // Bayta çeviriyoruz
+    const maxSizeInBytes = maxSizeInKB * 1024;  
     if (file && file.size > maxSizeInBytes) {
         document.getElementById('message').textContent = 
             `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-        event.target.value = ''; // Dosya seçimini sıfırlar
+        event.target.value = ''; 
     } else {
         document.getElementById('message').textContent = '';
     }

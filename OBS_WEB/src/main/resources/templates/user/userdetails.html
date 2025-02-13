@@ -72,7 +72,6 @@
 				</div>
 				
 			</div>
-			<!-- Boolean Dropdownları Alt Alta -->
 			<div class="row mt-4" >
 				<div class="form-group" style="width:200px;display:none;" id="izinlimidiv" >
 					<div class="form-check">
@@ -93,27 +92,21 @@
 					</div>
 				</div>
 			</div>
-			<!-- Kaydet ve Diğer Butonlar -->
-
 		<div class="aramagroup-box" style="margin-top: 5px;">
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2"
-				onclick="checkFile()" id="checkfilebutton">
+			<button type="button" class="btn btn-secondary ml-2" onclick="checkFile()" id="checkfilebutton">
 				<i class="fa fa-retweet"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" disabled class="btn btn-secondary ml-2"
-				onclick="saveUserDetails()" id="savebutton">
+			<button type="button" disabled class="btn btn-secondary ml-2" onclick="saveUserDetails()" id="savebutton">
 				<i class="fa fa-save"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2"
-				onclick="clearFormModulsuz()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="clearFormModulsuz()">
 				<i class="fa fa-plus"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2"
-				onclick="confirmDeleteus()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="confirmDeleteus()">
 				<i class="fa fa-trash"></i>
 			</button>
 		</div>
@@ -125,14 +118,11 @@
 	<p></p>	
 	<input type="hidden" id="hiddenId" name="hiddenId">
 	<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-	<!-- Alt Bölüm - Tablo Görünümü -->
 	<div id="moduleTable" class="card p-4">
-		<!--   <h3 class="mb-3">User Modul Bilgileri</h3> -->
 		<table class="table table-bordered table-hover">
 			<thead class="thead-dark">
 				<tr>
 					<th style="display: none;">ID</th>
-					<!-- Gizli sütun -->
 					<th>Program Kodu</th>
 					<th>Server Kullanici</th>
 					<th>Şifre Sunucu</th>
@@ -146,10 +136,7 @@
 				</tr>
 			</thead>
 			<tbody id="tableBody">
-				<!-- Daha fazla veri burada yer alabilir -->
 			</tbody>
 		</table>
 	</div>
 <script src="/obs_js_files/user/userDetails.js"></script>
-	
-

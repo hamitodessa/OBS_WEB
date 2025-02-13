@@ -2,7 +2,7 @@
  
 <style>
 .table-hover tbody tr:hover {
-	background-color: #ced4da !important; /* Özel rengi zorla */
+	background-color: #ced4da !important; 
 	color: inherit !important;
 }
 
@@ -20,7 +20,7 @@
 	display: flex;
 	align-items: center;
 	border: 1px solid #ccc;
-	height: 50px; /* Yüksekliği sabitledim */
+	height: 50px; 
 }
 </style>
 	<div class="card p-1 mb-4">
@@ -82,7 +82,6 @@
 					<input style="margin-top:10px;" class="form-control" id="superviser" maxlength="50">
 				</div>
 			</div>
-			<!-- Boolean Dropdownları Alt Alta -->
 			<div class="row mt-4" >
 				<div class="form-group" style="width:200px;" id="izinlimidiv" >
 					<div class="form-check">
@@ -103,22 +102,17 @@
 					</div>
 				</div>
 			</div>
-			<!-- Kaydet ve Diğer Butonlar -->
-
 		<div class="aramagroup-box" style="margin-top: 5px;">
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2"
-				onclick="saveUserDetailsiz()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="saveUserDetailsiz()">
 				<i class="fa fa-save"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2"
-				onclick="clearFormModulsuz()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="clearFormModulsuz()">
 				<i class="fa fa-plus"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2"
-				onclick="confirmDeleteiz()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="confirmDeleteiz()">
 				<i class="fa fa-trash"></i>
 			</button>
 		</div>
@@ -126,14 +120,11 @@
 	</div>
 	<input type="hidden" id="hiddenId" name="hiddenId">
 	<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-	<!-- Alt Bölüm - Tablo Görünümü -->
 	<div id="moduleTable" class="card p-4">
-		<!--   <h3 class="mb-3">User Modul Bilgileri</h3> -->
 		<table class="table table-bordered table-hover">
 			<thead class="thead-dark">
 				<tr>
 					<th style="display: none;">ID</th>
-					<!-- Gizli sütun -->
 					<th>Program Kodu</th>
 					<th>Server Kullanici</th>
 					<th>Şifre Sunucu</th>
@@ -147,10 +138,7 @@
 				</tr>
 			</thead>
 			<tbody id="tableBody">
-				<!-- Daha fazla veri burada yer alabilir -->
 			</tbody>
 		</table>
 	</div>
 <script src="/obs_js_files/user/userizinleri.js"></script>
-	
-

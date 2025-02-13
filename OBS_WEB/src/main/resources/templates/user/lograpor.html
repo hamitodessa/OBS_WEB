@@ -16,11 +16,33 @@
   background: #214162;
 }
 
-th:nth-child(1) {
-	width: 15%;
-}
-
-
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap;
+  }
+  .table-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
+  .container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
 </style>
 
@@ -47,16 +69,15 @@ th:nth-child(1) {
 	</div>
 </div>
 <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-<br>
-<!-- Tablo -->
-<!-- <div class="card p-4">  -->
+<div class="container">
+	<div class="table-container">
 <table class="table table-bordered table-hover">
 		 <thead class="thead-dark">
 			<tr>
-				<th>Tarih</th>
-				<th>Mesaj</th>
-				<th>Evrak</th>
-				<th>User</th>
+				<th>TARIH</th>
+				<th>MESAJ</th>
+				<th>EVRAK</th>
+				<th>USER</th>
 			</tr>
 		</thead>
 		<tbody id="tableBody">
@@ -70,10 +91,8 @@ th:nth-child(1) {
         </tr>
     </tfoot>
 	</table>
-<!--</div>  -->
+</div>
+</div>
 
 <input type="hidden" id="logBilgi" name="logBilgi" value="initialValue">
-<!-- Modal -->
-
 <script src="/obs_js_files/user/lograpor.js"></script>
- 
