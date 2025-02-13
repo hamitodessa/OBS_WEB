@@ -19,41 +19,61 @@
   background: #214162;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+  th,  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap;
+  }
+  .table-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
+  .container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 </style>
 
 
-<div class="card p-4">
+<div class="card p-1">
 		<div style="display: flex; align-items: center;">
 		<button class="btn btn-primary" type="button" id="yenileButton" style="margin-left: 10px;"
 			onclick="openFirstModal('kurrapor')">Yenile</button>
-		
 	</div>
 </div>
 <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-<br>
-<!-- Tablo -->
-<div class="card p-4">
-	<table class="table table-bordered table-hover" style="width:60%">
-		<thead class="thead-dark">
-			<tr>
-				<th>Tarih</th>
-				<th>Kur</th>
-				<th class="double-column">MA</th>
-				<th class="double-column">MS</th>
-				<th class="double-column">SA</th>
-				<th class="double-column">SS</th>
-				<th class="double-column">BA</th>
-				<th class="double-column">BS</th>
-			</tr>
-		</thead>
-		<tbody id="tableBody"></tbody>
-	</table>
+<div class="container">
+	<div class="table-container">
+		<table class="table table-bordered table-hover" style="width:60%">
+			<thead class="thead-dark">
+				<tr>
+					<th>Tarih</th>
+					<th>Kur</th>
+					<th class="double-column">MA</th>
+					<th class="double-column">MS</th>
+					<th class="double-column">SA</th>
+					<th class="double-column">SS</th>
+					<th class="double-column">BA</th>
+					<th class="double-column">BS</th>
+				</tr>
+			</thead>
+			<tbody id="tableBody"></tbody>
+		</table>
+	</div>
 </div>
 <input type="hidden" id="kurraporBilgi" name="kurraporBilgi" value="initialValue">
-
 <script src="/obs_js_files/kur/kurrapor.js"></script>
-
 <div th:replace="~{modal/kur/kurraporfiltre :: modalkurrapor}"></div>
- 
-
-

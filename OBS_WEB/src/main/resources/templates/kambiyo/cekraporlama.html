@@ -1,105 +1,94 @@
 <link rel="stylesheet" href="style/yenihsppln.css" />
-	
+
 <style>
+  .double-column {
+    text-align: right;
+  }
 
-.double-column {
-	text-align: right;
-}
+  .table-hover tbody tr:hover {
+    background-color: #ced4da !important;
+    color: inherit !important;
+  }
 
-.table-hover tbody tr:hover {
-	background-color: #ced4da !important;
-	color: inherit !important;
-}
+  .table-row-height td {
+    height: 10px;
+    line-height: 10px;
+  }
+  .table .thead-dark th {
+    color: #fff;
+    background: #214162;
+  }
+  .container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
-.table-row-height td {
-	height: 10px;
-	line-height: 10px;
-}
-.table .thead-dark th {
- color: #fff;
-  background: #214162;
-}
-.container {
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	margin-top: 10px;
-	padding: 0px;
-	width: 100%; 
-	max-width: 100%; 
-	box-sizing: border-box;
-}
-
-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: auto;
-    }
-th, td {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+  th,
+  td {
     border: 1px solid #ddd;
     padding: 8px;
-    white-space: nowrap; 
-}
-.table-container {
+    white-space: nowrap;
+  }
+  .table-container {
     flex-grow: 1;
     overflow-y: auto;
     border: 1px solid #ccc;
     margin-top: 10px;
-}
-
-
+  }
 </style>
 
-
 <div class="card p-1">
-		<div style="display: flex; align-items: center;">
-		<button class="btn btn-primary" type="button" id="cekrapyenileButton" style="margin-left: 10px;"
-			onclick="openFirstModal('cekrapor')">Yenile</button>
-		
-		<button class="btn btn-primary" style="margin-left: 10px"
-			type="button" id="cekrapreportFormat" onclick="cekrapdownloadReport()" disabled >Excel Indir </button>
-		
-		<button class="btn btn-primary" style="margin-left: 10px;"
-			type="button" id="cekrapmailButton" onclick="cekrapmailAt()" disabled>Email Gonder</button>
-
-		</div>
+  <div style="display: flex; align-items: center">
+    <button class="btn btn-primary" type="button" id="cekrapyenileButton" style="margin-left: 10px"
+      onclick="openFirstModal('cekrapor')">Yenile</button>
+    <button class="btn btn-primary" style="margin-left: 10px" type="button" id="cekrapreportFormat"
+      onclick="cekrapdownloadReport()" disabled>Excel Indir</button>
+    <button class="btn btn-primary" style="margin-left: 10px" type="button" id="cekrapmailButton"
+      onclick="cekrapmailAt()" disabled>Email Gonder</button>
+  </div>
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-	<div class="container">
-		<div class="table-container" >
-	<table class="table table-bordered table-hover"  id="main-table" >
-		<thead class="thead-dark">
-			<tr>
-				<th>Cek_No</th>
-				<th>Vade</th>
-				<th>Giris_Bordro</th>
-				<th>Giris_Tarihi</th>
-				<th>Giris_Musteri</th>
-				<th style="min-width:200px;">Banka</th>
-				<th style="min-width:200px;">Sube</th>
-				<th>Cins</th>
-				<th class="double-column">TUTAR</th>
-				<th>Durum</th>
-				<th>T_Tarih</th>
-				<th>G.Ozel_Kod</th>
-				<th>Cikis_Bordro</th>
-				<th>Cikis_Tarihi</th>
-				<th>Cikis_Musteri</th>
-				<th>C.Ozel_Kod</th>
-				<th>User</th>
-			</tr>
-		</thead>
-		<tbody id="tableBody">
-		</tbody>
-	</table>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
+<div class="container">
+  <div class="table-container">
+    <table class="table table-bordered table-hover" id="main-table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Cek_No</th>
+          <th>Vade</th>
+          <th>Giris_Bordro</th>
+          <th>Giris_Tarihi</th>
+          <th>Giris_Musteri</th>
+          <th style="min-width: 200px">Banka</th>
+          <th style="min-width: 200px">Sube</th>
+          <th>Cins</th>
+          <th class="double-column">TUTAR</th>
+          <th>Durum</th>
+          <th>T_Tarih</th>
+          <th>G.Ozel_Kod</th>
+          <th>Cikis_Bordro</th>
+          <th>Cikis_Tarihi</th>
+          <th>Cikis_Musteri</th>
+          <th>C.Ozel_Kod</th>
+          <th>User</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
 </div>
-</div>
-
-<input type="hidden" id="cekrapBilgi" name="cekrapBilgi" value="initialValue">
+<input type="hidden" id="cekrapBilgi" name="cekrapBilgi" value="initialValue" />
 <script src="/obs_js_files/kambiyo/cekrapor.js"></script>
 
-<!-- Modal -->
 <div th:replace="~{modal/kambiyo/cekraporfiltre :: modalcekrapor}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
-
- 

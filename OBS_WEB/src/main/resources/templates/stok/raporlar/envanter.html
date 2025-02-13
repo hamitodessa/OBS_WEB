@@ -1,95 +1,96 @@
-
 <link rel="stylesheet" href="style/yenihsppln.css" />
 <style>
-.container {
-	height: 100vh; 
-	display: flex;
-	flex-direction: column; 
-	margin-top: 10px;
-	padding: 0px;
-	width: 100%;
-	max-width: 100%;
-	box-sizing: border-box;
-}
+  .container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
-table {
+  table {
     width: 100%;
     border-collapse: collapse;
     table-layout: auto;
-}
-th, td {
+  }
+  th,
+  td {
     border: 1px solid #ddd;
     padding: 8px;
-    white-space: nowrap; 
-}
+    white-space: nowrap;
+  }
 
-.table-container {
-	flex-grow: 1;
-	overflow-y: auto;
-	border: 1px solid #ccc;
-	margin-top: 10px;
-}
+  .table-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
 
-.double-column {
-	text-align: right;
-}
+  .double-column {
+    text-align: right;
+  }
 
-.table-row-height td {
-	height: 10px;
-	line-height: 10px;
-}
+  .table-row-height td {
+    height: 10px;
+    line-height: 10px;
+  }
 
-.table .thead-dark th {
-	color: #fff;
-	background: #214162;
-}
+  .table .thead-dark th {
+    color: #fff;
+    background: #214162;
+  }
 </style>
-	<div class="card p-4">
-		<div style="display: flex; align-items: center;">
-			<button class="btn btn-primary" type="button" id="envyenileButton"
-				style="margin-left: 10px;" onclick="openFirstModal('envanter')">Filtre</button>
-			
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="envDownloadButton"
-			 onclick="envdownloadReport()" disabled>Excel Indir</button>
+<div class="card p-1">
+  <div style="display: flex; align-items: center">
+    <button class="btn btn-primary" type="button" id="envyenileButton" style="margin-left: 10px"
+      onclick="openFirstModal('envanter')">Filtre</button>
 
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="envmailButton"
-			 onclick="envmailAt()" disabled>Email Gonder</button>
-		</div>
-	</div>
-	<div id="errorDiv"
-		style="display: none; color: red; font-weight: bold;"></div>
-		<div class="table-container">
-			<table id="main-table" class="table table-bordered table-hover">
-				<thead class="thead-dark">
-					<tr>
-						<th>KODU</th>
-						<th>ADI</th>
-						<th>SIMGE</th>
-						<th>GIRIS MIKTARI</th>
-						<th>GIRIS TUTARI</th>
-						<th>CIKIS MIKTARI</th>
-						<th>CIKIS TUTARI</th>
-						<th>CIKIS MALIYET</th>
-						<th>STOK MIKTARI</th>
-						<th>MALIYET</th>
-						<th>TUTAR</th>
-					</tr>
-				</thead>
-				<tbody id="mainTableBody">
-				</tbody>
-				<tfoot>
-    			</tfoot>
-			</table>
-		</div>
+    <button class="btn btn-primary" style="margin-left: 10px" type="button" id="envDownloadButton"
+      onclick="envdownloadReport()" disabled>Excel Indir</button>
 
-		<div class="table-container" id="second-table-container" style="visibility: hidden;">
-			<table id="second-table" class="table table-bordered table-hover">
-				<thead class="thead-dark">
-				</thead>
-				<tbody id="secondTableBody">
-				</tbody>
-		</table>
-	</div>
+    <button class="btn btn-primary" style="margin-left: 10px" type="button" id="envmailButton"
+      onclick="envmailAt()" disabled>Email Gonder</button>
+  </div>
+</div>
+<div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
+<div class="container">
+  <div class="table-container">
+    <table id="main-table" class="table table-bordered table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>KODU</th>
+          <th>ADI</th>
+          <th>SIMGE</th>
+          <th>GIRIS MIKTARI</th>
+          <th>GIRIS TUTARI</th>
+          <th>CIKIS MIKTARI</th>
+          <th>CIKIS TUTARI</th>
+          <th>CIKIS MALIYET</th>
+          <th>STOK MIKTARI</th>
+          <th>MALIYET</th>
+          <th>TUTAR</th>
+        </tr>
+      </thead>
+      <tbody id="mainTableBody"></tbody>
+      <tfoot></tfoot>
+    </table>
+  </div>
+
+  <div
+    class="table-container"
+    id="second-table-container"
+    style="visibility: hidden"
+  >
+    <table id="second-table" class="table table-bordered table-hover">
+      <thead class="thead-dark"></thead>
+      <tbody id="secondTableBody"></tbody>
+    </table>
+  </div>
+</div>
 
 <input type="hidden" id="envanterBilgi" name="envanterBilgi" value="" />
 
