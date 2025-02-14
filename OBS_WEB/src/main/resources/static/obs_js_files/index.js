@@ -106,5 +106,9 @@ $(document).ready(function () {
 		"/stok/stokdetay": stokBaslik,
 		"/stok/degiskenler": stokBaslik,
 		"/kereste/degiskenler": keresteBaslik,
+		"/kereste/giris": () => {
+			stokBaslik();
+			initializeRows();
+		},
 	}
 });
