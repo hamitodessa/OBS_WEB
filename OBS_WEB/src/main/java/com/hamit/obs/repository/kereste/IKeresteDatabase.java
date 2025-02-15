@@ -19,5 +19,9 @@ public interface IKeresteDatabase {
 	void urun_kod_degisken_sil(String hangi_Y,String nerden,int sira,ConnectionDetails keresteConnDetails);
 	boolean alt_grup_kontrol(int anagrp,int altgrp,ConnectionDetails keresteConnDetails);
 	void ker_firma_adi_kayit(String fadi,ConnectionDetails keresteConnDetails);
-
+	String son_no_al(String cins,ConnectionDetails keresteConnDetails);
+	int evrak_no_al(String cins,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> ker_oku(String eno, String cins,ConnectionDetails keresteConnDetails);
+	String aciklama_oku(String evrcins, int satir, String evrno, String gircik,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> dipnot_oku(String ino, String cins, String gircik,ConnectionDetails keresteConnDetails);
 }

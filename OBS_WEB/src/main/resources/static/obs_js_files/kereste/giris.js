@@ -1,13 +1,3 @@
-document.querySelector('table').addEventListener('focusin', (event) => {
-	let currentRow = event.target.closest('tr');
-	if (currentRow && currentRow !== lastFocusedRow) {
-		lastFocusedRow = currentRow;
-		let cells = currentRow.cells;
-		//document.getElementById("urunadi").innerText = cells[11]?.textContent;
-		//document.getElementById("anaalt").innerText = cells[12]?.textContent;
-
-	}
-});
 
 $(document).ready(function() {
     applyMask();
@@ -118,6 +108,25 @@ function satirekle() {
         <td>
 			<input class="form-control" onfocus="selectAllContent(this)" onkeydown="focusNextRow(event, this)">
 		</td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
+		<td style="display: none;"></td>
 	    `;
         applyMask(); // Yeni eklenen inputa maskeyi uygula
 }
@@ -360,7 +369,6 @@ function focusNextCell(event, element) {
 
 function clearInputs() {
 
-	document.getElementById("barkod").value = '';
 	document.getElementById("urunadi").innerText = '';
 	document.getElementById("anaalt").innerText = '';
 	document.getElementById("iskonto").innerText = "0.00";
@@ -372,11 +380,12 @@ function clearInputs() {
 	document.getElementById("tevhartoptut").innerText = "0.00";
 	document.getElementById("tevoran").value = "0.00";
 
-	document.getElementById("ozelkod").value = '';
-	document.getElementById("anagrp").value = '';
+	document.getElementById("ozelkod").innerHTML = '';
+	document.getElementById("anagrp").innerHTML = '';
 	document.getElementById("altgrp").innerHTML = '';
 	document.getElementById("mensei").innerHTML = '';
 	document.getElementById("depo").innerHTML = '';
+	document.getElementById("nakliyeci").innerHTML = '';
 	document.getElementById("altgrp").disabled = true;
 
 	document.getElementById("carikod").value = '';
@@ -408,20 +417,20 @@ function clearInputs() {
 	document.getElementById("totalTutar").textContent = formatNumber2(0);
 }
 
-async function fatOku() {
+async function kerOku() {
 	const fisno = document.getElementById("fisno").value;
-	const gircikdeger = document.getElementById("gircik").value;
 	const errorDiv = document.getElementById("errorDiv");
 	document.body.style.cursor = "wait";
 	try {
-		const response = await fetchWithSessionCheck("stok/fatOku", {
+		const response = await fetchWithSessionCheck("kereste/kerOku", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ fisno: fisno, cins: gircikdeger }),
+			body: new URLSearchParams({ fisno: fisno,cins:'GIRIS' }),
 		});
 		const data = response;
+		console.info(data);
 		clearInputs();
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -429,7 +438,7 @@ async function fatOku() {
 		const dataSize = data.data.length;
 		if (dataSize === 0) return;
 
-		const table = document.getElementById('fatTable');
+		const table = document.getElementById('kerTable');
 		const rowss = table.querySelectorAll('tbody tr');
 		if (data.data.length > rowss.length) {
 			const additionalRows = data.data.length - rowss.length;
@@ -442,42 +451,86 @@ async function fatOku() {
 			const cells = rows[index].cells;
 			const barkodInput = cells[1]?.querySelector('input');
 			if (barkodInput) barkodInput.value = item.Barkod || "";
+
 			const urunKoduInput = cells[2]?.querySelector('input');
 			if (urunKoduInput) urunKoduInput.value = item.Kodu || "";
-			const depoSelect = cells[3]?.querySelector('select');
-			if (depoSelect) depoSelect.value = item.Depo || "";
-			const fiatInput = cells[4]?.querySelector('input');
-			if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
-			const iskontoInput = cells[5]?.querySelector('input');
-			if (iskontoInput) iskontoInput.value = formatNumber2(item.Iskonto);
-			const miktarInput = cells[6]?.querySelector('input');
-			if (miktarInput) miktarInput.value = formatNumber3(item.Miktar);
-			setLabelContent(cells[7], item.Birim || '');
-			const kdvInput = cells[8]?.querySelector('input');
-			if (kdvInput) kdvInput.value = formatNumber2(item.Kdv);
-			const tutarInput = cells[9]?.querySelector('input');
-			if (tutarInput) tutarInput.value = formatNumber2(item.Tutar);
-			const izahatInput = cells[10]?.querySelector('input');
+			
+			const paknoInput = cells[3]?.querySelector('input');
+			if (paknoInput) paknoInput.value = item.Paket_No || "";
+			
+			const mikInput = cells[4]?.querySelector('input');
+			if (mikInput) mikInput.value = formatNumber0(item.Miktar || 0);
+			
+			const m3Label = cells[5]?.querySelector('label span');
+			if (m3Label) m3Label.textContent = formatNumber3(hesapM3(item.Kodu,item.Miktar));
+			
+			const pm3Label = cells[6]?.querySelector('label span');
+			if (pm3Label) pm3Label.textContent = '';
+			
+			const konsInput = cells[7]?.querySelector('input');
+			if (konsInput) konsInput.value = item.Konsimento || "";
+			
+			const fiatInput = cells[8]?.querySelector('input');
+			if (fiatInput) fiatInput.value = formatNumber2(item.Fiat || 0);
+			
+			const iskInput = cells[9]?.querySelector('input');
+			if (iskInput) iskInput.value = formatNumber2(item.Iskonto || 0);
+			
+			const kdvInput = cells[10]?.querySelector('input');
+			if (kdvInput) kdvInput.value = formatNumber2(item.Kdv || 0);
+			
+			const tutarInput = cells[11]?.querySelector('input');
+			if (tutarInput) tutarInput.value = formatNumber2(item.Tutar || 0);
+			
+			const izahatInput = cells[12]?.querySelector('input');
 			if (izahatInput) izahatInput.value = item.Izahat || "";
-			cells[11].innerText = item.Adi || '';
-			cells[12].innerText = item.Ur_AnaGrup + " / " + item.Ur_AltGrup;
-			cells[13].innerText = item.base64Resim || '';
-		});
 
+			cells[13].innerText = item.Cikis_Evrak || '';
+			cells[14].innerText = item.CTarih || '';
+			cells[15].innerText = item.CKdv || '';
+			cells[16].innerText = item.CDoviz || '';
+			cells[17].innerText = item.CFiat || '';
+			cells[18].innerText = item.CTutar || '';
+			cells[19].innerText = item.CKur || '';
+			cells[20].innerText = item.CCari_Firma || '';
+			cells[21].innerText = item.CAdres_Firma || '';
+			cells[22].innerText = item.CIskonto || '';
+			cells[23].innerText = item.CTevkifat || '';
+			cells[24].innerText = item.CAna_Grup || '';
+			cells[25].innerText = item.CAlt_Grup || '';
+			cells[26].innerText = item.CDepo || '';
+			cells[27].innerText = item.COzel_Kod || '';
+			cells[28].innerText = item.CIzahat || '';
+			cells[29].innerText = item.CNakliyeci || '';
+			cells[30].innerText = item.CUser || '';
+			cells[31].innerText = item.CSatir || '';
+		});
+console.info("508");
 		for (let i = 0; i < data.data.length; i++) {
 			const item = data.data[i];
 			document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
+			console.info("512");
 			document.getElementById("anagrp").value = item.Ana_Grup || '';
+			console.info("514");
 			document.getElementById("kur").value = item.Kur;
+			console.info("516");
 			await anagrpChanged(document.getElementById("anagrp"));
-			document.getElementById("altgrp").value = item.Alt_Grup || ''
-			document.getElementById("ozelkod").value = item.Ozel_Kod || ''
-			document.getElementById("tevoran").value = item.Tevkifat || '0'
+			document.getElementById("altgrp").value = item.Alt_Grup || '';
+			console.info("519");
+			document.getElementById("ozelkod").value = item.Ozel_Kod || '';
+			console.info("521");
+			document.getElementById("mensei").value = item.Mensei || '';
+			document.getElementById("depo").value = item.Depo || '';
+			console.info("524");
+			document.getElementById("nakliyeci").value = item.Nakliyeci || ''
+			console.info("526");
+			document.getElementById("tevoran").value = item.Tevkifat || '0';
 			document.getElementById("carikod").value = item.Cari_Firma || '';
 			document.getElementById("adreskod").value = item.Adres_Firma || '';
 			document.getElementById("dovizcins").value = item.Doviz || '';
 			break;
 		}
+		console.info("533");
 		document.getElementById("a1").value = data.a1;
 		document.getElementById("a2").value = data.a2;
 
@@ -500,21 +553,37 @@ async function fatOku() {
 	}
 }
 
+function hesapM3(ukodu,miktar) {
+   
+    let token = ukodu.split("-"); 
+    if (token.length !== 4) return 0; 
+    let m3 = 0;
+    let deger1 = token[1]?.trim();
+    let deger2 = token[2]?.trim();
+    let deger3 = token[3]?.trim();
+    if (deger1 && deger2 && deger3) {
+        m3 = ((parseFloat(deger1) * parseFloat(deger2) * parseFloat(deger3)) * miktar) / 1000000000;
+    }
+	return  m3;
+  
+}
+
+
 async function sonfis() {
-	const gircikdeger = document.getElementById("gircik").value;
 	document.body.style.cursor = "wait";
 	try {
-		const response = await fetchWithSessionCheck('stok/sonfatfis', {
+		const response = await fetchWithSessionCheck('kereste/sonfis', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ cins: gircikdeger }),
+			body: new URLSearchParams({ cins: 'GIRIS' }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
 		const data = response;
+		console.info(data);
 		const fisNoInput = document.getElementById('fisno');
 		const errorDiv = document.getElementById('errorDiv');
 
@@ -529,7 +598,7 @@ async function sonfis() {
 			errorDiv.style.display = 'block';
 		} else {
 			errorDiv.style.display = 'none';
-			fatOku();
+			kerOku();
 		}
 	} catch (error) {
 		const errorDiv = document.getElementById('errorDiv');
@@ -541,18 +610,17 @@ async function sonfis() {
 }
 
 async function yeniFis() {
-	const gircikdeger = document.getElementById("gircik").value;
 	const errorDiv = document.getElementById('errorDiv');
 	errorDiv.innerText = "";
 	clearInputs();
 	document.body.style.cursor = "wait";
 	try {
-		const response = await fetchWithSessionCheck('stok/yenifis', {
+		const response = await fetchWithSessionCheck('kereste/yenifis', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ cins: gircikdeger }),
+			body: new URLSearchParams({ cins: 'GIRIS' }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -568,26 +636,25 @@ async function yeniFis() {
 	}
 }
 
-async function fatYoket() {
+async function kerYoket() {
 	const fisNoInput = document.getElementById('fisno').value;
-	const gircikdeger = document.getElementById("gircik").value;
 	if (["0", ""].includes(fisNoInput.value)) {
 		return;
 	}
-	const confirmDelete = confirm("Bu Fatura silinecek ?");
+	const confirmDelete = confirm("Bu Fis silinecek ?");
 	if (!confirmDelete) {
 		return;
 	}
 	document.body.style.cursor = "wait";
-	const $silButton = $('#fatsilButton');
+	const $silButton = $('#kersilButton');
 	$silButton.prop('disabled', true).text('Siliniyor...');
 	try {
-		const response = await fetchWithSessionCheck("stok/fatYoket", {
+		const response = await fetchWithSessionCheck("kereste/fisYoket", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ fisno: fisNoInput.value, cins: gircikdeger }),
+			body: new URLSearchParams({ fisno: fisNoInput.value}),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -606,12 +673,15 @@ async function fatYoket() {
 }
 
 function prepareureKayit() {
-	const faturaDTO = {
+	const keresteDTO = {
 		fisno: document.getElementById("fisno").value || "",
 		tarih: document.getElementById("fisTarih").value || "",
 		ozelkod: document.getElementById("ozelkod").value || "",
 		anagrup: document.getElementById("anagrp").value || "",
 		altgrup: document.getElementById("altgrp").value || "",
+		depo: document.getElementById("depo").value || "",
+		mensei: document.getElementById("mensei").value || "",
+		nakliyeci: document.getElementById("nakliyeci").value || "",
 
 		carikod: document.getElementById("carikod").value || "",
 		adreskod: document.getElementById("adreskod").value || "",
@@ -627,15 +697,13 @@ function prepareureKayit() {
 		acik1: document.getElementById("a1").value || "",
 		acik2: document.getElementById("a2").value || "",
 
-		fatcins: document.getElementById("gircik").value,
-
 	};
 	tableData = getTableData();
-	return { faturaDTO, tableData, };
+	return { keresteDTO, tableData, };
 }
 
 function getTableData() {
-	const table = document.getElementById('fatTable');
+	const table = document.getElementById('kerTable');
 	const rows = table.querySelectorAll('tbody tr');
 	const data = [];
 	rows.forEach((row) => {
@@ -645,40 +713,61 @@ function getTableData() {
 			const rowData = {
 				barkod: cells[1]?.querySelector('input')?.value || "",
 				ukodu: firstColumnValue,
-				depo: cells[3]?.querySelector('select')?.value || "",
-				fiat: parseLocaleNumber(cells[4]?.querySelector('input')?.value || 0),
-				iskonto: parseLocaleNumber(cells[5]?.querySelector('input')?.value || 0),
-				miktar: parseLocaleNumber(cells[6]?.querySelector('input')?.value || 0),
-				kdv: parseLocaleNumber(cells[8]?.querySelector('input')?.value || 0),
-				tutar: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
-				izahat: cells[10]?.querySelector('input')?.value || "",
+				paketno: cells[3]?.querySelector('input')?.value || "",
+				miktar: parseLocaleNumber(cells[4]?.querySelector('input')?.value || 0),
+				konsimento: cells[7]?.querySelector('input')?.value || "",
+				fiat: parseLocaleNumber(cells[8]?.querySelector('input')?.value || 0),
+				iskonto: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
+				kdv: parseLocaleNumber(cells[10]?.querySelector('input')?.value || 0),
+				tutar: parseLocaleNumber(cells[11]?.querySelector('input')?.value || 0),
+				izahat: cells[12]?.querySelector('input')?.value || "",
+
+				cevrak: cells[13]?.textContent || "",
+				ctarih: cells[14]?.textContent || "",
+				ckdv: cells[15]?.textContent || "",
+				cdoviz: cells[16]?.textContent || "",
+				cfiat: cells[17]?.textContent || "",
+				ctutar: cells[18]?.textContent || "",
+				ckur: cells[19]?.textContent || "",
+				ccarifirma: cells[20]?.textContent || "",
+				cadresfirma: cells[21]?.textContent || "",
+				ciskonto: cells[22]?.textContent || "",
+				ctevkifat: cells[23]?.textContent || "",
+				cana_grup: cells[24]?.textContent || "",
+				calt_grup: cells[25]?.textContent || "",
+				cdepo: cells[26]?.textContent || "",
+				cozel_kod: cells[27]?.textContent || "",
+				cizahat: cells[28]?.textContent || "",
+				cnakliyeci: cells[29]?.textContent || "",
+				cuser: cells[30]?.textContent || "",
+				csatir: cells[31]?.textContent || "",			
 			};
 			data.push(rowData);
 		}
 	});
 	return data;
 }
-async function fatKayit() {
+async function kerKayit() {
 	const fisno = document.getElementById("fisno").value;
-	const table = document.getElementById('fatTable');
+	const table = document.getElementById('kerTable');
 	const rows = table.rows;
 	if (!fisno || fisno === "0" || rows.length === 0) {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
-	const faturakayitDTO = prepareureKayit();
+	const kerestekayitDTO = prepareureKayit();
 	const errorDiv = document.getElementById('errorDiv');
-	const $kaydetButton = $('#fatkaydetButton');
+	const $kaydetButton = $('#kerkaydetButton');
 	$kaydetButton.prop('disabled', true).text('İşleniyor...');
 
 	document.body.style.cursor = 'wait';
 	try {
-		const response = await fetchWithSessionCheck('stok/fatKayit', {
+		const response = await fetchWithSessionCheck('kereste/girKayit', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(faturakayitDTO),
+			body: JSON.stringify(kerestekayitDTO),
 		});
 		if (response.errorMessage.trim() !== "") {
 			throw new Error(response.errorMessage);
@@ -696,10 +785,10 @@ async function fatKayit() {
 	}
 }
 
-async function fatcariIsle() {
-	const hesapKodu = $('#faturaBilgi').val();
+async function kercariIsle() {
+	const hesapKodu = $('#keresteBilgi').val();
 	const fisno = document.getElementById("fisno").value;
-	const table = document.getElementById('fatTable');
+	const table = document.getElementById('kerTable');
 	const rows = table.rows;
 	if (!fisno || fisno === "0" || rows.length === 0) {
 		alert("Geçerli bir evrak numarası giriniz.");
@@ -708,24 +797,23 @@ async function fatcariIsle() {
 	const $carkaydetButton = $('#carkaydetButton');
 	$carkaydetButton.prop('disabled', true).text('İşleniyor...');
 
-	const faturaDTO = {
+	const keresteDTO = {
 		fisno: document.getElementById("fisno").value || "",
 		tarih: document.getElementById("fisTarih").value || "",
 		carikod: document.getElementById("carikod").value || "",
-		miktar: parseLocaleNumber(document.getElementById("totalMiktar").textContent || 0),
+		m3: parseLocaleNumber(document.getElementById("totalM3").textContent || 0),
 		tutar: parseLocaleNumber(document.getElementById("tevhartoptut").innerText || 0),
-		fatcins: document.getElementById("gircik").value,
 		karsihesapkodu: hesapKodu,
 	};
 	const errorDiv = document.getElementById('errorDiv');
 	document.body.style.cursor = 'wait';
 	try {
-		const response = await fetchWithSessionCheck('stok/fatcariKayit', {
+		const response = await fetchWithSessionCheck('kereste/kergcariKayit', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(faturaDTO),
+			body: JSON.stringify(keresteDTO),
 		});
 		if (response.errorMessage.trim() !== "") {
 			throw new Error(response.errorMessage);

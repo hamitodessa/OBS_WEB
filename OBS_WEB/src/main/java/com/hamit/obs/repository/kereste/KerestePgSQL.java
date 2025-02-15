@@ -116,4 +116,36 @@ public class KerestePgSQL implements IKeresteDatabase {
 		
 	}
 
+	@Override
+	public String son_no_al(String cins, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int evrak_no_al(String cins, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> ker_oku(String eno, String cins, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String aciklama_oku(String evrcins, int satir, String evrno, String gircik,
+			ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> dipnot_oku(String ino, String cins, String gircik,
+			ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

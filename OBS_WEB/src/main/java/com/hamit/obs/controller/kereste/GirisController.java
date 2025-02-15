@@ -2,14 +2,17 @@ package com.hamit.obs.controller.kereste;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.kereste.KeresteService;
@@ -68,5 +71,42 @@ public class GirisController {
 		}
 		return model;
 	}
+	
+	@PostMapping("kereste/kerOku")
+	@ResponseBody
+	public Map<String, Object> fatOku(@RequestParam String fisno,@RequestParam String cins) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> kereste =new ArrayList<>();
+			if (cins.toString().equals("SATIS") )
+			{
+				kereste = keresteService.ker_oku(fisno.trim(), "C");
+				response.put("a1",keresteService.aciklama_oku("FAT", 1, fisno.trim(), "C"));
+				response.put("a2",keresteService.aciklama_oku("FAT", 2, fisno.trim(), "C"));
+				response.put("dipnot",keresteService.dipnot_oku(fisno.trim(), "F", "C"));
+			}
+			else
+			{
+				kereste = keresteService.ker_oku(fisno.trim(), "G");
+				response.put("a1",keresteService.aciklama_oku("FAT", 1, fisno.trim(), "G"));
+				response.put("a2",keresteService.aciklama_oku("FAT", 2, fisno.trim(), "G"));
+				response.put("dipnot",keresteService.dipnot_oku(fisno.trim(), "F", "G"));
+			}
+			
+						
+			response.put("data", (kereste != null) ? kereste : new ArrayList<>());
+			
+			
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("data", Collections.emptyList());
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	
 
 }

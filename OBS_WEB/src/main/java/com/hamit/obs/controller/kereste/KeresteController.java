@@ -65,5 +65,51 @@ public class KeresteController {
 		return response;
 	}
 
+	@PostMapping("kereste/sonfis")
+	@ResponseBody
+	public Map<String, String> sonfis(@RequestParam String cins) {
+		Map<String, String> response = new HashMap<>();
+		try {
+			if (cins.toString().equals("SATIS"))
+				response.put("fisno", keresteService.son_no_al("C"));
+			else
+				response.put("fisno", keresteService.son_no_al("G"));
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	@PostMapping("kereste/yenifis")
+	@ResponseBody
+	public Map<String, String> yenifis(@RequestParam String cins) {
+		Map<String, String> response = new HashMap<>();
+		try {
+			int sno = 0 ;
+			if (cins.toString().equals("SATIS"))
+				sno =  keresteService.evrak_no_al("C");
+			else
+				sno =  keresteService.evrak_no_al("G");
+			int kj = 10 - Integer.toString(sno).length();
+			StringBuilder strBuilder = new StringBuilder();
+			for (int i = 0; i < kj; i++) {
+			    strBuilder.append("0");
+			}
+			strBuilder.append(sno);
+			String str_ = strBuilder.toString();
+			response.put("fisno", str_.equals("0000000000") ? "0000000001":str_);
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
 
 }

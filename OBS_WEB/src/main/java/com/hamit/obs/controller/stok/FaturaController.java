@@ -159,7 +159,7 @@ public class FaturaController {
 	
 	@PostMapping("stok/sonfatfis")
 	@ResponseBody
-	public Map<String, String> sorgula(@RequestParam String cins) {
+	public Map<String, String> sonfatfis(@RequestParam String cins) {
 		Map<String, String> response = new HashMap<>();
 		try {
 			if (cins.toString().equals("SATIS"))
