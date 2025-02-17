@@ -1,5 +1,6 @@
 package com.hamit.obs.controller.kereste;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,13 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
+import com.hamit.obs.custom.yardimci.Tarih_Cevir;
+import com.hamit.obs.dto.kereste.keresteDTO;
+import com.hamit.obs.dto.kereste.kerestedetayDTO;
+import com.hamit.obs.dto.kereste.kerestekayitDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.user.UserService;
@@ -74,29 +82,25 @@ public class GirisController {
 	
 	@PostMapping("kereste/kerOku")
 	@ResponseBody
-	public Map<String, Object> fatOku(@RequestParam String fisno,@RequestParam String cins) {
+	public Map<String, Object> kerOku(@RequestParam String fisno,@RequestParam String cins) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			List<Map<String, Object>> kereste =new ArrayList<>();
 			if (cins.toString().equals("SATIS") )
 			{
 				kereste = keresteService.ker_oku(fisno.trim(), "C");
-				response.put("a1",keresteService.aciklama_oku("FAT", 1, fisno.trim(), "C"));
-				response.put("a2",keresteService.aciklama_oku("FAT", 2, fisno.trim(), "C"));
-				response.put("dipnot",keresteService.dipnot_oku(fisno.trim(), "F", "C"));
+				response.put("a1",keresteService.aciklama_oku("KER", 1, fisno.trim(), "C"));
+				response.put("a2",keresteService.aciklama_oku("KER", 2, fisno.trim(), "C"));
+				response.put("dipnot",keresteService.dipnot_oku(fisno.trim(), "K", "C"));
 			}
 			else
 			{
 				kereste = keresteService.ker_oku(fisno.trim(), "G");
-				response.put("a1",keresteService.aciklama_oku("FAT", 1, fisno.trim(), "G"));
-				response.put("a2",keresteService.aciklama_oku("FAT", 2, fisno.trim(), "G"));
-				response.put("dipnot",keresteService.dipnot_oku(fisno.trim(), "F", "G"));
+				response.put("a1",keresteService.aciklama_oku("KER", 1, fisno.trim(), "G"));
+				response.put("a2",keresteService.aciklama_oku("KER", 2, fisno.trim(), "G"));
+				response.put("dipnot",keresteService.dipnot_oku(fisno.trim(), "K", "G"));
 			}
-			
-						
 			response.put("data", (kereste != null) ? kereste : new ArrayList<>());
-			
-			
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("data", Collections.emptyList());
@@ -106,7 +110,98 @@ public class GirisController {
 		}
 		return response;
 	}
-
 	
+	@PostMapping("kereste/girKayit")
+	@ResponseBody
+	public  Map<String, Object>  kerKayit(@RequestBody kerestekayitDTO kerestekayitDTO) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			keresteDTO dto = kerestekayitDTO.getKeresteDTO();
+			List<kerestedetayDTO> tableData = kerestekayitDTO.getTableData();
+			String mesajlog = "";
+			
+			mesajlog = dto.getFisno().trim() + " Nolu Giris Silindi" ;
+			keresteService.ker_giris_sil(dto.getFisno().trim(),mesajlog);
+			int degisken[] = degiskenler(dto) ; 
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 
+			int index = 0;
+			for (kerestedetayDTO row : tableData) {
+				mesajlog = "Kereste Kayit" +  row.getUkodu() + " Mik=" + row.getMiktar() + " Tut=" + row.getTutar();
+
+				row.setFisno(dto.getFisno());
+				row.setCarikod(dto.getCarikod());
+				row.setAdreskod(dto.getAdreskod());
+				row.setTarih(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
+				
+				row.setAnagrup(degisken[0]);
+				row.setAltgrup(degisken[1]);
+				row.setNakliyeci(degisken[2]);
+				row.setOzelkod(degisken[3]);
+				row.setDepo(degisken[4]);
+				row.setMensei(degisken[5]);
+				
+				row.setDvzcins(dto.getDvzcins());
+				row.setKur(dto.getKur());
+				row.setTevoran(dto.getTevoran());
+				row.setUser(userrString);
+				row.setSatir(index);
+				keresteService.ker_kaydet(row, mesajlog);
+			    index++;
+			}
+			keresteService.dipnot_sil(dto.getFisno(), "K", "G");
+			keresteService.dipnot_yaz(dto.getFisno(), dto.getNot1(),dto.getNot2(),dto.getNot3(),"K", "G",userrString);
+			
+			keresteService.aciklama_sil("KER", dto.getFisno().trim(), "G");
+			
+			keresteService.aciklama_yaz("KER", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "G");
+			keresteService.aciklama_yaz("KER", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "G");
+
+					
+					
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	private int[] degiskenler(keresteDTO dto) throws ClassNotFoundException, SQLException
+	{
+		int degisken[] = {0,0,0,0,0,0} ;
+		//*************anagrp
+		if(! dto.getAnagrup().equals("")) {  
+			String anas = keresteService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", dto.getAnagrup());
+			degisken[0]  = Integer.parseInt(anas);
+		}
+		//*************alt grp
+		if(! dto.getAltgrup().equals("")) {
+			String alts = keresteService.urun_kod_degisken_ara("ALID_Y", "ALT_GRUP", "ALT_GRUP_DEGISKEN", dto.getAltgrup());
+			degisken[1]  = Integer.parseInt(alts);
+		}
+		//*************nakliyeci
+		if(! dto.getNakliyeci().equals("")) {
+			String naks = keresteService.urun_kod_degisken_ara("NAKID_Y", "UNVAN", "NAKLIYECI", dto.getNakliyeci());
+			degisken[2]  = Integer.parseInt(naks); 
+		}
+		//*************oz kod
+		if(! dto.getOzelkod().equals("")) {
+			String ozks = keresteService.urun_kod_degisken_ara("OZ1ID_Y", "OZEL_KOD_1", "OZ_KOD_1_DEGISKEN", dto.getNakliyeci());
+			degisken[3] = Integer.parseInt(ozks);
+		}
+		//*****Depo
+		if( ! dto.getDepo().equals("")) {
+			String dpos = keresteService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN",  dto.getDepo());
+			degisken[4] = Integer.parseInt(dpos);
+		}
+		//*****Mensei
+		if(! dto.getMensei().equals("")) {
+			String mens = keresteService.urun_kod_degisken_ara("MEID_Y", "MENSEI", "MENSEI_DEGISKEN", dto.getMensei());
+			degisken[5]  = Integer.parseInt(mens);
+		}
+		return degisken;
+	}
 }

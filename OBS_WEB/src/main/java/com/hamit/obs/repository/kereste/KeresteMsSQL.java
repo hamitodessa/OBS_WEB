@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
+import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.exception.ServiceException;
 
 @Component
@@ -309,7 +311,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 	public List<Map<String, Object>> ker_oku(String eno, String cins, ConnectionDetails keresteConnDetails) {
 		String sql = "";
 		if (cins.equals("G")) {
-			 sql = "SELECT   [Evrak_No] ,[Barkod] ,[Kodu],[Paket_No],[Konsimento] ,[Miktar],[Tarih],[Kdv] ,[Doviz] ,[Fiat]  ,[Tutar] ,[Kur]  ,[Cari_Firma],[Adres_Firma]  ,[Iskonto] ,[Tevkifat], "
+			 sql = "SELECT top 250  [Evrak_No] ,[Barkod] ,[Kodu],[Paket_No],[Konsimento] ,[Miktar],[Tarih],[Kdv] ,[Doviz] ,[Fiat]  ,[Tutar] ,[Kur]  ,[Cari_Firma],[Adres_Firma]  ,[Iskonto] ,[Tevkifat], "
 					+ " ISNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup ) , '') AS Ana_Grup   , " 
 					+ " ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup ) , '') AS Alt_Grup , " 
 					+ " ISNULL((Select MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei ) , '') AS Mensei, " 
@@ -371,13 +373,43 @@ public class KeresteMsSQL implements IKeresteDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> dipnot_oku(String ino, String cins, String gircik,
+	public String[] dipnot_oku(String ino, String cins, String gircik,
 			ConnectionDetails keresteConnDetails) {
+		String[] dipnot = {"","",""};
 		String sql =  "SELECT * " +
 				" FROM DPN  " +
 				" WHERE Evrak_No = N'" + ino + "'" +
 				" AND DPN.Tip = N'" + cins + "'" +
 				" AND Gir_Cik = '" + gircik + "'";
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				dipnot[0] = resultSet.getString("Bir");
+				dipnot[1] = resultSet.getString("Iki");
+				dipnot[2] = resultSet.getString("Uc");
+			} 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return dipnot; 
+	}
+
+	@Override
+	public List<Map<String, Object>> paket_oku(String pno, String nerden, ConnectionDetails keresteConnDetails) {
+		String[] token = pno.toString().split("-");
+		String dURUMString= "";
+		if(nerden.equals("C"))
+			dURUMString= " AND Cikis_Evrak = ''";
+		String sql = "SELECT   [Evrak_No] ,[Barkod] ,[Kodu],[Paket_No],[Konsimento] ,[Miktar],[Cikis_Evrak]  ,[CTarih]   ,"
+				+ " [CKdv] ,[CDoviz]  ,[CFiat] ,[CTutar] ,[CKur], " 
+				+ " [CCari_Firma] ,[CAdres_Firma] ,[CIskonto]  ,[CTevkifat],[CAna_Grup]    ,[CAlt_Grup] , "
+				+ " ISNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo ) , '') AS CDepo  ," 
+				+ " [COzel_Kod]   ,[CIzahat]  ,[CNakliyeci]  ,[CUSER],Satir" 
+				+ " FROM KERESTE   " 
+				+ " WHERE Paket_No = N'" + token[0] + "' AND Konsimento = N'"+ token[1] + "' "
+				+ dURUMString + "  ORDER BY Satir" ;
+
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -387,5 +419,172 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
+
+	}
+
+	@Override
+	public void ker_kaydet(kerestedetayDTO kerestedetayDTO, ConnectionDetails keresteConnDetails) {
+		String sql  ="INSERT INTO KERESTE (Evrak_No,Barkod,Kodu,Paket_No,Konsimento,Miktar,Tarih,Kdv,Doviz,Fiat,Tutar,Kur,Cari_Firma,Adres_Firma,Iskonto " + //15
+				" ,Tevkifat,Ana_Grup,Alt_Grup,Depo,Ozel_Kod,Izahat,Nakliyeci,[USER],Cikis_Evrak,CTarih,CKdv,CDoviz,CFiat,CTutar,CKur,CCari_Firma,CAdres_Firma " + //17
+				" ,CIskonto,CTevkifat,CAna_Grup,CAlt_Grup,CDepo,COzel_Kod,CIzahat,CNakliyeci,CUSER,Mensei,Satir,CSatir) " + //9
+				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" ;
+
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1,kerestedetayDTO.getFisno());
+			stmt.setString(2, kerestedetayDTO.getBarkod());
+			stmt.setString(3,kerestedetayDTO.getUkodu());
+			stmt.setString(4,kerestedetayDTO.getPaketno());
+			stmt.setString(5,kerestedetayDTO.getKonsimento());
+			stmt.setDouble(6, kerestedetayDTO.getMiktar());
+			stmt.setTimestamp(7,Timestamp.valueOf(kerestedetayDTO.getTarih()));
+			stmt.setDouble(8, kerestedetayDTO.getKdv());
+			stmt.setString(9,kerestedetayDTO.getDvzcins());
+			stmt.setDouble(10, kerestedetayDTO.getFiat());
+			stmt.setDouble(11, kerestedetayDTO.getTutar());
+			stmt.setDouble(12, kerestedetayDTO.getKur());
+			stmt.setString(13,kerestedetayDTO.getCarikod());
+			stmt.setString(14,kerestedetayDTO.getAdreskod());
+			stmt.setDouble(15, kerestedetayDTO.getIskonto());
+			stmt.setDouble(16, kerestedetayDTO.getTevoran());
+			stmt.setInt(17, kerestedetayDTO.getAnagrup());
+			stmt.setInt(18, kerestedetayDTO.getAltgrup());
+			stmt.setInt(19, kerestedetayDTO.getDepo());
+			stmt.setInt(20,kerestedetayDTO.getOzelkod());
+			stmt.setString(21,kerestedetayDTO.getIzahat());
+			stmt.setInt(22, kerestedetayDTO.getNakliyeci());
+			stmt.setString(23,  kerestedetayDTO.getUser());
+			stmt.setString(24,kerestedetayDTO.getCevrak());
+			System.out.println(kerestedetayDTO.getCtarih()+"=="+Timestamp.valueOf(kerestedetayDTO.getCtarih()));
+
+			stmt.setTimestamp(25,Timestamp.valueOf(kerestedetayDTO.getCtarih()));
+			stmt.setDouble(26, kerestedetayDTO.getCkdv());
+			stmt.setString(27,kerestedetayDTO.getCdoviz());
+			stmt.setDouble(28, kerestedetayDTO.getCfiat());
+			stmt.setDouble(29, kerestedetayDTO.getCtutar());
+			stmt.setDouble(30, kerestedetayDTO.getCkur());
+			stmt.setString(31, kerestedetayDTO.getCcarifirma());
+			stmt.setString(32, kerestedetayDTO.getCadresfirma());
+			stmt.setDouble(33, kerestedetayDTO.getCiskonto());
+			stmt.setDouble(34, kerestedetayDTO.getCtevkifat());
+			stmt.setInt(35, kerestedetayDTO.getCanagrup());
+			stmt.setInt(36, kerestedetayDTO.getCaltgrup());
+			stmt.setInt(37, kerestedetayDTO.getCdepo());
+			stmt.setInt(38, kerestedetayDTO.getCozelkod());
+			stmt.setString(39, kerestedetayDTO.getCizahat());
+			stmt.setInt(40, kerestedetayDTO.getCnakliyeci());
+			stmt.setString(41,  kerestedetayDTO.getCuser());
+			stmt.setInt(42,kerestedetayDTO.getMensei());
+			stmt.setInt(43, kerestedetayDTO.getSatir());
+			stmt.setInt(44, kerestedetayDTO.getCsatir());
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
+		}
+	}
+
+	@Override
+	public void ker_giris_sil(String eno, ConnectionDetails keresteConnDetails) {
+		String sql =  " DELETE " +
+				" FROM KERESTE " +
+				" WHERE Evrak_No  = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, eno);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+	}
+
+	@Override
+	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails keresteConnDetails) {
+		String sql = " DELETE " +
+				" FROM DPN" +
+				" WHERE Evrak_No = N'" + ino + "'" +
+				" AND Tip = N'" + cins + "'" +
+				" AND Gir_Cik = '" + gircik + "'";
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+
+	}
+
+	@Override
+	public void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr,
+			ConnectionDetails keresteConnDetails) {
+		String sql ="INSERT INTO DPN (Evrak_No,Tip,Bir,Iki,Uc,Gir_Cik,[USER]) " +
+				" VALUES (?,?,?,?,?,?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, eno);
+			preparedStatement.setString(2, tip);
+			preparedStatement.setString(3, bir);
+			preparedStatement.setString(4, iki);
+			preparedStatement.setString(5, uc);
+			preparedStatement.setString(6,gircik);
+			preparedStatement.setString(7, usr);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+
+	}
+
+	@Override
+	public void aciklama_sil(String evrcins, String evrno, String cins, ConnectionDetails keresteConnDetails) {
+		String sql = " DELETE " +
+				" FROM ACIKLAMA " +
+				" WHERE EVRAK_CINS = N'" + evrcins + "'" +
+				" AND EVRAK_NO = N'" + evrno + "'" +
+				" AND Gir_Cik = N'" + cins + "'";
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+
+	}
+
+	@Override
+	public void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,
+			ConnectionDetails keresteConnDetails) {
+		String sql = "INSERT INTO ACIKLAMA (EVRAK_CINS,SATIR,EVRAK_NO,ACIKLAMA,Gir_Cik) " +
+				" VALUES (?,?,?,?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, evrcins);
+			preparedStatement.setInt(2, satir);
+			preparedStatement.setString(3, evrno);
+			preparedStatement.setString(4, aciklama);
+			preparedStatement.setString(5, gircik);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+
+
 	}
 }

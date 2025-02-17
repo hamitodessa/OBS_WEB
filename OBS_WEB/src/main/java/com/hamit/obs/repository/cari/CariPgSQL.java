@@ -53,7 +53,7 @@ public class CariPgSQL implements ICariDatabase{
 	}
 
 	@Override
-	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2, ConnectionDetails cariConnDetails) {
+	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,ConnectionDetails cariConnDetails) {
 		StringBuilder tARIH = new StringBuilder();
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
 			tARIH.append(" AND TARIH BETWEEN ? AND ?");

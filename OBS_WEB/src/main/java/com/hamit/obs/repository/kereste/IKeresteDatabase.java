@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.dto.kereste.kerestedetayDTO;
 
 public interface IKeresteDatabase {
 
@@ -23,5 +24,13 @@ public interface IKeresteDatabase {
 	int evrak_no_al(String cins,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> ker_oku(String eno, String cins,ConnectionDetails keresteConnDetails);
 	String aciklama_oku(String evrcins, int satir, String evrno, String gircik,ConnectionDetails keresteConnDetails);
-	List<Map<String, Object>> dipnot_oku(String ino, String cins, String gircik,ConnectionDetails keresteConnDetails);
+	String[] dipnot_oku(String ino, String cins, String gircik,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> paket_oku(String pno,String nerden,ConnectionDetails keresteConnDetails);
+	void ker_kaydet(kerestedetayDTO kerestedetayDTO,ConnectionDetails keresteConnDetails);
+	void ker_giris_sil(String eno,ConnectionDetails keresteConnDetails);
+	void dipnot_sil(String ino, String cins, String gircik,ConnectionDetails keresteConnDetails);
+	void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr,ConnectionDetails keresteConnDetails);
+	void aciklama_sil(String evrcins, String evrno, String cins,ConnectionDetails keresteConnDetails);
+	void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,ConnectionDetails keresteConnDetails);
+
 }

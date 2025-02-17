@@ -111,5 +111,39 @@ public class KeresteController {
 		return response;
 	}
 
+	@PostMapping("kereste/paket_oku")
+	@ResponseBody
+	public Map<String, Object> paket_oku(@RequestParam String pno,@RequestParam String cins,@RequestParam String fisno) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> paket =new ArrayList<>();
+			response.put("mesaj", "" );
+			if (cins.toString().equals("SATIS") )
+			{
+				paket = keresteService.paket_oku(pno.trim(), "C");
 
+				if(paket.size() >0) {
+					if (! paket.get(0).get("Evrak_No").toString().equals(fisno)) {
+						response.put("mesaj", paket.get(0).get("Evrak_No")  + " Nolu Evrakta Cikis Yapilmis.." );
+					}
+				}
+			}
+			else
+			{
+				paket = keresteService.paket_oku(pno.trim(), "G");
+				if(paket.size() >0) {
+					if (! paket.get(0).get("Evrak_No").toString().equals(fisno)) {
+						response.put("mesaj", paket.get(0).get("Evrak_No")  + " Nolu Evrakta Giris Yapilmis.." );
+					}
+				}
+				
+			}
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
 }

@@ -10,14 +10,23 @@ import org.springframework.stereotype.Service;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.connection.ConnectionManager;
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
+import com.hamit.obs.dto.kereste.kerestedetayDTO;
+import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.kereste.IKeresteDatabase;
+import com.hamit.obs.repository.loglama.LoglamaRepository;
 
 @Service
 public class KeresteService {
 
 	@Autowired
 	private ConnectionManager masterConnectionManager;
+	
+	private LoglamaDTO loglamaDTO = new LoglamaDTO();
+	
+	@Autowired
+	private LoglamaRepository loglamaRepository;
 	
 	private final KeresteDatabaseContext databaseStrategyContext;
 	private IKeresteDatabase strategy;
@@ -207,11 +216,93 @@ public class KeresteService {
 		}
 	}
 	
-	public List<Map<String, Object>> dipnot_oku(String ino, String cins, String gircik){
+	public String[] dipnot_oku(String ino, String cins, String gircik){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
 			return strategy.dipnot_oku(ino, cins, gircik, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> paket_oku(String pno,String nerden){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.paket_oku(pno, nerden, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void ker_kaydet(kerestedetayDTO kerestedetayDTO,String mesajlog) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			
+			loglamaDTO.setEvrak(kerestedetayDTO.getFisno());
+			loglamaDTO.setmESAJ(mesajlog);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, keresteConnDetails);
+			
+			strategy.ker_kaydet(kerestedetayDTO,keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void ker_giris_sil(String eno,String mesajlog) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			
+			loglamaDTO.setEvrak(eno);
+			loglamaDTO.setmESAJ(mesajlog);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, keresteConnDetails);
+			
+			strategy.ker_giris_sil(eno, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void dipnot_sil(String ino, String cins, String gircik) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.dipnot_sil(ino, cins, gircik, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.dipnot_yaz(eno, bir, iki, uc, tip, gircik, usr, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void aciklama_sil(String evrcins, String evrno, String cins) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.aciklama_sil(evrcins, evrno, cins, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.aciklama_yaz(evrcins, satir, evrno, aciklama, gircik, keresteConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

@@ -23,7 +23,6 @@ async function eksfetchTableData() {
 			},
 			body: JSON.stringify({ hesapKodu, startDate, endDate }),
 		});
-
 		if (data.success) {
 			let totalBorc = 0;
 			let totalAlacak = 0;

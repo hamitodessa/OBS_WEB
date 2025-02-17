@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
+import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.exception.ServiceException;
 
 @Component
@@ -142,10 +143,54 @@ public class KerestePgSQL implements IKeresteDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> dipnot_oku(String ino, String cins, String gircik,
+	public String[] dipnot_oku(String ino, String cins, String gircik,
 			ConnectionDetails keresteConnDetails) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> paket_oku(String pno, String nerden, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void ker_kaydet(kerestedetayDTO kerestedetayDTO,ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ker_giris_sil(String eno, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr,
+			ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void aciklama_sil(String evrcins, String evrno, String cins, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,
+			ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

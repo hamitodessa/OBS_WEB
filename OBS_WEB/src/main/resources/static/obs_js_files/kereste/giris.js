@@ -1,50 +1,48 @@
 
 $(document).ready(function() {
-    applyMask();
-  });
+	applyMask();
+});
 
-  function applyMask() {
-    $("input[id^='ukodu_']").inputmask({
-        mask: "AA-999-9999-9999",
-        placeholder: "_",
-        definitions: {
-            'A': { 
-                validator: "[A-Za-z0-9]", 
-                cardinality: 1 
-            }
-        }
-    });
+function applyMask() {
+	$("input[id^='ukodu_']").inputmask({
+		mask: "AA-999-9999-9999",
+		placeholder: "_",
+		definitions: {
+			'A': {
+				validator: "[A-Za-z0-9]",
+				cardinality: 1
+			}
+		}
+	});
 }
 
 function updatePaketM3() {
-    const rows = document.querySelectorAll('table tr');
-    let paketMap = new Map();
-    rows.forEach(row => {
-        const paketnoCell = row.querySelector('td:nth-child(4) input');
-        const m3Cell = row.querySelector('td:nth-child(6) label span');
-        const paketm3Span = row.querySelector('td:nth-child(7) span');
-        if (!paketnoCell || !m3Cell || !paketm3Span) return;
-        const paketNo = paketnoCell.value.trim();
-        const m3Value = parseLocaleNumber(m3Cell.textContent.trim()) || 0;
-        console.info(paketNo);
-        console.info(m3Value);
-        if (!paketNo) return;
-        if (!paketMap.has(paketNo)) {
-            paketMap.set(paketNo, { total: 0, rows: [] });
-        }
-        paketMap.get(paketNo).total += m3Value;
-        paketMap.get(paketNo).rows.push(paketm3Span);
-    });
-    paketMap.forEach((data) => {
-        const rowCount = data.rows.length;
-        data.rows.forEach((cell, index) => {
-            if (index === rowCount - 1) {
-                cell.textContent = data.total ? data.total.toFixed(3) : '\u00A0';
-            } else {
-                cell.textContent = '\u00A0';
-            }
-        });
-    });
+	const rows = document.querySelectorAll('table tr');
+	let paketMap = new Map();
+	rows.forEach(row => {
+		const paketnoCell = row.querySelector('td:nth-child(4) input');
+		const m3Cell = row.querySelector('td:nth-child(6) label span');
+		const paketm3Span = row.querySelector('td:nth-child(7) span');
+		if (!paketnoCell || !m3Cell || !paketm3Span) return;
+		const paketNo = paketnoCell.value.trim();
+		const m3Value = parseLocaleNumber(m3Cell.textContent.trim()) || 0;
+		if (!paketNo) return;
+		if (!paketMap.has(paketNo)) {
+			paketMap.set(paketNo, { total: 0, rows: [] });
+		}
+		paketMap.get(paketNo).total += m3Value;
+		paketMap.get(paketNo).rows.push(paketm3Span);
+	});
+	paketMap.forEach((data) => {
+		const rowCount = data.rows.length;
+		data.rows.forEach((cell, index) => {
+			if (index === rowCount - 1) {
+				cell.textContent = data.total ? data.total.toFixed(3) : '\u00A0';
+			} else {
+				cell.textContent = '\u00A0';
+			}
+		});
+	});
 }
 
 function initializeRows() {
@@ -56,8 +54,13 @@ function initializeRows() {
 }
 function satirekle() {
 	const table = document.getElementById("kerTable").getElementsByTagName("tbody")[0];
+	const rowCount = table.rows.length;
+	if (rowCount == 250) {
+		alert("En fazla 250 satır ekleyebilirsiniz.");
+		return
+	}
 	const newRow = table.insertRow();
-    newRow.classList.add("data-row");
+	newRow.classList.add("data-row");
 	incrementRowCounter();
 
 	newRow.innerHTML = `
@@ -74,7 +77,7 @@ function satirekle() {
 		</td>
 		<td>
 		    <input class="form-control" maxlength="16" id="pakno_${rowCounter}" 
-		        onkeydown="focusNextCell(event, this)" onchange="updateValues(this)">
+		        onkeydown="if(event.key === 'Enter') paketkontrol(event,this)"  >
 		</td>
 		<td>
 		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur0(this)" 
@@ -109,6 +112,7 @@ function satirekle() {
 			<input class="form-control" onfocus="selectAllContent(this)" onkeydown="focusNextRow(event, this)">
 		</td>
 		<td style="display: none;"></td>
+		<td style="display: none;">1900-01-01 00:00:00.000</td>
 		<td style="display: none;"></td>
 		<td style="display: none;"></td>
 		<td style="display: none;"></td>
@@ -118,18 +122,18 @@ function satirekle() {
 		<td style="display: none;"></td>
 		<td style="display: none;"></td>
 		<td style="display: none;"></td>
+		<td style="display: none;">0</td>
+		<td style="display: none;">0</td>
+		<td style="display: none;">0</td>
+		<td style="display: none;">0</td>
 		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
+		<td style="display: none;">0</td>
 		<td style="display: none;"></td>
 		<td style="display: none;"></td>
 	    `;
-        applyMask(); // Yeni eklenen inputa maskeyi uygula
+	applyMask(); // Yeni eklenen inputa maskeyi uygula
 }
+
 
 function satirsil(button) {
 	const row = button.parentElement.parentElement;
@@ -138,18 +142,18 @@ function satirsil(button) {
 }
 
 function handleBlur3(input) {
-    updateValues(input);
+	updateValues(input);
 	input.value = formatNumber3(parseLocaleNumber(input.value));
 	updateColumnTotal();
 }
 function handleBlur(input) {
-    updateValues(input);
+	updateValues(input);
 	input.value = formatNumber2(parseLocaleNumber(input.value));
 	updateColumnTotal();
 }
 
 function handleBlur0(input) {
-    updateValues(input);
+	updateValues(input);
 	input.value = formatNumber0(parseLocaleNumber(input.value));
 	updateColumnTotal();
 }
@@ -161,8 +165,6 @@ function selectAllContent(element) {
 }
 
 function updateColumnTotal() {
-
-
 	const rows = document.querySelectorAll('table tr');
 	const totalSatirCell = document.getElementById("totalSatir");
 	const totalTutarCell = document.getElementById("totalTutar");
@@ -191,11 +193,11 @@ function updateColumnTotal() {
 	rows.forEach(row => {
 		const secondColumn = row.querySelector('td:nth-child(3) input');
 		const mik = row.querySelector('td:nth-child(5) input');
-        const m3 = row.querySelector('td:nth-child(6) label span');
+		const m3 = row.querySelector('td:nth-child(6) label span');
 		const pm3 = row.querySelector('td:nth-child(7) label span');
 		const fiat = row.querySelector('td:nth-child(9) input');
 		const iskonto = row.querySelector('td:nth-child(10) input');
-		
+
 		const kdvv = row.querySelector('td:nth-child(11) input');
 		const tutar = row.querySelector('td:nth-child(12) input');
 
@@ -295,32 +297,32 @@ async function anagrpChanged(anagrpElement) {
 
 function hesaplaM3(inputElement) {
 	if (!inputElement) return;
-    const row = inputElement.closest('tr'); 
-    if (!row) return; 
-    const cells = row.querySelectorAll('td');
-    const urkodCell = cells[2]?.querySelector('input')?.value?.trim();
-    const miktarCell = cells[4]?.querySelector('input');  
-    if (!urkodCell || !miktarCell) return; 
-    let miktar = parseFloat(miktarCell.value) || 0; 
-    let token = urkodCell.split("-"); 
-    if (token.length !== 4) return; 
-    let m3 = 0;
-    let deger1 = token[1]?.trim();
-    let deger2 = token[2]?.trim();
-    let deger3 = token[3]?.trim();
-    if (deger1 && deger2 && deger3) {
-        m3 = ((parseFloat(deger1) * parseFloat(deger2) * parseFloat(deger3)) * miktar) / 1000000000;
-    }
+	const row = inputElement.closest('tr');
+	if (!row) return;
+	const cells = row.querySelectorAll('td');
+	const urkodCell = cells[2]?.querySelector('input')?.value?.trim();
+	const miktarCell = cells[4]?.querySelector('input');
+	if (!urkodCell || !miktarCell) return;
+	let miktar = parseFloat(miktarCell.value) || 0;
+	let token = urkodCell.split("-");
+	if (token.length !== 4) return;
+	let m3 = 0;
+	let deger1 = token[1]?.trim();
+	let deger2 = token[2]?.trim();
+	let deger3 = token[3]?.trim();
+	if (deger1 && deger2 && deger3) {
+		m3 = ((parseFloat(deger1) * parseFloat(deger2) * parseFloat(deger3)) * miktar) / 1000000000;
+	}
 	const M3Cell = cells[5];
-    if (M3Cell) {
+	if (M3Cell) {
 		const span = M3Cell.querySelector('label span');
 		span.textContent = m3.toFixed(3);
-    }
+	}
 }
 
 async function updateValues(inputElement) {
 	hesaplaM3(inputElement)
-    updatePaketM3();
+	updatePaketM3();
 }
 
 function focusNextRow(event, element) {
@@ -380,12 +382,12 @@ function clearInputs() {
 	document.getElementById("tevhartoptut").innerText = "0.00";
 	document.getElementById("tevoran").value = "0.00";
 
-	document.getElementById("ozelkod").innerHTML = '';
-	document.getElementById("anagrp").innerHTML = '';
+	document.getElementById("ozelkod").value = '';
+	document.getElementById("anagrp").value = '';
 	document.getElementById("altgrp").innerHTML = '';
-	document.getElementById("mensei").innerHTML = '';
-	document.getElementById("depo").innerHTML = '';
-	document.getElementById("nakliyeci").innerHTML = '';
+	document.getElementById("mensei").value = '';
+	document.getElementById("depo").value = '';
+	document.getElementById("nakliyeci").value = '';
 	document.getElementById("altgrp").disabled = true;
 
 	document.getElementById("carikod").value = '';
@@ -412,7 +414,7 @@ function clearInputs() {
 	initializeRows();
 	document.getElementById("totalSatir").textContent = formatNumber0(0);
 	document.getElementById("totalMiktar").textContent = formatNumber0(0);
-	document.getElementById("totalM3").textContent = formatNumber3(0);	
+	document.getElementById("totalM3").textContent = formatNumber3(0);
 	document.getElementById("totalPaketM3").textContent = formatNumber3(0);
 	document.getElementById("totalTutar").textContent = formatNumber2(0);
 }
@@ -427,10 +429,9 @@ async function kerOku() {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ fisno: fisno,cins:'GIRIS' }),
+			body: new URLSearchParams({ fisno: fisno, cins: 'GIRIS' }),
 		});
 		const data = response;
-		console.info(data);
 		clearInputs();
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -454,34 +455,34 @@ async function kerOku() {
 
 			const urunKoduInput = cells[2]?.querySelector('input');
 			if (urunKoduInput) urunKoduInput.value = item.Kodu || "";
-			
+
 			const paknoInput = cells[3]?.querySelector('input');
 			if (paknoInput) paknoInput.value = item.Paket_No || "";
-			
+
 			const mikInput = cells[4]?.querySelector('input');
 			if (mikInput) mikInput.value = formatNumber0(item.Miktar || 0);
-			
+
 			const m3Label = cells[5]?.querySelector('label span');
-			if (m3Label) m3Label.textContent = formatNumber3(hesapM3(item.Kodu,item.Miktar));
-			
+			if (m3Label) m3Label.textContent = formatNumber3(hesapM3(item.Kodu, item.Miktar));
+
 			const pm3Label = cells[6]?.querySelector('label span');
 			if (pm3Label) pm3Label.textContent = '';
-			
+
 			const konsInput = cells[7]?.querySelector('input');
 			if (konsInput) konsInput.value = item.Konsimento || "";
-			
+
 			const fiatInput = cells[8]?.querySelector('input');
 			if (fiatInput) fiatInput.value = formatNumber2(item.Fiat || 0);
-			
+
 			const iskInput = cells[9]?.querySelector('input');
 			if (iskInput) iskInput.value = formatNumber2(item.Iskonto || 0);
-			
+
 			const kdvInput = cells[10]?.querySelector('input');
 			if (kdvInput) kdvInput.value = formatNumber2(item.Kdv || 0);
-			
+
 			const tutarInput = cells[11]?.querySelector('input');
 			if (tutarInput) tutarInput.value = formatNumber2(item.Tutar || 0);
-			
+
 			const izahatInput = cells[12]?.querySelector('input');
 			if (izahatInput) izahatInput.value = item.Izahat || "";
 
@@ -505,40 +506,29 @@ async function kerOku() {
 			cells[30].innerText = item.CUser || '';
 			cells[31].innerText = item.CSatir || '';
 		});
-console.info("508");
 		for (let i = 0; i < data.data.length; i++) {
 			const item = data.data[i];
 			document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
-			console.info("512");
 			document.getElementById("anagrp").value = item.Ana_Grup || '';
-			console.info("514");
 			document.getElementById("kur").value = item.Kur;
-			console.info("516");
 			await anagrpChanged(document.getElementById("anagrp"));
 			document.getElementById("altgrp").value = item.Alt_Grup || '';
-			console.info("519");
 			document.getElementById("ozelkod").value = item.Ozel_Kod || '';
-			console.info("521");
 			document.getElementById("mensei").value = item.Mensei || '';
 			document.getElementById("depo").value = item.Depo || '';
-			console.info("524");
 			document.getElementById("nakliyeci").value = item.Nakliyeci || ''
-			console.info("526");
 			document.getElementById("tevoran").value = item.Tevkifat || '0';
 			document.getElementById("carikod").value = item.Cari_Firma || '';
 			document.getElementById("adreskod").value = item.Adres_Firma || '';
 			document.getElementById("dovizcins").value = item.Doviz || '';
 			break;
 		}
-		console.info("533");
 		document.getElementById("a1").value = data.a1;
 		document.getElementById("a2").value = data.a2;
-
 		document.getElementById("not1").value = data.dipnot[0];
 		document.getElementById("not2").value = data.dipnot[1];
 		document.getElementById("not3").value = data.dipnot[2];
-
-
+		updatePaketM3();
 		updateColumnTotal();
 
 		hesapAdiOgren(document.getElementById("carikod").value, 'cariadilbl')
@@ -553,21 +543,20 @@ console.info("508");
 	}
 }
 
-function hesapM3(ukodu,miktar) {
-   
-    let token = ukodu.split("-"); 
-    if (token.length !== 4) return 0; 
-    let m3 = 0;
-    let deger1 = token[1]?.trim();
-    let deger2 = token[2]?.trim();
-    let deger3 = token[3]?.trim();
-    if (deger1 && deger2 && deger3) {
-        m3 = ((parseFloat(deger1) * parseFloat(deger2) * parseFloat(deger3)) * miktar) / 1000000000;
-    }
-	return  m3;
-  
-}
+function hesapM3(ukodu, miktar) {
 
+	let token = ukodu.split("-");
+	if (token.length !== 4) return 0;
+	let m3 = 0;
+	let deger1 = token[1]?.trim();
+	let deger2 = token[2]?.trim();
+	let deger3 = token[3]?.trim();
+	if (deger1 && deger2 && deger3) {
+		m3 = ((parseFloat(deger1) * parseFloat(deger2) * parseFloat(deger3)) * miktar) / 1000000000;
+	}
+	return m3;
+
+}
 
 async function sonfis() {
 	document.body.style.cursor = "wait";
@@ -583,7 +572,6 @@ async function sonfis() {
 			throw new Error(response.errorMessage);
 		}
 		const data = response;
-		console.info(data);
 		const fisNoInput = document.getElementById('fisno');
 		const errorDiv = document.getElementById('errorDiv');
 
@@ -654,7 +642,7 @@ async function kerYoket() {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ fisno: fisNoInput.value}),
+			body: new URLSearchParams({ fisno: fisNoInput.value }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -687,8 +675,8 @@ function prepareureKayit() {
 		adreskod: document.getElementById("adreskod").value || "",
 
 		dvzcins: document.getElementById("dovizcins").value || "",
-		kur: parseLocaleNumber(document.getElementById("kur").value) || 0,
-		tevoran: parseLocaleNumber(document.getElementById("tevoran").value) || 0,
+		kur: parseLocaleNumber(document.getElementById("kur").value) || 0.0,
+		tevoran: parseLocaleNumber(document.getElementById("tevoran").value) || 0.0,
 
 		not1: document.getElementById("not1").value || "",
 		not2: document.getElementById("not2").value || "",
@@ -723,24 +711,24 @@ function getTableData() {
 				izahat: cells[12]?.querySelector('input')?.value || "",
 
 				cevrak: cells[13]?.textContent || "",
-				ctarih: cells[14]?.textContent || "",
-				ckdv: cells[15]?.textContent || "",
+				ctarih: formatToTimestamp(cells[14]?.textContent || "1900-01-01 00:00:00.000"),
+				ckdv: parseFloat(cells[15]?.textContent.trim()) || 0.0,
 				cdoviz: cells[16]?.textContent || "",
-				cfiat: cells[17]?.textContent || "",
-				ctutar: cells[18]?.textContent || "",
-				ckur: cells[19]?.textContent || "",
+				cfiat: parseFloat(cells[17]?.textContent.trim()) || 0.0,
+				ctutar: parseFloat(cells[18]?.textContent.trim()) || 0.0,
+				ckur: parseFloat(cells[19]?.textContent.trim()) || 0.0,
 				ccarifirma: cells[20]?.textContent || "",
 				cadresfirma: cells[21]?.textContent || "",
-				ciskonto: cells[22]?.textContent || "",
-				ctevkifat: cells[23]?.textContent || "",
-				cana_grup: cells[24]?.textContent || "",
-				calt_grup: cells[25]?.textContent || "",
-				cdepo: cells[26]?.textContent || "",
-				cozel_kod: cells[27]?.textContent || "",
+				ciskonto: parseFloat(cells[22]?.textContent.trim()) || 0.0,
+				ctevkifat: parseFloat(cells[23]?.textContent.trim()) || 0.0,
+				canagrup: parseInt(cells[24]?.textContent.trim(), 10) || 0,
+				caltgrup: parseInt(cells[25]?.textContent.trim(), 10) || 0,
+				cdepo: parseInt(cells[26]?.textContent.trim(), 10) || 0,
+				cozelkod: parseInt(cells[27]?.textContent.trim(), 10) || 0,
 				cizahat: cells[28]?.textContent || "",
-				cnakliyeci: cells[29]?.textContent || "",
+				cnakliyeci: parseInt(cells[29]?.textContent.trim(), 10) || 0,
 				cuser: cells[30]?.textContent || "",
-				csatir: cells[31]?.textContent || "",			
+				csatir: parseInt(cells[31]?.textContent.trim(), 10) || 0,
 			};
 			data.push(rowData);
 		}
@@ -748,6 +736,10 @@ function getTableData() {
 	return data;
 }
 async function kerKayit() {
+	
+	const kodkontrol = kontrolEt();
+	if (! kodkontrol) return ;
+	
 	const fisno = document.getElementById("fisno").value;
 	const table = document.getElementById('kerTable');
 	const rows = table.rows;
@@ -761,6 +753,7 @@ async function kerKayit() {
 	$kaydetButton.prop('disabled', true).text('İşleniyor...');
 
 	document.body.style.cursor = 'wait';
+	console.info(kerestekayitDTO);
 	try {
 		const response = await fetchWithSessionCheck('kereste/girKayit', {
 			method: 'POST',
@@ -769,9 +762,10 @@ async function kerKayit() {
 			},
 			body: JSON.stringify(kerestekayitDTO),
 		});
-		if (response.errorMessage.trim() !== "") {
+		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
+		
 		clearInputs();
 		document.getElementById("fisno").value = "";
 		document.getElementById("errorDiv").innerText = "";
@@ -827,4 +821,73 @@ async function kercariIsle() {
 		$carkaydetButton.prop('disabled', false).text('Cari Kaydet');
 		document.body.style.cursor = 'default';
 	}
+}
+
+async function paketkontrol(event, input) {
+	const fisno = document.getElementById("fisno").value;
+	const errorDiv = document.getElementById('errorDiv');
+	errorDiv.style.display = 'none';
+	errorDiv.innerText = "";
+
+	const row = input.closest('tr');
+	if (!row) return;
+	const cells = row.querySelectorAll('td');
+	const konsCell = cells[7]?.querySelector('input')?.value?.trim();
+	const pakno = input.value + "-" + konsCell;
+	document.body.style.cursor = "wait";
+	try {
+		const response = await fetchWithSessionCheck("kereste/paket_oku", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ pno: pakno, cins: 'GIRIS', fisno: fisno }),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		const data = response;
+		if (data.mesaj != "") {
+			document.body.style.cursor = "default";
+			setTimeout(() => {
+				alert(data.mesaj);
+			}, 100);
+			return;
+		}
+		updateValues(input);
+		focusNextCell(event, input)
+	} catch (error) {
+		const errorDiv = document.getElementById('errorDiv');
+		errorDiv.style.display = 'block';
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+	}
+}
+
+
+function kontrolEt() {
+	const table = document.getElementById("kerTable").getElementsByTagName("tbody")[0];
+	let isValid = true;
+	for (let row of table.rows) {
+		let kod = row.cells[2].innerText.trim();
+		if(kod != ''){
+			if (!kontrolFormat(kod)) {
+			      isValid = false;
+			      alert(`Geçersiz kod bulundu: ${kod}`);
+			      break;
+			    }
+		}
+		
+	}
+	if (isValid) {
+		return true;
+	} else {
+		return false;
+	}
+}
+function kontrolFormat(kod) {
+	// Mask: "AA-999-9999-9999" (İlk iki karakter harf, geri kalanı rakam)
+	const regex = /^[A-Z]{2}-\d{3}-\d{4}-\d{4}$/;
+	return regex.test(kod);
 }
