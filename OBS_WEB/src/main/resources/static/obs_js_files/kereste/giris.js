@@ -711,7 +711,7 @@ function getTableData() {
 				izahat: cells[12]?.querySelector('input')?.value || "",
 
 				cevrak: cells[13]?.textContent || "",
-				ctarih: formatToTimestamp(cells[14]?.textContent || "1900-01-01 00:00:00.000"),
+				ctarih: cells[14]?.textContent || "1900-01-01 00:00:00.000",
 				ckdv: parseFloat(cells[15]?.textContent.trim()) || 0.0,
 				cdoviz: cells[16]?.textContent || "",
 				cfiat: parseFloat(cells[17]?.textContent.trim()) || 0.0,
@@ -736,10 +736,6 @@ function getTableData() {
 	return data;
 }
 async function kerKayit() {
-	
-	const kodkontrol = kontrolEt();
-	if (! kodkontrol) return ;
-	
 	const fisno = document.getElementById("fisno").value;
 	const table = document.getElementById('kerTable');
 	const rows = table.rows;
@@ -747,13 +743,14 @@ async function kerKayit() {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
+	const kodkontrol = kontrolEt();
+	if (! kodkontrol) return ;
+
 	const kerestekayitDTO = prepareureKayit();
 	const errorDiv = document.getElementById('errorDiv');
 	const $kaydetButton = $('#kerkaydetButton');
 	$kaydetButton.prop('disabled', true).text('İşleniyor...');
-
 	document.body.style.cursor = 'wait';
-	console.info(kerestekayitDTO);
 	try {
 		const response = await fetchWithSessionCheck('kereste/girKayit', {
 			method: 'POST',
@@ -765,7 +762,6 @@ async function kerKayit() {
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
-		
 		clearInputs();
 		document.getElementById("fisno").value = "";
 		document.getElementById("errorDiv").innerText = "";

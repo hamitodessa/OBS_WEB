@@ -320,7 +320,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 					+ " [Izahat]  , " 
 					+ " ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci ),'') Nakliyeci , " 
 					+ " [USER] "
-					+ "	,[Cikis_Evrak]  ,[CTarih]   ,[CKdv] ,[CDoviz]  ,[CFiat] ,[CTutar] ,[CKur] ,[CCari_Firma] ,[CAdres_Firma] ,[CIskonto]  ,[CTevkifat] "
+					+ "	,[Cikis_Evrak]  ,FORMAT(CTarih, 'yyyy-MM-dd HH:mm:ss.fff') AS CTarih ,[CKdv] ,[CDoviz]  ,[CFiat] ,[CTutar] ,[CKur] ,[CCari_Firma] ,[CAdres_Firma] ,[CIskonto]  ,[CTevkifat] "
 					+ "	,[CAna_Grup]    ,[CAlt_Grup]  ,CDepo  ,[COzel_Kod]   ,[CIzahat]  ,[CNakliyeci]  ,[CUSER],[CSatir]" 
 					+ " FROM KERESTE   " 
 					+ " WHERE Evrak_No  = N'" + eno + "' Order by  Satir " ; 
@@ -456,8 +456,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			stmt.setInt(22, kerestedetayDTO.getNakliyeci());
 			stmt.setString(23,  kerestedetayDTO.getUser());
 			stmt.setString(24,kerestedetayDTO.getCevrak());
-			System.out.println(kerestedetayDTO.getCtarih()+"=="+Timestamp.valueOf(kerestedetayDTO.getCtarih()));
-
 			stmt.setTimestamp(25,Timestamp.valueOf(kerestedetayDTO.getCtarih()));
 			stmt.setDouble(26, kerestedetayDTO.getCkdv());
 			stmt.setString(27,kerestedetayDTO.getCdoviz());

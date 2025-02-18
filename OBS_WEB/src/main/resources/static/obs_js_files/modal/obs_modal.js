@@ -18,6 +18,12 @@ function openFirstModal(nerdenGeldi) {
 			return;
 		}
 	}
+	else if (nerdenGeldi === "kerestegiris") {
+		const fisno = document.getElementById("fisno").value.trim();
+		if (!fisno || fisno === "0") {
+			return;
+		}
+	}
 
 	const modal = document.getElementById('firstModal');
 	nerden = nerdenGeldi;
@@ -416,6 +422,11 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #stokdetayBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "kerestegiris") {
+		const hesapKodu = $('#ckodu').val() || "";
+		const hiddenField = $('#ara_content #kerBilgi');
+		hiddenField.val(hesapKodu);
+	}
 
 
 	$('#firstModal').modal('hide');
@@ -461,7 +472,6 @@ function saveToMain() {
 		reportFormat.disabled = false;
 		const mailButton = document.getElementById("cekrapmailButton");
 		mailButton.disabled = false;
-		
 
 	}
 	else if (nerden === "cekgir") {
@@ -478,6 +488,9 @@ function saveToMain() {
 	}
 	else if (nerden === "fatura") {
 		fatcariIsle();
+	}
+	else if (nerden === "kerestegiris") {
+		kercariIsle();
 	}
 	else if (nerden === "fatrapor") {
 		fatfetchTableData();

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.custom.yardimci.Formatlama;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
+import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.dto.kereste.keresteDTO;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.dto.kereste.kerestekayitDTO;
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.user.UserService;
 
@@ -34,6 +39,9 @@ public class GirisController {
 	
 	@Autowired
 	private KeresteService keresteService;
+	
+	@Autowired
+	private CariService cariservice;
 	
 	@GetMapping("kereste/giris")
 	public Model fatura(Model model) {
@@ -118,9 +126,8 @@ public class GirisController {
 		try {
 			keresteDTO dto = kerestekayitDTO.getKeresteDTO();
 			List<kerestedetayDTO> tableData = kerestekayitDTO.getTableData();
-			String mesajlog = "";
 			
-			mesajlog = dto.getFisno().trim() + " Nolu Giris Silindi" ;
+			String mesajlog = dto.getFisno().trim() + " Nolu Giris Silindi" ;
 			keresteService.ker_giris_sil(dto.getFisno().trim(),mesajlog);
 			int degisken[] = degiskenler(dto) ; 
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -156,18 +163,74 @@ public class GirisController {
 			
 			keresteService.aciklama_yaz("KER", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "G");
 			keresteService.aciklama_yaz("KER", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "G");
-
-					
 					
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
 	}
+	
+	@PostMapping("kereste/fisYoket")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> evrakSil(@RequestParam String fisno) {
+		Map<String, String> response = new HashMap<>();
+		try {
+			String mesajlog = fisno.trim() + " Nolu Giris Silindi" ;
+			keresteService.ker_giris_sil(fisno.trim(),mesajlog);
+			keresteService.dipnot_sil(fisno.trim(), "K", "G");
+			keresteService.aciklama_sil("KER", fisno.trim(), "G");
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage",  e.getMessage());
+		}
+		return ResponseEntity.ok(response);
+	}
+	
+	@PostMapping("kereste/kergcariKayit")
+	@ResponseBody
+	public ResponseEntity<?> kergcariKayit(@RequestBody keresteDTO keresteDTO ) {
+		try {
+			keresteDTO dto = keresteDTO;
+			String[] hesapIsmi = {"",""};
+			hesapIsmi = cariservice.hesap_adi_oku(dto.getKarsihesapkodu());
+			if (hesapIsmi[0].equals("") ) {  
+				 throw new ServiceException("Girilen Alacakli Hesap Kodunda  bir  hesaba rastlanmadi!!!!");
+			} 
+			double sdf =  dto.getMiktar();
+			String aciklama = "" ;
+			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
+				aciklama = dto.getFisno() + "'Evrak ile " + Formatlama.doub_0(sdf) +  " m3 Urun Girisi" ;
+				dekontDTO dekontDTO = new dekontDTO();
+				dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
+				dekontDTO.setFisNo(cariservice.yenifisno());
+				dekontDTO.setBhes(dto.getKarsihesapkodu());
+				dekontDTO.setBcins("");
+				dekontDTO.setBkur(1);
+				dekontDTO.setBorc(dto.getTutar());
+				dekontDTO.setAhes(dto.getCarikod());
+				dekontDTO.setAcins("");
+				dekontDTO.setAkur(1);
+				dekontDTO.setAlacak(dto.getTutar());
+				dekontDTO.setIzahat(aciklama);
+				dekontDTO.setKod("Alış");
+				dekontDTO.setUser(userrString);
+				cariservice.cari_dekont_kaydet(dekontDTO);
+			
+			return ResponseEntity.ok(Map.of("errorMessage", ""));
+		} catch (ServiceException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("errorMessage", "Veriler kaydedilirken hata oluştu."));
+		}
+	}
+
 
 	private int[] degiskenler(keresteDTO dto) throws ClassNotFoundException, SQLException
 	{
