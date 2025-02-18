@@ -73,19 +73,10 @@ getFullDateWithTimeAndMilliseconds = function (dateInput) {
 	return fullDate;
 }
 
-formatTableDate = function (dateValue) {
-	if (dateValue.includes('T')) {
-		const date = new Date(dateValue);
-		return date.toISOString().split('T')[0];
-	}
-	return dateValue;
-}
-
 formatdateSaatsiz = function (dateString) {
 	const isoDate = dateString;
 	const formattedDate = new Date(isoDate).toISOString().split('T')[0];
 	return formattedDate;
-
 }
 
 validateAutoSearch = function (inputId, datalistId) {
@@ -123,7 +114,6 @@ hesapAdiOgren = async function (inputId, targetLabelId1) {
 			},
 			body: new URLSearchParams({ hesapkodu: inputValue }),
 		});
-
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
@@ -249,6 +239,8 @@ async function firmaIsmi(modul, event) {
 				lblfismi.innerText = "Kambiyo Firma Adi";
 			} else if (modul === "fatura") {
 				lblfismi.innerText = "Stok Firma Adi";
+			} else if (modul === "kereste") {
+				lblfismi.innerText = "Kereste Firma Adi";
 			}
 		}
 	} catch (error) {

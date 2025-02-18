@@ -286,7 +286,7 @@ async function tahevrakOku() {
 					if (borcluInput) borcluInput.value = item.BORCLU || "";
 
 					const vadeInput = cells[6]?.querySelector('input');
-					if (vadeInput) vadeInput.value = formatTableDate(item.TARIH) || "";
+					if (vadeInput) vadeInput.value = formatdateSaatsiz(item.TARIH) || "";
 
 					const tutarInput = cells[7]?.querySelector('input');
 					if (tutarInput) tutarInput.value = formatNumber2(item.TUTAR);
@@ -486,7 +486,7 @@ function prepareRequestPayload() {
 	} else if (document.getElementById("tur").value === "Cek") {
 		turu = 1;
 	} else {
-		turu = 2; 
+		turu = 2;
 	}
 	let tah_ted = 0;
 	if (document.getElementById("tah_ted").value === "Tahsilat") {
@@ -532,7 +532,7 @@ async function tahfisKayit() {
 		turChange();
 		document.getElementById("tahevrakNo").value = "0";
 		document.getElementById("errorDiv").innerText = "";
-		errorDiv.style.display = 'none'; 
+		errorDiv.style.display = 'none';
 	} catch (error) {
 		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
 		errorDiv.style.display = 'block';

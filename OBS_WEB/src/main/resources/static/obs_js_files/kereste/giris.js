@@ -626,7 +626,11 @@ async function yeniFis() {
 
 async function kerYoket() {
 	const fisNoInput = document.getElementById('fisno').value;
-	if (["0", ""].includes(fisNoInput.value)) {
+	const table = document.getElementById('kerTable');
+	const rows = table.rows;
+	
+	if (!fisNoInput || fisNoInput === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
 	const confirmDelete = confirm("Bu Fis silinecek ?");
