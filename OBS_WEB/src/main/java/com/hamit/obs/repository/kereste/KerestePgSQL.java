@@ -193,4 +193,10 @@ public class KerestePgSQL implements IKeresteDatabase {
 		
 	}
 
+	@Override
+	public List<Map<String, Object>> ker_barkod_kod_oku(String sira, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

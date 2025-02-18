@@ -401,7 +401,8 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		String dURUMString= "";
 		if(nerden.equals("C"))
 			dURUMString= " AND Cikis_Evrak = ''";
-		String sql = "SELECT   [Evrak_No] ,[Barkod] ,[Kodu],[Paket_No],[Konsimento] ,[Miktar],[Cikis_Evrak]  ,[CTarih]   ,"
+		String sql = "SELECT   [Evrak_No] ,[Barkod] ,[Kodu],[Paket_No],[Konsimento] ,[Miktar],[Cikis_Evrak]  ," 
+				+ " FORMAT(CTarih, 'yyyy-MM-dd HH:mm:ss.fff') AS CTarih   ,"
 				+ " [CKdv] ,[CDoviz]  ,[CFiat] ,[CTutar] ,[CKur], " 
 				+ " [CCari_Firma] ,[CAdres_Firma] ,[CIskonto]  ,[CTevkifat],[CAna_Grup]    ,[CAlt_Grup] , "
 				+ " ISNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo ) , '') AS CDepo  ," 
@@ -409,7 +410,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				+ " FROM KERESTE   " 
 				+ " WHERE Paket_No = N'" + token[0] + "' AND Konsimento = N'"+ token[1] + "' "
 				+ dURUMString + "  ORDER BY Satir" ;
-
+		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -583,6 +584,25 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("stok sil", e);
 		}
 
+
+	}
+
+	@Override
+	public List<Map<String, Object>> ker_barkod_kod_oku(String sira, ConnectionDetails keresteConnDetails) {
+		String sql =  "SELECT  DISTINCT CONCAT(Paket_No, '-', Konsimento) AS Paket_No FROM KERESTE   " +
+				" WHERE Cikis_Evrak = '' " +
+				" ORDER by " + sira;
+		
+		System.out.println(sql);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 
 	}
 }

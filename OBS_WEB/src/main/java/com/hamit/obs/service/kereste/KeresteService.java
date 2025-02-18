@@ -307,6 +307,16 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
+	public List<Map<String, Object>> ker_barkod_kod_oku(String sira){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.ker_barkod_kod_oku(sira, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
 
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();

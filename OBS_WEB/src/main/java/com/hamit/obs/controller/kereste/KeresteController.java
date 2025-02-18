@@ -118,13 +118,17 @@ public class KeresteController {
 		try {
 			List<Map<String, Object>> paket =new ArrayList<>();
 			response.put("mesaj", "" );
-			if (cins.toString().equals("SATIS") )
+			if (cins.toString().equals("CIKIS") )
 			{
 				paket = keresteService.paket_oku(pno.trim(), "C");
 
 				if(paket.size() >0) {
-					if (! paket.get(0).get("Evrak_No").toString().equals(fisno)) {
+					if (! paket.get(0).get("Cikis_Evrak").toString().equals("")   && ! paket.get(0).get("Cikis_Evrak").toString().equals(fisno))
+					{
 						response.put("mesaj", paket.get(0).get("Evrak_No")  + " Nolu Evrakta Cikis Yapilmis.." );
+						}
+					else {
+						response.put("paket", paket);
 					}
 				}
 			}

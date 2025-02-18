@@ -107,8 +107,12 @@ $(document).ready(function () {
 		"/stok/degiskenler": stokBaslik,
 		"/kereste/degiskenler": keresteBaslik,
 		"/kereste/giris": () => {
-			stokBaslik();
+			keresteBaslik();
 			initializeRows();
+		},
+		"/kereste/cikis": () => {
+			keresteBaslik();
+			fetchpakdepo();
 		},
 	}
 });

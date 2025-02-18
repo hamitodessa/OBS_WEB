@@ -32,5 +32,5 @@ public interface IKeresteDatabase {
 	void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr,ConnectionDetails keresteConnDetails);
 	void aciklama_sil(String evrcins, String evrno, String cins,ConnectionDetails keresteConnDetails);
 	void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,ConnectionDetails keresteConnDetails);
-
+	List<Map<String, Object>> ker_barkod_kod_oku(String sira,ConnectionDetails keresteConnDetails);
 }

@@ -60,7 +60,6 @@ function satirekle() {
 		return
 	}
 	const newRow = table.insertRow();
-	newRow.classList.add("data-row");
 	incrementRowCounter();
 
 	newRow.innerHTML = `
