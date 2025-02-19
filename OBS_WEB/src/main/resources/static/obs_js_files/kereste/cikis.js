@@ -63,7 +63,7 @@ function satirekle() {
         <td><label class="form-control" style="display: block;width:100%;height:100%;text-align:right;font-weight:bold; color:darkgreen;"><span>&nbsp;</span></label></td>
 		<td>
 			<div style="position: relative; width: 100%;">
-			    <select class="form-control" id="depo_${rowCounter}">
+			    <select class="form-control" id="depo_${rowCounter}" onkeydown="focusNextCell(event, this)">
 		    	    ${depolar.map(kod => `
 		        	    <option value="${kod.DEPO}" >
 		        	        ${kod.DEPO}
@@ -94,11 +94,11 @@ function satirekle() {
 		</td>
 		<td style="display: none;"></td>
 	    `;
-return newRow;
+	return newRow;
 }
 
 function handleBlur(input) {
-	
+
 	input.value = formatNumber2(parseLocaleNumber(input.value));
 	updateColumnTotal();
 }
@@ -121,7 +121,6 @@ async function paketkontrol(event, input) {
 			},
 			body: new URLSearchParams({ pno: pakno, cins: 'CIKIS', fisno: fisno }),
 		});
-
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
 		}
@@ -133,39 +132,44 @@ async function paketkontrol(event, input) {
 			}, 100);
 			return;
 		}
-		const currentRow = input.closest('tr'); 
-		let rowIndex = currentRow.rowIndex;  
-		 const table = document.getElementById('kerTable');
-		 const rowss = table.querySelectorAll('tbody tr');
-		 if (data.paket.length + rowIndex >= rowss.length) {
-			let neededRows = (data.paket.length + rowIndex) - rowss.length;
-			for (let i = 0; i < neededRows; i++) {
-				satirekle();
-			 }
-		 }
-		const rows = table.querySelectorAll('tbody tr');
-		rowIndex -= 1;
-		data.paket.forEach((item) => {
-			const cells = rows[rowIndex]?.cells;
-			const pakInput = cells[1]?.querySelector('input');
-			pakInput.value = input.value;
+		console.info("size:"+data.paket.length);
+		if (data.paket.length == 0) {
+			focusNextCell(event, input);
+		} else {
+			const currentRow = input.closest('tr');
+			let rowIndex = currentRow.rowIndex;
+			const table = document.getElementById('kerTable');
+			const rowss = table.querySelectorAll('tbody tr');
+			if (data.paket.length + rowIndex >= rowss.length) {
+				let neededRows = (data.paket.length + rowIndex) - rowss.length;
+				for (let i = 0; i < neededRows; i++) {
+					satirekle();
+				}
+			}
+			const rows = table.querySelectorAll('tbody tr');
+			rowIndex -= 1;
+			data.paket.forEach((item) => {
+				const cells = rows[rowIndex]?.cells;
+				const pakInput = cells[1]?.querySelector('input');
+				pakInput.value = input.value;
 
-			const barkodInput = cells[2]?.querySelector('label span');
-			barkodInput.textContent = item.Barkod || "\u00A0";
+				const barkodInput = cells[2]?.querySelector('label span');
+				barkodInput.textContent = item.Barkod || "\u00A0";
 
-			const koduInput = cells[3]?.querySelector('label span');
-			koduInput.textContent = item.Kodu;
+				const koduInput = cells[3]?.querySelector('label span');
+				koduInput.textContent = item.Kodu;
 
-			const miktarInput = cells[4]?.querySelector('label span');
-			miktarInput.textContent = formatNumber0(item.Miktar || 0);
-		
-			const m3Input = cells[5]?.querySelector('label span');
-			m3Input.textContent = formatNumber3(hesaplaM3(item.Kodu,item.Miktar) || 0);
-			
-			rowIndex++;
-		});
-		updatePaketM3();
-		updateColumnTotal();
+				const miktarInput = cells[4]?.querySelector('label span');
+				miktarInput.textContent = formatNumber0(item.Miktar || 0);
+
+				const m3Input = cells[5]?.querySelector('label span');
+				m3Input.textContent = formatNumber3(hesaplaM3(item.Kodu, item.Miktar) || 0);
+
+				rowIndex++;
+			});
+			updatePaketM3();
+			updateColumnTotal();
+		}
 	} catch (error) {
 		const errorDiv = document.getElementById('errorDiv');
 		errorDiv.style.display = 'block';
@@ -267,8 +271,8 @@ function updateColumnTotal() {
 	});
 }
 
-function hesaplaM3(kodu,miktar) {
-	
+function hesaplaM3(kodu, miktar) {
+
 	let token = kodu.split("-");
 	if (token.length !== 4) return;
 	let m3 = 0;
@@ -340,7 +344,7 @@ function focusNextCell(event, element) {
 		let currentCell = element.closest('td');
 		let nextCell = currentCell.nextElementSibling;
 		while (nextCell) {
-			const focusableElement = nextCell.querySelector('input');
+			const focusableElement = nextCell.querySelector('input,select');
 			if (focusableElement) {
 				focusableElement.focus();
 				if (focusableElement.select) {
@@ -436,10 +440,16 @@ async function kerOku() {
 
 
 			const paknoInput = cells[1]?.querySelector('input');
-			if (paknoInput) paknoInput.value = item.Paket_No || "";
+			if (paknoInput) paknoInput.value = item.Paket_No + "-" + item.Konsimento;
 
 			const barkodInput = cells[2]?.querySelector('label span');
-			if (barkodInput) barkodInput.textContent = item.Barkod || "";
+			if (barkodInput) {
+				if (item.Barkod === null || item.Barkod === undefined || item.Barkod.trim() === '') {
+					barkodInput.textContent = "\u00A0";
+				} else {
+					barkodInput.textContent = item.Barkod;
+				}
+			}
 
 			const urunKoduInput = cells[3]?.querySelector('label span');
 			if (urunKoduInput) urunKoduInput.textContent = item.Kodu || "";
@@ -472,7 +482,7 @@ async function kerOku() {
 			if (izahatInput) izahatInput.value = item.CIzahat || "";
 
 			cells[13].innerText = item.Satir || '';
-			
+
 		});
 		for (let i = 0; i < data.data.length; i++) {
 			const item = data.data[i];
@@ -624,7 +634,7 @@ async function kerYoket() {
 	const fisNoInput = document.getElementById('fisno').value;
 	const table = document.getElementById('kerTable');
 	const rows = table.rows;
-	
+
 	if (!fisNoInput || fisNoInput === "0" || rows.length === 0) {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
@@ -693,17 +703,17 @@ function getTableData() {
 	const data = [];
 	rows.forEach((row) => {
 		const cells = row.querySelectorAll('td');
-		const firstColumnValue = cells[2]?.querySelector('input')?.value || "";
+		const firstColumnValue = cells[1]?.querySelector('input')?.value || "";
 		if (firstColumnValue.trim()) {
 			const rowData = {
-				paketno: cells[2]?.querySelector('input')?.value || "",
-				cdepo: cells[8]?.querySelector('input')?.value || "",
-				cfiat: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
-				ciskonto: parseLocaleNumber(cells[10]?.querySelector('input')?.value || 0),
-				ckdv: parseLocaleNumber(cells[11]?.querySelector('input')?.value || 0),
-				ctutar: parseLocaleNumber(cells[12]?.querySelector('input')?.value || 0),
-				cizahat: cells[13]?.querySelector('input')?.value || "",
-				satir : parseInt(cells[14]?.textContent.trim(), 10) || 0,
+				paketno: cells[1]?.querySelector('input')?.value || "",
+				cdepostring: cells[7]?.querySelector('input')?.value || "",
+				cfiat: parseLocaleNumber(cells[8]?.querySelector('input')?.value || 0),
+				ciskonto: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
+				ckdv: parseLocaleNumber(cells[10]?.querySelector('input')?.value || 0),
+				ctutar: parseLocaleNumber(cells[11]?.querySelector('input')?.value || 0),
+				cizahat: cells[12]?.querySelector('input')?.value || "",
+				satir: parseInt(cells[13]?.textContent.trim(), 10) || 0,
 			};
 			data.push(rowData);
 		}
@@ -718,7 +728,6 @@ async function kerKayit() {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
-
 	const kerestekayitDTO = prepareureKayit();
 	const errorDiv = document.getElementById('errorDiv');
 	const $kaydetButton = $('#kerkaydetButton');
@@ -749,7 +758,7 @@ async function kerKayit() {
 }
 
 async function kercariIsle() {
-	const hesapKodu = $('#keresteBilgi').val();
+	const hesapKodu = $('#kerBilgi').val();
 	const fisno = document.getElementById("fisno").value;
 	const table = document.getElementById('kerTable');
 	const rows = table.rows;
@@ -757,14 +766,14 @@ async function kercariIsle() {
 		alert("Geçerli bir evrak numarasi giriniz.");
 		return;
 	}
-	const $carkaydetButton = $('#carkaydetButton');
+	const $carkaydetButton = $('#carkayitButton');
 	$carkaydetButton.prop('disabled', true).text('İşleniyor...');
 
 	const keresteDTO = {
 		fisno: document.getElementById("fisno").value || "",
 		tarih: document.getElementById("fisTarih").value || "",
 		carikod: document.getElementById("carikod").value || "",
-		m3: parseLocaleNumber(document.getElementById("totalM3").textContent || 0),
+		miktar: document.getElementById("totalM3").textContent || 0,
 		tutar: parseLocaleNumber(document.getElementById("tevhartoptut").innerText || 0),
 		karsihesapkodu: hesapKodu,
 	};
@@ -789,5 +798,10 @@ async function kercariIsle() {
 	} finally {
 		$carkaydetButton.prop('disabled', false).text('Cari Kaydet');
 		document.body.style.cursor = 'default';
+	}
+}
+function selectAllContent(element) {
+	if (element && element.select) {
+		element.select();
 	}
 }

@@ -326,11 +326,11 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		}
 		else {
 			sql = "SELECT   [Evrak_No] ,[Barkod] ,[Kodu],[Paket_No],[Konsimento] ,[Miktar],[Tarih],[Kdv] ,[Doviz] ,[Fiat]  ,[Tutar] ,[Kur]  ,[Cari_Firma],[Adres_Firma]  ,[Iskonto] ,[Tevkifat], "
-					+ "	[Ana_Grup] , " 
-					+ " [Alt_Grup] , " 
-					+ " [Mensei] , " 
+					+ " ISNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup ) , '') AS Ana_Grup   , " 
+					+ " ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup ) , '') AS Alt_Grup , " 
+					+ " ISNULL((Select MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei ) , '') AS Mensei, " 
 					+ " ISNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo ) , '') AS Depo  ,[Ozel_Kod] ,[Izahat]  ," 
-					+ " [Nakliyeci] , " 
+					+ " ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci ),'') Nakliyeci , " 
 					+ " [USER] "
 					+ "	,[Cikis_Evrak]  ,[CTarih]   ,[CKdv] ,[CDoviz]  ,[CFiat] ,[CTutar] ,[CKur] ,[CCari_Firma] ,[CAdres_Firma] ,[CIskonto]  ,[CTevkifat] "
 					+ "	,[CAna_Grup]    ,[CAlt_Grup]  ,ISNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo ) , '') AS CDepo  ,[COzel_Kod]   ,[CIzahat]  ,[CNakliyeci]  ,[CUSER],Satir" 
@@ -346,7 +346,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -407,9 +406,8 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				+ " ISNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo ) , '') AS CDepo  ," 
 				+ " [COzel_Kod]   ,[CIzahat]  ,[CNakliyeci]  ,[CUSER],Satir" 
 				+ " FROM KERESTE   " 
-				+ " WHERE Paket_No = N'" + token[0] + "' AND Konsimento = N'"+ token[1] + "' "
+				+ " WHERE Paket_No = N'" + token[0] + "' AND Konsimento = N'" + token[1] + "' "
 				+ dURUMString + "  ORDER BY Satir" ;
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -419,7 +417,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -517,7 +514,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
 		}
-
 	}
 
 	@Override
@@ -541,7 +537,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
 		}
-
 	}
 
 	@Override
@@ -560,7 +555,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
 		}
-
 	}
 
 	@Override
@@ -582,8 +576,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
 		}
-
-
 	}
 
 	@Override
@@ -591,8 +583,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		String sql =  "SELECT  DISTINCT CONCAT(Paket_No, '-', Konsimento) AS Paket_No FROM KERESTE   " +
 				" WHERE Cikis_Evrak = '' " +
 				" ORDER by " + sira;
-		
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -602,7 +592,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -620,7 +609,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
 		}
-
 	}
 
 	@Override
@@ -643,11 +631,9 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
-			
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
 		}
-
 	}
 }

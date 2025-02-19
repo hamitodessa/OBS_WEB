@@ -51,6 +51,7 @@ public class kerestedetayDTO {
 	private int canagrup;
 	private int caltgrup;
 	private int cdepo;
+	private String cdepostring;
 	private int cozelkod;
 	private String cizahat;
 	private int cnakliyeci;

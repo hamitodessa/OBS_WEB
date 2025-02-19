@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.hamit.obs.custom.yardimci.Formatlama;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.cari.dekontDTO;
@@ -204,7 +203,7 @@ public class GirisController {
 			double sdf =  dto.getMiktar();
 			String aciklama = "" ;
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
-				aciklama = dto.getFisno() + "'Evrak ile " + Formatlama.doub_0(sdf) +  " m3 Urun Girisi" ;
+				aciklama = dto.getFisno() + "'Evrak ile " + sdf +  " m3 Urun Girisi" ;
 				dekontDTO dekontDTO = new dekontDTO();
 				dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
 				dekontDTO.setFisNo(cariservice.yenifisno());
@@ -220,7 +219,6 @@ public class GirisController {
 				dekontDTO.setKod("Alış");
 				dekontDTO.setUser(userrString);
 				cariservice.cari_dekont_kaydet(dekontDTO);
-			
 			return ResponseEntity.ok(Map.of("errorMessage", ""));
 		} catch (ServiceException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

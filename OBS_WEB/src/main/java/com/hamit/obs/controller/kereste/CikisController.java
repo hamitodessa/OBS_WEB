@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.hamit.obs.custom.yardimci.Formatlama;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.cari.dekontDTO;
@@ -44,7 +43,7 @@ public class CikisController {
 	private CariService cariservice;
 	
 	@GetMapping("kereste/cikis")
-	public Model fatura(Model model) {
+	public Model cikis(Model model) {
 		try {
 			List<Map<String, Object>> anaKodlari = keresteService.ker_kod_degisken_oku("ANA_GRUP", "AGID_Y", "ANA_GRUP_DEGISKEN") ;
 			Map<String, Object> anaDeger = new HashMap<>();
@@ -116,6 +115,7 @@ public class CikisController {
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 
 			int index = 0;
+			System.out.println(tableData.size());
 			for (kerestedetayDTO row : tableData) {
 				mesajlog = "Kereste Kayit" +  row.getUkodu() + " Mik=" + row.getMiktar() + " Tut=" + row.getTutar();
 
@@ -128,7 +128,14 @@ public class CikisController {
 				row.setCaltgrup(degisken[1]);
 				row.setCnakliyeci(degisken[2]);
 				row.setCozelkod(degisken[3]);
-				row.setCdepo(degisken[4]);
+				
+				//*****Depo
+				int qwe = 0 ;
+				if( ! row.getCdepostring().equals("")) {
+					String dpos = keresteService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN", row.getCdepostring());
+					qwe = Integer.parseInt(dpos);
+				}
+				row.setCdepo(qwe);
 				
 				
 				row.setCdoviz(dto.getDvzcins());
@@ -151,6 +158,7 @@ public class CikisController {
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
@@ -187,7 +195,7 @@ public class CikisController {
 			double sdf =  dto.getMiktar();
 			String aciklama = "" ;
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
-				aciklama = dto.getFisno() + "'Evrak ile " + Formatlama.doub_0(sdf) +  " m3 Urun Girisi" ;
+				aciklama = dto.getFisno() + "'Evrak ile " + sdf +  " m3 Urun Girisi" ;
 				dekontDTO dekontDTO = new dekontDTO();
 				dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
 				dekontDTO.setFisNo(cariservice.yenifisno());
@@ -238,11 +246,7 @@ public class CikisController {
 			String ozks = keresteService.urun_kod_degisken_ara("OZ1ID_Y", "OZEL_KOD_1", "OZ_KOD_1_DEGISKEN", dto.getNakliyeci());
 			degisken[3] = Integer.parseInt(ozks);
 		}
-		//*****Depo
-		if( ! dto.getDepo().equals("")) {
-			String dpos = keresteService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN",  dto.getDepo());
-			degisken[4] = Integer.parseInt(dpos);
-		}
+		
 		return degisken;
 	}
 }

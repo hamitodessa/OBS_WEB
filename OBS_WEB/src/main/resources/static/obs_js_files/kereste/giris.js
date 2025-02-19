@@ -779,7 +779,7 @@ async function kerKayit() {
 }
 
 async function kercariIsle() {
-	const hesapKodu = $('#keresteBilgi').val();
+	const hesapKodu = $('#kerBilgi').val();
 	const fisno = document.getElementById("fisno").value;
 	const table = document.getElementById('kerTable');
 	const rows = table.rows;
@@ -787,14 +787,14 @@ async function kercariIsle() {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
-	const $carkaydetButton = $('#carkaydetButton');
+	const $carkaydetButton = $('#carkayitButton');
 	$carkaydetButton.prop('disabled', true).text('İşleniyor...');
 
 	const keresteDTO = {
 		fisno: document.getElementById("fisno").value || "",
 		tarih: document.getElementById("fisTarih").value || "",
 		carikod: document.getElementById("carikod").value || "",
-		miktar: parseLocaleNumber(document.getElementById("totalM3").textContent || 0),
+		miktar: document.getElementById("totalM3").textContent || 0,
 		tutar: parseLocaleNumber(document.getElementById("tevhartoptut").innerText || 0),
 		karsihesapkodu: hesapKodu,
 	};
@@ -831,7 +831,12 @@ async function paketkontrol(event, input) {
 	const row = input.closest('tr');
 	if (!row) return;
 	const cells = row.querySelectorAll('td');
-	const konsCell = cells[7]?.querySelector('input')?.value?.trim();
+	const konsCell = cells[7]?.querySelector('input')?.value?.trim() ?? '';
+	if (!konsCell) {
+		alert("Kontrol icin once Konsimento No giriniz!");
+		return;
+	}
+
 	const pakno = input.value + "-" + konsCell;
 	document.body.style.cursor = "wait";
 	try {
