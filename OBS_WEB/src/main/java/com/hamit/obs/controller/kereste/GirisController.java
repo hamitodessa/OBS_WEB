@@ -94,7 +94,7 @@ public class GirisController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			List<Map<String, Object>> kereste =new ArrayList<>();
-			if (cins.toString().equals("SATIS") )
+			if (cins.toString().equals("CIKIS") )
 			{
 				kereste = keresteService.ker_oku(fisno.trim(), "C");
 				response.put("a1",keresteService.aciklama_oku("KER", 1, fisno.trim(), "C"));

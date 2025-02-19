@@ -70,7 +70,7 @@ public class KeresteController {
 	public Map<String, String> sonfis(@RequestParam String cins) {
 		Map<String, String> response = new HashMap<>();
 		try {
-			if (cins.toString().equals("SATIS"))
+			if (cins.toString().equals("CIKIS"))
 				response.put("fisno", keresteService.son_no_al("C"));
 			else
 				response.put("fisno", keresteService.son_no_al("G"));
@@ -90,7 +90,7 @@ public class KeresteController {
 		Map<String, String> response = new HashMap<>();
 		try {
 			int sno = 0 ;
-			if (cins.toString().equals("SATIS"))
+			if (cins.toString().equals("CIKIS"))
 				sno =  keresteService.evrak_no_al("C");
 			else
 				sno =  keresteService.evrak_no_al("G");
