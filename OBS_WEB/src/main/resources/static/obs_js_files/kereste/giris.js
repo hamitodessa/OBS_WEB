@@ -794,7 +794,7 @@ async function kercariIsle() {
 		fisno: document.getElementById("fisno").value || "",
 		tarih: document.getElementById("fisTarih").value || "",
 		carikod: document.getElementById("carikod").value || "",
-		m3: parseLocaleNumber(document.getElementById("totalM3").textContent || 0),
+		miktar: parseLocaleNumber(document.getElementById("totalM3").textContent || 0),
 		tutar: parseLocaleNumber(document.getElementById("tevhartoptut").innerText || 0),
 		karsihesapkodu: hesapKodu,
 	};

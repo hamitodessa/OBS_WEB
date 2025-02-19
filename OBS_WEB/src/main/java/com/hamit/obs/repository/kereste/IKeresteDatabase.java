@@ -33,4 +33,6 @@ public interface IKeresteDatabase {
 	void aciklama_sil(String evrcins, String evrno, String cins,ConnectionDetails keresteConnDetails);
 	void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> ker_barkod_kod_oku(String sira,ConnectionDetails keresteConnDetails);
+	void ker_cikis_sil(String eno,ConnectionDetails keresteConnDetails);
+	void ker_cikis_kaydet(kerestedetayDTO kerestedetayDTO,ConnectionDetails keresteConnDetails);
 }

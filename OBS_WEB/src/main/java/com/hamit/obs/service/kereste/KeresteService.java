@@ -317,6 +317,38 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
+	public void ker_cikis_sil(String eno,String mesajlog) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			
+			loglamaDTO.setEvrak(eno);
+			loglamaDTO.setmESAJ(mesajlog);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, keresteConnDetails);
+			
+			strategy.ker_cikis_sil(eno, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void ker_cikis_kaydet(kerestedetayDTO kerestedetayDTO,String mesajlog) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			
+			loglamaDTO.setEvrak(kerestedetayDTO.getFisno());
+			loglamaDTO.setmESAJ(mesajlog);
+			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, keresteConnDetails);
+			
+			strategy.ker_cikis_kaydet(kerestedetayDTO, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
 
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();

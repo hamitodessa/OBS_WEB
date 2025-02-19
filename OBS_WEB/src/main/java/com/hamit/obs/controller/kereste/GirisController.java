@@ -199,7 +199,7 @@ public class GirisController {
 			String[] hesapIsmi = {"",""};
 			hesapIsmi = cariservice.hesap_adi_oku(dto.getKarsihesapkodu());
 			if (hesapIsmi[0].equals("") ) {  
-				 throw new ServiceException("Girilen Alacakli Hesap Kodunda  bir  hesaba rastlanmadi!!!!");
+				 throw new ServiceException("Girilen Borclu Hesap Kodunda  bir  hesaba rastlanmadi!!!!");
 			} 
 			double sdf =  dto.getMiktar();
 			String aciklama = "" ;

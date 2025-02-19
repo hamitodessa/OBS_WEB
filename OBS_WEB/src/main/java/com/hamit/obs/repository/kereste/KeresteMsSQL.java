@@ -259,7 +259,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (Exception e) {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
 		}
-
 	}
 
 	@Override
@@ -603,6 +602,52 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
+
+	}
+
+	@Override
+	public void ker_cikis_sil(String eno, ConnectionDetails keresteConnDetails) {
+		String sql =  "UPDATE KERESTE SET Cikis_Evrak = '', CTarih = '1900.01.01',CKdv = 0,CDoviz ='',CFiat=0,CTutar=0,CKur=0,CCari_Firma='',CAdres_Firma='' ," 
+				+ " CIskonto=0,CTevkifat=0,CAna_Grup=0,CAlt_Grup=0,CDepo=0,COzel_Kod=0,CIzahat='',CNakliyeci=0,CUSER='' ,CSatir=0"
+				+ " WHERE Cikis_Evrak  = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, eno);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+
+	}
+
+	@Override
+	public void ker_cikis_kaydet(kerestedetayDTO kerestedetayDTO, ConnectionDetails keresteConnDetails) {
+		String[] token = kerestedetayDTO.getPaketno().toString().split("-");
+		String sql = "UPDATE KERESTE SET " 
+				+ " Cikis_Evrak = '"+ kerestedetayDTO.getCevrak() +"', CTarih = '"+ kerestedetayDTO.getCtarih() + "', " 
+				+ " CKdv = "+ kerestedetayDTO.getCkdv() + ",CDoviz ='"+ kerestedetayDTO.getCdoviz() + "', "  
+				+ " CFiat="+ kerestedetayDTO.getCfiat() + ",Ctutar="+ kerestedetayDTO.getCtutar() + ", " 
+				+ " CKur="+ kerestedetayDTO.getCkur() + ",CCari_Firma = '"+ kerestedetayDTO.getCcarifirma() +"' ," 
+				+ " CAdres_Firma='"+ kerestedetayDTO.getCadresfirma() +"' ," 
+				+ " CIskonto="+ kerestedetayDTO.getCiskonto() + ",CTevkifat ="+ kerestedetayDTO.getCtevkifat() +" ,"
+				+ " CAna_Grup="+ kerestedetayDTO.getCanagrup() + ",CAlt_Grup="+ kerestedetayDTO.getCaltgrup() + ", " 
+				+ " CDepo="+ kerestedetayDTO.getCdepo() + ",COzel_Kod="+ kerestedetayDTO.getCozelkod() +" ," 
+				+ " CIzahat='"+ kerestedetayDTO.getCizahat() +"',CNakliyeci="+ kerestedetayDTO.getCnakliyeci() + ", " 
+				+ " CUSER='"+ kerestedetayDTO.getCuser() +"',"
+				+ " CSatir="+ kerestedetayDTO.getCsatir() +""
+				+ " WHERE Paket_No  ='" + token[0] + "' AND Konsimento = '"+ token[1] +"' "
+				+ " AND Satir = "+ kerestedetayDTO.getSatir() + "" ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+		}
 
 	}
 }

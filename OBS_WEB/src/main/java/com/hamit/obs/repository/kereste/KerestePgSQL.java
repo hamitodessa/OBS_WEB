@@ -199,4 +199,16 @@ public class KerestePgSQL implements IKeresteDatabase {
 		return null;
 	}
 
+	@Override
+	public void ker_cikis_sil(String eno, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ker_cikis_kaydet(kerestedetayDTO kerestedetayDTO, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -620,6 +620,174 @@ async function anagrpChanged(anagrpElement) {
 	}
 }
 
+async function kerYoket() {
+	const fisNoInput = document.getElementById('fisno').value;
+	const table = document.getElementById('kerTable');
+	const rows = table.rows;
+	
+	if (!fisNoInput || fisNoInput === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarası giriniz.");
+		return;
+	}
+	const confirmDelete = confirm("Bu Fis silinecek ?");
+	if (!confirmDelete) {
+		return;
+	}
+	document.body.style.cursor = "wait";
+	const $silButton = $('#kersilButton');
+	$silButton.prop('disabled', true).text('Siliniyor...');
+	try {
+		const response = await fetchWithSessionCheck("kereste/fiscYoket", {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({ fisno: fisNoInput.value }),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		clearInputs();
+		document.getElementById("fisno").value = "";
+		document.getElementById("errorDiv").style.display = "none";
+		document.getElementById("errorDiv").innerText = "";
+	} catch (error) {
+		document.getElementById("errorDiv").style.display = "block";
+		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
+	} finally {
+		document.body.style.cursor = "default";
+		$silButton.prop('disabled', false).text('Sil');
+	}
+}
 
+function prepareureKayit() {
+	const keresteDTO = {
+		fisno: document.getElementById("fisno").value || "",
+		tarih: document.getElementById("fisTarih").value || "",
+		ozelkod: document.getElementById("ozelkod").value || "",
+		anagrup: document.getElementById("anagrp").value || "",
+		altgrup: document.getElementById("altgrp").value || "",
+		nakliyeci: document.getElementById("nakliyeci").value || "",
 
+		carikod: document.getElementById("carikod").value || "",
+		adreskod: document.getElementById("adreskod").value || "",
 
+		dvzcins: document.getElementById("dovizcins").value || "",
+		kur: parseLocaleNumber(document.getElementById("kur").value) || 0.0,
+		tevoran: parseLocaleNumber(document.getElementById("tevoran").value) || 0.0,
+
+		not1: document.getElementById("not1").value || "",
+		not2: document.getElementById("not2").value || "",
+		not3: document.getElementById("not3").value || "",
+
+		acik1: document.getElementById("a1").value || "",
+		acik2: document.getElementById("a2").value || "",
+	};
+	tableData = getTableData();
+	return { keresteDTO, tableData, };
+}
+
+function getTableData() {
+	const table = document.getElementById('kerTable');
+	const rows = table.querySelectorAll('tbody tr');
+	const data = [];
+	rows.forEach((row) => {
+		const cells = row.querySelectorAll('td');
+		const firstColumnValue = cells[2]?.querySelector('input')?.value || "";
+		if (firstColumnValue.trim()) {
+			const rowData = {
+				paketno: cells[2]?.querySelector('input')?.value || "",
+				cdepo: cells[8]?.querySelector('input')?.value || "",
+				cfiat: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
+				ciskonto: parseLocaleNumber(cells[10]?.querySelector('input')?.value || 0),
+				ckdv: parseLocaleNumber(cells[11]?.querySelector('input')?.value || 0),
+				ctutar: parseLocaleNumber(cells[12]?.querySelector('input')?.value || 0),
+				cizahat: cells[13]?.querySelector('input')?.value || "",
+				satir : parseInt(cells[14]?.textContent.trim(), 10) || 0,
+			};
+			data.push(rowData);
+		}
+	});
+	return data;
+}
+async function kerKayit() {
+	const fisno = document.getElementById("fisno").value;
+	const table = document.getElementById('kerTable');
+	const rows = table.rows;
+	if (!fisno || fisno === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarası giriniz.");
+		return;
+	}
+
+	const kerestekayitDTO = prepareureKayit();
+	const errorDiv = document.getElementById('errorDiv');
+	const $kaydetButton = $('#kerkaydetButton');
+	$kaydetButton.prop('disabled', true).text('İşleniyor...');
+	document.body.style.cursor = 'wait';
+	try {
+		const response = await fetchWithSessionCheck('kereste/cikKayit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(kerestekayitDTO),
+		});
+		if (response.errorMessage) {
+			throw new Error(response.errorMessage);
+		}
+		clearInputs();
+		document.getElementById("fisno").value = "";
+		document.getElementById("errorDiv").innerText = "";
+		errorDiv.style.display = 'none';
+	} catch (error) {
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+		errorDiv.style.display = 'block';
+	} finally {
+		document.body.style.cursor = 'default';
+		$kaydetButton.prop('disabled', false).text('Kaydet');
+	}
+}
+
+async function kercariIsle() {
+	const hesapKodu = $('#keresteBilgi').val();
+	const fisno = document.getElementById("fisno").value;
+	const table = document.getElementById('kerTable');
+	const rows = table.rows;
+	if (!fisno || fisno === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarasi giriniz.");
+		return;
+	}
+	const $carkaydetButton = $('#carkaydetButton');
+	$carkaydetButton.prop('disabled', true).text('İşleniyor...');
+
+	const keresteDTO = {
+		fisno: document.getElementById("fisno").value || "",
+		tarih: document.getElementById("fisTarih").value || "",
+		carikod: document.getElementById("carikod").value || "",
+		m3: parseLocaleNumber(document.getElementById("totalM3").textContent || 0),
+		tutar: parseLocaleNumber(document.getElementById("tevhartoptut").innerText || 0),
+		karsihesapkodu: hesapKodu,
+	};
+	const errorDiv = document.getElementById('errorDiv');
+	document.body.style.cursor = 'wait';
+	try {
+		const response = await fetchWithSessionCheck('kereste/kerccariKayit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(keresteDTO),
+		});
+		if (response.errorMessage.trim() !== "") {
+			throw new Error(response.errorMessage);
+		}
+		document.getElementById("errorDiv").innerText = "";
+		errorDiv.style.display = 'none';
+	} catch (error) {
+		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+		errorDiv.style.display = 'block';
+	} finally {
+		$carkaydetButton.prop('disabled', false).text('Cari Kaydet');
+		document.body.style.cursor = 'default';
+	}
+}
