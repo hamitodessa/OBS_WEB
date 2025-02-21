@@ -78,6 +78,10 @@ public class createDBController {
 				serverBilgiDTO.setUser_modul_baslik("OK_Fat");
 				break;
 			}
+			case "Kereste": {
+				serverBilgiDTO.setUser_modul_baslik("OK_Ker");
+				break;
+			}
 			}
 			result = serverService.dosyakontrol(serverBilgiDTO);
 			drm = result != false ? "true" : "false" ;
@@ -99,40 +103,45 @@ public class createDBController {
 		Map<String, String> response = new HashMap<>();
 		boolean result = false;
 		String drm  = "false" ;
+		serverBilgiDTO svrBilgiDTO = serverBilgiDTO;
 		String usrString =  Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
 		try {
-			switch (serverBilgiDTO.getUser_modul()) {
+			switch (svrBilgiDTO.getUser_modul()) {
 			case "Cari Hesap": {
-				serverBilgiDTO.setUser_name(usrString);
-				serverBilgiDTO.setUser_modul_baslik("OK_Car");
+				svrBilgiDTO.setUser_name(usrString);
+				svrBilgiDTO.setUser_modul_baslik("OK_Car");
 				break;
 			}
 			case "Kur": {
-				serverBilgiDTO.setUser_name(usrString);
-				serverBilgiDTO.setUser_modul_baslik("OK_Kur");
+				svrBilgiDTO.setUser_name(usrString);
+				svrBilgiDTO.setUser_modul_baslik("OK_Kur");
 				break;
 			}
 			case "Adres": {
-				serverBilgiDTO.setUser_name(usrString);
-				serverBilgiDTO.setUser_modul_baslik("OK_Adres");
+				svrBilgiDTO.setUser_name(usrString);
+				svrBilgiDTO.setUser_modul_baslik("OK_Adres");
 				break;
 			}
 			case "Kambiyo": {
-				serverBilgiDTO.setUser_name(usrString);
-				serverBilgiDTO.setUser_modul_baslik("OK_Kam");
+				svrBilgiDTO.setUser_name(usrString);
+				svrBilgiDTO.setUser_modul_baslik("OK_Kam");
 				break;
 			}
 			case "Fatura": {
-				serverBilgiDTO.setUser_name(usrString);
-				serverBilgiDTO.setUser_modul_baslik("OK_Fat");
+				svrBilgiDTO.setUser_name(usrString);
+				svrBilgiDTO.setUser_modul_baslik("OK_Fat");
+				break;
+			}
+			case "Kereste": {
+				svrBilgiDTO.setUser_name(usrString);
+				svrBilgiDTO.setUser_modul_baslik("OK_Ker");
 				break;
 			}
 			}
-			result = serverService.dosyaolustur(serverBilgiDTO);
-			
+			result = serverService.dosyaolustur(svrBilgiDTO);
 			drm = result != false ? "true" : "false" ;			response.put("olustuDurum",drm ); 
 			response.put("errorMessage", ""); 
-			boolean idxdurum = index_JOB(serverBilgiDTO.getUser_modul(),serverBilgiDTO.getHangi_sql(),serverBilgiDTO);
+			boolean idxdurum = index_JOB(svrBilgiDTO.getUser_modul(),svrBilgiDTO.getHangi_sql(),svrBilgiDTO);
 			response.put("indexolustuDurum",idxdurum != false ? "true" : "false");
 		} catch (ServiceException e) {
 			response.put("olustuDurum",drm ); 
@@ -402,5 +411,4 @@ public class createDBController {
 		}
 		return result;
 	}
-
 }

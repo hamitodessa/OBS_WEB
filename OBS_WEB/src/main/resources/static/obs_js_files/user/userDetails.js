@@ -176,13 +176,18 @@ function confirmDeleteus() {
 }
 
 async function deleteUserDetailsus() {
-	const id = document.getElementById("hiddenId").value; // Silinecek kaydın ID'sini al
+	const idd = document.getElementById("hiddenId").value; 
+	if (!idd || isNaN(idd) || idd <= 0) {
+		return;
+	}
+	const id = Number(idd); 
+	const modul = document.getElementById("user_modul").value;
 	document.body.style.cursor = "wait";
 	try {
 		const response = await fetchWithSessionCheck("user/delete_user_details", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ id })
+			body: JSON.stringify({ id , modul }),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -195,7 +200,6 @@ async function deleteUserDetailsus() {
 		document.body.style.cursor = "default";
 	}
 }
-
 //****************************************DOSYA KONTROL ************************************************/
 async function checkFile() {
 	const userPwdServerInput = document.getElementById("user_pwd_server").value;

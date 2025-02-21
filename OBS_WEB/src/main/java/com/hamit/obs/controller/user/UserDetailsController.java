@@ -68,7 +68,6 @@ public class UserDetailsController {
 	public Map<String, Object> detailoku(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			//String email = userService.getCurrentUser().getEmail();
 			String email = SecurityContextHolder.getContext().getAuthentication().getName();
 			User user = userService.getCurrentUser();
 			Set<Role> roles = user.getRoles();
@@ -227,29 +226,24 @@ public class UserDetailsController {
 	
 	@PostMapping("user/delete_user_details")
 	@ResponseBody
-	public Map<String, Object> deleteUserDetails(@RequestBody Map<String, Long> request) {
+	public Map<String, Object> deleteUserDetails(@RequestBody Map<String, Object> request) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			Long id = request.get("id");
-			User user = userService.getCurrentUser();
-			User_Details userdetailsToRemove = user.getUserDetails().stream()
-					.filter(details -> details.getId().equals(id))
-					.findFirst()
-					.orElseThrow(() -> new RuntimeException("User Details not found"));
-			user.getUserDetails().remove(userdetailsToRemove);
-			userService.saveUser(user);	
+			Long id =  ((Number) request.get("id")).longValue();
+			String modul = (String) request.get("modul");
+			userDetailsService.deleteUserDetails(id);
 			response.put("errorMessage", ""); 
-			if(userdetailsToRemove.getUser_modul().equals("Cari Hesap"))
+			if(modul.equals("Cari Hesap"))
 				cariService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Kur"))
+			else if(modul.equals("Kur"))
 				kurService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Adres"))
+			else if(modul.equals("Adres"))
 				adresService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Kambiyo"))
+			else if(modul.equals("Kambiyo"))
 				kambiyoService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Fatura"))
+			else if(modul.equals("Fatura"))
 				faturaService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Kereste"))
+			else if(modul.equals("Kereste"))
 				keresteService.initialize();
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage()); 

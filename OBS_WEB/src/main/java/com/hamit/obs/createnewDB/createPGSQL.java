@@ -1176,10 +1176,11 @@ public class createPGSQL {
 			stmt.executeUpdate(sql);
 		}
 		// ***************OZEL NO YAZ *************************
-		sql = "INSERT INTO  \"EVRAK\"(\"EVRAK\",\"NO\") VALUES (?,?)";
+		sql = "INSERT INTO \"OZEL\" (\"YONETICI\",\"YON_SIFRE\",\"FIRMA_ADI\") VALUES (?,? ,?)";
 		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, "SEN_C");
-			stmt.setInt(2, 0);
+			stmt.setString(1, user_name);
+			stmt.setString(2, "12345");
+			stmt.setString(3, firmaAdi);
 			stmt.executeUpdate();
 		}
 	}

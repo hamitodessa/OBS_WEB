@@ -1194,7 +1194,6 @@ public class createMYSQL {
 
 			String logDatabaseUrl =  "jdbc:mysql://" + sbilgi.getUser_ip() + "/" + databaseName;
 			try (Connection logConnection = DriverManager.getConnection(logDatabaseUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
-
 				createTableLog(logConnection);
 			}
 		} catch (Exception e) {
@@ -1220,7 +1219,8 @@ public class createMYSQL {
 	public void job_sil_S(String jobName,serverBilgiDTO sbilgi) throws SQLException  {
 		try {
 			Statement stmt = null;
-			String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
+			String veritabaniAdi = sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu();
+			String connectionString = "jdbc:mysql://" + sbilgi.getUser_ip() + "/" + veritabaniAdi ;
 			Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 			stmt = conn.createStatement();
 			stmt.execute("DROP EVENT IF EXISTS " + jobName + ";");
@@ -1236,7 +1236,8 @@ public class createMYSQL {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Statement stmt = null;
-			String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() ;
+			String veritabaniAdi = sbilgi.getUser_modul_baslik().toLowerCase() + sbilgi.getUser_prog_kodu();
+			String connectionString =  "jdbc:mysql://" + sbilgi.getUser_ip() + "/" + veritabaniAdi ;
 			Connection conn = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 			stmt = conn.createStatement();
 			String sql = "CREATE EVENT IF NOT EXISTS " + jobName
