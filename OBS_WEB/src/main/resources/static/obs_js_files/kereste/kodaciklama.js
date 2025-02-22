@@ -9,7 +9,6 @@ async function kodacikyukle() {
     try {
         const data = await fetchWithSessionCheck("kereste/kodaciklamadoldur", {
             method: "GET",
-
         });
         if (data.errorMessage) {
             throw new Error(response.errorMessage);
@@ -23,8 +22,9 @@ async function kodacikyukle() {
                 `;
             row.addEventListener("click", () => setFormValues(row));
             tableBody.appendChild(row);
-
         });
+				document.getElementById("kod").value = "";
+				document.getElementById("aciklama").value = "";
     } catch (error) {
         errorDiv.style.display = "block";
         errorDiv.innerText = error.message;
@@ -69,6 +69,10 @@ async function saveKod() {
 }
 
 async function deleteKod() {
+	const confirmDelete = confirm("Bu Kod silinecek ?");
+	  if (!confirmDelete) {
+	    return;
+	  }
     const errorDiv = document.getElementById("errorDiv");
     errorDiv.style.display = "none";
     errorDiv.innerText = '';
@@ -79,10 +83,6 @@ async function deleteKod() {
         const kod = document.getElementById("kod").value;
         if (!kod) {
             alert("Kod alani boş birakilamaz.");
-            return;
-        }
-        if (!aciklama) {
-            alert("Açiklama alani boş birakilamaz.");
             return;
         }
         const response = await fetchWithSessionCheck("kereste/koddelete", {

@@ -1,92 +1,89 @@
 <style>
+  .table-hover tbody tr:hover {
+    background-color: #ced4da !important;
+    color: inherit !important;
+  }
 
-    .table-hover tbody tr:hover {
-        background-color: #ced4da !important;
-        color: inherit !important;
-      }
-    
-      .table-row-height td {
-        height: 10px;
-        line-height: 10px;
-      }
-    
-      .table .thead-dark th {
-        color: #fff;
-        background: #214162;
-      }
-    
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: auto;
-      }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        white-space: nowrap;
-      }
-      .table-container {
-        flex-grow: 1;
-        overflow-y: auto;
-        border: 1px solid #ccc;
-        margin-top: 10px;
-      }
-      .container {
-        height: 70vh;
-        display: flex;
-        flex-direction: column;
-        margin-top: 10px;
-        padding: 0px;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-    
-        .group-box {
-            border: 1px solid #ccc;
-            padding: 7px;
-            margin: 10px;
-            width: 50%;
-            box-sizing: border-box;
-        }
-        </style>
-        <div class="card p-1">
-            <div class="group-box">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <label style="width: 100px;">Konsimento</label>
-                    <input class="form-control"id="kons" style="width: 100px;">
-                    <span style="padding-left: 10px;"></span>
-                    <label style="width: 80px;">Aciklama</label>
-                    <input class="form-control"id="aciklama">
-                </div>
-            </div>
-            <div class="group-box">
-                <div class="container">
-                    <div class="table-container">
-                        <table id="modalTable"
-                            class="table modal-table table-bordered table-hover">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th style="width:100px;">Konsimento</th>
-                                    <th>Aciklama</th>
-                                
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div id="errorDiv"
-                style="display: none; color: red; font-weight: bold;"></div>
-            <br>
-            <div class="group-box">
-                <button class="btn btn-primary" type="button" id="kaydetButton"
-                    style="width: 150px;" disabled onclick="saveKons()">Kaydet</button>
-                <span style="padding-left: 10px;"></span>
-                <button class="btn btn-primary" type="button" id="deleteButton"
-                        style="width: 150px;" onclick="deleteKons()">Sil</button>
-            </div>
-        </div>
-        
+  .table-row-height td {
+    height: 10px;
+    line-height: 10px;
+  }
+
+  .table .thead-dark th {
+    color: #fff;
+    background: #214162;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap;
+  }
+  .table-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }
+  .container {
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 0px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .group-box {
+    border: 1px solid #ccc;
+    padding: 7px;
+    margin: 10px;
+    width: 50%;
+    box-sizing: border-box;
+  }
+</style>
+<div class="card p-1">
+  <div class="group-box">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <label style="width: 100px">Konsimento</label>
+      <input class="form-control" id="kons" style="width: 100px" />
+      <span style="padding-left: 10px"></span>
+      <label style="width: 80px">Aciklama</label>
+      <input class="form-control" id="aciklama" />
+    </div>
+  </div>
+  <div class="group-box">
+    <div class="container">
+      <div class="table-container">
+        <table id="modalTable" class="table modal-table table-bordered table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th style="width: 100px">Konsimento</th>
+              <th>Aciklama</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
+  <br />
+  <div class="group-box">
+    <button class="btn btn-primary"  type="button"
+      id="kaydetButton" style="width: 100px"  onclick="saveKons()">Kaydet</button>
+    <span style="padding-left: 10px"></span>
+    <button class="btn btn-primary" type="button" id="deleteButton"
+      style="width: 100px" onclick="deleteKons()">Sil</button>
+  </div>
+</div>
+
+<script src="/obs_js_files/kereste/konsaciklama.js"></script>

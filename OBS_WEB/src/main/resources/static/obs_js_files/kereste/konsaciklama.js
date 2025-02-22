@@ -4,16 +4,15 @@ async function konsacikyukle() {
     errorDiv.innerText = "";
     const tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
-
     document.body.style.cursor = "wait";
     try {
         const data = await fetchWithSessionCheck("kereste/konsaciklamadoldur", {
             method: "GET",
-
         });
         if (data.errorMessage) {
             throw new Error(response.errorMessage);
         }
+        console.info(data);
         data.data.forEach(item => {
             const row = document.createElement("tr");
             row.classList.add("table-row-height");
@@ -23,8 +22,9 @@ async function konsacikyukle() {
                 `;
             row.addEventListener("click", () => setFormValues(row));
             tableBody.appendChild(row);
-
         });
+				document.getElementById("kons").value = "";
+				document.getElementById("aciklama").value = "";
     } catch (error) {
         errorDiv.style.display = "block";
         errorDiv.innerText = error.message;
@@ -43,8 +43,8 @@ async function saveKons() {
     try {
         const kons = document.getElementById("kons").value;
         const aciklama = document.getElementById("aciklama").value;
-        if (!kod) {
-            alert("Kod alanı boş bırakılamaz.");
+        if (!kons) {
+            alert("Konsimento alanı boş bırakılamaz.");
             return;
         }
         if (!aciklama) {
@@ -69,6 +69,10 @@ async function saveKons() {
 }
 
 async function deleteKons() {
+	const confirmDelete = confirm("Bu Konsimento silinecek ?");
+	    if (!confirmDelete) {
+	      return;
+	    }
     const errorDiv = document.getElementById("errorDiv");
     errorDiv.style.display = "none";
     errorDiv.innerText = '';
@@ -77,12 +81,8 @@ async function deleteKons() {
     document.body.style.cursor = "wait";
     try {
         const kons = document.getElementById("kons").value;
-        if (!kod) {
-            alert("Kod alani boş birakilamaz.");
-            return;
-        }
-        if (!aciklama) {
-            alert("Açiklama alani boş birakilamaz.");
+        if (!kons) {
+            alert("Konsimento alani boş birakilamaz.");
             return;
         }
         const response = await fetchWithSessionCheck("kereste/konsdelete", {
@@ -93,7 +93,7 @@ async function deleteKons() {
         if (response.errorMessage) {
             throw new Error(response.errorMessage);
         }
-        kodacikyukle();
+        konsacikyukle();
     } catch (error) {
         errorDiv.style.display = "block";
         errorDiv.innerText = error.message || "Bir hata oluştu.";

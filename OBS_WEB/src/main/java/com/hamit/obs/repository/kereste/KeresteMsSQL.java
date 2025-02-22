@@ -589,7 +589,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MS ker_barkod_kod_oku", e);
 		}
 		return resultList; 
 	}
@@ -607,7 +607,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			preparedStatement.setString(1, eno);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			throw new ServiceException("stok sil", e);
+			throw new ServiceException("ker_cikis_sil", e);
 		}
 	}
 
@@ -646,7 +646,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MS kod_pln", e);
 		}
 		return resultList; 
 	}
@@ -665,7 +665,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			preparedStatement.setString(2, aciklama);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			throw new ServiceException("stok sil", e);
+			throw new ServiceException("kod_kayit", e);
 		}
 	}
 
@@ -679,7 +679,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			preparedStatement.setString(1, kod);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			throw new ServiceException("stok sil", e);
+			throw new ServiceException("kod_sil", e);
 		}
 	}
 
@@ -692,7 +692,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MS kons_pln.", e);
 		}
 		return resultList; 
 	}
@@ -754,7 +754,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				psDeletePaket.executeUpdate();
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("stok sil", e);
+			throw new ServiceException("kons_sil", e);
 		}
 		return result;
 	}
