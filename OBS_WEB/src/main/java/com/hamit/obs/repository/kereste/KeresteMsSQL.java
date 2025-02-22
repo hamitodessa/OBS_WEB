@@ -269,7 +269,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			sql = "SELECT max(Evrak_No)  as NO FROM KERESTE  ";
 		else
 			sql = "SELECT max(Cikis_Evrak)  as NO FROM KERESTE  ";
-		
+
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -292,7 +292,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			sql = "SELECT max(Evrak_No + 1) AS NO  FROM KERESTE  ";
 		else
 			sql = "SELECT max(Cikis_Evrak + 1) AS NO  FROM KERESTE  ";
-		
+
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -310,7 +310,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 	public List<Map<String, Object>> ker_oku(String eno, String cins, ConnectionDetails keresteConnDetails) {
 		String sql = "";
 		if (cins.equals("G")) {
-			 sql = "SELECT top 250  [Evrak_No] ,[Barkod] ,[Kodu],[Paket_No],[Konsimento] ,[Miktar],[Tarih],[Kdv] ,[Doviz] ,[Fiat]  ,[Tutar] ,[Kur]  ,[Cari_Firma],[Adres_Firma]  ,[Iskonto] ,[Tevkifat], "
+			sql = "SELECT top 250  [Evrak_No] ,[Barkod] ,[Kodu],[Paket_No],[Konsimento] ,[Miktar],[Tarih],[Kdv] ,[Doviz] ,[Fiat]  ,[Tutar] ,[Kur]  ,[Cari_Firma],[Adres_Firma]  ,[Iskonto] ,[Tevkifat], "
 					+ " ISNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup ) , '') AS Ana_Grup   , " 
 					+ " ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup ) , '') AS Alt_Grup , " 
 					+ " ISNULL((Select MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei ) , '') AS Mensei, " 
@@ -635,5 +635,127 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (Exception e) {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
 		}
+	}
+
+	@Override
+	public List<Map<String, Object>> kod_pln(ConnectionDetails keresteConnDetails) {
+		String sql = "SELECT * FROM KOD_ACIKLAMA   ORDER BY KOD ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public void kod_kayit(String kodu, String aciklama, ConnectionDetails keresteConnDetails) {
+
+		String sql = "INSERT INTO KOD_ACIKLAMA (KOD,ACIKLAMA) " +
+				" VALUES (?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, kodu);
+			preparedStatement.setString(2, aciklama);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+	}
+
+	@Override
+	public void kod_sil(String kod, ConnectionDetails keresteConnDetails) {
+		String sql = "DELETE FROM KOD_ACIKLAMA WHERE KOD = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, kod);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+	}
+
+	@Override
+	public List<Map<String, Object>> kons_pln(ConnectionDetails keresteConnDetails) {
+		String sql = "SELECT * FROM KONS_ACIKLAMA   ORDER BY KONS ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public void kons_kayit(String kons, String aciklama, int paket_no, ConnectionDetails keresteConnDetails) {
+		String sqlKons = "INSERT INTO KONS_ACIKLAMA (KONS, ACIKLAMA) VALUES (?, ?)";
+		String sqlPaket = "INSERT INTO PAKET_NO (Pak_No, Konsimento) VALUES (?, ?)";
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword())) {
+			connection.setAutoCommit(false);
+			try (PreparedStatement psKons = connection.prepareStatement(sqlKons);
+					PreparedStatement psPaket = connection.prepareStatement(sqlPaket)) {
+				psKons.setString(1, kons);
+				psKons.setString(2, aciklama);
+				psKons.executeUpdate();
+
+				psPaket.setInt(1, paket_no);
+				psPaket.setString(2, kons);
+				psPaket.executeUpdate();
+
+				connection.commit();
+			} catch (SQLException e) {
+				connection.rollback();
+				throw new ServiceException("Kayıt işlemi sırasında hata oluştu", e);
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Veritabanı bağlantı hatası", e);
+		}
+	}
+
+	@Override
+	public int kons_sil(String kons, ConnectionDetails keresteConnDetails) {
+		int result = 0;
+		String sqlDeleteKons = "DELETE FROM KONS_ACIKLAMA WHERE KONS = ?";
+		String sqlSelectPakNo = "SELECT Pak_No FROM PAKET_NO WHERE Konsimento = ?";
+		String sqlDeletePaket = "DELETE FROM PAKET_NO WHERE Konsimento = ?";
+
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), 
+				keresteConnDetails.getUsername(), 
+				keresteConnDetails.getPassword())) {
+			try (PreparedStatement psDeleteKons = connection.prepareStatement(sqlDeleteKons)) {
+				psDeleteKons.setString(1, kons);
+				psDeleteKons.executeUpdate();
+			}
+			try (PreparedStatement psSelect = connection.prepareStatement(sqlSelectPakNo)) {
+				psSelect.setString(1, kons);
+				try (ResultSet rs = psSelect.executeQuery()) {
+					if (rs.next()) {
+						result = rs.getInt("Pak_No");
+					}
+				}
+			}
+			try (PreparedStatement psDeletePaket = connection.prepareStatement(sqlDeletePaket)) {
+				psDeletePaket.setString(1, kons);
+				psDeletePaket.executeUpdate();
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("stok sil", e);
+		}
+		return result;
 	}
 }

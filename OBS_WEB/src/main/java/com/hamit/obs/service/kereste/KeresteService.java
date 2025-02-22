@@ -22,15 +22,15 @@ public class KeresteService {
 
 	@Autowired
 	private ConnectionManager masterConnectionManager;
-	
+
 	private LoglamaDTO loglamaDTO = new LoglamaDTO();
-	
+
 	@Autowired
 	private LoglamaRepository loglamaRepository;
-	
+
 	private final KeresteDatabaseContext databaseStrategyContext;
 	private IKeresteDatabase strategy;
-	
+
 	public KeresteService(KeresteDatabaseContext databaseStrategyContext) {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
@@ -45,7 +45,7 @@ public class KeresteService {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
 	}
-	
+
 	public String[] conn_detail() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
@@ -55,7 +55,7 @@ public class KeresteService {
 		detay[2] = keresteConnDetails.getServerIp() ;
 		return detay;
 	}
-	
+
 	public String ker_firma_adi() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -65,7 +65,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> ker_kod_degisken_oku(String fieldd, String sno, String nerden){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -75,7 +75,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String urun_kod_degisken_ara(String fieldd, String sno, String nerden, String arama) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -85,7 +85,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> ker_kod_alt_grup_degisken_oku(int sno){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -95,7 +95,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void urun_degisken_eski(String fieldd ,String degisken_adi ,String nerden ,String sno ,int ID ) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -105,7 +105,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void urun_degisken_alt_grup_eski(String alt_grup ,int ana_grup ,int  ID) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -115,7 +115,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void urun_degisken_kayit(String fieldd, String nerden, String degisken_adi, String sira) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -125,7 +125,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void urun_degisken_alt_grup_kayit(String alt_grup, int ana_grup) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -135,7 +135,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void urun_degisken_alt_grup_sil(int id) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -145,7 +145,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void urun_kod_degisken_sil(String hangi_Y, String nerden, int sira) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -155,7 +155,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public boolean alt_grup_kontrol(int anagrp, int altgrp) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -165,7 +165,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void ker_firma_adi_kayit(String fadi) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -175,7 +175,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String son_no_al(String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -185,7 +185,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public int evrak_no_al(String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -195,7 +195,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> ker_oku(String eno, String cins){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -205,7 +205,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String aciklama_oku(String evrcins, int satir, String evrno, String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -215,7 +215,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String[] dipnot_oku(String ino, String cins, String gircik){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -225,7 +225,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> paket_oku(String pno,String nerden){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -235,39 +235,39 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void ker_kaydet(kerestedetayDTO kerestedetayDTO,String mesajlog) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-			
+
 			loglamaDTO.setEvrak(kerestedetayDTO.getFisno());
 			loglamaDTO.setmESAJ(mesajlog);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
 			loglamaRepository.log_kaydet(loglamaDTO, keresteConnDetails);
-			
+
 			strategy.ker_kaydet(kerestedetayDTO,keresteConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void ker_giris_sil(String eno,String mesajlog) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-			
+
 			loglamaDTO.setEvrak(eno);
 			loglamaDTO.setmESAJ(mesajlog);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
 			loglamaRepository.log_kaydet(loglamaDTO, keresteConnDetails);
-			
+
 			strategy.ker_giris_sil(eno, keresteConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void dipnot_sil(String ino, String cins, String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -277,7 +277,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -287,7 +287,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void aciklama_sil(String evrcins, String evrno, String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -297,7 +297,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -307,7 +307,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> ker_barkod_kod_oku(String sira){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -317,34 +317,94 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void ker_cikis_sil(String eno,String mesajlog) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-			
+
 			loglamaDTO.setEvrak(eno);
 			loglamaDTO.setmESAJ(mesajlog);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
 			loglamaRepository.log_kaydet(loglamaDTO, keresteConnDetails);
-			
+
 			strategy.ker_cikis_sil(eno, keresteConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void ker_cikis_kaydet(kerestedetayDTO kerestedetayDTO,String mesajlog) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-			
+
 			loglamaDTO.setEvrak(kerestedetayDTO.getFisno());
 			loglamaDTO.setmESAJ(mesajlog);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
 			loglamaRepository.log_kaydet(loglamaDTO, keresteConnDetails);
-			
+
 			strategy.ker_cikis_kaydet(kerestedetayDTO, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
+	public List<Map<String, Object>> kod_pln(){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.kod_pln(keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
+	public void kod_kayit(String kodu, String aciklama) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.kod_kayit(kodu,aciklama,keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
+	public void kod_sil(String kod) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.kod_sil(kod,keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
+	public List<Map<String, Object>> kons_pln(){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.kons_pln(keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
+	public void kons_kayit(String kons, String aciklama,int paket_no) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.kons_kayit(kons,aciklama,paket_no,keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
+	public int kons_sil(String kons) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.kons_sil(kons,keresteConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

@@ -638,4 +638,41 @@ public class KerestePgSQL implements IKeresteDatabase {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
 		}
 	}
+
+	@Override
+	public List<Map<String, Object>> kod_pln(ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void kod_kayit(String kodu, String aciklama, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void kod_sil(String kod, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> kons_pln(ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void kons_kayit(String kodu, String aciklama, int paket_no, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int kons_sil(String kod, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

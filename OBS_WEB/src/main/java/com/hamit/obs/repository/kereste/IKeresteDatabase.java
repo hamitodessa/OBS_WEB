@@ -35,4 +35,10 @@ public interface IKeresteDatabase {
 	List<Map<String, Object>> ker_barkod_kod_oku(String sira,ConnectionDetails keresteConnDetails);
 	void ker_cikis_sil(String eno,ConnectionDetails keresteConnDetails);
 	void ker_cikis_kaydet(kerestedetayDTO kerestedetayDTO,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> kod_pln(ConnectionDetails keresteConnDetails);
+	void kod_kayit(String kodu, String aciklama,ConnectionDetails keresteConnDetails);
+	void kod_sil(String kod,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> kons_pln(ConnectionDetails keresteConnDetails);
+	void kons_kayit(String kodu, String aciklama,int paket_no,ConnectionDetails keresteConnDetails);
+	int kons_sil(String kod,ConnectionDetails keresteConnDetails);
 }

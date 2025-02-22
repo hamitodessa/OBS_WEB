@@ -35,13 +35,13 @@ public class CikisController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private KeresteService keresteService;
-	
+
 	@Autowired
 	private CariService cariservice;
-	
+
 	@GetMapping("kereste/cikis")
 	public Model cikis(Model model) {
 		try {
@@ -50,7 +50,7 @@ public class CikisController {
 			anaDeger.put("ANA_GRUP", ""); 
 			anaKodlari.add(0, anaDeger);
 			model.addAttribute("anaKodlari", (anaKodlari != null) ? anaKodlari : new ArrayList<>());
-			
+
 			List<Map<String, Object>> nakKodlari = keresteService.ker_kod_degisken_oku("UNVAN", "NAKID_Y", "NAKLIYECI") ;
 			Map<String, Object> nakDeger = new HashMap<>();
 			nakDeger.put("UNVAN", ""); 
@@ -74,7 +74,7 @@ public class CikisController {
 		}
 		return model;
 	}
-	
+
 	@GetMapping("kereste/getpakdepo")
 	@ResponseBody
 	public Map<String, Object> getpakdepo() {
@@ -86,7 +86,7 @@ public class CikisController {
 			paketNolar.add(0, pakDeger);
 			response.put("paknolar", (paketNolar != null) ? paketNolar : new ArrayList<>());
 			System.out.println(paketNolar.size());
-			
+
 			List<Map<String, Object>> depoKodlari = keresteService.ker_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
 			Map<String, Object> depoDeger = new HashMap<>();
 			depoDeger.put("DEPO", ""); 
@@ -100,7 +100,7 @@ public class CikisController {
 		}
 		return response;
 	}	
-	
+
 	@PostMapping("kereste/cikKayit")
 	@ResponseBody
 	public  Map<String, Object>  kercikKayit(@RequestBody kerestekayitDTO kerestekayitDTO) {
@@ -108,7 +108,7 @@ public class CikisController {
 		try {
 			keresteDTO dto = kerestekayitDTO.getKeresteDTO();
 			List<kerestedetayDTO> tableData = kerestekayitDTO.getTableData();
-			
+
 			String mesajlog = dto.getFisno().trim() + " Nolu Cikis Silindi" ;
 			keresteService.ker_cikis_sil(dto.getFisno().trim() ,mesajlog);
 			int degisken[] = degiskenler(dto) ; 
@@ -123,12 +123,12 @@ public class CikisController {
 				row.setCcarifirma(dto.getCarikod());
 				row.setCadresfirma(dto.getAdreskod());
 				row.setCtarih(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
-				
+
 				row.setCanagrup(degisken[0]);
 				row.setCaltgrup(degisken[1]);
 				row.setCnakliyeci(degisken[2]);
 				row.setCozelkod(degisken[3]);
-				
+
 				//*****Depo
 				int qwe = 0 ;
 				if( ! row.getCdepostring().equals("")) {
@@ -136,24 +136,24 @@ public class CikisController {
 					qwe = Integer.parseInt(dpos);
 				}
 				row.setCdepo(qwe);
-				
-				
+
+
 				row.setCdoviz(dto.getDvzcins());
 				row.setCkur(dto.getKur());
 				row.setCtevkifat(dto.getTevoran());
 				row.setCuser(userrString);
 				row.setCsatir(index);
 				keresteService.ker_cikis_kaydet(row, mesajlog);
-			    index++;
+				index++;
 			}
 			keresteService.dipnot_sil(dto.getFisno(), "K", "C");
 			keresteService.dipnot_yaz(dto.getFisno(), dto.getNot1(),dto.getNot2(),dto.getNot3(),"K", "C",userrString);
-			
+
 			keresteService.aciklama_sil("KER", dto.getFisno().trim(), "C");
-			
+
 			keresteService.aciklama_yaz("KER", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "C");
 			keresteService.aciklama_yaz("KER", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "C");
-					
+
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
@@ -163,7 +163,7 @@ public class CikisController {
 		}
 		return response;
 	}
-	
+
 	@PostMapping("kereste/fiscYoket")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> cevrakSil(@RequestParam String fisno) {
@@ -181,7 +181,7 @@ public class CikisController {
 		}
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@PostMapping("kereste/kerccariKayit")
 	@ResponseBody
 	public ResponseEntity<?> kerccariKayit(@RequestBody keresteDTO keresteDTO ) {
@@ -190,28 +190,27 @@ public class CikisController {
 			String[] hesapIsmi = {"",""};
 			hesapIsmi = cariservice.hesap_adi_oku(dto.getKarsihesapkodu());
 			if (hesapIsmi[0].equals("") ) {  
-				 throw new ServiceException("Girilen Alacakli Hesap Kodunda  bir  hesaba rastlanmadi!!!!");
+				throw new ServiceException("Girilen Alacakli Hesap Kodunda  bir  hesaba rastlanmadi!!!!");
 			} 
 			double sdf =  dto.getMiktar();
 			String aciklama = "" ;
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
-				aciklama = dto.getFisno() + "'Evrak ile " + sdf +  " m3 Urun Girisi" ;
-				dekontDTO dekontDTO = new dekontDTO();
-				dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
-				dekontDTO.setFisNo(cariservice.yenifisno());
-				dekontDTO.setBhes(dto.getCarikod());
-				dekontDTO.setBcins("");
-				dekontDTO.setBkur(1);
-				dekontDTO.setBorc(dto.getTutar());
-				dekontDTO.setAhes(dto.getKarsihesapkodu());
-				dekontDTO.setAcins("");
-				dekontDTO.setAkur(1);
-				dekontDTO.setAlacak(dto.getTutar());
-				dekontDTO.setIzahat(aciklama);
-				dekontDTO.setKod("Satis");
-				dekontDTO.setUser(userrString);
-				cariservice.cari_dekont_kaydet(dekontDTO);
-			
+			aciklama = dto.getFisno() + "'Evrak ile " + sdf +  " m3 Urun Girisi" ;
+			dekontDTO dekontDTO = new dekontDTO();
+			dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
+			dekontDTO.setFisNo(cariservice.yenifisno());
+			dekontDTO.setBhes(dto.getCarikod());
+			dekontDTO.setBcins("");
+			dekontDTO.setBkur(1);
+			dekontDTO.setBorc(dto.getTutar());
+			dekontDTO.setAhes(dto.getKarsihesapkodu());
+			dekontDTO.setAcins("");
+			dekontDTO.setAkur(1);
+			dekontDTO.setAlacak(dto.getTutar());
+			dekontDTO.setIzahat(aciklama);
+			dekontDTO.setKod("Satis");
+			dekontDTO.setUser(userrString);
+			cariservice.cari_dekont_kaydet(dekontDTO);
 			return ResponseEntity.ok(Map.of("errorMessage", ""));
 		} catch (ServiceException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -222,7 +221,6 @@ public class CikisController {
 		}
 	}
 
-	
 	private int[] degiskenler(keresteDTO dto) throws ClassNotFoundException, SQLException
 	{
 		int degisken[] = {0,0,0,0,0} ;
@@ -246,7 +244,7 @@ public class CikisController {
 			String ozks = keresteService.urun_kod_degisken_ara("OZ1ID_Y", "OZEL_KOD_1", "OZ_KOD_1_DEGISKEN", dto.getNakliyeci());
 			degisken[3] = Integer.parseInt(ozks);
 		}
-		
+
 		return degisken;
 	}
 }

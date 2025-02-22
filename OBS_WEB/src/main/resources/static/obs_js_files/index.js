@@ -114,5 +114,13 @@ $(document).ready(function () {
 			keresteBaslik();
 			fetchpakdepo();
 		},
+		"/kereste/kodaciklama": () => {
+			keresteBaslik();
+			kodacikyukle();
+		},
+		"/kereste/konsimentoaciklama": () => {
+			keresteBaslik();
+			konsacikyukle();
+		},
 	}
 });
