@@ -675,4 +675,11 @@ public class KerestePgSQL implements IKeresteDatabase {
 		return 0;
 	}
 
+	@Override
+	public List<Map<String, Object>> urun_detay(String pakno, String kons, String kodu, String evrak,
+			ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -122,5 +122,8 @@ $(document).ready(function () {
 			keresteBaslik();
 			konsacikyukle();
 		},
+		"/kereste/koddegis": () => {
+			keresteBaslik();
+		},
 	}
 });

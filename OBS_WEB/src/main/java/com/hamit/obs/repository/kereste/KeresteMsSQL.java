@@ -758,4 +758,81 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		}
 		return result;
 	}
+
+	@Override
+	public List<Map<String, Object>> urun_detay(String pakno, String kons, String kodu, String evrak,
+			ConnectionDetails keresteConnDetails) {
+		String[] token = kodu.toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) = '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) = '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) = '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) = '" + token[3] + "'  AND"  );
+		String evrakString = "" ;
+		if (evrak.toString().equals(""))
+			evrakString = " AND Evrak_No like '" + evrak + "%'" ;
+		String sql =  " SELECT [Evrak_No] "
+				+ " ,[Barkod] "
+				+ " ,[Kodu] "
+				+ " ,[Paket_No] "
+				+ " ,[Konsimento] "
+				+ " ,[Miktar] "
+				+ " ,(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) )  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000)  as m3"
+				+ " ,[Tarih] "
+				+ " ,[Kdv] "
+				+ " ,[Doviz] "
+				+ " ,[Fiat] "
+				+ " ,[Tutar] "
+				+ " ,[Kur] "
+				+ " ,[Cari_Firma] "
+				+ " ,[Adres_Firma] "
+				+ " ,[Iskonto] "
+				+ " ,[Tevkifat] "
+				+ " ,ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup),'') Ana_Grup "
+				+ " ,ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup),'') AS Alt_Grup "
+				+ " ,ISNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei),'') AS Mensei "
+				+ " ,(SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo ) as Depo  " 
+				+ " ,ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.Ozel_Kod),'') Ozel_Kod "
+				+ " ,[Izahat] "
+				+ " ,(SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci ) as Nakliyeci  " 
+				+ " ,[USER] "
+				+ " ,[Cikis_Evrak] "
+				+ " ,ISNULL(CASE WHEN CONVERT(DATE, CTarih) = '1900-01-01' THEN '' ELSE CONVERT(CHAR(10), CTarih, 104) END, '') AS CTarih "
+				+ " ,[CKdv] "
+				+ " ,[CDoviz] "
+				+ " ,[CFiat] "
+				+ " ,[CTutar] "
+				+ " ,[CKur] "
+				+ " ,[CCari_Firma] "
+				+ " ,[CAdres_Firma] "
+				+ " ,[CIskonto] "
+				+ " ,[CTevkifat] "
+				+ " ,ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.CAna_Grup),'') AS C_Ana_Grup "
+				+ "	,ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.CAlt_Grup),'') AS C_Alt_Grup "
+				+ " ,ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo),'') AS C_Depo "
+				+ " ,ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.COzel_Kod),'') COzel_Kod "
+				+ " ,[CIzahat] "
+				+ " ,(SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci ) as C_Nakliyeci  " 
+				+ " ,[CUSER] ,Satir" 
+				+ " FROM KERESTE    " 
+				+ " WHERE " 
+				+ kODU 
+				+ " Paket_No like N'" + pakno + "%' AND " 
+				+ " Konsimento like N'" + kons + "%'" 
+				+ " " + evrakString + " "; 
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
+	}
 }
