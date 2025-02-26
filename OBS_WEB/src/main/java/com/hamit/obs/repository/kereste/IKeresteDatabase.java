@@ -42,4 +42,8 @@ public interface IKeresteDatabase {
 	void kons_kayit(String kodu, String aciklama,int paket_no,ConnectionDetails keresteConnDetails);
 	int kons_sil(String kod,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> urun_detay(String pakno,String kons, String kodu,String evrak,ConnectionDetails keresteConnDetails);
+	String kod_adi(String kod,ConnectionDetails keresteConnDetails);
+	String kons_adi(String kons,ConnectionDetails keresteConnDetails);
+	void ker_kod_degis(String paket_No, String kon, String yenikod,int satir,ConnectionDetails keresteConnDetails);
+	void ker_kons_degis(String kons, String yenikons, int satir,ConnectionDetails keresteConnDetails);
 }

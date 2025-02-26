@@ -419,6 +419,47 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
+	public String kod_adi(String kod) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.kod_adi(kod, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public String kons_adi(String kons) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.kons_adi(kons, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void ker_kod_degis(String paket_No, String kon, String yenikod,int satir) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.ker_kod_degis(paket_No, kon, yenikod, satir, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public void ker_kons_degis(String kons, String yenikons, int satir) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			strategy.ker_kons_degis(kons, yenikons, satir, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();

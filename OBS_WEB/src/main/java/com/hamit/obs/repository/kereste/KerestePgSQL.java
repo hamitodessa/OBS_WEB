@@ -682,4 +682,29 @@ public class KerestePgSQL implements IKeresteDatabase {
 		return null;
 	}
 
+	@Override
+	public String kod_adi(String kod, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String kons_adi(String kons, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void ker_kod_degis(String paket_No, String kon, String yenikod, int satir,
+			ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ker_kons_degis(String kons, String yenikons, int satir, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -133,9 +133,9 @@
       </div>
       <div style="display: flex; align-items: center">
         <span style="padding-left: 10px"></span>
-        <input type="text" id="ykod" class="form-control" style="min-width: 100px; max-width: 100px" />
+        <input type="text" id="ykod" class="form-control" maxlength="2" style="min-width: 100px; max-width: 100px" onkeydown="if(event.key === 'Enter') kodadi()" />
         <span style="padding-left: 10px"></span>
-        <label style="min-width: 250px; max-width: 250px" id="kodadi"></label>
+        <label style="min-width: 250px; max-width: 250px;font-weight: bold;" id="kodadi"></label>
         <button type="button" class="btn btn-secondary ml-2" onclick="kodKaydet()" ><i class="fa fa-save"></i></button>
       </div>
       <br />
@@ -145,10 +145,10 @@
       </div>
       <div style="display: flex; align-items: center">
         <span style="padding-left: 10px"></span>
-        <input type="text" id="ykons" class="form-control" style="min-width: 100px; max-width: 100px" />
+        <input type="text" id="ykons" class="form-control" style="min-width: 100px; max-width: 100px" onkeydown="if(event.key === 'Enter') konsadi()" />
         <span style="padding-left: 10px"></span>
-        <label style="min-width: 250px; max-width: 250px" id="konsadi"></label>
-        <button type="button" class="btn btn-secondary ml-2" onclick="konsKaydet()"><i class="fa fa-save"></i></button>
+        <label style="min-width: 250px; max-width: 250px;font-weight: bold;" id="konsadi"></label>
+        <button type="button" class="btn btn-secondary ml-2" onclick="ykonsKaydet()"><i class="fa fa-save"></i></button>
       </div>
     </div>
   </div>
@@ -157,7 +157,7 @@
 
 <div class="container">
   <div class="table-container">
-    <table class="table table-bordered" id="imaTable" style="margin-top: 5px">
+    <table class="table table-bordered" id="urunTable" style="margin-top: 5px">
       <thead class="thead-dark">
         <tr>
           <th style="text-align: center">

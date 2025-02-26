@@ -132,7 +132,6 @@ async function paketkontrol(event, input) {
 			}, 100);
 			return;
 		}
-		console.info("size:"+data.paket.length);
 		if (data.paket.length == 0) {
 			focusNextCell(event, input);
 		} else {
@@ -288,7 +287,7 @@ function hesaplaM3(kodu, miktar) {
 function updatePaketM3() {
 	const rows = document.querySelectorAll('table tr');
 	let paketMap = new Map();
-	let paketadet = 0 ;
+	let paketadet = 0;
 	rows.forEach(row => {
 		const paketnoCell = row.querySelector('td:nth-child(2) input');
 		const m3Cell = row.querySelector('td:nth-child(6) label span');
@@ -308,7 +307,7 @@ function updatePaketM3() {
 		data.rows.forEach((cell, index) => {
 			if (index === rowCount - 1) {
 				cell.textContent = data.total ? data.total.toFixed(3) : '\u00A0';
-				paketadet += 1 ;
+				paketadet += 1;
 			} else {
 				cell.textContent = '\u00A0';
 			}
@@ -407,7 +406,7 @@ function clearInputs() {
 	document.getElementById("totalM3").textContent = formatNumber3(0);
 	document.getElementById("totalPaketM3").textContent = formatNumber3(0);
 	document.getElementById("totalTutar").textContent = formatNumber2(0);
-	document.getElementById("totalPakadet").textContent = '' ;
+	document.getElementById("totalPakadet").textContent = '';
 }
 
 async function kerOku() {

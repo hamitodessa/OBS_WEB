@@ -12,7 +12,6 @@ async function konsacikyukle() {
         if (data.errorMessage) {
             throw new Error(response.errorMessage);
         }
-        console.info(data);
         data.data.forEach(item => {
             const row = document.createElement("tr");
             row.classList.add("table-row-height");
@@ -23,8 +22,8 @@ async function konsacikyukle() {
             row.addEventListener("click", () => setFormValues(row));
             tableBody.appendChild(row);
         });
-				document.getElementById("kons").value = "";
-				document.getElementById("aciklama").value = "";
+        document.getElementById("kons").value = "";
+        document.getElementById("aciklama").value = "";
     } catch (error) {
         errorDiv.style.display = "block";
         errorDiv.innerText = error.message;
@@ -64,15 +63,15 @@ async function saveKons() {
         errorDiv.style.display = "block";
         errorDiv.innerText = error.message || "Bir hata oluştu.";
     } finally {
-		document.body.style.cursor = "default";
-	}
+        document.body.style.cursor = "default";
+    }
 }
 
 async function deleteKons() {
-	const confirmDelete = confirm("Bu Konsimento silinecek ?");
-	    if (!confirmDelete) {
-	      return;
-	    }
+    const confirmDelete = confirm("Bu Konsimento silinecek ?");
+    if (!confirmDelete) {
+        return;
+    }
     const errorDiv = document.getElementById("errorDiv");
     errorDiv.style.display = "none";
     errorDiv.innerText = '';
@@ -88,7 +87,7 @@ async function deleteKons() {
         const response = await fetchWithSessionCheck("kereste/konsdelete", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ kons}),
+            body: JSON.stringify({ kons }),
         });
         if (response.errorMessage) {
             throw new Error(response.errorMessage);
@@ -98,8 +97,8 @@ async function deleteKons() {
         errorDiv.style.display = "block";
         errorDiv.innerText = error.message || "Bir hata oluştu.";
     } finally {
-		document.body.style.cursor = "default";
-	}
+        document.body.style.cursor = "default";
+    }
 }
 
 function setFormValues(row) {

@@ -835,4 +835,88 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		return resultList; 
 
 	}
+
+	@Override
+	public String kod_adi(String kod, ConnectionDetails keresteConnDetails) {
+		String kodadi = "";
+		String sql = "SELECT ACIKLAMA FROM KOD_ACIKLAMA  WHERE KOD = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, kod);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				kodadi = resultSet.getString("ACIKLAMA");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("kod_oku", e);
+		}
+		return kodadi;
+	}
+
+	@Override
+	public String kons_adi(String kons, ConnectionDetails keresteConnDetails) {
+		String konsadi = "";
+		String sql = "SELECT ACIKLAMA FROM KONS_ACIKLAMA  WHERE KONS = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, kons);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				konsadi = resultSet.getString("ACIKLAMA");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("kons_oku", e);
+		}
+		return konsadi;
+	}
+
+	@Override
+	public void ker_kod_degis(String paket_No, String kon, String yenikod, int satir,
+			ConnectionDetails keresteConnDetails) {
+		String sql = "UPDATE KERESTE  " 
+				+ " SET  Kodu = CONCAT( ? , SUBSTRING (Kodu, 3,14))" 
+				+ " WHERE  Paket_No = ? AND Konsimento = ? AND " 
+				+ " Satir = ?" ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, yenikod);
+			preparedStatement.setString(2, paket_No);
+			preparedStatement.setString(3, kon);
+			preparedStatement.setInt(4, satir);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
+		}
+
+	}
+
+	@Override
+	public void ker_kons_degis(String kons, String yenikons, int satir, ConnectionDetails keresteConnDetails) {
+		String sql = "UPDATE KERESTE  " 
+				+ " SET  Konsimento = ? " 
+				+ " WHERE  Konsimento = ? AND  Satir = ? ";
+		
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, yenikons);
+			preparedStatement.setString(2, kons);
+			preparedStatement.setInt(3, satir);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
+		}
+
+	}
 }
