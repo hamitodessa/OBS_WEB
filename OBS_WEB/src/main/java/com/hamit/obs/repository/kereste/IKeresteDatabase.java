@@ -50,4 +50,5 @@ public interface IKeresteDatabase {
 	void ker_kod_degis(String paket_No, String kon, String yenikod,int satir,ConnectionDetails keresteConnDetails);
 	void ker_kons_degis(String kons, String yenikons, int satir,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO,Pageable pageable,  ConnectionDetails keresteConnDetails);
+	double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO ,ConnectionDetails keresteConnDetails);
 }

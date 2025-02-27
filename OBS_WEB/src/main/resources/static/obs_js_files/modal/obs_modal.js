@@ -578,7 +578,7 @@ function saveToMain() {
 		reportFormat.disabled = false;
 	}
 	else if (nerden === "kerestedetayrapor") {
-		kerestedetayfetchTableData(0);
+		kerestedetaydoldur(0);
 		const mailButton = document.getElementById("kerestedetaymailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("kerestedetayreportDownload");

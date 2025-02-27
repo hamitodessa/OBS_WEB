@@ -478,7 +478,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
 		}
 	}
@@ -924,83 +923,107 @@ public class KeresteMsSQL implements IKeresteDatabase {
 
 	@Override
 	public List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO, Pageable pageable, ConnectionDetails keresteConnDetails) {
-	    List<Map<String, Object>> resultList = new ArrayList<>();
-	    
-	    int page = pageable.getPageNumber();
-	    int pageSize = pageable.getPageSize();
-	    int offset = page * pageSize;
+		List<Map<String, Object>> resultList = new ArrayList<>();
 
-	    StringBuilder sql = new StringBuilder();
-	    sql.append("SELECT [Evrak_No], [Barkod], [Kodu], [Paket_No], [Konsimento], [Miktar], ")
-	       .append("(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3)) * ")
-	       .append("CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * ")
-	       .append("CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4))) * Miktar) / 1000000000) AS m3, ")
-	       .append("[Tarih], [Kdv], [Doviz], [Fiat], [Tutar], [Kur], [Cari_Firma], [Adres_Firma], ")
-	       .append("[Iskonto], [Tevkifat], ")
-	       .append("ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup), '') AS Ana_Grup, ")
-	       .append("ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup), '') AS Alt_Grup, ")
-	       .append("ISNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei), '') AS Mensei, ")
-	       .append("ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo), '') AS Depo, ")
-	       .append("[Izahat], ")
-	       .append("ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci), '') AS Nakliyeci, ")
-	       .append("[USER], [Cikis_Evrak], ")
-	       .append("ISNULL(CASE WHEN CONVERT(DATE, CTarih) = '1900-01-01' THEN '' ELSE CONVERT(CHAR(10), CTarih, 104) END, '') AS CTarih ")
-	       .append("FROM KERESTE WHERE 1=1 ");
+		int page = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize();
+		int offset = page * pageSize;
 
-	    // Tarih Filtreleri
-	    sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' ");
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT [Evrak_No], [Barkod], [Kodu], [Paket_No], [Konsimento], [Miktar], ")
+		.append("(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3)) * ")
+		.append("CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * ")
+		.append("CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4))) * Miktar) / 1000000000) AS m3, ")
+		.append("[Tarih], [Kdv], [Doviz], [Fiat], [Tutar], [Kur], [Cari_Firma], [Adres_Firma], ")
+		.append("[Iskonto], [Tevkifat], ")
+		.append("ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup), '') AS Ana_Grup, ")
+		.append("ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup), '') AS Alt_Grup, ")
+		.append("ISNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei), '') AS Mensei, ")
+		.append("ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo), '') AS Depo, ")
+		.append("[Izahat], ")
+		.append("ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci), '') AS Nakliyeci, ")
+		.append("[USER], [Cikis_Evrak], ")
+		.append("ISNULL(CASE WHEN CONVERT(DATE, CTarih) = '1900-01-01' THEN '' ELSE CONVERT(CHAR(10), CTarih, 104) END, '') AS CTarih, ")
+		.append("[CKdv],[CDoviz],[CFiat],[CTutar],[CKur],[CCari_Firma],[CAdres_Firma],[CIskonto],[CTevkifat],")
+		.append("ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.CAna_Grup),'') AS C_Ana_Grup, ")
+		.append("ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.CAlt_Grup),'') AS C_Alt_Grup, ")
+		.append("ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo),'') AS C_Depo, ")
+		.append("ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.COzel_Kod),'') COzel_Kod, ")
+		.append("[CIzahat] ," )
+		.append("ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci),'' ) as C_Nakliyeci, ") 
+		.append("[CUSER] ") 
+		.append("FROM KERESTE WHERE 1=1 ");
 
-	    // Paket No Filtreleri
-	    if (kerestedetayraporDTO.getPak1() != null && kerestedetayraporDTO.getPak2() != null) {
-	        sql.append(" AND Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
-	    }
+		sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' ");
+		sql.append(" AND Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
+		sql.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ");
+		sql.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ");
+		sql.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ");
+		sql.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ");
 
-	    // Cari Firma Filtreleri
-	    if (kerestedetayraporDTO.getGfirma1() != null && kerestedetayraporDTO.getGfirma2() != null) {
-	        sql.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ");
-	    }
+		sql.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" );
+		sql.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) ;
+		sql.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" );
+		sql.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" );
 
-	    // Evrak No Filtreleri
-	    if (kerestedetayraporDTO.getEvr1() != null && kerestedetayraporDTO.getEvr2() != null) {
-	        sql.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ");
-	    }
+		sql.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" );
+		sql.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" );
+		sql.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " );
+		sql.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ); 
 
-	    // Konsimento Filtreleri
-	    if (kerestedetayraporDTO.getKons1() != null && kerestedetayraporDTO.getKons2() != null) {
-	        sql.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ");
-	    }
+		sql.append(" ORDER BY Tarih DESC OFFSET ").append(offset).append(" ROWS FETCH NEXT ").append(pageSize).append(" ROWS ONLY");
 
-	    // Çıkış Evrak Filtreleri
-	    if (kerestedetayraporDTO.getCevr1() != null && kerestedetayraporDTO.getCevr2() != null) {
-	        sql.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ");
-	    }
-	    
-	    sql.append( " AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" );
-	    sql.append( " Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) ;
-	    sql.append( " Depo " + kerestedetayraporDTO.getGdepo()  + " AND" );
-	    sql.append( " Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" );
-	    
-	    sql.append(  " CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" );
-	    sql.append(  " CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" );
-	    sql.append(  " CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " );
-	    sql.append( " COzel_Kod " + kerestedetayraporDTO.getCozkod() ); 
-	    
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), 
+				keresteConnDetails.getUsername(), 
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 
-	    // Pagination ekleniyor
-	    sql.append(" ORDER BY Tarih DESC OFFSET ").append(offset).append(" ROWS FETCH NEXT ").append(pageSize).append(" ROWS ONLY");
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
 
-	    try (Connection connection = DriverManager.getConnection(
-	            keresteConnDetails.getJdbcUrl(), 
-	            keresteConnDetails.getUsername(), 
-	            keresteConnDetails.getPassword());
-	         PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList;
+	}
 
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        resultList = ResultSetConverter.convertToList(resultSet); 
+	@Override
+	public double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO, ConnectionDetails keresteConnDetails) {
+		double result = 0 ;
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT * ") 
+		.append("FROM KERESTE WHERE 1=1 ");
 
-	    } catch (Exception e) {
-	        throw new ServiceException("MS stkService genel hatası.", e);
-	    }
-	    return resultList;
+		sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' ");
+		sql.append(" AND Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
+		sql.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ");
+		sql.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ");
+		sql.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ");
+		sql.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ");
+
+		sql.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" );
+		sql.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) ;
+		sql.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" );
+		sql.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" );
+
+		sql.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" );
+		sql.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" );
+		sql.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " );
+		sql.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ); 
+
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), 
+				keresteConnDetails.getUsername(), 
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result  = resultSet.getFetchSize();
+			} 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return result;
 	}
 }

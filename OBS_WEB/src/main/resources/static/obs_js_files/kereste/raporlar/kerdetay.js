@@ -1,5 +1,6 @@
 let currentPage = 0;
-const pageSize = 100;
+let totalPages = 1;
+const pageSize = 200;
 
 async function anagrpChanged(anagrpElement, altgrpElement) {
     const anagrup = anagrpElement.value;
@@ -101,7 +102,6 @@ async function openenvModal(modal) {
             cozSelect.appendChild(optioncoz);
         });
 
-
         const newOption = document.createElement("option");
         newOption.value = "Bos Olanlar";
         newOption.textContent = "Bos Olanlar";
@@ -131,10 +131,6 @@ async function openenvModal(modal) {
     }
 }
 
-
-
-
-
 function ilksayfa() {
     kerestedetayfetchTableData(0);
 }
@@ -146,19 +142,36 @@ function oncekisayfa() {
 }
 
 function sonrakisayfa() {
-    kerestedetayfetchTableData(currentPage + 1);
+    if (currentPage < totalPages - 1) {
+        kerestedetayfetchTableData(currentPage + 1);
+    }
 }
 
 async function sonsayfa() {
-    const response = await fetch(`/api/veriler/count`);
-    const totalRecords = await response.json();
-    const totalPages = Math.ceil(totalRecords / pageSize);
     kerestedetayfetchTableData(totalPages - 1);
 }
-async function kerestedetayfetchTableData(page) {
+
+async function toplampagesize() { 
+        const kerestedetayraporDTO = getKeresteDetayRaporDTO();
+        const response = await fetchWithSessionCheck("kereste/kerestedetaydoldursize", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(kerestedetayraporDTO),
+        });
+        totalPages = response.totalRecords;
+}
+
+async function kerestedetaydoldur() {
+    kerestedetayfetchTableData(0);
+    toplampagesize();
+}
+
+function getKeresteDetayRaporDTO() {
     const hiddenFieldValue = $('#kerestedetayBilgi').val();
     const parsedValues = hiddenFieldValue.split(",");
-    const kerestedetayraporDTO = {
+    return {
         gtar1: parsedValues[0],
         gtar2: parsedValues[1],
         ctar1: parsedValues[2],
@@ -184,10 +197,15 @@ async function kerestedetayfetchTableData(page) {
         kons1: parsedValues[22],
         kons2: parsedValues[23],
         cozkod: parsedValues[24],
-        cdepo: parsedValues[25],
-        page: page,
-        pageSize: pageSize
+        cdepo: parsedValues[25]
     };
+}
+
+async function kerestedetayfetchTableData(page) {
+    const kerestedetayraporDTO = getKeresteDetayRaporDTO();
+    kerestedetayraporDTO.page = page;
+    kerestedetayraporDTO.pageSize = pageSize ;
+   
     const errorDiv = document.getElementById("errorDiv");
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
@@ -204,7 +222,7 @@ async function kerestedetayfetchTableData(page) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify( kerestedetayraporDTO),
+            body: JSON.stringify(kerestedetayraporDTO),
         });
         if (response.errorMessage) {
             throw new Error(response.errorMessage);
@@ -213,7 +231,6 @@ async function kerestedetayfetchTableData(page) {
         data.data.forEach(rowData => {
             const row = document.createElement('tr');
             row.classList.add("table-row-height");
-            
             row.innerHTML = `
                 <td>${rowData.Evrak_No}</td>
 				<td>${rowData.Barkod}</td>
@@ -241,7 +258,7 @@ async function kerestedetayfetchTableData(page) {
                 <td>${rowData.Nakliyeci}</td>
                 <td>${rowData.USER}</td>
                 <td>${rowData.Cikis_Evrak}</td>
-                <td>${formatDate(rowData.CTarih)}</td>
+                <td>${rowData.CTarih}</td>
                 <td class="double-column">${formatNumber2(rowData.CKdv)}</td>
                 <td>${rowData.CDoviz}</td>
                 <td class="double-column">${formatNumber2(rowData.CFiat)}</td>
@@ -254,14 +271,13 @@ async function kerestedetayfetchTableData(page) {
                 <td>${rowData.C_Ana_Grup}</td>
                 <td>${rowData.C_Alt_Grup}</td>
 				<td>${rowData.C_Depo}</td>
-                <td>${rowData.COzel_kod}</td>
+                <td>${rowData.COzel_Kod}</td>
                 <td>${rowData.CIzahat}</td>
                 <td>${rowData.C_Nakliyeci}</td>
                 <td>${rowData.CUSER}</td>
                 `;
             mainTableBody.appendChild(row);
         });
-        document.body.style.cursor = "default";
     } catch (error) {
         errorDiv.style.display = "block";
         errorDiv.innerText = error;
@@ -270,4 +286,3 @@ async function kerestedetayfetchTableData(page) {
         document.body.style.cursor = "default";
     }
 }
-

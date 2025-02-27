@@ -715,4 +715,10 @@ public class KerestePgSQL implements IKeresteDatabase {
 		return null;
 	}
 
+	@Override
+	public double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

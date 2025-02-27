@@ -58,6 +58,23 @@ public class DetayController {
 		return response;
 	}
 	
+	@PostMapping("kereste/kerestedetaydoldursize")
+	@ResponseBody
+	public Map<String, Object> stokdetaydoldursize(@RequestBody kerestedetayraporDTO kerestedetayraporDTO ) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			double kerdetaysize = keresteService.stok_raporsize(kerestedetayraporDTO);
+			response.put("totalRecords", kerdetaysize);
+			response.put("errorMessage", ""); 
+		} catch (ServiceException e) {
+			response.put("data", Collections.emptyList());
+			response.put("errorMessage", e.getMessage()); 
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+	
 	private String[] grup_cevir(String ana,String alt,String dpo,String ozkod,String cana,String calt,String cdpo,String cozkod)
 	{
 		String deger[] = {"","","","","","","",""};
