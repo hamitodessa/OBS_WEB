@@ -928,6 +928,26 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		int page = pageable.getPageNumber();
 		int pageSize = pageable.getPageSize();
 		int offset = page * pageSize;
+		
+		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) >= '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) >= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) >= '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) >= '" + token[3] + "'  AND"  );
+		token = kerestedetayraporDTO.getUkodu2().toString().split("-");
+		if (! token[0].equals("ZZ"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) <= '" + token[0] + "'  AND" );
+		if (! token[1].equals("999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) <= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("9999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) <= '" + token[2] + "' AND" );
+		if (! token[3].equals("9999"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
 
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT [Evrak_No], [Barkod], [Kodu], [Paket_No], [Konsimento], [Miktar], ")
@@ -954,8 +974,9 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		.append("[CUSER] ") 
 		.append("FROM KERESTE WHERE 1=1 ");
 
-		sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' ");
-		sql.append(" AND Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
+		sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ");
+		sql.append(kODU.toString());
+		sql.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
 		sql.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ");
 		sql.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ");
 		sql.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ");
@@ -991,12 +1012,35 @@ public class KeresteMsSQL implements IKeresteDatabase {
 	@Override
 	public double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO, ConnectionDetails keresteConnDetails) {
 		double result = 0 ;
+		
+		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) >= '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) >= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) >= '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) >= '" + token[3] + "'  AND"  );
+		token = kerestedetayraporDTO.getUkodu2().toString().split("-");
+		if (! token[0].equals("ZZ"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) <= '" + token[0] + "'  AND" );
+		if (! token[1].equals("999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) <= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("9999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) <= '" + token[2] + "' AND" );
+		if (! token[3].equals("9999"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
+
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * ") 
-		.append("FROM KERESTE WHERE 1=1 ");
+		.append("FROM KERESTE ");
 
-		sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' ");
-		sql.append(" AND Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
+		sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ");
+		sql.append(kODU.toString());
+		sql.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
 		sql.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ");
 		sql.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ");
 		sql.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ");
