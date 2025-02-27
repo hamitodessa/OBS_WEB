@@ -212,7 +212,6 @@ async function kerestedetayfetchTableData(page) {
         data = response;
         data.data.forEach(rowData => {
             const row = document.createElement('tr');
-            row.classList.add('expandable');
             row.classList.add("table-row-height");
             
             row.innerHTML = `
