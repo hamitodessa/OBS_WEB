@@ -85,7 +85,6 @@ public class CikisController {
 			pakDeger.put("Paket_No", ""); 
 			paketNolar.add(0, pakDeger);
 			response.put("paknolar", (paketNolar != null) ? paketNolar : new ArrayList<>());
-			System.out.println(paketNolar.size());
 
 			List<Map<String, Object>> depoKodlari = keresteService.ker_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
 			Map<String, Object> depoDeger = new HashMap<>();
@@ -115,7 +114,6 @@ public class CikisController {
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 
 			int index = 0;
-			System.out.println(tableData.size());
 			for (kerestedetayDTO row : tableData) {
 				mesajlog = "Kereste Kayit" +  row.getUkodu() + " Mik=" + row.getMiktar() + " Tut=" + row.getTutar();
 

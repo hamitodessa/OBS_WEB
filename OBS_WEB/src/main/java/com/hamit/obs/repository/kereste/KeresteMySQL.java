@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
+import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
 @Component
@@ -707,6 +709,12 @@ public class KeresteMySQL implements IKeresteDatabase {
 	public void ker_kons_degis(String kons, String yenikons, int satir, ConnectionDetails keresteConnDetails) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO,Pageable pageable, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

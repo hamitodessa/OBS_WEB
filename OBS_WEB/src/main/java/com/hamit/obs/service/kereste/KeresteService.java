@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
+import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
 import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.kereste.IKeresteDatabase;
@@ -455,6 +457,16 @@ public class KeresteService {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
 			strategy.ker_kons_degis(kons, yenikons, satir, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO,Pageable pageable){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.stok_rapor(kerestedetayraporDTO,pageable, keresteConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

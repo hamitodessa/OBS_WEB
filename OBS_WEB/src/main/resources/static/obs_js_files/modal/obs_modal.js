@@ -430,11 +430,11 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #kerBilgi');
 		hiddenField.val(hesapKodu);
 	}
-	else if (nerden === "лукуыеуdetayrapor") {
+	else if (nerden === "kerestedetayrapor") {
 		const tar1 = $('#tar1').val() || "";
 		const tar2 = $('#tar2').val() || "";
-		const ctar1 = $('#сtar1').val() || "";
-		const ctar2 = $('#сtar2').val() || "";
+		const ctar1 = $('#ctar1').val() || "";
+		const ctar2 = $('#ctar2').val() || "";
 		const ukod1 = $('#ukod1').val() || "";
 		const ukod2 = $('#ukod2').val() || "";
 		const ckod1 = $('#chkod1').val() || "";
@@ -457,9 +457,9 @@ function saveToMain() {
 		const kons2 = $('#kons2').val() || "";
 		const cozkod = $('#cozkod').val() || "";
 		const cdepo = $('#cdepo').val() || "";
-
-		const degerler = [tar1, tar2, ctar1, ctar2, ukod1, ukod2, ckod1, ckod2, pak1, pak2, cevr1, cevr2, hes1, hes2, canagrp, evr1, evr2,
-			caltgrp, anagrp, altgrp, depo,ozkod,kons1,kons2,cozkod,cdepo ].join(",");
+		const degerler = [tar1, tar2, ctar1, ctar2, ukod1, ukod2, ckod1, ckod2, pak1, pak2,
+			cevr1, cevr2, hes1, hes2, canagrp, evr1, evr2,caltgrp, anagrp, altgrp,
+			depo, ozkod, kons1, kons2, cozkod, cdepo].join(",");
 		const hiddenField = $('#ara_content #kerestedetayBilgi');
 		hiddenField.val(degerler);
 	}
@@ -578,7 +578,7 @@ function saveToMain() {
 		reportFormat.disabled = false;
 	}
 	else if (nerden === "kerestedetayrapor") {
-		kerestedetayfetchTableData();
+		kerestedetayfetchTableData(0);
 		const mailButton = document.getElementById("kerestedetaymailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("kerestedetayreportDownload");

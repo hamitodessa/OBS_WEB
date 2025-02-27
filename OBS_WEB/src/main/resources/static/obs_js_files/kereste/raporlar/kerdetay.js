@@ -1,3 +1,6 @@
+let currentPage = 0;
+const pageSize = 100;
+
 async function anagrpChanged(anagrpElement, altgrpElement) {
     const anagrup = anagrpElement.value;
     const errorDiv = document.getElementById("errorDiv");
@@ -91,9 +94,10 @@ async function openenvModal(modal) {
             optionOz.value = item.OZEL_KOD_1;
             optionOz.textContent = item.OZEL_KOD_1;
             ozSelect.appendChild(optionOz);
+
             const optioncoz = document.createElement("option");
-            optioncoz.value = item.ANA_GRUP;
-            optioncoz.textContent = item.ANA_GRUP;
+            optioncoz.value = item.OZEL_KOD_1;
+            optioncoz.textContent = item.OZEL_KOD_1;
             cozSelect.appendChild(optioncoz);
         });
 
@@ -127,40 +131,62 @@ async function openenvModal(modal) {
     }
 }
 
-async function kerestedetayfetchTableData() {
+
+
+
+
+function ilksayfa() {
+    kerestedetayfetchTableData(0);
+}
+
+function oncekisayfa() {
+    if (currentPage > 0) {
+        kerestedetayfetchTableData(currentPage - 1);
+    }
+}
+
+function sonrakisayfa() {
+    kerestedetayfetchTableData(currentPage + 1);
+}
+
+async function sonsayfa() {
+    const response = await fetch(`/api/veriler/count`);
+    const totalRecords = await response.json();
+    const totalPages = Math.ceil(totalRecords / pageSize);
+    kerestedetayfetchTableData(totalPages - 1);
+}
+async function kerestedetayfetchTableData(page) {
     const hiddenFieldValue = $('#kerestedetayBilgi').val();
     const parsedValues = hiddenFieldValue.split(",");
-
-
-    // depo, ozkod, kons1, kons2, cozkod ].join(",");
-
-    const kerestedetayDTO = {
-        tar1: parsedValues[0],
-        tar2: parsedValues[1],
+    const kerestedetayraporDTO = {
+        gtar1: parsedValues[0],
+        gtar2: parsedValues[1],
         ctar1: parsedValues[2],
         ctar2: parsedValues[3],
-        ukod1: parsedValues[4],
-        ukod2: parsedValues[5],
-        ckod1: parsedValues[6],
-        ckod2: parsedValues[7],
+        ukodu1: parsedValues[4],
+        ukodu2: parsedValues[5],
+        cfirma1: parsedValues[6],
+        cfirma2: parsedValues[7],
         pak1: parsedValues[8],
         pak2: parsedValues[9],
         cevr1: parsedValues[10],
         cevr2: parsedValues[11],
-        hes1: parsedValues[12],
-        hes2: parsedValues[13],
-        canagrp: parsedValues[14],
+        gfirma1: parsedValues[12],
+        gfirma2: parsedValues[13],
+        cana: parsedValues[14],
         evr1: parsedValues[15],
         evr2: parsedValues[16],
-        caltgrp: parsedValues[17],
-        anagrp: parsedValues[18],
-        altgrp: parsedValues[19],
-        depo: parsedValues[20],
-        ozkod: parsedValues[21],
+        calt: parsedValues[17],
+        gana: parsedValues[18],
+        galt: parsedValues[19],
+        gdepo: parsedValues[20],
+        gozkod: parsedValues[21],
         kons1: parsedValues[22],
         kons2: parsedValues[23],
         cozkod: parsedValues[24],
-        cdepo: parsedValues[25]
+        cdepo: parsedValues[25],
+        page: page,
+        pageSize: pageSize
     };
     const errorDiv = document.getElementById("errorDiv");
     errorDiv.style.display = "none";
@@ -170,13 +196,15 @@ async function kerestedetayfetchTableData() {
     $yenileButton.prop('disabled', true).text('İşleniyor...');
     const mainTableBody = document.getElementById("tbody");
     mainTableBody.innerHTML = "";
+
+    currentPage = page;
     try {
         const response = await fetchWithSessionCheck("kereste/kerestedetaydoldur", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(kerestedetayDTO),
+            body: JSON.stringify( kerestedetayraporDTO),
         });
         if (response.errorMessage) {
             throw new Error(response.errorMessage);
@@ -186,15 +214,6 @@ async function kerestedetayfetchTableData() {
             const row = document.createElement('tr');
             row.classList.add('expandable');
             row.classList.add("table-row-height");
-
-                + " ,ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.CAna_Grup),'') AS C_Ana_Grup "
-                + "	,ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.CAlt_Grup),'') AS C_Alt_Grup "
-                + " ,ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo),'') AS C_Depo "
-                + " ,ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.COzel_Kod),'') COzel_Kod "
-                + " ,[CIzahat] "
-                + " ,(SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci ) as C_Nakliyeci  "
-                + " ,[CUSER] " 
-            
             
             row.innerHTML = `
                 <td>${rowData.Evrak_No}</td>

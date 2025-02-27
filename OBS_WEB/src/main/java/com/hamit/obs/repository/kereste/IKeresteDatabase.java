@@ -3,8 +3,11 @@ package com.hamit.obs.repository.kereste;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
+
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
+import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
 
 public interface IKeresteDatabase {
 
@@ -46,4 +49,5 @@ public interface IKeresteDatabase {
 	String kons_adi(String kons,ConnectionDetails keresteConnDetails);
 	void ker_kod_degis(String paket_No, String kon, String yenikod,int satir,ConnectionDetails keresteConnDetails);
 	void ker_kons_degis(String kons, String yenikons, int satir,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO,Pageable pageable,  ConnectionDetails keresteConnDetails);
 }
