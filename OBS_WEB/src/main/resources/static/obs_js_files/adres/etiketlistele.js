@@ -1,28 +1,3 @@
-async function etiketListele() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none"; // Hata mesajını gizle
-
-	try {
-		const response = await fetchWithSessionCheck("adres/etiketliste", {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'text/html',
-			},
-		});
-		if (!response.ok) {
-			const errorText = await response.text();
-			throw new Error(errorText || "Bir hata oluştu.");
-		}
-
-		const html = await response.text();
-		document.getElementById("gonderilmisMailler").innerHTML = html;
-
-	} catch (error) {
-		errorDiv.style.display = "block"; // Hata mesajını göster
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	}
-}
-
 function toggleCheckboxes(source) {
 	const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
 	checkboxes.forEach(checkbox => {
@@ -31,10 +6,9 @@ function toggleCheckboxes(source) {
 }
 
 async function etiketyazdir() {
-
 	const rows = document.querySelectorAll('tbody input[type="checkbox"]:checked');
 	const selectedData = Array.from(rows).map(row => {
-		const tr = row.closest('tr'); // Checkbox'ın bulunduğu satır
+		const tr = row.closest('tr');
 		const data = {
 			Adi: tr.querySelector('td:nth-child(2)').textContent.trim(),
 			Adres_1: tr.querySelector('td:nth-child(3)').textContent.trim(),
@@ -52,11 +26,9 @@ async function etiketyazdir() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-
 	document.body.style.cursor = "wait";
 	const $indirButton = $('#etiketyazdirButton');
 	$indirButton.prop('disabled', true).text('İşleniyor...');
-
 	try {
 		const response = await fetchWithSessionCheckForDownload('adres/etiket_download', {
 			method: 'POST',
@@ -65,7 +37,6 @@ async function etiketyazdir() {
 			},
 			body: JSON.stringify({ selectedRows: selectedData })
 		});
-
 		if (response.blob) {
 			const disposition = response.headers.get('Content-Disposition');
 			const fileName = disposition.match(/filename="(.+)"/)[1];
@@ -80,7 +51,6 @@ async function etiketyazdir() {
 		} else {
 			throw new Error("Dosya indirilemedi.");
 		}
-
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
@@ -95,14 +65,12 @@ function aramaYap() {
    const filter = input.value.toLowerCase();
    const table = document.getElementById("myTable");
    const rows = table.getElementsByTagName("tr");
-
-   for (let i = 1; i < rows.length; i++) { // İlk satır başlık olduğu için 1'den başlıyoruz
+   for (let i = 1; i < rows.length; i++) {
      const cells = rows[i].getElementsByTagName("td");
      let shouldDisplay = false;
 
      if (cells.length > 1) {
        const col1 = cells[1].textContent.toLowerCase();
-
        if (col1.includes(filter)) {
          shouldDisplay = true;
        }

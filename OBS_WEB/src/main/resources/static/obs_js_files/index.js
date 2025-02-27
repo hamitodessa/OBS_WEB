@@ -125,5 +125,8 @@ $(document).ready(function () {
 		"/kereste/koddegis": () => {
 			keresteBaslik();
 		},
+		"/kereste/detay": () => {
+			keresteBaslik();
+		},
 	}
 });

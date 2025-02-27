@@ -11,7 +11,7 @@ async function anagrpChanged(anagrpElement, altgrpElement) {
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
 	try {
-		const response = await fetchWithSessionCheck("stok/altgrup", {
+		const response = await fetchWithSessionCheck("kereste/altgrup", {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: new URLSearchParams({ anagrup: anagrup }),

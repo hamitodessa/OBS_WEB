@@ -1,0 +1,141 @@
+<style>
+    .container {
+        height: 100vh; 
+        display: flex;
+        flex-direction: column; 
+        margin-top: 10px;
+        padding: 0px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+    }
+     th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        white-space: nowrap; 
+    }
+        
+    .table-container {
+        flex-grow: 1;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+    }
+    
+        
+    .double-column {
+        text-align: right;
+    }
+    
+    .table-row-height td {
+        height: 10px;
+        line-height: 10px;
+    }
+    
+    .table .thead-dark th {
+        color: #fff;
+        background: #214162;
+    }
+
+    .pagination li:hover{
+    cursor: pointer;
+}
+    </style>
+        <div class="card p-1">
+            <div style="display: flex; align-items: center;">
+                <button class="btn btn-primary" type="button" id="keresteyenileButton"
+                    style="margin-left: 10px;" onclick="openFirstModal('kerestedetayrapor')">Filtre</button>
+                
+                <button class="btn btn-primary" style="margin-left: 10px;" type="button" id="kerestedetayreportDownload"
+                 onclick="kerestedetaydownloadReport()" disabled>Excel Indir</button>
+    
+                <button class="btn btn-primary" style="margin-left: 10px;" type="button" id="kerestedetaymailButton"
+                 onclick="kerestedetaymailAt()" disabled>Email Gonder</button>
+            </div>
+        </div>
+        <div id="errorDiv"  style="display: none; color: red; font-weight: bold;"></div>
+<div class="container">
+  <div class="table-container">
+    <table class="table table-bordered" id="detayTable" style="margin-top: 5px">
+      <thead class="thead-dark">
+        <tr>
+          <th>Evrak_No</th>
+          <th>Barkod</th>
+          <th style="min-width: 150px">Kodu</th>
+          <th>Paket_No</th>
+          <th>Konsimento</th>
+          <th class="double-column">Miktar</th>
+          <th class="double-column">m3</th>
+          <th>Tarih</th>
+          <th class="double-column">Kdv</th>
+          <th>Doviz</th>
+          <th class="double-column">Fiat</th>
+          <th class="double-column">Tutar</th>
+          <th class="double-column">Kur</th>
+          <th>Cari_Firma</th>
+          <th>Adres_Firma</th>
+          <th class="double-column">Iskonto</th>
+          <th class="double-column">Tevkifat</th>
+          <th>Ana_Grup</th>
+          <th>Alt_Grup</th>
+          <th>Mensei</th>
+          <th>Depo</th>
+          <th>Ozel_Kod</th>
+          <th>Izahat</th>
+          <th>Nakliyeci</th>
+          <th>User</th>
+          <th>Cikis_Evrak</th>
+          <th>CTarih</th>
+          <th class="double-column">CKdv</th>
+          <th>CDoviz</th>
+          <th class="double-column">CFiat</th>
+          <th class="double-column">CTutar</th>
+          <th class="double-column">CKur</th>
+          <th>CCari_Firma</th>
+          <th>CAdres_Firma</th>
+          <th class="double-column">CIskonto</th>
+          <th class="double-column">CTevkifat</th>
+          <th>CAna_Grup</th>
+          <th>CAlt_Grup</th>
+          <th>CDepo</th>
+          <th>COzel_Kod</th>
+          <th>CIzahat</th>
+          <th>CNakliyeci</th>
+          <th>CUser</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!--		Start Pagination -->
+<div class='pagination-container' style="margin-top: 5px">
+	<button type="button" class="btn btn-secondary ml-2" onclick="deksonfisNo()">
+        <i class="fa fa-backward"></i>
+    </button>
+    <span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="dekilerifisNo()">
+		<i class="fa fa-angle-left"></i>
+	</button>
+    <span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="dekilerifisNo()">
+		<i class="fa fa-angle-right"></i>
+	</button>
+	<span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="dekilerifisNo()">
+		<i class="fa fa-forward"></i>
+	</button>
+</div>
+
+    <input type="hidden" id="kerdetayBilgi" />
+    
+    <script src="/obs_js_files/kereste/raporlar/kerdetay.js"></script>
+    <div th:replace="~{modal/kereste/kerestedetayfiltre :: modalkerestedetay}"></div>
+    <div th:replace="~{modal/yenihsppln :: secondModal}"></div>

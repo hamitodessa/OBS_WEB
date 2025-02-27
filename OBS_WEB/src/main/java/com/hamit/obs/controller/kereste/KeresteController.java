@@ -153,4 +153,36 @@ public class KeresteController {
 		}
 		return response;
 	}
+	
+	@PostMapping("kereste/anadepo")
+	@ResponseBody
+	public Map<String, Object>  anadepo() {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> anaKodlari = keresteService.ker_kod_degisken_oku("ANA_GRUP", "AGID_Y", "ANA_GRUP_DEGISKEN") ;
+			Map<String, Object> anaDeger = new HashMap<>();
+			anaDeger.put("ANA_GRUP", ""); 
+			anaKodlari.add(0, anaDeger);
+			response.put("anaKodlari", (anaKodlari != null) ? anaKodlari : new ArrayList<>());
+
+			List<Map<String, Object>> depoKodlari = keresteService.ker_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
+			Map<String, Object> depoDeger = new HashMap<>();
+			depoDeger.put("DEPO", ""); 
+			depoKodlari.add(0, depoDeger);
+			response.put("depoKodlari", (depoKodlari != null) ? depoKodlari : new ArrayList<>());
+			
+			List<Map<String, Object>> oz1Kodlari = keresteService.ker_kod_degisken_oku("OZEL_KOD_1", "OZ1ID_Y", "OZ_KOD_1_DEGISKEN") ;
+			Map<String, Object> oz1Deger = new HashMap<>();
+			oz1Deger.put("OZEL_KOD_1", ""); 
+			oz1Kodlari.add(0, oz1Deger);
+			response.put("oz1Kodlari", (oz1Kodlari != null) ? oz1Kodlari : new ArrayList<>());
+			
+			response.put("errorMessage","");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage()); // Hata mesajı
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
 }
