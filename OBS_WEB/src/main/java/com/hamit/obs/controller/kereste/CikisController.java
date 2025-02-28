@@ -156,7 +156,6 @@ public class CikisController {
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;

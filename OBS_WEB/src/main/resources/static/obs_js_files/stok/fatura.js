@@ -415,7 +415,6 @@ function clearInputs() {
 async function fatOku() {
 	const fisno = document.getElementById("fisno").value;
 	if (!fisno) {
-		console.log("Fiş numarası boş olamaz!");
 		return;
 	}
 	const gircikdeger = document.getElementById("gircik").value;

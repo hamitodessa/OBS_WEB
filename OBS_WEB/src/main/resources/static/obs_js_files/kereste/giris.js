@@ -425,7 +425,6 @@ function clearInputs() {
 async function kerOku() {
 	const fisno = document.getElementById("fisno").value.trim();
 	if (!fisno) {
-		console.log("Fiş numarası boş olamaz!");
 		return;
 	}
 	const errorDiv = document.getElementById("errorDiv");
@@ -633,10 +632,6 @@ async function yeniFis() {
 
 async function kerYoket() {
 	const fisno = document.getElementById("fisno").value.trim();
-	if (!fisno) {
-		console.log("Fiş numarası boş olamaz!");
-		return;
-	}
 	const table = document.getElementById('kerTable');
 	const rows = table.rows;
 	

@@ -279,11 +279,9 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				result = resultSet.getString("NO");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return result;
-
 	}
 
 	@Override
@@ -305,7 +303,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
 		return E_NUMBER;
-
 	}
 
 	@Override
@@ -897,7 +894,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
 		}
-
 	}
 
 	@Override
@@ -905,7 +901,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		String sql = "UPDATE KERESTE  " 
 				+ " SET  Konsimento = ? " 
 				+ " WHERE  Konsimento = ? AND  Satir = ? ";
-		
+
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(),
 				keresteConnDetails.getUsername(),
@@ -918,7 +914,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
 		}
-
 	}
 
 	@Override
@@ -928,7 +923,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		int page = pageable.getPageNumber();
 		int pageSize = pageable.getPageSize();
 		int offset = page * pageSize;
-		
+
 		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
 		StringBuilder kODU = new StringBuilder();
 		if (! token[0].equals("00"))
@@ -1012,7 +1007,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 	@Override
 	public double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO, ConnectionDetails keresteConnDetails) {
 		double result = 0 ;
-		
+
 		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
 		StringBuilder kODU = new StringBuilder();
 		if (! token[0].equals("00"))
@@ -1033,7 +1028,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		if (! token[3].equals("9999"))
 			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
 
-		
+
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT count(Evrak_No) as satir ") 
 		.append("FROM KERESTE ")

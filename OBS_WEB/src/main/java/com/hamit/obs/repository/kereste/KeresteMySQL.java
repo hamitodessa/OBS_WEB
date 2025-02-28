@@ -274,7 +274,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			sql = "SELECT max(Evrak_No)  as NO FROM KERESTE  ";
 		else
 			sql = "SELECT max(Cikis_Evrak)  as NO FROM KERESTE  ";
-		
+
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -296,7 +296,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			sql = "SELECT max(Evrak_No + 1) AS NO  FROM KERESTE  ";
 		else
 			sql = "SELECT max(Cikis_Evrak + 1) AS NO  FROM KERESTE  ";
-		
+
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -315,7 +315,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 		String sql = "";
 		if (cins.equals("G")) 
 		{
-			 sql = "SELECT    Evrak_No  , Barkod  , Kodu , Paket_No , Konsimento  , Miktar , Tarih , Kdv  , Doviz  , Fiat   , Tutar  , Kur   , Cari_Firma , Adres_Firma   , Iskonto  , Tevkifat,  "
+			sql = "SELECT    Evrak_No  , Barkod  , Kodu , Paket_No , Konsimento  , Miktar , Tarih , Kdv  , Doviz  , Fiat   , Tutar  , Kur   , Cari_Firma , Adres_Firma   , Iskonto  , Tevkifat,  "
 					+ " IFNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup ) , '') AS Ana_Grup   ," 
 					+ " IFNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup ) , '') AS Alt_Grup   ," 
 					+ " IFNULL((Select MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei ) , '') AS Mensei   ," 
@@ -482,7 +482,6 @@ public class KeresteMySQL implements IKeresteDatabase {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
 		}
 	}
@@ -907,7 +906,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 		String sql = "UPDATE KERESTE  " 
 				+ " SET  Konsimento = ? " 
 				+ " WHERE  Konsimento = ? AND  Satir = ? ";
-		
+
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(),
 				keresteConnDetails.getUsername(),
@@ -930,7 +929,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 		int page = pageable.getPageNumber();
 		int pageSize = pageable.getPageSize();
 		int offset = page * pageSize;
-		
+
 		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
 		StringBuilder kODU = new StringBuilder();
 		if (! token[0].equals("00"))
@@ -994,7 +993,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 		.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ) 
 		.append(" ORDER BY Tarih DESC LIMIT ").append(pageSize).append(" OFFSET ").append(offset);
 
-				
+
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(), 
 				keresteConnDetails.getUsername(), 
@@ -1013,7 +1012,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 	@Override
 	public double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO, ConnectionDetails keresteConnDetails) {
 		double result = 0 ;
-		
+
 		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
 		StringBuilder kODU = new StringBuilder();
 		if (! token[0].equals("00"))
@@ -1034,7 +1033,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 		if (! token[3].equals("9999"))
 			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
 
-		
+
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT count(Evrak_No) as satir ") 
 		.append("FROM KERESTE ")

@@ -274,7 +274,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 			sql = "SELECT max(\"Evrak_No\")  as \"NO\" FROM \"KERESTE\"  ";
 		else
 			sql = "SELECT max(\"Cikis_Evrak\")  as \"NO\" FROM \"KERESTE\"  ";
-		
+
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -292,7 +292,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 	public int evrak_no_al(String cins, ConnectionDetails keresteConnDetails) {
 		String sql ;
 		int E_NUMBER = 0 ;
-		
+
 		if (cins.equals("G"))
 			sql = "SELECT CASE WHEN max(\"Evrak_No\") = '' THEN '1' ELSE max(\"Evrak_No\")::int + 1 END AS \"NO\" FROM  \"KERESTE\" ";
 		else
@@ -480,7 +480,6 @@ public class KerestePgSQL implements IKeresteDatabase {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
 		}
 	}
@@ -778,7 +777,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 		String evrakString = "" ;
 		if (evrak.toString().equals(""))
 			evrakString = " AND \"Evrak_No\"::text like '" + evrak + "%'" ;
-		
+
 		String sql =  " SELECT \"Evrak_No\" "
 				+ " ,\"Barkod\" "
 				+ " ,\"Kodu\" "
@@ -828,7 +827,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 				+ " \"Paket_No\"::text like N'"+ pakno+ "%' AND " 
 				+ " \"Konsimento\"::text like N'"+ kons + "%'" 
 				+ " " + evrakString + " "; 
-		
+
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -900,7 +899,6 @@ public class KerestePgSQL implements IKeresteDatabase {
 		} catch (SQLException e) {
 			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
 		}
-
 	}
 
 	@Override
@@ -908,7 +906,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 		String sql = "UPDATE \"KERESTE\"  " 
 				+ " SET  \"Konsimento\" = ? " 
 				+ " WHERE  \"Konsimento\" = ? AND  \"Satir\" = ? ";
-		
+
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(),
 				keresteConnDetails.getUsername(),
@@ -950,7 +948,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4) <= '" + token[2] + "' AND" );
 		if (! token[3].equals("9999"))
 			kODU.append( " SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4) <= '" + token[3] + "'  AND"  );
-		
+
 		String sql =  " SELECT \"Evrak_No\" "
 				+ " ,\"Barkod\" "
 				+ " ,\"Kodu\" "
@@ -1015,7 +1013,6 @@ public class KerestePgSQL implements IKeresteDatabase {
 				+ " \"COzel_Kod\"::text " + kerestedetayraporDTO.getCozkod()  
 				+ " ORDER BY \"Tarih\" DESC LIMIT ?  OFFSET ? ";
 
-		
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(), 
 				keresteConnDetails.getUsername(), 
@@ -1030,14 +1027,13 @@ public class KerestePgSQL implements IKeresteDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
-		
 	}
 
 	@Override
 	public double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO, ConnectionDetails keresteConnDetails) {
-		
+
 		double result = 0 ;
-		
+
 		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
 		StringBuilder kODU = new StringBuilder();
 		if (! token[0].equals("00"))
@@ -1093,6 +1089,4 @@ public class KerestePgSQL implements IKeresteDatabase {
 		}
 		return result;
 	}
-
-
 }

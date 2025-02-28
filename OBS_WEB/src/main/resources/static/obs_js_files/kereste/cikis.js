@@ -412,7 +412,6 @@ function clearInputs() {
 async function kerOku() {
 	const fisno = document.getElementById("fisno").value.trim();
 	if (!fisno) {
-		console.log("Fiş numarası boş olamaz!");
 		return;
 	}
 

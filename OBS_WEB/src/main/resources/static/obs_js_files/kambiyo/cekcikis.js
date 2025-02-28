@@ -219,7 +219,6 @@ function bordroOkuma(event) {
 async function bordroOku() {
 	const bordroNo = document.getElementById("bordrono").value;
 	if (!bordroNo) {
-		console.log("Fiş numarası boş olamaz!");
 		return;
 	}
 	const errorDiv = document.getElementById("errorDiv");
