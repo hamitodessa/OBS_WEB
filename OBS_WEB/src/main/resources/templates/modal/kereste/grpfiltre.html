@@ -1,0 +1,178 @@
+<style>
+    .modal-dialog {
+        height: 500px; 
+        margin: 0 auto; 
+    }
+    
+    .modal-content {
+        overflow-y: auto;
+    }
+    
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+    
+    #secondModal {
+        z-index: 1050 !important;
+    }
+    
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+    </style>
+    
+<div class="modal fade" th:fragment="modalgrp" id="firstModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 790px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Grup Raporlama</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Ilk Son Tarih</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span> 
+                        <input type="date" id="tar1" style="min-width: 130px;max-width: 130px;" class="form-control" value="1900-01-01"> 
+                        <span style="padding-left: 5px;"></span> 
+                        <input type="date" id="tar2" style="min-width: 130px;max-width: 130px;" class="form-control" value="2100-12-31"> 
+                        <span style="padding-left: 5px;"></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Urun Ana Grup</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold"
+                                style="width: 150px;  " id="uranagrp" onchange="anagrpChanged(this,'uraltgrp')">
+                        </select> 
+                </div>
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Ilk Son Urun kodu</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span> 
+                        <input type="text" id="ukod1" style="min-width: 130px;max-width: 130px;" class="form-control" ondblclick="openurunkodlariModal('ukod1', 'grprapor','ukodukod')">
+                        <span style="padding-left: 5px;"></span> 
+                        <input type="text" id="ukod2" style="min-width: 130px;max-width: 130px;" value="ZZZZZZZZZZZZ" class="form-control" ondblclick="openurunkodlariModal('ukod2', 'grprapor','ukodukod')">
+                        <span style="padding-left: 5px;"></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Urun Alt Grup</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style=" width: 150px; " id="uraltgrp" disabled>
+                        </select> 
+                </div>
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Ilk ve Son Hesap</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span> 
+                        <input type="text" id="ckod1" style="min-width: 130px;max-width: 130px;" class="form-control"  ondblclick="openSecondModal('ckod1')"> 
+                        <span style="padding-left: 5px;"></span>
+                        <input type="text" id="ckod2" style="min-width: 130px;max-width: 130px;" value="ZZZZZZZZZZ" class="form-control"  ondblclick="openSecondModal('ckod2')">
+                        <span style="padding-left: 5px;"></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Urun Oz.Kod</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style=" width: 150px; " id="urozkod" >
+                        </select> 
+                </div>
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Ilk ve Son Sinif</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span> 
+                        <input type="text" id="sinif1" style="min-width: 130px;max-width: 130px;" class="form-control"> 
+                        <span style="padding-left: 5px;"></span>
+                        <input type="text" id="sinif2" style="min-width: 130px;max-width: 130px;" value="ZZZZZZZZZZ" class="form-control">
+                </div>
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Birim</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="birim" >
+                            <option value="Tutar">Tutar</option>
+                            <option value="Miktar">Miktar</option>
+                            <option value="Agirlik">Agirlik</option>
+                        </select> 
+                        <span style="padding-left: 95px;"></span>
+                        <div class="form-row" style="width: 130px;">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="istenenaychc" onchange="istenenayChanged()">
+                                <label class="form-check-label" >Istenen Ay</label>
+                            </div>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <input type="text" id="istenenay" style="width: 50px;visibility:hidden;"   class="form-control" >  
+                </div>
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Gruplama</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="gruplama" >
+                            <option value="Urun Kodu">Urun Kodu</option>
+                            <option value="Urun Kodu-Yil">Urun Kodu-Yil</option>
+                            <option value="Yil">Yil</option>
+                            <option value="Hesap Kodu-Yil">Hesap Kodu</option>
+                            <option value="Hesap Kodu-Yil">Hesap Kodu-Yil</option>
+                            <option value="Yil_Ay">Yil_Ay</option>
+                            <option value="Urun_Ana_Grup">Urun_Ana_Grup</option>
+                            <option value="Urun_Ana_Grup_Yil">Urun_Ana_Grup_Yil</option>
+                        </select> 
+                        <span style="padding-left: 95px;"></span>
+                        <div class="form-row" style="width: 130px;">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="dvzcevirchc"  onchange="dvzcevirChanged()">
+                                <label class="form-check-label" >Dvz Cevirme</label>
+                            </div>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;visibility:hidden;" id="dvzcins" >
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="RUB">RUB</option>
+                        </select> 
+                </div>
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Stunlar</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="stunlar" >
+                            <option value="Yil">Yil</option>
+                            <option value="Ay">Ay</option>
+                            <option value="Gun">Gun</option>
+                            <option value="Ana Grup">Ana Grup</option>
+                            <option value="Urun Ana Grup">Urun Ana Grup</option>
+                            <option value="Hesap Kodu">Hesap Kodu</option>
+                        </select> 
+                        <span style="padding-left: 229px;"></span>
+                        <select class="form-select cins_bold" style="min-width: 80px;max-width: 80px;visibility:hidden;" id="dvzturu" >
+                            <option value="MA">MA</option>
+                            <option value="MS">MS</option>
+                        </select> 
+                </div>
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Turu</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="turu" >
+                            <option value="CIKAN">CIKAN</option>
+                            <option value="GIREN">GIREN</option>
+                        </select> 
+                </div>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Raporla</button>
+                </div>
+            </div>
+    </div>
+</div>	

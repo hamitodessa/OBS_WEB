@@ -128,5 +128,8 @@ $(document).ready(function () {
 		"/kereste/detay": () => {
 			keresteBaslik();
 		},
+		"/kereste/grprapor": () => {
+			keresteBaslik();
+		},
 	}
 });
