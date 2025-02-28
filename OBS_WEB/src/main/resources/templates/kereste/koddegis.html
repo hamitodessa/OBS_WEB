@@ -83,6 +83,12 @@
     border-collapse: collapse;
     table-layout: auto;
   }
+
+  .table-hover tbody tr:hover {
+    background-color: #ced4da !important;
+    color: inherit !important;
+  }
+ 
   .container {
     height: 50vh;
     display: flex;
@@ -157,7 +163,7 @@
 
 <div class="container">
   <div class="table-container">
-    <table class="table table-bordered" id="urunTable" style="margin-top: 5px">
+    <table class="table table-bordered table-hover" id="urunTable" style="margin-top: 5px">
       <thead class="thead-dark">
         <tr>
           <th style="text-align: center">
