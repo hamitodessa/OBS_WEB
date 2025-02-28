@@ -645,8 +645,78 @@ public class KeresteMySQL implements IKeresteDatabase {
 
 	@Override
 	public List<Map<String, Object>> kod_pln(ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM KONS_ACIKLAMA   ORDER BY KONS ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("My kons_pln.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public void kons_kayit(String kons, String aciklama, int paket_no, ConnectionDetails keresteConnDetails) {
+		String sqlKons = "INSERT INTO KONS_ACIKLAMA (KONS, ACIKLAMA) VALUES (?, ?)";
+		String sqlPaket = "INSERT INTO PAKET_NO (Pak_No, Konsimento) VALUES (?, ?)";
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword())) {
+			connection.setAutoCommit(false);
+			try (PreparedStatement psKons = connection.prepareStatement(sqlKons);
+					PreparedStatement psPaket = connection.prepareStatement(sqlPaket)) {
+				psKons.setString(1, kons);
+				psKons.setString(2, aciklama);
+				psKons.executeUpdate();
+
+				psPaket.setInt(1, paket_no);
+				psPaket.setString(2, kons);
+				psPaket.executeUpdate();
+
+				connection.commit();
+			} catch (SQLException e) {
+				connection.rollback();
+				throw new ServiceException("Kayıt işlemi sırasında hata oluştu", e);
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Veritabanı bağlantı hatası", e);
+		}
+	}
+
+	@Override
+	public int kons_sil(String kons, ConnectionDetails keresteConnDetails) {
+		int result = 0;
+		String sqlDeleteKons = "DELETE FROM KONS_ACIKLAMA WHERE KONS = ?";
+		String sqlSelectPakNo = "SELECT Pak_No FROM PAKET_NO WHERE Konsimento = ?";
+		String sqlDeletePaket = "DELETE FROM PAKET_NO WHERE Konsimento = ?";
+
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), 
+				keresteConnDetails.getUsername(), 
+				keresteConnDetails.getPassword())) {
+			try (PreparedStatement psDeleteKons = connection.prepareStatement(sqlDeleteKons)) {
+				psDeleteKons.setString(1, kons);
+				psDeleteKons.executeUpdate();
+			}
+			try (PreparedStatement psSelect = connection.prepareStatement(sqlSelectPakNo)) {
+				psSelect.setString(1, kons);
+				try (ResultSet rs = psSelect.executeQuery()) {
+					if (rs.next()) {
+						result = rs.getInt("Pak_No");
+					}
+				}
+			}
+			try (PreparedStatement psDeletePaket = connection.prepareStatement(sqlDeletePaket)) {
+				psDeletePaket.setString(1, kons);
+				psDeletePaket.executeUpdate();
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("kons_sil", e);
+		}
+		return result;
 	}
 
 	@Override
@@ -665,18 +735,6 @@ public class KeresteMySQL implements IKeresteDatabase {
 	public List<Map<String, Object>> kons_pln(ConnectionDetails keresteConnDetails) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void kons_kayit(String kodu, String aciklama, int paket_no, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int kons_sil(String kod, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -712,7 +770,8 @@ public class KeresteMySQL implements IKeresteDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO,Pageable pageable, ConnectionDetails keresteConnDetails) {
+	public List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO, Pageable pageable,
+			ConnectionDetails keresteConnDetails) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -722,5 +781,6 @@ public class KeresteMySQL implements IKeresteDatabase {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 
 }

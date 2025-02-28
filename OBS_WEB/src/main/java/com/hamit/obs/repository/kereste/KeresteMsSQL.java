@@ -972,27 +972,26 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		.append("[CIzahat] ," )
 		.append("ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci),'' ) as C_Nakliyeci, ") 
 		.append("[CUSER] ") 
-		.append("FROM KERESTE WHERE 1=1 ");
+		.append("FROM KERESTE WHERE 1=1 ")
 
-		sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ");
-		sql.append(kODU.toString());
-		sql.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
-		sql.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ");
-		sql.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ");
-		sql.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ");
-		sql.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ");
+		.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ")
+		.append(kODU.toString())
+		.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ")
+		.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ")
+		.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ")
+		.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ")
+		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
 
-		sql.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" );
-		sql.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) ;
-		sql.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" );
-		sql.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" );
+		.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" )
+		.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) 
+		.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" )
+		.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" )
 
-		sql.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" );
-		sql.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" );
-		sql.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " );
-		sql.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ); 
-
-		sql.append(" ORDER BY Tarih DESC OFFSET ").append(offset).append(" ROWS FETCH NEXT ").append(pageSize).append(" ROWS ONLY");
+		.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" )
+		.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" )
+		.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " )
+		.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ) 
+		.append(" ORDER BY Tarih DESC OFFSET ").append(offset).append(" ROWS FETCH NEXT ").append(pageSize).append(" ROWS ONLY");
 
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(), 
@@ -1035,26 +1034,25 @@ public class KeresteMsSQL implements IKeresteDatabase {
 
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * ") 
-		.append("FROM KERESTE ");
+		sql.append("SELECT count(Evrak_No) as satir ") 
+		.append("FROM KERESTE ")
+		.append(" WHERE Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ")
+		.append(kODU.toString())
+		.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ")
+		.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ")
+		.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ")
+		.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ")
+		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
 
-		sql.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ");
-		sql.append(kODU.toString());
-		sql.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ");
-		sql.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ");
-		sql.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ");
-		sql.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ");
-		sql.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ");
+		.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" )
+		.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) 
+		.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" )
+		.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" )
 
-		sql.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" );
-		sql.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) ;
-		sql.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" );
-		sql.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" );
-
-		sql.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" );
-		sql.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" );
-		sql.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " );
-		sql.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ); 
+		.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" )
+		.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" )
+		.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " )
+		.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ); 
 
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(), 
@@ -1063,7 +1061,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				result  = resultSet.getFetchSize();
+				result  = resultSet.getInt("satir");
 			} 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);

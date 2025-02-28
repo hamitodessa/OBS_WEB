@@ -63,6 +63,16 @@ public class DetayController {
 	public Map<String, Object> stokdetaydoldursize(@RequestBody kerestedetayraporDTO kerestedetayraporDTO ) {
 		Map<String, Object> response = new HashMap<>();
 		try {
+			String turuString[] = grup_cevir(kerestedetayraporDTO.getGana(),kerestedetayraporDTO.getGalt(),kerestedetayraporDTO.getGdepo(),kerestedetayraporDTO.getGozkod(),
+					kerestedetayraporDTO.getCana(),kerestedetayraporDTO.getCalt(),kerestedetayraporDTO.getCdepo(),kerestedetayraporDTO.getCozkod());
+			kerestedetayraporDTO.setGana(turuString[0]);
+			kerestedetayraporDTO.setGalt(turuString[1]);
+			kerestedetayraporDTO.setGdepo(turuString[2]);
+			kerestedetayraporDTO.setGozkod(turuString[3]);
+			kerestedetayraporDTO.setCana(turuString[4]);
+			kerestedetayraporDTO.setCalt(turuString[5]);
+			kerestedetayraporDTO.setCdepo(turuString[6]);
+			kerestedetayraporDTO.setCozkod(turuString[7]);
 			double kerdetaysize = keresteService.stok_raporsize(kerestedetayraporDTO);
 			response.put("totalRecords", kerdetaysize);
 			response.put("errorMessage", ""); 

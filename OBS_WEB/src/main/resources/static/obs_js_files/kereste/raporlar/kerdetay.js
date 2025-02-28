@@ -1,5 +1,3 @@
-let currentPage = 0;
-let totalPages = 1;
 const pageSize = 200;
 
 async function anagrpChanged(anagrpElement, altgrpElement) {
@@ -160,12 +158,13 @@ async function toplampagesize() {
             },
             body: JSON.stringify(kerestedetayraporDTO),
         });
-        totalPages = response.totalRecords;
+    const totalRecords = response.totalRecords;
+    totalPages = Math.ceil(totalRecords / pageSize); // Tekrar .totalRecords çağırmaya gerek yok!
 }
 
 async function kerestedetaydoldur() {
-    kerestedetayfetchTableData(0);
     toplampagesize();
+    kerestedetayfetchTableData(0);
 }
 
 function getKeresteDetayRaporDTO() {
