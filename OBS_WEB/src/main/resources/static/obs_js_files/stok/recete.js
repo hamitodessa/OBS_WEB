@@ -242,6 +242,10 @@ async function updateurunValues(inputElement) {
 
 async function receteOku() {
 	const recno = document.getElementById("recno").value;
+	if (!recno) {
+		console.log("Fiş numarası boş olamaz!");
+		return;
+	}
 	const errorDiv = document.getElementById("errorDiv");
 	document.body.style.cursor = "wait";
 	try {

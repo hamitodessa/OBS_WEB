@@ -410,7 +410,12 @@ function clearInputs() {
 }
 
 async function kerOku() {
-	const fisno = document.getElementById("fisno").value;
+	const fisno = document.getElementById("fisno").value.trim();
+	if (!fisno) {
+		console.log("Fiş numarası boş olamaz!");
+		return;
+	}
+
 	const errorDiv = document.getElementById("errorDiv");
 	document.body.style.cursor = "wait";
 	try {
@@ -547,7 +552,7 @@ async function sonfis() {
 		const errorDiv = document.getElementById('errorDiv');
 
 		fisNoInput.value = data.fisno;
-		if (data.fisNo === 0) {
+		if (data.fisNo === 0 || !fisNoInput) {
 			alert('Hata: Evrak numarası bulunamadı.');
 			errorDiv.innerText = data.errorMessage;
 			return;

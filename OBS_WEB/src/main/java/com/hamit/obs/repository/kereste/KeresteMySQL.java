@@ -721,66 +721,353 @@ public class KeresteMySQL implements IKeresteDatabase {
 
 	@Override
 	public void kod_kayit(String kodu, String aciklama, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "INSERT INTO KOD_ACIKLAMA (KOD,ACIKLAMA) " +
+				" VALUES (?,?)" ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, kodu);
+			preparedStatement.setString(2, aciklama);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("kod_kayit", e);
+		}
 	}
 
 	@Override
 	public void kod_sil(String kod, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "DELETE FROM KOD_ACIKLAMA WHERE KOD = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, kod);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("kod_sil", e);
+		}
 	}
 
 	@Override
 	public List<Map<String, Object>> kons_pln(ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM KONS_ACIKLAMA   ORDER BY KONS ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS kons_pln.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public List<Map<String, Object>> urun_detay(String pakno, String kons, String kodu, String evrak,
 			ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String[] token = kodu.toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) = '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) = '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) = '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) = '" + token[3] + "'  AND"  );
+		String evrakString = "" ;
+		if (evrak.toString().equals(""))
+			evrakString = " AND Evrak_No like '" + evrak + "%'" ;
+		String sql =  " SELECT Evrak_No "
+				+ " ,Barkod  "
+				+ " ,Kodu  "
+				+ " ,Paket_No  "
+				+ " ,Konsimento  "
+				+ " ,Miktar  "
+				+ " ,(((CONVERT( SUBSTRING(KERESTE.Kodu, 4, 3),DECIMAL )  *  CONVERT( SUBSTRING(KERESTE.Kodu, 8, 4),DECIMAL) * CONVERT( SUBSTRING(KERESTE.Kodu, 13, 4),DECIMAL)  ) * Miktar)/1000000000)  as m3"
+				+ " ,Tarih "
+				+ " ,Kdv  "
+				+ " ,Doviz  "
+				+ " ,Fiat  "
+				+ " ,Tutar  "
+				+ " ,Kur  "
+				+ " ,Cari_Firma  "
+				+ " ,Adres_Firma  "
+				+ " ,Iskonto  "
+				+ " ,Tevkifat  "
+				+ " ,IFNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup),'') Ana_Grup "
+				+ " ,IFNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup),'') AS Alt_Grup "
+				+ " ,IFNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei),'') AS Mensei "
+				+ " ,IFNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo),'' ) as Depo  " 
+				+ " ,IFNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.Ozel_Kod),'') Ozel_Kod "
+				+ " ,Izahat "
+				+ " ,IFNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci),'' ) as Nakliyeci  " 
+				+ " ,USER "
+				+ " ,Cikis_Evrak "
+				+ " ,IF(DATE_FORMAT(CTarih, '%Y.%m.%d')= '1900.01.01','',DATE_FORMAT(CTarih, '%d.%m.%Y'))  AS CTarih "
+				+ " ,CKdv "
+				+ " ,CDoviz "
+				+ " ,CFiat "
+				+ " ,CTutar "
+				+ " ,CKur "
+				+ " ,CCari_Firma "
+				+ " ,CAdres_Firma "
+				+ " ,CIskonto "
+				+ " ,CTevkifat "
+				+ " ,IFNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.CAna_Grup),'') AS C_Ana_Grup "
+				+ "	,IFNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.CAlt_Grup),'') AS C_Alt_Grup "
+				+ " ,IFNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo),'') AS C_Depo "
+				+ " ,IFNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.COzel_Kod),'') COzel_Kod "
+				+ " ,CIzahat "
+				+ " ,IFNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci),'' ) as C_Nakliyeci  " 
+				+ " ,CUSER ,Satir" 
+				+ " FROM KERESTE    " 
+				+ " WHERE " 
+				+ kODU 
+				+ " Paket_No like N'" + pakno + "%' AND " 
+				+ " Konsimento like N'" + kons + "%'" 
+				+ " " + evrakString + " "; 
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
 	public String kod_adi(String kod, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String kodadi = "";
+		String sql = "SELECT ACIKLAMA FROM KOD_ACIKLAMA  WHERE KOD = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, kod);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				kodadi = resultSet.getString("ACIKLAMA");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("kod_oku", e);
+		}
+		return kodadi;
 	}
 
 	@Override
 	public String kons_adi(String kons, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String konsadi = "";
+		String sql = "SELECT ACIKLAMA FROM KONS_ACIKLAMA  WHERE KONS = ? " ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, kons);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				konsadi = resultSet.getString("ACIKLAMA");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("kons_oku", e);
+		}
+		return konsadi;
 	}
 
 	@Override
 	public void ker_kod_degis(String paket_No, String kon, String yenikod, int satir,
 			ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		
+		String sql = "UPDATE KERESTE  " 
+				+ " SET  Kodu = CONCAT( ? , SUBSTRING (Kodu, 3,14))" 
+				+ " WHERE  Paket_No = ? AND Konsimento = ? AND " 
+				+ " Satir = ?" ;
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, yenikod);
+			preparedStatement.setString(2, paket_No);
+			preparedStatement.setString(3, kon);
+			preparedStatement.setInt(4, satir);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
+		}
 	}
 
 	@Override
 	public void ker_kons_degis(String kons, String yenikons, int satir, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
+		String sql = "UPDATE KERESTE  " 
+				+ " SET  Konsimento = ? " 
+				+ " WHERE  Konsimento = ? AND  Satir = ? ";
 		
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(),
+				keresteConnDetails.getUsername(),
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, yenikons);
+			preparedStatement.setString(2, kons);
+			preparedStatement.setInt(3, satir);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new ServiceException("Ürün değişken güncelleme başarısız", e);
+		}
 	}
 
 	@Override
 	public List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO, Pageable pageable,
 			ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		int page = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize();
+		int offset = page * pageSize;
+		
+		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) >= '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) >= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) >= '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) >= '" + token[3] + "'  AND"  );
+		token = kerestedetayraporDTO.getUkodu2().toString().split("-");
+		if (! token[0].equals("ZZ"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) <= '" + token[0] + "'  AND" );
+		if (! token[1].equals("999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) <= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("9999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) <= '" + token[2] + "' AND" );
+		if (! token[3].equals("9999"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT Evrak_No, Barkod, Kodu, Paket_No,Konsimento,Miktar,")
+		.append("(((CONVERT(SUBSTRING(KERESTE.Kodu, 4, 3),DECIMAL )  *  CONVERT(SUBSTRING(KERESTE.Kodu, 8, 4),DECIMAL) * CONVERT(SUBSTRING(KERESTE.Kodu, 13, 4),DECIMAL )  ) * Miktar)/1000000000)  as m3,")
+		.append("Tarih, Kdv, Doviz, Fiat, Tutar, Kur,Cari_Firma, Adres_Firma, ")
+		.append("Iskonto, Tevkifat, ")
+		.append("IFNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup), '') AS Ana_Grup, ")
+		.append("IFNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup), '') AS Alt_Grup, ")
+		.append("IFNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei), '') AS Mensei, ")
+		.append("IFNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo), '') AS Depo, ")
+		.append("IFNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.Ozel_Kod),'') Ozel_Kod, ")
+		.append("Izahat, ")
+		.append("IFNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci), '') AS Nakliyeci, ")
+		.append("USER, Cikis_Evrak, ")
+		.append("IF(DATE_FORMAT(CTarih, '%Y.%m.%d')= '1900.01.01','',DATE_FORMAT(CTarih, '%d.%m.%Y'))  AS CTarih, ")
+		.append("CKdv,CDoviz,CFiat,CTutar,CKur,CCari_Firma,CAdres_Firma,CIskonto,CTevkifat,")
+		.append("IFNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.CAna_Grup),'') AS C_Ana_Grup, ")
+		.append("IFNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.CAlt_Grup),'') AS C_Alt_Grup, ")
+		.append("IFNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo),'') AS C_Depo, ")
+		.append("IFNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.COzel_Kod),'') COzel_Kod, ")
+		.append("CIzahat ," )
+		.append("IFNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci),'' ) as C_Nakliyeci, ") 
+		.append("CUSER ") 
+		.append("FROM KERESTE WHERE 1=1 ")
+
+		.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ")
+		.append(kODU.toString())
+		.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ")
+		.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ")
+		.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ")
+		.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ")
+		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
+
+		.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" )
+		.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) 
+		.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" )
+		.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" )
+
+		.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" )
+		.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" )
+		.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " )
+		.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ) 
+		.append(" ORDER BY Tarih DESC LIMIT ").append(pageSize).append(" OFFSET ").append(offset);
+
+				
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), 
+				keresteConnDetails.getUsername(), 
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList;
 	}
 
 	@Override
 	public double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return 0;
+		double result = 0 ;
+		
+		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) >= '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) >= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) >= '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) >= '" + token[3] + "'  AND"  );
+		token = kerestedetayraporDTO.getUkodu2().toString().split("-");
+		if (! token[0].equals("ZZ"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) <= '" + token[0] + "'  AND" );
+		if (! token[1].equals("999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) <= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("9999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) <= '" + token[2] + "' AND" );
+		if (! token[3].equals("9999"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
+
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT count(Evrak_No) as satir ") 
+		.append("FROM KERESTE ")
+		.append(" WHERE Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ")
+		.append(kODU.toString())
+		.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ")
+		.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ")
+		.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ")
+		.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ")
+		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
+
+		.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" )
+		.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) 
+		.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" )
+		.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" )
+
+		.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" )
+		.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" )
+		.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " )
+		.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ); 
+
+		try (Connection connection = DriverManager.getConnection(
+				keresteConnDetails.getJdbcUrl(), 
+				keresteConnDetails.getUsername(), 
+				keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result  = resultSet.getInt("satir");
+			} 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return result;
 	}
-
-
 }

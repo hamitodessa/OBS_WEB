@@ -347,6 +347,10 @@ async function yeniFis() {
 
 async function zaiOku() {
 	const fisno = document.getElementById("fisno").value;
+	if (!fisno) {
+		console.log("Fiş numarası boş olamaz!");
+		return;
+	}
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = '';

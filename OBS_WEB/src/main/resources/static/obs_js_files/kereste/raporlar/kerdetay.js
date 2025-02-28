@@ -252,7 +252,7 @@ async function kerestedetayfetchTableData(page) {
                 <td>${rowData.Alt_Grup}</td>
                 <td>${rowData.Mensei}</td>
 				<td>${rowData.Depo}</td>
-                <td>${rowData.Ozel_kod}</td>
+                <td>${rowData.Ozel_Kod}</td>
                 <td>${rowData.Izahat}</td>
                 <td>${rowData.Nakliyeci}</td>
                 <td>${rowData.USER}</td>

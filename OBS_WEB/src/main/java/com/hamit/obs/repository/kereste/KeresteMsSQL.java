@@ -960,6 +960,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		.append("ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup), '') AS Alt_Grup, ")
 		.append("ISNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei), '') AS Mensei, ")
 		.append("ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo), '') AS Depo, ")
+		.append("ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.Ozel_Kod),'') Ozel_Kod, ")
 		.append("[Izahat], ")
 		.append("ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci), '') AS Nakliyeci, ")
 		.append("[USER], [Cikis_Evrak], ")

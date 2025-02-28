@@ -149,6 +149,10 @@ async function sonfis() {
 
 async function uretimOku() {
 	const fisno = document.getElementById("fisno").value;
+	if (!fisno) {
+		console.log("Fiş numarası boş olamaz!");
+		return;
+	}
 	const errorDiv = document.getElementById("errorDiv");
 	document.body.style.cursor = "wait";
 	try {
