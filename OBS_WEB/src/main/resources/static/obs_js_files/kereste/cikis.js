@@ -639,11 +639,11 @@ async function anagrpChanged(anagrpElement) {
 }
 
 async function kerYoket() {
-	const fisNoInput = document.getElementById('fisno').value;
+	const fisno = document.getElementById("fisno").value.trim();
 	const table = document.getElementById('kerTable');
 	const rows = table.rows;
 
-	if (!fisNoInput || fisNoInput === "0" || rows.length === 0) {
+	if (!fisno || fisno === "0" || rows.length === 0) {
 		alert("Geçerli bir evrak numarası giriniz.");
 		return;
 	}
@@ -660,7 +660,7 @@ async function kerYoket() {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			body: new URLSearchParams({ fisno: fisNoInput.value }),
+			body: new URLSearchParams({ fisno}),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
