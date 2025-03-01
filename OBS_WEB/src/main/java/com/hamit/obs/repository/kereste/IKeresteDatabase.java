@@ -2,6 +2,7 @@ package com.hamit.obs.repository.kereste;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 
@@ -51,4 +52,10 @@ public interface IKeresteDatabase {
 	void ker_kons_degis(String kons, String yenikons, int satir,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO,Pageable pageable,  ConnectionDetails keresteConnDetails);
 	double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO ,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String k1, String k2, String f1,
+			String f2, String t1, String t2,String dURUM,String e1, String e2,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> grp_rapor(String gruplama,String sstr_2, String sstr_4, String kur_dos, String qwq6,
+			String qwq7, String qwq8, String k1, String k2, String s1, String s2, String jkj,
+			String t1, String t2, String sstr_5, String sstr_1,String orderBY,String dURUM,String ko1, String ko2,String dpo,String grup,
+			String e1 , String e2,String ozelgrp[][],Set<String> sabitkolonlar,ConnectionDetails keresteConnDetails);
 }

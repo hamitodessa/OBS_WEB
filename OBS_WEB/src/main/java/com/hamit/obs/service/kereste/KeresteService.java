@@ -2,6 +2,7 @@ package com.hamit.obs.service.kereste;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -477,6 +478,31 @@ public class KeresteService {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
 			return strategy.stok_raporsize(kerestedetayraporDTO, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String k1, String k2, String f1,
+			String f2, String t1, String t2,String dURUM,String e1, String e2){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.baslik_bak(baslik, ordr, jkj, k1, k2, f1, f2, t1, t2, dURUM, e1, e2, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> grp_rapor(String gruplama,String sstr_2, String sstr_4, String kur_dos, String qwq6,
+			String qwq7, String qwq8, String k1, String k2, String s1, String s2, String jkj,
+			String t1, String t2, String sstr_5, String sstr_1,String orderBY,String dURUM,String ko1, String ko2,String dpo,String grup,
+			String e1 , String e2,String ozelgrp[][],Set<String> sabitkolonlar){
+		
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.grp_rapor(gruplama, sstr_2, sstr_4, kur_dos, qwq6, qwq7, qwq8, k1, k2, s1, s2, jkj, t1, t2, sstr_5, sstr_1, orderBY, dURUM, ko1, ko2, dpo, grup, e1, e2, ozelgrp,sabitkolonlar, keresteConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

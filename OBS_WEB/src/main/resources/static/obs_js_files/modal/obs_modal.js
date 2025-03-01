@@ -54,6 +54,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "kerestedetayrapor") {
 		openenvModal(modal);
 	}
+	else if (nerden === "kergrprapor") {
+		openenvModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -463,6 +466,33 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #kerestedetayBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "kergrprapor") {
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const anagrp = $('#anagrp').val() || "";
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const ckod1 = $('#ckod1').val() || "";
+		const ckod2 = $('#ckod2').val() || "";
+		const ozkod = $('#ozkod').val() || "";
+		const kons1 = $('#kons1').val() || "";
+		const kons2 = $('#kons2').val() || "";
+		const depo = $('#depo').val() || "";
+		const evr1 = $('#evr1').val() || "";
+		const evr2 = $('#evr2').val() || "";
+		const birim = $('#birim').val() || "";
+		const gruplama = $('#gruplama').val() || "";
+		const stunlar = $('#stunlar').val() || "";
+		const turu = $('#turu').val() || "";
+		const dvzcevirchc = $('#dvzcevirchc').prop('checked');
+		const doviz = $('#dvzcins').val() || "";
+		const dvzturu = $('#dvzturu').val() || "";
+		const degerler = [tar1, tar2, anagrp, ukod1, ukod2, altgrp, ckod1, ckod2, ozkod,kons1,kons2,depo,evr1,evr2, birim,gruplama,
+			stunlar, turu, dvzcevirchc,doviz,dvzturu].join(",");
+		const hiddenField = $('#ara_content #grpBilgi');
+		hiddenField.val(degerler);
+	}
 
 
 	$('#firstModal').modal('hide');
@@ -582,6 +612,13 @@ function saveToMain() {
 		const mailButton = document.getElementById("kerestedetaymailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("kerestedetayreportDownload");
+		reportFormat.disabled = false;
+	}
+	else if (nerden === "kergrprapor") {
+		grpfetchTableData();
+		const mailButton = document.getElementById("grprapmailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("grprapreportDownload");
 		reportFormat.disabled = false;
 	}
 }

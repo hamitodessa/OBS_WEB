@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -1063,5 +1064,129 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String k1, String k2, String f1,
+			String f2, String t1, String t2, String dURUM, String e1, String e2, ConnectionDetails keresteConnDetails) {
+		String[] token = k1.toString().split("-");
+		String ilks ,ilkk,ilkb,ilkg;
+		ilks = token[0];
+		ilkk = token[1];
+		ilkb = token[2];
+		ilkg = token[3];
+		token = k2.toString().split("-");
+		String sons,sonk,sonb,song;
+		sons = token[0];
+		sonk = token[1];
+		sonb = token[2];
+		song = token[3];
+		String qweString = "" ;
+		if(dURUM.equals("C"))
+			qweString = " Cikis_Evrak " ;
+		else
+			qweString = " Evrak_No " ;
+		String tARIH = "" ;
+		if(! t1.equals("1900-01-01") || ! t2.equals("2100-12-31"))
+			tARIH = " AND " + dURUM + "Tarih BETWEEN '" + t1 + "'  AND  '"  + t2 + " 23:59:59.998'" ;
+		String sql =   "SELECT "+ baslik + "  FROM KERESTE   " +
+				" WHERE   " + jkj +
+				" SUBSTRING(KERESTE.Kodu, 1, 2) >= '"+ilks +"' AND SUBSTRING(KERESTE.Kodu, 1, 2) <= '"+ sons +"' AND" +
+				" SUBSTRING(KERESTE.Kodu, 4, 3) >= '"+ilkk +"' AND SUBSTRING(KERESTE.Kodu, 4, 3) <= '"+ sonk +"' AND" +
+				" SUBSTRING(KERESTE.Kodu, 8, 4) >= '"+ilkb +"' AND SUBSTRING(KERESTE.Kodu, 8, 4) <= '"+ sonb +"' AND" +
+				" SUBSTRING(KERESTE.Kodu, 13, 4) >= '"+ilkg +"' AND SUBSTRING(KERESTE.Kodu, 13, 4) <= '"+ song +"' " +
+				" AND " + dURUM + "Cari_Firma between N'" + f1 + "' AND N'" + f2 + "'" +
+				" AND " + qweString  + " between N'" + e1 + "' AND N'" + e2 + "'" +
+				tARIH +
+				" " + ordr + " ";
+		
+		System.out.println(sql);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+
+	}
+
+	@Override
+	public List<Map<String, Object>> grp_rapor(String gruplama, String sstr_2, String sstr_4, String kur_dos,
+			String qwq6, String qwq7, String qwq8, String k1, String k2, String s1, String s2, String jkj, String t1,
+			String t2, String sstr_5, String sstr_1, String orderBY, String dURUM, String ko1, String ko2, String dpo,
+			String grup, String e1, String e2, String[][] ozelgrp,Set<String> sabitkolonlar, ConnectionDetails keresteConnDetails) {
+		String[] token = k1.toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) >= '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) >= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) >= '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) >= '" + token[3] + "' AND"  );
+		token = k2.toString().split("-");
+		if (! token[0].equals("ZZ"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 1, 2) <= '" + token[0] + "' AND" );
+		if (! token[1].equals("999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 4, 3) <= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("9999"))
+			kODU.append(" SUBSTRING(KERESTE.Kodu, 8, 4) <= '" + token[2] + "' AND" );
+		if (! token[3].equals("9999"))
+			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
+		if(qwq6.equals(" Like  '%' "))
+			qwq6 =  " " ;
+		else
+			qwq6 = dURUM + "Ana_Grup " + qwq6 ;
+		if(qwq7.equals(" Like  '%' "))
+			qwq7 =  " " ;
+		else
+			qwq7 = " AND "+ dURUM + "Alt_Grup " + qwq7 ;
+		if(qwq8.equals(" Like  '%' "))
+			qwq8 =  " " ;
+		else
+			qwq8 = " AND "+ dURUM + "Ozel_Kod " + qwq8 ;
+		if(dpo.equals(" Like  '%' "))
+			dpo =  " " ;
+		else
+			dpo = " AND "+ dURUM + "Depo " + dpo + " AND ";
+		String qweString = "" ;
+		if(dURUM.equals("C"))
+			qweString = " Cikis_Evrak " ;
+		else
+			qweString = " Evrak_No " ;
+		String sql =   "SELECT * " +
+				" FROM (SELECT " + gruplama + " ," + sstr_2 + " as degisken," + sstr_4 +
+				" FROM KERESTE " + kur_dos + 
+				" WHERE " + jkj + " " +
+				   qwq6 + " " + qwq7 + " " + qwq8 + " " + dpo +
+				   kODU + " " +
+				   dURUM + "Cari_Firma between N'" + s1 + "' AND N'" + s2 + "'" +
+				" AND " + qweString  + " between N'" + e1 + "' AND N'" + e2 + "'" +
+				" AND Konsimento between N'" + ko1 + "' AND N'" + ko2 + "'" +
+				" AND KERESTE."+ dURUM + "Tarih BETWEEN '" +t1 + "'" + " AND  '" + t2 + " 23:59:59.998'" +
+				" ) AS s " +
+				" PIVOT" +
+				" (" +
+				" SUM(" + sstr_5 + ")" +
+				" FOR degisken" +
+				" IN (" + sstr_1 + ")" +
+				" )" +
+				" AS p" +
+				" ORDER BY " + orderBY ;
+		
+		System.out.println(sql);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 }

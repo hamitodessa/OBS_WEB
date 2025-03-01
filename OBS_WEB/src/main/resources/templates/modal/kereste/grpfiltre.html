@@ -35,106 +35,108 @@
             <div class="modal-body">
                 <div class="input-group" style="padding: 2px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk Son Tarih</span>
+                            <span class="input-group-text" style="width: 140px;">Ilk Son Tarih</span>
                         </div>
                         <span style="padding-left: 5px;"></span> 
-                        <input type="date" id="tar1" style="min-width: 130px;max-width: 130px;" class="form-control" value="1900-01-01"> 
+                        <input type="date" id="tar1" style="min-width: 140px;max-width: 140px;" class="form-control" value="1900-01-01"> 
                         <span style="padding-left: 5px;"></span> 
-                        <input type="date" id="tar2" style="min-width: 130px;max-width: 130px;" class="form-control" value="2100-12-31"> 
+                        <input type="date" id="tar2" style="min-width: 140px;max-width: 140px;" class="form-control" value="2100-12-31"> 
                         <span style="padding-left: 5px;"></span>
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Urun Ana Grup</span>
+                            <span class="input-group-text" style="width: 140px;">Ana Grup</span>
                         </div>
                         <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"
-                                style="width: 150px;  " id="uranagrp" onchange="anagrpChanged(this,'uraltgrp')">
+                        <select class="form-select cins_bold" id="anagrp" onchange="anagrpChanged(this,'altgrp')">
                         </select> 
                 </div>
                 <div class="input-group" style="padding: 2px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk Son Urun kodu</span>
+                            <span class="input-group-text" style="width: 140px;">Ilk Son Urun kodu</span>
                         </div>
                         <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="ukod1" style="min-width: 130px;max-width: 130px;" class="form-control" ondblclick="openurunkodlariModal('ukod1', 'grprapor','ukodukod')">
+                        <input type="text" id="ukod1" style="min-width: 140px;max-width: 140px;" value ="00-000-0000-0000" class="form-control" ondblclick="openurunkodlariModal('ukod1', 'grprapor','ukodukod')">
                         <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="ukod2" style="min-width: 130px;max-width: 130px;" value="ZZZZZZZZZZZZ" class="form-control" ondblclick="openurunkodlariModal('ukod2', 'grprapor','ukodukod')">
+                        <input type="text" id="ukod2" style="min-width: 140px;max-width: 140px;" value="ZZ-999-9999-9999" class="form-control" ondblclick="openurunkodlariModal('ukod2', 'grprapor','ukodukod')">
                         <span style="padding-left: 5px;"></span>
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Urun Alt Grup</span>
+                            <span class="input-group-text" style="width: 140px;">Alt Grup</span>
                         </div>
                         <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style=" width: 150px; " id="uraltgrp" disabled>
+                        <select class="form-select cins_bold"  id="altgrp" disabled>
                         </select> 
                 </div>
                 <div class="input-group" style="padding: 2px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk ve Son Hesap</span>
+                            <span class="input-group-text" style="width: 140px;">Ilk ve Son Hesap</span>
                         </div>
                         <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="ckod1" style="min-width: 130px;max-width: 130px;" class="form-control"  ondblclick="openSecondModal('ckod1')"> 
+                        <input type="text" id="ckod1" style="min-width: 140px;max-width: 140px;" class="form-control"  ondblclick="openSecondModal('ckod1')"> 
                         <span style="padding-left: 5px;"></span>
-                        <input type="text" id="ckod2" style="min-width: 130px;max-width: 130px;" value="ZZZZZZZZZZ" class="form-control"  ondblclick="openSecondModal('ckod2')">
+                        <input type="text" id="ckod2" style="min-width: 140px;max-width: 140px;" value="ZZZZZZZZZZ" class="form-control"  ondblclick="openSecondModal('ckod2')">
                         <span style="padding-left: 5px;"></span>
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Urun Oz.Kod</span>
+                            <span class="input-group-text" style="width: 140px;">Ozel Kod</span>
                         </div>
                         <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style=" width: 150px; " id="urozkod" >
+                        <select class="form-select cins_bold"  id="ozkod" >
                         </select> 
                 </div>
                 <div class="input-group" style="padding: 2px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk ve Son Sinif</span>
+                            <span class="input-group-text" style="width: 140px;">Ilk ve Son Kons.</span>
                         </div>
                         <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="sinif1" style="min-width: 130px;max-width: 130px;" class="form-control"> 
+                        <input type="text" id="kons1" style="min-width: 140px;max-width: 140px;" class="form-control"> 
                         <span style="padding-left: 5px;"></span>
-                        <input type="text" id="sinif2" style="min-width: 130px;max-width: 130px;" value="ZZZZZZZZZZ" class="form-control">
+                        <input type="text" id="kons2" style="min-width: 140px;max-width: 140px;" value="ZZZZZZZZZZ" class="form-control">
+                        <span style="padding-left: 5px;"></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 140px;">Depo</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" id="depo" >
+                        </select> 
                 </div>
                 <div class="input-group" style="padding: 2px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Birim</span>
+                            <span class="input-group-text" style="width: 140px;">Ilk ve Son Evrak</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span> 
+                        <input type="text" id="evr1" style="min-width: 140px;max-width: 140px;" class="form-control"> 
+                        <span style="padding-left: 5px;"></span>
+                        <input type="text" id="evr2" style="min-width: 140px;max-width: 140px;" value="ZZZZZZZZZZ" class="form-control">
+                       <span style="padding-left: 5px;"></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 140px;">Turu</span>
                         </div>
                         <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="birim" >
+                        <select class="form-select cins_bold"  id="turu" >
+                            <option value="CIKAN">CIKAN</option>
+                            <option value="GIREN">GIREN</option>
+                            <option value="STOK">STOK</option>
+                        </select> 
+                    </div>
+                <div class="input-group" style="padding: 2px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 140px;">Birim</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style="min-width: 140px;max-width: 140px;" id="birim" >
+                            <option value="m3">m3</option>
                             <option value="Tutar">Tutar</option>
                             <option value="Miktar">Miktar</option>
-                            <option value="Agirlik">Agirlik</option>
+                            
                         </select> 
-                        <span style="padding-left: 95px;"></span>
-                        <div class="form-row" style="width: 130px;">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="istenenaychc" onchange="istenenayChanged()">
-                                <label class="form-check-label" >Istenen Ay</label>
-                            </div>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <input type="text" id="istenenay" style="width: 50px;visibility:hidden;"   class="form-control" >  
-                </div>
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Gruplama</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="gruplama" >
-                            <option value="Urun Kodu">Urun Kodu</option>
-                            <option value="Urun Kodu-Yil">Urun Kodu-Yil</option>
-                            <option value="Yil">Yil</option>
-                            <option value="Hesap Kodu-Yil">Hesap Kodu</option>
-                            <option value="Hesap Kodu-Yil">Hesap Kodu-Yil</option>
-                            <option value="Yil_Ay">Yil_Ay</option>
-                            <option value="Urun_Ana_Grup">Urun_Ana_Grup</option>
-                            <option value="Urun_Ana_Grup_Yil">Urun_Ana_Grup_Yil</option>
-                        </select> 
-                        <span style="padding-left: 95px;"></span>
-                        <div class="form-row" style="width: 130px;">
+
+                        <span style="padding-left: 150px;"></span>
+                        <div class="form-row" style="width: 138px;">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="dvzcevirchc"  onchange="dvzcevirChanged()">
                                 <label class="form-check-label" >Dvz Cevirme</label>
                             </div>
                         </div>
                         <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;visibility:hidden;" id="dvzcins" >
+                        <select class="form-select cins_bold" style="visibility:hidden;" id="dvzcins" >
                             <option value="USD">USD</option>
                             <option value="EUR">EUR</option>
                             <option value="RUB">RUB</option>
@@ -142,31 +144,54 @@
                 </div>
                 <div class="input-group" style="padding: 2px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Stunlar</span>
+                            <span class="input-group-text" style="width: 140px;">Gruplama</span>
                         </div>
                         <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="stunlar" >
+                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="gruplama" >
+                            <option value="Urun Kodu">Urun Kodu</option>
+                            <option value="Sinif">Sinif</option>
+                            <option value="Sinif I Hane">Sinif I Hane</option>
+                            <option value="Sinif II Hane">Sinif II Hane</option>
+                            <option value="Kalinlik">Kalinlik</option>
+                            <option value="Genislik">Genislik</option>
+                            <option value="Boy">Boy</option>
+                            <option value="Sinif-Kal">Sinif-Kal</option>
+                            <option value="Sinif-Gen">Sinif-Gen</option>
+                            <option value="Sinif-Boy">Sinif-Boy</option>
+                            <option value="Sinif-Kal-Boy">Sinif-Kal-Boy</option>
+                            <option value="Sinif-Kal-Gen">Sinif-Kal-Gen</option>
+                            <option value="Urun Kodu-Yil">Urun Kodu-Yil</option>
                             <option value="Yil">Yil</option>
-                            <option value="Ay">Ay</option>
-                            <option value="Gun">Gun</option>
-                            <option value="Ana Grup">Ana Grup</option>
-                            <option value="Urun Ana Grup">Urun Ana Grup</option>
-                            <option value="Hesap Kodu">Hesap Kodu</option>
+                            <option value="Yil-Ay">Yil-Ay</option>
+                            <option value="Paket-Sinif-Kal-Boy">Paket-Sinif-Kal-Boy</option>
+                            <option value="Paket-Sinif-Kal-Gen">Paket-Sinif-Kal-Gen</option>
+                            <option value="Kons-Paket-Sinif-Kal-Gen">Kons-Paket-Sinif-Kal-Gen</option>
+                            <option value="Kons-Paket-Sinif-Kal-Boy">Kons-Paket-Sinif-Kal-Boy</option>
+                            <option value="Paket-Konsimento">Paket-Konsimento</option>
+                            <option value="Hesap-Kodu">Hesap-Kodu</option>
+                            <option value="Hesap-Kodu-Yil">Hesap-Kodu-Yil</option>
+                            <option value="Konsimento">Konsimento</option>
                         </select> 
-                        <span style="padding-left: 229px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 80px;max-width: 80px;visibility:hidden;" id="dvzturu" >
+                        <span style="padding-left: 256px;"></span>
+                        <select class="form-select cins_bold" style="visibility:hidden;" id="dvzturu" >
                             <option value="MA">MA</option>
                             <option value="MS">MS</option>
                         </select> 
                 </div>
                 <div class="input-group" style="padding: 2px;">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Turu</span>
+                            <span class="input-group-text" style="width: 140px;">Stunlar</span>
                         </div>
                         <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="turu" >
-                            <option value="CIKAN">CIKAN</option>
-                            <option value="GIREN">GIREN</option>
+                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="stunlar" >
+                            <option value="Yil">Yil</option>
+                            <option value="Ay">Ay</option>
+                            <option value="Gun">Gun</option>
+                            <option value="Kalinlik">Kalinlik</option>
+                            <option value="Boy">Boy</option>
+                            <option value="Genislik">Genislik</option>
+                            <option value="Sinif">Sinif</option>
+                            <option value="Hesap-Kodu">Hesap-Kodu</option>
                         </select> 
                 </div>
             </div>

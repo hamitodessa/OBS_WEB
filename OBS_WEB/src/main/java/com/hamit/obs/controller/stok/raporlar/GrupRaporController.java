@@ -44,7 +44,7 @@ public class GrupRaporController {
 	private FaturaService faturaService;
 
 	@GetMapping("/stok/grprapor")
-	public String stokrapor() {
+	public String grprapor() {
 		return "stok/raporlar/gruprapor";
 	}
 
