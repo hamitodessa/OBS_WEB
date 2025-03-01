@@ -122,6 +122,19 @@ function dvzcevirChanged() {
         document.getElementById("dvzturu").style.visibility = "hidden";
     }
 }
+function birimChanged() {
+    const birim = document.getElementById("birim").value;
+    if (birim === "Tutar") {
+        document.getElementById("dvzcevirchc").style.visibility = "visible";
+        document.getElementById("dvzcevirlbl").style.visibility = "visible";
+    } else {
+        document.getElementById("dvzcevirchc").style.visibility = "hidden";
+        document.getElementById("dvzcevirlbl").style.visibility = "hidden";
+        document.getElementById("dvzcins").style.visibility = "hidden";
+        document.getElementById("dvzturu").style.visibility = "hidden";
+    }
+   
+}
 
 async function grpfetchTableData() {
     const hiddenFieldValue = $('#grpBilgi').val();
@@ -206,7 +219,13 @@ function updateTable(data, headers, format, kolonbaslangic) {
             if (index >= kolonbaslangic) {
                 let numericValue = parseFloat(cellValue);
                 if (!isNaN(numericValue)) {
-                    td.textContent = format == 2 ? formatNumber2(numericValue) : formatNumber3(numericValue);
+                    if(format == 2){
+                        td.textContent = formatNumber2(numericValue);
+                    } else if(format == 3){
+                        td.textContent = formatNumber3(numericValue);   
+                    } else {
+                        td.textContent = formatNumber0(numericValue);   
+                    }
                     td.classList.add("double-column");
                     kolonToplamlari[index] += numericValue;
                 } else {
@@ -225,7 +244,13 @@ function updateTable(data, headers, format, kolonbaslangic) {
     headers.forEach((header, index) => {
         let th = document.createElement("th");
         if (index >= kolonbaslangic) {
-            th.textContent = format == 2 ? formatNumber2(kolonToplamlari[index]) : formatNumber3(kolonToplamlari[index]);
+            if(format == 2){
+                th.textContent = formatNumber2(kolonToplamlari[index]);
+            } else if(format == 3){
+                th.textContent = formatNumber3(kolonToplamlari[index]);   
+            } else {
+                th.textContent = formatNumber0(kolonToplamlari[index]);   
+            }
             th.classList.add("double-column");
         } else {
             th.textContent = "";

@@ -22,8 +22,6 @@ import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
-import OBS_C_2025.BAGLAN;
-
 @Component
 public class KeresteMsSQL implements IKeresteDatabase {
 
@@ -1101,8 +1099,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				" AND " + qweString  + " between N'" + e1 + "' AND N'" + e2 + "'" +
 				tARIH +
 				" " + ordr + " ";
-		
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -1112,7 +1108,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -1120,40 +1115,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			String qwq6, String qwq7, String qwq8, String k1, String k2, String s1, String s2, String jkj, String t1,
 			String t2, String sstr_5, String sstr_1, String orderBY, String dURUM, String ko1, String ko2, String dpo,
 			String grup, String e1, String e2, String[][] ozelgrp,Set<String> sabitkolonlar, ConnectionDetails keresteConnDetails) {
-		if(! kur_dos.equals(""))
-		{
-			if (! BAGLAN.kerDizin.hAN_SQL.equals(BAGLAN.kurDizin.hAN_SQL))
-				throw  new Exception("Kereste Dosya ve Kur Dosyasi Farkli SQL dosyalari");
-			if (BAGLAN.kerDizin.yER.equals("S") && BAGLAN.kurDizin.yER.equals("L"))
-				throw  new Exception("Kereste Dosya Server ---- Kur Dosyasi Lokal Secilmis");
-			String str1 = "" ;
-			if (BAGLAN.kurDizin.yER.equals("L"))
-				str1 = "OK_Kur" + BAGLAN.kurDizin.kOD + ".dbo.KURLAR as k " ;
-			else
-			{
-				if ( BAGLAN.cariDizin.sERVER.equals(BAGLAN.kurDizin.sERVER))
-					str1 = "OK_Kur" + BAGLAN.kurDizin.kOD + ".dbo.KURLAR as k " ;
-				else
-				{
-					PreparedStatement stmtt = con.prepareStatement("SELECT CAST(value AS INT) 'Config_Value' "
-							+ "FROM [master].sys.configurations "
-							+ "WHERE name = 'ad hoc distributed queries' ");
-					ResultSet rqs = stmtt.executeQuery();
-					rqs.next();
-					if(rqs.getInt("Config_Value") == 0)
-					{
-						stmtt = con.prepareStatement("EXEC sp_configure 'show advanced options', 1 "
-								+ " RECONFIGURE "
-								+ "	EXEC sp_configure 'ad hoc distributed queries', 1"
-								+ "	RECONFIGURE") ;
-						stmtt.execute();
-					}
-					str1 = "OPENROWSET('MSOLEDBSQL','" + BAGLAN.kurDizin.sERVER.replace(":",",")  + "';'" + BAGLAN.kurDizin.kULLANICI +  "';'" + BAGLAN.kurDizin.sIFRESI + 
-							"','SELECT * FROM [OK_Kur" + BAGLAN.kurDizin.kOD + "].[dbo].[KURLAR]') as k ";
-				}
-			}
-			kur_dos = " left outer join " +  str1 + kur_dos;
-		}
 
 		String[] token = k1.toString().split("-");
 		StringBuilder kODU = new StringBuilder();
@@ -1214,8 +1175,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				" )" +
 				" AS p" +
 				" ORDER BY " + orderBY ;
-		
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

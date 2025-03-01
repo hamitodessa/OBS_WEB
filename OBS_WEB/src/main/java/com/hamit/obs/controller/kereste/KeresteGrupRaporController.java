@@ -27,7 +27,6 @@ import com.hamit.obs.service.kereste.KeresteService;
 @Controller
 public class KeresteGrupRaporController {
 
-
 	@Autowired
 	private KeresteService keresteService;
 
@@ -35,7 +34,6 @@ public class KeresteGrupRaporController {
 	public String grprapor() {
 		return "kereste/gruprapor";
 	}
-
 
 	@PostMapping("kereste/grpdoldur")
 	@ResponseBody
@@ -70,14 +68,12 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"Kodu\""; 
 						ozelgrp[0][1] = "Kodu"; 
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Kodu")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor("Kodu",baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -90,6 +86,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Kodu, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -109,7 +107,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -126,7 +123,6 @@ public class KeresteGrupRaporController {
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) As Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Sinif")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -139,6 +135,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Sinif, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -158,7 +156,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -175,7 +172,6 @@ public class KeresteGrupRaporController {
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 1) As Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 1) ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Sinif")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -188,6 +184,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Sinif, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -207,7 +205,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -224,7 +221,6 @@ public class KeresteGrupRaporController {
 						klmString = " SUBSTRING(KERESTE.Kodu,2, 1) As Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,2, 1) ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Sinif")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -237,6 +233,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Sinif, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -256,7 +254,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -273,7 +270,6 @@ public class KeresteGrupRaporController {
 						klmString = " SUBSTRING(KERESTE.Kodu,4, 3) As Kalinlik ";
 						grpString = " SUBSTRING(KERESTE.Kodu,4, 3) ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Kalinlik")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -286,6 +282,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Kalinlik, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -305,7 +303,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -322,7 +319,6 @@ public class KeresteGrupRaporController {
 						klmString = " SUBSTRING(KERESTE.Kodu,13, 4) As Genislik ";
 						grpString = " SUBSTRING(KERESTE.Kodu,13, 4) ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Genislik")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -335,6 +331,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Genislik, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -354,7 +352,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -371,7 +368,6 @@ public class KeresteGrupRaporController {
 						klmString = " SUBSTRING(KERESTE.Kodu,8, 4) As Boy ";
 						grpString = " SUBSTRING(KERESTE.Kodu,13, 4) ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Boy")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -384,6 +380,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Boy, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -401,7 +399,6 @@ public class KeresteGrupRaporController {
 						hANGI = "" ;
 					else if (kergrupraporDTO.getTuru().equals("CIKAN"))
 						hANGI = "C" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -422,7 +419,6 @@ public class KeresteGrupRaporController {
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal  " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) ,SUBSTRING(KERESTE.Kodu, 4, 3)  ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Sinif,Kal")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString + " , " + mlkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -435,6 +431,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Sinif,Kal, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -454,7 +452,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -475,7 +472,6 @@ public class KeresteGrupRaporController {
 						mlkString = " SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen  " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) ,SUBSTRING(KERESTE.Kodu, 13, 4)  ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Sinif,Gen")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString + " , " + mlkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -488,6 +484,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Sinif,Gen, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -507,7 +505,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -528,7 +525,6 @@ public class KeresteGrupRaporController {
 						mlkString = " SUBSTRING(KERESTE.Kodu, 8, 4) AS Gen  " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) ,SUBSTRING(KERESTE.Kodu, 8, 4)  ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Sinif,Boy")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString + " , " + mlkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -541,6 +537,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Sinif,Boy, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -560,7 +558,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -577,7 +574,6 @@ public class KeresteGrupRaporController {
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						blkString = " SUBSTRING(KERESTE.Kodu, 8, 4) As Boy " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif , SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal ,SUBSTRING(KERESTE.Kodu, 8, 4) As Boy ";
-
 					}
 					else if(kerConnDetails.getHangisql().equals("MY SQL"))
 					{
@@ -586,7 +582,6 @@ public class KeresteGrupRaporController {
 						blkString = " SUBSTRING(KERESTE.Kodu, 8, 4) As Boy " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2)  , SUBSTRING(KERESTE.Kodu, 4, 3),SUBSTRING(KERESTE.Kodu, 8, 4)  ";
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Sinif,Kal,Boy")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString + " , " + mlkString + " , " + blkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -599,6 +594,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Sinif,Kal,Boy, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -618,7 +615,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -643,7 +639,6 @@ public class KeresteGrupRaporController {
 						blkString = " SUBSTRING(KERESTE.Kodu, 13, 4)  AS Gen" ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2)  ,SUBSTRING(KERESTE.Kodu, 4, 3) ,SUBSTRING(KERESTE.Kodu, 13, 4)   " ;
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Sinif,Kal,Gen")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString + " ," + mlkString + " ," + blkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -656,6 +651,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Sinif,Kal,Gen, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -675,7 +672,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -692,7 +688,6 @@ public class KeresteGrupRaporController {
 						klmString = " YEAR(KERESTE."+ hANGI+"Tarih)  as Yil"   ;
 						grpString = " YEAR(KERESTE."+ hANGI+"Tarih) "   ;
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Yil")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -705,6 +700,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Yil, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -745,7 +742,6 @@ public class KeresteGrupRaporController {
 						blkString = " YEAR(KERESTE."+ hANGI+"Tarih) as Yil" ;
 						grpString = " YEAR(KERESTE."+ hANGI+"Tarih) , MONTH(KERESTE."+ hANGI+"Tarih) " ;
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Yil,Ay")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(blkString + " , " + mlkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -758,6 +754,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Yil,Ay, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -777,7 +775,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -796,7 +793,6 @@ public class KeresteGrupRaporController {
 						blkString = " YEAR(KERESTE."+ hANGI+"Tarih) as Yil" ;
 						grpString= " Kodu ,YEAR(KERESTE." + hANGI + "Tarih) " ;
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Kodu,Yil")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(" Kodu, " + blkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -809,6 +805,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Kodu,Yil, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -828,7 +826,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -847,7 +844,6 @@ public class KeresteGrupRaporController {
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						blkString = " SUBSTRING(KERESTE.Kodu, 8, 4) AS Boy" ;
 						grpString = " Paket_No ,SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif , SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal ,SUBSTRING(KERESTE.Kodu, 8, 4) AS Boy ";
-
 					}
 					else if(kerConnDetails.getHangisql().equals("MY SQL"))
 					{
@@ -857,7 +853,6 @@ public class KeresteGrupRaporController {
 						grpString = " Paket_No, SUBSTRING(KERESTE.Kodu,1, 2)  , SUBSTRING(KERESTE.Kodu, 4, 3) ,SUBSTRING(KERESTE.Kodu, 8, 4)  ";
 
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Paket_No,Sinif , Kal,Boy")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(klmString + " ," + mlkString +" ," + blkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -870,6 +865,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Paket_No,Sinif , Kal,Boy, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -889,7 +886,6 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-
 					if(kerConnDetails.getHangisql().equals("PG SQL"))
 					{
 						ozelgrp = new String[7][2];
@@ -916,7 +912,6 @@ public class KeresteGrupRaporController {
 						blkString = " SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen " ;
 						grpString = " Paket_No,SUBSTRING(KERESTE.Kodu,1, 2)  , SUBSTRING(KERESTE.Kodu, 4, 3) ,SUBSTRING(KERESTE.Kodu, 13, 4) " ;
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Paket_No,Sinif , Kal,Gen")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(" Paket_No," + klmString + " ," + mlkString+" ," + blkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -929,6 +924,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Paket_No,Sinif , Kal,Gen, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -977,7 +974,6 @@ public class KeresteGrupRaporController {
 						blkString = " SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen " ;
 						grpString = " Konsimento,Paket_No,SUBSTRING(KERESTE.Kodu,1, 2)  , SUBSTRING(KERESTE.Kodu, 4, 3) ,SUBSTRING(KERESTE.Kodu, 13, 4) " ;
 					}
-
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Konsimento,Paket_No,Sinif,Kal,Gen")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(" Konsimento, Paket_No," + klmString + " ," + mlkString+" ," + blkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -990,6 +986,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Konsimento,Paket_No,Sinif,Kal,Gen, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -1050,6 +1048,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Konsimento,Paket_No,Sinif , Kal,Boy, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -1118,6 +1118,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Hesap,Unvan, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -1186,6 +1188,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Hesap,Unvan, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -1210,7 +1214,6 @@ public class KeresteGrupRaporController {
 						ozelgrp[0][0] = "\"KERESTE\".\"Konsimento\""; 
 						ozelgrp[0][1] = "Konsimento"; 
 					}
-					
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Konsimento")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor("Konsimento",baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1223,6 +1226,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Konsimento, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -1249,7 +1254,6 @@ public class KeresteGrupRaporController {
 						ozelgrp[1][0] = "\"Konsimento\""; 
 						ozelgrp[1][1] = "Konsimento"; 
 					}
-					
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Paket_No,Konsimento")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor(" Paket_No,Konsimento ",baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1262,6 +1266,8 @@ public class KeresteGrupRaporController {
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
 						response.put("format",2);
+					else if(kergrupraporDTO.getBirim().equals("Miktar"))
+						response.put("format",0);
 					else
 						response.put("format",3);
 					response.put("baslik","Paket_No,Konsimento, " + baslikbakStrings[0] + ",TOPLAM");   
@@ -1366,9 +1372,9 @@ public class KeresteGrupRaporController {
 			if (kergrupraporDTO.getBirim().equals("Tutar"))
 			{
 				if(kerConnDetails.getHangisql().equals("MS SQL"))
-					kur_dos = " on k.Tarih = convert(varchar(10), KERESTE." + hTarString + "Tarih, 120) and (k.kur IS NULL OR k.KUR ='" + kergrupraporDTO.getDoviz()+ "') ";
+					kur_dos = "  left outer join OK_Kur" + kurConnDetails.getDatabaseName() + ".dbo.kurlar k on k.Tarih = convert(varchar(10), KERESTE." + hTarString + "Tarih, 120) and (k.kur IS NULL OR k.KUR ='" + kergrupraporDTO.getDoviz() + "') ";
 				else if(kerConnDetails.getHangisql().equals("MY SQL"))
-					kur_dos = " on k.Tarih = DATE( KERESTE." + hTarString + "Tarih) and  k.kur ='" + kergrupraporDTO.getDoviz() + "' ";
+					kur_dos = "  left outer join ok_kur" + kurConnDetails.getDatabaseName() + ".kurlar k on k.Tarih = DATE(KERESTE." + hTarString + "Tarih) and  k.kur ='" + kergrupraporDTO.getDoviz() + "' ";
 				else if(kerConnDetails.getHangisql().equals("PG SQL"))
 				{
 					String kurServer = "" ; 
@@ -1377,13 +1383,12 @@ public class KeresteGrupRaporController {
 						kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
 					else
 						kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
-
 					String kurcString = kergrupraporDTO.getDvzturu();
 					String kurcesitString = kergrupraporDTO.getDoviz();
-					kur_dos  = " left join  (SELECT * FROM  dblink ('" + kurServer + "'," + 
+					kur_dos = " left join  (SELECT * FROM  dblink ('" + kurServer + "'," + 
 							" 'SELECT \"TARIH\", \"" + kurcString + "\",\"KUR\" FROM \"KURLAR\" WHERE \"KUR\"= ''" + kurcesitString +"''')  AS kur " +
 							" (\"TARIH\" timestamp,\"" + kurcString + "\" DOUBLE PRECISION,\"KUR\" character varying) " +
-							" ) as tr on DATE(\"KERESTE\".\"Tarih\") = DATE(tr.\"TARIH\") " ;
+							" ) as tr on DATE(\"KERESTE\".\"" +hTarString + "Tarih\") = DATE(tr.\"TARIH\") " ;
 				}
 			}
 			else
@@ -1392,7 +1397,6 @@ public class KeresteGrupRaporController {
 		else
 			kur_dos = "" ;
 
-
 		jkj  = "" ;
 		if (kergrupraporDTO.getTuru().equals("GIREN"))
 			jkj =   "" ;
@@ -1400,7 +1404,7 @@ public class KeresteGrupRaporController {
 			jkj = " Cikis_Evrak <> '' AND  " ;
 		else if (kergrupraporDTO.getTuru().equals("STOK"))
 			jkj = " Cikis_Evrak = '' AND " ;
-		
+
 		deg_cevirString[0] = jkj ;
 		deg_cevirString[1] = jkj1 ;
 		deg_cevirString[2] = ch1 ;
@@ -1488,7 +1492,6 @@ public class KeresteGrupRaporController {
 				jkj = " Cikis_Evrak = '' AND " ;
 				hANGI = "" ;
 			}
-
 			if (kergrupraporDTO.getStunlar().equals("Yil"))
 			{
 				if(kerConnDetails.getHangisql().equals("MS SQL"))
@@ -1701,7 +1704,6 @@ public class KeresteGrupRaporController {
 					hKODU = "CCari_Firma" ;
 				else if (kergrupraporDTO.getTuru().equals("STOK"))
 					hKODU = "Cari_Firma" ;
-
 				if(kerConnDetails.getHangisql().equals("MS SQL"))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT " + hKODU,"ORDER BY " + hKODU,jkj,
@@ -1729,8 +1731,6 @@ public class KeresteGrupRaporController {
 					sstr_2 = "\"" + hKODU.trim() + "\" " ;
 				}
 			}
-
-
 			String sstr_1 = "";
 			StringBuilder text = new StringBuilder();
 			for (Map<String, Object> row : baslik)
@@ -1745,6 +1745,4 @@ public class KeresteGrupRaporController {
 		}
 		return baslikbakStrings;
 	}
-
-
 }

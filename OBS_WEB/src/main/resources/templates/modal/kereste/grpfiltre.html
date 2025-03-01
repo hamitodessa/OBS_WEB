@@ -121,7 +121,7 @@
                             <span class="input-group-text" style="width: 140px;">Birim</span>
                         </div>
                         <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 140px;max-width: 140px;" id="birim" >
+                        <select class="form-select cins_bold" style="min-width: 140px;max-width: 140px;" id="birim" onchange="birimChanged()">
                             <option value="m3">m3</option>
                             <option value="Tutar">Tutar</option>
                             <option value="Miktar">Miktar</option>
@@ -131,8 +131,8 @@
                         <span style="padding-left: 150px;"></span>
                         <div class="form-row" style="width: 138px;">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dvzcevirchc"  onchange="dvzcevirChanged()">
-                                <label class="form-check-label" >Dvz Cevirme</label>
+                                <input type="checkbox" class="form-check-input" style="visibility:hidden;" id="dvzcevirchc"  onchange="dvzcevirChanged()">
+                                <label class="form-check-label" style="visibility:hidden;" id="dvzcevirlbl" >Dvz Cevirme</label>
                             </div>
                         </div>
                         <span style="padding-left: 5px;"></span>
