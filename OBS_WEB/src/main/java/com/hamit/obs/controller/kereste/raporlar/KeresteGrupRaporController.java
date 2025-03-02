@@ -1,5 +1,6 @@
-package com.hamit.obs.controller.kereste;
+package com.hamit.obs.controller.kereste.raporlar;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,7 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.mail.util.ByteArrayDataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +27,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
+import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kereste.kergrupraporDTO;
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.kereste.KeresteService;
 
 @Controller
 public class KeresteGrupRaporController {
 
+	@Autowired
+	private RaporOlustur raporOlustur;
+
+	
 	@Autowired
 	private KeresteService keresteService;
 
@@ -1745,4 +1758,33 @@ public class KeresteGrupRaporController {
 		}
 		return baslikbakStrings;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@PostMapping("kereste/grp_download")
+	@ResponseBody
+	public ResponseEntity<byte[]> downloadReport(@RequestBody Map<String, Object> requestBody) {
+		ByteArrayDataSource dataSource ;
+		try {
+			List<String> header =  (List<String>) requestBody.get("headers");  
+			String tableString = (String) requestBody.get("data");
+			int sabitkolon = (int) requestBody.get("sabitkolon");
+			List<Map<String, String>> tableData = ResultSetConverter.parseTableData(tableString, header);
+			dataSource =  raporOlustur.grprap(tableData,sabitkolon);
+			if (dataSource == null)
+				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");
+			byte[] fileContent = dataSource.getInputStream().readAllBytes();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			String fileName = "Grup_Rapor.xlsx";
+			headers.setContentDispositionFormData("attachment", fileName);
+			return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+		} catch (ServiceException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().getBytes(StandardCharsets.UTF_8));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Beklenmeyen bir hata oluştu.".getBytes(StandardCharsets.UTF_8));
+		} finally {
+			dataSource = null;
+		}	
+	}
+
 }

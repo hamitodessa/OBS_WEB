@@ -61,7 +61,7 @@ public class RaporEmailGonderme {
 			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter") || nerden.equals("stok")
 					 || nerden.equals("stokdetay")  || nerden.equals("tahrap")|| nerden.equals("cekrap") )
 				gonder_excell();
-			else if(nerden.equals("gruprapor") || nerden.equals("imagruprapor"))
+			else if(nerden.equals("gruprapor") || nerden.equals("imagruprapor") || nerden.equals("kergruprapor"))
 				gonder_excell_grup();
 			else
 				gonder_jasper();

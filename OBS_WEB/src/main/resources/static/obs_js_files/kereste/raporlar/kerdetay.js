@@ -159,7 +159,7 @@ async function toplampagesize() {
             body: JSON.stringify(kerestedetayraporDTO),
         });
     const totalRecords = response.totalRecords;
-    totalPages = Math.ceil(totalRecords / pageSize); // Tekrar .totalRecords çağırmaya gerek yok!
+    totalPages = Math.ceil(totalRecords / pageSize);
 }
 
 async function kerestedetaydoldur() {

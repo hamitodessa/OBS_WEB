@@ -1,4 +1,4 @@
-package com.hamit.obs.controller.kereste;
+package com.hamit.obs.controller.kereste.raporlar;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -133,7 +133,7 @@ public class ExcellToDataSource {
 						Cell cell = excelRow.createCell(i);
 						String cellValue = row.get(columnName) == null ? "" : row.get(columnName).trim();
 						cell.setCellValue(cellValue);
-						if (i > sabitkolon)
+						if (i >= sabitkolon)
 							cell.setCellStyle(rightAlignStyle);
 						if(tableData.size() == rowNum)
 							cell.setCellStyle(toplamStyle);
