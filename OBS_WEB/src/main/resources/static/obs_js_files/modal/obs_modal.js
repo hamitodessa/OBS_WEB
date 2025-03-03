@@ -57,6 +57,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "kergrprapor") {
 		openenvModal(modal);
 	}
+	else if (nerden === "kerfatrapor") {
+		openenvModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -493,6 +496,42 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #grpBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "kerfatrapor") {
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const ctar1 = $('#ctar1').val() || "";
+		const ctar2 = $('#ctar2').val() || "";
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const ckod1 = $('#chkod1').val() || "";
+		const ckod2 = $('#chkod2').val() || "";
+		const pak1 = $('#pak1').val() || "";
+		const pak2 = $('#pak2').val() || "";
+		const cevr1 = $('#cevr1').val() || "";
+		const cevr2 = $('#cevr2').val() || "";
+		const hes1 = $('#hes1').val() || "";
+		const hes2 = $('#hes2').val() || "";
+		const canagrp = $('#canagrp').val() || "";
+		const evr1 = $('#evr1').val() || "";
+		const evr2 = $('#evr2').val() || "";
+		const caltgrp = $('#caltgrp').val() || "";
+		const anagrp = $('#anagrp').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const depo = $('#depo').val() || "";
+		const ozkod = $('#ozkod').val() || "";
+		const kons1 = $('#kons1').val() || "";
+		const kons2 = $('#kons2').val() || "";
+		const cozkod = $('#cozkod').val() || "";
+		const cdepo = $('#cdepo').val() || "";
+		const gruplama = $('#gruplama').val() || "";
+		const caradr = $('#caradr').val() || "";
+		const gircik = $('#turu').val() || "";
+		const degerler = [tar1, tar2, ctar1, ctar2, ukod1, ukod2, ckod1, ckod2, pak1, pak2,
+			cevr1, cevr2, hes1, hes2, canagrp, evr1, evr2, caltgrp, anagrp, altgrp,
+			depo, ozkod, kons1, kons2, cozkod, cdepo, gruplama, caradr,gircik].join(",");
+		const hiddenField = $('#ara_content #fatrapBilgi');
+		hiddenField.val(degerler);
+	}
 
 
 	$('#firstModal').modal('hide');
@@ -619,6 +658,13 @@ function saveToMain() {
 		const mailButton = document.getElementById("grprapmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("grprapreportDownload");
+		reportFormat.disabled = false;
+	}
+	else if (nerden === "kerfatrapor") {
+		kerfetchTableData();
+		const mailButton = document.getElementById("fatrapmailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("fatrapreportFormat");
 		reportFormat.disabled = false;
 	}
 }

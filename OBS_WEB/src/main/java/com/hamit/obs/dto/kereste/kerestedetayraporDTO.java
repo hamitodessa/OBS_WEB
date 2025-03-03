@@ -43,8 +43,13 @@ public class kerestedetayraporDTO {
 	private double doub1 ;
 	private double doub2 ;
 	
-	 private int page;
-	 private int pageSize;
+	private int page;
+	private int pageSize;
 	
+	private String gruplama;
+	private String bir;
+	private String iki;
+	private String uc;
+	private String caradr;
 
 }

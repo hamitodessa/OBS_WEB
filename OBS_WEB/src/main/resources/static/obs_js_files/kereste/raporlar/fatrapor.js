@@ -11,7 +11,7 @@ async function anagrpChanged(anagrpElement) {
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
 	try {
-		const response = await fetchWithSessionCheck("stok/altgrup", {
+		const response = await fetchWithSessionCheck("kereste/altgrup", {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: new URLSearchParams({ anagrup: anagrup }),
@@ -35,32 +35,40 @@ async function anagrpChanged(anagrpElement) {
 	}
 }
 
-async function fatfetchTableData() {
+async function kerfetchTableData() {
 	const hiddenFieldValue = $('#fatrapBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
-	const fatraporDTO = {
-		fatno1: parsedValues[0],
-		fatno2: parsedValues[1],
-		anagrp: parsedValues[2],
-		tar1: parsedValues[3],
-		tar2: parsedValues[4],
-		altgrp: parsedValues[5],
-		ckod1: parsedValues[6],
-		ckod2: parsedValues[7],
-		depo: parsedValues[8],
-		adr1: parsedValues[9],
-		adr2: parsedValues[10],
-		turu: parsedValues[11],
-		ukod1: parsedValues[12],
-		ukod2: parsedValues[13],
-		tev1: parsedValues[14],
-		tev2: parsedValues[15],
-		okod1: parsedValues[16],
-		okod2: parsedValues[17],
-		gruplama: parsedValues[18],
-		dvz1: parsedValues[19],
-		dvz2: parsedValues[20],
-		caradr: parsedValues[21]
+	const kerestedetayraporDTO = {
+		gtar1: parsedValues[0],
+		gtar2: parsedValues[1],
+		ctar1: parsedValues[2],
+		ctar2: parsedValues[3],
+		ukodu1: parsedValues[4],
+		ukodu2: parsedValues[5],
+		cfirma1: parsedValues[6],
+		cfirma2: parsedValues[7],
+		pak1: parsedValues[8],
+		pak2: parsedValues[9],
+		cevr1: parsedValues[10],
+		cevr2: parsedValues[11],
+		gfirma1: parsedValues[12],
+		gfirma2: parsedValues[13],
+		cana: parsedValues[14],
+		evr1: parsedValues[15],
+		evr2: parsedValues[16],
+		calt: parsedValues[17],
+		gana: parsedValues[18],
+		galt: parsedValues[19],
+		gdepo: parsedValues[20],
+		gozkod: parsedValues[21],
+		kons1: parsedValues[22],
+		kons2: parsedValues[23],
+		cozkod: parsedValues[24],
+		cdepo: parsedValues[25],
+		gruplama: parsedValues[26],
+		caradr: parsedValues[27],
+		gircik: parsedValues[28]
+
 	};
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
@@ -73,12 +81,12 @@ async function fatfetchTableData() {
 	mainTableBody.innerHTML = "";
 	clearTfoot();
 	try {
-		const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
+		const response = await fetchWithSessionCheck("kereste/fatrapdoldur", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(fatraporDTO),
+			body: JSON.stringify(kerestedetayraporDTO),
 		});
 		if (response.errorMessage) {
 			throw new Error(response.errorMessage);
@@ -86,7 +94,7 @@ async function fatfetchTableData() {
 		data = response;
 		let sqlHeaders = "";
 		if (response.raporturu === 'fno') {
-			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "MIKTAR", "TUTAR", "ISK. TUTAR"];
+			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfno(sqlHeaders);
 		} else if (response.raporturu === 'fkodu') {
 			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
@@ -107,19 +115,20 @@ async function fatfetchTableData() {
                     <td>${rowData.Fatura_No || ''}</td>
                     <td>${rowData.Hareket || ''}</td>
                     <td>${formatDate(rowData.Tarih)}</td>
-                    <td>${rowData.Cari_Firma || ''}</td>
+                    <td>${rowData.Unvan || ''}</td>
                     <td>${rowData.Adres_Firma || ''}</td>
                     <td>${rowData.Doviz || ''}</td>
-                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.m3)}</td>
                     <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
+					<td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
+                    <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
                 `;
-				totalmiktar += rowData.Miktar;
+				totalmiktar += rowData.m3;
 				totaltutar += rowData.Iskontolu_Tutar;
 			}
 			else if (response.raporturu === 'fkodu') {
 				row.innerHTML = `
-                    
                     <td>${rowData.Fatura_No || ''}</td>
                     <td>${rowData.Hareket || ''}</td>
                     <td>${rowData.Unvan || ''}</td>
@@ -130,7 +139,7 @@ async function fatfetchTableData() {
                     <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
                 `;
-				totalmiktar += rowData.Miktar;
+				totalmiktar += rowData.m3;
 				totaltutar += rowData.Toplam_Tutar;
 			} if (response.raporturu === 'fnotar') {
 				row.innerHTML = `
@@ -146,7 +155,7 @@ async function fatfetchTableData() {
                     <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
                 `;
-				totalmiktar += rowData.Miktar;
+				totalmiktar += rowData.m3;
 				totaltutar += rowData.Toplam_Tutar;
 			}
 			mainTableBody.appendChild(row);
@@ -169,19 +178,25 @@ async function fatfetchTableData() {
                                 <table class="details-table table table-bordered table-hover">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th>Kodu</th>
-                                            <th>Adi</th>
+                                            <th>Fatura_No</th>
+                                            <th>Barkod</th>
+											<th>Kodu</th>
+											<th>Paket_No</th>
                                             <th style="text-align: right;">Miktar</th>
-                                            <th>Birim</th>
+											<th style="text-align: right;">m3</th>
+                                            <th style="text-align: right;">Kdv</th>
+											<th>Doviz</th>
                                             <th style="text-align: right;">Fiat</th>
-                                            <th>Doviz</th>
                                             <th style="text-align: right;">Tutar</th>
+											<th style="text-align: right;">Kur</th>
+											<th>Cari_Firma</th>
+											<th>Adres_Firma</th>
                                             <th style="text-align: right;">Iskonto</th>
+											<th style="text-align: right;">Tevkifat</th>
                                             <th style="text-align: right;">Iskonto_Tutar</th>
                                             <th style="text-align: right;">Iskontolu_Tutar</th>
-                                            <th style="text-align: right;">Kdv</th>
+											<th style="text-align: right;">Kdv</th>
                                             <th style="text-align: right;">Kdv Tutar</th>
-                                            <th style="text-align: right;">Tevkifat</th>
                                             <th style="text-align: right;">Tev Edi.Kdv.</th>
                                             <th style="text-align: right;">Tev Dah Top. Tut.</th>
                                             <th style="text-align: right;">Beyan Edilen Kdv</th>
@@ -200,19 +215,26 @@ async function fatfetchTableData() {
 							data.forEach(item => {
 								detailsTable += `
                                     <tr>
-                                        <td style="min-width:80px;">${item.Kodu || ''}</td>
-                                        <td style="min-width:250px;">${item.Adi || ''}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber3(item.Miktar)}</td>
-                                        <td>${item.Birim || ''}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Fiat)}</td>
+                                        <td style="min-width:80px;">${item.Fatura_No || ''}</td>
+                                        <td >${item.Barkod || ''}</td>
+										<td >${item.Kodu || ''}</td>
+										<td >${item.Paket_No || ''}</td>
+										<td style="text-align: right;min-width:80px;">${formatNumber0(item.Miktar)}</td>
+										<td style="text-align: right;min-width:80px;">${formatNumber3(item.m3)}</td>
+                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Kdv)}</td>
                                         <td>${item.Doviz || ''}</td>
+										<td style="text-align: right;min-width:80px;">${formatNumber2(item.Fiat)}</td>
                                         <td style="text-align: right;min-width:80px;">${formatNumber2(item.Tutar)}</td>
+										<td style="text-align: right;min-width:80px;">${formatNumber2(item.Kur)}</td>
+										<td>${item.Cari_Firma || ''}</td>
+										<td>${item.Adres_Firma || ''}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Iskonto)}</td>
+										<td style="text-align: right;">${formatNumber2(item.Tevkifat)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Iskonto_Tutar)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Iskontolu_Tutar)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Kdv)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Kdv_Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Tevkifat)}</td>
+                                       
                                         <td style="text-align: right;">${formatNumber2(item.Tev_Edilen_KDV)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Tev_Dah_Top_Tutar)}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Beyan_Edilen_KDV)}</td>
@@ -287,7 +309,7 @@ async function fetchDetails(evrakNo, cins) {
 		} else {
 			gircik = "C";
 		}
-		const response = await fetchWithSessionCheck("stok/fatdetay", {
+		const response = await fetchWithSessionCheck("kereste/fatdetay", {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
@@ -316,7 +338,7 @@ function updateTableHeadersfno(headers) {
 		let th = document.createElement("th");
 		th.textContent = header;
 
-		if (index >= headers.length - 3) {
+		if (index >= headers.length - 5) {
 			th.classList.add("double-column");
 		}
 		trHead.appendChild(th);
@@ -421,11 +443,11 @@ function updateTableHeadersfnotar(headers) {
 	tfoot.appendChild(trFoot);
 }
 
-async function openfatrapModal(modal) {
+async function openenvModal(modal) {
 	$(modal).modal('show');
 	document.body.style.cursor = "wait";
 	try {
-		const response = await fetchWithSessionCheck("stok/anadepo", {
+		const response = await fetchWithSessionCheck("kereste/anadepo", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -436,40 +458,74 @@ async function openfatrapModal(modal) {
 		}
 		const ana = response.anaKodlari;
 		const dpo = response.depoKodlari;
+		const oz = response.oz1Kodlari;
 		const anaSelect = document.getElementById("anagrp");
+		const canaSelect = document.getElementById("canagrp");
 		const dpoSelect = document.getElementById("depo");
+		const cdpoSelect = document.getElementById("cdepo");
+		const ozSelect = document.getElementById("ozkod");
+		const cozSelect = document.getElementById("cozkod");
 		anaSelect.innerHTML = "";
+		canaSelect.innerHTML = "";
 		dpoSelect.innerHTML = "";
-
-		const optionbos = document.createElement("option");
-		optionbos.value = "";
-		optionbos.textContent = "";
-		anaSelect.appendChild(optionbos);
+		cdpoSelect.innerHTML = "";
+		ozSelect.innerHTML = "";
+		cozSelect.innerHTML = "";
 		ana.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.ANA_GRUP;
-			option.textContent = item.ANA_GRUP;
-			anaSelect.appendChild(option);
+			const optionAna = document.createElement("option");
+			optionAna.value = item.ANA_GRUP;
+			optionAna.textContent = item.ANA_GRUP;
+			anaSelect.appendChild(optionAna);
+			const optionUrana = document.createElement("option");
+			optionUrana.value = item.ANA_GRUP;
+			optionUrana.textContent = item.ANA_GRUP;
+			canaSelect.appendChild(optionUrana);
 		});
-		optionbos.value = "";
-		optionbos.textContent = "";
-		dpoSelect.appendChild(optionbos);
 		dpo.forEach(item => {
 			const option = document.createElement("option");
 			option.value = item.DEPO;
 			option.textContent = item.DEPO;
 			dpoSelect.appendChild(option);
+
+			const optioncdpo = document.createElement("option");
+			optioncdpo.value = item.DEPO;
+			optioncdpo.textContent = item.DEPO;
+			cdpoSelect.appendChild(optioncdpo);
+
 		});
+
+		oz.forEach(item => {
+			const optionOz = document.createElement("option");
+			optionOz.value = item.OZEL_KOD_1;
+			optionOz.textContent = item.OZEL_KOD_1;
+			ozSelect.appendChild(optionOz);
+
+			const optioncoz = document.createElement("option");
+			optioncoz.value = item.OZEL_KOD_1;
+			optioncoz.textContent = item.OZEL_KOD_1;
+			cozSelect.appendChild(optioncoz);
+		});
+
 		const newOption = document.createElement("option");
 		newOption.value = "Bos Olanlar";
-		newOption.textContent = "Bos Olanlar"; 
+		newOption.textContent = "Bos Olanlar";
+
+		const newOption1 = document.createElement("option");
+		newOption1.value = "Bos Olanlar";
+		newOption1.textContent = "Bos Olanlar";
 
 		const newOption2 = document.createElement("option");
 		newOption2.value = "Bos Olanlar";
 		newOption2.textContent = "Bos Olanlar";
 
+		const newOption3 = document.createElement("option");
+		newOption3.value = "Bos Olanlar";
+		newOption3.textContent = "Bos Olanlar";
+
 		anaSelect.insertBefore(newOption, anaSelect.options[1]);
+		canaSelect.insertBefore(newOption1, canaSelect.options[1]);
 		dpoSelect.insertBefore(newOption2, dpoSelect.options[1]);
+		cdpoSelect.insertBefore(newOption3, cdpoSelect.options[1]);
 	} catch (error) {
 		const modalError = document.getElementById("errorDiv");
 		modalError.style.display = "block";
@@ -509,7 +565,7 @@ async function fatrapdownloadReport() {
 		}
 	});
 	try {
-		const response = await fetchWithSessionCheckForDownload('stok/fatrap_download', {
+		const response = await fetchWithSessionCheckForDownload('kereste/fatrap_download', {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(rows)
@@ -563,7 +619,7 @@ async function fatrapmailAt() {
 			}
 		});
 	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
-	const degerler = "fatrapor";
+	const degerler = "kerfatrapor";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
 }

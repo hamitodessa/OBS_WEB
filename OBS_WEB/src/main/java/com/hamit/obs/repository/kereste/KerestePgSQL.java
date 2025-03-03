@@ -1254,4 +1254,17 @@ public class KerestePgSQL implements IKeresteDatabase {
 		}
 		return resultList; 
 	}
+
+	@Override
+	public List<Map<String, Object>> fat_rapor(kerestedetayraporDTO kerestedetayraporDTO,
+			ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> fat_detay_rapor(String fno, String turu, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

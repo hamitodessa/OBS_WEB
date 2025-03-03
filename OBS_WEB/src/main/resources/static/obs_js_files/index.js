@@ -131,5 +131,6 @@ $(document).ready(function () {
 		"/kereste/grprapor": () => {
 			keresteBaslik();
 		},
+		"/kereste/fatrapor": keresteBaslik,
 	}
 });
