@@ -27,23 +27,23 @@ import com.hamit.obs.service.kur.KurService;
 
 @Service
 public class CariService {
-	
+
 	@Autowired
 	private LoglamaRepository loglamaRepository;
 
 	@Autowired
 	private ConnectionManager masterConnectionManager;
-	
+
 	@Autowired
 	private AdresService adresService;
-	
+
 	@Autowired
 	private KurService kurService;
-	
+
 	private LoglamaDTO loglamaDTO = new LoglamaDTO();
 	private final CariDatabaseContext databaseStrategyContext;
 	private ICariDatabase strategy;
-	
+
 	public CariService(CariDatabaseContext databaseStrategyContext) {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
@@ -58,7 +58,7 @@ public class CariService {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
 	}
-	
+
 	public String[] conn_detail() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
@@ -68,7 +68,7 @@ public class CariService {
 		detay[2] = cariConnDetails.getServerIp() ;
 		return detay;
 	}
-	
+
 	public String[] hesap_adi_oku(String hesap) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -167,7 +167,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> mizan(mizanDTO mizanDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -177,7 +177,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String cari_firma_adi() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -197,7 +197,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void hpln_kayit(hesapplaniDTO hesapplaniDTO)
 	{
 		try {
@@ -208,7 +208,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void hpln_detay_kayit(hesapplaniDTO hesapplaniDTO)
 	{
 		try {
@@ -228,7 +228,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -248,7 +248,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> banka_sube(String nerden){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -258,7 +258,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public tahsilatDTO tahfiskon(String fisNo,Integer tah_ted){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -268,7 +268,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> tah_cek_doldur(String fisNo,Integer tah_ted){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -278,7 +278,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public int cari_tahsonfisno(Integer tah_ted) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -298,7 +298,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void tah_kayit(tahsilatDTO tahsilatDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -308,7 +308,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void tah_cek_sil(tahsilatDTO tahsilatDTO,String user) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -322,7 +322,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void tah_cek_kayit(tahsilatTableRowDTO tahsilatTableRowDTO, String fisno, Integer tah_ted) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -332,7 +332,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void tah_sil(String fisno, Integer tah_ted,String user)
 	{
 		try {
@@ -347,7 +347,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> tah_listele(tahrapDTO tahrapDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -388,7 +388,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> tah_cek_kayit_aktar(String fisno, Integer tah_ted){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -398,7 +398,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void cari_firma_adi_kayit(String fadi) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -417,7 +417,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public int hesap_plani_kayit_adedi() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -427,7 +427,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void cari_kod_degis_hesap(String eskikod, String yenikod,String user) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -441,7 +441,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void cari_kod_degis_satirlar(String eskikod, String yenikod,String user) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -455,7 +455,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void cari_kod_degis_tahsilat(String eskikod, String yenikod,String user) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -487,7 +487,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();
 		Throwable cause = e.getCause();

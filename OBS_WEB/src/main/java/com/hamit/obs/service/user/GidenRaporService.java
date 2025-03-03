@@ -13,15 +13,15 @@ public class GidenRaporService {
 
 	@Autowired
 	IGidenRaporRepository gidenRaporRepository;
-	
+
 	public Gonderilmis_Mailler savegonderilmisMailler(Gonderilmis_Mailler gonderilmisMailler) {
-        return gidenRaporRepository.save(gonderilmisMailler);
-    }
-	
+		return gidenRaporRepository.save(gonderilmisMailler);
+	}
+
 	public List<Gonderilmis_Mailler> gidenRaporListele(String user_email){
 		return gidenRaporRepository.gidenRaporListele(user_email);
 	}
-	
+
 	public void deletebyId(Long id) {
 		gidenRaporRepository.deleteById(id);
 	}

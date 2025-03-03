@@ -1160,9 +1160,9 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				" FROM (SELECT " + gruplama + " ," + sstr_2 + " as degisken," + sstr_4 +
 				" FROM KERESTE " + kur_dos + 
 				" WHERE " + jkj + " " +
-				   qwq6 + " " + qwq7 + " " + qwq8 + " " + dpo +
-				   kODU + " " +
-				   dURUM + "Cari_Firma between N'" + s1 + "' AND N'" + s2 + "'" +
+				qwq6 + " " + qwq7 + " " + qwq8 + " " + dpo +
+				kODU + " " +
+				dURUM + "Cari_Firma between N'" + s1 + "' AND N'" + s2 + "'" +
 				" AND " + qweString  + " between N'" + e1 + "' AND N'" + e2 + "'" +
 				" AND Konsimento between N'" + ko1 + "' AND N'" + ko2 + "'" +
 				" AND KERESTE."+ dURUM + "Tarih BETWEEN '" +t1 + "'" + " AND  '" + t2 + " 23:59:59.998'" +

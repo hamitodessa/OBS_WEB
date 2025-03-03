@@ -1094,8 +1094,45 @@ public class KerestePgSQL implements IKeresteDatabase {
 	@Override
 	public List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String k1, String k2, String f1,
 			String f2, String t1, String t2, String dURUM, String e1, String e2, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String[] token = k1.toString().split("-");
+		String ilks ,ilkk,ilkb,ilkg;
+		ilks = token[0];
+		ilkk = token[1];
+		ilkb = token[2];
+		ilkg = token[3];
+		token = k2.toString().split("-");
+		String sons,sonk,sonb,song;
+		sons = token[0];
+		sonk = token[1];
+		sonb = token[2];
+		song = token[3];
+		String qweString = "" ;
+		if(dURUM.equals("C"))
+			qweString = " Cikis_Evrak " ;
+		else
+			qweString = " Evrak_No " ;
+		String tARIH = "" ;
+		if(! t1.equals("1900-01-01") || ! t2.equals("2100-12-31"))
+			tARIH = " AND \"" + dURUM + "Tarih\" BETWEEN '" + t1 + "'  AND  '"  + t2 + " 23:59:59.998'" ;
+		String sql =   "SELECT "+ baslik + "  FROM \"KERESTE\"   " +
+				" WHERE   " + jkj +
+				" SUBSTRING(\"Kodu\", 1, 2) >= '"+ilks +"' AND SUBSTRING(\"Kodu\", 1, 2) <= '"+ sons +"' AND" +
+				" SUBSTRING(\"Kodu\", 4, 3) >= '"+ilkk +"' AND SUBSTRING(\"Kodu\", 4, 3) <= '"+ sonk +"' AND" +
+				" SUBSTRING(\"Kodu\", 8, 4) >= '"+ilkb +"' AND SUBSTRING(\"Kodu\", 8, 4) <= '"+ sonb +"' AND" +
+				" SUBSTRING(\"Kodu\", 13, 4) >= '"+ilkg +"' AND SUBSTRING(\"Kodu\", 13, 4) <= '"+ song +"' " +
+				" AND \"" + dURUM.trim() + "Cari_Firma\" between N'" + f1 + "' AND N'" + f2 + "'" +
+				" AND \"" + qweString.trim()  + "\" between N'" + e1 + "' AND N'" + e2 + "'" +
+				tARIH +
+				" " + ordr + " ";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 
 	@Override
@@ -1103,7 +1140,118 @@ public class KerestePgSQL implements IKeresteDatabase {
 			String qwq6, String qwq7, String qwq8, String k1, String k2, String s1, String s2, String jkj, String t1,
 			String t2, String sstr_5, String sstr_1, String orderBY, String dURUM, String ko1, String ko2, String dpo,
 			String grup, String e1, String e2, String[][] ozelgrp,Set<String> sabitkolonlar, ConnectionDetails keresteConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String[] token = k1.toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 1, 2) >= '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3) >= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4) >= '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4) >= '" + token[3] + "' AND"  );
+		token = k2.toString().split("-");
+		if (! token[0].equals("ZZ"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 1, 2) <= '" + token[0] + "' AND" );
+		if (! token[1].equals("999"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3) <= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("9999"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4) <= '" + token[2] + "' AND" );
+		if (! token[3].equals("9999"))
+			kODU.append( " SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4) <= '" + token[3] + "'  AND"  );
+		if(qwq6.equals(" Like  '%' "))
+			qwq6 =  "" ;
+		else
+			qwq6 = dURUM + "Ana_Grup " + qwq6 ;
+		if(qwq7.equals(" Like  '%' "))
+			qwq7 =  "" ;
+		else
+			qwq7 = " AND "+ dURUM + "Alt_Grup " + qwq7 ;
+		if(qwq8.equals(" Like  '%' "))
+			qwq8 =  "" ;
+		else
+			qwq8 = " AND "+ dURUM + "Ozel_Kod " + qwq8 ;
+		if(dpo.equals(" Like  '%' "))
+			dpo =  "" ;
+		else
+			dpo = " AND "+ dURUM + "Depo " + dpo + " AND ";
+		String qweString = "" ;
+		if(dURUM.equals("C"))
+			qweString = " Cikis_Evrak " ;
+		else
+			qweString = " Evrak_No " ;
+		String grpString = "" ;
+		String ordString = "" ;
+		for (int i = 0; i <= ozelgrp.length-1;i++) {
+			if(ozelgrp[i][0] == null) break;
+			grpString = grpString + " " + ozelgrp[i][0].trim() +  " ," ;
+		}
+		grpString = " satir ," ;
+		ordString = grpString;
+		sstr_1 = sstr_1.replace("[","('");
+		sstr_1 = sstr_1.replace("]","')");
+		String[] baslik = sstr_1.split(",");
+		String newselectString = " " ;
+		for (int i = 0; i <= ozelgrp.length-1;i++) {
+			if(ozelgrp[i][0] == null) break;
+			newselectString = newselectString + " " + ozelgrp[i][0].trim() + "::character varying ," ;
+		}
+		newselectString = newselectString.substring(0, newselectString.length() - 1);
+		newselectString = "ARRAY[" + newselectString + "] AS satir" ;
+		String ustselectString = " " ;
+		for (int i = 0; i <= ozelgrp.length-1;i++) {
+			if(ozelgrp[i][0] == null) break;
+			ustselectString = ustselectString + "satir[" + (i+1) + "] AS \"" + ozelgrp[i][1].trim() + "\" , " ;
+		}
+		String ustkolonString = "" ;
+		String[] baslik2 = sstr_1.split(",");
+		if (baslik2.length == 1)
+			ustkolonString =  ustselectString  + " \"" + baslik2[0].substring(2,baslik2[0].length()-2) + "\""  ;
+		else {
+			for(int i = 0;i<=baslik2.length-1;i++)
+				ustkolonString += "\""+ baslik2[i].trim().substring(2,baslik2[i].length()-2) + "\" , "  ;
+			ustkolonString = ustkolonString.substring(0,ustkolonString.length()-2);
+			String qazString = "" ;
+			for (int i = 0; i <= ozelgrp.length-1;i++) {
+				if(ozelgrp[i][0] == null) break;
+				qazString = qazString + " satir[" + (i+1) + "] AS  \"" + ozelgrp[i][1].trim() + "\" ," ;
+			}
+			ustkolonString = qazString + " "  + ustkolonString  ;
+		}
+		String altkolonString = "" ;
+		baslik = sstr_1.split(",");
+		if (baslik.length == 1)
+			altkolonString =  " satir character varying[] , \"" + baslik[0].substring(2,baslik[0].length()-2) + "\" DOUBLE PRECISION "  ;
+		else {
+			for(int i = 0;i<=baslik.length-1;i++)
+				altkolonString += "\"" + baslik[i].trim().substring(2,baslik[i].length()-2) + "\" DOUBLE PRECISION , "  ;
+			altkolonString =  " satir character varying[] ,"  + altkolonString.substring(0,altkolonString.length() - 2)  ;
+		}
+		if(jkj.equals(" Cikis_Evrak <> '' AND  "))
+			jkj = " \"Cikis_Evrak\" <> '' AND  " ;
+		else if(jkj.equals(" Cikis_Evrak = '' AND "))
+			jkj = " \"Cikis_Evrak\" = '' AND " ;
+		String sql = "SELECT  " + ustkolonString +
+				" FROM crosstab ($$ SELECT " + newselectString + " ," + sstr_2 + "  , " + sstr_4 +" " +
+				" FROM \"KERESTE\" "  + kur_dos + 
+				" WHERE " + jkj + " " +
+				qwq6 + " "+ qwq7 + " " +qwq8 + " " + dpo +
+				kODU + " " +
+				"  \"" + dURUM + "Cari_Firma\" between '" + s1 + "' AND '" + s2 + "'" +
+				" AND \"" + qweString.trim()  + "\" between '" + e1 + "' AND '" + e2 + "'" +
+				" AND \"Konsimento\" between '" + ko1 + "' AND '" + ko2 + "'" +
+				" AND  \"KERESTE\".\"" + dURUM + "Tarih\" BETWEEN '" + t1 + "'" + " AND  '" + t2 + " 23:59:59.998'" +
+				" GROUP BY " +  grpString + " " + sstr_2  +
+				" ORDER BY  " + ordString + sstr_2  +
+				" $$, $$ VALUES  " + sstr_1  + "  $$)  AS ct (" + altkolonString+ ")" ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 }

@@ -17,15 +17,15 @@ public class LogRaporService {
 
 	@Autowired
 	private LoglamaRepository loglamaRepository;
-	
+
 	@Autowired
 	private ConnectionManager masterConnectionManager;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	ConnectionDetails connConnDetails ;
-	
+
 	public List<Map<String, Object>> lograpor(String startDate,String endDate,String aciklama,String modul){
 		try {
 			String useremail = userService.getCurrentUser().getEmail();
@@ -37,9 +37,8 @@ public class LogRaporService {
 			String originalMessage = e.getMessage();
 			Throwable cause = e.getCause();
 			String detailedMessage = originalMessage;
-			if (cause != null) {
+			if (cause != null)
 				detailedMessage += " - " + cause.getMessage();
-			}
 			throw new ServiceException(detailedMessage);
 		}
 	}

@@ -19,13 +19,13 @@ public class AdresService {
 
 	@Autowired
 	private ConnectionManager masterConnectionManager;
-	
+
 	private final AdresDatabaseContext databaseStrategyContext;
 	private IAdresDatabase strategy;
 	public AdresService(AdresDatabaseContext databaseStrategyContext) {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
-	
+
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -37,7 +37,7 @@ public class AdresService {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
 	}
-	
+
 	public String[] conn_detail() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
@@ -52,7 +52,7 @@ public class AdresService {
 		ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 		return adresConnDetails;
 	}
-	
+
 	public List<Map<String, Object>> hesap_kodlari(){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -92,7 +92,7 @@ public class AdresService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void adres_sil(int id) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -102,7 +102,7 @@ public class AdresService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String kod_ismi(String kodu) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -112,7 +112,7 @@ public class AdresService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String[] adr_etiket_arama_kod(String kodu) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -131,7 +131,7 @@ public class AdresService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> adr_etiket(String siralama){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -141,7 +141,7 @@ public class AdresService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> adr_hpl(){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -151,7 +151,7 @@ public class AdresService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();
 		Throwable cause = e.getCause();

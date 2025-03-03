@@ -31,13 +31,11 @@ public class AdresDatabaseContext {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			String config = userDetailsService.findHangiSQLByUserId("Adres", useremail);
-			if (config == null || config.isEmpty()) {
+			if (config == null || config.isEmpty())
 				throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
-			}
 			IAdresDatabase strategy = strategies.get(config);
-			if (strategy == null) {
+			if (strategy == null)
 				throw new ServiceException("Belirtilen konfigürasyona uygun strateji bulunamadı: " + config);
-			}
 			return strategy;
 		} catch (ServiceException e) {
 			throw e;

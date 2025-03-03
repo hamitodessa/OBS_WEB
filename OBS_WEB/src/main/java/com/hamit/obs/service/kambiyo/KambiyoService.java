@@ -23,12 +23,12 @@ public class KambiyoService {
 
 	@Autowired
 	private LoglamaRepository loglamaRepository;
-	
+
 	private LoglamaDTO loglamaDTO = new LoglamaDTO();
-	
+
 	@Autowired
 	private ConnectionManager masterConnectionManager;
-	
+
 	private final KambiyoDatabaseContext databaseStrategyContext;
 	private IKambiyoDatabase strategy;
 	public KambiyoService(KambiyoDatabaseContext databaseStrategyContext) {
@@ -45,7 +45,7 @@ public class KambiyoService {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
 	}
-	
+
 	public String[] conn_detail() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, "Kambiyo");
@@ -104,7 +104,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String kam_aciklama_oku(String cek_sen,int satir,String bordroNo,String gircik){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -128,7 +128,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void  cek_kayit(bordrodetayDTO row,String user) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -142,7 +142,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void  kam_aciklama_yaz(String cek_sen, int satir, String bordroNo, String aciklama, String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -152,7 +152,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void  kam_aciklama_sil(String cek_sen, String bordroNo, String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -171,7 +171,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> kalan_cek_liste(){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -181,7 +181,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String cek_kontrol(String cekno) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -191,7 +191,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public bordrodetayDTO cek_dokum(String cekno) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -201,7 +201,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void bordro_cikis_sil(String bordroNo, String cek_sen,String user) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -215,7 +215,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void bordro_cikis_yaz(String cek_sen, String ceksencins_where, String cekno, String cmus, String cbor,
 			String ctar, String ozkod) {
 		try {
@@ -226,7 +226,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> cek_rapor(cekraporDTO cekraporDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -254,7 +254,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void kam_durum_yaz(String cekno, String ceksen_from, String ceksen_where, String durum, String ttarih) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -264,7 +264,7 @@ public class KambiyoService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();
 		Throwable cause = e.getCause();

@@ -43,7 +43,7 @@ public class KeresteService {
 			UserSessionManager.removeUserByModul(useremail,"Kereste");
 			this.strategy = databaseStrategyContext.getStrategy();
 			masterConnectionManager.loadConnections("Kereste",useremail);
-			UserSessionManager.addUserSession(useremail, "Kereste", masterConnectionManager.getConnection("Fatura", useremail));
+			UserSessionManager.addUserSession(useremail, "Kereste", masterConnectionManager.getConnection("Kereste", useremail));
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
@@ -412,7 +412,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> urun_detay(String pakno,String kons, String kodu,String evrak){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -422,7 +422,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String kod_adi(String kod) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -432,7 +432,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public String kons_adi(String kons) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -442,7 +442,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void ker_kod_degis(String paket_No, String kon, String yenikod,int satir) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -452,7 +452,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public void ker_kons_degis(String kons, String yenikons, int satir) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -462,7 +462,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> stok_rapor(kerestedetayraporDTO kerestedetayraporDTO,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -472,7 +472,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public double stok_raporsize(kerestedetayraporDTO kerestedetayraporDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -482,7 +482,7 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String k1, String k2, String f1,
 			String f2, String t1, String t2,String dURUM,String e1, String e2){
 		try {
@@ -493,12 +493,11 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> grp_rapor(String gruplama,String sstr_2, String sstr_4, String kur_dos, String qwq6,
 			String qwq7, String qwq8, String k1, String k2, String s1, String s2, String jkj,
 			String t1, String t2, String sstr_5, String sstr_1,String orderBY,String dURUM,String ko1, String ko2,String dpo,String grup,
 			String e1 , String e2,String ozelgrp[][],Set<String> sabitkolonlar){
-		
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
@@ -507,7 +506,6 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-
 
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();

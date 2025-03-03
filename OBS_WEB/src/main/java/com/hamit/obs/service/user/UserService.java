@@ -36,7 +36,7 @@ import javax.mail.internet.MimeMultipart;
 @Service
 public class UserService {
 
-	
+
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -48,22 +48,22 @@ public class UserService {
 	}
 
 	public void registerUser(User user, RolEnum role) throws Exception {
-	    if (userRepository.findByEmail(user.getEmail()) != null) {
-	        throw new Exception("Bu email adresiyle kayıtlı bir kullanıcı zaten var.");
-	    }
-	    user.setPassword(passwordEncoder.encode(user.getPassword()));
-	    Role userRole = roleRepository.findByName(role);
-	    if (userRole == null) {
-	        userRole = new Role();
-	        userRole.setName(role);
-	        roleRepository.save(userRole);
-	    }
-	    Set<Role> roles = new HashSet<>();
-	    roles.add(userRole);
-	    user.setRoles(roles);
-	    userRepository.save(user);
+		if (userRepository.findByEmail(user.getEmail()) != null) {
+			throw new Exception("Bu email adresiyle kayıtlı bir kullanıcı zaten var.");
+		}
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		Role userRole = roleRepository.findByName(role);
+		if (userRole == null) {
+			userRole = new Role();
+			userRole.setName(role);
+			roleRepository.save(userRole);
+		}
+		Set<Role> roles = new HashSet<>();
+		roles.add(userRole);
+		user.setRoles(roles);
+		userRepository.save(user);
 	}
-	
+
 	public User getCurrentUser() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (principal instanceof UserDetails) {
@@ -73,20 +73,20 @@ public class UserService {
 			return null; 
 		}
 	}	 
-	
+
 	public byte[] getImage(String email){
 		return userRepository.getImage(email);
 	}
-	
+
 	public List<User> findByUserAdminHesap(String email){
 		return userRepository.findByUserAdminHesap(email);
-		
+
 	}
-	
+
 	public List<RolEnum> getRoleNamesByEmail(String email){
 		return userRepository.getRoleNamesByEmail(email);
 	}
-	
+
 	public User findUserByUsername(String username) {
 		return userRepository.findByEmail(username);
 	}
@@ -94,11 +94,11 @@ public class UserService {
 	public void saveUser(User user) {
 		userRepository.save(user);
 	}
-	
+
 	public void deleteUser(User user) {
 		userRepository.delete(user);
 	}
-	
+
 	public boolean sendPasswordByEmail(String email) {
 		User user = findUserByUsername(email);
 		if (user != null) {
@@ -142,33 +142,32 @@ public class UserService {
 			return false;
 		}
 	}
-	
+
 	@Transactional
 	public User duplicateUser(User currentUser, String newEmail) {
-		// Yeni kullanıcı oluştur
 		User newUser = new User();
 		newUser.setEmail(newEmail);
 		newUser.setFirstName(currentUser.getFirstName());
 		newUser.setLastName(currentUser.getLastName());
-		newUser.setPassword(currentUser.getPassword()); // Şifreyi olduğu gibi mi kullanıyorsun?
+		newUser.setPassword(currentUser.getPassword());
 		newUser.setImage(null);
 		newUser.setAdmin_hesap(currentUser.getAdmin_hesap());
 		newUser.setRoles(new HashSet<>(currentUser.getRoles()));
 
 		Email_Details emailDetail = currentUser.getEmailDetails();
-			Email_Details newEmailDetail = new Email_Details();
-			newEmailDetail.setBssl(emailDetail.getBssl());
-			newEmailDetail.setBtsl(emailDetail.getBtsl());
-			newEmailDetail.setEmail(newEmail);
-			newEmailDetail.setGon_isim(emailDetail.getGon_isim());
-			newEmailDetail.setGon_mail(emailDetail.getGon_mail());
-			newEmailDetail.setHesap(emailDetail.getHesap());
-			newEmailDetail.setHost(emailDetail.getHost());
-			newEmailDetail.setPort(emailDetail.getPort());
-			newEmailDetail.setSifre(emailDetail.getSifre());
-			newEmailDetail.setUser(newUser);
-		    newUser.setEmailDetails(newEmailDetail);
-		
+		Email_Details newEmailDetail = new Email_Details();
+		newEmailDetail.setBssl(emailDetail.getBssl());
+		newEmailDetail.setBtsl(emailDetail.getBtsl());
+		newEmailDetail.setEmail(newEmail);
+		newEmailDetail.setGon_isim(emailDetail.getGon_isim());
+		newEmailDetail.setGon_mail(emailDetail.getGon_mail());
+		newEmailDetail.setHesap(emailDetail.getHesap());
+		newEmailDetail.setHost(emailDetail.getHost());
+		newEmailDetail.setPort(emailDetail.getPort());
+		newEmailDetail.setSifre(emailDetail.getSifre());
+		newEmailDetail.setUser(newUser);
+		newUser.setEmailDetails(newEmailDetail);
+
 
 		for (User_Details userDetail : currentUser.getUserDetails()) {
 			User_Details newUserDetail = new User_Details();
@@ -188,18 +187,18 @@ public class UserService {
 		}
 
 		Etiket_Ayarlari etiketAyari = currentUser.getEtiketAyarlari();
-			Etiket_Ayarlari newEtiketAyari = new Etiket_Ayarlari();
-			newEtiketAyari.setAltbosluk(etiketAyari.getAltbosluk());
-			newEtiketAyari.setDikeyarabosluk(etiketAyari.getDikeyarabosluk());
-			newEtiketAyari.setGenislik(etiketAyari.getGenislik());
-			newEtiketAyari.setUstbosluk(etiketAyari.getUstbosluk());
-			newEtiketAyari.setSagbosluk(etiketAyari.getSagbosluk());
-			newEtiketAyari.setSolbosluk(etiketAyari.getSolbosluk());
-			newEtiketAyari.setYataydikey(etiketAyari.getYataydikey());
-			newEtiketAyari.setYukseklik(etiketAyari.getYukseklik());
-			newEtiketAyari.setUser(newUser);
-			newUser.setEtiketAyarlari(newEtiketAyari);
-		
+		Etiket_Ayarlari newEtiketAyari = new Etiket_Ayarlari();
+		newEtiketAyari.setAltbosluk(etiketAyari.getAltbosluk());
+		newEtiketAyari.setDikeyarabosluk(etiketAyari.getDikeyarabosluk());
+		newEtiketAyari.setGenislik(etiketAyari.getGenislik());
+		newEtiketAyari.setUstbosluk(etiketAyari.getUstbosluk());
+		newEtiketAyari.setSagbosluk(etiketAyari.getSagbosluk());
+		newEtiketAyari.setSolbosluk(etiketAyari.getSolbosluk());
+		newEtiketAyari.setYataydikey(etiketAyari.getYataydikey());
+		newEtiketAyari.setYukseklik(etiketAyari.getYukseklik());
+		newEtiketAyari.setUser(newUser);
+		newUser.setEtiketAyarlari(newEtiketAyari);
+
 		return userRepository.save(newUser);
 	}
 }

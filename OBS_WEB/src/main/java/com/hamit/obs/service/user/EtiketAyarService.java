@@ -12,7 +12,7 @@ public class EtiketAyarService {
 
 	@Autowired
 	IEtiketAyarRepository iEtiketAyarRepository ;
-	
+
 	public Etiket_Ayarlari findByUserId(Long user_id){
 		try {
 			return iEtiketAyarRepository.findByUserId(user_id);

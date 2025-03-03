@@ -31,13 +31,11 @@ public class KurDatabaseContext {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 	        String config = userDetailsService.findHangiSQLByUserId("Kur", useremail);
-	        if (config == null || config.isEmpty()) {
-	            throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
-	        }
+	        if (config == null || config.isEmpty())
+	        	throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
 	        IKurDatabase strategy = strategies.get(config);
-	        if (strategy == null) {
-	            throw new ServiceException("Belirtilen konfigürasyona uygun strateji bulunamadı: " + config);
-	        }
+	        if (strategy == null)
+	        	throw new ServiceException("Belirtilen konfigürasyona uygun strateji bulunamadı: " + config);
 	        return strategy;
 	    } catch (ServiceException e) {
 	        throw e;

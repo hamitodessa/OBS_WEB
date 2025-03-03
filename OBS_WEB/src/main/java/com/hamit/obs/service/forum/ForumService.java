@@ -14,7 +14,6 @@ public class ForumService {
 	@Autowired
 	private IForumRepository forumRepository;
 
-
 	public void subjectSave(String subjectTitle, String subjectDescription,String createdBy) {
 		forumRepository.subjectSave(subjectTitle, subjectDescription,createdBy);
 	}

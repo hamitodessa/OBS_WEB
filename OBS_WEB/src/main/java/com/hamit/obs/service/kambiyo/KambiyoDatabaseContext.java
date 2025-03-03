@@ -31,13 +31,11 @@ public class KambiyoDatabaseContext {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 	        String config = userDetailsService.findHangiSQLByUserId("Kambiyo", useremail);
-	        if (config == null || config.isEmpty()) {
-	            throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
-	        }
+	        if (config == null || config.isEmpty())
+	        	throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
 	        IKambiyoDatabase strategy = strategies.get(config);
-	        if (strategy == null) {
-	            throw new ServiceException("Belirtilen konfigürasyona uygun strateji bulunamadı: " + config);
-	        }
+	        if (strategy == null)
+	        	throw new ServiceException("Belirtilen konfigürasyona uygun strateji bulunamadı: " + config);
 	        return strategy;
 	    } catch (ServiceException e) {
 	        throw e;

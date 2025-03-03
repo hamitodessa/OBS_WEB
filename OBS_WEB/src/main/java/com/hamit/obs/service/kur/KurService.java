@@ -17,13 +17,13 @@ import com.hamit.obs.repository.kur.IKurDatabase;
 
 @Service
 public class KurService {
-	
+
 	@Autowired
 	private ConnectionManager masterConnectionManager;
-	
+
 	private final KurDatabaseContext databaseStrategyContext;
 	private IKurDatabase strategy;
-	
+
 	public KurService(KurDatabaseContext databaseStrategyContext) {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
@@ -48,7 +48,7 @@ public class KurService {
 		detay[2] = kurConnDetails.getServerIp() ;
 		return detay;
 	}
-	
+
 	public ConnectionDetails conn_details() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
@@ -73,7 +73,7 @@ public class KurService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public boolean kur_kayit(kurgirisDTO kurgirisDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -83,7 +83,7 @@ public class KurService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> kur_rapor(kurraporDTO kurraporDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -93,7 +93,7 @@ public class KurService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	public List<Map<String, Object>> kur_oku(kurgirisDTO kurgirisDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -103,7 +103,7 @@ public class KurService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	
+
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();
 		Throwable cause = e.getCause();
