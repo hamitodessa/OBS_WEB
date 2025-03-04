@@ -132,13 +132,14 @@ public class GirisController {
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 
 			int index = 0;
+			String tarihString = Tarih_Cevir.dateFormaterSaatli(dto.getTarih());
 			for (kerestedetayDTO row : tableData) {
 				mesajlog = "Kereste Kayit" +  row.getUkodu() + " Mik=" + row.getMiktar() + " Tut=" + row.getTutar();
 
 				row.setFisno(dto.getFisno());
 				row.setCarikod(dto.getCarikod());
 				row.setAdreskod(dto.getAdreskod());
-				row.setTarih(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
+				row.setTarih(tarihString);
 				
 				row.setAnagrup(degisken[0]);
 				row.setAltgrup(degisken[1]);

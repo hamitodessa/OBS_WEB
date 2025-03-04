@@ -355,7 +355,6 @@ public class FaturaController {
 					izah = row.getIzahat() + " Nolu Giris Faturasi...";
 				}
 				mesajlog = "Fatura Stok Kayit  H:"+ har + "   Kod:" + row.getUkodu().trim() + " Miktar:" + miktar + " Fiat:" + row.getFiat() ;
-
 				faturaService.stk_kaydet(dto.getFisno().trim(), "FAT", tarih, dpo, row.getUkodu().trim(), miktar, row.getFiat()
 						,KusurYuvarla.round(tutar,2),KusurYuvarla.round(kdvlitut,2) , har, izah, ana, alt, dto.getKur(), "",dto.getDvzcins(), dto.getCarikod().trim(),userrString,mesajlog);	
 			}

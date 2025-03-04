@@ -278,10 +278,8 @@ public class KerFatRaporController {
 							+" WHERE \"D_HESAP\" = \"KERESTE\".\"Cari_Firma\" ) as \"Vergi_No\"  " ;
 					qw3 = "\"Evrak_No\",TO_CHAR(\"Tarih\",'yyyy-MM-dd'), \"Cari_Firma\"" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL") )
-				{
+				else if(kerConnDetails.getHangisql().equals("MY SQL"))
 					qw3 = "Evrak_No,DATE_FORMAT(Tarih,'%Y-%m-%d'), Cari_Firma" ;
-				}
 			}
 			else 
 			{
@@ -301,10 +299,8 @@ public class KerFatRaporController {
 							+" WHERE \"D_HESAP\" = \"KERESTE\".\"CCari_Firma\" ) as \"Vergi_No\"  " ;
 					qw3 = "\"Cikis_Evrak\",TO_CHAR(\"CTarih\",'yyyy-MM-dd'), \"CCari_Firma\"" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL") )
-				{
+				else if(kerConnDetails.getHangisql().equals("MY SQL"))
 					qw3 = "Evrak_No,DATE_FORMAT(CTarih,'%Y-%m-%d'), Cari_Firma" ;
-				}
 			}
 		}
 		else
@@ -318,7 +314,6 @@ public class KerFatRaporController {
 				qw1 = " ,(SELECT Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma) as Unvan " ;
 				qw2 = " ,(SELECT Vergi_No FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma  ) as Vergi_No " ;
 				qw3 = "Evrak_No,FORMAT(Tarih, 'yyyy-MM-dd'), Adres_Firma" ; 
-				
 				if(kerConnDetails.getHangisql().equals("PG SQL") )
 				{
 					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
@@ -332,10 +327,8 @@ public class KerFatRaporController {
 							+" WHERE \"M_KODU\" = \"KERESTE\".\"Adres_Firma\" ) as \"Vergi_No\"  " ;
 					qw3 = "\"Evrak_No\",TO_CHAR(\"Tarih\",'yyyy-MM-dd'), \"Adres_Firma\"" ; 
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL") )
-				{
+				else if(kerConnDetails.getHangisql().equals("MY SQL"))
 					qw3 = "Evrak_No,DATE_FORMAT(Tarih,'%Y-%m-%d'), Cari_Firma" ;
-				}
 			}
 			else 
 			{
@@ -355,10 +348,8 @@ public class KerFatRaporController {
 							+" WHERE \"M_KODU\" = \"KERESTE\".\"CAdres_Firma\" ) as \"Vergi_No\"  " ;
 					qw3 = "\"Cikis_Evrak\",TO_CHAR(\"CTarih\",'yyyy-MM-dd'), \"CAdres_Firma\"" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL") )
-				{
+				else if(kerConnDetails.getHangisql().equals("MY SQL"))
 					qw3 = "Evrak_No,DATE_FORMAT(CTarih,'%Y-%m-%d'), Cari_Firma" ;
-				}
 			}
 		}
 		deger[0] = qw1;
@@ -434,13 +425,11 @@ public class KerFatRaporController {
 				qweString = "LIMIT 1" ;
 				ewqString = "" ;
 				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
-			
 			}
 			if (turu.equals("G"))
 			{
 				qw1 = " ,(SELECT  " + ewqString +" Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma  " + qweString+ ") as Unvan " ;
 				qw2 = " Adres_Firma" ;
-				
 				if(kerConnDetails.getHangisql().equals("PG SQL") )
 				{
 					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 

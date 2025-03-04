@@ -114,13 +114,14 @@ public class CikisController {
 			String userrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 
 			int index = 0;
+			String tarihString = Tarih_Cevir.dateFormaterSaatli(dto.getTarih());
 			for (kerestedetayDTO row : tableData) {
 				mesajlog = "Kereste Kayit" +  row.getUkodu() + " Mik=" + row.getMiktar() + " Tut=" + row.getTutar();
 
 				row.setCevrak(dto.getFisno());
 				row.setCcarifirma(dto.getCarikod());
 				row.setCadresfirma(dto.getAdreskod());
-				row.setCtarih(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
+				row.setCtarih(tarihString);
 
 				row.setCanagrup(degisken[0]);
 				row.setCaltgrup(degisken[1]);
