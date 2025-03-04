@@ -1,3 +1,5 @@
+pageSize = 250;
+
 async function anagrpChanged(anagrpElement) {
 	const anagrup = anagrpElement.value;
 	const errorDiv = document.getElementById("errorDiv");
@@ -35,10 +37,58 @@ async function anagrpChanged(anagrpElement) {
 	}
 }
 
-async function fatfetchTableData() {
+function ilksayfa() {
+	fatfetchTableData(0);
+}
+
+function oncekisayfa() {
+	if (currentPage > 0) {
+		fatfetchTableData(currentPage - 1);
+	}
+}
+
+function sonrakisayfa() {
+	if (currentPage < totalPages - 1) {
+		fatfetchTableData(currentPage + 1);
+	}
+}
+
+async function sonsayfa() {
+	fatfetchTableData(totalPages - 1);
+}
+
+async function toplampagesize() {
+	try {
+		const errorDiv = document.getElementById("errorDiv");
+		errorDiv.style.display = "none";
+		errorDiv.innerText = "";
+		const fatraporDTO = getfatraporDTO();
+		const response = await fetchWithSessionCheck("stok/fatdoldursize", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(fatraporDTO),
+		});
+		const totalRecords = response.totalRecords;
+		totalPages = Math.ceil(totalRecords / pageSize);
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error;
+		document.body.style.cursor = "default";
+	}
+}
+
+async function fatdoldur() {
+	document.body.style.cursor = "wait";
+	toplampagesize();
+	fatfetchTableData(0);
+}
+
+function getfatraporDTO() {
 	const hiddenFieldValue = $('#fatrapBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
-	const fatraporDTO = {
+	return {
 		fatno1: parsedValues[0],
 		fatno2: parsedValues[1],
 		anagrp: parsedValues[2],
@@ -62,16 +112,26 @@ async function fatfetchTableData() {
 		dvz2: parsedValues[20],
 		caradr: parsedValues[21]
 	};
+}
+
+async function fatfetchTableData(page) {
+	const fatraporDTO = getfatraporDTO();
+	fatraporDTO.page = page;
+	fatraporDTO.pageSize = pageSize;
+	currentPage = page;
+
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
-	
+
 	document.body.style.cursor = "wait";
 	const $yenileButton = $('#fatrapyenileButton');
 	$yenileButton.prop('disabled', true).text('İşleniyor...');
 	const mainTableBody = document.getElementById("mainTableBody");
 	mainTableBody.innerHTML = "";
+
 	clearTfoot();
+
 	try {
 		const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
 			method: "POST",
@@ -462,7 +522,7 @@ async function openfatrapModal(modal) {
 		});
 		const newOption = document.createElement("option");
 		newOption.value = "Bos Olanlar";
-		newOption.textContent = "Bos Olanlar"; 
+		newOption.textContent = "Bos Olanlar";
 
 		const newOption2 = document.createElement("option");
 		newOption2.value = "Bos Olanlar";
@@ -545,23 +605,23 @@ async function fatrapmailAt() {
 	localStorage.removeItem("tablobaslik");
 	document.body.style.cursor = "wait";
 	let table = document.querySelector("#main-table");
-		let headers = [];
-		let rows = [];
-		table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
-		table.querySelectorAll("tbody tr").forEach(tr => {
-			let rowData = {};
-			let isEmpty = true;
-			tr.querySelectorAll("td").forEach((td, index) => {
-				let value = td.innerText.trim();
-				if (value !== "") {
-					isEmpty = false;
-				}
-				rowData[headers[index]] = value;
-			});
-			if (!isEmpty) {
-				rows.push(rowData);
+	let headers = [];
+	let rows = [];
+	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+	table.querySelectorAll("tbody tr").forEach(tr => {
+		let rowData = {};
+		let isEmpty = true;
+		tr.querySelectorAll("td").forEach((td, index) => {
+			let value = td.innerText.trim();
+			if (value !== "") {
+				isEmpty = false;
 			}
+			rowData[headers[index]] = value;
 		});
+		if (!isEmpty) {
+			rows.push(rowData);
+		}
+	});
 	localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
 	const degerler = "fatrapor";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;

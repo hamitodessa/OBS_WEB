@@ -8,9 +8,9 @@ urnkodlar = [];
 rowCounter = 0;
 lastFocusedRow = null;
 tablobaslik = "";
-currentPage = 0;
+currentPage = 0 ;
+pageSize = 0;
 totalPages = 1;
-
 
 incrementRowCounter = function () {
 	rowCounter++;

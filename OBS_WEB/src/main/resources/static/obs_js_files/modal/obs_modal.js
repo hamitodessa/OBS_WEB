@@ -598,7 +598,7 @@ function saveToMain() {
 		kercariIsle();
 	}
 	else if (nerden === "fatrapor") {
-		fatfetchTableData();
+		fatdoldur();
 		const mailButton = document.getElementById("fatrapmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("fatrapreportFormat");

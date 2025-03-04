@@ -526,6 +526,26 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
+	public List<Map<String, Object>> fat_rapor_fat_tar(kerestedetayraporDTO kerestedetayraporDTO){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.fat_rapor_fat_tar(kerestedetayraporDTO, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> fat_rapor_cari_kod(kerestedetayraporDTO kerestedetayraporDTO){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.fat_rapor_cari_kod(kerestedetayraporDTO, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
 
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();

@@ -1199,4 +1199,17 @@ public class KeresteMySQL implements IKeresteDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Map<String, Object>> fat_rapor_fat_tar(kerestedetayraporDTO kerestedetayraporDTO, ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> fat_rapor_cari_kod(kerestedetayraporDTO kerestedetayraporDTO,
+			ConnectionDetails keresteConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -94,13 +94,13 @@ async function kerfetchTableData() {
 		data = response;
 		let sqlHeaders = "";
 		if (response.raporturu === 'fno') {
-			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
+			sqlHeaders = ["", "EVRAK NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfno(sqlHeaders);
 		} else if (response.raporturu === 'fkodu') {
 			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfkodu(sqlHeaders);
 		} else if (response.raporturu === 'fnotar') {
-			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
+			sqlHeaders = ["", "EVRAK NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfnotar(sqlHeaders);
 		}
 		let totalmiktar = 0;
@@ -129,11 +129,11 @@ async function kerfetchTableData() {
 			}
 			else if (response.raporturu === 'fkodu') {
 				row.innerHTML = `
-                    <td>${rowData.Fatura_No || ''}</td>
+                    <td>${rowData.Firma_Kodu || ''}</td>
                     <td>${rowData.Hareket || ''}</td>
                     <td>${rowData.Unvan || ''}</td>
                     <td>${rowData.Vergi_No || ''}</td>
-                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.m3)}</td>
                     <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
@@ -149,7 +149,7 @@ async function kerfetchTableData() {
                     <td>${formatDate(rowData.Tarih)}</td>
                     <td>${rowData.Unvan || ''}</td>
                     <td>${rowData.Vergi_No || ''}</td>
-                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+                    <td class="double-column">${formatNumber3(rowData.m3)}</td>
                     <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
                     <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
@@ -193,20 +193,13 @@ async function kerfetchTableData() {
 											<th>Adres_Firma</th>
                                             <th style="text-align: right;">Iskonto</th>
 											<th style="text-align: right;">Tevkifat</th>
-                                            <th style="text-align: right;">Iskonto_Tutar</th>
-                                            <th style="text-align: right;">Iskontolu_Tutar</th>
-											<th style="text-align: right;">Kdv</th>
-                                            <th style="text-align: right;">Kdv Tutar</th>
-                                            <th style="text-align: right;">Tev Edi.Kdv.</th>
-                                            <th style="text-align: right;">Tev Dah Top. Tut.</th>
-                                            <th style="text-align: right;">Beyan Edilen Kdv</th>
-                                            <th style="text-align: right;">Tev Har TopTutar</th>
                                             <th>Ana Grup</th>
                                             <th>Alt Grup</th>
+											<th>Mensei</th>
                                             <th>Depo</th>
                                             <th>Ozel Kod</th>
                                             <th>Izahat</th>
-                                            <th>Hareket</th>
+                                            <th>Nakliyeci</th>
                                             <th>User</th>
                                         </tr>
                                     </thead>
@@ -230,21 +223,13 @@ async function kerfetchTableData() {
 										<td>${item.Adres_Firma || ''}</td>
                                         <td style="text-align: right;">${formatNumber2(item.Iskonto)}</td>
 										<td style="text-align: right;">${formatNumber2(item.Tevkifat)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Iskonto_Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Iskontolu_Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Kdv)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Kdv_Tutar)}</td>
-                                       
-                                        <td style="text-align: right;">${formatNumber2(item.Tev_Edilen_KDV)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Tev_Dah_Top_Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Beyan_Edilen_KDV)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Tev_Har_Top_Tutar)}</td>
-                                        <td >${item.Ana_Grup}</td>
+										<td >${item.Ana_Grup}</td>
                                         <td >${item.Alt_Grup}</td>
-                                        <td >${item.Depo}</td>
+										<td >${item.Mensei}</td>
+										<td >${item.Depo}</td>
                                         <td >${item.Ozel_Kod}</td>
-                                        <td >${item.Izahat}</td>
-                                        <td >${item.Hareket}</td>
+										<td >${item.Izahat}</td>
+										<td >${item.Nakliyeci}</td>
                                         <td >${item.USER}</td>
                                     </tr>
                                 `;

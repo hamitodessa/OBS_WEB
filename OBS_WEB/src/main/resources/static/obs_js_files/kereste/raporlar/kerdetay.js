@@ -1,4 +1,4 @@
-const pageSize = 250;
+pageSize = 250;
 
 async function anagrpChanged(anagrpElement, altgrpElement) {
     const anagrup = anagrpElement.value;

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -1076,7 +1077,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO,Pageable pageable, ConnectionDetails faturaConnDetails) {
 		String sql = " SELECT Fatura_No ,IIF(Gir_Cik = 'C','Satis','Alis') as Hareket,Tarih ,Cari_Firma ,Adres_Firma,Doviz , sum(Miktar) as Miktar ,sum(Fiat * Miktar) as Tutar, " +
 				" SUM(Fiat * Miktar) - sum(((Fiat * Miktar) * Iskonto)/100) as Iskontolu_Tutar,count(Fatura_No) as fatsayi " +
 				" FROM FATURA WITH (INDEX (IX_FATURA)) " +
@@ -1093,16 +1094,58 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				" AND FATURA.Depo " + fatraporDTO.getDepo() +
 				" AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'" +
 				" GROUP BY Fatura_No,Gir_Cik,Tarih ,Cari_Firma,Adres_Firma,Doviz  " +
-				" ORDER BY  Fatura_No";
+				" ORDER BY  Fatura_No OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+		
+		int page = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize();
+		int offset = page * pageSize;
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(), faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setInt(1, offset);
+			preparedStatement.setInt(2, pageSize);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList; 
+	}
+	
+	@Override
+	public double fat_raporsize(fatraporDTO fatraporDTO ,ConnectionDetails faturaConnDetails) {
+		double result = 0 ;
+		String sql = "SELECT COUNT(*) AS satir" +
+				 " FROM (" + 
+				" SELECT Fatura_No " +
+				" FROM FATURA WITH (INDEX (IX_FATURA)) " +
+				" WHERE FATURA.Fatura_No >= N'" + fatraporDTO.getFatno1() + "' AND  FATURA.Fatura_No <= N'" + fatraporDTO.getFatno2() + "'" +
+				" AND FATURA.Tarih >= '" + fatraporDTO.getTar1() + "' AND  FATURA.Tarih <= '" + fatraporDTO.getTar2() + " 23:59:59.998'" +
+				" AND FATURA.Cari_Firma >= N'" + fatraporDTO.getCkod1() + "' AND  FATURA.Cari_Firma <= N'" + fatraporDTO.getCkod2() + "' " +
+				" AND FATURA.Adres_Firma >= N'" + fatraporDTO.getAdr1() + "' AND  FATURA.Adres_Firma <= N'" + fatraporDTO.getAdr2() + "' " +
+				" AND FATURA.Kodu >= N'" + fatraporDTO.getUkod1() + "' AND FATURA.Kodu <= N'" + fatraporDTO.getUkod2() + "' " +
+				" AND FATURA.Doviz >= N'" + fatraporDTO.getDvz1() + "' AND FATURA.Doviz <= N'" + fatraporDTO.getDvz2() + "' " +
+				" AND FATURA.Tevkifat >= '" + fatraporDTO.getTev1() + "' AND FATURA.Tevkifat <= '" + fatraporDTO.getTev2() + "' " +
+				" AND FATURA.Ozel_Kod >= N'" + fatraporDTO.getOkod1() + "' AND FATURA.Ozel_Kod <= N'" + fatraporDTO.getOkod2() + "' " +
+				" AND FATURA.Ana_Grup " + fatraporDTO.getAnagrp() +
+				" AND FATURA.Alt_Grup " + fatraporDTO.getAltgrp() +
+				" AND FATURA.Depo " + fatraporDTO.getDepo() +
+				" AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'" +
+				" GROUP BY Fatura_No,Gir_Cik,Tarih ,Cari_Firma,Adres_Firma,Doviz  " +
+				" ) AS Gruplanmis";
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), 
+				faturaConnDetails.getUsername(), 
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result  = resultSet.getInt("satir");
+			} 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return result;
 	}
 
 	@Override
@@ -1142,7 +1185,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO,Pageable pageable, ConnectionDetails faturaConnDetails) {
 		String sql = " SELECT Fatura_No,IIF(Gir_Cik = 'C','Satis','Alis') as Hareket,Tarih " +
 				" " + fatraporDTO.getBir() + "" +
 				" " + fatraporDTO.getIki() + "" +
@@ -1178,7 +1221,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO,Pageable pageable, ConnectionDetails faturaConnDetails) {
 		String sql = " SELECT  " + fatraporDTO.getUc() + " ,IIF(Gir_Cik = 'C','Satis','Alis') as Hareket " +
 				"  " + fatraporDTO.getBir() + " " +
 				" ,sum([Miktar]) as Miktar " +

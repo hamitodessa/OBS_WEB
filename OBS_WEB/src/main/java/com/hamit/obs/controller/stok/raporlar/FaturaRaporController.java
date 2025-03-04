@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,15 +57,16 @@ public class FaturaRaporController {
 			fatraporDTO.setDepo(turuString[2]);
 			fatraporDTO.setTuru(turuString[3]);
 			List<Map<String, Object>> fat_listele = new ArrayList<>();
+			Pageable pageable = PageRequest.of(fatraporDTO.getPage(), fatraporDTO.getPageSize());
 			if (fatraporDTO.getGruplama().equals("fno"))
-				fat_listele = faturaService.fat_rapor(fatraporDTO);
+				fat_listele = faturaService.fat_rapor(fatraporDTO,pageable);
 			else if (fatraporDTO.getGruplama().equals("fkodu"))
 			{
 				String hangiadres[] = hangiadres(fatraporDTO.getCaradr());
 				fatraporDTO.setBir(hangiadres[0]);
 				fatraporDTO.setIki(hangiadres[1]);
 				fatraporDTO.setUc(hangiadres[2]);
-				fat_listele = faturaService.fat_rapor_fat_tar(fatraporDTO);
+				fat_listele = faturaService.fat_rapor_cari_kod(fatraporDTO,pageable);
 			}
 			else
 			{
@@ -71,10 +74,32 @@ public class FaturaRaporController {
 				fatraporDTO.setBir(hangiadres[0]);
 				fatraporDTO.setIki(hangiadres[1]);
 				fatraporDTO.setUc(hangiadres[2]);
-				fat_listele = faturaService.fat_rapor_cari_kod(fatraporDTO);
+				fat_listele = faturaService.fat_rapor_fat_tar(fatraporDTO,pageable);
 			}
 			response.put("data", (fat_listele != null) ? fat_listele : new ArrayList<>());
 			response.put("raporturu",fatraporDTO.getGruplama());
+			response.put("errorMessage", ""); 
+		} catch (ServiceException e) {
+			response.put("data", Collections.emptyList());
+			response.put("errorMessage", e.getMessage()); 
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@PostMapping("stok/fatdoldursize")
+	@ResponseBody
+	public Map<String, Object> fatdoldursize(@RequestBody fatraporDTO fatraporDTO) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			String turuString[] =  grup_cevir(fatraporDTO.getAnagrp(),fatraporDTO.getAltgrp(),fatraporDTO.getDepo(),fatraporDTO.getTuru());
+			fatraporDTO.setAnagrp(turuString[0]);
+			fatraporDTO.setAltgrp(turuString[1]);
+			fatraporDTO.setDepo(turuString[2]);
+			fatraporDTO.setTuru(turuString[3]);
+			double fatdetaysize = faturaService.fat_raporsize(fatraporDTO);
+			response.put("totalRecords", fatdetaysize);
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {
 			response.put("data", Collections.emptyList());

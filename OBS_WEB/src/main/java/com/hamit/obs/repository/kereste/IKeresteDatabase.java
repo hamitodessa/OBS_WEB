@@ -60,4 +60,6 @@ public interface IKeresteDatabase {
 			String e1 , String e2,String ozelgrp[][],Set<String> sabitkolonlar,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> fat_rapor(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> fat_detay_rapor(String fno , String turu,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> fat_rapor_fat_tar(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> fat_rapor_cari_kod(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
 }

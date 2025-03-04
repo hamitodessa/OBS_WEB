@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.data.domain.Pageable;
+
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.dto.stok.urunDTO;
 import com.hamit.obs.dto.stok.raporlar.envanterDTO;
@@ -43,7 +45,7 @@ public interface IFaturaDatabase {
 	void urun_degisken_eski(String fieldd ,String degisken_adi ,String nerden ,String sno ,int ID ,ConnectionDetails faturaConnDetails);
 	void urun_degisken_alt_grup_eski(String alt_grup ,int ana_grup ,int  ID,ConnectionDetails faturaConnDetails);
 	void urun_degisken_kayit(String fieldd  ,String nerden,String degisken_adi,String sira,ConnectionDetails faturaConnDetails);
-	void  urun_degisken_alt_grup_kayit (String alt_grup , int ana_grup,ConnectionDetails faturaConnDetails);
+	void urun_degisken_alt_grup_kayit (String alt_grup , int ana_grup,ConnectionDetails faturaConnDetails);
 	boolean alt_grup_kontrol(int anagrp,int altgrp,ConnectionDetails faturaConnDetails);
 	void urun_degisken_alt_grup_sil(int id,ConnectionDetails faturaConnDetails);
 	void urun_kod_degisken_sil(String hangi_Y,String nerden,int sira,ConnectionDetails faturaConnDetails);
@@ -68,10 +70,11 @@ public interface IFaturaDatabase {
 	String zayi_son_bordro_no_al(ConnectionDetails faturaConnDetails);
 	int zayi_fisno_al(ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> zayi_oku(String eno,String cins,ConnectionDetails faturaConnDetails);
-	List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO,Pageable pageable,ConnectionDetails faturaConnDetails);
+	double fat_raporsize(fatraporDTO fatraporDTO ,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> fat_detay_rapor(String fno , String turu,ConnectionDetails faturaConnDetails);
-	List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO,ConnectionDetails faturaConnDetails);
-	List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO,Pageable pageable,ConnectionDetails faturaConnDetails);
+	List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO,Pageable pageable,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> imalat_rapor(imaraporDTO imaraporDTO,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO , ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails);

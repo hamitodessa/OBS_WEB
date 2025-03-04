@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -612,11 +613,21 @@ public class FaturaService {
 		}
 	}
 	
-	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO){
+	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.fat_rapor(fatraporDTO,fatConnDetails);
+			return strategy.fat_rapor(fatraporDTO,pageable,fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public double fat_raporsize(fatraporDTO fatraporDTO) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			return strategy.fat_raporsize(fatraporDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
@@ -632,21 +643,21 @@ public class FaturaService {
 		}
 	}
 	
-	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO){
+	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.fat_rapor_fat_tar(fatraporDTO,fatConnDetails);
+			return strategy.fat_rapor_fat_tar(fatraporDTO,pageable ,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
 	
-	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO){
+	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			return strategy.fat_rapor_cari_kod(fatraporDTO,fatConnDetails);
+			return strategy.fat_rapor_cari_kod(fatraporDTO,pageable ,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

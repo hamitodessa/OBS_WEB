@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -1080,7 +1081,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO,Pageable pageable, ConnectionDetails faturaConnDetails) {
 		
 		fatraporDTO.setDepo(fatraporDTO.getDepo().replace("Like", "::text Like"));
 		fatraporDTO.setAnagrp(fatraporDTO.getAnagrp().replace("Like", "::text Like"));
@@ -1111,6 +1112,41 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
+	}
+	
+	@Override
+	public double fat_raporsize(fatraporDTO fatraporDTO ,ConnectionDetails faturaConnDetails) {
+		double result = 0 ;
+		String sql = " SELECT count(\"Fatura_No\") as satir  " +
+				" FROM \"FATURA\"  " +
+				" WHERE \"Fatura_No\" >= N'" + fatraporDTO.getFatno1() + "' AND   \"Fatura_No\" <= N'" + fatraporDTO.getFatno2() + "'" +
+				" AND \"Tarih\" >= '" + fatraporDTO.getTar1() + "' AND   \"Tarih\" <= '" + fatraporDTO.getTar2() + " 23:59:59.998'" +
+				" AND \"Cari_Firma\" >= N'" + fatraporDTO.getCkod1() + "' AND   \"Cari_Firma\" <= N'" + fatraporDTO.getCkod2() + "' " +
+				" AND \"Adres_Firma\" >= N'" + fatraporDTO.getAdr1() + "' AND   \"Adres_Firma\" <= N'" + fatraporDTO.getAdr2() + "' " +
+				" AND \"Kodu\" >= N'" + fatraporDTO.getUkod1() + "' AND  \"Kodu\" <= N'" + fatraporDTO.getUkod2() + "' " +
+				" AND \"Doviz\" >= N'" + fatraporDTO.getDvz1() + "' AND  \"Doviz\" <= N'" + fatraporDTO.getDvz2() + "' " +
+				" AND \"Tevkifat\" >= '" + fatraporDTO.getTev1() + "' AND  \"Tevkifat\" <= '" + fatraporDTO.getTev2() + "' " +
+				" AND \"Ozel_Kod\" >= N'" + fatraporDTO.getOkod1() + "' AND  \"Ozel_Kod\" <= N'" + fatraporDTO.getOkod2() + "' " +
+				" AND \"Ana_Grup\" " + fatraporDTO.getAnagrp() +
+				" AND \"Alt_Grup\" " + fatraporDTO.getAltgrp() +
+				" AND \"Depo\" " + fatraporDTO.getDepo() +
+				" AND \"Gir_Cik\"::text Like '" + fatraporDTO.getTuru() + "%'" +
+				" GROUP BY \"Fatura_No\",\"Gir_Cik\",\"Tarih\" ,\"Cari_Firma\",\"Adres_Firma\",\"Doviz\"  " +
+				" ORDER BY \"Fatura_No\"";
+		
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(), 
+				faturaConnDetails.getUsername(), 
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result  = resultSet.getInt("satir");
+			} 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return result;
 	}
 
 	@Override
@@ -1150,7 +1186,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO,Pageable pageable, ConnectionDetails faturaConnDetails) {
 		fatraporDTO.setDepo(fatraporDTO.getDepo().replace("Like", "::text Like"));
 		fatraporDTO.setAnagrp(fatraporDTO.getAnagrp().replace("Like", "::text Like"));
 		fatraporDTO.setAltgrp(fatraporDTO.getAltgrp().replace("Like", "::text Like"));
@@ -1189,7 +1225,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO,Pageable pageable, ConnectionDetails faturaConnDetails) {
 				fatraporDTO.setDepo(fatraporDTO.getDepo().replace("Like", "::text Like"));
 		fatraporDTO.setAnagrp(fatraporDTO.getAnagrp().replace("Like", "::text Like"));
 		fatraporDTO.setAltgrp(fatraporDTO.getAltgrp().replace("Like", "::text Like"));
