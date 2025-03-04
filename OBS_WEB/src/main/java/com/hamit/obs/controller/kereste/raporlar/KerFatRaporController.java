@@ -260,11 +260,11 @@ public class KerFatRaporController {
 				ewqString = "" ;
 				c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
 			}
-			if (turu.equals("GIREN"))
+			if (turu.equals("G"))
 			{
 				qw1 = " ,(SELECT " + ewqString + "  UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE.Cari_Firma " + qweString +" ) as Unvan " ;
 				qw2 = " ,(SELECT   VERGI_NO FROM " + c_yer + ".HESAP_DETAY WHERE HESAP_DETAY.D_HESAP = KERESTE.Cari_Firma  ) as Vergi_No " ;
-				qw3 = "Evrak_No,FORMAT(Tarih, 'yyyy-MM-dd'), Cari_Firma" ;
+				qw3 = "Evrak_No,Tarih, Cari_Firma" ;
 				if(kerConnDetails.getHangisql().equals("PG SQL") )
 				{
 					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
@@ -279,13 +279,13 @@ public class KerFatRaporController {
 					qw3 = "\"Evrak_No\",TO_CHAR(\"Tarih\",'yyyy-MM-dd'), \"Cari_Firma\"" ;
 				}
 				else if(kerConnDetails.getHangisql().equals("MY SQL"))
-					qw3 = "Evrak_No,DATE_FORMAT(Tarih,'%Y-%m-%d'), Cari_Firma" ;
+					qw3 = "Evrak_No,Tarih, Cari_Firma" ;
 			}
 			else 
 			{
 				qw1 = " ,(SELECT " + ewqString + "  UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE.CCari_Firma " + qweString +" ) as Unvan " ;
 				qw2 = " ,(SELECT   VERGI_NO FROM " + c_yer + ".HESAP_DETAY WHERE HESAP_DETAY.D_HESAP = KERESTE.CCari_Firma  ) as Vergi_No " ;
-				qw3 = "Cikis_Evrak,FORMAT(CTarih, 'yyyy-MM-dd'), CCari_Firma" ;
+				qw3 = "Cikis_Evrak,CTarih, CCari_Firma" ;
 				if(kerConnDetails.getHangisql().equals("PG SQL") )
 				{
 					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
@@ -297,10 +297,10 @@ public class KerFatRaporController {
 							+ " 'SELECT \"VERGI_NO\" ,\"D_HESAP\" FROM \"HESAP_DETAY\"  ') "  
 							+" AS adr(\"VERGI_NO\" character varying,\"D_HESAP\" character varying) "
 							+" WHERE \"D_HESAP\" = \"KERESTE\".\"CCari_Firma\" ) as \"Vergi_No\"  " ;
-					qw3 = "\"Cikis_Evrak\",TO_CHAR(\"CTarih\",'yyyy-MM-dd'), \"CCari_Firma\"" ;
+					qw3 = "\"Cikis_Evrak\",\"CTarih\", \"CCari_Firma\"" ;
 				}
 				else if(kerConnDetails.getHangisql().equals("MY SQL"))
-					qw3 = "Evrak_No,DATE_FORMAT(CTarih,'%Y-%m-%d'), Cari_Firma" ;
+					qw3 = "Evrak_No,CTarih, Cari_Firma" ;
 			}
 		}
 		else
@@ -313,7 +313,7 @@ public class KerFatRaporController {
 			{
 				qw1 = " ,(SELECT Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma) as Unvan " ;
 				qw2 = " ,(SELECT Vergi_No FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma  ) as Vergi_No " ;
-				qw3 = "Evrak_No,FORMAT(Tarih, 'yyyy-MM-dd'), Adres_Firma" ; 
+				qw3 = "Evrak_No,Tarih, Adres_Firma" ; 
 				if(kerConnDetails.getHangisql().equals("PG SQL") )
 				{
 					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
@@ -325,16 +325,16 @@ public class KerFatRaporController {
 							+ " 'SELECT \"VERGI_NO\" ,\"M_KODU\" FROM \"ADRES\"  ') "  
 							+" AS adr(\"VERGI_NO\" character varying,\"M_KODU\" character varying) "
 							+" WHERE \"M_KODU\" = \"KERESTE\".\"Adres_Firma\" ) as \"Vergi_No\"  " ;
-					qw3 = "\"Evrak_No\",TO_CHAR(\"Tarih\",'yyyy-MM-dd'), \"Adres_Firma\"" ; 
+					qw3 = "\"Evrak_No\",\"Tarih\", \"Adres_Firma\"" ; 
 				}
 				else if(kerConnDetails.getHangisql().equals("MY SQL"))
-					qw3 = "Evrak_No,DATE_FORMAT(Tarih,'%Y-%m-%d'), Cari_Firma" ;
+					qw3 = "Evrak_No,Tarih, Cari_Firma" ;
 			}
 			else 
 			{
 				qw1 = " ,(SELECT Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.CAdres_Firma  ) as Unvan " ;
 				qw2 = " ,(SELECT Vergi_No FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.CAdres_Firma  ) as Vergi_No " ;
-				qw3 = "Cikis_Evrak,FORMAT(CTarih, 'yyyy-MM-dd'), CAdres_Firma" ;
+				qw3 = "Cikis_Evrak,CTarih, CAdres_Firma" ;
 				if(kerConnDetails.getHangisql().equals("PG SQL") )
 				{
 					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
@@ -346,10 +346,10 @@ public class KerFatRaporController {
 							+ " 'SELECT \"VERGI_NO\" ,\"M_KODU\" FROM \"ADRES\"  ') "  
 							+" AS adr(\"VERGI_NO\" character varying,\"M_KODU\" character varying) "
 							+" WHERE \"M_KODU\" = \"KERESTE\".\"CAdres_Firma\" ) as \"Vergi_No\"  " ;
-					qw3 = "\"Cikis_Evrak\",TO_CHAR(\"CTarih\",'yyyy-MM-dd'), \"CAdres_Firma\"" ;
+					qw3 = "\"Cikis_Evrak\",\"CTarih\", \"CAdres_Firma\"" ;
 				}
 				else if(kerConnDetails.getHangisql().equals("MY SQL"))
-					qw3 = "Evrak_No,DATE_FORMAT(CTarih,'%Y-%m-%d'), Cari_Firma" ;
+					qw3 = "Evrak_No,CTarih, Cari_Firma" ;
 			}
 		}
 		deger[0] = qw1;

@@ -97,7 +97,7 @@ async function kerfetchTableData() {
 			sqlHeaders = ["", "EVRAK NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfno(sqlHeaders);
 		} else if (response.raporturu === 'fkodu') {
-			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
+			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfkodu(sqlHeaders);
 		} else if (response.raporturu === 'fnotar') {
 			sqlHeaders = ["", "EVRAK NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
@@ -125,7 +125,7 @@ async function kerfetchTableData() {
                     <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
                 `;
 				totalmiktar += rowData.m3;
-				totaltutar += rowData.Iskontolu_Tutar;
+				totaltutar += rowData.Toplam_Tutar;
 			}
 			else if (response.raporturu === 'fkodu') {
 				row.innerHTML = `
@@ -254,7 +254,7 @@ async function kerfetchTableData() {
 		});
 		if (response.raporturu === 'fno') {
 			document.getElementById("toplam-7").innerText = formatNumber3(totalmiktar);
-			document.getElementById("toplam-9").innerText = formatNumber2(totaltutar);
+			document.getElementById("toplam-11").innerText = formatNumber2(totaltutar);
 
 		}
 		else if (response.raporturu === 'fkodu') {
@@ -337,7 +337,7 @@ function updateTableHeadersfno(headers) {
 			th.textContent = "0.000";
 			th.id = "toplam-" + index;
 			th.classList.add("double-column");
-		} else if (index === 9) {
+		} else if (index === 11) {
 			th.textContent = "0.00";
 			th.id = "toplam-" + index;
 			th.classList.add("double-column");
