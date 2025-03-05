@@ -65,7 +65,6 @@ public class KerFatRaporController {
 				kerestedetayraporDTO.setGircik("C") ;
 			List<Map<String, Object>> fat_listele = new ArrayList<>();
 			
-			System.out.println(kerestedetayraporDTO.getGruplama());
 			if (kerestedetayraporDTO.getGruplama().equals("fno"))
 				fat_listele = keresteService.fat_rapor(kerestedetayraporDTO);
 			else if (kerestedetayraporDTO.getGruplama().equals("fkodu"))
@@ -83,10 +82,36 @@ public class KerFatRaporController {
 				kerestedetayraporDTO.setIki(hangiadres[1]);
 				kerestedetayraporDTO.setUc(hangiadres[2]);
 				fat_listele = keresteService.fat_rapor_fat_tar(kerestedetayraporDTO);
-				
 			}
 			response.put("data", (fat_listele != null) ? fat_listele : new ArrayList<>());
 			response.put("raporturu",kerestedetayraporDTO.getGruplama());
+			response.put("errorMessage", ""); 
+		} catch (ServiceException e) {
+			response.put("data", Collections.emptyList());
+			response.put("errorMessage", e.getMessage()); 
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@PostMapping("kereste/fatdoldursize")
+	@ResponseBody
+	public Map<String, Object> fatdoldursize(@RequestBody kerestedetayraporDTO kerestedetayraporDTO) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			String turuString[] = grup_cevir(kerestedetayraporDTO.getGana(),kerestedetayraporDTO.getGalt(),kerestedetayraporDTO.getGdepo(),kerestedetayraporDTO.getGozkod(),
+					kerestedetayraporDTO.getCana(),kerestedetayraporDTO.getCalt(),kerestedetayraporDTO.getCdepo(),kerestedetayraporDTO.getCozkod());
+			kerestedetayraporDTO.setGana(turuString[0]);
+			kerestedetayraporDTO.setGalt(turuString[1]);
+			kerestedetayraporDTO.setGdepo(turuString[2]);
+			kerestedetayraporDTO.setGozkod(turuString[3]);
+			kerestedetayraporDTO.setCana(turuString[4]);
+			kerestedetayraporDTO.setCalt(turuString[5]);
+			kerestedetayraporDTO.setCdepo(turuString[6]);
+			kerestedetayraporDTO.setCozkod(turuString[7]);
+			double fatdetaysize = keresteService.fat_raporsize(kerestedetayraporDTO);
+			response.put("totalRecords", fatdetaysize);
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {
 			response.put("data", Collections.emptyList());
@@ -244,7 +269,6 @@ public class KerFatRaporController {
 		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 		
-		System.out.println("turu:"+turu);
 		if (hangiadres.equals("Cari_Firma"))
 		{
 			String qweString = "", ewqString = "" ;
@@ -276,7 +300,7 @@ public class KerFatRaporController {
 							+ " 'SELECT \"VERGI_NO\" ,\"D_HESAP\" FROM \"HESAP_DETAY\"  ') "  
 							+" AS adr(\"VERGI_NO\" character varying,\"D_HESAP\" character varying) "
 							+" WHERE \"D_HESAP\" = \"KERESTE\".\"Cari_Firma\" ) as \"Vergi_No\"  " ;
-					qw3 = "\"Evrak_No\",TO_CHAR(\"Tarih\",'yyyy-MM-dd'), \"Cari_Firma\"" ;
+					qw3 = "\"Evrak_No\",\"Tarih\", \"Cari_Firma\"" ;
 				}
 				else if(kerConnDetails.getHangisql().equals("MY SQL"))
 					qw3 = "Evrak_No,Tarih, Cari_Firma" ;
@@ -368,7 +392,6 @@ public class KerFatRaporController {
 		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
 		
-		System.out.println("turu:"+turu);
 		if (hangiadres.equals("Cari_Firma"))
 		{
 			String qweString = "", ewqString = "" ;

@@ -58,7 +58,8 @@ public interface IKeresteDatabase {
 			String qwq7, String qwq8, String k1, String k2, String s1, String s2, String jkj,
 			String t1, String t2, String sstr_5, String sstr_1,String orderBY,String dURUM,String ko1, String ko2,String dpo,String grup,
 			String e1 , String e2,String ozelgrp[][],Set<String> sabitkolonlar,ConnectionDetails keresteConnDetails);
-	List<Map<String, Object>> fat_rapor(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> fat_rapor(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails,ConnectionDetails cariConnDetails );
+	double fat_raporsize(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> fat_detay_rapor(String fno , String turu,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> fat_rapor_fat_tar(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> fat_rapor_cari_kod(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);

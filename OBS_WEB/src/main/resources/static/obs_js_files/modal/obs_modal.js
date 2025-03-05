@@ -661,7 +661,7 @@ function saveToMain() {
 		reportFormat.disabled = false;
 	}
 	else if (nerden === "kerfatrapor") {
-		kerfetchTableData();
+		kerfatdoldur();
 		const mailButton = document.getElementById("fatrapmailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("fatrapreportFormat");

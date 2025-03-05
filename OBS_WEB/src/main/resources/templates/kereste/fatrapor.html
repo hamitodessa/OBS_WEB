@@ -103,6 +103,25 @@ th, td {
 			</table>
 		</div>
 	</div>
+	<!--		Start Pagination -->
+<div class='pagination-container' style="margin-top: 5px">
+	<button type="button" class="btn btn-secondary ml-2" onclick="ilksayfa()">
+        <i class="fa fa-backward"></i>
+    </button>
+    <span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="oncekisayfa()">
+		<i class="fa fa-angle-left"></i>
+	</button>
+    <span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="sonrakisayfa()">
+		<i class="fa fa-angle-right"></i>
+	</button>
+	<span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="sonsayfa()">
+		<i class="fa fa-forward"></i>
+	</button>
+</div>
+
 <input type="hidden" id="fatrapBilgi" name="fatrapBilgi" value="" />
 
 <script src="/obs_js_files/kereste/raporlar/fatrapor.js"></script>

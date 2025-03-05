@@ -511,7 +511,18 @@ public class KeresteService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-			return strategy.fat_rapor(kerestedetayraporDTO, keresteConnDetails);
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
+			return strategy.fat_rapor(kerestedetayraporDTO, keresteConnDetails,cariConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public double fat_raporsize(kerestedetayraporDTO kerestedetayraporDTO) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.fat_raporsize(kerestedetayraporDTO, keresteConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

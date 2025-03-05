@@ -1,3 +1,4 @@
+pageSize = 250;
 async function anagrpChanged(anagrpElement) {
 	const anagrup = anagrpElement.value;
 	const errorDiv = document.getElementById("errorDiv");
@@ -35,10 +36,58 @@ async function anagrpChanged(anagrpElement) {
 	}
 }
 
-async function kerfetchTableData() {
+function ilksayfa() {
+	kerfetchTableData(0);
+}
+
+function oncekisayfa() {
+	if (currentPage > 0) {
+		kerfetchTableData(currentPage - 1);
+	}
+}
+
+function sonrakisayfa() {
+	if (currentPage < totalPages - 1) {
+		kerfetchTableData(currentPage + 1);
+	}
+}
+
+async function sonsayfa() {
+	kerfetchTableData(totalPages - 1);
+}
+
+async function toplampagesize() {
+	try {
+		const errorDiv = document.getElementById("errorDiv");
+		errorDiv.style.display = "none";
+		errorDiv.innerText = "";
+		const kerestedetayraporDTO = getfatraporDTO();
+		const response = await fetchWithSessionCheck("kereste/fatdoldursize", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(kerestedetayraporDTO),
+		});
+		const totalRecords = response.totalRecords;
+		totalPages = Math.ceil(totalRecords / pageSize);
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error;
+		document.body.style.cursor = "default";
+	}
+}
+
+async function kerfatdoldur() {
+	document.body.style.cursor = "wait";
+	toplampagesize();
+	kerfetchTableData(0);
+}
+
+function getfatraporDTO() {
 	const hiddenFieldValue = $('#fatrapBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
-	const kerestedetayraporDTO = {
+	return {
 		gtar1: parsedValues[0],
 		gtar2: parsedValues[1],
 		ctar1: parsedValues[2],
@@ -68,8 +117,15 @@ async function kerfetchTableData() {
 		gruplama: parsedValues[26],
 		caradr: parsedValues[27],
 		gircik: parsedValues[28]
-
 	};
+}
+
+
+async function kerfetchTableData(page) {
+	const kerestedetayraporDTO = getfatraporDTO();
+	kerestedetayraporDTO.page = page;
+	kerestedetayraporDTO.pageSize = pageSize;
+	currentPage = page;
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -97,7 +153,7 @@ async function kerfetchTableData() {
 			sqlHeaders = ["", "EVRAK NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfno(sqlHeaders);
 		} else if (response.raporturu === 'fkodu') {
-			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
+			sqlHeaders = ["CARI_HESAP", "HAREKET", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfkodu(sqlHeaders);
 		} else if (response.raporturu === 'fnotar') {
 			sqlHeaders = ["", "EVRAK NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
