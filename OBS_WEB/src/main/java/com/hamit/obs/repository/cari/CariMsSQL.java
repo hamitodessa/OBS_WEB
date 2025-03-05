@@ -53,9 +53,9 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2, ConnectionDetails cariConnDetails) {
-		StringBuilder tARIH = new StringBuilder();
+		String tARIH = "";
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
-			tARIH.append(" AND TARIH BETWEEN ? AND ?");
+			tARIH = " AND TARIH BETWEEN ? AND ?";
 		}
 		String sql = "SELECT TARIH, SATIRLAR.EVRAK, ISNULL(IZAHAT.IZAHAT, '') AS IZAHAT, KOD, KUR, BORC, ALACAK, " +
 				"SUM(ALACAK - BORC) OVER(ORDER BY TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE, [USER] " +
