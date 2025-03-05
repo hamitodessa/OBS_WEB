@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
@@ -53,7 +54,7 @@ public class CariPgSQL implements ICariDatabase{
 	}
 
 	@Override
-	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,ConnectionDetails cariConnDetails) {
+	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable,ConnectionDetails cariConnDetails) {
 		StringBuilder tARIH = new StringBuilder();
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
 			tARIH.append(" AND TARIH BETWEEN ? AND ?");
@@ -113,6 +114,33 @@ public class CariPgSQL implements ICariDatabase{
 
 		return resultList;
 	}
+	
+	@Override
+	public double eks_raporsize(String hesap, String t1, String t2, ConnectionDetails cariConnDetails) {
+		double result = 0 ;
+		String tARIH = "";
+		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
+			tARIH = " AND TARIH BETWEEN ? AND ?";
+		}
+		String sql = "SELECT COUNT(TARIH) as satir " +
+				" FROM SATIRLAR " +
+				" WHERE HESAP = ? " +
+				tARIH ;
+		try (Connection connection = DriverManager.getConnection(
+				cariConnDetails.getJdbcUrl(), 
+				cariConnDetails.getUsername(), 
+				cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result  = resultSet.getInt("satir");
+			} 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return result;
+	}
+	
 
 	@Override
 	public List<Map<String, Object>> ekstre_mizan(String kod, String ilktarih, String sontarih, String ilkhcins,

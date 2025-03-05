@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
@@ -52,8 +53,12 @@ public class CariMsSQL implements ICariDatabase{
 	}
 
 	@Override
-	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2, ConnectionDetails cariConnDetails) {
+	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable, ConnectionDetails cariConnDetails) {
 		String tARIH = "";
+		int page = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize();
+		int offset = page * pageSize;
+		
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
 			tARIH = " AND TARIH BETWEEN ? AND ?";
 		}
@@ -62,27 +67,33 @@ public class CariMsSQL implements ICariDatabase{
 				"FROM SATIRLAR LEFT JOIN IZAHAT " +
 				"ON SATIRLAR.EVRAK = IZAHAT.EVRAK WHERE HESAP = ?" +
 				tARIH +
-				" ORDER BY TARIH";
+				" ORDER BY TARIH" +
+				" OFFSET " + offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
+		
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, hesap);
-			if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
+
+			if (!t1.equals("1900-01-01") || ! t2.equals("2100-12-31")) {
 				preparedStatement.setString(2, t1);
 				preparedStatement.setString(3, t2 + " 23:59:59.998");
 			}
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
+			
+			System.out.println(resultList.get(0).get("TARIH"));
+			System.out.println(offset);
 			if (!t1.equals("1900-01-01")) {
 				List<Map<String, Object>> mizanList = ekstre_mizan(
-						hesap,"1900-01-01",Tarih_Cevir.tarihEksi1(t1) + " 23:59:59.000","   ", "ZZZ","     ", "ZZZZZ",cariConnDetails);
+						hesap,"1900-01-01",resultList.get(0).get("TARIH").toString(),"   ", "ZZZ","     ", "ZZZZZ",cariConnDetails);
 				if (!mizanList.isEmpty()) {
 					Map<String, Object> newRow = new HashMap<>();
 					double borc = (double) mizanList.get(0).getOrDefault("ISLEM", 0.0);
 					double alacak = (double) mizanList.get(0).getOrDefault("ISLEM2", 0.0);
 					double bakiye = alacak - borc;
-					newRow.put("TARIH", new Date());
+					newRow.put("TARIH", t1); //new Date()
 					newRow.put("EVRAK", 0);
 					newRow.put("IZAHAT", "Devir");
 					newRow.put("KOD", "");
@@ -104,11 +115,43 @@ public class CariMsSQL implements ICariDatabase{
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServiceException("Ekstre okunamadı", e);
 		}
 		return resultList;
 	}
 
+	@Override
+	public double eks_raporsize(String hesap, String t1, String t2, ConnectionDetails cariConnDetails) {
+		double result = 0 ;
+		String tARIH = "";
+		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
+			tARIH = " AND TARIH BETWEEN ? AND ?";
+		}
+		String sql = "SELECT COUNT(TARIH) as satir " +
+				" FROM SATIRLAR " +
+				" WHERE HESAP = ? " +
+				tARIH ;
+		try (Connection connection = DriverManager.getConnection(
+				cariConnDetails.getJdbcUrl(), 
+				cariConnDetails.getUsername(), 
+				cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, hesap);
+			if (!t1.equals("1900-01-01") || ! t2.equals("2100-12-31")) {
+				preparedStatement.setString(2, t1);
+				preparedStatement.setString(3, t2 + " 23:59:59.998");
+			}
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result  = resultSet.getInt("satir");
+			} 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return result;
+	}
+	
 	@Override
 	public List<Map<String, Object>> ekstre_mizan(String kod, String ilktarih, String sontarih, String ilkhcins,
 			String sonhcins, String ilkkar, String sonkar, ConnectionDetails cariConnDetails) {

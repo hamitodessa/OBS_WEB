@@ -10,6 +10,8 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.custom.degiskenler.UygulamaSabitleri;
@@ -94,7 +96,8 @@ public class RaporOlustur {
 			parameters.put("kOD", hesap);
 			parameters.put("uNVAN", cariService.hesap_adi_oku(hesap)[0]);
 			parameters.put("pERIYOT", "Periyot :" + Tarih_Cevir.tarihTers(t1) + " - " + Tarih_Cevir.tarihTers(t2));
-			List<Map<String, Object>> ekstreData = cariService.ekstre(hesap, t1, t2);
+			Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+			List<Map<String, Object>> ekstreData = cariService.ekstre(hesap, t1, t2,pageable);
 			JasperPrint jp = prepareJasperPrint("CAR_EKSTRE.jrxml", parameters, ekstreData,UygulamaSabitleri.CariRaporYeri);
 			return exportRapor(jp, uzanti);
 		} catch (Exception e) {

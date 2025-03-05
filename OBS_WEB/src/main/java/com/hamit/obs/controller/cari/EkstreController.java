@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,13 +45,16 @@ public class EkstreController {
 
 	@PostMapping("cari/ekstre")
 	@ResponseBody
-	public Map<String, Object> sorgula(@RequestBody Map<String, String> params) {
+	public Map<String, Object> sorgula(@RequestBody Map<String, Object> params) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			String hesapKodu = params.get("hesapKodu");
-			String startDate = params.get("startDate");
-			String endDate = params.get("endDate");
-			List<Map<String, Object>> ekstre = cariservice.ekstre(hesapKodu, startDate, endDate);
+			String hesapKodu = (String) params.get("hesapKodu");
+			String startDate = (String) params.get("startDate");
+			String endDate = (String) params.get("endDate");
+			int page = (int) params.get("page");
+			int pageSize = (int) params.get("pageSize");
+			Pageable pageable = PageRequest.of(page, pageSize);
+			List<Map<String, Object>> ekstre = cariservice.ekstre(hesapKodu, startDate, endDate,pageable);
 			response.put("success", true);
 			response.put("data", (ekstre != null) ? ekstre : new ArrayList<>());
 			response.put("errorMessage", "");
@@ -58,6 +63,27 @@ public class EkstreController {
 			response.put("data", Collections.emptyList());
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+	
+	@PostMapping("cari/ekssize")
+	@ResponseBody
+	public Map<String, Object> ekssize(@RequestBody Map<String, Object> params) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			String hesapKodu = (String) params.get("hesapKodu");
+			String startDate = (String) params.get("startDate");
+			String endDate = (String) params.get("endDate");
+			double ekssize = cariservice.eks_raporsize(hesapKodu, startDate, endDate);
+			response.put("totalRecords", ekssize);
+			response.put("errorMessage", ""); 
+		} catch (ServiceException e) {
+			response.put("data", Collections.emptyList());
+			response.put("errorMessage", e.getMessage()); 
+		} catch (Exception e) {
+			e.printStackTrace();
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;

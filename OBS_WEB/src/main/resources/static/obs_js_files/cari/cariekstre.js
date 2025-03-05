@@ -1,9 +1,67 @@
-async function eksfetchTableData() {
+pageSize = 500;
+
+function ilksayfa() {
+	eksfetchTableData(0);
+}
+
+function oncekisayfa() {
+	if (currentPage > 0) {
+		eksfetchTableData(currentPage - 1);
+	}
+}
+
+function sonrakisayfa() {
+	if (currentPage < totalPages - 1) {
+		eksfetchTableData(currentPage + 1);
+	}
+}
+
+async function sonsayfa() {
+	eksfetchTableData(totalPages - 1);
+}
+
+async function toplampagesize() {
+	try {
+		const errorDiv = document.getElementById("errorDiv");
+		errorDiv.style.display = "none";
+		errorDiv.innerText = "";
+		const hiddenFieldValue = $('#ekstreBilgi').val();
+		const parsedValues = hiddenFieldValue.split(",");
+		const hesapKodu = parsedValues[0];
+		const startDate = parsedValues[1];
+		const endDate = parsedValues[2];
+		const response = await fetchWithSessionCheck("cari/ekssize", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ hesapKodu, startDate, endDate }),
+		});
+		const totalRecords = response.totalRecords;
+		totalPages = Math.ceil(totalRecords / pageSize);
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error;
+		document.body.style.cursor = "default";
+	}
+}
+
+async function eksdoldur() {
+	document.body.style.cursor = "wait";
+	toplampagesize();
+	eksfetchTableData(0);
+}
+
+
+async function eksfetchTableData(page) {
 	const hiddenFieldValue = $('#ekstreBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
 	const hesapKodu = parsedValues[0];
 	const startDate = parsedValues[1];
 	const endDate = parsedValues[2];
+
+	currentPage = page;
+
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -21,12 +79,18 @@ async function eksfetchTableData() {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ hesapKodu, startDate, endDate }),
+			body: JSON.stringify({ hesapKodu, startDate, endDate, page, pageSize }),
 		});
 		if (data.success) {
 			let totalBorc = 0;
 			let totalAlacak = 0;
-			data.data.forEach(item => {
+			data.data.forEach((item, index, array) => {
+				if (index === 0) {
+					console.log("İlk satırın tarihi:", item.TARIH);
+				}
+				if (index === array.length - 1) {
+					console.log("Son satırın tarihi:", item.TARIH);
+				}
 				const row = document.createElement("tr");
 				row.classList.add("table-row-height");
 				row.innerHTML = `

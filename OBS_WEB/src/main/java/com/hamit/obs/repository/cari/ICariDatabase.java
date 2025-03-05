@@ -3,6 +3,8 @@ package com.hamit.obs.repository.cari;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
+
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.dto.cari.dvzcevirmeDTO;
@@ -17,7 +19,8 @@ import com.hamit.obs.dto.cari.tahsilatTableRowDTO;
 public interface ICariDatabase {
 
 	String[] hesap_adi_oku(String hesap, ConnectionDetails cariConnDetails) ;
-	List<Map<String, Object>> ekstre(String hesap , String t1 ,String t2,ConnectionDetails cariConnDetails) ;
+	List<Map<String, Object>> ekstre(String hesap , String t1 ,String t2,Pageable pageable,ConnectionDetails cariConnDetails) ;
+	double eks_raporsize(String hesap , String t1 ,String t2 ,ConnectionDetails cariConnDetails);
 	List<Map<String, Object>> ekstre_mizan(String kod,String ilktarih,String sontarih,String ilkhcins,String sonhcins,String ilkkar,String sonkar,ConnectionDetails cariConnDetails) ;
 	List<Map<String, Object>> hesap_kodlari(ConnectionDetails cariConnDetails);
 	List<Map<String, Object>> hp_pln(ConnectionDetails cariConnDetails);

@@ -544,7 +544,7 @@ function saveToMain() {
 		reportFormat.disabled = false;
 	}
 	else if (nerden === "ekstre") {
-		eksfetchTableData();
+		eksdoldur();
 		const mailButton = document.getElementById("mailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("reportFormat");

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -78,15 +79,26 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
-	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2){
+	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
-			return strategy.ekstre(hesap, t1, t2,cariConnDetails);
+			return strategy.ekstre(hesap, t1, t2,pageable,cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
+	public double eks_raporsize(String hesap , String t1 ,String t2) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
+			return strategy.eks_raporsize(hesap, t1, t2,cariConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
 	public List<Map<String, Object>> hesap_kodlari(){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
