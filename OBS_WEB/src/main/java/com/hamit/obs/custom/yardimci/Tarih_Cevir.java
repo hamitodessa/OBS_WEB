@@ -50,4 +50,10 @@ public class Tarih_Cevir {
 		convertedDate = convertedDate.substring(0, 10) +  " " + str ;
 		return convertedDate;
 	}
+	
+	public static Date stringtoDate(String tarih) {
+		LocalDate localDate = LocalDate.parse(tarih, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return date;
+	}
 }

@@ -39,6 +39,7 @@ async function toplampagesize() {
 		});
 		const totalRecords = response.totalRecords;
 		totalPages = Math.ceil(totalRecords / pageSize);
+		console.log(totalPages);
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error;
@@ -84,13 +85,7 @@ async function eksfetchTableData(page) {
 		if (data.success) {
 			let totalBorc = 0;
 			let totalAlacak = 0;
-			data.data.forEach((item, index, array) => {
-				if (index === 0) {
-					console.log("İlk satırın tarihi:", item.TARIH);
-				}
-				if (index === array.length - 1) {
-					console.log("Son satırın tarihi:", item.TARIH);
-				}
+			data.data.forEach((item) => {
 				const row = document.createElement("tr");
 				row.classList.add("table-row-height");
 				row.innerHTML = `
@@ -108,8 +103,10 @@ async function eksfetchTableData(page) {
 				totalBorc += item.BORC || 0;
 				totalAlacak += item.ALACAK || 0;
 			});
-			document.getElementById("totalBorc").textContent = formatNumber2(totalBorc);
-			document.getElementById("totalAlacak").textContent = formatNumber2(totalAlacak);
+			//document.getElementById("totalBorc").textContent = formatNumber2(totalBorc);
+			//document.getElementById("totalAlacak").textContent = formatNumber2(totalAlacak);
+			document.getElementById("totalBorc").textContent = '';
+			document.getElementById("totalAlacak").textContent = '';
 			hesapAdiOgren(hesapKodu, 'hesapAdi');
 		} else {
 			errorDiv.style.display = "block";

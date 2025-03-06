@@ -56,17 +56,24 @@ public class CariPgSQL implements ICariDatabase{
 	@Override
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable,ConnectionDetails cariConnDetails) {
 		StringBuilder tARIH = new StringBuilder();
+		
+		int page = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize();
+		int offset = page * pageSize;
+		
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
 			tARIH.append(" AND TARIH BETWEEN ? AND ?");
 		}
-		String sql = "SELECT \"TARIH\",\"SATIRLAR\".\"EVRAK\"," +  
+		String sql = "SELECT \"SID\",\"TARIH\",\"SATIRLAR\".\"EVRAK\"," +  
 				" COALESCE(\"IZAHAT\".\"IZAHAT\",'') AS \"IZAHAT\",\"KOD\",\"KUR\",\"BORC\",\"ALACAK\","  + 
 				" SUM(\"ALACAK\"-\"BORC\") OVER(ORDER BY \"TARIH\" ROWS BETWEEN UNBOUNDED PRECEDING And CURRENT ROW) AS \"BAKIYE\",\"USER\" "  + 
 				" FROM \"SATIRLAR\" LEFT JOIN \"IZAHAT\"" + 
 				" ON \"SATIRLAR\".\"EVRAK\" = \"IZAHAT\".\"EVRAK\" WHERE  \"HESAP\" = ? " + 
 				tARIH + 
-				" ORDER BY \"TARIH\"";
+				" ORDER BY \"TARIH\"" +
+				" LIMIT " + pageSize + " OFFSET " + offset + " ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
+		
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, hesap);
@@ -78,40 +85,74 @@ public class CariPgSQL implements ICariDatabase{
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
 			if (!t1.equals("1900-01-01")) {
-				List<Map<String, Object>> mizanList = ekstre_mizan(
-						hesap,"1900-01-01",Tarih_Cevir.tarihEksi1(t1) + " 23:59:59.000",
-						"   ", "ZZZ","     ", "ZZZZZ",cariConnDetails);
-
-				if (!mizanList.isEmpty()) {
-					Map<String, Object> newRow = new HashMap<>();
-					double borc = (double) mizanList.get(0).getOrDefault("ISLEM", 0.0);
-					double alacak = (double) mizanList.get(0).getOrDefault("ISLEM2", 0.0);
-					double bakiye = alacak - borc;
-
-					newRow.put("TARIH", new Date());
+				Map<String, Object> newRow = new HashMap<>();
+				double borc = 0;
+				double alacak = 0;
+				double bakiye =0;
+				if(offset == 0) {
+					List<Map<String, Object>> mizanList = ekstre_mizan(hesap,"1900-01-01",Tarih_Cevir.tarihEksi1(t1) + " 23:59:59.000","   ", "ZZZ","     ", "ZZZZZ",cariConnDetails);
+					borc = (double) mizanList.get(0).getOrDefault("ISLEM", 0.0);
+					alacak = (double) mizanList.get(0).getOrDefault("ISLEM2", 0.0);
+					bakiye = alacak - borc;
+					newRow.put("TARIH",Tarih_Cevir.stringtoDate(t1));
 					newRow.put("EVRAK", 0);
 					newRow.put("IZAHAT", "Devir");
-					newRow.put("KODU", "");
+					newRow.put("KOD", "");
 					newRow.put("KUR", 0.0);
 					newRow.put("BORC", borc);
 					newRow.put("ALACAK", alacak);
 					newRow.put("BAKIYE", bakiye);
-					newRow.put("USER", "hmt");
+					newRow.put("USER", "");
 					resultList.add(0, newRow);
-
-					// Bakiye değerlerini güncelle
-					for (Map<String, Object> row : resultList) {
-						borc = (double) row.getOrDefault("BORC", 0.0);
-						alacak = (double) row.getOrDefault("ALACAK", 0.0);
-						bakiye += alacak - borc;
-						row.put("BAKIYE", bakiye);
+					borc = 0.00;
+					alacak = 0.00;
+					bakiye = 0.00;
+				}
+				else {
+					List<Map<String, Object>> komplelist = eski_bakiye(hesap,resultList.get(0).get("TARIH").toString(),cariConnDetails);
+					if (komplelist != null && !komplelist.isEmpty()) {
+					    for (int i = komplelist.size() - 1; i > 0; i--) {
+					        if (komplelist.get(i).get("SID").toString().equals(resultList.get(0).get("SID").toString())) {
+					            bakiye = (double) komplelist.get(i - 1).get("BAKIYE");
+					            komplelist.clear();
+					            komplelist = null;
+					            break;
+					        }
+					    }
 					}
+				}
+				for (Map<String, Object> row : resultList) {
+					borc = (double) row.getOrDefault("BORC", 0.0);
+					alacak = (double) row.getOrDefault("ALACAK", 0.0);
+					bakiye += alacak - borc;
+					row.put("BAKIYE", bakiye);
 				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Ekstre okunamadı", e);
 		}
-
+		return resultList;
+	}
+	
+	@Override
+	public List<Map<String, Object>> eski_bakiye(String hesap,String t2,ConnectionDetails cariConnDetails){
+		
+		String sql = "SELECT \"SID\", \"TARIH\",\"BORC\",\"ALACAK\","  + 
+				" SUM(\"ALACAK\"-\"BORC\") OVER(ORDER BY \"TARIH\" ROWS BETWEEN UNBOUNDED PRECEDING And CURRENT ROW) AS \"BAKIYE\" "  + 
+				" FROM \"SATIRLAR\" " + 
+				" WHERE  \"HESAP\" = ? " + 
+				" AND \"TARIH\" <= '" + t2 + "' " + 
+				" ORDER BY \"TARIH\"";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, hesap);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Ekstre okunamadı", e);
+		}
 		return resultList;
 	}
 	
@@ -131,6 +172,11 @@ public class CariPgSQL implements ICariDatabase{
 				cariConnDetails.getUsername(), 
 				cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			preparedStatement.setString(1, hesap);
+			if (!t1.equals("1900-01-01") || ! t2.equals("2100-12-31")) {
+				preparedStatement.setString(2, t1);
+				preparedStatement.setString(3, t2 + " 23:59:59.998");
+			}
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				result  = resultSet.getInt("satir");

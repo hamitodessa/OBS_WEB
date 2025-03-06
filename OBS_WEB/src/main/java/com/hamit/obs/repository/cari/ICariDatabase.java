@@ -20,6 +20,7 @@ public interface ICariDatabase {
 
 	String[] hesap_adi_oku(String hesap, ConnectionDetails cariConnDetails) ;
 	List<Map<String, Object>> ekstre(String hesap , String t1 ,String t2,Pageable pageable,ConnectionDetails cariConnDetails) ;
+	List<Map<String, Object>> eski_bakiye(String hesap,String t2,ConnectionDetails cariConnDetails);
 	double eks_raporsize(String hesap , String t1 ,String t2 ,ConnectionDetails cariConnDetails);
 	List<Map<String, Object>> ekstre_mizan(String kod,String ilktarih,String sontarih,String ilkhcins,String sonhcins,String ilkkar,String sonkar,ConnectionDetails cariConnDetails) ;
 	List<Map<String, Object>> hesap_kodlari(ConnectionDetails cariConnDetails);
