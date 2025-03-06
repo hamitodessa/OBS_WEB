@@ -62,7 +62,7 @@ public class CariPgSQL implements ICariDatabase{
 		int offset = page * pageSize;
 		
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
-			tARIH.append(" AND TARIH BETWEEN ? AND ?");
+			tARIH.append(" AND \"TARIH\" BETWEEN ? AND ?");
 		}
 		String sql = "SELECT \"SID\",\"TARIH\",\"SATIRLAR\".\"EVRAK\"," +  
 				" COALESCE(\"IZAHAT\".\"IZAHAT\",'') AS \"IZAHAT\",\"KOD\",\"KUR\",\"BORC\",\"ALACAK\","  + 
@@ -78,8 +78,9 @@ public class CariPgSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, hesap);
 			if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
-				preparedStatement.setString(2, t1);
-				preparedStatement.setString(3, t2 + " 23:59:59.998");
+				
+				preparedStatement.setTimestamp(2, Timestamp.valueOf(t1 + " 00:00:00"));
+				preparedStatement.setTimestamp(3, Timestamp.valueOf(t2 + " 23:59:59.998"));
 			}
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
@@ -136,7 +137,6 @@ public class CariPgSQL implements ICariDatabase{
 	
 	@Override
 	public List<Map<String, Object>> eski_bakiye(String hesap,String t2,ConnectionDetails cariConnDetails){
-		
 		String sql = "SELECT \"SID\", \"TARIH\",\"BORC\",\"ALACAK\","  + 
 				" SUM(\"ALACAK\"-\"BORC\") OVER(ORDER BY \"TARIH\" ROWS BETWEEN UNBOUNDED PRECEDING And CURRENT ROW) AS \"BAKIYE\" "  + 
 				" FROM \"SATIRLAR\" " + 
@@ -174,8 +174,8 @@ public class CariPgSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 			preparedStatement.setString(1, hesap);
 			if (!t1.equals("1900-01-01") || ! t2.equals("2100-12-31")) {
-				preparedStatement.setString(2, t1);
-				preparedStatement.setString(3, t2 + " 23:59:59.998");
+				preparedStatement.setTimestamp(2, Timestamp.valueOf(t1 + " 00:00:00"));
+				preparedStatement.setTimestamp(3, Timestamp.valueOf(t2 + " 23:59:59.998"));
 			}
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
@@ -186,7 +186,6 @@ public class CariPgSQL implements ICariDatabase{
 		}
 		return result;
 	}
-	
 
 	@Override
 	public List<Map<String, Object>> ekstre_mizan(String kod, String ilktarih, String sontarih, String ilkhcins,
