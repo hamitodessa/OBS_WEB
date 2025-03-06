@@ -161,11 +161,11 @@ public class CariPgSQL implements ICariDatabase{
 		double result = 0 ;
 		String tARIH = "";
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
-			tARIH = " AND TARIH BETWEEN ? AND ?";
+			tARIH = " AND \"TARIH\" BETWEEN ? AND ?";
 		}
-		String sql = "SELECT COUNT(TARIH) as satir " +
-				" FROM SATIRLAR " +
-				" WHERE HESAP = ? " +
+		String sql = "SELECT COUNT(\"TARIH\") as satir " +
+				" FROM \"SATIRLAR\" " +
+				" WHERE \"HESAP\" = ? " +
 				tARIH ;
 		try (Connection connection = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(), 
