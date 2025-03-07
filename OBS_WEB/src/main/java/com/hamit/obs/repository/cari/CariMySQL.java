@@ -62,15 +62,12 @@ public class CariMySQL implements ICariDatabase{
 	@Override
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable, ConnectionDetails cariConnDetails) {
 		StringBuilder tARIH = new StringBuilder();
-		
 		int page = pageable.getPageNumber();
 		int pageSize = pageable.getPageSize();
 		int offset = page * pageSize;
-		
 		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
 			tARIH.append(" AND TARIH BETWEEN ? AND ?");
 		}
-
 		String sql = "SELECT SID,TARIH,SATIRLAR.EVRAK ," + 
 				" IFNULL(IZAHAT.IZAHAT,'') AS IZAHAT,KOD,KUR,BORC,ALACAK," + 
 				" SUM(ALACAK-BORC) OVER(ORDER BY TARIH ROWS BETWEEN UNBOUNDED PRECEDING And CURRENT ROW) AS BAKIYE,USER" + 
@@ -80,9 +77,7 @@ public class CariMySQL implements ICariDatabase{
 				" WHERE HESAP = ? " + tARIH + 
 				" ORDER BY TARIH" +
 				" LIMIT " + pageSize + " OFFSET " + offset + " ";
-		
 		List<Map<String, Object>> resultList = new ArrayList<>();
-
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, hesap);
@@ -186,9 +181,8 @@ public class CariMySQL implements ICariDatabase{
 				preparedStatement.setString(3, t2 + " 23:59:59.998");
 			}
 			ResultSet resultSet = preparedStatement.executeQuery();
-			if (resultSet.next()) {
+			if (resultSet.next())
 				result  = resultSet.getInt("satir");
-			} 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -212,7 +206,6 @@ public class CariMySQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("veritabani okuma", e); 
 		}
@@ -227,7 +220,6 @@ public class CariMySQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService genel hatası.", e);
 		}
@@ -241,7 +233,6 @@ public class CariMySQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService genel hatası.", e);
 		}
@@ -254,9 +245,8 @@ public class CariMySQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					evrakNo = resultSet.getInt("MAX_NO");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Hesap adı okunamadı", e); 
@@ -314,12 +304,10 @@ public class CariMySQL implements ICariDatabase{
 				" ORDER BY H DESC";
 		List<dekontDTO> dekontDTO =  new ArrayList<>(); 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Date input için gerekli format
-
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.isBeforeFirst()) {
-
 				resultSet.next();
 				dekontDTO dto = new dekontDTO();
 				dto.setFisNo(fisNo); // fisNo doğrudan metod parametresinden geliyor
@@ -353,7 +341,6 @@ public class CariMySQL implements ICariDatabase{
 				dekontDTO.add(dto);
 			}
 			resultSet.close();
-
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService Evrak Okuma", e);
 		}
@@ -366,9 +353,8 @@ public class CariMySQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				CallableStatement preparedStatement = connection.prepareCall(sql)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					evrakNo = resultSet.getInt(1);
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
@@ -379,15 +365,12 @@ public class CariMySQL implements ICariDatabase{
 	public void evrak_yoket(int evrakno,ConnectionDetails cariConnDetails) {
 		String querySatirlar = "DELETE FROM SATIRLAR WHERE EVRAK = ?";
 		String queryIzahat = "DELETE FROM IZAHAT WHERE EVRAK = ?";
-
 		try (Connection connection = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement stmtSatirlar = connection.prepareStatement(querySatirlar);
 				PreparedStatement stmtIzahat = connection.prepareStatement(queryIzahat)) {
-
 			stmtSatirlar.setInt(1, evrakno);
 			stmtSatirlar.executeUpdate();
-
 			stmtIzahat.setInt(1, evrakno);
 			stmtIzahat.executeUpdate();
 		} catch (Exception e) {
@@ -416,7 +399,6 @@ public class CariMySQL implements ICariDatabase{
 		default:
 			break;
 		}
-
 		sqlBuilder.append("SELECT SATIRLAR.HESAP, HESAP.UNVAN, HESAP.HESAP_CINSI AS H_CINSI, ")
 		.append("SUM(SATIRLAR.BORC) AS BORC, SUM(SATIRLAR.ALACAK) AS ALACAK, ")
 		.append("SUM(SATIRLAR.ALACAK) - SUM(SATIRLAR.BORC) AS BAKIYE ")
@@ -429,29 +411,24 @@ public class CariMySQL implements ICariDatabase{
 		if (!mizanDTO.getStartDate().equals("1900.01.01") || !mizanDTO.getEndDate().equals("2100.12.31")) {
 			sqlBuilder.append("AND TARIH BETWEEN ? AND ? ");
 		}
-
 		sqlBuilder.append("GROUP BY SATIRLAR.HESAP, HESAP.UNVAN, HESAP.HESAP_CINSI ")
 		.append(havingClause)
 		.append("ORDER BY SATIRLAR.HESAP ASC ");
 
 		String sql = sqlBuilder.toString();
-
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
 			preparedStatement.setString(1, mizanDTO.getHkodu1());
 			preparedStatement.setString(2, mizanDTO.getHkodu2());
 			preparedStatement.setString(3, mizanDTO.getCins1());
 			preparedStatement.setString(4, mizanDTO.getCins2());
 			preparedStatement.setString(5, mizanDTO.getKarton1());
 			preparedStatement.setString(6, mizanDTO.getKarton2());
-
 			int paramIndex = 7;
 			if (!mizanDTO.getStartDate().equals("1900.01.01") || !mizanDTO.getEndDate().equals("2100.12.31")) {
 				preparedStatement.setString(paramIndex++, mizanDTO.getStartDate());
 				preparedStatement.setString(paramIndex, mizanDTO.getEndDate() + " 23:59:59.998");
 			}
-
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
@@ -467,9 +444,8 @@ public class CariMySQL implements ICariDatabase{
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
-			if (resultSet.next()) {
+			if (resultSet.next())
 				firmaIsmi = resultSet.getString("FIRMA_ADI");
-			}
 		} catch (SQLException e) {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
@@ -479,7 +455,6 @@ public class CariMySQL implements ICariDatabase{
 	public void hsp_sil(String hesap,ConnectionDetails cariConnDetails) {
 		String queryHesap = "DELETE FROM HESAP WHERE HESAP = ?";
 		String queryHesapDetay = "DELETE FROM HESAP_DETAY WHERE D_HESAP = ?";
-
 		try (Connection connection = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement stmtHesap = connection.prepareStatement(queryHesap);
@@ -594,7 +569,6 @@ public class CariMySQL implements ICariDatabase{
 	@Override
 	public List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO, ConnectionDetails cariConnDetails) {
 	    List<Map<String, Object>> resultList = new ArrayList<>();
-
 	    String havingCondition = "";
 	    if (mizanDTO.getHangi_tur().equals("Borclu Hesaplar")) {
 	        havingCondition = " HAVING BAKIYE < 0 ";
@@ -632,7 +606,6 @@ public class CariMySQL implements ICariDatabase{
 
 	    try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
 	        preparedStatement.setString(1, mizanDTO.getStartDate());
 	        preparedStatement.setString(2, mizanDTO.getStartDate());
 	        preparedStatement.setString(3, mizanDTO.getEndDate() + " 23:59:59");
@@ -642,24 +615,20 @@ public class CariMySQL implements ICariDatabase{
 	        preparedStatement.setString(7, mizanDTO.getCins2());
 	        preparedStatement.setString(8, mizanDTO.getKarton1());
 	        preparedStatement.setString(9, mizanDTO.getKarton2());
-
 	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
 	            resultList = ResultSetConverter.convertToList(resultSet);
 	        }
 	    } catch (SQLException e) {
 	        throw new ServiceException("Mizan okunamadı", e);
 	    }
-
 	    return resultList;
 	}
-
 
 	@Override
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO, 
 			ConnectionDetails cariConnDetails, 
 			ConnectionDetails kurConnectionDetails) {
 		List<Map<String, Object>> resultList = new ArrayList<>();
-
 		try {
 			if (!cariConnDetails.getHangisql().equals(kurConnectionDetails.getHangisql())) {
 				throw new ServiceException("Cari Dosya ve Kur Dosyası farklı SQL sunucularında yer alıyor.");
@@ -675,7 +644,6 @@ public class CariMySQL implements ICariDatabase{
 				create_federated(cariConnDetails, kurConnectionDetails, usrString);
 				str1 = "obs_federated." + usrString + "_kurlar_federated AS k USE INDEX (IX_KUR)";
 			}
-
 			String islem = "/";
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT DATE(s.TARIH) as TARIH, s.EVRAK, IFNULL(I.IZAHAT, '') AS IZAHAT, ")
@@ -696,19 +664,15 @@ public class CariMySQL implements ICariDatabase{
 			.append("LEFT OUTER JOIN ").append(str1).append(" ON DATE(k.TARIH) = DATE(s.TARIH) ")
 			.append("WHERE s.HESAP = ? AND (k.KUR IS NULL OR k.KUR = ?) ");
 
-
 			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || !dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
 				sql.append("AND s.TARIH BETWEEN ? AND ? ");
 			}
-
 			sql.append("ORDER BY s.TARIH;");
-
 			try (Connection connection = DriverManager.getConnection(
 					cariConnDetails.getJdbcUrl(), 
 					cariConnDetails.getUsername(), 
 					cariConnDetails.getPassword());
 					PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
-				// Parametreleri ekle
 				stmt.setString(1, dvzcevirmeDTO.getHesapKodu());
 				stmt.setString(2, dvzcevirmeDTO.getDvz_tur());
 				if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || !dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
@@ -719,14 +683,9 @@ public class CariMySQL implements ICariDatabase{
 					resultList = ResultSetConverter.convertToList(rss);
 				}
 			}
-		} catch (SQLException sqlException) {
-			throw new ServiceException("Veritabanı bağlantısı sırasında bir hata oluştu: " + sqlException.getMessage(), sqlException);
-		} catch (ServiceException serviceException) {
-			throw serviceException;
 		} catch (Exception e) {
 			throw new ServiceException("Bilinmeyen bir hata oluştu: " + e.getMessage(), e);
 		}
-
 		return resultList;
 	}
 
@@ -744,7 +703,6 @@ public class CariMySQL implements ICariDatabase{
 			stmt = con.createStatement();  
 			stmt.execute(sql);
 			stmt.close();
-
 			String kurserstr = "jdbc:mysql://" + kurConnectionDetails.getServerIp() ;
 			sql =  " CREATE TABLE IF NOT EXISTS " + usrString + "_kurlar_federated(" 
 					+ " Kur varchar(3),Tarih DATE ,"
@@ -806,7 +764,6 @@ public class CariMySQL implements ICariDatabase{
 				dto.setPosBanka(resultSet.getString("POS_BANKA"));
 			}
 			resultSet.close();
-
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService Evrak Okuma", e);
 		}
@@ -822,7 +779,6 @@ public class CariMySQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService genel hatası.", e);
 		}
@@ -836,9 +792,8 @@ public class CariMySQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					evrakNo = resultSet.getInt("MAX_NO");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Hesap adı okunamadı", e); 
@@ -853,15 +808,13 @@ public class CariMySQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					evrakNo = resultSet.getInt("NO");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Hesap adı okunamadı", e); 
 		}
 		return evrakNo;
-
 	}
 
 	@Override
@@ -923,7 +876,6 @@ public class CariMySQL implements ICariDatabase{
 		} catch (Exception e) {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
 		}
-
 	}
 
 	@Override
@@ -956,7 +908,6 @@ public class CariMySQL implements ICariDatabase{
 			if (!cariConnDetails.getHangisql().equals(adresConnectionDetails.getHangisql())) {
 				throw new ServiceException("Cari Dosya ve Adres Dosyası farklı SQL sunucularında yer alıyor.");
 			}
-			
 			String str1 = "";
 			if (cariConnDetails.getServerIp().equals(adresConnectionDetails.getServerIp())) {
 				str1=  "OK_Adr" + adresConnectionDetails.getDatabaseName() + ".Adres as adr ";
@@ -969,14 +920,6 @@ public class CariMySQL implements ICariDatabase{
 								: user.getFirstName();
 				create_federated(cariConnDetails, adresConnectionDetails, usrString);
 				str1 = "obs_federated." + usrString + "_adres_federated";
-				
-//				if ( BAGLAN.cariDizin.sERVER.equals(BAGLAN.adrDizin.sERVER))
-//					str1 = "ok_adr" + BAGLAN.adrDizin.kOD + ".Adres " ;
-//				else
-//				{
-//					create_federated("adr");
-//					str1 =  "obs_federated." + gLB.KULL_ADI + "_adres_federated " ;
-//				}
 			}
 			String sql = "SELECT EVRAK,TARIH,C_HES as CARI_HESAP," + 
 					" (SELECT UNVAN FROM HESAP WHERE HESAP = C_HES ) AS UNVAN,"+ 
@@ -1095,7 +1038,6 @@ public class CariMySQL implements ICariDatabase{
 		} catch (Exception e) {
 			throw new ServiceException( e.getMessage());
 		}
-
 	}
 
 	@Override
@@ -1114,7 +1056,6 @@ public class CariMySQL implements ICariDatabase{
 			throw new ServiceException( e.getMessage());
 		}
 		return resultList;
-
 	}
 
 	@Override
@@ -1124,15 +1065,13 @@ public class CariMySQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					kayitSayi = resultSet.getInt("SAYI");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException( e.getMessage());
 		}
 		return kayitSayi;
-
 	}
 
 	@Override
@@ -1153,7 +1092,6 @@ public class CariMySQL implements ICariDatabase{
 	    } catch (Exception e) {
 	        throw new ServiceException(e.getMessage());
 	    }
-
 	}
 
 	@Override
@@ -1168,7 +1106,6 @@ public class CariMySQL implements ICariDatabase{
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage());
 		}
-
 	}
 
 	@Override
@@ -1183,7 +1120,6 @@ public class CariMySQL implements ICariDatabase{
 		} catch (Exception e) {
 			throw new ServiceException(e.getMessage());
 		}
-
 	}
 
 	@Override

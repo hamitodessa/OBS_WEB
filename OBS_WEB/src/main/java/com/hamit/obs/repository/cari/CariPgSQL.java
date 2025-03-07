@@ -178,9 +178,8 @@ public class CariPgSQL implements ICariDatabase{
 				preparedStatement.setTimestamp(3, Timestamp.valueOf(t2 + " 23:59:59.998"));
 			}
 			ResultSet resultSet = preparedStatement.executeQuery();
-			if (resultSet.next()) {
+			if (resultSet.next())
 				result  = resultSet.getInt("satir");
-			} 
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -204,7 +203,6 @@ public class CariPgSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("veritabani okuma", e); 
 		}
@@ -219,7 +217,6 @@ public class CariPgSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService genel hatası.", e);
 		}
@@ -233,7 +230,6 @@ public class CariPgSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService genel hatası.", e);
 		}
@@ -246,9 +242,8 @@ public class CariPgSQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					evrakNo = resultSet.getInt("MAX_NO");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Hesap adı okunamadı", e); 
@@ -311,7 +306,6 @@ public class CariPgSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.isBeforeFirst()) {
-
 				resultSet.next();
 				dekontDTO dto = new dekontDTO();
 				dto.setFisNo(fisNo); // fisNo doğrudan metod parametresinden geliyor
@@ -343,7 +337,6 @@ public class CariPgSQL implements ICariDatabase{
 				dekontDTO.add(dto);
 			}
 			resultSet.close();
-
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService Evrak Okuma", e);
 		}
@@ -356,9 +349,8 @@ public class CariPgSQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					evrakNo = resultSet.getInt("EVRAK");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
@@ -369,15 +361,12 @@ public class CariPgSQL implements ICariDatabase{
 	public void evrak_yoket(int evrakno,ConnectionDetails cariConnDetails) {
 		String querySatirlar = "DELETE FROM \"SATIRLAR\" WHERE \"EVRAK\" = ? " ;
 		String queryIzahat = "DELETE FROM \"IZAHAT\" WHERE \"EVRAK\" = ? ";
-
 		try (Connection connection = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement stmtSatirlar = connection.prepareStatement(querySatirlar);
 				PreparedStatement stmtIzahat = connection.prepareStatement(queryIzahat)) {
-
 			stmtSatirlar.setInt(1, evrakno);
 			stmtSatirlar.executeUpdate();
-
 			stmtIzahat.setInt(1, evrakno);
 			stmtIzahat.executeUpdate();
 		} catch (Exception e) {
@@ -419,7 +408,6 @@ public class CariPgSQL implements ICariDatabase{
 		if (!mizanDTO.getStartDate().equals("1900-01-01") || !mizanDTO.getEndDate().equals("2100-12-31")) {
 			sqlBuilder.append("AND \"TARIH\" BETWEEN ? AND ? ");
 		}
-
 		sqlBuilder.append(" GROUP BY \"SATIRLAR\".\"HESAP\",\"HESAP\".\"UNVAN\",\"HESAP\".\"HESAP_CINSI\" ")
 		.append(havingClause)
 		.append("ORDER BY \"SATIRLAR\".\"HESAP\" ASC ");
@@ -440,7 +428,6 @@ public class CariPgSQL implements ICariDatabase{
 				preparedStatement.setString(paramIndex++, mizanDTO.getStartDate());
 				preparedStatement.setString(paramIndex, mizanDTO.getEndDate() + " 23:59:59.998");
 			}
-
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
@@ -456,9 +443,8 @@ public class CariPgSQL implements ICariDatabase{
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
-			if (resultSet.next()) {
+			if (resultSet.next())
 				firmaIsmi = resultSet.getString("FIRMA_ADI");
-			}
 		} catch (SQLException e) {
 			throw new ServiceException("Firma adı okunamadı", e);
 		}
@@ -469,7 +455,6 @@ public class CariPgSQL implements ICariDatabase{
 	public void hsp_sil(String hesap,ConnectionDetails cariConnDetails) {
 		String queryHesap = "DELETE FROM \"HESAP\" WHERE \"HESAP\" = ? " ;
 		String queryHesapDetay = "DELETE FROM \"HESAP_DETAY\" WHERE \"D_HESAP\" = ?";
-
 		try (Connection connection = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement stmtHesap = connection.prepareStatement(queryHesap);
@@ -593,7 +578,6 @@ public class CariPgSQL implements ICariDatabase{
 	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olmayanlar")) {
 	        havingCondition = " HAVING SUM(s.\"ALACAK\" - s.\"BORC\") <> 0 ";
 	    }
-
 	    String sql = "" +
 		        "SELECT s.\"HESAP\", h.\"UNVAN\", h.\"HESAP_CINSI\", " +
 		        "COALESCE(ozet.\"ONCEKI_BAKIYE\", 0) AS \"ONCEKI_BAKIYE\", " +
@@ -620,7 +604,6 @@ public class CariPgSQL implements ICariDatabase{
 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
-
 			preparedStatement.setTimestamp(1, java.sql.Timestamp.valueOf(mizanDTO.getStartDate() + " 00:00:00"));
 			preparedStatement.setTimestamp(2, java.sql.Timestamp.valueOf(mizanDTO.getStartDate() + " 00:00:00"));
 			preparedStatement.setTimestamp(3, java.sql.Timestamp.valueOf(mizanDTO.getEndDate() + " 23:59:59.998"));
@@ -633,8 +616,6 @@ public class CariPgSQL implements ICariDatabase{
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
-		} catch (SQLException sqlException) {
-			throw new ServiceException("Veritabanı bağlantısı sırasında bir hata oluştu: " + sqlException.getMessage(), sqlException);
 		} catch (Exception e) {
 			throw new ServiceException("Bilinmeyen bir hata oluştu: " + e.getMessage(), e);
 		}
@@ -679,10 +660,6 @@ public class CariPgSQL implements ICariDatabase{
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			ResultSet rss = stmt.executeQuery();
 			resultList = ResultSetConverter.convertToList(rss);
-		} catch (SQLException sqlException) {
-			throw new ServiceException("Veritabanı bağlantısı sırasında bir hata oluştu: " + sqlException.getMessage(), sqlException);
-		} catch (ServiceException serviceException) {
-			throw serviceException; 
 		} catch (Exception e) {
 			throw new ServiceException("Bilinmeyen bir hata oluştu: " + e.getMessage(), e);
 		}
@@ -699,7 +676,6 @@ public class CariPgSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("PG CariService genel hatası.", e);
 		}
@@ -729,7 +705,6 @@ public class CariPgSQL implements ICariDatabase{
 				dto.setTutar(resultSet.getDouble("TUTAR"));
 				dto.setPosBanka(resultSet.getString("POS_BANKA"));
 			}
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService Evrak Okuma", e);
 		}
@@ -744,7 +719,6 @@ public class CariPgSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService genel hatası.", e);
 		}
@@ -758,9 +732,8 @@ public class CariPgSQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					evrakNo = resultSet.getInt("MAX_NO");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Hesap adı okunamadı", e); 
@@ -775,9 +748,8 @@ public class CariPgSQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					evrakNo = resultSet.getInt("NO");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Hesap adı okunamadı", e); 
@@ -787,7 +759,6 @@ public class CariPgSQL implements ICariDatabase{
 
 	@Override
 	public void tah_kayit(tahsilatDTO tahsilatDTO, ConnectionDetails cariConnDetails) {
-
 		String sql1 = "DELETE FROM \"TAH_DETAY\" WHERE \"EVRAK\" = '" + tahsilatDTO.getFisNo()  + "' AND \"CINS\" = '" + tahsilatDTO.getTah_ted() + "' " ;
 		String sql  = "INSERT INTO \"TAH_DETAY\" (\"EVRAK\",\"TARIH\",\"C_HES\",\"A_HES\",\"CINS\",\"TUTAR\",\"TUR\",\"ACIKLAMA\",\"DVZ_CINS\",\"POS_BANKA\")" +
 				" VALUES (?,?,?,?,?,?,?,?,?,?)" ;
@@ -906,7 +877,6 @@ public class CariPgSQL implements ICariDatabase{
 					PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 				ResultSet resultSet = preparedStatement.executeQuery();
 				resultList = ResultSetConverter.convertToList(resultSet); 
-				resultSet.close();
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Tahsilat Listeleme okunamadi", e);
@@ -1033,9 +1003,8 @@ public class CariPgSQL implements ICariDatabase{
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
+				if (resultSet.next())
 					kayitSayi = resultSet.getInt("SAYI");
-				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
