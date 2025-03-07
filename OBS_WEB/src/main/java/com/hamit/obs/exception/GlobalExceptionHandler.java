@@ -15,13 +15,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<Map<String, String>> handleServiceException(ServiceException ex) {
 		Map<String, String> errorResponse = new HashMap<>();
 		errorResponse.put("error", "Bir hata oluştu: " + ex.getMessage());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse); // 400 Bad Request
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Map<String, String>> handleGeneralException(Exception ex) {
 		Map<String, String> errorResponse = new HashMap<>();
 		errorResponse.put("error", "Beklenmeyen bir hata oluştu: " + ex.getMessage());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse); // 500 Internal Server Error
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 	}
 }

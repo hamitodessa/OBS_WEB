@@ -169,6 +169,7 @@ public class RaporEmailGonderme {
 		ByteArrayDataSource ds = raporOlustur.cari_ekstre(values[0], values[1], values[2], format);
 		return ds ;
 	}
+	
 	public ByteArrayDataSource cari_mizan(String degerler,String format) {
 		String[] values = degerler.split(",");
 		mizanDTO mizanDTO = new mizanDTO();

@@ -149,8 +149,8 @@ public class RaporOlustur {
 			else
 				parameters.put("Evrak", tahsilatDTO.getFisNo());
 			parameters.put("Unvan", adrbilgi[0]);
-			parameters.put("Adr1",  adrbilgi[1]);
-			parameters.put("Adr2",  adrbilgi[2]);
+			parameters.put("Adr1", adrbilgi[1]);
+			parameters.put("Adr2", adrbilgi[2]);
 			parameters.put("Semt", adrbilgi[4]);
 			double aqw = tahsilatDTO.getTutar();
 			if(tahsilatDTO.getTur() == 0)

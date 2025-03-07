@@ -1244,18 +1244,14 @@ public class createMSSQL {
 		String databaseName = sbilgi.getUser_modul_baslik() + sbilgi.getUser_prog_kodu() + "_LOG";
 		String connectionUrl = "jdbc:sqlserver://" + sbilgi.getUser_ip() + ";trustServerCertificate=true;";
 		String createDatabaseSql =  "CREATE DATABASE [" + databaseName + "]";
-
 		sbilgi.setUser_prog_kodu(sbilgi.getUser_prog_kodu() +  "_LOG");
-		if (dosyaKontrol(sbilgi)) {
+		if (dosyaKontrol(sbilgi))
 			return;
-		}
 		try (Connection initialConnection = DriverManager.getConnection(connectionUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 				Statement stmt = initialConnection.createStatement()) {
 			stmt.executeUpdate(createDatabaseSql);
-
 			String logDatabaseUrl =  "jdbc:sqlserver://" + sbilgi.getUser_ip() + ";database=" + databaseName+ ";trustServerCertificate=true;";
 			try (Connection logConnection = DriverManager.getConnection(logDatabaseUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
-
 				createTableLog(logConnection);
 			}
 		} catch (Exception e) {
