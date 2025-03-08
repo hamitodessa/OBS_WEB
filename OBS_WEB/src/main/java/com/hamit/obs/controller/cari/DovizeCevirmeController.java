@@ -58,6 +58,24 @@ public class DovizeCevirmeController {
 		}
 		return response;
 	}
+	
+	@PostMapping("cari/dvzsize")
+	@ResponseBody
+	public Map<String, Object> ekssize(@RequestBody dvzcevirmeDTO dvzcevirmeDTO) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			double dvzsize = cariservice.dvz_raporsize(dvzcevirmeDTO);
+			response.put("totalRecords", dvzsize);
+			response.put("errorMessage", ""); 
+		} catch (ServiceException e) {
+			response.put("data", Collections.emptyList());
+			response.put("errorMessage", e.getMessage()); 
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
 
 	@PostMapping("cari/dvzcevirme_download")
 	public ResponseEntity<byte[]> downloadReport(@RequestBody dvzcevirmeDTO dvzcevirmeDTO) {

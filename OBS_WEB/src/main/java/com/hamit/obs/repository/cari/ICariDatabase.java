@@ -38,6 +38,7 @@ public interface ICariDatabase {
 	hesapplaniDTO hsp_pln(String hesap ,ConnectionDetails cariConnDetails);
 	List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO,ConnectionDetails cariConnDetails) ;
 	List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO,ConnectionDetails cariConnDetails,ConnectionDetails kurConnectionDetails) ;
+	double dvz_raporsize(dvzcevirmeDTO dvzcevirmeDTO,ConnectionDetails cariConnDetails,ConnectionDetails kurConnectionDetails);
 	List<Map<String, Object>> banka_sube(String nerden ,ConnectionDetails cariConnDetails);
 	tahsilatDTO tahfiskon(String fisNo,Integer tah_ted,ConnectionDetails cariConnDetails);
 	List<Map<String, Object>> tah_cek_doldur(String fisNo,Integer tah_ted,ConnectionDetails cariConnDetails) ;

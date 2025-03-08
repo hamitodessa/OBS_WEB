@@ -630,6 +630,11 @@ public class CariPgSQL implements ICariDatabase{
 			String sql = "" ;
 			String tARIH = "" ;
 			String kurServer = "" ;
+			
+			int page = dvzcevirmeDTO.getPage();
+			int pageSize = dvzcevirmeDTO.getPageSize();
+			int offset = page * pageSize;
+			
 			if (!cariConnDetails.getHangisql().equals(kurConnectionDetails.getHangisql()))
 				throw  new Exception("Cari Dosya ve Kur Dosyasi Farkli SQL dosyalari");
 			String[] ipogren = Global_Yardimci.ipCevir(kurConnectionDetails.getServerIp());
@@ -652,7 +657,8 @@ public class CariPgSQL implements ICariDatabase{
 					" AS k (\"TARIH\" timestamp ,\"" + dvzcevirmeDTO.getDvz_cins() + "\" double precision) on DATE(s.\"TARIH\") = DATE(k.\"TARIH\")" +
 					" WHERE \"HESAP\" = '" + dvzcevirmeDTO.getHesapKodu() + "'" + 	
 					tARIH +
-					" ORDER BY \"TARIH\"";
+					" ORDER BY \"TARIH\"" +
+					" LIMIT " + pageSize + " OFFSET " + offset + " ";
 			Connection connection = DriverManager.getConnection(
 					cariConnDetails.getJdbcUrl(), 
 					cariConnDetails.getUsername(), 
@@ -661,11 +667,39 @@ public class CariPgSQL implements ICariDatabase{
 			ResultSet rss = stmt.executeQuery();
 			resultList = ResultSetConverter.convertToList(rss);
 		} catch (Exception e) {
-			throw new ServiceException("Bilinmeyen bir hata oluştu: " + e.getMessage(), e);
+			throw new ServiceException("PG " + e.getMessage(), e);
 		}
 		return resultList;
 	}
 
+	@Override
+	public double dvz_raporsize(dvzcevirmeDTO dvzcevirmeDTO, ConnectionDetails cariConnDetails,ConnectionDetails kurConnectionDetails) {
+		double result = 0 ;
+		try {
+			String tarihFilter = "";
+			System.out.println(dvzcevirmeDTO.getStartDate());
+			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || 	!dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
+				tarihFilter = " AND s.\"TARIH\" BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" + dvzcevirmeDTO.getEndDate() + " 23:59:59.998'" ;
+			}
+			String sql = "SELECT COUNT(\"TARIH\") as satir " +
+					" FROM \"SATIRLAR\" " +
+					" WHERE \"HESAP\" = N'" + dvzcevirmeDTO.getHesapKodu() + "' " + tarihFilter +
+					" ORDER BY satir ";
+			try (Connection connection = DriverManager.getConnection(
+					cariConnDetails.getJdbcUrl(), 
+					cariConnDetails.getUsername(), 
+					cariConnDetails.getPassword());
+					PreparedStatement stmt = connection.prepareStatement(sql);
+					ResultSet resultSet = stmt.executeQuery()) {
+				if (resultSet.next())
+					result  = resultSet.getInt("satir");
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Dvz Cevirme: " + e.getMessage(), e);
+		}
+		return result;
+	}
+	
 	@Override
 	public List<Map<String, Object>> banka_sube(String nerden, ConnectionDetails cariConnDetails) {
 		String sql = " SELECT DISTINCT \"" + nerden.toUpperCase() + "\"" +

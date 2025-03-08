@@ -565,7 +565,7 @@ function saveToMain() {
 		reportFormat.disabled = false;
 	}
 	else if (nerden === "dvzcevirme") {
-		dvzfetchTableData();
+		dvzdoldur();
 		const mailButton = document.getElementById("mailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("reportFormat");

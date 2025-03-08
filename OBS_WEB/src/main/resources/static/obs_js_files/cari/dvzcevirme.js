@@ -1,4 +1,60 @@
-async function dvzfetchTableData() {
+pageSize = 1000;
+
+function ilksayfa() {
+	dvzfetchTableData(0);
+}
+
+function oncekisayfa() {
+	if (currentPage > 0) {
+		dvzfetchTableData(currentPage - 1);
+	}
+}
+
+function sonrakisayfa() {
+	if (currentPage < totalPages - 1) {
+		dvzfetchTableData(currentPage + 1);
+	}
+}
+
+async function sonsayfa() {
+	dvzfetchTableData(totalPages - 1);
+}
+
+async function toplampagesize() {
+	try {
+		const errorDiv = document.getElementById("errorDiv");
+		errorDiv.style.display = "none";
+		errorDiv.innerText = "";
+		const hiddenFieldValue = $('#dvzcevirmeBilgi').val();
+		const parsedValues = hiddenFieldValue.split(",");
+		const hesapKodu = parsedValues[0];
+		const startDate = parsedValues[1];
+		const endDate = parsedValues[2];
+		const dvz_tur = parsedValues[3];
+		const dvz_cins = parsedValues[4];
+		const response = await fetchWithSessionCheck("cari/dvzsize", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ hesapKodu, startDate, endDate, dvz_tur, dvz_cins }),
+		});
+		const totalRecords = response.totalRecords;
+		totalPages = Math.ceil(totalRecords / pageSize);
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error;
+		document.body.style.cursor = "default";
+	}
+}
+
+async function dvzdoldur() {
+	document.body.style.cursor = "wait";
+	toplampagesize();
+	dvzfetchTableData(0);
+}
+
+async function dvzfetchTableData(page) {
 	const hiddenFieldValue = $('#dvzcevirmeBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
 	const hesapKodu = parsedValues[0];
@@ -6,11 +62,8 @@ async function dvzfetchTableData() {
 	const endDate = parsedValues[2];
 	const dvz_tur = parsedValues[3];
 	const dvz_cins = parsedValues[4];
+	currentPage = page;
 
-	if (!hesapKodu) {
-		alert("Lütfen geçerli bir hesap kodu girin!");
-		return;
-	}
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.style.display = "none";
 	errorDiv.innerText = "";
@@ -33,7 +86,7 @@ async function dvzfetchTableData() {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ hesapKodu, startDate, endDate, dvz_tur, dvz_cins }),
+			body: JSON.stringify({ hesapKodu, startDate, endDate, dvz_tur, dvz_cins, page, pageSize }),
 		});
 		if (data.success) {
 			let boskur = 0;
@@ -44,7 +97,9 @@ async function dvzfetchTableData() {
 					<td>${formatDate(item.TARIH)}</td>
 					<td>${item.EVRAK || ''}</td>
 					<td>${item.IZAHAT || ''}</td>
-					<td class="double-column">${formatNumber4(item.CEV_KUR)}</td>
+					<td class="double-column" style="color: ${item.CEV_KUR == 1 ? 'red' : 'black'};">
+    					${formatNumber4(item.CEV_KUR)}
+					</td>
 					<td class="double-column">${formatNumber2(item.DOVIZ_TUTAR)}</td>
 					<td class="double-column">${formatNumber2(item.DOVIZ_BAKIYE)}</td>
 					<td class="double-column">${formatNumber2(item.BAKIYE)}</td>
@@ -76,7 +131,6 @@ async function dvzfetchTableData() {
 async function dvzdownloadReport(format) {
 	const hiddenFieldValue = $('#dvzcevirmeBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
-
 	const hesapKodu = parsedValues[0] || "";
 	const startDateField = parsedValues[1] || "";
 	const endDateField = parsedValues[2] || "";
@@ -87,7 +141,7 @@ async function dvzdownloadReport(format) {
 	errorDiv.innerText = "";
 	if (!hesapKodu || !startDateField || !endDateField || !format) {
 		errorDiv.style.display = "block";
-		errorDiv.innerText = "Lütfen tüm alanları doldurun.";
+		errorDiv.innerText = "Lütfen tüm alanlari doldurun.";
 		return;
 	}
 	document.body.style.cursor = "wait";
@@ -150,7 +204,7 @@ function dvzmailAt() {
 		alert("Lütfen geçerli bir hesap kodu girin!");
 		return;
 	}
-	const degerler = hesapKodu + "," + startDateField + "," + endDateField + "," + dvz_tur + "," + dvz_cins + ",cariekstre";
+	const degerler = hesapKodu + "," + startDateField + "," + endDateField + "," + dvz_tur + "," + dvz_cins + ",dvzcevir";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
 }

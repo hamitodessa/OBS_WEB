@@ -408,7 +408,7 @@ public class CariMySQL implements ICariDatabase{
 		.append("AND HESAP.HESAP_CINSI BETWEEN ? AND ? ")
 		.append("AND HESAP.KARTON BETWEEN ? AND ? ");
 
-		if (!mizanDTO.getStartDate().equals("1900.01.01") || !mizanDTO.getEndDate().equals("2100.12.31")) {
+		if (!mizanDTO.getStartDate().equals("1900-01-01") || !mizanDTO.getEndDate().equals("2100-12-31")) {
 			sqlBuilder.append("AND TARIH BETWEEN ? AND ? ");
 		}
 		sqlBuilder.append("GROUP BY SATIRLAR.HESAP, HESAP.UNVAN, HESAP.HESAP_CINSI ")
@@ -425,7 +425,7 @@ public class CariMySQL implements ICariDatabase{
 			preparedStatement.setString(5, mizanDTO.getKarton1());
 			preparedStatement.setString(6, mizanDTO.getKarton2());
 			int paramIndex = 7;
-			if (!mizanDTO.getStartDate().equals("1900.01.01") || !mizanDTO.getEndDate().equals("2100.12.31")) {
+			if (!mizanDTO.getStartDate().equals("1900-01-01") || !mizanDTO.getEndDate().equals("2100-12-31")) {
 				preparedStatement.setString(paramIndex++, mizanDTO.getStartDate());
 				preparedStatement.setString(paramIndex, mizanDTO.getEndDate() + " 23:59:59.998");
 			}
@@ -628,6 +628,11 @@ public class CariMySQL implements ICariDatabase{
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO, 
 			ConnectionDetails cariConnDetails, 
 			ConnectionDetails kurConnectionDetails) {
+		
+		int page = dvzcevirmeDTO.getPage();
+		int pageSize = dvzcevirmeDTO.getPageSize();
+		int offset = page * pageSize;
+		
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
 			if (!cariConnDetails.getHangisql().equals(kurConnectionDetails.getHangisql())) {
@@ -667,7 +672,8 @@ public class CariMySQL implements ICariDatabase{
 			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || !dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
 				sql.append("AND s.TARIH BETWEEN ? AND ? ");
 			}
-			sql.append("ORDER BY s.TARIH;");
+			sql.append("ORDER BY s.TARIH");
+			sql.append(" LIMIT " + pageSize + " OFFSET " + offset + " ");
 			try (Connection connection = DriverManager.getConnection(
 					cariConnDetails.getJdbcUrl(), 
 					cariConnDetails.getUsername(), 
@@ -687,6 +693,35 @@ public class CariMySQL implements ICariDatabase{
 			throw new ServiceException("Bilinmeyen bir hata oluştu: " + e.getMessage(), e);
 		}
 		return resultList;
+	}
+	
+	@Override
+	public double dvz_raporsize(dvzcevirmeDTO dvzcevirmeDTO, ConnectionDetails cariConnDetails,ConnectionDetails kurConnectionDetails) {
+		double result = 0 ;
+		try {
+			String tarihFilter = "";
+			System.out.println(dvzcevirmeDTO.getStartDate());
+			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || 	!dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
+				tarihFilter = " AND s.TARIH BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" 
+						+ dvzcevirmeDTO.getEndDate() + " 23:59:59.998'";
+			}
+			String sql = "SELECT COUNT(TARIH) as satir " +
+					" FROM SATIRLAR " +
+					" WHERE HESAP = N'" + dvzcevirmeDTO.getHesapKodu() + "' " + tarihFilter +
+					" ORDER BY satir ";
+			try (Connection connection = DriverManager.getConnection(
+					cariConnDetails.getJdbcUrl(), 
+					cariConnDetails.getUsername(), 
+					cariConnDetails.getPassword());
+					PreparedStatement stmt = connection.prepareStatement(sql);
+					ResultSet resultSet = stmt.executeQuery()) {
+				if (resultSet.next())
+					result  = resultSet.getInt("satir");
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Dvz Cevirme: " + e.getMessage(), e);
+		}
+		return result;
 	}
 
 	private  void create_federated(ConnectionDetails cariConnDetails, 

@@ -1,4 +1,4 @@
-pageSize = 500;
+pageSize = 1000;
 
 function ilksayfa() {
 	eksfetchTableData(0);
@@ -39,7 +39,6 @@ async function toplampagesize() {
 		});
 		const totalRecords = response.totalRecords;
 		totalPages = Math.ceil(totalRecords / pageSize);
-		console.log(totalPages);
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error;
@@ -52,7 +51,6 @@ async function eksdoldur() {
 	toplampagesize();
 	eksfetchTableData(0);
 }
-
 
 async function eksfetchTableData(page) {
 	const hiddenFieldValue = $('#ekstreBilgi').val();

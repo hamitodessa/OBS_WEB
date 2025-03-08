@@ -398,7 +398,7 @@ public class CariMsSQL implements ICariDatabase{
 		.append("AND HESAP.HESAP_CINSI BETWEEN ? AND ? ")
 		.append("AND HESAP.KARTON BETWEEN ? AND ? ");
 
-		if (!mizanDTO.getStartDate().equals("1900.01.01") || !mizanDTO.getEndDate().equals("2100.12.31")) {
+		if (!mizanDTO.getStartDate().equals("1900-01-01") || !mizanDTO.getEndDate().equals("2100-12-31")) {
 			sqlBuilder.append("AND TARIH BETWEEN ? AND ? ");
 		}
 
@@ -416,7 +416,7 @@ public class CariMsSQL implements ICariDatabase{
 			preparedStatement.setString(5, mizanDTO.getKarton1());
 			preparedStatement.setString(6, mizanDTO.getKarton2());
 			int paramIndex = 7;
-			if (!mizanDTO.getStartDate().equals("1900.01.01") || !mizanDTO.getEndDate().equals("2100.12.31")) {
+			if (!mizanDTO.getStartDate().equals("1900-01-01") || !mizanDTO.getEndDate().equals("2100-12-31")) {
 				preparedStatement.setString(paramIndex++, mizanDTO.getStartDate());
 				preparedStatement.setString(paramIndex, mizanDTO.getEndDate() + " 23:59:59.998");
 			}
@@ -619,6 +619,11 @@ public class CariMsSQL implements ICariDatabase{
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO, 
 			ConnectionDetails cariConnDetails, 
 			ConnectionDetails kurConnectionDetails) {
+		
+		int page = dvzcevirmeDTO.getPage();
+		int pageSize = dvzcevirmeDTO.getPageSize();
+		int offset = page * pageSize;
+		
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
 			if (!cariConnDetails.getHangisql().equals(kurConnectionDetails.getHangisql())) {
@@ -650,23 +655,24 @@ public class CariMsSQL implements ICariDatabase{
 						+ kurConnectionDetails.getDatabaseName() + "].[dbo].[KURLAR]')";
 			}
 			String tarihFilter = "";
-			if (!dvzcevirmeDTO.getStartDate().equals("1900.01.01") || 	!dvzcevirmeDTO.getEndDate().equals("2100.12.31")) {
+			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || 	!dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
 				tarihFilter = " AND s.TARIH BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" 
 						+ dvzcevirmeDTO.getEndDate() + " 23:59:59.998'";
 			}
 			String sql = "SELECT s.TARIH, s.EVRAK, I.IZAHAT, " +
-					"ISNULL(IIF(k." + dvzcevirmeDTO.getDvz_cins() + " = 0, 1, k." + dvzcevirmeDTO.getDvz_cins() + "), 1) as CEV_KUR, " +
-					"((s.ALACAK - s.BORC) / ISNULL(NULLIF(k." + dvzcevirmeDTO.getDvz_cins() + ", 0), 1)) as DOVIZ_TUTAR, " +
-					"SUM((s.ALACAK - s.BORC) / ISNULL(NULLIF(k." + dvzcevirmeDTO.getDvz_cins() + ", 0), 1)) OVER (ORDER BY s.TARIH " +
-					"ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as DOVIZ_BAKIYE, " +
-					"SUM(s.ALACAK - s.BORC) OVER (ORDER BY s.TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as BAKIYE, " +
-					"s.KUR, BORC, ALACAK, s.[USER] " +
-					"FROM (SATIRLAR as s LEFT OUTER JOIN IZAHAT as I ON s.EVRAK = I.EVRAK) " +
-					"LEFT OUTER JOIN " + str1 + " as k " +
-					"ON CONVERT(VARCHAR(25), s.TARIH, 101) = CONVERT(VARCHAR(25), k.Tarih, 101) " +
-					"WHERE s.HESAP = N'" + dvzcevirmeDTO.getHesapKodu() + "' " + tarihFilter +
+					" ISNULL(IIF(k." + dvzcevirmeDTO.getDvz_cins() + " = 0, 1, k." + dvzcevirmeDTO.getDvz_cins() + "), 1) as CEV_KUR, " +
+					" ((s.ALACAK - s.BORC) / ISNULL(NULLIF(k." + dvzcevirmeDTO.getDvz_cins() + ", 0), 1)) as DOVIZ_TUTAR, " +
+					" SUM((s.ALACAK - s.BORC) / ISNULL(NULLIF(k." + dvzcevirmeDTO.getDvz_cins() + ", 0), 1)) OVER (ORDER BY s.TARIH " +
+					" ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as DOVIZ_BAKIYE, " +
+					" SUM(s.ALACAK - s.BORC) OVER (ORDER BY s.TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as BAKIYE, " +
+					" s.KUR, BORC, ALACAK, s.[USER] " +
+					" FROM (SATIRLAR as s LEFT OUTER JOIN IZAHAT as I ON s.EVRAK = I.EVRAK) " +
+					" LEFT OUTER JOIN " + str1 + " as k " +
+					" ON CONVERT(VARCHAR(25), s.TARIH, 101) = CONVERT(VARCHAR(25), k.Tarih, 101) " +
+					" WHERE s.HESAP = N'" + dvzcevirmeDTO.getHesapKodu() + "' " + tarihFilter +
 					" AND (k.Kur IS NULL OR k.Kur = '" + dvzcevirmeDTO.getDvz_tur() + "') " +
-					"ORDER BY s.TARIH";
+					" ORDER BY s.TARIH" +
+					" OFFSET " + offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
 			try (Connection connection = DriverManager.getConnection(
 					cariConnDetails.getJdbcUrl(), 
 					cariConnDetails.getUsername(), 
@@ -679,6 +685,34 @@ public class CariMsSQL implements ICariDatabase{
 			throw new ServiceException("Dvz Cevirme: " + e.getMessage(), e);
 		}
 		return resultList;
+	}
+	
+	@Override
+	public double dvz_raporsize(dvzcevirmeDTO dvzcevirmeDTO, ConnectionDetails cariConnDetails,ConnectionDetails kurConnectionDetails) {
+		double result = 0 ;
+		try {
+			String tarihFilter = "";
+			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || 	!dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
+				tarihFilter = " AND s.TARIH BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" 
+						+ dvzcevirmeDTO.getEndDate() + " 23:59:59.998'";
+			}
+			String sql = "SELECT COUNT(TARIH) as satir " +
+					" FROM SATIRLAR " +
+					" WHERE HESAP = N'" + dvzcevirmeDTO.getHesapKodu() + "' " + tarihFilter +
+					" ORDER BY satir ";
+			try (Connection connection = DriverManager.getConnection(
+					cariConnDetails.getJdbcUrl(), 
+					cariConnDetails.getUsername(), 
+					cariConnDetails.getPassword());
+					PreparedStatement stmt = connection.prepareStatement(sql);
+					ResultSet resultSet = stmt.executeQuery()) {
+				if (resultSet.next())
+					result  = resultSet.getInt("satir");
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Dvz Cevirme: " + e.getMessage(), e);
+		}
+		return result;
 	}
 
 	@Override

@@ -260,6 +260,17 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
+	public double dvz_raporsize(dvzcevirmeDTO dvzcevirmeDTO) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
+			return strategy.dvz_raporsize(dvzcevirmeDTO,cariConnDetails,kurService.conn_details());
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 
 	public List<Map<String, Object>> banka_sube(String nerden){
 		try {
@@ -499,6 +510,7 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
 
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();

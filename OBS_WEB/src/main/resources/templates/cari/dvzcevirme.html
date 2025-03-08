@@ -49,49 +49,17 @@
 
 <div class="card p-1">
   <div style="display: flex; align-items: center">
-    <button
-      class="btn btn-primary"
-      type="button"
-      id="dvzyenileButton"
-      style="margin-left: 10px"
-      onclick="openFirstModal('dvzcevirme')"
-    >
-      Yenile
-    </button>
-
-    <select
-      id="reportFormat"
-      class="form-select"
-      style="width: 150px; margin-left: 10px"
-      onchange="dvzdownloadReport(this.value)"
-      disabled
-    >
+    <button class="btn btn-primary" type="button" id="dvzyenileButton" style="margin-left: 10px" onclick="openFirstModal('dvzcevirme')">Yenile</button>
+    <select id="reportFormat" class="form-select" style="width: 150px; margin-left: 10px" onchange="dvzdownloadReport(this.value)" disabled>
       <option value="" disabled selected>Rapor Indir</option>
       <option value="pdf">PDF</option>
       <option value="xlsx">Excel (XLSX)</option>
       <option value="docx">Word (DOCX)</option>
       <option value="xml">XML</option>
     </select>
-
-    <button
-      class="btn btn-primary"
-      style="margin-left: 10px"
-      type="button"
-      id="mailButton"
-      onclick="dvzmailAt()"
-      disabled
-    >
-      Email Gonder
-    </button>
-    <label
-      id="hesapAdi"
-      style="width: 300px; font-weight: bold; margin-left: 40px"
-      >.....</label
-    >
-    <label
-      id="dvzaciklama"
-      style="width: 300px; font-weight: bold; margin-left: 40px"
-    ></label>
+    <button      class="btn btn-primary" style="margin-left: 10px" type="button" id="mailButton" onclick="dvzmailAt()" disabled>Email Gonder</button>
+    <label id="hesapAdi" style="width: 300px; font-weight: bold; margin-left: 40px">.....</label>
+    <label id="dvzaciklama" style="width: 300px; font-weight: bold; margin-left: 40px"></label>
   </div>
 </div>
 <div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
@@ -132,12 +100,24 @@
     </table>
   </div>
 </div>
-<input
-  type="hidden"
-  id="dvzcevirmeBilgi"
-  name="dvzcevirmeBilgi"
-  value="initialValue"
-/>
+<div class='pagination-container' style="margin-top: 5px">
+	<button type="button" class="btn btn-secondary ml-2" onclick="ilksayfa()">
+        <i class="fa fa-backward"></i>
+    </button>
+    <span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="oncekisayfa()">
+		<i class="fa fa-angle-left"></i>
+	</button>
+    <span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="sonrakisayfa()">
+		<i class="fa fa-angle-right"></i>
+	</button>
+	<span style="padding-left: 5px;"></span>
+	<button type="button" class="btn btn-secondary ml-2" onclick="sonsayfa()">
+		<i class="fa fa-forward"></i>
+	</button>
+</div>
+<input  type="hidden"  id="dvzcevirmeBilgi"  name="dvzcevirmeBilgi"  value="initialValue"/>
 <div th:replace="~{modal/cari/dvzcevirmefiltre :: modaldvzcevirmefiltre}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 <script src="/obs_js_files/cari/dvzcevirme.js"></script>

@@ -110,6 +110,8 @@ public class RaporOlustur {
 			Map<String, Object> parameters = new HashMap<>();
 			parameters.put("Kod", dvzcevirmeDTO.getHesapKodu() + " / " + cariService.hesap_adi_oku(dvzcevirmeDTO.getHesapKodu())[0]);
 			parameters.put("Kur", dvzcevirmeDTO.getDvz_tur() + " / " + dvzcevirmeDTO.getDvz_cins());
+			dvzcevirmeDTO.setPage(0);
+			dvzcevirmeDTO.setPageSize(Integer.MAX_VALUE);
 			List<Map<String, Object>> dvzcev = cariService.dvzcevirme(dvzcevirmeDTO);
 			JasperPrint jp = prepareJasperPrint("DVZ_CEVIRME.jrxml", parameters, dvzcev,UygulamaSabitleri.CariRaporYeri);
 			return exportRapor(jp, dvzcevirmeDTO.getFormat());

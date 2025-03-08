@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
+import com.hamit.obs.dto.cari.dvzcevirmeDTO;
 import com.hamit.obs.dto.cari.mizanDTO;
 import com.hamit.obs.dto.kambiyo.bordroPrinter;
 import com.hamit.obs.dto.user.RaporEmailDegiskenler;
@@ -123,6 +124,8 @@ public class RaporEmailGonderme {
 			return "Cari_Mizan_";
 		case "cariozelmizan":
 			return "Cari_Ozel_Mizan_";
+		case "dvzcevir":
+			return "Cari_Dovize_Cevirme_";
 		case "cgbordro":
 			return "Giris_Bordro_";
 		case "ccbordro":
@@ -140,6 +143,8 @@ public class RaporEmailGonderme {
 			return cari_mizan(degerler, format);
 		case "cariozelmizan":
 			return cari_mizan(degerler, format);
+		case "dvzcevir":
+			return cari_dvzcevir(degerler, format);
 		case "cgbordro":
 			return kam_gbordro(degerler, format);
 		case "ccbordro":
@@ -167,6 +172,18 @@ public class RaporEmailGonderme {
 	public ByteArrayDataSource cari_ekstre(String degerler,String format) throws Exception{
 		String[] values = degerler.split(",");
 		ByteArrayDataSource ds = raporOlustur.cari_ekstre(values[0], values[1], values[2], format);
+		return ds ;
+	}
+	public ByteArrayDataSource cari_dvzcevir(String degerler,String format) throws Exception{
+		String[] values = degerler.split(",");
+		dvzcevirmeDTO dvzcevirmeDTO = new dvzcevirmeDTO();
+		dvzcevirmeDTO.setHesapKodu(values[0]);
+		dvzcevirmeDTO.setStartDate(values[1]);
+		dvzcevirmeDTO.setEndDate(values[2]);
+		dvzcevirmeDTO.setDvz_tur(values[3]);
+		dvzcevirmeDTO.setDvz_cins(values[4]);
+		dvzcevirmeDTO.setFormat(format);
+		ByteArrayDataSource ds = raporOlustur.dvzcevirme(dvzcevirmeDTO);
 		return ds ;
 	}
 	

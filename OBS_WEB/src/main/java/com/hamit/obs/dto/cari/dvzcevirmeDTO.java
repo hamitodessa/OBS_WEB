@@ -14,4 +14,6 @@ public class dvzcevirmeDTO {
 	String dvz_tur ;
 	String dvz_cins ;
 	
+	private int page;
+	private int pageSize;
 }
