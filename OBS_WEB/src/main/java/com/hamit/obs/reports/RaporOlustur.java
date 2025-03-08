@@ -24,6 +24,7 @@ import com.hamit.obs.dto.cari.mizanDTO;
 import com.hamit.obs.dto.cari.tahsilatDTO;
 import com.hamit.obs.dto.cari.tahsilatTableRowDTO;
 import com.hamit.obs.dto.kambiyo.bordroPrinter;
+import com.hamit.obs.dto.kereste.keresteyazdirDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.Etiket_Ayarlari;
 import com.hamit.obs.model.user.User;
@@ -63,6 +64,9 @@ public class RaporOlustur {
 
 	@Autowired
 	private EtiketAyarService etiketAyarService ;
+	
+	@Autowired
+	private ExcellToDataSource excellToDataSource;
 
 	public ByteArrayDataSource cari_mizan(mizanDTO mizanDTO) {
 		try {
@@ -331,53 +335,47 @@ public class RaporOlustur {
 	}
 
 	public ByteArrayDataSource fatrap(List<Map<String, String>> tableData)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
 	}
 
 	public ByteArrayDataSource envanter(List<Map<String, String>> tableData)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
 	}
 
 	public ByteArrayDataSource imarap(List<Map<String, String>> tableData)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
 	}
 
 	public ByteArrayDataSource stokrap(List<Map<String, String>> tableData)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
 	}
 	
 	public ByteArrayDataSource tahrap(List<Map<String, String>> tableData)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
 	}
 	
 	public ByteArrayDataSource cekrap(List<Map<String, String>> tableData)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
 	}
 	
 	public ByteArrayDataSource grprap(List<Map<String, String>> tableData,int sabitkolon)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell_grp(tableData,sabitkolon);
 	}
 	
 	public ByteArrayDataSource imagrprap(List<Map<String, String>> tableData,int sabitkolon)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell_grp(tableData,sabitkolon);
 	}
 	
 	public ByteArrayDataSource stokdetayrap(List<Map<String, String>> tableData)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
 	}
 	
 	public ByteArrayDataSource kerdetay(List<Map<String, String>> tableData)  throws Exception {
-		ExcellToDataSource excellToDataSource = new ExcellToDataSource() ;
 		return excellToDataSource.export_excell(tableData);
+	}
+	
+	public ByteArrayDataSource kereste_cikis(keresteyazdirDTO keresteyazdirDTO,String hesadi)  throws Exception {
+		return excellToDataSource.export_excell_kercikis(keresteyazdirDTO,hesadi);
 	}
 
 	private JasperPrint prepareJasperPrint(String jrxmlPath, Map<String, Object> parameters, List<Map<String, Object>> data , String raporyeri) throws Exception {

@@ -51,5 +51,6 @@ public class kerestedetayraporDTO {
 	private String iki;
 	private String uc;
 	private String caradr;
+	
 
 }

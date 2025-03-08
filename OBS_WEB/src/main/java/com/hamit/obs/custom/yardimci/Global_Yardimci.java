@@ -23,4 +23,14 @@ public class Global_Yardimci {
 			    : parts[0];
 		return user_log;
 	}
+	
+	public static boolean validCheck(String value)
+	{
+		boolean result ;
+		if(value.trim().length() == 0)
+			result = false;
+		else
+			result = true;
+		return result ;
+	}
 }

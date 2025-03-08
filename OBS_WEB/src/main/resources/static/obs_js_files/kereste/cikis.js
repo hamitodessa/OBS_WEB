@@ -444,11 +444,8 @@ async function kerOku() {
 		const rows = table.querySelectorAll('tbody tr');
 		data.data.forEach((item, index) => {
 			const cells = rows[index].cells;
-
-
 			const paknoInput = cells[1]?.querySelector('input');
 			if (paknoInput) paknoInput.value = item.Paket_No + "-" + item.Konsimento;
-
 			const barkodInput = cells[2]?.querySelector('label span');
 			if (barkodInput) {
 				if (item.Barkod === null || item.Barkod === undefined || item.Barkod.trim() === '') {
@@ -721,6 +718,12 @@ function getTableData() {
 				ctutar: parseLocaleNumber(cells[11]?.querySelector('input')?.value || 0),
 				cizahat: cells[12]?.querySelector('input')?.value || "",
 				satir: parseInt(cells[13]?.textContent.trim(), 10) || 0,
+
+				ukodu: cells[3]?.textContent.trim() || "",
+				miktar: parseInt(cells[4]?.textContent.trim()) || 0,
+				m3: parseFloat(cells[5]?.textContent.trim()) || 0.0,
+				pakm3: parseFloat(cells[6]?.textContent.trim()) || 0.0,
+
 			};
 			data.push(rowData);
 		}
@@ -811,4 +814,90 @@ function selectAllContent(element) {
 	if (element && element.select) {
 		element.select();
 	}
+}
+
+async function downloadcikis() {
+	const fisno = document.getElementById("fisno").value;
+	const table = document.getElementById('kerTable');
+	const rows = table.rows;
+	if (!fisno || fisno === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarasi giriniz.");
+		return;
+	}
+
+	const keresteyazdirDTO = {
+		...prepareureKayit(),
+		cikisbilgiDTO: cikisbilgiler() 
+	};
+	const errorDiv = document.getElementById('errorDiv');
+	const $indirButton = $('#cikisdownloadButton');
+	document.body.style.cursor = "wait";
+	
+	$indirButton.prop('disabled', true).text('İşleniyor...');
+	try {
+		const response = await fetchWithSessionCheckForDownload('kereste/cikis_download', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(keresteyazdirDTO),
+		});
+		if (response.blob) {
+			const disposition = response.headers.get('Content-Disposition');
+			const fileName = disposition.match(/filename="(.+)"/)[1];
+			const url = window.URL.createObjectURL(response.blob);
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = fileName;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			window.URL.revokeObjectURL(url);
+		} else {
+			throw new Error("Dosya indirilemedi.");
+		}
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
+	} finally {
+		$indirButton.prop('disabled', false).text('Yazdir');
+		document.body.style.cursor = "default";
+	}
+}
+
+function cikisbilgiler(){
+	return {
+	totaltutar : document.getElementById("totalTutar").innerText.trim(),
+	totalmiktar : document.getElementById("totalMiktar").innerText.trim(),
+	totalm3 : document.getElementById("totalM3").innerText.trim(),
+	totalpaketm3 : document.getElementById("totalPaketM3").innerText.trim(),
+	paketsayi : document.getElementById("totalPakadet").textContent.replace("Paket:", "").trim() || "",
+
+	iskonto :  document.getElementById("iskonto").innerText.trim(),
+	bakiye : document.getElementById("bakiye").innerText.trim(),
+	kdv : document.getElementById("kdv").innerText.trim(),
+	tevedkdv : document.getElementById("tevedkdv").innerText.trim(),
+	tevdahtoptut : document.getElementById("tevdahtoptut").innerText.trim(),
+	beyedikdv : document.getElementById("beyedikdv").innerText.trim(),
+	tevhartoptut : document.getElementById("tevhartoptut").innerText.trim(),
+	}
+	
+}
+
+async function cikismailAt() {
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
+	const hiddenFieldValue = $('#ekstreBilgi').val();
+	const parsedValues = hiddenFieldValue.split(",");
+	const hesapKodu = parsedValues[0];
+	const startDateField = parsedValues[1];
+	const endDateField = parsedValues[2];
+	if (!hesapKodu) {
+		alert("Lütfen geçerli bir hesap kodu girin!");
+		return;
+	}
+	const degerler = hesapKodu + "," + startDateField + "," + endDateField + ",cariekstre";
+	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+	mailsayfasiYukle(url);
 }

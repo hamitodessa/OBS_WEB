@@ -58,4 +58,7 @@ public class kerestedetayDTO {
 	private String cuser;
 	private int csatir;
 
+	private double m3;
+	private double pakm3;
+
 }

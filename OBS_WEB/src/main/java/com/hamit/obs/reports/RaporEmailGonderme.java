@@ -52,6 +52,9 @@ public class RaporEmailGonderme {
 	private RaporOlustur raporOlustur;
 
 	private RaporEmailDegiskenler raporEmailDegiskenler;
+	
+	@Autowired
+	private ExcellToDataSource excellToDataSource;
 
 	public boolean EmailGonderme(RaporEmailDegiskenler raporEmailDegiskenler) {
 
@@ -75,7 +78,6 @@ public class RaporEmailGonderme {
 	private void gonder_excell() {
 		try {
 			String raporAdi = raporEmailDegiskenler.getNerden();
-			ExcellToDataSource excellToDataSource = new ExcellToDataSource();
 			List<Map<String, String>> tableData = raporEmailDegiskenler.getExceList();
 			ByteArrayDataSource ds = excellToDataSource.export_excell(tableData);
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm");
@@ -89,7 +91,6 @@ public class RaporEmailGonderme {
 	private void gonder_excell_grup() {
 		try {
 			String raporAdi = raporEmailDegiskenler.getNerden();
-			ExcellToDataSource excellToDataSource = new ExcellToDataSource();
 			String[] values = raporEmailDegiskenler.getDegerler().split(",");
 			List<String> header = Arrays.asList(raporEmailDegiskenler.getBaslik().split(","));  
 			String tableString = raporEmailDegiskenler.getTableString();

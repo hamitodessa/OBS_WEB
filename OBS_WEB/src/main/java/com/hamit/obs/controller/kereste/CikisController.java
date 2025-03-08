@@ -1,5 +1,6 @@
 package com.hamit.obs.controller.kereste;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,8 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.util.ByteArrayDataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,7 +30,9 @@ import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.dto.kereste.keresteDTO;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.dto.kereste.kerestekayitDTO;
+import com.hamit.obs.dto.kereste.keresteyazdirDTO;
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.user.UserService;
@@ -36,6 +43,9 @@ public class CikisController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private RaporOlustur raporOlustur;
+	
 	@Autowired
 	private KeresteService keresteService;
 
@@ -245,4 +255,30 @@ public class CikisController {
 
 		return degisken;
 	}
+	
+	@PostMapping("kereste/cikis_download")
+	public ResponseEntity<byte[]> cikis_download(@RequestBody keresteyazdirDTO keresteyazdirDTO) {
+		ByteArrayDataSource dataSource ;
+		try {
+			keresteDTO keresteDTO = keresteyazdirDTO.getKeresteDTO();
+			String[] hesadi = cariservice.hesap_adi_oku(keresteDTO.getCarikod());
+			dataSource =  raporOlustur.kereste_cikis(keresteyazdirDTO,hesadi[0]);
+			if (dataSource == null) {
+				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");
+			}
+			byte[] fileContent = dataSource.getInputStream().readAllBytes();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			String fileName = "Kereste_Cikis.xlsx";
+			headers.setContentDispositionFormData("attachment", fileName);
+			return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+		} catch (ServiceException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().getBytes(StandardCharsets.UTF_8));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Beklenmeyen bir hata oluştu.".getBytes(StandardCharsets.UTF_8));
+		} finally {
+			dataSource = null;
+		}	
+	}
+
 }
