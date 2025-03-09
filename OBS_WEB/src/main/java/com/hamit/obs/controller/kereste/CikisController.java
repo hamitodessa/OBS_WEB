@@ -260,9 +260,7 @@ public class CikisController {
 	public ResponseEntity<byte[]> cikis_download(@RequestBody keresteyazdirDTO keresteyazdirDTO) {
 		ByteArrayDataSource dataSource ;
 		try {
-			keresteDTO keresteDTO = keresteyazdirDTO.getKeresteDTO();
-			String[] hesadi = cariservice.hesap_adi_oku(keresteDTO.getCarikod());
-			dataSource =  raporOlustur.kereste_cikis(keresteyazdirDTO,hesadi[0]);
+			dataSource =  raporOlustur.kereste_cikis(keresteyazdirDTO);
 			if (dataSource == null) {
 				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");
 			}

@@ -31,11 +31,14 @@ import com.hamit.obs.dto.kereste.keresteDTO;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.dto.kereste.keresteyazdirDTO;
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kereste.KeresteService;
 
 @Component
 public class ExcellToDataSource {
 
+	@Autowired
+	private CariService cariservice;
 	
 	@Autowired
 	private KeresteService keresteService;
@@ -174,7 +177,7 @@ public class ExcellToDataSource {
 	}
 
 	@SuppressWarnings({ "resource", "unused" })
-	public ByteArrayDataSource export_excell_kercikis(keresteyazdirDTO keresteyazdirDTO,String hesadi) {
+	public ByteArrayDataSource export_excell_kercikis(keresteyazdirDTO keresteyazdirDTO) {
 		ByteArrayDataSource ds = null ;
 		keresteDTO dto = keresteyazdirDTO.getKeresteDTO();
 		List<kerestedetayDTO> tableData = keresteyazdirDTO.getTableData();
@@ -296,7 +299,10 @@ public class ExcellToDataSource {
 
 			cell = satir3.createCell(1);
 			cell.setCellStyle(solaStyle);
-			cell.setCellValue(hesadi);
+			
+			String[] hesadi = cariservice.hesap_adi_oku(dto.getCarikod());
+			
+			cell.setCellValue(hesadi[0]);
 
 			Row bosRow5 = sheet.createRow(5);
 
@@ -375,9 +381,12 @@ public class ExcellToDataSource {
 								cell = satirRow.createCell(s);
 								if(s==4)
 									cell.setCellValue(tableData.get(i).getM3());
-								else if(s==5)
-									cell.setCellValue(tableData.get(i).getPakm3());
-
+								else if(s==5) {
+									if(tableData.get(i).getPakm3() == 0)
+										cell.setCellValue("");
+									else
+										cell.setCellValue(tableData.get(i).getPakm3());
+								}
 								cell.setCellStyle(satirStyle3); 
 						}
 						else if (s == 7 || s == 8 || s == 9 ||  s == 10 )
@@ -523,20 +532,15 @@ public class ExcellToDataSource {
 				cell.setCellStyle(solaStyle);
 				ssatir +=1 ;
 			}
-			
-			
 			for (int i=0; i<=  11; i++)
 				sheet.autoSizeColumn(i);
-
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			workbook.write(bos);
 			byte[] byteArray = bos.toByteArray();
 			InputStream in = new ByteArrayInputStream(byteArray);
 			ds = new ByteArrayDataSource(in, "application/x-any");
 			bos.close();
-
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			throw new ServiceException(ex.getMessage());
 		}
 		return ds;

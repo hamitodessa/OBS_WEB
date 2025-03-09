@@ -374,8 +374,8 @@ public class RaporOlustur {
 		return excellToDataSource.export_excell(tableData);
 	}
 	
-	public ByteArrayDataSource kereste_cikis(keresteyazdirDTO keresteyazdirDTO,String hesadi)  throws Exception {
-		return excellToDataSource.export_excell_kercikis(keresteyazdirDTO,hesadi);
+	public ByteArrayDataSource kereste_cikis(keresteyazdirDTO keresteyazdirDTO)  throws Exception {
+		return excellToDataSource.export_excell_kercikis(keresteyazdirDTO);
 	}
 
 	private JasperPrint prepareJasperPrint(String jrxmlPath, Map<String, Object> parameters, List<Map<String, Object>> data , String raporyeri) throws Exception {

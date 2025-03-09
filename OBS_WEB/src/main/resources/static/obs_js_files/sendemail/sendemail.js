@@ -17,8 +17,10 @@ function tabloyukle() {
 		document.getElementById("format").value = "xlsx" ;
 		document.getElementById("format").disabled = true;
 	}
-
-	
+	if(document.getElementById("degerler").value === "kercikis"){
+		document.getElementById("format").value = "xlsx" ;
+		document.getElementById("format").disabled = true;
+    }
 	document.body.style.cursor = "default"
 };
 
@@ -35,6 +37,12 @@ async function sendmailAt() {
 		baslik: document.getElementById("tablobaslik").value || "",
 		format: document.getElementById("format") ? document.getElementById("format").value : ""
 	}
+
+	if(document.getElementById("degerler").value === "kercikis"){
+		const storedData = localStorage.getItem("keresteyazdirDTO");
+        RaporEmailDegiskenler.keresteyazdirDTO = JSON.parse(storedData);
+    }
+
 	if (document.getElementById("extraValue").value != "") {
 		let extraValue = document.getElementById("extraValue").value;
 		try {
@@ -95,6 +103,7 @@ async function sendmailAt() {
 		localStorage.removeItem("tableData");
 		localStorage.removeItem("grprapor");
 		localStorage.removeItem("tablobaslik");
+		localStorage.removeItem("keresteyazdirDTO");
 		document.body.style.cursor = "default";
 		$mailButton.prop('disabled', false).text('Gönder');
 	}

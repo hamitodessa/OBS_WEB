@@ -27,6 +27,7 @@ import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.dto.cari.dvzcevirmeDTO;
 import com.hamit.obs.dto.cari.mizanDTO;
 import com.hamit.obs.dto.kambiyo.bordroPrinter;
+import com.hamit.obs.dto.kereste.keresteyazdirDTO;
 import com.hamit.obs.dto.user.RaporEmailDegiskenler;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.Email_Details;
@@ -67,6 +68,8 @@ public class RaporEmailGonderme {
 				gonder_excell();
 			else if(nerden.equals("gruprapor") || nerden.equals("imagruprapor") || nerden.equals("kergruprapor"))
 				gonder_excell_grup();
+			else if(nerden.equals("kercikis"))
+				gonder_excell_kercikis();
 			else
 				gonder_jasper();
 			durum = true ;
@@ -104,6 +107,22 @@ public class RaporEmailGonderme {
 			throw new ServiceException(ex.getMessage());
 		}
 	}
+	
+	private void gonder_excell_kercikis() {
+		try {
+			String raporAdi = raporEmailDegiskenler.getNerden();
+			keresteyazdirDTO keresteyazdirDTO = raporEmailDegiskenler.getKeresteyazdirDTO();
+			ByteArrayDataSource ds = excellToDataSource.export_excell_kercikis(keresteyazdirDTO);
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm");
+			String zaman = dtf.format(LocalDateTime.now());
+			String rapor_dos_adi = raporAdi + zaman + ".xlsx";
+			son_gonderme(ds, rapor_dos_adi);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new ServiceException(ex.getMessage());
+		}
+	}
+	
 	private void gonder_jasper() {
 		try {
 			String raporAdi = getRaporAdi(raporEmailDegiskenler.getNerden());

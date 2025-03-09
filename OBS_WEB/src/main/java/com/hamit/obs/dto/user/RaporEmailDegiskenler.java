@@ -3,6 +3,8 @@ package com.hamit.obs.dto.user;
 import java.util.List;
 import java.util.Map;
 
+import com.hamit.obs.dto.kereste.keresteyazdirDTO;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,4 +24,5 @@ public class RaporEmailDegiskenler {
     List<Map<String, String>> exceList;
     String tableString;
     String baslik;
+    keresteyazdirDTO keresteyazdirDTO;    
 }

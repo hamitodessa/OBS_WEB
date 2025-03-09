@@ -888,16 +888,15 @@ async function cikismailAt() {
 	localStorage.removeItem("tableData");
 	localStorage.removeItem("grprapor");
 	localStorage.removeItem("tablobaslik");
-	const hiddenFieldValue = $('#ekstreBilgi').val();
-	const parsedValues = hiddenFieldValue.split(",");
-	const hesapKodu = parsedValues[0];
-	const startDateField = parsedValues[1];
-	const endDateField = parsedValues[2];
-	if (!hesapKodu) {
-		alert("Lütfen geçerli bir hesap kodu girin!");
-		return;
-	}
-	const degerler = hesapKodu + "," + startDateField + "," + endDateField + ",cariekstre";
+	
+	const keresteyazdirDTO = {
+		...prepareureKayit(),
+		cikisbilgiDTO: cikisbilgiler() 
+	};
+
+
+	localStorage.setItem("keresteyazdirDTO", JSON.stringify(keresteyazdirDTO));
+	const degerler = "kercikis";
 	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
 	mailsayfasiYukle(url);
 }
