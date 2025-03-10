@@ -739,6 +739,9 @@ function getTableData() {
 				cnakliyeci: parseInt(cells[29]?.textContent.trim(), 10) || 0,
 				cuser: cells[30]?.textContent || "",
 				csatir: parseInt(cells[31]?.textContent.trim(), 10) || 0,
+
+				m3: parseFloat(cells[5]?.textContent.trim()) || 0.0,
+				pakm3: parseFloat(cells[6]?.textContent.trim()) || 0.0,
 			};
 			data.push(rowData);
 		}
@@ -901,4 +904,86 @@ function kontrolFormat(kod) {
 	// Mask: "AA-999-9999-9999" (İlk iki karakter harf, geri kalanı rakam)
 	const regex = /^[A-Z]{2}-\d{3}-\d{4}-\d{4}$/;
 	return regex.test(kod);
+}
+
+async function downloadgiris() {
+	const fisno = document.getElementById("fisno").value;
+	const table = document.getElementById('kerTable');
+	const rows = table.rows;
+	if (!fisno || fisno === "0" || rows.length === 0) {
+		alert("Geçerli bir evrak numarasi giriniz.");
+		return;
+	}
+
+	const keresteyazdirDTO = {
+		...prepareureKayit(),
+		cikisbilgiDTO: cikisbilgiler()
+	};
+	const errorDiv = document.getElementById('errorDiv');
+	const $indirButton = $('#girisdownloadButton');
+	document.body.style.cursor = "wait";
+
+	$indirButton.prop('disabled', true).text('İşleniyor...');
+	try {
+		const response = await fetchWithSessionCheckForDownload('kereste/giris_download', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(keresteyazdirDTO),
+		});
+		if (response.blob) {
+			const disposition = response.headers.get('Content-Disposition');
+			const fileName = disposition.match(/filename="(.+)"/)[1];
+			const url = window.URL.createObjectURL(response.blob);
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = fileName;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			window.URL.revokeObjectURL(url);
+		} else {
+			throw new Error("Dosya indirilemedi.");
+		}
+	} catch (error) {
+		errorDiv.style.display = "block";
+		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
+	} finally {
+		$indirButton.prop('disabled', false).text('Yazdir');
+		document.body.style.cursor = "default";
+	}
+}
+
+function cikisbilgiler() {
+	return {
+		totaltutar: document.getElementById("totalTutar").innerText.trim(),
+		totalmiktar: document.getElementById("totalMiktar").innerText.trim(),
+		totalm3: document.getElementById("totalM3").innerText.trim(),
+		totalpaketm3: document.getElementById("totalPaketM3").innerText.trim(),
+		paketsayi: document.getElementById("totalPakadet").textContent.replace("Paket:", "").trim() || "",
+
+		iskonto: document.getElementById("iskonto").innerText.trim(),
+		bakiye: document.getElementById("bakiye").innerText.trim(),
+		kdv: document.getElementById("kdv").innerText.trim(),
+		tevedkdv: document.getElementById("tevedkdv").innerText.trim(),
+		tevdahtoptut: document.getElementById("tevdahtoptut").innerText.trim(),
+		beyedikdv: document.getElementById("beyedikdv").innerText.trim(),
+		tevhartoptut: document.getElementById("tevhartoptut").innerText.trim(),
+	}
+
+}
+
+async function girismailAt() {
+	localStorage.removeItem("tableData");
+	localStorage.removeItem("grprapor");
+	localStorage.removeItem("tablobaslik");
+	const keresteyazdirDTO = {
+		...prepareureKayit(),
+		cikisbilgiDTO: cikisbilgiler()
+	};
+	localStorage.setItem("keresteyazdirDTO", JSON.stringify(keresteyazdirDTO));
+	const degerler = "kergiris";
+	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+	mailsayfasiYukle(url);
 }

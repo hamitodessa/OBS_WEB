@@ -26,7 +26,7 @@ public class KodDegisController {
 	public String kodaciklama() {
 		return "kereste/koddegis";
 	}
-	
+
 	@PostMapping("kereste/koddegisload")
 	@ResponseBody
 	public Map<String, Object> koddegisload(@RequestBody Map<String, String> request) {
@@ -36,7 +36,7 @@ public class KodDegisController {
 			String kons = request.get("kons");
 			String kodu = request.get("kodu");
 			String evrak = request.get("evrak");
-			
+
 			List<Map<String, Object>> koddegis = keresteService.urun_detay(pakno,kons,kodu,evrak);
 			response.put("data", (koddegis != null) ? koddegis : new ArrayList<>());
 			response.put("errorMessage", ""); 
@@ -62,7 +62,7 @@ public class KodDegisController {
 		}
 		return response;
 	}
-	
+
 	@PostMapping("kereste/konsadi")
 	@ResponseBody
 	public Map<String, String> konsadi(@RequestParam String kons) {
@@ -85,7 +85,7 @@ public class KodDegisController {
 		try {
 			List<Map<String, Object>> selectedList =  request.get("selectedRows") ;
 			for (Map<String, Object> row : selectedList) {
-			    keresteService.ker_kod_degis((String) row.get("paket"),(String)  row.get("kons"),(String) row.get("kodu"),(int) row.get("satir"));
+				keresteService.ker_kod_degis((String) row.get("paket"),(String)  row.get("kons"),(String) row.get("kodu"),(int) row.get("satir"));
 			}
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
@@ -95,7 +95,7 @@ public class KodDegisController {
 		}
 		return response;
 	}
-	
+
 	@PostMapping("kereste/ykonskaydet")
 	@ResponseBody
 	public Map<String, String> ykonskaydet(@RequestBody Map<String, List<Map<String, Object>>> request) {
@@ -103,7 +103,7 @@ public class KodDegisController {
 		try {
 			List<Map<String, Object>> selectedList =  request.get("selectedRows") ;
 			for (Map<String, Object> row : selectedList) {
-			    keresteService.ker_kons_degis((String) row.get("kons"),(String)  row.get("ykons"),(int) row.get("satir"));
+				keresteService.ker_kons_degis((String) row.get("kons"),(String)  row.get("ykons"),(int) row.get("satir"));
 			}
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {

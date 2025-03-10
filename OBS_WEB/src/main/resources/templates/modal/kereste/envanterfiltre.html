@@ -23,11 +23,11 @@
     }
     </style>
     
-    <div class="modal fade" th:fragment="modalkerestedetay" id="firstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" th:fragment="modalkeresteenvanter" id="firstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="min-width: 870px;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kereste Detay Raporlama</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Kereste Envanter Raporlama</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                     </button>
@@ -182,6 +182,17 @@
                         <span style="padding-left: 5px;"></span>
                         <select class="form-select cins_bold"
                             style="min-width: 140px;max-width: 140px;" id="altgrp" >
+                        </select> 
+                        <span style="padding-left: 5px;"></span>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 130px;">Gruplama</span>
+                        </div>
+                        <span style="padding-left: 5px;"></span>
+                        <select class="form-select cins_bold" style="min-width: 130px;max-width: 130px;" id="gruplama" >
+                            <option value="Urun Kodu">Urun Kodu</option>
+                            <option value="Konsimento">Konsimento</option>
+                            <option value="Hesap-Kodu">Hesap-Kodu</option>
+                            <option value="Ana_Grup-Alt_Grup">Ana_Grup-Alt_Grup</option>
                         </select> 
                     </div>
                     

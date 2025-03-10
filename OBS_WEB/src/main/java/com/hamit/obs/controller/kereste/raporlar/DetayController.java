@@ -100,7 +100,6 @@ public class DetayController {
 	{
 		String deger[] = {"","","","","","","",""};
 		String qwq1 = "", qwq2="", qwq3="",qwq4 = "",qwq5 = "", qwq6="",qwq7 = "",qwq8 = "";
-		//***********************ANA GRUP
 		if (ana.equals(""))
 			qwq1 = " Like  '%' " ;
 		else if  (ana.equals("Bos Olanlar"))
@@ -111,7 +110,6 @@ public class DetayController {
 			qwq1 = "=" + anas;
 		}
 		deger[0] = qwq1; 
-		//***********************ALT GRUP
 		if (alt.equals(""))
 			qwq2 = " Like  '%' " ;
 		else if  (alt.equals("Bos Olanlar"))
@@ -122,7 +120,6 @@ public class DetayController {
 			qwq2 ="=" + alts;
 		}
 		deger[1] = qwq2; 
-		//***********************DEPO
 		if (dpo.equals(""))
 			qwq3 = " Like  '%' " ;
 		else if  (dpo.equals("Bos Olanlar"))
@@ -133,8 +130,6 @@ public class DetayController {
 			qwq3 = "=" + dpos;
 		}
 		deger[2] = qwq3; 
-
-		//***********************OZKOD
 		if (ozkod.equals(""))
 			qwq4 = " Like  '%' " ;
 		else if  (ozkod.equals("Bos Olanlar"))
@@ -145,7 +140,6 @@ public class DetayController {
 			qwq4 = "=" + anas;
 		}
 		deger[3] = qwq4; 
-		//***********************cANA GRUP
 		if (cana.equals(""))
 			qwq5 = " Like  '%' " ;
 		else if  (ana.equals("Bos Olanlar"))
@@ -156,7 +150,6 @@ public class DetayController {
 			qwq5 = "=" + canas;
 		}
 		deger[4] = qwq5; 
-		//***********************cALT GRUP
 		if (calt.equals(""))
 			qwq6 = " Like  '%' " ;
 		else if  (calt.equals("Bos Olanlar"))
@@ -167,7 +160,6 @@ public class DetayController {
 			qwq6 ="=" + calts;
 		}
 		deger[5] = qwq6; 
-		//***********************cDEPO
 		if (cdpo.equals(""))
 			qwq7 = " Like  '%' " ;
 		else if  (cdpo.equals("Bos Olanlar"))
@@ -178,8 +170,6 @@ public class DetayController {
 			qwq7 = "=" + cdpos;
 		}
 		deger[6] = qwq7; 
-
-		//***********************cOZKOD
 		if (cozkod.equals(""))
 			qwq8 = " Like  '%' " ;
 		else if  (cozkod.equals("Bos Olanlar"))

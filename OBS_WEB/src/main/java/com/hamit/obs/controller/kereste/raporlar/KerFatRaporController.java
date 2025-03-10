@@ -35,15 +35,15 @@ public class KerFatRaporController {
 
 	@Autowired
 	private RaporOlustur raporOlustur;
-	
+
 	@Autowired
 	private KeresteService keresteService;
-	
+
 	@GetMapping("/kereste/fatrapor")
 	public String fatrapor() {
 		return "kereste/fatrapor";
 	}
-	
+
 	@PostMapping("kereste/fatrapdoldur")
 	@ResponseBody
 	public Map<String, Object> fatrapdoldur(@RequestBody kerestedetayraporDTO kerestedetayraporDTO) {
@@ -64,7 +64,7 @@ public class KerFatRaporController {
 			else
 				kerestedetayraporDTO.setGircik("C") ;
 			List<Map<String, Object>> fat_listele = new ArrayList<>();
-			
+
 			if (kerestedetayraporDTO.getGruplama().equals("fno"))
 				fat_listele = keresteService.fat_rapor(kerestedetayraporDTO);
 			else if (kerestedetayraporDTO.getGruplama().equals("fkodu"))
@@ -72,7 +72,7 @@ public class KerFatRaporController {
 				String hangiadres[] = hangiadresckod(kerestedetayraporDTO.getCaradr(),kerestedetayraporDTO.getGircik());
 				kerestedetayraporDTO.setBir(hangiadres[0]);
 				kerestedetayraporDTO.setIki(hangiadres[1]);
-				
+
 				fat_listele = keresteService.fat_rapor_cari_kod(kerestedetayraporDTO);
 			}
 			else
@@ -94,7 +94,7 @@ public class KerFatRaporController {
 		}
 		return response;
 	}
-	
+
 	@PostMapping("kereste/fatdoldursize")
 	@ResponseBody
 	public Map<String, Object> fatdoldursize(@RequestBody kerestedetayraporDTO kerestedetayraporDTO) {
@@ -121,7 +121,7 @@ public class KerFatRaporController {
 		}
 		return response;
 	}
-	
+
 	@PostMapping("kereste/fatdetay")
 	@ResponseBody
 	public Map<String, Object> fatdetay(@RequestParam String evrakNo,@RequestParam String gircik) {
@@ -138,7 +138,7 @@ public class KerFatRaporController {
 		}
 		return response;
 	}
-	
+
 	@PostMapping("kereste/fatrap_download")
 	public ResponseEntity<byte[]> downloadReport(@RequestBody List<Map<String, String>> tableData) {
 		ByteArrayDataSource dataSource ;
@@ -162,12 +162,10 @@ public class KerFatRaporController {
 		}	
 	}
 
-	
 	private String[] grup_cevir(String ana,String alt,String dpo,String ozkod,String cana,String calt,String cdpo,String cozkod)
 	{
 		String deger[] = {"","","","","","","",""};
 		String qwq1 = "", qwq2="", qwq3="",qwq4 = "",qwq5 = "", qwq6="",qwq7 = "",qwq8 = "";
-		//***********************ANA GRUP
 		if (ana.equals(""))
 			qwq1 = " Like  '%' " ;
 		else if  (ana.equals("Bos Olanlar"))
@@ -178,7 +176,6 @@ public class KerFatRaporController {
 			qwq1 = "=" + anas;
 		}
 		deger[0] = qwq1; 
-		//***********************ALT GRUP
 		if (alt.equals(""))
 			qwq2 = " Like  '%' " ;
 		else if  (alt.equals("Bos Olanlar"))
@@ -189,7 +186,6 @@ public class KerFatRaporController {
 			qwq2 ="=" + alts;
 		}
 		deger[1] = qwq2; 
-		//***********************DEPO
 		if (dpo.equals(""))
 			qwq3 = " Like  '%' " ;
 		else if  (dpo.equals("Bos Olanlar"))
@@ -200,8 +196,6 @@ public class KerFatRaporController {
 			qwq3 = "=" + dpos;
 		}
 		deger[2] = qwq3; 
-
-		//***********************OZKOD
 		if (ozkod.equals(""))
 			qwq4 = " Like  '%' " ;
 		else if  (ozkod.equals("Bos Olanlar"))
@@ -212,7 +206,6 @@ public class KerFatRaporController {
 			qwq4 = "=" + anas;
 		}
 		deger[3] = qwq4; 
-		//***********************cANA GRUP
 		if (cana.equals(""))
 			qwq5 = " Like  '%' " ;
 		else if  (ana.equals("Bos Olanlar"))
@@ -223,7 +216,6 @@ public class KerFatRaporController {
 			qwq5 = "=" + canas;
 		}
 		deger[4] = qwq5; 
-		//***********************cALT GRUP
 		if (calt.equals(""))
 			qwq6 = " Like  '%' " ;
 		else if  (calt.equals("Bos Olanlar"))
@@ -234,7 +226,6 @@ public class KerFatRaporController {
 			qwq6 ="=" + calts;
 		}
 		deger[5] = qwq6; 
-		//***********************cDEPO
 		if (cdpo.equals(""))
 			qwq7 = " Like  '%' " ;
 		else if  (cdpo.equals("Bos Olanlar"))
@@ -245,8 +236,6 @@ public class KerFatRaporController {
 			qwq7 = "=" + cdpos;
 		}
 		deger[6] = qwq7; 
-
-		//***********************cOZKOD
 		if (cozkod.equals(""))
 			qwq8 = " Like  '%' " ;
 		else if  (cozkod.equals("Bos Olanlar"))
@@ -261,14 +250,14 @@ public class KerFatRaporController {
 	}	
 	private String[] hangiadres(String hangiadres,String turu) {
 		String deger[] = {"","","",""};
-		
+
 		String qw1 = "", qw2="", qw3="",c_yer = "";
-		
+
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
 		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
-		
+
 		if (hangiadres.equals("Cari_Firma"))
 		{
 			String qweString = "", ewqString = "" ;
@@ -381,17 +370,15 @@ public class KerFatRaporController {
 		deger[2] = qw3;
 		return deger;
 	}
-	
+
 	private String[] hangiadresckod(String hangiadres,String turu) {
 		String deger[] = {"","","",""};
-		
 		String qw1 = "", qw2="",c_yer = "";
-		
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
 		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
 		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
-		
+
 		if (hangiadres.equals("Cari_Firma"))
 		{
 			String qweString = "", ewqString = "" ;
@@ -415,9 +402,9 @@ public class KerFatRaporController {
 				{
 					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"UNVAN\" FROM  dblink ('" + carServer + "', "  
-								+ " 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"  ') "  
-								+ " AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
-								+ " WHERE \"HESAP\" = \"KERESTE\".\"Cari_Firma\"  LIMIT 1) as \"Unvan\"  " ;
+							+ " 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"  ') "  
+							+ " AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
+							+ " WHERE \"HESAP\" = \"KERESTE\".\"Cari_Firma\"  LIMIT 1) as \"Unvan\"  " ;
 					qw2 = " \"Cari_Firma\"" ;
 				}
 			}

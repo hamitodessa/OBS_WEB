@@ -88,7 +88,6 @@ public class KodKonsController {
 	public Map<String, Object> konsaciklamadoldur() {
 		Map<String, Object> response = new HashMap<>();
 		try {
-
 			List<Map<String, Object>> konsacik = keresteService.kons_pln();
 			response.put("data", (konsacik != null) ? konsacik : new ArrayList<>());
 			response.put("errorMessage", "");

@@ -39,7 +39,7 @@ public class KeresteGrupRaporController {
 	@Autowired
 	private RaporOlustur raporOlustur;
 
-	
+
 	@Autowired
 	private KeresteService keresteService;
 
@@ -53,7 +53,6 @@ public class KeresteGrupRaporController {
 	public Map<String, Object> grpdoldur(@RequestBody kergrupraporDTO kergrupraporDTO) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
@@ -1409,7 +1408,6 @@ public class KeresteGrupRaporController {
 		}
 		else
 			kur_dos = "" ;
-
 		jkj  = "" ;
 		if (kergrupraporDTO.getTuru().equals("GIREN"))
 			jkj =   "" ;
@@ -1417,7 +1415,6 @@ public class KeresteGrupRaporController {
 			jkj = " Cikis_Evrak <> '' AND  " ;
 		else if (kergrupraporDTO.getTuru().equals("STOK"))
 			jkj = " Cikis_Evrak = '' AND " ;
-
 		deg_cevirString[0] = jkj ;
 		deg_cevirString[1] = jkj1 ;
 		deg_cevirString[2] = ch1 ;
@@ -1430,7 +1427,6 @@ public class KeresteGrupRaporController {
 	{
 		String deger[] = {"","","",""};
 		String qwq1 = "", qwq2="", qwq3="",qwq4="";
-		//***********************ANA GRUP
 		if (ana.equals(""))
 			qwq1 = " Like  '%' " ;
 		else if  (ana.equals("Bos Olanlar"))
@@ -1441,7 +1437,6 @@ public class KeresteGrupRaporController {
 			qwq1 = "=" + anas;
 		}
 		deger[0] = qwq1; 
-		//***********************ALT GRUP
 		if (alt.equals(""))
 			qwq2 = " Like  '%' " ;
 		else if  (alt.equals("Bos Olanlar"))
@@ -1452,7 +1447,6 @@ public class KeresteGrupRaporController {
 			qwq2 ="=" + alts;
 		}
 		deger[1] = qwq2; 
-		//***********************oz1
 		if (oz1.equals(""))
 			qwq3 = " Like  '%' " ;
 		else if  (oz1.equals("Bos Olanlar"))
@@ -1463,7 +1457,6 @@ public class KeresteGrupRaporController {
 			qwq3 = "=" + ozs1;
 		}
 		deger[2] = qwq3; 
-		//**********************dpo
 		if (depo.equals(""))
 			qwq4 = " Like  '%' " ;
 		else if  (depo.equals("Bos Olanlar"))
@@ -1474,7 +1467,6 @@ public class KeresteGrupRaporController {
 			qwq4 = "=" + dpo1;
 		}
 		deger[3] = qwq4; 
-
 		return deger;
 	}
 
@@ -1758,7 +1750,7 @@ public class KeresteGrupRaporController {
 		}
 		return baslikbakStrings;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@PostMapping("kereste/grp_download")
 	@ResponseBody
@@ -1786,5 +1778,4 @@ public class KeresteGrupRaporController {
 			dataSource = null;
 		}	
 	}
-
 }

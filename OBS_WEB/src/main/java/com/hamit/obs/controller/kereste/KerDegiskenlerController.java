@@ -20,18 +20,18 @@ import com.hamit.obs.service.kereste.KeresteService;
 @Controller
 public class KerDegiskenlerController {
 
-	
+
 	@Autowired
 	private KeresteService keresteService;
-	
+
 	@GetMapping("/kereste/degiskenler")
 	public Model uretim(Model model) {
 		List<Map<String, Object>> anaKodlari = keresteService.ker_kod_degisken_oku("ANA_GRUP", "AGID_Y", "ANA_GRUP_DEGISKEN") ;
 		model.addAttribute("anaKodlari", (anaKodlari != null) ? anaKodlari : new ArrayList<>());
 		return model;
 	}
-	
-    @GetMapping("kereste/anagrpOku")
+
+	@GetMapping("kereste/anagrpOku")
 	@ResponseBody
 	public Map<String, Object> anagrpOku() {
 		Map<String, Object> response = new HashMap<>();
@@ -46,8 +46,8 @@ public class KerDegiskenlerController {
 		}
 		return response;
 	}
-    
-    @GetMapping("kereste/menseiOku")
+
+	@GetMapping("kereste/menseiOku")
 	@ResponseBody
 	public Map<String, Object> menseiOku() {
 		Map<String, Object> response = new HashMap<>();
@@ -62,54 +62,54 @@ public class KerDegiskenlerController {
 		}
 		return response;
 	}
-    
-    @GetMapping("kereste/depoOku")
- 	@ResponseBody
- 	public Map<String, Object> depoOku() {
- 		Map<String, Object> response = new HashMap<>();
- 		try {
- 			List<Map<String, Object>> depoKodlari = keresteService.ker_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
- 			response.put("depo", depoKodlari); 
- 			response.put("errorMessage", "");
- 		} catch (ServiceException e) {
- 			response.put("errorMessage", e.getMessage());
- 		} catch (Exception e) {
- 			response.put("errorMessage", "Hata: " + e.getMessage());
- 		}
- 		return response;
- 	}
 
-    @GetMapping("kereste/oz1Oku")
-  	@ResponseBody
-  	public Map<String, Object> oz1Oku() {
-  		Map<String, Object> response = new HashMap<>();
-  		try {
-  			List<Map<String, Object>> oz1OkuKodlari = keresteService.ker_kod_degisken_oku("OZEL_KOD_1", "OZ1ID_Y", "OZ_KOD_1_DEGISKEN") ;
-  			response.put("oz1", oz1OkuKodlari); 
-  			response.put("errorMessage", "");
-  		} catch (ServiceException e) {
-  			response.put("errorMessage", e.getMessage());
-  		} catch (Exception e) {
-  			response.put("errorMessage", "Hata: " + e.getMessage());
-  		}
-  		return response;
-  	}
+	@GetMapping("kereste/depoOku")
+	@ResponseBody
+	public Map<String, Object> depoOku() {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> depoKodlari = keresteService.ker_kod_degisken_oku("DEPO", "DPID_Y", "DEPO_DEGISKEN") ;
+			response.put("depo", depoKodlari); 
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
 
-    @GetMapping("kereste/nakOku")
-  	@ResponseBody
-  	public Map<String, Object> nakOku() {
-  		Map<String, Object> response = new HashMap<>();
-  		try {
-  			List<Map<String, Object>> nakOkuKodlari = keresteService.ker_kod_degisken_oku("UNVAN", "NAKID_Y", "NAKLIYECI") ;
-  			response.put("nak", nakOkuKodlari); 
-  			response.put("errorMessage", "");
-  		} catch (ServiceException e) {
-  			response.put("errorMessage", e.getMessage());
-  		} catch (Exception e) {
-  			response.put("errorMessage", "Hata: " + e.getMessage());
-  		}
-  		return response;
-  	}
+	@GetMapping("kereste/oz1Oku")
+	@ResponseBody
+	public Map<String, Object> oz1Oku() {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> oz1OkuKodlari = keresteService.ker_kod_degisken_oku("OZEL_KOD_1", "OZ1ID_Y", "OZ_KOD_1_DEGISKEN") ;
+			response.put("oz1", oz1OkuKodlari); 
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
+
+	@GetMapping("kereste/nakOku")
+	@ResponseBody
+	public Map<String, Object> nakOku() {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			List<Map<String, Object>> nakOkuKodlari = keresteService.ker_kod_degisken_oku("UNVAN", "NAKID_Y", "NAKLIYECI") ;
+			response.put("nak", nakOkuKodlari); 
+			response.put("errorMessage", "");
+		} catch (ServiceException e) {
+			response.put("errorMessage", e.getMessage());
+		} catch (Exception e) {
+			response.put("errorMessage", "Hata: " + e.getMessage());
+		}
+		return response;
+	}
 
 	@PostMapping("kereste/altgrupdeg")
 	@ResponseBody
@@ -196,32 +196,32 @@ public class KerDegiskenlerController {
 			String idacik = request.get("idacik");
 			String degisken = request.get("degisken");
 			String altgrpAna = request.get("altgrpAna");
-				if (degisken.equals("mensei"))
-					keresteService.urun_kod_degisken_sil( "MEID_Y", "MENSEI_DEGISKEN", Integer.parseInt(idacik));
-				else  if (degisken.equals("anagrp"))
-					keresteService.urun_kod_degisken_sil( "AGID_Y", "ANA_GRUP_DEGISKEN", Integer.parseInt(idacik));
-				else if (degisken.equals("altgrp"))
+			if (degisken.equals("mensei"))
+				keresteService.urun_kod_degisken_sil( "MEID_Y", "MENSEI_DEGISKEN", Integer.parseInt(idacik));
+			else  if (degisken.equals("anagrp"))
+				keresteService.urun_kod_degisken_sil( "AGID_Y", "ANA_GRUP_DEGISKEN", Integer.parseInt(idacik));
+			else if (degisken.equals("altgrp"))
+			{
+				String qwe = keresteService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", altgrpAna);
+				int anaG = 0;
+				if (! qwe.equals(""))
+					anaG  = Integer.parseInt(qwe);
+				int altG = 0;
+				String ewq = keresteService.urun_kod_degisken_ara("ALID_Y", "ALT_GRUP", "ALT_GRUP_DEGISKEN",aciklama.trim());
+				if (! ewq.equals(""))
+					altG  = Integer.parseInt(ewq);
+				if (keresteService.alt_grup_kontrol(anaG,altG) )
 				{
-					String qwe = keresteService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", altgrpAna);
-					int anaG = 0;
-					if (! qwe.equals(""))
-						anaG  = Integer.parseInt(qwe);
-					int altG = 0;
-					String ewq = keresteService.urun_kod_degisken_ara("ALID_Y", "ALT_GRUP", "ALT_GRUP_DEGISKEN",aciklama.trim());
-					if (! ewq.equals(""))
-						altG  = Integer.parseInt(ewq);
-					if (keresteService.alt_grup_kontrol(anaG,altG) )
-					{
-						response.put("errorMessage", "Ilk once Degisken Yenileme Bolumunden degistirip sonra siliniz....");
-						return response;
-					}
-					keresteService.urun_degisken_alt_grup_sil(Integer.parseInt(idacik));				}
-				else  if (degisken.equals("depo"))
-					keresteService.urun_kod_degisken_sil("DPID_Y", "DEPO_DEGISKEN", Integer.parseInt(idacik));
-				else  if (degisken.equals("oz1"))
-					keresteService.urun_kod_degisken_sil("OZ1ID_Y", "OZ_KOD_1_DEGISKEN", Integer.parseInt(idacik));
-				else  if (degisken.equals("nak"))
-					keresteService.urun_kod_degisken_sil("NAKID_Y","NAKLIYECI", Integer.parseInt(idacik));
+					response.put("errorMessage", "Ilk once Degisken Yenileme Bolumunden degistirip sonra siliniz....");
+					return response;
+				}
+				keresteService.urun_degisken_alt_grup_sil(Integer.parseInt(idacik));				}
+			else  if (degisken.equals("depo"))
+				keresteService.urun_kod_degisken_sil("DPID_Y", "DEPO_DEGISKEN", Integer.parseInt(idacik));
+			else  if (degisken.equals("oz1"))
+				keresteService.urun_kod_degisken_sil("OZ1ID_Y", "OZ_KOD_1_DEGISKEN", Integer.parseInt(idacik));
+			else  if (degisken.equals("nak"))
+				keresteService.urun_kod_degisken_sil("NAKID_Y","NAKLIYECI", Integer.parseInt(idacik));
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("success", false);
@@ -231,7 +231,4 @@ public class KerDegiskenlerController {
 		}
 		return response;
 	}
-
-
-	
 }

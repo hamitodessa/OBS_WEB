@@ -17,10 +17,10 @@ import com.hamit.obs.service.kereste.KeresteService;
 
 @Controller
 public class KeresteController {
-	
+
 	@Autowired
 	private KeresteService keresteService;
-	
+
 	@GetMapping("kereste/getBaslik")
 	@ResponseBody
 	public Map<String, String> getBaslik() {
@@ -95,9 +95,8 @@ public class KeresteController {
 				sno =  keresteService.evrak_no_al("G");
 			int kj = 10 - Integer.toString(sno).length();
 			StringBuilder strBuilder = new StringBuilder();
-			for (int i = 0; i < kj; i++) {
-			    strBuilder.append("0");
-			}
+			for (int i = 0; i < kj; i++)
+				strBuilder.append("0");
 			strBuilder.append(sno);
 			String str_ = strBuilder.toString();
 			response.put("fisno", str_.equals("0000000000") ? "0000000001":str_);
@@ -122,12 +121,9 @@ public class KeresteController {
 				paket = keresteService.paket_oku(pno, "C");
 				if(paket.size() >0) {
 					if (! paket.get(0).get("Cikis_Evrak").toString().equals("")   && ! paket.get(0).get("Cikis_Evrak").toString().equals(fisno))
-					{
 						response.put("mesaj", paket.get(0).get("Evrak_No")  + " Nolu Evrakta Cikis Yapilmis.." );
-					}
-					else {
+					else
 						response.put("paket", paket);
-					}
 				}
 				else {
 					response.put("mesaj","");
@@ -142,7 +138,6 @@ public class KeresteController {
 						response.put("mesaj", paket.get(0).get("Evrak_No")  + " Nolu Evrakta Giris Yapilmis.." );
 					}
 				}
-
 			}
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
@@ -152,7 +147,7 @@ public class KeresteController {
 		}
 		return response;
 	}
-	
+
 	@PostMapping("kereste/anadepo")
 	@ResponseBody
 	public Map<String, Object>  anadepo() {
@@ -169,16 +164,16 @@ public class KeresteController {
 			depoDeger.put("DEPO", ""); 
 			depoKodlari.add(0, depoDeger);
 			response.put("depoKodlari", (depoKodlari != null) ? depoKodlari : new ArrayList<>());
-			
+
 			List<Map<String, Object>> oz1Kodlari = keresteService.ker_kod_degisken_oku("OZEL_KOD_1", "OZ1ID_Y", "OZ_KOD_1_DEGISKEN") ;
 			Map<String, Object> oz1Deger = new HashMap<>();
 			oz1Deger.put("OZEL_KOD_1", ""); 
 			oz1Kodlari.add(0, oz1Deger);
 			response.put("oz1Kodlari", (oz1Kodlari != null) ? oz1Kodlari : new ArrayList<>());
-			
+
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
-			response.put("errorMessage", e.getMessage()); // Hata mesajı
+			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}

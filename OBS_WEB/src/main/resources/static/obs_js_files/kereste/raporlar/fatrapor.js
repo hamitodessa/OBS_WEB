@@ -120,7 +120,6 @@ function getfatraporDTO() {
 	};
 }
 
-
 async function kerfetchTableData(page) {
 	const kerestedetayraporDTO = getfatraporDTO();
 	kerestedetayraporDTO.page = page;

@@ -377,6 +377,10 @@ public class RaporOlustur {
 	public ByteArrayDataSource kereste_cikis(keresteyazdirDTO keresteyazdirDTO)  throws Exception {
 		return excellToDataSource.export_excell_kercikis(keresteyazdirDTO);
 	}
+	
+	public ByteArrayDataSource kereste_giris(keresteyazdirDTO keresteyazdirDTO)  throws Exception {
+		return excellToDataSource.export_excell_kergiris(keresteyazdirDTO);
+	}
 
 	private JasperPrint prepareJasperPrint(String jrxmlPath, Map<String, Object> parameters, List<Map<String, Object>> data , String raporyeri) throws Exception {
 		ClassPathResource resource = new ClassPathResource(raporyeri + "/" + jrxmlPath);

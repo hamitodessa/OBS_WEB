@@ -17,7 +17,7 @@ function tabloyukle() {
 		document.getElementById("format").value = "xlsx" ;
 		document.getElementById("format").disabled = true;
 	}
-	if(document.getElementById("degerler").value === "kercikis"){
+	if (document.getElementById("degerler").value === "kercikis" || document.getElementById("degerler").value === "kergiris"){
 		document.getElementById("format").value = "xlsx" ;
 		document.getElementById("format").disabled = true;
     }
@@ -38,26 +38,18 @@ async function sendmailAt() {
 		format: document.getElementById("format") ? document.getElementById("format").value : ""
 	}
 
-	if(document.getElementById("degerler").value === "kercikis"){
-		const storedData = localStorage.getItem("keresteyazdirDTO");
-        RaporEmailDegiskenler.keresteyazdirDTO = JSON.parse(storedData);
+	if (document.getElementById("degerler").value === "kercikis" || document.getElementById("degerler").value === "kergiris"){
+		const keresteyazdirDTO = localStorage.getItem("keresteyazdirDTO");
+		RaporEmailDegiskenler.keresteyazdirDTO = JSON.parse(keresteyazdirDTO);
     }
 
 	if (document.getElementById("extraValue").value != "") {
 		let extraValue = document.getElementById("extraValue").value;
-		try {
-			RaporEmailDegiskenler.exceList = JSON.parse(extraValue);
-		} catch (error) {
-			throw new Error("JSON dönüşüm hatası:", error);
-		}
+		RaporEmailDegiskenler.exceList = JSON.parse(extraValue);
 	}
 	if (document.getElementById("grprapor").value != "") {
 		let extraValue = document.getElementById("grprapor").value;
-		try {
-			RaporEmailDegiskenler.tableString = extraValue;
-		} catch (error) {
-			throw new Error("JSON dönüşüm hatası:", error);
-		}
+		RaporEmailDegiskenler.tableString = extraValue;
 	}
 
 	const errorDiv = document.getElementById("errorDiv");

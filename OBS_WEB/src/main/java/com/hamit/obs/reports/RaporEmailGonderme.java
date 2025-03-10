@@ -70,6 +70,8 @@ public class RaporEmailGonderme {
 				gonder_excell_grup();
 			else if(nerden.equals("kercikis"))
 				gonder_excell_kercikis();
+			else if(nerden.equals("kergiris"))
+				gonder_excell_kergiris();
 			else
 				gonder_jasper();
 			durum = true ;
@@ -118,7 +120,20 @@ public class RaporEmailGonderme {
 			String rapor_dos_adi = raporAdi + zaman + ".xlsx";
 			son_gonderme(ds, rapor_dos_adi);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			throw new ServiceException(ex.getMessage());
+		}
+	}
+	
+	private void gonder_excell_kergiris() {
+		try {
+			String raporAdi = raporEmailDegiskenler.getNerden();
+			keresteyazdirDTO keresteyazdirDTO = raporEmailDegiskenler.getKeresteyazdirDTO();
+			ByteArrayDataSource ds = excellToDataSource.export_excell_kergiris(keresteyazdirDTO);
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm");
+			String zaman = dtf.format(LocalDateTime.now());
+			String rapor_dos_adi = raporAdi + zaman + ".xlsx";
+			son_gonderme(ds, rapor_dos_adi);
+		} catch (Exception ex) {
 			throw new ServiceException(ex.getMessage());
 		}
 	}

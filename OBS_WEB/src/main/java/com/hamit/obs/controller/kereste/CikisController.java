@@ -45,7 +45,7 @@ public class CikisController {
 
 	@Autowired
 	private RaporOlustur raporOlustur;
-	
+
 	@Autowired
 	private KeresteService keresteService;
 
@@ -127,26 +127,20 @@ public class CikisController {
 			String tarihString = Tarih_Cevir.dateFormaterSaatli(dto.getTarih());
 			for (kerestedetayDTO row : tableData) {
 				mesajlog = "Kereste Kayit" +  row.getUkodu() + " Mik=" + row.getMiktar() + " Tut=" + row.getTutar();
-
 				row.setCevrak(dto.getFisno());
 				row.setCcarifirma(dto.getCarikod());
 				row.setCadresfirma(dto.getAdreskod());
 				row.setCtarih(tarihString);
-
 				row.setCanagrup(degisken[0]);
 				row.setCaltgrup(degisken[1]);
 				row.setCnakliyeci(degisken[2]);
 				row.setCozelkod(degisken[3]);
-
-				//*****Depo
 				int qwe = 0 ;
 				if( ! row.getCdepostring().equals("")) {
 					String dpos = keresteService.urun_kod_degisken_ara("DPID_Y", "DEPO", "DEPO_DEGISKEN", row.getCdepostring());
 					qwe = Integer.parseInt(dpos);
 				}
 				row.setCdepo(qwe);
-
-
 				row.setCdoviz(dto.getDvzcins());
 				row.setCkur(dto.getKur());
 				row.setCtevkifat(dto.getTevoran());
@@ -232,30 +226,25 @@ public class CikisController {
 	private int[] degiskenler(keresteDTO dto) throws ClassNotFoundException, SQLException
 	{
 		int degisken[] = {0,0,0,0,0} ;
-		//*************anagrp
 		if(! dto.getAnagrup().equals("")) {  
 			String anas = keresteService.urun_kod_degisken_ara("AGID_Y", "ANA_GRUP", "ANA_GRUP_DEGISKEN", dto.getAnagrup());
 			degisken[0]  = Integer.parseInt(anas);
 		}
-		//*************alt grp
 		if(! dto.getAltgrup().equals("")) {
 			String alts = keresteService.urun_kod_degisken_ara("ALID_Y", "ALT_GRUP", "ALT_GRUP_DEGISKEN", dto.getAltgrup());
 			degisken[1]  = Integer.parseInt(alts);
 		}
-		//*************nakliyeci
 		if(! dto.getNakliyeci().equals("")) {
 			String naks = keresteService.urun_kod_degisken_ara("NAKID_Y", "UNVAN", "NAKLIYECI", dto.getNakliyeci());
 			degisken[2]  = Integer.parseInt(naks); 
 		}
-		//*************oz kod
 		if(! dto.getOzelkod().equals("")) {
 			String ozks = keresteService.urun_kod_degisken_ara("OZ1ID_Y", "OZEL_KOD_1", "OZ_KOD_1_DEGISKEN", dto.getNakliyeci());
 			degisken[3] = Integer.parseInt(ozks);
 		}
-
 		return degisken;
 	}
-	
+
 	@PostMapping("kereste/cikis_download")
 	public ResponseEntity<byte[]> cikis_download(@RequestBody keresteyazdirDTO keresteyazdirDTO) {
 		ByteArrayDataSource dataSource ;
@@ -278,5 +267,4 @@ public class CikisController {
 			dataSource = null;
 		}	
 	}
-
 }
