@@ -63,4 +63,6 @@ public interface IKeresteDatabase {
 	List<Map<String, Object>> fat_detay_rapor(String fno , String turu,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> fat_rapor_fat_tar(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> fat_rapor_cari_kod(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
+	List<Map<String, Object>> envanter(kerestedetayraporDTO kerestedetayraporDTO,String Gruplama[],ConnectionDetails keresteConnDetails);
+
 }

@@ -557,6 +557,16 @@ public class KeresteService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
+	public List<Map<String, Object>> envanter(kerestedetayraporDTO kerestedetayraporDTO, String[] gruplama){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			return strategy.envanter(kerestedetayraporDTO,gruplama, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
 
 	private String errorMessages(ServiceException e) {
 		String originalMessage = e.getMessage();

@@ -1537,4 +1537,11 @@ public class KeresteMySQL implements IKeresteDatabase {
 		}
 		return resultList; 
 	}
+
+	@Override
+	public List<Map<String, Object>> envanter(kerestedetayraporDTO kerestedetayraporDTO, String[] Gruplama,ConnectionDetails keresteConnDetails)
+		{
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
