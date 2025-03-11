@@ -15,6 +15,7 @@ import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
+import com.hamit.obs.dto.kereste.kergrupraporDTO;
 import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.kereste.IKeresteDatabase;
@@ -563,6 +564,17 @@ public class KeresteService {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
 			return strategy.envanter(kerestedetayraporDTO,gruplama, keresteConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> ort_diger_kodu(kergrupraporDTO kergrupraporDTO ,  String yu, String iu){
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+			return strategy.ort_diger_kodu(kergrupraporDTO,yu,iu, keresteConnDetails,kurConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

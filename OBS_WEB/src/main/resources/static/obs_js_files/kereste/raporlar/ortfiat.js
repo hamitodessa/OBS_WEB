@@ -133,7 +133,7 @@ async function kerortfiatdoldur() {
     const mainTableBody = document.getElementById("mainTableBody");
     mainTableBody.innerHTML = "";
     clearTfoot();
-    console.log(kergrupraporDTO);
+
     try {
         const response = await fetchWithSessionCheck("kereste/ortfiatdoldur", {
             method: "POST",
@@ -146,7 +146,137 @@ async function kerortfiatdoldur() {
             throw new Error(response.errorMessage);
         }
         data = response;
-        
+        console.log(data);
+        let sqlHeaders = "";
+        let extraColumns = "";
+        if (response.raporturu === 'Sinif') {
+            sqlHeaders = ["SINIF", "ACIKLAMA", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+        else if (response.raporturu === 'Sinif-Kal') {
+            sqlHeaders = ["SINIF", "KAL", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+        else if (response.raporturu === 'Sinif-Boy') {
+            sqlHeaders = ["SINIF", "BOY", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+        else if (response.raporturu === 'Sinif-Gen') {
+            sqlHeaders = ["SINIF", "GEN", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+        else if (response.raporturu === 'Kodu') {
+            sqlHeaders = ["KODU", "ACIKLAMA", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+        else if (response.raporturu === 'Konsimento') {
+            sqlHeaders = ["KONSIMENTO", "ACIKLAMA", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+        else if (response.raporturu === 'Hesap Kodu') {
+            sqlHeaders = ["CARI FIRMA", "UNVAN", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+        else if (response.raporturu === 'Hesap Kodu-Ana_Alt_Grup') {
+            sqlHeaders = ["CARI FIRMA", "ANA GRUP", "ALT GRUP", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaders3(sqlHeaders);
+        }
+        else if (response.raporturu === 'Yil') {
+            sqlHeaders = ["YIL", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaders1(sqlHeaders);
+        }
+        else if (response.raporturu === 'Yil_Ay') {
+            sqlHeaders = ["YIL", "AY", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+        else if (response.raporturu === 'Ana Grup') {
+            sqlHeaders = ["ANA GRUP", "ALT GRUP", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
+            updateTableHeaderssinif(sqlHeaders);
+        }
+
+        data.data.forEach(rowData => {
+            const row = document.createElement('tr');
+            row.classList.add('expandable');
+            row.classList.add("table-row-height");
+            if (response.raporturu === 'Sinif') {
+                extraColumns = `
+                    <td>${rowData.Sinif || ''}</td>
+                    <td>${rowData.Adi || ''}</td>
+            `;
+            }
+            else if (response.raporturu === 'Sinif-Kal') {
+                extraColumns = `
+                    <td>${rowData.Sinif || ''}</td>
+                    <td>${rowData.Kal || ''}</td>
+            `;
+            }
+            else if (response.raporturu === 'Sinif-Boy') {
+                extraColumns = `
+                    <td>${rowData.Sinif || ''}</td>
+                    <td>${rowData.Boy || ''}</td>
+                `;
+            }
+            else if (response.raporturu === 'Sinif-Gen') {
+                extraColumns = `
+                    <td>${rowData.Sinif || ''}</td>
+                    <td>${rowData.Gen || ''}</td>
+                `;
+            }
+            else if (response.raporturu === 'Kodu') {
+                extraColumns = `
+                    <td>${rowData.Kodu || ''}</td>
+                    <td>${rowData.Adi || ''}</td>
+                `;
+            }
+            else if (response.raporturu === 'Konsimento') {
+                extraColumns = `
+                    <td>${rowData.Konsimento || ''}</td>
+                    <td>${rowData.Aciklama || ''}</td>
+                `;
+            }
+            else if (response.raporturu === 'Hesap Kodu') {
+                extraColumns = `
+                    <td>${rowData.Cari_Firma || ''}</td>
+                    <td>${rowData.Cari_Adi || ''}</td>
+                `;
+            }
+            else if (response.raporturu === 'Hesap Kodu-Ana_Alt_Grup') {
+                extraColumns = `
+                    <td>${rowData.Cari_Firma || ''}</td>
+                    <td>${rowData.Ana_Grup || ''}</td>
+                    <td>${rowData.Alta_Grup || ''}</td>
+                `;
+            }
+            else if (response.raporturu === 'Yil') {
+                extraColumns = `
+                    <td>${rowData.Yil || ''}</td>
+                `;
+            }
+            else if (response.raporturu === 'Yil_Ay') {
+                extraColumns = `
+                    <td>${rowData.Yil || ''}</td>
+                    <td>${rowData.Ay || ''}</td>
+                `;
+            }
+            else if (response.raporturu === 'Ana Grup') {
+                extraColumns = `
+                    <td>${rowData.Ana_Grup || ''}</td>
+                    <td>${rowData.Alt_Grup || ''}</td>
+                `;
+            }
+        row.innerHTML = `
+            ${extraColumns}
+            <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+            <td class="double-column">${formatNumber2(rowData[data.dvz + "_Tutar"])}</td>
+            <td class="double-column">${formatNumber0(rowData.Miktar)}</td>
+            <td class="double-column">${formatNumber3(rowData.m3)}</td>
+            <td class="double-column">${formatNumber2(rowData.m3_Ort_Fiat)}</td>
+            <td class="double-column">${formatNumber2(rowData["m3_Ort_Fiat_" + data.dvz])}</td>
+        `;
+
+        mainTableBody.appendChild(row);
+        });
+
         document.body.style.cursor = "default";
     } catch (error) {
         errorDiv.style.display = "block";
@@ -155,6 +285,140 @@ async function kerortfiatdoldur() {
         $yenileButton.prop('disabled', false).text('Yenile');
         document.body.style.cursor = "default";
     }
+}
+
+function updateTableHeaders1(headers) {
+    let thead = document.querySelector("#main-table thead");
+    let table = document.querySelector("#main-table");
+    let tfoot = table.querySelector("tfoot");
+    if (!tfoot) {
+        tfoot = document.createElement("tfoot");
+        table.appendChild(tfoot);
+    }
+    thead.innerHTML = "";
+    let trHead = document.createElement("tr");
+    trHead.classList.add("thead-dark");
+    headers.forEach((header, index) => {
+        let th = document.createElement("th");
+        th.textContent = header;
+
+        if (index >= headers.length - 6) {
+            th.classList.add("double-column");
+        }
+        trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    tfoot.innerHTML = "";
+    let trFoot = document.createElement("tr");
+    headers.forEach((_, index) => {
+        let th = document.createElement("th");
+        if (index === 4) {
+            th.textContent = "0";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 5) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 2 || index === 3 || index === 6 || index === 7) {
+            th.textContent = "0.00";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else {
+            th.textContent = "";
+        }
+        trFoot.appendChild(th);
+    });
+    tfoot.appendChild(trFoot);
+}
+function updateTableHeaderssinif(headers) {
+    let thead = document.querySelector("#main-table thead");
+    let table = document.querySelector("#main-table");
+    let tfoot = table.querySelector("tfoot");
+    if (!tfoot) {
+        tfoot = document.createElement("tfoot");
+        table.appendChild(tfoot);
+    }
+    thead.innerHTML = "";
+    let trHead = document.createElement("tr");
+    trHead.classList.add("thead-dark");
+    headers.forEach((header, index) => {
+        let th = document.createElement("th");
+        th.textContent = header;
+
+        if (index >= headers.length - 6) {
+            th.classList.add("double-column");
+        }
+        trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    tfoot.innerHTML = "";
+    let trFoot = document.createElement("tr");
+    headers.forEach((_, index) => {
+        let th = document.createElement("th");
+        if (index === 5) {
+            th.textContent = "0";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 6) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 3 || index === 4 || index === 7 || index === 8) {
+            th.textContent = "0.00";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else {
+            th.textContent = "";
+        }
+        trFoot.appendChild(th);
+    });
+    tfoot.appendChild(trFoot);
+}
+
+function updateTableHeaders3(headers) {
+    let thead = document.querySelector("#main-table thead");
+    let table = document.querySelector("#main-table");
+    let tfoot = table.querySelector("tfoot");
+    if (!tfoot) {
+        tfoot = document.createElement("tfoot");
+        table.appendChild(tfoot);
+    }
+    thead.innerHTML = "";
+    let trHead = document.createElement("tr");
+    trHead.classList.add("thead-dark");
+    headers.forEach((header, index) => {
+        let th = document.createElement("th");
+        th.textContent = header;
+
+        if (index >= headers.length - 6) {
+            th.classList.add("double-column");
+        }
+        trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+    tfoot.innerHTML = "";
+    let trFoot = document.createElement("tr");
+    headers.forEach((_, index) => {
+        let th = document.createElement("th");
+        if (index === 6) {
+            th.textContent = "0";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 7) {
+            th.textContent = "0.000";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else if (index === 4 || index === 5 || index === 8 || index === 9) {
+            th.textContent = "0.00";
+            th.id = "toplam-" + index;
+            th.classList.add("double-column");
+        } else {
+            th.textContent = "";
+        }
+        trFoot.appendChild(th);
+    });
+    tfoot.appendChild(trFoot);
 }
 
 function clearTfoot() {

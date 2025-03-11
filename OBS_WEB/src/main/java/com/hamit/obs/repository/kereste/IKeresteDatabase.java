@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
+import com.hamit.obs.dto.kereste.kergrupraporDTO;
 
 public interface IKeresteDatabase {
 
@@ -64,5 +65,5 @@ public interface IKeresteDatabase {
 	List<Map<String, Object>> fat_rapor_fat_tar(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> fat_rapor_cari_kod(kerestedetayraporDTO kerestedetayraporDTO,ConnectionDetails keresteConnDetails);
 	List<Map<String, Object>> envanter(kerestedetayraporDTO kerestedetayraporDTO,String gruplama[],ConnectionDetails keresteConnDetails);
-
+	List<Map<String, Object>> ort_diger_kodu(kergrupraporDTO kergrupraporDTO ,  String yu, String iu,ConnectionDetails keresteConnDetails,ConnectionDetails kurConnDetails);
 }

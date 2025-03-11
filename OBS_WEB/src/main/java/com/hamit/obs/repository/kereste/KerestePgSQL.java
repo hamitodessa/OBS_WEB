@@ -20,6 +20,7 @@ import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
+import com.hamit.obs.dto.kereste.kergrupraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
 @Component
@@ -1678,5 +1679,12 @@ public class KerestePgSQL implements IKeresteDatabase {
 			throw new ServiceException("My stkService genel hatası.", e);
 		}
 		return resultList;
+	}
+
+	@Override
+	public List<Map<String, Object>> ort_diger_kodu(kergrupraporDTO kergrupraporDTO, String yu, String iu,
+			ConnectionDetails keresteConnDetails,ConnectionDetails kurConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

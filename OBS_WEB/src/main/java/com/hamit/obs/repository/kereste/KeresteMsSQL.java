@@ -20,6 +20,7 @@ import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
+import com.hamit.obs.dto.kereste.kergrupraporDTO;
 import com.hamit.obs.exception.ServiceException;
 
 @Component
@@ -1594,6 +1595,110 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				+ " CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " 
 				+ " COzel_Kod " + kerestedetayraporDTO.getCozkod() 
 				+ " GROUP BY "+ gruplama[1] +"  ORDER BY " + gruplama[1]  ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
+	}
+
+	@Override
+	public List<Map<String, Object>> ort_diger_kodu(kergrupraporDTO kergrupraporDTO, String yu, String iu,
+			ConnectionDetails keresteConnDetails,ConnectionDetails kurConnDetails) {
+
+		String str1 = "" ;
+		String hANGI = "" ;
+
+		if (kergrupraporDTO.getTuru().equals("GIREN"))
+			hANGI= "" ;
+		else if (kergrupraporDTO.getTuru().equals("CIKAN"))
+			hANGI= "C" ;
+		else
+			hANGI= "" ;
+
+		if(kergrupraporDTO.isDvzcevirchc())
+		{
+			if (!keresteConnDetails.getHangisql().equals(kurConnDetails.getHangisql())) {
+				throw new ServiceException("Kereste ve Kur Dosyası farklı SQL sunucularında yer alıyor.");
+			}
+			if (keresteConnDetails.getServerIp().equals(kurConnDetails.getServerIp())) {
+				str1=  "OK_Kur" + kurConnDetails.getDatabaseName() + ".dbo.KURLAR";
+			}
+		}
+		String[] token = kergrupraporDTO.getUkod1().toString().split("-");
+		String ilks ,ilkk,ilkb,ilkg;
+		ilks = token[0];
+		ilkk = token[1];
+		ilkb = token[2];
+		ilkg = token[3];
+		token = kergrupraporDTO.getUkod2().toString().split("-");
+		String sons,sonk,sonb,song;
+		sons = token[0];
+		sonk = token[1];
+		sonb = token[2];
+		song = token[3];
+		String dURUM = "" ;
+		if (hANGI.equals("") )
+		{
+			hANGI = "" ;
+			dURUM =    " " ;
+		}
+		else {
+			hANGI = "C" ;
+			dURUM =   " Cikis_Evrak <> '' AND" ;
+		}
+		String sql = "" ,kurc = "" ;
+		if(kergrupraporDTO.isDvzcevirchc())
+		{
+			sql =  "SELECT  " + yu + "," +
+					" SUM((" + hANGI + "Fiat * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu,4,3)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000) - (   (KERESTE."+hANGI+"Tutar * Kereste."+hANGI+"Iskonto)/100)    ) ) As Tutar,  " +
+					" SUM((" + hANGI + "Fiat * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu,4,3)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000) - (   (KERESTE."+hANGI+"Tutar * Kereste."+hANGI+"Iskonto)/100)    )  / kurlar." + kurc + ") as " + kergrupraporDTO.getDoviz() +"_Tutar , " +
+					" SUM(KERESTE.Miktar)  As Miktar, " +
+					" SUM(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4,3)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu,8,4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000) As m3, " +
+					" SUM(Kereste." + hANGI + "Tutar - ((KERESTE." + hANGI + "Tutar * Kereste."+hANGI+"Iskonto)/100)) /  iif(( sum(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) )  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000)  ) = 0,1, " +
+					" SUM(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4,3)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu, 8,4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000)) As m3_Ort_Fiat , " +
+					" (SUM((" + hANGI + "Fiat * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu,4,3)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000) - (   (" + hANGI+"Fiat * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) )  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000) * Kereste."+hANGI+"Iskonto)/100)) / kurlar."+ kurc +") / NULLIF(SUM(((CONVERT(INT,SUBSTRING(KERESTE.Kodu, 4, 3) )  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000),0))  As m3_Ort_Fiat_"+ kergrupraporDTO.getDoviz() +" " +
+					" FROM KERESTE left join " + str1 + " on Kurlar.Tarih = convert(varchar(10), KERESTE." + hANGI + "Tarih, 120) and kurlar.Kur = '" + kergrupraporDTO.getDoviz() + "'  " +
+					" WHERE " +
+					" " + dURUM +
+					" KERESTE." + hANGI + "Tarih BETWEEN '" + kergrupraporDTO.getTar1() + "'" + " AND  '" + kergrupraporDTO.getTar2() + " 23:59:59.998' AND" +
+					" SUBSTRING(KERESTE.Kodu, 1, 2) >= '" + ilks + "' AND SUBSTRING(KERESTE.Kodu, 1, 2) <= '"+ sons + "' AND" +
+					" SUBSTRING(KERESTE.Kodu, 4, 3) >= '" + ilkk + "' AND SUBSTRING(KERESTE.Kodu, 4, 3) <= '"+ sonk + "' AND" +
+					" SUBSTRING(KERESTE.Kodu, 8, 4) >= '" + ilkb + "' AND SUBSTRING(KERESTE.Kodu, 8, 4) <= '"+ sonb + "' AND" +
+					" SUBSTRING(KERESTE.Kodu, 13, 4) >= '" + ilkg + "' AND SUBSTRING(KERESTE.Kodu, 13, 4) <= '"+ song + "' AND " + 
+					" " + hANGI + "Cari_Firma between N'" + kergrupraporDTO.getCkod1() + "' AND N'" + kergrupraporDTO.getCkod2() + "' AND" +
+					" Konsimento between N'" + kergrupraporDTO.getKons1() + "' AND N'" + kergrupraporDTO.getKons2() + "'" +
+					" GROUP BY  " + iu ;
+		}
+		else 
+		{
+			kurc="" ;
+			sql =  "SELECT  " + yu + "," +
+					" SUM((" + hANGI + "Fiat * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3))  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000) - (   (KERESTE."+hANGI+"Tutar * Kereste."+hANGI+"Iskonto)/100)    ) ) As Tutar,  " +
+					" SUM((" + hANGI + "Fiat * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3))  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000) - (   (KERESTE."+hANGI+"Tutar * Kereste."+hANGI+"Iskonto)/100)    ) ) as _Tutar , " +
+					" SUM(KERESTE.Miktar)  As Miktar, " +
+					" SUM(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3))  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000) As m3, " +
+					" SUM(KERESTE." + hANGI + "Tutar - ((KERESTE." + hANGI + "Tutar * Kereste." + hANGI + "Iskonto)/100)) / IIF(( sum(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) )  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000)  ) = 0,1, " +
+					" SUM(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3))  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000)) As m3_Ort_Fiat , " +
+					" (SUM(" + hANGI + "Fiat * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4))) * Miktar)/1000000000) - ((" + hANGI + "Fiat * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) )  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * "  +
+					" CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4))) * Miktar)/1000000000) * Kereste." + hANGI + "Iskonto)/100)) / NULLIF(SUM(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3))  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000),0))  As m3_Ort_Fiat_" + kergrupraporDTO.getDoviz() +" " +
+					" FROM KERESTE   " +
+					" WHERE    " +
+					" " + dURUM +
+					" KERESTE." + hANGI + "Tarih BETWEEN '" + kergrupraporDTO.getTar1() + "'" + " AND  '" + kergrupraporDTO.getTar2() + " 23:59:59.998' AND" +
+					" SUBSTRING(KERESTE.Kodu, 1, 2) >= '" + ilks + "' AND SUBSTRING(KERESTE.Kodu, 1, 2) <= '"+ sons + "' AND" +
+					" SUBSTRING(KERESTE.Kodu, 4, 3) >= '" + ilkk + "' AND SUBSTRING(KERESTE.Kodu, 4, 3) <= '"+ sonk + "' AND" +
+					" SUBSTRING(KERESTE.Kodu, 8, 4) >= '" + ilkb + "' AND SUBSTRING(KERESTE.Kodu, 8, 4) <= '"+ sonb + "' AND" +
+					" SUBSTRING(KERESTE.Kodu, 13, 4) >= '" + ilkg + "' AND SUBSTRING(KERESTE.Kodu, 13, 4) <= '"+ song + "' AND " + 
+					" " + hANGI + "Cari_Firma between N'" + kergrupraporDTO.getCkod1() + "' AND N'" + kergrupraporDTO.getCkod2() + "' AND" +
+					" Konsimento between N'" + kergrupraporDTO.getKons1() + "' AND N'" + kergrupraporDTO.getKons2() + "'" +
+					" GROUP BY  " + iu ;
+		}
+		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
