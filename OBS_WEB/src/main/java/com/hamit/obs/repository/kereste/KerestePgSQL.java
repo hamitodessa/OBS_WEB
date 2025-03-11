@@ -1614,9 +1614,69 @@ public class KerestePgSQL implements IKeresteDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> envanter(kerestedetayraporDTO kerestedetayraporDTO, String[] Gruplama,ConnectionDetails keresteConnDetails)
+	public List<Map<String, Object>> envanter(kerestedetayraporDTO kerestedetayraporDTO, String[] gruplama,ConnectionDetails keresteConnDetails)
 			{
-		// TODO Auto-generated method stub
-		return null;
+		String[] token = kerestedetayraporDTO.getUkodu1().toString().split("-");
+		StringBuilder kODU = new StringBuilder();
+		if (! token[0].equals("00"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 1, 2) >= '" + token[0] + "'  AND" );
+		if (! token[1].equals("000"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3) >= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("0000"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4) >= '" + token[2] + "' AND" );
+		if (! token[3].equals("0000"))
+			kODU.append( " SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4) >= '" + token[3] + "'  AND"  );
+		token = kerestedetayraporDTO.getUkodu2().toString().split("-");
+		if (! token[0].equals("ZZ"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 1, 2) <= '" + token[0] + "'  AND" );
+		if (! token[1].equals("999"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3) <= '" + token[1] + "' AND"  ) ;
+		if (! token[2].equals("9999"))
+			kODU.append(" SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4) <= '" + token[2] + "' AND" );
+		if (! token[3].equals("9999"))
+			kODU.append( " SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4) <= '" + token[3] + "'  AND"  );
+		String sql =  " SELECT  " + gruplama[0].trim() + " "
+				+ ",SUM( \"Miktar\" )   as \"Giris_Miktar\" "
+				+ ",sum(((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) as \"Giris_m3\" "
+				+ ",SUM(((((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000)) * \"Fiat\"  ) - SUM(((((((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000)) * \"Fiat\"  ) * \"Iskonto\")/100)  as \"Giris_Tutar\" "
+				+ ",SUM(CASE WHEN \"Cikis_Evrak\" <> '' THEN \"Miktar\" ELSE '0' END) AS \"Cikis_Miktar\" "
+				+ ",SUM(CASE WHEN \"Cikis_Evrak\" <> '' THEN ((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int * \"Miktar\")/1000000000) ELSE '0' END)  as \"Cikis_m3\" "
+				+ ",SUM(CASE WHEN \"Cikis_Evrak\" <> '' THEN \"CTutar\" ELSE '0' END) AS \"Cikis_Tutar\" "
+				+ ",sum(((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) -   "
+				+ " SUM(CASE WHEN \"Cikis_Evrak\" <> '' THEN ((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int * \"Miktar\")/1000000000) ELSE '0' END  )  "
+				+ " as \"Stok_M3\" ," 
+				+ " ((SUM(((((SUBSTRING(\"KERESTE\".\"Kodu\",4,3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\",13,4)::int) * \"Miktar\")/1000000000)) * \"Fiat\"  ) - SUM(((((((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000)) * \"Fiat\"  ) * \"Iskonto\")/100)) /(sum(((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000))) as \"Ort_Fiat\" , "
+				+ " ((SUM(((((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000)) * \"Fiat\") - SUM(((((((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000)) * \"Fiat\") * \"Iskonto\")/100)) /(sum(((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000))) * " 
+				+ " (sum(((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) -  SUM(CASE WHEN \"Cikis_Evrak\" <> '' THEN ((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int * \"Miktar\")/1000000000) ELSE '0' END ) )"
+				+ "  as \"Stok_Tutar\" "
+				+ "  FROM \"KERESTE\" "
+				+ " WHERE " 
+				+ " \"Tarih\" BETWEEN '" + kerestedetayraporDTO.getGtar1() + "'" + " AND  '" + kerestedetayraporDTO.getGtar2() + " 23:59:59.998' AND" 
+				+ kODU
+				+ " \"Paket_No\" between N'" + kerestedetayraporDTO.getPak1() + "' AND N'" + kerestedetayraporDTO.getPak2() + "' AND " 
+				+ " \"Cari_Firma\" between N'" + kerestedetayraporDTO.getGfirma1() + "' AND N'" + kerestedetayraporDTO.getGfirma2() + "' AND" 
+				+ " \"Evrak_No\" between N'" + kerestedetayraporDTO.getEvr1() + "' AND N'" + kerestedetayraporDTO.getEvr2() + "' AND" 
+				+ " \"Konsimento\" between N'" + kerestedetayraporDTO.getKons1() + "' AND N'" + kerestedetayraporDTO.getKons2() + "' AND" 
+				+ " \"Ana_Grup\"::text " + kerestedetayraporDTO.getGana()  + " AND" 
+				+ " \"Alt_Grup\"::text " + kerestedetayraporDTO.getGalt()  + " AND" 
+				+ " \"Depo\"::text " + kerestedetayraporDTO.getGdepo()  + " AND" 
+				+ " \"Ozel_Kod\"::text " + kerestedetayraporDTO.getGozkod() + " AND" 
+				+ " \"CTarih\" BETWEEN '" + kerestedetayraporDTO.getCtar1() + "'" + " AND  '" + kerestedetayraporDTO.getCtar2() + " 23:59:59.998' AND" 
+				+ " \"CCari_Firma\" between N'" + kerestedetayraporDTO.getCfirma1() + "' AND N'" + kerestedetayraporDTO.getCfirma2() + "' AND" 
+				+ " \"Cikis_Evrak\" between N'" + kerestedetayraporDTO.getCevr1()+ "' AND N'" + kerestedetayraporDTO.getCevr2() + "' AND" 
+				+ " \"CAna_Grup\"::text " + kerestedetayraporDTO.getCana()  + " AND" 
+				+ " \"CAlt_Grup\"::text " + kerestedetayraporDTO.getCalt()  + " AND" 
+				+ " \"CDepo\"::text " + kerestedetayraporDTO.getCdepo()  + " AND " 
+				+ " \"COzel_Kod\"::text " + kerestedetayraporDTO.getCozkod() 
+				+ " GROUP BY "+ gruplama[1] +"  ORDER BY " + gruplama[1]  ;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("My stkService genel hatası.", e);
+		}
+		return resultList;
 	}
 }

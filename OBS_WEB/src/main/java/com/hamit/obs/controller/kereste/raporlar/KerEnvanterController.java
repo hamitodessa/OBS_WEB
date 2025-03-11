@@ -1,12 +1,19 @@
 package com.hamit.obs.controller.kereste.raporlar;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.util.ByteArrayDataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +26,15 @@ import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.kereste.KeresteService;
 
 @Controller
 public class KerEnvanterController {
 
+	@Autowired
+	private RaporOlustur raporOlustur;
+	
 	@Autowired
 	private KeresteService keresteService;
 	
@@ -201,6 +212,29 @@ public class KerEnvanterController {
 		}
 		deger[7] = qwq8; 
 		return deger;
+	}
+
+	@PostMapping("kereste/envanter_download")
+	public ResponseEntity<byte[]> downloadReport(@RequestBody List<Map<String, String>> tableData) {
+		ByteArrayDataSource dataSource ;
+		try {
+			dataSource =  raporOlustur.fatrap(tableData);
+			if (dataSource == null) {
+				throw new ServiceException("Rapor oluşturulamadı: veri bulunamadı.");
+			}
+			byte[] fileContent = dataSource.getInputStream().readAllBytes();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			String fileName = "Envanter_Rapor.xlsx";
+			headers.setContentDispositionFormData("attachment", fileName);
+			return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+		} catch (ServiceException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage().getBytes(StandardCharsets.UTF_8));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Beklenmeyen bir hata oluştu.".getBytes(StandardCharsets.UTF_8));
+		} finally {
+			dataSource = null;
+		}	
 	}
 
 }

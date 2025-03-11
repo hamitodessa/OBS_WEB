@@ -192,16 +192,16 @@ async function envanterfetchTableData() {
         data = response;
         let sqlHeaders = "";
         if (response.raporturu === 'Urun Kodu') {
-            sqlHeaders = ["KODU", "GIRIS MIKTAR", "GIRIS M3", "GIRIS TUTAR", "CIKIS MIKTAR", "CIKIS M3", "CIKIS TUTAR", "STOK M3", "ORT FIAT", "STOK TUTAR"];
+            sqlHeaders = ["KODU", "GIRIS MIKTAR", "GIRIS M3", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS M3", "CIKIS TUTARI", "STOK M3", "ORT FIAT", "STOK TUTAR"];
             updateTableHeaderskodu(sqlHeaders);
         } else if (response.raporturu === 'Konsimento') {
-            sqlHeaders = ["KONSIMENTO","ACIKLAMA" ,"GIRIS MIKTAR", "GIRIS M3", "GIRIS TUTAR", "CIKIS MIKTAR", "CIKIS M3", "CIKIS TUTAR", "STOK M3", "ORT FIAT", "STOK TUTAR"];
+            sqlHeaders = ["KONSIMENTO","ACIKLAMA" ,"GIRIS MIKTAR", "GIRIS M3", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS M3", "CIKIS TUTARI", "STOK M3", "ORT FIAT", "STOK TUTAR"];
             updateTableHeaders(sqlHeaders);
         } else if (response.raporturu === 'Hesap-Kodu') {
-            sqlHeaders = ["CARI FIRMA","UNVAN" ,"GIRIS MIKTAR", "GIRIS M3", "GIRIS TUTAR", "CIKIS MIKTAR", "CIKIS M3", "CIKIS TUTAR", "STOK M3", "ORT FIAT", "STOK TUTAR"];
+            sqlHeaders = ["CARI FIRMA","UNVAN" ,"GIRIS MIKTAR", "GIRIS M3", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS M3", "CIKIS TUTARI", "STOK M3", "ORT FIAT", "STOK TUTAR"];
             updateTableHeaders(sqlHeaders);
         } else if (response.raporturu === 'Ana_Grup-Alt_Grup') {
-            sqlHeaders = ["ANA GRUP","ALT GRUP" ,"GIRIS MIKTAR", "GIRIS M3", "GIRIS TUTAR", "CIKIS MIKTAR", "CIKIS M3", "CIKIS TUTAR", "STOK M3", "ORT FIAT", "STOK TUTAR"];
+            sqlHeaders = ["ANA GRUP","ALT GRUP" ,"GIRIS MIKTAR", "GIRIS M3", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS M3", "CIKIS TUTARI", "STOK M3", "ORT FIAT", "STOK TUTAR"];
             updateTableHeaders(sqlHeaders);
         }
         let totalgmiktar = 0;
@@ -213,7 +213,6 @@ async function envanterfetchTableData() {
         let totalstokm3 = 0;
 		let totaltutar = 0;
 
-        console.log(data);
 		data.data.forEach(rowData => {
 			const row = document.createElement('tr');
 			row.classList.add('expandable');
@@ -438,4 +437,93 @@ function clearTfoot() {
 			cells[i].textContent = "";
 		}
 	}
+}
+
+async function envanterDownload() {
+    const errorDiv = document.getElementById("errorDiv");
+    errorDiv.style.display = "none";
+    errorDiv.innerText = "";
+
+    document.body.style.cursor = "wait";
+    const $indirButton = $('#envanterDownload');
+    $indirButton.prop('disabled', true).text('İşleniyor...');
+    const $yenileButton = $('#envanteryenileButton');
+    $yenileButton.prop('disabled', true);
+
+    let table = document.querySelector("#main-table");
+    let headers = [];
+    let rows = [];
+    table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+    table.querySelectorAll("tbody tr").forEach(tr => {
+        let rowData = {};
+        let isEmpty = true;
+        tr.querySelectorAll("td").forEach((td, index) => {
+            let value = td.innerText.trim();
+            if (value !== "") {
+                isEmpty = false;
+            }
+            rowData[headers[index]] = value;
+        });
+        if (!isEmpty) {
+            rows.push(rowData);
+        }
+    });
+    try {
+        const response = await fetchWithSessionCheckForDownload('kereste/envanter_download', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(rows)
+        });
+        if (response.blob) {
+            const disposition = response.headers.get('Content-Disposition');
+            const fileName = disposition.match(/filename="(.+)"/)[1];
+            const url = window.URL.createObjectURL(response.blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } else {
+            throw new Error("Dosya indirilemedi.");
+        }
+
+    } catch (error) {
+        errorDiv.style.display = "block";
+        errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
+    } finally {
+        $indirButton.prop('disabled', false).text('Rapor İndir');
+        $yenileButton.prop('disabled', false);
+        document.body.style.cursor = "default";
+    }
+}
+
+async function envantermailAt() {
+    localStorage.removeItem("tableData");
+    localStorage.removeItem("grprapor");
+    localStorage.removeItem("tablobaslik");
+    document.body.style.cursor = "wait";
+    let table = document.querySelector("#main-table");
+    let headers = [];
+    let rows = [];
+    table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+    table.querySelectorAll("tbody tr").forEach(tr => {
+        let rowData = {};
+        let isEmpty = true;
+        tr.querySelectorAll("td").forEach((td, index) => {
+            let value = td.innerText.trim();
+            if (value !== "") {
+                isEmpty = false;
+            }
+            rowData[headers[index]] = value;
+        });
+        if (!isEmpty) {
+            rows.push(rowData);
+        }
+    });
+    localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
+    const degerler = "kerenvanter";
+    const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+    mailsayfasiYukle(url);
 }

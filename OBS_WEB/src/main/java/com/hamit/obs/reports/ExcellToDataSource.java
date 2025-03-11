@@ -53,7 +53,7 @@ public class ExcellToDataSource {
 						"GIRIS MIKTARI", "GIRIS TUTARI", "CIKIS MIKTARI", "CIKIS TUTARI", "CIKIS MALIYET", "STOK MIKTARI","MALIYET",
 						"GIRIS AGIRLIK",  "CIKIS AGIRLIK", "STOK AGIRLIK","ONCEKI BAKIYE", "PERY. GIRIS AGIRLIK", "PERY. CIKIS AGIRLIK",
 						"PERY. STOK AGIRLIK", "BAKIYE","FIAT","MIKTAR_BAKIYE","TUTAR_BAKIYE","M3","KDV","FIAT","KUR","ISKONTO","TEVKIFAT",
-						"CKDV","CFIAT","CKUR","CISKONTO","CTEVKIFAT");
+						"CKDV","CFIAT","CKUR","CISKONTO","CTEVKIFAT","GIRIS M3", "CIKIS M3", "STOK M3", "ORT FIAT", "STOK TUTAR");
 				Map<String, Double> columnSums = new HashMap<>();
 				for (String col : rightAlignedColumns) {
 					columnSums.put(col, 0.0);
