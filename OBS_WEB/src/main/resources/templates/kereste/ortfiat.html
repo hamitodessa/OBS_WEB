@@ -1,0 +1,111 @@
+
+<link rel="stylesheet" href="style/yenihsppln.css" />
+<style>
+.container {
+	height: 100vh; 
+	display: flex;
+	flex-direction: column; 
+	margin-top: 10px;
+	padding: 0px;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap; 
+}
+
+.details-row {
+	display: none;
+}
+
+.expandable:hover {
+	cursor: pointer;
+}
+
+.toggle-button {
+	font-weight: bold;
+	font-size: 16px;
+	cursor: pointer;
+	width: 20px;
+	text-align: center;
+}
+
+.toggle-button:hover {
+	color: #007BFF;
+}
+
+.table-container {
+	flex-grow: 1;
+	overflow-y: auto;
+	border: 1px solid #ccc;
+	margin-top: 10px;
+}
+
+.details-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+	table-layout: auto;
+}
+
+.details-table th, .details-table td {
+	border: 1px solid #ccc;
+	padding: 6px;
+	white-space: nowrap; 
+}
+
+.double-column {
+	text-align: right;
+}
+
+.table-row-height td {
+	height: 10px;
+	line-height: 10px;
+}
+
+.table .thead-dark th {
+	color: #fff;
+	background: #214162;
+}
+</style>
+	<div class="card p-1">
+		<div style="display: flex; align-items: center;">
+			<button class="btn btn-primary" type="button" id="ortfiatyenileButton"
+				style="margin-left: 10px;" onclick="openFirstModal('kerortfiat')">Filtre</button>
+			
+			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="ortfiatDownload"
+			 onclick="ortfiatDownload()" disabled>Excel Indir</button>
+
+			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="ortfiatmailButton"
+			 onclick="ortfiatmailAt()" disabled>Email Gonder</button>
+		</div>
+	</div>
+	<div id="errorDiv"
+		style="display: none; color: red; font-weight: bold;"></div>
+	<div class="container">
+		<div class="table-container">
+			<table id="main-table" class="table table-bordered table-hover">
+				<thead class="thead-dark">
+				</thead>
+				<tbody id="mainTableBody">
+				</tbody>
+				<tfoot>
+    			</tfoot>
+			</table>
+		</div>
+	</div>
+
+<input type="hidden" id="ortfiatBilgi"  />
+
+<script src="/obs_js_files/kereste/raporlar/ortfiat.js"></script>
+<div th:replace="~{modal/kereste/ortfiatfiltre :: modalortfiat}"></div>
+<div th:replace="~{modal/yenihsppln :: secondModal}"></div>

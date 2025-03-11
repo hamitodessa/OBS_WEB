@@ -63,6 +63,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "kerenvanter") {
 		openenvModal(modal);
 	}
+	else if (nerden === "kerortfiat") {
+		openenvModal(modal);
+	}
 	else {
 		$(modal).modal('show');
 	}
@@ -569,6 +572,28 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #fatrapBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "kerortfiat") {
+		const tar1 = $('#tar1').val() || "";
+		const tar2 = $('#tar2').val() || "";
+		const anagrp = $('#anagrp').val() || "";
+		const ukod1 = $('#ukod1').val() || "";
+		const ukod2 = $('#ukod2').val() || "";
+		const altgrp = $('#altgrp').val() || "";
+		const ckod1 = $('#ckod1').val() || "";
+		const ckod2 = $('#ckod2').val() || "";
+		const ozkod = $('#ozkod').val() || "";
+		const kons1 = $('#kons1').val() || "";
+		const kons2 = $('#kons2').val() || "";
+		const gruplama = $('#gruplama').val() || "";
+		const turu = $('#turu').val() || "";
+		const dvzcevirchc = $('#dvzcevirchc').prop('checked');
+		const doviz = $('#dvzcins').val() || "";
+		const dvzturu = $('#dvzturu').val() || "";
+		const degerler = [tar1, tar2, anagrp, ukod1, ukod2, altgrp, ckod1, ckod2, ozkod, kons1, kons2, gruplama,
+			turu, dvzcevirchc, doviz, dvzturu].join(",");
+		const hiddenField = $('#ara_content #ortfiatBilgi');
+		hiddenField.val(degerler);
+	}
 
 
 	$('#firstModal').modal('hide');
@@ -709,6 +734,13 @@ function saveToMain() {
 		const mailButton = document.getElementById("envantermailButton");
 		mailButton.disabled = false;
 		const reportFormat = document.getElementById("envanterDownload");
+		reportFormat.disabled = false;
+	}
+	else if (nerden === "kerortfiat") {
+		kerortfiatdoldur();
+		const mailButton = document.getElementById("ortfiatmailButton");
+		mailButton.disabled = false;
+		const reportFormat = document.getElementById("ortfiatDownload");
 		reportFormat.disabled = false;
 	}
 }
