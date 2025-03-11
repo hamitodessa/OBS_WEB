@@ -65,7 +65,7 @@ public class RaporEmailGonderme {
 			String nerden = raporEmailDegiskenler.getNerden(); 
 			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter") || nerden.equals("stok")
 					 || nerden.equals("stokdetay")  || nerden.equals("tahrap")|| nerden.equals("cekrap") || nerden.equals("kerdetay")
-					 || nerden.equals("kerenvanter"))
+					 || nerden.equals("kerenvanter") || nerden.equals("kerortfiat"))
 				gonder_excell();
 			else if(nerden.equals("gruprapor") || nerden.equals("imagruprapor") || nerden.equals("kergruprapor"))
 				gonder_excell_grup();

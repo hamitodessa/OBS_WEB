@@ -1652,6 +1652,7 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			dURUM =   " Cikis_Evrak <> '' AND" ;
 		}
 		String sql = "" ,kurc = "" ;
+		kurc = kergrupraporDTO.getDvzturu();
 		if(kergrupraporDTO.isDvzcevirchc())
 		{
 			sql =  "SELECT  " + yu + "," +

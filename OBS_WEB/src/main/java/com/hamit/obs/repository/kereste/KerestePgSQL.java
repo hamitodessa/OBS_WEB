@@ -1684,7 +1684,108 @@ public class KerestePgSQL implements IKeresteDatabase {
 	@Override
 	public List<Map<String, Object>> ort_diger_kodu(kergrupraporDTO kergrupraporDTO, String yu, String iu,
 			ConnectionDetails keresteConnDetails,ConnectionDetails kurConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String hANGI = "" ;
+		if (kergrupraporDTO.getTuru().equals("GIREN"))
+			hANGI= "" ;
+		else if (kergrupraporDTO.getTuru().equals("CIKAN"))
+			hANGI= "C" ;
+		else
+			hANGI= "" ;
+		String kurServer = "" ;
+		if(kergrupraporDTO.isDvzcevirchc())
+		{
+			if (!keresteConnDetails.getHangisql().equals(kurConnDetails.getHangisql())) {
+				throw new ServiceException("Kereste ve Kur Dosyası farklı SQL sunucularında yer alıyor.");
+			}
+			String[] ipogren = Global_Yardimci.ipCevir(kurConnDetails.getServerIp());
+			if (keresteConnDetails.getServerIp().equals(kurConnDetails.getServerIp()))
+				kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
+			else
+				kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
+		}
+		String[] token = kergrupraporDTO.getUkod1().toString().split("-");
+		String ilks ,ilkk,ilkb,ilkg;
+		ilks = token[0];
+		ilkk = token[1];
+		ilkb = token[2];
+		ilkg = token[3];
+		token = kergrupraporDTO.getUkod2().toString().split("-");
+		String sons,sonk,sonb,song;
+		sons = token[0];
+		sonk = token[1];
+		sonb = token[2];
+		song = token[3];
+		String dURUM = "" ;
+		if (hANGI.equals("") )
+		{
+			hANGI = "" ;
+			dURUM =    " " ;
+		}
+		else {
+			hANGI = "C" ;
+			dURUM =   " Cikis_Evrak <> '' AND" ;
+		}
+		String sql = "" ,kurc = "" ;
+		kurc = kergrupraporDTO.getDvzturu();
+		if(kergrupraporDTO.isDvzcevirchc())
+		{
+			sql =  "SELECT  " + yu + "," +
+					" SUM((\"" + hANGI + "Fiat\" * (((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) - ((s.\""+hANGI+"Tutar\" * s.\""+hANGI+"Iskonto\")/100))) As \"Tutar\",  " +
+					" SUM((\"" + hANGI + "Fiat\" * (((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) - ((s.\""+hANGI+"Tutar\" * s.\""+hANGI+"Iskonto\")/100)) / k.\""+ kurc +"\") as \""+ kergrupraporDTO.getDoviz() +"_Tutar\" , " +
+					" SUM(s.\"Miktar\")  As \"Miktar\", " +
+					" SUM(((SUBSTRING(s.\"Kodu\", 4, 3)::int  * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) As m3, " +
+					" SUM(s.\"" + hANGI + "Tutar\" - ((s.\"" + hANGI + "Tutar\" * s.\"" + hANGI + "Iskonto\")/100)) / CASE WHEN (sum(((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000)) = 0 THEN 1  ELSE  " +
+					" SUM(((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) END As \"m3_Ort_Fiat\" , " +
+					" (SUM((s.\"" + hANGI + "Fiat\" * (((SUBSTRING(s.\"Kodu\", 4, 3)::int  *  SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) - ((s.\"" + hANGI+"Fiat\" * (((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) * s.\""+hANGI+"Iskonto\")/100)) / k.\""+ kurc +"\") / NULLIF(SUM(((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000),0))  As \"m3_Ort_Fiat_"+ kergrupraporDTO.getDoviz() +"\" " +
+					" FROM \"KERESTE\" as s " + 
+					" LEFT JOIN   dblink('" + kurServer + "', " +
+					" 'SELECT \"TARIH\",\"MA\",\"MS\",\"BA\",\"BS\",\"SA\",\"SS\"  FROM \"KURLAR\" WHERE \"KUR\"  = ''" + kergrupraporDTO.getDoviz() + "''  ')   " +
+					" AS k (\"TARIH\" timestamp, \"MA\" DOUBLE PRECISION,\"MS\" DOUBLE PRECISION,\"BA\" DOUBLE PRECISION ,\"BS\" DOUBLE PRECISION, " +  
+					" \"SA\" DOUBLE PRECISION,\"SS\" DOUBLE PRECISION ) on  DATE(k.\"TARIH\")  = DATE(s.\"" + dURUM + "Tarih\") " + 
+					" WHERE    " +
+					" " + dURUM +
+					" s.\"" + hANGI + "Tarih\" BETWEEN '" + kergrupraporDTO.getTar1() + "'" + " AND  '" + kergrupraporDTO.getTar2() + " 23:59:59.998' AND" +
+					" SUBSTRING(s.\"Kodu\", 1, 2) >= '" + ilks + "' AND SUBSTRING(s.\"Kodu\", 1, 2) <= '"+ sons + "' AND" +
+					" SUBSTRING(s.\"Kodu\", 4, 3) >= '" + ilkk + "' AND SUBSTRING(s.\"Kodu\", 4, 3) <= '"+ sonk + "' AND" +
+					" SUBSTRING(s.\"Kodu\", 8, 4) >= '" + ilkb + "' AND SUBSTRING(s.\"Kodu\", 8, 4) <= '"+ sonb + "' AND" +
+					" SUBSTRING(s.\"Kodu\", 13, 4) >= '" + ilkg + "' AND SUBSTRING(s.\"Kodu\", 13, 4) <= '"+ song + "' AND " + 
+					" \"" + hANGI + "Cari_Firma\" between N'" + kergrupraporDTO.getCkod1() + "' AND N'" + kergrupraporDTO.getCkod2() + "' AND" +
+					" \"Konsimento\" between N'" + kergrupraporDTO.getKons1() + "' AND N'" + kergrupraporDTO.getKons2() + "'" +
+					" GROUP BY  " + iu ;
+		}
+		else 
+		{
+			kurc="" ;
+			sql =  "SELECT  " + yu + "," +
+					" SUM((\"" + hANGI + "Fiat\" * (((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) - ((s.\""+hANGI+"Tutar\" * s.\""+hANGI+"Iskonto\")/100))) As \"Tutar\",  " +
+					" SUM((\"" + hANGI + "Fiat\" * (((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) - ((s.\""+hANGI+"Tutar\" * s.\""+hANGI+"Iskonto\")/100))) As \"_Tutar\" , " +
+					" SUM(s.\"Miktar\")  As \"Miktar\", " +
+					" SUM(((SUBSTRING(s.\"Kodu\", 4, 3)::int  * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) As m3, " +
+					" SUM(s.\"" + hANGI + "Tutar\" - ((s.\"" + hANGI + "Tutar\" * s.\""+hANGI+"Iskonto\")/100)) / CASE WHEN (sum(((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000)) = 0 THEN 1  ELSE  " +
+					" SUM(((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) END As \"m3_Ort_Fiat\" , " +
+					" (SUM(\"" + hANGI + "Fiat\" * (((SUBSTRING(s.\"Kodu\", 4, 3)::int  *  SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) - ((\"" + hANGI + "Fiat\" * (((SUBSTRING(s.\"Kodu\", 4, 3)::int * SUBSTRING(s.\"Kodu\", 8, 4)::int * "  +
+					" SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000) * s.\"" + hANGI + "Iskonto\")/100)) / NULLIF(SUM(((SUBSTRING(s.\"Kodu\", 4, 3)::int  * SUBSTRING(s.\"Kodu\", 8, 4)::int * SUBSTRING(s.\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000),0))  As \"m3_Ort_Fiat_" + kergrupraporDTO.getDoviz() +"\" " +
+					" FROM \"KERESTE\" as s   " +
+					" WHERE    " +
+					" " + dURUM +
+					" s.\"" + hANGI + "Tarih\" BETWEEN '" + kergrupraporDTO.getTar1() + "'" + " AND  '" + kergrupraporDTO.getTar2() + " 23:59:59.998' AND" +
+					" SUBSTRING(s.\"Kodu\", 1, 2) >= '" + ilks + "' AND SUBSTRING(s.\"Kodu\", 1, 2) <= '"+ sons + "' AND" +
+					" SUBSTRING(s.\"Kodu\", 4, 3) >= '" + ilkk + "' AND SUBSTRING(s.\"Kodu\", 4, 3) <= '"+ sonk + "' AND" +
+					" SUBSTRING(s.\"Kodu\", 8, 4) >= '" + ilkb + "' AND SUBSTRING(s.\"Kodu\", 8, 4) <= '"+ sonb + "' AND" +
+					" SUBSTRING(s.\"Kodu\", 13, 4) >= '" + ilkg + "' AND SUBSTRING(s.\"Kodu\", 13, 4) <= '"+ song + "' AND " + 
+					" \"" + hANGI + "Cari_Firma\" between N'" + kergrupraporDTO.getCkod1() + "' AND N'" + kergrupraporDTO.getCkod2() + "' AND" +
+					" \"Konsimento\" between N'" + kergrupraporDTO.getKons1() + "' AND N'" + kergrupraporDTO.getKons2() + "'" +
+					" GROUP BY  " + iu ;
+		}
+		System.out.println(sql);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet); 
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList; 
 	}
 }
