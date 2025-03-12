@@ -1723,7 +1723,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 		}
 		else {
 			hANGI = "C" ;
-			dURUM =   " Cikis_Evrak <> '' AND" ;
+			dURUM =   " \"Cikis_Evrak\" <> '' AND" ;
 		}
 		String sql = "" ,kurc = "" ;
 		kurc = kergrupraporDTO.getDvzturu();

@@ -68,8 +68,6 @@ async function openenvModal(modal) {
             optionOz1.textContent = item.OZEL_KOD_1;
             ozSelect.appendChild(optionOz1);
         });
-
-
         const newOption = document.createElement("option");
         newOption.value = "Bos Olanlar";
         newOption.textContent = "Bos Olanlar";
@@ -88,7 +86,6 @@ async function openenvModal(modal) {
         document.body.style.cursor = "default";
     }
 }
-
 
 function dvzcevirChanged() {
     const dvzcevir = document.getElementById("dvzcevirchc").checked;
@@ -132,8 +129,6 @@ async function kerortfiatdoldur() {
     $yenileButton.prop('disabled', true).text('İşleniyor...');
     const mainTableBody = document.getElementById("mainTableBody");
     mainTableBody.innerHTML = "";
-    clearTfoot();
-
     try {
         const response = await fetchWithSessionCheck("kereste/ortfiatdoldur", {
             method: "POST",
@@ -193,7 +188,6 @@ async function kerortfiatdoldur() {
             sqlHeaders = ["ANA GRUP", "ALT GRUP", "TUTAR", data.dvz + "_TUTAR", "MIKTAR", "M3", "M3_ORT_FIAT", "M3_ORT_FIAT_" + data.dvz];
             updateTableHeaderssinif(sqlHeaders);
         }
-
         data.data.forEach(rowData => {
             const row = document.createElement('tr');
             row.classList.add('expandable');
@@ -273,10 +267,8 @@ async function kerortfiatdoldur() {
             <td class="double-column">${formatNumber2(rowData.m3_Ort_Fiat)}</td>
             <td class="double-column">${formatNumber2(rowData["m3_Ort_Fiat_" + data.dvz])}</td>
         `;
-
         mainTableBody.appendChild(row);
         });
-
         document.body.style.cursor = "default";
     } catch (error) {
         errorDiv.style.display = "block";
@@ -308,28 +300,6 @@ function updateTableHeaders1(headers) {
         trHead.appendChild(th);
     });
     thead.appendChild(trHead);
-    tfoot.innerHTML = "";
-    let trFoot = document.createElement("tr");
-    headers.forEach((_, index) => {
-        let th = document.createElement("th");
-        if (index === 4) {
-            th.textContent = "0";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else if (index === 5) {
-            th.textContent = "0.000";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else if (index === 2 || index === 3 || index === 6 || index === 7) {
-            th.textContent = "0.00";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else {
-            th.textContent = "";
-        }
-        trFoot.appendChild(th);
-    });
-    tfoot.appendChild(trFoot);
 }
 function updateTableHeaderssinif(headers) {
     let thead = document.querySelector("#main-table thead");
@@ -352,28 +322,6 @@ function updateTableHeaderssinif(headers) {
         trHead.appendChild(th);
     });
     thead.appendChild(trHead);
-    tfoot.innerHTML = "";
-    let trFoot = document.createElement("tr");
-    headers.forEach((_, index) => {
-        let th = document.createElement("th");
-        if (index === 5) {
-            th.textContent = "0";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else if (index === 6) {
-            th.textContent = "0.000";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else if (index === 3 || index === 4 || index === 7 || index === 8) {
-            th.textContent = "0.00";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else {
-            th.textContent = "";
-        }
-        trFoot.appendChild(th);
-    });
-    tfoot.appendChild(trFoot);
 }
 
 function updateTableHeaders3(headers) {
@@ -390,46 +338,12 @@ function updateTableHeaders3(headers) {
     headers.forEach((header, index) => {
         let th = document.createElement("th");
         th.textContent = header;
-
         if (index >= headers.length - 6) {
             th.classList.add("double-column");
         }
         trHead.appendChild(th);
     });
     thead.appendChild(trHead);
-    tfoot.innerHTML = "";
-    let trFoot = document.createElement("tr");
-    headers.forEach((_, index) => {
-        let th = document.createElement("th");
-        if (index === 6) {
-            th.textContent = "0";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else if (index === 7) {
-            th.textContent = "0.000";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else if (index === 4 || index === 5 || index === 8 || index === 9) {
-            th.textContent = "0.00";
-            th.id = "toplam-" + index;
-            th.classList.add("double-column");
-        } else {
-            th.textContent = "";
-        }
-        trFoot.appendChild(th);
-    });
-    tfoot.appendChild(trFoot);
-}
-
-function clearTfoot() {
-    let table = document.querySelector("#main-table");
-    let tfoot = table.querySelector("tfoot");
-    if (tfoot) {
-        let cells = tfoot.querySelectorAll("th");
-        for (let i = 0; i < cells.length; i++) {
-            cells[i].textContent = "";
-        }
-    }
 }
 
 async function ortfiatDownload() {
@@ -481,7 +395,6 @@ async function ortfiatDownload() {
 		} else {
 			throw new Error("Dosya indirilemedi.");
 		}
-
 	} catch (error) {
 		errorDiv.style.display = "block";
 		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";

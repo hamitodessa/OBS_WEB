@@ -62,6 +62,8 @@ public class ExcellToDataSource {
 				}
 				XSSFCellStyle rightAlignStyle = workbook.createCellStyle();
 				rightAlignStyle.setAlignment(HorizontalAlignment.RIGHT);
+				XSSFCellStyle leftAlignStyle = workbook.createCellStyle();
+				leftAlignStyle.setAlignment(HorizontalAlignment.LEFT);
 				XSSFCellStyle toplamStyle = workbook.createCellStyle();
 				toplamStyle.setAlignment(HorizontalAlignment.RIGHT);
 				toplamStyle.setBorderTop(BorderStyle.MEDIUM);
@@ -73,7 +75,11 @@ public class ExcellToDataSource {
 						for (String column : rightAlignedColumns) {
 							if (header.contains(column)) { 
 								headerCell.setCellStyle(rightAlignStyle);
-								break; // Eğer eşleşme bulunduysa, diğerlerini kontrol etme
+								break;
+							}
+							else {
+								headerCell.setCellStyle(leftAlignStyle);
+								break;
 							}
 						}
 					}

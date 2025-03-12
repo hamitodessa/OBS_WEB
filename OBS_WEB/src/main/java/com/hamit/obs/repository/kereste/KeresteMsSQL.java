@@ -1455,7 +1455,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				+" COzel_Kod " + kerestedetayraporDTO.getCozkod() 
 				+" GROUP BY " + kerestedetayraporDTO.getUc() + "" 
 				+" ORDER BY  " + kerestedetayraporDTO.getUc() + "";
-		
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -1527,7 +1526,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				+" COzel_Kod " + kerestedetayraporDTO.getCozkod() 
 				+" GROUP BY " + kerestedetayraporDTO.getIki() + "" 
 				+" ORDER BY  " + kerestedetayraporDTO.getIki() + "";
-
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -1609,17 +1607,14 @@ public class KeresteMsSQL implements IKeresteDatabase {
 	@Override
 	public List<Map<String, Object>> ort_diger_kodu(kergrupraporDTO kergrupraporDTO, String yu, String iu,
 			ConnectionDetails keresteConnDetails,ConnectionDetails kurConnDetails) {
-
 		String str1 = "" ;
 		String hANGI = "" ;
-
 		if (kergrupraporDTO.getTuru().equals("GIREN"))
 			hANGI= "" ;
 		else if (kergrupraporDTO.getTuru().equals("CIKAN"))
 			hANGI= "C" ;
 		else
 			hANGI= "" ;
-
 		if(kergrupraporDTO.isDvzcevirchc())
 		{
 			if (!keresteConnDetails.getHangisql().equals(kurConnDetails.getHangisql())) {
@@ -1699,7 +1694,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 					" Konsimento between N'" + kergrupraporDTO.getKons1() + "' AND N'" + kergrupraporDTO.getKons2() + "'" +
 					" GROUP BY  " + iu ;
 		}
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

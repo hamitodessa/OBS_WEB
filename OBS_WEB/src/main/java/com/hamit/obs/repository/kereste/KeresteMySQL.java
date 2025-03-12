@@ -1704,7 +1704,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("My stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
