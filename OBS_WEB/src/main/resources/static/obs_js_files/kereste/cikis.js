@@ -163,7 +163,7 @@ async function paketkontrol(event, input) {
 
 				const m3Input = cells[5]?.querySelector('label span');
 				m3Input.textContent = formatNumber3(hesaplaM3(item.Kodu, item.Miktar) || 0);
-
+				cells[13].innerText = item.Satir || 0;
 				rowIndex++;
 			});
 			updatePaketM3();

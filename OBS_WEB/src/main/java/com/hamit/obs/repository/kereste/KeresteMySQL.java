@@ -635,6 +635,8 @@ public class KeresteMySQL implements IKeresteDatabase {
 				+ " CSatir="+ kerestedetayDTO.getCsatir() +""
 				+ " WHERE Paket_No  ='" + token[0] + "' AND Konsimento = '"+ token[1] +"' "
 				+ " AND Satir = "+ kerestedetayDTO.getSatir() + "" ;
+		
+		System.out.println(sql);
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {

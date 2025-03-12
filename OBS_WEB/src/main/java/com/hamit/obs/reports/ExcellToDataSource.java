@@ -57,9 +57,8 @@ public class ExcellToDataSource {
 						"M3_ORT_FIAT");
 	           
 				Map<String, Double> columnSums = new HashMap<>();
-				for (String col : rightAlignedColumns) {
+				for (String col : rightAlignedColumns)
 					columnSums.put(col, 0.0);
-				}
 				XSSFCellStyle rightAlignStyle = workbook.createCellStyle();
 				rightAlignStyle.setAlignment(HorizontalAlignment.RIGHT);
 				XSSFCellStyle leftAlignStyle = workbook.createCellStyle();
@@ -178,7 +177,6 @@ public class ExcellToDataSource {
 		keresteDTO dto = keresteyazdirDTO.getKeresteDTO();
 		List<kerestedetayDTO> tableData = keresteyazdirDTO.getTableData();
 		cikisbilgiDTO cikisbilgiDTO = keresteyazdirDTO.getCikisbilgiDTO();
-		
 		try {
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			XSSFSheet sheet = workbook.createSheet("Evrak_" + dto.getFisno());
@@ -346,7 +344,6 @@ public class ExcellToDataSource {
 
 			//******************SATIRLAR ***********************************************	
 			int satir = 0 ;
-			//List<kerestedetayDTO> tableData = kerestekayitDTO.getTableData();
 			for (int i =0;i< tableData.size() ;i++)
 			{
 				if (!  tableData.get(i).getPaketno().equals("") )
@@ -354,7 +351,6 @@ public class ExcellToDataSource {
 					Row satirRow = sheet.createRow(i+7);
 					for (int s =0;s<= 10 ;s++)
 					{
-
 						if (s == 0 || s == 1 || s == 2)
 						{
 							cell = satirRow.createCell(s);
@@ -436,7 +432,6 @@ public class ExcellToDataSource {
 
 			cell = toplam1.createCell(0);
 			cell.setCellStyle(satirStyleTOPTUT); 
-
 			//***********************************************************
 			Row toplam2  = sheet.createRow(satir + 8);
 			sheet.addMergedRegion(new CellRangeAddress(satir + 8,satir + 8,6,8));
@@ -548,7 +543,6 @@ public class ExcellToDataSource {
 		keresteDTO dto = keresteyazdirDTO.getKeresteDTO();
 		List<kerestedetayDTO> tableData = keresteyazdirDTO.getTableData();
 		cikisbilgiDTO cikisbilgiDTO = keresteyazdirDTO.getCikisbilgiDTO();
-		
 		try {
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			XSSFSheet sheet = workbook.createSheet("Evrak_" + dto.getFisno());
@@ -713,10 +707,8 @@ public class ExcellToDataSource {
 			cell = aCIKLAMA.createCell(9);
 			cell.setCellValue("Tutar");
 			cell.setCellStyle(satirStyleBASLIK2);
-
 			//******************SATIRLAR ***********************************************	
 			int satir = 0 ;
-			//List<kerestedetayDTO> tableData = kerestekayitDTO.getTableData();
 			for (int i =0;i< tableData.size() ;i++)
 			{
 				if (!  tableData.get(i).getPaketno().equals("") )
@@ -806,7 +798,6 @@ public class ExcellToDataSource {
 
 			cell = toplam1.createCell(0);
 			cell.setCellStyle(satirStyleTOPTUT); 
-
 			//***********************************************************
 			Row toplam2  = sheet.createRow(satir + 8);
 			sheet.addMergedRegion(new CellRangeAddress(satir + 8,satir + 8,6,8));
@@ -885,7 +876,7 @@ public class ExcellToDataSource {
 			cell = toplam8.createCell(9);
 			cell.setCellValue(cikisbilgiDTO.getTevhartoptut());//alt tev har top tur
 			cell.setCellStyle(satirStyle2_ARA); 
-			//
+
 			List<String> uniqueDataList = u_kod_ogren(tableData) ;
 			int ssatir = satir + 8 ;
 			for (int iterator = 0;iterator <= uniqueDataList.size()-1;iterator ++) {
@@ -922,5 +913,4 @@ public class ExcellToDataSource {
 		List<String> uniqueDataList = list.stream().distinct().collect(Collectors.toList());
 		return uniqueDataList ;
 	}
-
 }
