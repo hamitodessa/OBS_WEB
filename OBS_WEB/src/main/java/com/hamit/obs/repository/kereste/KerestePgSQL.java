@@ -651,7 +651,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS kod_pln", e);
+			throw new ServiceException("PG kod_pln", e);
 		}
 		return resultList; 
 	}
@@ -1251,7 +1251,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToListPIVOT(resultSet,sabitkolonlar); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
 	}

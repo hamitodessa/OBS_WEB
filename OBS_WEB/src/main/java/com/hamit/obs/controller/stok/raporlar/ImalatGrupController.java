@@ -687,7 +687,7 @@ public class ImalatGrupController {
 			sstr_5 = "Tutar" ;
 			if(fatConnDetails.getHangisql().equals("PG SQL"))
 			{
-				sstr_4 = " CASE WHEN SUM(ABS(\"STOK\".\"Tutar\")) = 0 THEN null else SUM(ABS(\"STOK\".\"Tutar\")) end " ;   //   // " SUM(ABS(\"STOK\".\"Tutar\"))"
+				sstr_4 = " CASE WHEN SUM(ABS(\"STOK\".\"Tutar\")) = 0 THEN null else SUM(ABS(\"STOK\".\"Tutar\")) end " ;
 				sstr_5 = "\"Tutar\"" ;
 			}
 		}
@@ -697,7 +697,7 @@ public class ImalatGrupController {
 			sstr_5 = "Miktar";
 			if(fatConnDetails.getHangisql().equals("PG SQL"))
 			{
-				sstr_4 =  " CASE WHEN SUM(ABS(\"STOK\".\"Miktar\")) = 0 THEN null else SUM(ABS(\"STOK\".\"Miktar\")) end " ;;    //" SUM(ABS(\"STOK\".\"Miktar\"))" 
+				sstr_4 =  " CASE WHEN SUM(ABS(\"STOK\".\"Miktar\")) = 0 THEN null else SUM(ABS(\"STOK\".\"Miktar\")) end " ;
 				sstr_5 = "\"Miktar\"" ;
 			}
 		}

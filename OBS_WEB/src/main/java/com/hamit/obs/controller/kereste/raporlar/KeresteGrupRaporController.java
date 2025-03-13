@@ -1100,7 +1100,7 @@ public class KeresteGrupRaporController {
 						String carString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
 								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
 								" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
-								" WHERE \"HESAP\" = \"STOK\".\"Hesap_Kodu\"  )";
+								" WHERE \"HESAP\" = \"KERESTE\".\"" + hESAP + "\"  )";
 						ozelgrp[1][0] = carString; 
 						ozelgrp[1][1] = "Unvan"; 
 					}
@@ -1170,7 +1170,7 @@ public class KeresteGrupRaporController {
 						String carString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
 								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
 								" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
-								" WHERE \"HESAP\" = \"STOK\".\"Hesap_Kodu\"  )";
+								" WHERE \"HESAP\" = \"KERESTE\".\"" + hESAP + "\"  )";
 						ozelgrp[1][0] = carString; 
 						ozelgrp[1][1] = "Unvan"; 
 					}
@@ -1178,15 +1178,15 @@ public class KeresteGrupRaporController {
 					{
 						String c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
 						klmString = hESAP + " AS Hesap " ;
-						mlkString = " (SELECT   UNVAN FROM " + c_yer + ".[dbo].[HESAP] WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
-						grpString = hESAP + " AS Hesap , (SELECT   UNVAN FROM " + c_yer + ".[dbo].[HESAP] WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
+						mlkString = " (SELECT UNVAN FROM " + c_yer + ".[dbo].[HESAP] WHERE HESAP.HESAP = KERESTE." + hESAP + ")" + " AS Unvan " ;
+						grpString = hESAP + " AS Hesap,(SELECT UNVAN FROM " + c_yer + ".[dbo].[HESAP] WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
 					}
 					else if(kerConnDetails.getHangisql().equals("MY SQL"))
 					{
 						String c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
 						klmString = hESAP + " AS Hesap " ;
-						mlkString = " (SELECT   UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
-						grpString = hESAP + "  , (SELECT   UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " ;
+						mlkString = " (SELECT UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
+						grpString = hESAP + " ,(SELECT UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " ;
 					}
 					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Hesap,Unvan")); 
 					List<Map<String, Object>> grup = keresteService.grp_rapor( klmString + " , " + mlkString,baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
@@ -1225,15 +1225,17 @@ public class KeresteGrupRaporController {
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"Konsimento\""; 
 						ozelgrp[0][1] = "Konsimento"; 
+						ozelgrp[1][0] = " (SELECT \"ACIKLAMA\" FROM \"KONS_ACIKLAMA\"  WHERE \"KONS\" = \"Konsimento\" ) "; 
+						ozelgrp[1][1] = "Aciklama"; 
 					}
-					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Konsimento")); 
-					List<Map<String, Object>> grup = keresteService.grp_rapor("Konsimento",baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
+					Set<String> sabitKolonlar = new HashSet<>(Arrays.asList("Konsimento,Aciklama")); 
+					List<Map<String, Object>> grup = keresteService.grp_rapor("Konsimento,(SELECT ACIKLAMA FROM KONS_ACIKLAMA  WHERE KONS = KERESTE.Konsimento ) as Aciklama ",baslikbakStrings[1],deg_cevirString[3], deg_cevirString[5],   kergrupraporDTO.getAnagrp(),  kergrupraporDTO.getAltgrp(),  kergrupraporDTO.getOzkod(),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2(),
 							deg_cevirString[0],
 							kergrupraporDTO.getTar1(),kergrupraporDTO.getTar2(),
-							deg_cevirString[4], baslikbakStrings[0],"Konsimento",hANGI,
-							kergrupraporDTO.getKons1(),kergrupraporDTO.getKons2(),kergrupraporDTO.getDepo(),"Konsimento" ,
+							deg_cevirString[4], baslikbakStrings[0],"Konsimento,Aciklama",hANGI,
+							kergrupraporDTO.getKons1(),kergrupraporDTO.getKons2(),kergrupraporDTO.getDepo(),"Konsimento,Aciklama" ,
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2(),ozelgrp,sabitKolonlar);
 					response.put("data", (grup != null) ? grup : new ArrayList<>());
 					if(kergrupraporDTO.getBirim().equals("Tutar"))
@@ -1242,8 +1244,8 @@ public class KeresteGrupRaporController {
 						response.put("format",0);
 					else
 						response.put("format",3);
-					response.put("baslik","Konsimento, " + baslikbakStrings[0] + ",TOPLAM");   
-					response.put("sabitkolonsayisi",1);
+					response.put("baslik","Konsimento,Aciklama, " + baslikbakStrings[0] + ",TOPLAM");   
+					response.put("sabitkolonsayisi",2);
 				}
 			}
 			else if (kergrupraporDTO.getGruplama().equals("Paket-Konsimento"))

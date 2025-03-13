@@ -138,7 +138,7 @@ public class ExcellToDataSource {
 				for (int i = 0; i < headers.size(); i++) {
 					Cell headerCell = headerRow.createCell(i);
 					headerCell.setCellValue(headers.get(i));
-					if (i > sabitkolon)
+					if (i >= sabitkolon)
 						headerCell.setCellStyle(rightAlignStyle);
 				}
 				int rowNum = 1;

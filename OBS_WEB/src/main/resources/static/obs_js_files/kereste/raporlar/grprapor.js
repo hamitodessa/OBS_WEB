@@ -223,7 +223,7 @@ function updateTable(data, headers, format, kolonbaslangic) {
                         td.textContent = formatNumber2(numericValue);
                     } else if(format == 3){
                         td.textContent = formatNumber3(numericValue);   
-                    } else {
+                    } else if (format == 0) {
                         td.textContent = formatNumber0(numericValue);   
                     }
                     td.classList.add("double-column");
@@ -248,7 +248,7 @@ function updateTable(data, headers, format, kolonbaslangic) {
                 th.textContent = formatNumber2(kolonToplamlari[index]);
             } else if(format == 3){
                 th.textContent = formatNumber3(kolonToplamlari[index]);   
-            } else {
+            } else if (format == 0) {
                 th.textContent = formatNumber0(kolonToplamlari[index]);   
             }
             th.classList.add("double-column");

@@ -90,7 +90,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -352,7 +352,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -397,7 +397,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 				dipnot[2] = resultSet.getString("Uc");
 			} 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return dipnot; 
 	}
@@ -422,7 +422,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -596,7 +596,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -648,7 +648,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 
 	@Override
 	public List<Map<String, Object>> kod_pln(ConnectionDetails keresteConnDetails) {
-		String sql = "SELECT * FROM KONS_ACIKLAMA   ORDER BY KONS ";
+		String sql = "SELECT * FROM KOD_ACIKLAMA   ORDER BY KOD ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -762,7 +762,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS kons_pln.", e);
+			throw new ServiceException("MY kons_pln.", e);
 		}
 		return resultList; 
 	}
@@ -838,7 +838,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1008,7 +1008,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList;
 	}
@@ -1069,7 +1069,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 				result  = resultSet.getInt("satir");
 			} 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return result;
 	}
@@ -1158,12 +1158,12 @@ public class KeresteMySQL implements IKeresteDatabase {
 			dpo =  " " ;
 		else
 			dpo = " AND "+ dURUM + "Depo " + dpo + " AND ";
-		String replaceString = sstr_1.replace('[',' ');//replaces all occurrences of 'a' to 'e'  
-		String replaceString2 = replaceString.replace(']',' ');//replaces all occurrences of 'a' to 'e'  
+		String replaceString = sstr_1.replace('[',' ');
+		String replaceString2 = replaceString.replace(']',' ');
 		String[] tokens = replaceString2.split(",");
 		String cASE = "" ;
 		for (String t : tokens)
-			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
+			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '" + t.trim() + "',";
 		cASE = cASE.substring(0, cASE.length() - 1);
 		String qweString = "" ;
 		if(dURUM.equals("C"))
@@ -1172,13 +1172,12 @@ public class KeresteMySQL implements IKeresteDatabase {
 			qweString = " Evrak_No " ;
 		String sql =   "SELECT " + gruplama + " ," + cASE +
 				" FROM KERESTE " + kur_dos + 
-				" WHERE " + jkj + " " + qwq6 + " " + qwq7 + " " +qwq8 + " " + dpo + kODU +
+				" WHERE " + jkj + " " + qwq6 + " " + qwq7 + " " + qwq8 + " " + dpo + kODU +
 				" " + dURUM + "Cari_Firma between N'" + s1 + "' AND N'" + s2 + "'" +
 				" AND " + qweString  + " between N'" + e1 + "' AND N'" + e2 + "'" +
 				" AND Konsimento between N'" + ko1 + "' AND N'" + ko2 + "'" +
 				" AND  KERESTE."+ dURUM + "Tarih BETWEEN '" +t1 + "'" + " AND  '" + t2 + " 23:59:59.998'" +
 				" GROUP BY " + grup + " ORDER BY " + orderBY;
-		
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -1266,7 +1265,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1338,7 +1337,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 				result  = resultSet.getInt("satir");
 			} 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return result;
 	}
@@ -1390,7 +1389,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1465,7 +1464,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -1536,7 +1535,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList; 
 	}

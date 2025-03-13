@@ -269,13 +269,13 @@ public class KerOrtFiatController {
 			}
 			else if(kerConnDetails.getHangisql().equals("MY SQL"))
 			{
-				yu = " KERESTE."+ hANGI+"Cari_Firma,(SELECT DISTINCT UNVAN FROM OK_Car" + cariConnDetails.getDatabaseName() + ".HESAP WHERE hesap.hesap = KERESTE."+hANGI+"Cari_Firma   ) as Cari_Adi  ";
-				iu = " KERESTE."+ hANGI+"Cari_Firma ORDER BY KERESTE." + hANGI + "Cari_Firma";
+				yu = " KERESTE." + hANGI + "Cari_Firma,(SELECT DISTINCT UNVAN FROM OK_Car" + cariConnDetails.getDatabaseName() + ".HESAP WHERE hesap.hesap = KERESTE."+hANGI+"Cari_Firma   ) as Cari_Adi  ";
+				iu = " KERESTE." + hANGI + "Cari_Firma ORDER BY KERESTE." + hANGI + "Cari_Firma";
 			}
 			if(kerConnDetails.getHangisql().equals("PG SQL"))
 			{
 				String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
-				yu = " s.\""+ hANGI+"Cari_Firma\","
+				yu = " s.\"" + hANGI + "Cari_Firma\","
 						+ "(SELECT \"UNVAN\" FROM dblink ('"+ carServer + "',"  
 						+ " 'SELECT \"UNVAN\",\"HESAP\" FROM \"HESAP\" ') "  
 						+ " AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
