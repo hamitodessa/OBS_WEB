@@ -1,7 +1,6 @@
 package com.hamit.obs.service.user;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +19,10 @@ public class GidenRaporService {
 
 	public List<Gonderilmis_Mailler> gidenRaporListele(String user_email){
 		return gidenRaporRepository.gidenRaporListele(user_email);
+	}
+	
+	public List<String> alicioku(String user_email){
+		return gidenRaporRepository.alicioku(user_email);
 	}
 
 	public void deletebyId(Long id) {

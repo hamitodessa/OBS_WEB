@@ -1,7 +1,6 @@
 package com.hamit.obs.repository.user;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +13,7 @@ public interface IGidenRaporRepository extends JpaRepository<Gonderilmis_Mailler
 	
    @Query("SELECT u FROM Gonderilmis_Mailler u WHERE u.user_email = :user_email")
    List<Gonderilmis_Mailler> gidenRaporListele(@Param("user_email") String user_email);
+   
+   @Query("SELECT DISTINCT alici FROM Gonderilmis_Mailler u WHERE u.user_email = :user_email")
+   List<String> alicioku(@Param("user_email") String user_email);
 }

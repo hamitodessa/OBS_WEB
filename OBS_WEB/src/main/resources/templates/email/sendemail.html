@@ -100,13 +100,23 @@
             <h4>Alici</h4>
             <div class="form-row">
               <label class="form-check-label" for="to">To</label>
-              <input class="form-control input-width form-control-sm"
-                type="text" id="too" />
+              <div style="position: relative;width:100%; ">
+                <input class="form-control" list="aliciOptions" style="width:100%;" type="email" id="too">
+                  <datalist id="aliciOptions" >
+                    <option th:each="kod : ${alici}" th:value="${kod}" th:text="${kod}" ></option>
+                  </datalist>
+                <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+              </div>
             </div>
             <div class="form-row" style="padding-top: 5px">
               <label class="form-check-label" for="cc">Cc</label>
-              <input class="form-control input-width form-control-sm"
-                type="email" id="ccc"/>
+              <div style="position: relative;width:100%; ">
+                <input class="form-control" list="cccOptions"  style="width:100%;" type="email" id="ccc">
+                  <datalist id="cccOptions" >
+                    <option th:each="kod : ${alici}" th:value="${kod}" th:text="${kod}" ></option>
+                  </datalist>
+                <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+              </div>
             </div>
           </div>
         </div>
