@@ -17,7 +17,8 @@ function tabloyukle() {
 		document.getElementById("format").value = "xlsx" ;
 		document.getElementById("format").disabled = true;
 	}
-	if (document.getElementById("degerler").value === "kercikis" || document.getElementById("degerler").value === "kergiris"){
+	if (document.getElementById("degerler").value === "kercikis" || document.getElementById("degerler").value === "kergiris"
+				|| document.getElementById("degerler").value === ""){
 		document.getElementById("format").value = "xlsx" ;
 		document.getElementById("format").disabled = true;
     }

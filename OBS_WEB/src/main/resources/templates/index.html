@@ -122,7 +122,6 @@
 							<ul class="collapse list-unstyled" id="kereste">
 								<li><a href="" class="changeLink" data-url="/kereste/giris"><span>Giris</span></a></li>
 								<li><a href="" class="changeLink" data-url="/kereste/cikis"><span>Cikis</span></a></li>
-						<!--	<hr>   -->	
 								<li><a href="" class="changeLink" data-url="/kereste/koddegis"><span>Kod Degistirme</span></a></li>
 								<li><a href="" class="changeLink" data-url="/kereste/fatrapor"><span>Kereste Fatura Raporlama</span></a></li>
 								<li><a href="" class="changeLink" data-url="/kereste/detay"><span>Kereste Detay Raporlama</span></a></li>
@@ -136,18 +135,16 @@
 								<li><a href="" onclick="firmaIsmi('kereste', event)"><span>Firma Ismi Degistirme</span></a></li>
 							</ul>
 						</li>
+						<li><a href="" data-url="/user/mailgonderme" class="changeLink" ><i class="fa fa-envelope-square orange_color"></i><span>Mail Gonderme</span></a></li>
 						<li><a href="" data-url="/user/gidenraporlar" class="changeLink" ><i class="fa fa-briefcase blue1_color"></i><span>Giden Raporlar</span></a></li>
-
 						<li><a href="" data-url="/user/lograpor" class="changeLink" ><i class="fa fa-object-group blue2_color"></i><span>Log Rapor</span></a></li>
-						
-						<li><a href="#ayar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i
-									class="fa fa-cog yellow_color"></i> <span>Ayarlar</span></a>
+						<li><a href="#ayar" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i	class="fa fa-cog yellow_color"></i> <span>Ayarlar</span></a>
 							<ul class="collapse list-unstyled" id="ayar">
 								<li><a href="" class="changeLink" data-url="/user/user_pwd_change"> <span>Sifre Degis</span></a></li>
 								<li><a href="" class="changeLink" data-url="/user/user_update"> <span>Isim Degis</span></a></li>
 								<li><a href="" class="changeLink" data-url="/user/userdetails"> <span>Kullanici Detaylari</span></a></li>
 								<li th:if="${menuitemvisible}"><a href="" class="changeLink" data-url="/user/userizinler">
-        								<span>Admin İşlemleri</span></a>
+									<span>Admin İşlemleri</span></a>
 								</li>
 								<li><a href="" class="changeLink" data-url="/user/emailsettings"> <span>E Mail Ayarlari</span></a></li>
 								<li><a href="" class="changeLink" data-url="/user/createdb"> <span>Yeni Veritabani Olustur</span></a></li>
@@ -155,7 +152,6 @@
 								<li><a href="" class="changeLink" data-url="/user/deleteaccount"> <span>Hesap Silme</span></a></li>
 							</ul>
 						</li>
-
 					</ul>
 				</div>
 			</nav>

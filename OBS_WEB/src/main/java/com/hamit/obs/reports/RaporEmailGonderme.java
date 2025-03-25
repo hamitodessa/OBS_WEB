@@ -73,6 +73,8 @@ public class RaporEmailGonderme {
 				gonder_excell_kercikis();
 			else if(nerden.equals("kergiris"))
 				gonder_excell_kergiris();
+			else if(nerden.equals("duz"))
+				gonder_duz();
 			else
 				gonder_jasper();
 			durum = true ;
@@ -134,6 +136,14 @@ public class RaporEmailGonderme {
 			String zaman = dtf.format(LocalDateTime.now());
 			String rapor_dos_adi = raporAdi + zaman + ".xlsx";
 			son_gonderme(ds, rapor_dos_adi);
+		} catch (Exception ex) {
+			throw new ServiceException(ex.getMessage());
+		}
+	}
+	
+	private void gonder_duz() {
+		try {
+			son_gonderme(null, "");
 		} catch (Exception ex) {
 			throw new ServiceException(ex.getMessage());
 		}
@@ -320,13 +330,16 @@ public class RaporEmailGonderme {
 				message.setRecipient(RecipientType.CC,new InternetAddress( raporEmailDegiskenler.getCcc()));
 			messagePart = new MimeBodyPart();
 			messagePart.setText(raporEmailDegiskenler.getAciklama().toString().trim(), "UTF-8", "plain");
-			MimeBodyPart attachment = new MimeBodyPart();
+			
 			Multipart multipart = new MimeMultipart();
-			attachment.setDataHandler(new DataHandler(ds));
-			attachment.setFileName(rapdosadi);
-			multipart.addBodyPart(attachment);
-			multipart.addBodyPart(messagePart);
+			if(ds != null) {
+				MimeBodyPart attachment = new MimeBodyPart();
+				attachment.setDataHandler(new DataHandler(ds));
+				attachment.setFileName(rapdosadi);
+				multipart.addBodyPart(attachment);
+			}
 			message.setSubject(raporEmailDegiskenler.getKonu().toString().trim(), "UTF-8");
+			multipart.addBodyPart(messagePart);
 			message.setContent(multipart);
 			message.setSentDate(new Date());
 			Transport.send(message);
