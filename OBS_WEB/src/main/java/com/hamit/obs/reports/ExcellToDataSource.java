@@ -67,22 +67,19 @@ public class ExcellToDataSource {
 				toplamStyle.setAlignment(HorizontalAlignment.RIGHT);
 				toplamStyle.setBorderTop(BorderStyle.MEDIUM);
 				Row headerRow = sheet.createRow(0);
+				
 				for (int i = 0; i < headers.size(); i++) {
+					String header = headers.get(i);
 					Cell headerCell = headerRow.createCell(i);
-					headerCell.setCellValue(headers.get(i));
-					for (String header : headers) {
-						for (String column : rightAlignedColumns) {
-							if (header.contains(column)) { 
-								headerCell.setCellStyle(rightAlignStyle);
-								break;
-							}
-							else {
-								headerCell.setCellStyle(leftAlignStyle);
-								break;
-							}
-						}
+					headerCell.setCellValue(header);
+					//boolean isRightAligned = rightAlignedColumns.stream().anyMatch(header::contains);
+					if (rightAlignedColumns.contains(header)) {
+						headerCell.setCellStyle(rightAlignStyle);
+					} else {
+						headerCell.setCellStyle(leftAlignStyle);
 					}
 				}
+				
 				int rowNum = 1;
 				for (Map<String, String> row : tableData) {
 					Row excelRow = sheet.createRow(rowNum);
