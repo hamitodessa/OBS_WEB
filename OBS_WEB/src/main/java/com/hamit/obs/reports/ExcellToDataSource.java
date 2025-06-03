@@ -112,7 +112,7 @@ public class ExcellToDataSource {
 			workbook.write(bos);
 			byte[] byteArray = bos.toByteArray();
 			InputStream in = new ByteArrayInputStream(byteArray);
-			ds = new ByteArrayDataSource(in, "application/x-any");
+			ds = new ByteArrayDataSource(in, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			bos.close();
 		} catch (Exception ex) {
 			throw new ServiceException(ex.getMessage());
@@ -160,7 +160,7 @@ public class ExcellToDataSource {
 			workbook.write(bos);
 			byte[] byteArray = bos.toByteArray();
 			InputStream in = new ByteArrayInputStream(byteArray);
-			ds = new ByteArrayDataSource(in, "application/x-any");
+			ds = new ByteArrayDataSource(in, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			bos.close();
 		} catch (Exception ex) {
 			throw new ServiceException(ex.getMessage());
@@ -526,7 +526,7 @@ public class ExcellToDataSource {
 			workbook.write(bos);
 			byte[] byteArray = bos.toByteArray();
 			InputStream in = new ByteArrayInputStream(byteArray);
-			ds = new ByteArrayDataSource(in, "application/x-any");
+			ds = new ByteArrayDataSource(in, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			bos.close();
 		} catch (Exception ex) {
 			throw new ServiceException(ex.getMessage());
@@ -892,7 +892,7 @@ public class ExcellToDataSource {
 			workbook.write(bos);
 			byte[] byteArray = bos.toByteArray();
 			InputStream in = new ByteArrayInputStream(byteArray);
-			ds = new ByteArrayDataSource(in, "application/x-any");
+			ds = new ByteArrayDataSource(in, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			bos.close();
 		} catch (Exception ex) {
 			throw new ServiceException(ex.getMessage());

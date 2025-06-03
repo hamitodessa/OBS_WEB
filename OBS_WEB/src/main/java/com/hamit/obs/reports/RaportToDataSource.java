@@ -36,7 +36,7 @@ public class RaportToDataSource {
 		exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
 		exporter.exportReport();
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream .toByteArray());
-		ByteArrayDataSource ds = new ByteArrayDataSource(inputStream, "application/x-any");
+		ByteArrayDataSource ds = new ByteArrayDataSource(inputStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		return ds;
 	}
 	public ByteArrayDataSource export_docx(JasperPrint jp) throws IOException, JRException
@@ -47,7 +47,7 @@ public class RaportToDataSource {
 		exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
 		exporter.exportReport();
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream .toByteArray());
-		ByteArrayDataSource ds = new ByteArrayDataSource(inputStream, "application/x-any");
+		ByteArrayDataSource ds = new ByteArrayDataSource(inputStream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 		return ds;
 	}
 	public ByteArrayDataSource export_xml(JasperPrint jp) throws IOException, JRException
@@ -58,7 +58,7 @@ public class RaportToDataSource {
 		exporter.setExporterOutput(new SimpleXmlExporterOutput(byteArrayOutputStream));
 		exporter.exportReport();
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream .toByteArray());
-		ByteArrayDataSource ds = new ByteArrayDataSource(inputStream, "application/x-any");
+		ByteArrayDataSource ds = new ByteArrayDataSource(inputStream, "application/xml");
 		return ds;
 	}
 	public ByteArrayDataSource export_html(JasperPrint jp) throws IOException, JRException
@@ -69,7 +69,7 @@ public class RaportToDataSource {
 		exporter.setExporterOutput(new SimpleHtmlExporterOutput(byteArrayOutputStream));
 		exporter.exportReport();
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream .toByteArray());
-		ByteArrayDataSource ds = new ByteArrayDataSource(inputStream, "application/x-any");
+		ByteArrayDataSource ds = new ByteArrayDataSource(inputStream, "text/html");
 		return ds;
 	}
 }
