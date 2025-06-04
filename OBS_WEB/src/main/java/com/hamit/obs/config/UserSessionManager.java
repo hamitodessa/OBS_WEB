@@ -20,9 +20,8 @@ public class UserSessionManager {
 		Map<String, ConnectionDetails> userModules = userSessions.get(username);
 		if (userModules != null) {
 			userModules.remove(modulname);
-			if (userModules.isEmpty()) {
+			if (userModules.isEmpty())
 				userSessions.remove(username);
-			}
 		}
 	}
 
