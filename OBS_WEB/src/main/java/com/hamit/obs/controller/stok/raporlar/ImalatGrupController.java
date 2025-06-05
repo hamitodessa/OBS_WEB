@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -53,7 +54,7 @@ public class ImalatGrupController {
 		List<Map<String, Object>> imagrup = new ArrayList<>();
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 
 			String[] baslikbakStrings = {"","","",""};
 			String[] deg_cevirString = {"",""};
@@ -490,7 +491,7 @@ public class ImalatGrupController {
 			String ch1 = "" ;
 			String sstr_2 = "" ;
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			if(fatConnDetails.getHangisql().equals("PG SQL"))
 			{
 				if (grupraporDTO.getTuru().equals("CIKAN"))
@@ -679,7 +680,7 @@ public class ImalatGrupController {
 	{
 		String[] deg_cevirString = {"",""};
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+		ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 		String sstr_4 = "" , sstr_5 = "";
 		if (grupraporDTO.getBirim().equals("Tutar"))
 		{

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.dto.user.User_DetailsDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -145,18 +146,16 @@ public class UserIzinleriController {
 			userDetails.setUser(user);
 			userDetailsService.saveUserDetails(userDetails);
 			response.put("errorMessage", ""); 
-			if(userDetails.getUser_modul().equals("Cari Hesap"))
-				cariService.initialize();
-			else if(userDetails.getUser_modul().equals("Kur"))
-				kurService.initialize();
-			else if(userDetails.getUser_modul().equals("Adres"))
-				adresService.initialize();
-			else if(userDetails.getUser_modul().equals("Kambiyo"))
-				kambiyoService.initialize();
-			else if(userDetails.getUser_modul().equals("Fatura"))
-				faturaService.initialize();
-			else if(userDetails.getUser_modul().equals("Kereste"))
-				keresteService.initialize();
+			modulTipi modultip = modulTipi.fromDbValue(userDetails.getUser_modul());
+			switch (modultip) {
+			case CARI_HESAP -> cariService.initialize();
+			case KUR        -> kurService.initialize();
+			case ADRES      -> adresService.initialize();
+			case KAMBIYO    -> kambiyoService.initialize();
+			case FATURA     -> faturaService.initialize();
+			case KERESTE    -> keresteService.initialize();
+			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
+		}
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {
@@ -179,18 +178,16 @@ public class UserIzinleriController {
 			user.getUserDetails().remove(userdetailsToRemove);
 			userService.saveUser(user);	
 			response.put("errorMessage", ""); 
-			if(userdetailsToRemove.getUser_modul().equals("Cari Hesap"))
-				cariService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Kur"))
-				kurService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Adres"))
-				adresService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Kambiyo"))
-				kambiyoService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Fatura"))
-				faturaService.initialize();
-			else if(userdetailsToRemove.getUser_modul().equals("Kereste"))
-				keresteService.initialize();
+			modulTipi modultip = modulTipi.fromDbValue(userdetailsToRemove.getUser_modul());
+			switch (modultip) {
+			case CARI_HESAP -> cariService.initialize();
+			case KUR        -> kurService.initialize();
+			case ADRES      -> adresService.initialize();
+			case KAMBIYO    -> kambiyoService.initialize();
+			case FATURA     -> faturaService.initialize();
+			case KERESTE    -> keresteService.initialize();
+			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
+		}
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.cari.CariMsSQL;
 import com.hamit.obs.repository.cari.CariMySQL;
@@ -29,7 +30,7 @@ public class CariDatabaseContext {
 	public ICariDatabase getStrategy() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-	        String config = userDetailsService.findHangiSQLByUserId("Cari Hesap", useremail);
+	        String config = userDetailsService.findHangiSQLByUserId(modulTipi.CARI_HESAP.getDbValue(), useremail);
 	        if (config == null || config.isEmpty())
 	        	throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
 	        ICariDatabase strategy = strategies.get(config);

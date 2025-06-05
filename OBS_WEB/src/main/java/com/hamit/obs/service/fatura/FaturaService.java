@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.connection.ConnectionManager;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.dto.stok.urunDTO;
@@ -44,10 +45,10 @@ public class FaturaService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			UserSessionManager.removeUserByModul(useremail,"Fatura");
+			UserSessionManager.removeUserByModul(useremail,modulTipi.FATURA);
 			this.strategy = databaseStrategyContext.getStrategy();
-			masterConnectionManager.loadConnections("Fatura",useremail);
-			UserSessionManager.addUserSession(useremail, "Fatura", masterConnectionManager.getConnection("Fatura", useremail));
+			masterConnectionManager.loadConnections(modulTipi.FATURA,useremail);
+			UserSessionManager.addUserSession(useremail, modulTipi.FATURA, masterConnectionManager.getConnection(modulTipi.FATURA, useremail));
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
@@ -55,7 +56,7 @@ public class FaturaService {
 	
 	public String[] conn_detail() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails faturaConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+		ConnectionDetails faturaConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 		String[] detay = {"","",""};
 		detay[0] = faturaConnDetails.getHangisql() ;
 		detay[1] = faturaConnDetails.getDatabaseName() ;
@@ -66,7 +67,7 @@ public class FaturaService {
 	public String fat_firma_adi() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fat_firma_adi(fatConnDetails) ;
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -75,7 +76,7 @@ public class FaturaService {
 	public List<Map<String, Object>> urun_kodlari(){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.urun_kodlari(fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -85,7 +86,7 @@ public class FaturaService {
 	public urunDTO stk_urun(String sira, String arama){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.stk_urun(sira,arama, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -95,7 +96,7 @@ public class FaturaService {
 	public String urun_kod_degisken_ara(String fieldd,String sno,String nerden,String arama) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.urun_kod_degisken_ara(fieldd,sno,nerden,arama, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -105,7 +106,7 @@ public class FaturaService {
 	public List<Map<String, Object>> stk_kod_degisken_oku(String fieldd, String sno, String nerden){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.stk_kod_degisken_oku(fieldd,sno,nerden,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -115,7 +116,7 @@ public class FaturaService {
 	public List<Map<String, Object>> stk_kod_alt_grup_degisken_oku (int sno){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.stk_kod_alt_grup_degisken_oku(sno,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -124,7 +125,7 @@ public class FaturaService {
 	public String ur_kod_bak(String kodu) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.ur_kod_bak(kodu,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -134,7 +135,7 @@ public class FaturaService {
 	public void stk_ur_sil(String kodu) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.stk_ur_sil(kodu,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -144,7 +145,7 @@ public class FaturaService {
 	public void stk_ur_kayit(urunDTO urunDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.stk_ur_kayit(urunDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -154,7 +155,7 @@ public class FaturaService {
 	public void stk_firma_adi_kayit(String fadi) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ("Firma Ismi :" + fadi);
@@ -169,7 +170,7 @@ public class FaturaService {
 	public String uret_son_bordro_no_al() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.uret_son_bordro_no_al(fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -179,7 +180,7 @@ public class FaturaService {
 	public List<Map<String, Object>> stok_oku(String eno, String cins){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.stok_oku(eno,cins,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -188,7 +189,7 @@ public class FaturaService {
 	public String aciklama_oku(String evrcins, int satir, String evrno, String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.aciklama_oku(evrcins, satir,evrno,gircik,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -198,7 +199,7 @@ public class FaturaService {
 	public urunDTO urun_adi_oku (String kodu,String kodbarcode) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.urun_adi_oku(kodu, kodbarcode,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -208,7 +209,7 @@ public class FaturaService {
 	public double son_imalat_fiati_oku(String kodu) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.son_imalat_fiati_oku(kodu,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -218,7 +219,7 @@ public class FaturaService {
 	public String uret_ilk_tarih(String baslangic, String tar, String ukodu) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.uret_ilk_tarih(baslangic,tar,ukodu,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -227,7 +228,7 @@ public class FaturaService {
 	public double gir_ort_fiati_oku(String kodu, String ilkt, String tarih) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.gir_ort_fiati_oku(kodu,ilkt,tarih,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -237,7 +238,7 @@ public class FaturaService {
 	public int uretim_fisno_al() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.uretim_fisno_al(fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -247,7 +248,7 @@ public class FaturaService {
 	public List<Map<String, Object>> recete_oku(String rno){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.recete_oku(rno,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -257,7 +258,7 @@ public class FaturaService {
 	public void stok_sil(String eno, String ecins, String cins,String mesajlog) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			
 			loglamaDTO.setEvrak(eno);
 			loglamaDTO.setmESAJ(mesajlog);
@@ -275,7 +276,7 @@ public class FaturaService {
 			String b1, String doviz, String hspkodu, String usr,String mesajlog) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			
 			loglamaDTO.setEvrak(evrno);
 			loglamaDTO.setmESAJ(mesajlog);
@@ -292,7 +293,7 @@ public class FaturaService {
 	public void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			
 			loglamaDTO.setEvrak(evrno);
 			loglamaDTO.setmESAJ("Fatura Aciklama Yaz : " + evrcins + " - " + aciklama );
@@ -308,7 +309,7 @@ public class FaturaService {
 	public void aciklama_sil(String evrcins,String evrno,String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			
 			loglamaDTO.setEvrak(evrno);
 			loglamaDTO.setmESAJ("Fatura Aciklama Sil " + evrcins + " - " + cins);
@@ -324,7 +325,7 @@ public class FaturaService {
 	public List<Map<String, Object>> urun_arama(){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.urun_arama(fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -334,7 +335,7 @@ public class FaturaService {
 	public void urun_degisken_eski(String fieldd ,String degisken_adi ,String nerden ,String sno ,int ID ) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.urun_degisken_eski(fieldd,degisken_adi,nerden,sno,ID,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -344,7 +345,7 @@ public class FaturaService {
 	public void urun_degisken_alt_grup_eski(String alt_grup ,int ana_grup ,int  ID) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.urun_degisken_alt_grup_eski(alt_grup,ana_grup,ID,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -354,7 +355,7 @@ public class FaturaService {
 	public void urun_degisken_kayit(String fieldd  ,String nerden,String degisken_adi,String sira) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.urun_degisken_kayit(fieldd,nerden,degisken_adi,sira,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -364,7 +365,7 @@ public class FaturaService {
 	public void  urun_degisken_alt_grup_kayit (String alt_grup , int ana_grup) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.urun_degisken_alt_grup_kayit(alt_grup,ana_grup,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -374,7 +375,7 @@ public class FaturaService {
 	public boolean alt_grup_kontrol(int anagrp,int altgrp) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.alt_grup_kontrol(anagrp,altgrp,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -384,7 +385,7 @@ public class FaturaService {
 	public void urun_degisken_alt_grup_sil(int id) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ("Alt Grup Silme:" + id);
@@ -400,7 +401,7 @@ public class FaturaService {
 	public void urun_kod_degisken_sil(String hangi_Y,String nerden,int sira) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			loglamaDTO.setEvrak("");
 			loglamaDTO.setmESAJ(nerden + " Silme:" + sira);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
@@ -414,7 +415,7 @@ public class FaturaService {
 	public double son_satis_fiati_oku(String kodu,String muskodu,String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.son_satis_fiati_oku(kodu,muskodu,gircik,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -424,7 +425,7 @@ public class FaturaService {
 	public List<Map<String, Object>> fatura_oku(String fno,String cins){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fatura_oku(fno,cins,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -434,7 +435,7 @@ public class FaturaService {
 	public String[] dipnot_oku(String ino,String cins ,String gircik){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.dipnot_oku(ino,cins,gircik,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -444,7 +445,7 @@ public class FaturaService {
 	public String son_no_al(String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.son_no_al(cins,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -454,7 +455,7 @@ public class FaturaService {
 	public int fatura_no_al(String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fatura_no_al(cins,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -464,7 +465,7 @@ public class FaturaService {
 	public void fat_giris_sil(String fno,String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			
 			loglamaDTO.setEvrak(fno);
 			loglamaDTO.setmESAJ(fno + " Nolu Giris Fatura Silindi");
@@ -480,7 +481,7 @@ public class FaturaService {
 	public void dipnot_sil(String ino,String cins,String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			loglamaDTO.setEvrak(ino);
 			loglamaDTO.setmESAJ("Fatura Dip Not Sil "  + ino);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
@@ -495,7 +496,7 @@ public class FaturaService {
 	public List<Map<String, Object>> fat_oz_kod (String cins){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fat_oz_kod(cins,fatConnDetails);		
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -508,7 +509,7 @@ public class FaturaService {
 			, String ozkod ,double kur ,String cins,int  anagrp,int  altgrp ,String usr) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			loglamaDTO.setEvrak(fatno);
 			loglamaDTO.setmESAJ(gircik + " Fatura Kayit " +  kodu + " Mik=" + miktar + " Tut=" + tutar);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
@@ -522,7 +523,7 @@ public class FaturaService {
 	public void dipnot_yaz(String eno,String bir,String iki,String uc,String tip,String gircik,String usr) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			loglamaDTO.setEvrak(eno);
 			loglamaDTO.setmESAJ("Fatura Dip Not Yaz : "  + bir);
 			loglamaDTO.setUser(Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
@@ -536,7 +537,7 @@ public class FaturaService {
 	public String recete_son_bordro_no_al() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.recete_son_bordro_no_al(fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -546,7 +547,7 @@ public class FaturaService {
 	public int recete_no_al() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.recete_no_al(fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -556,7 +557,7 @@ public class FaturaService {
 	public void rec_sil(String rno) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.rec_sil(rno,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -566,7 +567,7 @@ public class FaturaService {
 	public void kod_recete_yaz(String ukodu,String rec) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.kod_recete_yaz(ukodu,rec,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -576,7 +577,7 @@ public class FaturaService {
 	public void recete_kayit(String recno,boolean durum,String tur,String kodu ,double miktar ,int anagrp,int altgrup ,String usr) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			strategy.recete_kayit(recno, durum, tur, kodu, miktar, anagrp, altgrup, usr, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -586,7 +587,7 @@ public class FaturaService {
 	public String zayi_son_bordro_no_al() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.zayi_son_bordro_no_al(fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -596,7 +597,7 @@ public class FaturaService {
 	public int zayi_fisno_al() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.zayi_fisno_al(fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -606,7 +607,7 @@ public class FaturaService {
 	public List<Map<String, Object>> zayi_oku(String eno,String cins){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.zayi_oku(eno,cins,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -616,7 +617,7 @@ public class FaturaService {
 	public List<Map<String, Object>> fat_rapor(fatraporDTO fatraporDTO,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fat_rapor(fatraporDTO,pageable,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -626,7 +627,7 @@ public class FaturaService {
 	public double fat_raporsize(fatraporDTO fatraporDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fat_raporsize(fatraporDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -636,7 +637,7 @@ public class FaturaService {
 	public List<Map<String, Object>> fat_detay_rapor(String fno , String turu){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fat_detay_rapor(fno,turu,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -646,7 +647,7 @@ public class FaturaService {
 	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fat_rapor_fat_tar(fatraporDTO,pageable ,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -656,7 +657,7 @@ public class FaturaService {
 	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.fat_rapor_cari_kod(fatraporDTO,pageable ,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -666,7 +667,7 @@ public class FaturaService {
 	public List<Map<String, Object>> imalat_rapor(imaraporDTO imaraporDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.imalat_rapor(imaraporDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -676,7 +677,7 @@ public class FaturaService {
 	public List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.envanter_rapor(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -686,7 +687,7 @@ public class FaturaService {
 	public List<Map<String, Object>> envanter_rapor_fifo(envanterDTO envanterDTO ){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.envanter_rapor_fifo(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -696,7 +697,7 @@ public class FaturaService {
 	public List<Map<String, Object>> envanter_rapor_fifo_2(envanterDTO envanterDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.envanter_rapor_fifo_2(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -706,7 +707,7 @@ public class FaturaService {
 	public double envanter_rapor_lifo(envanterDTO envanterDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.envanter_rapor_lifo(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -716,7 +717,7 @@ public class FaturaService {
 	public List<Map<String, Object>> envanter_rapor_u_kodu_oncekitarih(envanterDTO envanterDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.envanter_rapor_u_kodu_oncekitarih(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -726,7 +727,7 @@ public class FaturaService {
 	public List<Map<String, Object>> envanter_rapor_u_kodu(envanterDTO envanterDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.envanter_rapor_u_kodu(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -736,7 +737,7 @@ public class FaturaService {
 	public List<Map<String, Object>> envanter_rapor_ana_grup_alt_grup(envanterDTO envanterDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.envanter_rapor_ana_grup_alt_grup(envanterDTO,fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -746,7 +747,7 @@ public class FaturaService {
 	public List<Map<String, Object>> baslik_bak(String baslik,String ordr,String jkj,String ch1,String k1,String k2,String f1,String f2,String t1,String t2){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.baslik_bak(baslik, ordr, jkj, ch1, k1, k2, f1, f2, t1, t2, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -757,7 +758,7 @@ public class FaturaService {
 			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.grp_urn_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -768,7 +769,7 @@ public class FaturaService {
 			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.grp_urn_kodlu_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -779,8 +780,8 @@ public class FaturaService {
 			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, "Cari Hesap");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			return strategy.grp_mus_kodlu(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails,cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -791,8 +792,8 @@ public class FaturaService {
 			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, "Cari Hesap");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			return strategy.grp_mus_kodlu_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails,cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -803,7 +804,7 @@ public class FaturaService {
 			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.grp_yil_ay(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -814,7 +815,7 @@ public class FaturaService {
 			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.grp_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -825,7 +826,7 @@ public class FaturaService {
 			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.grp_ana_grup(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -836,7 +837,7 @@ public class FaturaService {
 			String sstr_5,String sstr_1,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.grp_ana_grup_yil(grupraporDTO, sstr_2, sstr_4, kur_dos, jkj, ch1, jkj1, sstr_5, sstr_1, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -847,7 +848,7 @@ public class FaturaService {
 			String qwq7,String qwq8,String qwq9,String k1,String k2,String t1,String t2,String ordrr){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.ima_baslik_bak(bas, jkj, ch1, qwq6, qwq7, qwq8, qwq9, k1, k2, t1, t2, ordrr, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -859,7 +860,7 @@ public class FaturaService {
 			String sstr_1,String ordrr,String sstr_55,String ozelgrp[][], Set<String> sabitKolonlar){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.ima_alt_kod(slct, sstr_5, sstr_2, sstr_4, jkj, ch1, qwq6, qwq7, qwq8, qwq9, s1, s2, k1, k2, t1, t2, sstr_1, ordrr, sstr_55, ozelgrp,sabitKolonlar, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -869,7 +870,7 @@ public class FaturaService {
 	public List<Map<String, Object>> stok_rapor(stokdetayDTO stokdetayDTO){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			return strategy.stok_rapor(stokdetayDTO, fatConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));

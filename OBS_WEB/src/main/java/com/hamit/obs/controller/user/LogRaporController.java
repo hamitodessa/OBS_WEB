@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.user.LogRaporService;
 
@@ -33,11 +34,11 @@ public class LogRaporController {
 		Map<String, Object> response = new HashMap<>();
 		List<Map<String, Object>> lograpor = new ArrayList<>();
 		try {
-			String modul = (String) requestBody.get("modul");
 			String startDate = (String) requestBody.get("startDate");
 			String endDate = (String) requestBody.get("endDate");
 			String aciklama = (String) requestBody.get("aciklama");
-			lograpor = logRaporService.lograpor(startDate,endDate,aciklama,modul);
+			modulTipi modultip = modulTipi.fromDbValue((String) requestBody.get("modul"));
+			lograpor = logRaporService.lograpor(startDate,endDate,aciklama,modultip);
 			response.put("success", true);
 			response.put("data", (lograpor != null) ? lograpor : new ArrayList<>());
 			response.put("errorMessage", ""); 

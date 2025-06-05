@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.connection.ConnectionManager;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.loglama.LoglamaRepository;
@@ -26,7 +27,7 @@ public class LogRaporService {
 
 	ConnectionDetails connConnDetails ;
 
-	public List<Map<String, Object>> lograpor(String startDate,String endDate,String aciklama,String modul){
+	public List<Map<String, Object>> lograpor(String startDate,String endDate,String aciklama,modulTipi modul){
 		try {
 			String useremail = userService.getCurrentUser().getEmail();
 			masterConnectionManager.loadConnections(modul,useremail);

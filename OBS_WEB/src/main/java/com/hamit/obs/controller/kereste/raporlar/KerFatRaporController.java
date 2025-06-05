@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -254,9 +255,9 @@ public class KerFatRaporController {
 		String qw1 = "", qw2="", qw3="",c_yer = "";
 
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
-		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
+		ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KERESTE);
+		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.ADRES);
 
 		if (hangiadres.equals("Cari_Firma"))
 		{
@@ -375,9 +376,9 @@ public class KerFatRaporController {
 		String deger[] = {"","","",""};
 		String qw1 = "", qw2="",c_yer = "";
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
-		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
+		ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KERESTE);
+		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.ADRES);
 
 		if (hangiadres.equals("Cari_Firma"))
 		{

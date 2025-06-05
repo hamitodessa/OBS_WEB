@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.connection.ConnectionManager;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.dto.kur.kurgirisDTO;
 import com.hamit.obs.dto.kur.kurraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -30,10 +31,10 @@ public class KurService {
 	public void initialize() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			UserSessionManager.removeUserByModul(useremail,"Kur");
+			UserSessionManager.removeUserByModul(useremail,modulTipi.KUR);
 			this.strategy = databaseStrategyContext.getStrategy();
-			masterConnectionManager.loadConnections("Kur",useremail);
-			UserSessionManager.addUserSession(useremail, "Kur", masterConnectionManager.getConnection("Kur", useremail));
+			masterConnectionManager.loadConnections(modulTipi.KUR,useremail);
+			UserSessionManager.addUserSession(useremail, modulTipi.KUR, masterConnectionManager.getConnection(modulTipi.KUR, useremail));
 		} else {
 			throw new ServiceException("No authenticated user found in SecurityContext");
 		}
@@ -41,7 +42,7 @@ public class KurService {
 
 	public String[] conn_detail() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 		String[] detay = {"","",""};
 		detay[0] = kurConnDetails.getHangisql() ;
 		detay[1] = kurConnDetails.getDatabaseName() ;
@@ -51,14 +52,14 @@ public class KurService {
 
 	public ConnectionDetails conn_details() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 		return kurConnDetails;
 	}
 
 	public List<Map<String, Object>> kur_liste(String tarih){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 			return strategy.kur_liste(tarih,kurConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -67,7 +68,7 @@ public class KurService {
 	public void kur_sil (String tarih,String kur_turu) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 			strategy.kur_sil(tarih,kur_turu,kurConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -77,7 +78,7 @@ public class KurService {
 	public boolean kur_kayit(kurgirisDTO kurgirisDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 			return strategy.kur_kayit(kurgirisDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -87,7 +88,7 @@ public class KurService {
 	public List<Map<String, Object>> kur_rapor(kurraporDTO kurraporDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 			return strategy.kur_rapor(kurraporDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -97,7 +98,7 @@ public class KurService {
 	public List<Map<String, Object>> kur_oku(kurgirisDTO kurgirisDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+			ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 			return strategy.kur_oku(kurgirisDTO,kurConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));

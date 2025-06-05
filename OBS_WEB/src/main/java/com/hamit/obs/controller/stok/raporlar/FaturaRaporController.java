@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -205,9 +206,9 @@ public class FaturaRaporController {
 		String qw1 = "", qw2="", qw3="",c_yer;
 		
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails faturaConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
-		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, "Adres");
+		ConnectionDetails faturaConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+		ConnectionDetails adrConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.ADRES);
 		
 		if (hangiadres.equals("Cari_Firma"))
 		{

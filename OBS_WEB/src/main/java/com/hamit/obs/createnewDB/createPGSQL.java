@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.dto.server.serverBilgiDTO;
 
 public class createPGSQL {
@@ -90,33 +91,16 @@ public class createPGSQL {
 			stmt.executeUpdate(createDatabaseQuery);
 			String databaseConnectionString = "jdbc:postgresql://" + sbilgi.getUser_ip() + "/" + veritabaniAdi;
 			try (Connection databaseConnection = DriverManager.getConnection(databaseConnectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
-				switch (sbilgi.getUser_modul()) {
-				case "Cari Hesap": {
-					createTableCari(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
-					break;
-				}
-				case "Kur": {
-					createTableKur(databaseConnection);
-					break;
-				}
-				case "Adres": {
-					createTableAdres(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
-					break;
-				}
-				case "Kambiyo": {
-					createTableKambiyo(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
-					break;
-				}
-				case "Fatura": {
-					createTableFatura(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
-					break;
-				}
-				case "Kereste": {
-					createTableKereste(databaseConnection, sbilgi.getFirma_adi() , sbilgi.getUser_name());
-					break;
-				}
-				}
-
+				modulTipi modultip = modulTipi.fromDbValue(sbilgi.getUser_modul());
+				switch (modultip) {
+				case CARI_HESAP -> createTableCari(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
+				case KUR        -> createTableKur(databaseConnection);
+				case ADRES      -> createTableAdres(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
+				case KAMBIYO    -> createTableKambiyo(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
+				case FATURA     -> createTableFatura(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
+				case KERESTE    -> createTableKereste(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
+				default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
+			}
 			}
 			sifirdan_LOG(sbilgi);
 			result = true;

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kereste.kergrupraporDTO;
@@ -54,8 +55,8 @@ public class KeresteGrupRaporController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
+			ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KERESTE);
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail,modulTipi.CARI_HESAP);
 			String turuString[] =  grup_cevir(kergrupraporDTO.getAnagrp(),kergrupraporDTO.getAltgrp(),kergrupraporDTO.getOzkod(),kergrupraporDTO.getDepo());
 
 			kergrupraporDTO.setAnagrp(turuString[0]);
@@ -1300,8 +1301,8 @@ public class KeresteGrupRaporController {
 	private String[] deg_cevir(kergrupraporDTO kergrupraporDTO )
 	{
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+		ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KERESTE);
+		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 
 		String[] deg_cevirString = {"","","","","",""};
 		String jkj = "" ,jkj1 = "" ,ch1 = "",sstr_4 = "" , sstr_5 = "" , kur_dos = "" ;
@@ -1481,7 +1482,7 @@ public class KeresteGrupRaporController {
 			String sstr_2 = "" ;
 			String hANGI = "" ;
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
+			ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KERESTE);
 			jkj  = "" ;
 			hANGI = "" ;
 			if (kergrupraporDTO.getTuru().equals("GIREN"))

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.dto.user.CalismaDiziniDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.RolEnum;
@@ -98,14 +99,14 @@ public class LoginController {
 	        CalismaDiziniDTO dto = new CalismaDiziniDTO();
 	       //dto.setFirma(cariService.cari_firma_adi());
 	        dto.setFirma("");
-	        dto.setModul("Cari Hesap");
+	        dto.setModul(modulTipi.CARI_HESAP.getDbValue());
 	        dto.setHangi_sql(cariService.conn_detail()[0]);
 	        dto.setProgkodu(cariService.conn_detail()[1]);
 	        dto.setServer(cariService.conn_detail()[2]);
 	        calismaDiziniDTO.add(dto);
 	        dto = new CalismaDiziniDTO();
 	        dto.setFirma("");
-	        dto.setModul("Kur");
+	        dto.setModul(modulTipi.KUR.getDbValue());
 	        dto.setHangi_sql(kurService.conn_detail()[0]);
 	        dto.setProgkodu(kurService.conn_detail()[1]);
 	        dto.setServer(kurService.conn_detail()[2]);
@@ -113,7 +114,7 @@ public class LoginController {
 	        dto = new CalismaDiziniDTO();
 	        //dto.setFirma(kambiyoService.kambiyo_firma_adi());
 	        dto.setFirma("");
-	        dto.setModul("Kambiyo");
+	        dto.setModul(modulTipi.KAMBIYO.getDbValue());
 	        dto.setHangi_sql(kambiyoService.conn_detail()[0]);
 	        dto.setProgkodu(kambiyoService.conn_detail()[1]);
 	        dto.setServer(kambiyoService.conn_detail()[2]);
@@ -121,7 +122,7 @@ public class LoginController {
 	        dto = new CalismaDiziniDTO();
 	        //dto.setFirma(adresService.adres_firma_adi());
 	        dto.setFirma("");
-	        dto.setModul("Adres");
+	        dto.setModul(modulTipi.ADRES.getDbValue());
 	        dto.setHangi_sql(adresService.conn_detail()[0]);
 	        dto.setProgkodu(adresService.conn_detail()[1]);
 	        dto.setServer(adresService.conn_detail()[2]);
@@ -129,7 +130,7 @@ public class LoginController {
 	        dto = new CalismaDiziniDTO();
 	        //dto.setFirma(kambiyoService.fatura_firma_adi());
 	        dto.setFirma("");
-	        dto.setModul("Fatura");
+	        dto.setModul(modulTipi.FATURA.getDbValue());
 	        dto.setHangi_sql(faturaService.conn_detail()[0]);
 	        dto.setProgkodu(faturaService.conn_detail()[1]);
 	        dto.setServer(faturaService.conn_detail()[2]);
@@ -137,7 +138,7 @@ public class LoginController {
 	        dto = new CalismaDiziniDTO();
 	      //dto.setFirma(keresteService.kereste_firma_adi());
 	        dto.setFirma("");
-	        dto.setModul("Kereste");
+	        dto.setModul(modulTipi.KERESTE.getDbValue());
 	        dto.setHangi_sql(keresteService.conn_detail()[0]);
 	        dto.setProgkodu(keresteService.conn_detail()[1]);
 	        dto.setServer(keresteService.conn_detail()[2]);

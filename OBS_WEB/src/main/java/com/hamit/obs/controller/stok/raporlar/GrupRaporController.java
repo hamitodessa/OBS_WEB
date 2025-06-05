@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
@@ -54,8 +55,8 @@ public class GrupRaporController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			String turuString[] =  grup_cevir(grupraporDTO.getUranagrp(),grupraporDTO.getUraltgrp(),grupraporDTO.getUrozkod());
 			grupraporDTO.setUranagrp(turuString[0]);
 			grupraporDTO.setUraltgrp(turuString[1]);
@@ -355,7 +356,7 @@ public class GrupRaporController {
 			String ch1 = "" ;
 			String sstr_2 = "" ;
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
+			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 			if(fatConnDetails.getHangisql().equals("PG SQL"))
 			{
 				if (grupraporDTO.getTuru().equals("CIKAN"))
@@ -578,8 +579,8 @@ public class GrupRaporController {
 	private String[] deg_cevir(grupraporDTO grupraporDTO )
 	{
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, "Fatura");
-		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, "Kur");
+		ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 
 		String[] deg_cevirString = {"","","","","",""};
 		String harekString = "" ;

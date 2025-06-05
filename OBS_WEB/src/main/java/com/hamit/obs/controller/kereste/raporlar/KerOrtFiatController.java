@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.kereste.kergrupraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -49,8 +50,8 @@ public class KerOrtFiatController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, "Kereste");
-			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, "Cari Hesap");
+			ConnectionDetails kerConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KERESTE);
+			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			String turuString[] =  grup_cevir(kergrupraporDTO.getAnagrp(),kergrupraporDTO.getAltgrp(),kergrupraporDTO.getOzkod());
 
 			kergrupraporDTO.setAnagrp(turuString[0]);

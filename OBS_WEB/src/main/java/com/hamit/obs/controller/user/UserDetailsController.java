@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.dto.server.serverBilgiDTO;
 import com.hamit.obs.dto.user.User_DetailsDTO;
@@ -145,18 +147,16 @@ public class UserDetailsController {
 				userDetails.setUser(user);
 				userDetailsService.saveUserDetails(userDetails);
 				response.put("errorMessage", "");
-				if(userDetails.getUser_modul().equals("Cari Hesap"))
-					cariService.initialize();
-				else if(userDetails.getUser_modul().equals("Kur"))
-					kurService.initialize();
-				else if(userDetails.getUser_modul().equals("Adres"))
-					adresService.initialize();
-				else if(userDetails.getUser_modul().equals("Kambiyo"))
-					kambiyoService.initialize();
-				else if(userDetails.getUser_modul().equals("Fatura"))
-					faturaService.initialize();
-				else if(userDetails.getUser_modul().equals("Kereste"))
-					keresteService.initialize();
+				modulTipi modultip = modulTipi.fromDbValue(userDetails.getUser_modul());
+				switch (modultip) {
+				case CARI_HESAP -> cariService.initialize();
+				case KUR        -> kurService.initialize();
+				case ADRES      -> adresService.initialize();
+				case KAMBIYO    -> kambiyoService.initialize();
+				case FATURA     -> faturaService.initialize();
+				case KERESTE    -> keresteService.initialize();
+				default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
+			}
 			} else {
 				response.put("errorMessage", "Bu işlemi yapmaya yetkiniz yok...Adminden Yetki Aliniz");
 			}
@@ -175,31 +175,34 @@ public class UserDetailsController {
 		boolean result = false;
 		String drm  = "false" ;
 		try {
-			switch (serverBilgiDTO.getUser_modul()) {
-			case "Cari Hesap": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Car");
+			modulTipi modultip = modulTipi.fromDbValue(serverBilgiDTO.getUser_modul());
+			switch (modultip) {
+			case CARI_HESAP: {
+				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Car.name());
 				break;
 			}
-			case "Kur": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Kur");
+			case KUR: {
+				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kur.name());
 				break;
 			}
-			case "Adres": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Adr");
+			case ADRES: {
+				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Adr.name());
 				break;
 			}
-			case "Kambiyo": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Kam");
+			case KAMBIYO: {
+				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kam.name());
 				break;
 			}
-			case "Fatura": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Fat");
+			case FATURA: {
+				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Fat.name());
 				break;
 			}
-			case "Kereste": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Ker");
+			case KERESTE: {
+				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Ker.name());
 				break;
 			}
+			default:
+				break;
 			}
 			String sifre = serverBilgiDTO.getUser_pwd_server();
 			if (sifre == null) {
@@ -230,21 +233,18 @@ public class UserDetailsController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			Long id =  ((Number) request.get("id")).longValue();
-			String modul = (String) request.get("modul");
+			modulTipi modultip = modulTipi.fromDbValue((String) request.get("modul"));
 			userDetailsService.deleteUserDetails(id);
 			response.put("errorMessage", ""); 
-			if(modul.equals("Cari Hesap"))
-				cariService.initialize();
-			else if(modul.equals("Kur"))
-				kurService.initialize();
-			else if(modul.equals("Adres"))
-				adresService.initialize();
-			else if(modul.equals("Kambiyo"))
-				kambiyoService.initialize();
-			else if(modul.equals("Fatura"))
-				faturaService.initialize();
-			else if(modul.equals("Kereste"))
-				keresteService.initialize();
+			switch (modultip) {
+			case CARI_HESAP -> cariService.initialize();
+			case KUR        -> kurService.initialize();
+			case ADRES      -> adresService.initialize();
+			case KAMBIYO    -> kambiyoService.initialize();
+			case FATURA     -> faturaService.initialize();
+			case KERESTE    -> keresteService.initialize();
+			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
+		}
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage()); 
 		} catch (Exception e) {

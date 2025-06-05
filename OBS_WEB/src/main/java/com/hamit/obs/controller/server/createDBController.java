@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.server.serverBilgiDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -57,32 +59,16 @@ public class createDBController {
 		boolean result = false;
 		String drm  = "false" ;
 		try {
-			switch (serverBilgiDTO.getUser_modul()) {
-			case "Cari Hesap": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Car");
-				break;
-			}
-			case "Kur": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Kur");
-				break;
-			}
-			case "Adres": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Adr");
-				break;
-			}
-			case "Kambiyo": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Kam");
-				break;
-			}
-			case "Fatura": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Fat");
-				break;
-			}
-			case "Kereste": {
-				serverBilgiDTO.setUser_modul_baslik("OK_Ker");
-				break;
-			}
-			}
+			modulTipi modultip = modulTipi.fromDbValue(serverBilgiDTO.getUser_modul());
+			switch (modultip) {
+			case CARI_HESAP -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Car.name());
+			case KUR        -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kur.name());
+			case ADRES      -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Adr.name());
+			case KAMBIYO    -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kam.name());
+			case FATURA     -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Fat.name());
+			case KERESTE    -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Ker.name());
+			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
+		}
 			result = serverService.dosyakontrol(serverBilgiDTO);
 			drm = result != false ? "true" : "false" ;
 			response.put("dosyaDurum",drm ); 
@@ -106,37 +92,16 @@ public class createDBController {
 		serverBilgiDTO svrBilgiDTO = serverBilgiDTO;
 		String usrString =  Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
 		try {
-			switch (svrBilgiDTO.getUser_modul()) {
-			case "Cari Hesap": {
-				svrBilgiDTO.setUser_name(usrString);
-				svrBilgiDTO.setUser_modul_baslik("OK_Car");
-				break;
-			}
-			case "Kur": {
-				svrBilgiDTO.setUser_name(usrString);
-				svrBilgiDTO.setUser_modul_baslik("OK_Kur");
-				break;
-			}
-			case "Adres": {
-				svrBilgiDTO.setUser_name(usrString);
-				svrBilgiDTO.setUser_modul_baslik("OK_Adres");
-				break;
-			}
-			case "Kambiyo": {
-				svrBilgiDTO.setUser_name(usrString);
-				svrBilgiDTO.setUser_modul_baslik("OK_Kam");
-				break;
-			}
-			case "Fatura": {
-				svrBilgiDTO.setUser_name(usrString);
-				svrBilgiDTO.setUser_modul_baslik("OK_Fat");
-				break;
-			}
-			case "Kereste": {
-				svrBilgiDTO.setUser_name(usrString);
-				svrBilgiDTO.setUser_modul_baslik("OK_Ker");
-				break;
-			}
+			modulTipi modultip = modulTipi.fromDbValue(serverBilgiDTO.getUser_modul());
+			svrBilgiDTO.setUser_name(usrString);
+			switch (modultip) {
+				case CARI_HESAP -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Car.name());
+				case KUR        -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kur.name());
+				case ADRES      -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Adr.name());
+				case KAMBIYO    -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kam.name());
+				case FATURA     -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Fat.name());
+				case KERESTE    -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Ker.name());
+			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
 			}
 			result = serverService.dosyaolustur(svrBilgiDTO);
 			drm = result != false ? "true" : "false" ;			response.put("olustuDurum",drm ); 
@@ -160,8 +125,9 @@ public class createDBController {
 		boolean result = false;
 		try {
 			StringBuilder stb = new StringBuilder();
-			switch(modul) {
-			case "Cari Hesap":
+			modulTipi modultip = modulTipi.fromDbValue(modul);
+			switch(modultip) {
+			case CARI_HESAP:
 				String hangi = hangiSQL  ;
 				if( hangi.equals("MS SQL")) 
 				{
@@ -171,31 +137,31 @@ public class createDBController {
 					stb.append(" ALTER INDEX [IX_HESAP] ON [dbo].[HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IDX_HESAP] ON [dbo].[HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [D_HESAP] ON [dbo].[HESAP_DETAY] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					serverService.job_sil_S("OK_Car" +  sbilgi.getUser_prog_kodu() + "_Index","",sbilgi);
-					serverService.job_olustur_S("OK_Car" +  sbilgi.getUser_prog_kodu() + "_Index","OK_Car" +  sbilgi.getUser_prog_kodu() , stb.toString(),sbilgi );
-					serverService.job_baslat_S("OK_Car" +  sbilgi.getUser_prog_kodu() + "_Index",sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","",sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() , stb.toString(),sbilgi );
+					serverService.job_baslat_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index",sbilgi);
 				}
 				else if( hangi.equals("MY SQL")) 
 				{ 
 					stb.append(" OPTIMIZE TABLE OK_Car" +  sbilgi.getUser_prog_kodu() + ".satirlar,") ; 
-					stb.append("  OK_Car" +  sbilgi.getUser_prog_kodu() + ".izahat,") ; 
-					stb.append("  OK_Car" +  sbilgi.getUser_prog_kodu() + ".hesap,") ; 
-					stb.append("  OK_Car" +  sbilgi.getUser_prog_kodu() + ".hesap_detay;") ; 
-					serverService.job_sil_S("OK_Car" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_car" + sbilgi.getUser_prog_kodu()  , sbilgi); //"/ok_car019"
-					serverService.job_olustur_S("OK_Car" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_car" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					stb.append("  " + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + ".izahat,") ; 
+					stb.append("  " + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + ".hesap,") ; 
+					stb.append("  " + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + ".hesap_detay;") ; 
+					serverService.job_sil_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","/ok_car" + sbilgi.getUser_prog_kodu()  , sbilgi); //"/ok_car019"
+					serverService.job_olustur_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","/ok_car" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 				}
 				else if( hangi.equals("PG SQL")) 
 				{ 
 					serverService.job_sil_S("CARI_" + sbilgi.getUser_prog_kodu() ,"", sbilgi); 
 					stb.append("REINDEX TABLE \"SATIRLAR\";REINDEX TABLE \"HESAP\"; ") ; 
 					stb.append("REINDEX TABLE \"HESAP_DETAY\";REINDEX TABLE \"IZAHAT\"; ") ; 
-					String jobString = "SELECT dblink(''dbname = ok_car" +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
+					String jobString = "SELECT dblink(''dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
 							"''" + stb.toString() + "'') " ;
 					String dosyaString = sbilgi.getSuperviser().equals("") ? sbilgi.getSuperviser() : sbilgi.getSuperviser() ;
 					serverService.job_olustur_S("CARI_" +  sbilgi.getUser_prog_kodu() ,dosyaString , jobString ,sbilgi);
 				}
 				break;
-			case "Fatura":
+			case FATURA:
 				hangi = hangiSQL  ;
 				if( hangi.equals("MS SQL")) 
 				{
@@ -206,18 +172,18 @@ public class createDBController {
 					stb.append(" ALTER INDEX [IX_Giren] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_STOK] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_RECETE] ON [dbo].[RECETE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					serverService.job_sil_S("OK_Fat" +  sbilgi.getUser_prog_kodu() + "_Index", "",sbilgi);
-					serverService.job_olustur_S("OK_Fat" +  sbilgi.getUser_prog_kodu() + "_Index","OK_Fat" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
-					serverService.job_baslat_S("OK_Fat" +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index", "",sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					serverService.job_baslat_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
 				else if( hangi.equals("MY SQL")) 
 				{
 					stb.append(" OPTIMIZE TABLE OK_Fat" +  sbilgi.getUser_prog_kodu() + ".fatura,") ; 
-					stb.append("  OK_Fat" +  sbilgi.getUser_prog_kodu() + ".mal,") ; 
-					stb.append("  OK_Fat" +  sbilgi.getUser_prog_kodu() + ".stok,") ; 
-					stb.append("  OK_Fat" +  sbilgi.getUser_prog_kodu() + ".recete;") ; 
-					serverService.job_sil_S("OK_Fat" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_fat" + sbilgi.getUser_prog_kodu()  , sbilgi);
-					serverService.job_olustur_S("OK_Fat" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_fat" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
+					stb.append("  " + modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + ".mal,") ; 
+					stb.append("  " + modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + ".stok,") ; 
+					stb.append("  " + modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + ".recete;") ; 
+					serverService.job_sil_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Fat.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Fat.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
 				else if( hangi.equals("PG SQL")) 
 				{ 
@@ -225,88 +191,88 @@ public class createDBController {
 					stb.append("REINDEX TABLE \"DPN\";REINDEX TABLE \"FATURA\"; ") ; 
 					stb.append("REINDEX TABLE \"IRSALIYE\";REINDEX TABLE \"MAL\"; ") ; 
 					stb.append("REINDEX TABLE \"RECETE\";REINDEX TABLE \"STOK\"; ") ; 
-					String jobString = "SELECT dblink(''dbname = ok_fat" +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
+					String jobString = "SELECT dblink(''dbname = " + modulbaslikTipi.OK_Fat.name().toLowerCase() +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
 							"''" + stb.toString() + "'') " ;
 					String dosyaString = sbilgi.getSuperviser().equals("") ? sbilgi.getSuperviser() : sbilgi.getSuperviser() ;
 					serverService.job_olustur_S("STOK_" +  sbilgi.getUser_prog_kodu() ,dosyaString , jobString ,sbilgi);
 				}
 				break;
-			case "Adres":
+			case ADRES:
 				hangi = hangiSQL  ;
 				if( hangi.equals("MS SQL")) 
 				{
 					stb.append(" ALTER INDEX [IX_SATIRLAR] ON [dbo].[Adres] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					serverService.job_sil_S("OK_Adr" +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
-					serverService.job_olustur_S("OK_Adr" +  sbilgi.getUser_prog_kodu() + "_Index","OK_Adr" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
-					serverService.job_baslat_S("OK_Adr" +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					serverService.job_baslat_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
 				else if( hangi.equals("MY SQL")) 
 				{
-					stb.append(" OPTIMIZE TABLE OK_Adr" +  sbilgi.getUser_prog_kodu() + ".adres;") ; 
-					serverService.job_sil_S("OK_Adr" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_adr" + sbilgi.getUser_prog_kodu()  , sbilgi); 
-					serverService.job_olustur_S("OK_Adr" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_adr" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + ".adres;") ; 
+					serverService.job_sil_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Adr.name() + sbilgi.getUser_prog_kodu()  , sbilgi); 
+					serverService.job_olustur_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 				}
 				else if( hangi.equals("PG SQL")) 
 				{ 
 					serverService.job_sil_S("ADRES_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"ADRES\" ") ; 
-					String jobString = "SELECT dblink(''dbname = ok_adr" +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
+					String jobString = "SELECT dblink(''dbname = " + modulbaslikTipi.OK_Adr.name().toLowerCase() +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
 							"''" + stb.toString() + "'') " ;
 					String dosyaString = sbilgi.getSuperviser().equals("") ? sbilgi.getSuperviser() : sbilgi.getSuperviser() ;
 					serverService.job_olustur_S("ADRES_" +  sbilgi.getUser_prog_kodu() ,dosyaString , jobString ,sbilgi);
 				}
 				break;
-			case "Kur":
+			case KUR:
 				hangi = hangiSQL  ;
 				if( hangi.equals("MS SQL")) 
 				{
 					stb.append(" ALTER INDEX [IX_KUR] ON [dbo].[Kurlar] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					serverService.job_sil_S("OK_Kur" +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
-					serverService.job_olustur_S("OK_Kur" +  sbilgi.getUser_prog_kodu() + "_Index","OK_Kur" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
-					serverService.job_baslat_S("OK_Kur" +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					serverService.job_baslat_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
 				else if( hangi.equals("MY SQL")) 
 				{
-					stb.append(" OPTIMIZE TABLE OK_Kur" +  sbilgi.getUser_prog_kodu() + ".kurlar;") ; 
-					serverService.job_sil_S("OK_Kur" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_kur" + sbilgi.getUser_prog_kodu()  , sbilgi); 
-					serverService.job_olustur_S("OK_Kur" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_kur" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
+					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + ".kurlar;") ; 
+					serverService.job_sil_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Kur.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi); 
+					serverService.job_olustur_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Kur.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
 				else if( hangi.equals("PG SQL")) 
 				{ 
 					serverService.job_sil_S("KUR_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"KURLAR\" ") ; 
-					String jobString = "SELECT dblink(''dbname = ok_kur" +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
+					String jobString = "SELECT dblink(''dbname = " + modulbaslikTipi.OK_Kur.name().toLowerCase() +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
 							"''" + stb.toString() + "'') " ;
 					String dosyaString = sbilgi.getSuperviser().equals("") ? sbilgi.getSuperviser() : sbilgi.getSuperviser() ;
 					serverService.job_olustur_S("KUR_" +  sbilgi.getUser_prog_kodu() ,dosyaString, jobString ,sbilgi);
 				}
 				break;
-			case "Kambiyo":
+			case KAMBIYO:
 				hangi = hangiSQL  ;
 				if( hangi.equals("MS SQL")) 
 				{
 					stb.append(" ALTER INDEX [IX_CEK] ON [dbo].[CEK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					serverService.job_sil_S("OK_Kam" +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
-					serverService.job_olustur_S("OK_Kam" +  sbilgi.getUser_prog_kodu() + "_Index","OK_Kam" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
-					serverService.job_baslat_S("OK_Kam" +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					serverService.job_baslat_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
 				else if( hangi.equals("MY SQL")) 
 				{
-					stb.append(" OPTIMIZE TABLE OK_Kam" +  sbilgi.getUser_prog_kodu() + ".cek;") ; 
-					serverService.job_sil_S("OK_Kam" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_kam" + sbilgi.getUser_prog_kodu()  , sbilgi); 
-					serverService.job_olustur_S("OK_Kam" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_kam" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
+					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + ".cek;") ; 
+					serverService.job_sil_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Kam.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi); 
+					serverService.job_olustur_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Kam.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
 				else if( hangi.equals("PG SQL")) 
 				{ 
 					serverService.job_sil_S("KAMBIYO_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"CEK\" ") ; 
-					String jobString = "SELECT dblink(''dbname = ok_kam" +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
+					String jobString = "SELECT dblink(''dbname = " + modulbaslikTipi.OK_Kam.name().toLowerCase() +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
 							"''" + stb.toString() + "'') " ;
 					String dosyaString = sbilgi.getSuperviser().equals("") ? sbilgi.getSuperviser() : sbilgi.getSuperviser() ;
 					serverService.job_olustur_S("KAMBIYO_" +  sbilgi.getUser_prog_kodu() ,dosyaString , jobString ,sbilgi);
 				}
 				break;
-			case "Sms":
+			case SMS:
 				hangi = hangiSQL  ;
 				if( hangi.equals("MS SQL")) 
 				{
@@ -318,18 +284,18 @@ public class createDBController {
 					stb.append(" ALTER INDEX [IX_MAIL] ON [dbo].[MAIL_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IDX_MAIL_BILGILERI] ON [dbo].[MAIL_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_MID] ON [dbo].[MAIL_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					serverService.job_sil_S("OK_Sms" +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
-					serverService.job_olustur_S("OK_Sms" +  sbilgi.getUser_prog_kodu() + "_Index","OK_Sms" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
-					serverService.job_baslat_S("OK_Sms" +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					serverService.job_baslat_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
 				else if( hangi.equals("MY SQL")) 
 				{
-					stb.append(" OPTIMIZE TABLE OK_Sms" +  sbilgi.getUser_prog_kodu() + ".sms_hesap,") ; 
-					stb.append("  OK_Sms" +  sbilgi.getUser_prog_kodu() + ".sms_bilgileri,") ; 
-					stb.append("  OK_Sms" +  sbilgi.getUser_prog_kodu() + ".mail_hesap,") ; 
-					stb.append("  OK_Sms" +  sbilgi.getUser_prog_kodu() + ".mail_bilgileri;") ; 
-					serverService.job_sil_S("OK_Sms" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_sms" + sbilgi.getUser_prog_kodu()  , sbilgi);
-					serverService.job_olustur_S("OK_Sms" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_sms" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
+					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + ".sms_hesap,") ; 
+					stb.append("  " + modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + ".sms_bilgileri,") ; 
+					stb.append("  " + modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + ".mail_hesap,") ; 
+					stb.append("  " + modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + ".mail_bilgileri;") ; 
+					serverService.job_sil_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Sms.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Sms.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
 				else if( hangi.equals("PG SQL")) 
 				{ 
@@ -338,41 +304,41 @@ public class createDBController {
 					stb.append("REINDEX TABLE \"MAIL_HESAP\" ;") ; 
 					stb.append("REINDEX TABLE \"SMS_BILGILERI\" ;") ; 
 					stb.append("REINDEX TABLE \"SMS_HESAP\" ;") ; 
-					String jobString = "SELECT dblink(''dbname = ok_sms" +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
+					String jobString = "SELECT dblink(''dbname = " + modulbaslikTipi.OK_Sms.name().toLowerCase() +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
 							"''" + stb.toString() + "'') " ;
 					String dosyaString = sbilgi.getSuperviser().equals("") ? sbilgi.getSuperviser() : sbilgi.getSuperviser() ;
 					serverService.job_olustur_S("SMS_" +  sbilgi.getUser_prog_kodu() ,dosyaString , jobString ,sbilgi);
 				}
 				break;
-			case "Gunluk":
+			case GUNLUK:
 				hangi = hangiSQL  ;
 				if( hangi.equals("MS SQL")) 
 				{
 					stb.append(" ALTER INDEX [IDX_GUNLUK] ON [dbo].[GUNLUK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_GOREV] ON [dbo].[GOREV] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					serverService.job_sil_S("OK_Gun" +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
-					serverService.job_olustur_S("OK_Gun" +  sbilgi.getUser_prog_kodu() + "_Index","OK_Gun" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
-					serverService.job_baslat_S("OK_Gun" +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					serverService.job_baslat_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
 				else if( hangi.equals("MY SQL")) 
 				{
 					stb.append(" OPTIMIZE TABLE OK_Gun" +  sbilgi.getUser_prog_kodu() + ".gunluk,") ; 
-					stb.append("  OK_Gun" +  sbilgi.getUser_prog_kodu() + ".gorev;") ; 
-					serverService.job_sil_S("OK_Gun" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_gun" + sbilgi.getUser_prog_kodu()  , sbilgi);
-					serverService.job_olustur_S("OK_Gun" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_gun" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
+					stb.append("  " + modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + ".gorev;") ; 
+					serverService.job_sil_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Gun.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Gun.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
 				else if( hangi.equals("PG SQL")) 
 				{ 
 					serverService.job_sil_S("GUNLUK_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"GUNLUK\" ;") ; 
 					stb.append("REINDEX TABLE \"GOREV\" ;") ; 
-					String jobString = "SELECT dblink(''dbname = ok_gun" +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
+					String jobString = "SELECT dblink(''dbname = " + modulbaslikTipi.OK_Gun.name().toLowerCase() +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
 							"''" + stb.toString() + "'') " ;
 					String dosyaString = sbilgi.getSuperviser().equals("") ? sbilgi.getSuperviser() : sbilgi.getSuperviser() ;
 					serverService.job_olustur_S("GUNLUK_" +  sbilgi.getUser_prog_kodu() ,dosyaString , jobString ,sbilgi);
 				}
 				break;
-			case "Kereste":
+			case KERESTE:
 				hangi = hangiSQL  ;
 				if( hangi.equals("MS SQL")) 
 				{
@@ -381,23 +347,23 @@ public class createDBController {
 					stb.append(" ALTER INDEX [IX_KERESTE] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [PID] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_ACIKLAMA] ON [dbo].[ACIKLAMA] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					serverService.job_sil_S("OK_Ker" +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
-					serverService.job_olustur_S("OK_Ker" +  sbilgi.getUser_prog_kodu() + "_Index","OK_Ker" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
-					serverService.job_baslat_S("OK_Ker" +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					serverService.job_baslat_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
 				else if( hangi.equals("MY SQL")) 
 				{
 					stb.append(" OPTIMIZE TABLE OK_Ker" +  sbilgi.getUser_prog_kodu() + ".kereste,") ; 
-					stb.append("  OK_Ker" +  sbilgi.getUser_prog_kodu() + ".aciklama;") ; 
-					serverService.job_sil_S("OK_Ker" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_ker" + sbilgi.getUser_prog_kodu()  , sbilgi);
-					serverService.job_olustur_S("OK_Ker" +  sbilgi.getUser_prog_kodu() + "_Index","/ok_ker" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
+					stb.append("  " + modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + ".aciklama;") ; 
+					serverService.job_sil_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Ker.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Ker.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
 				else if( hangi.equals("PG SQL")) 
 				{ 
 					serverService.job_sil_S("KERESTE_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"KERESTE\" ;") ; 
 					stb.append("REINDEX TABLE \"DPN\" ;") ; 
-					String jobString = "SELECT dblink(''dbname = ok_ker" +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
+					String jobString = "SELECT dblink(''dbname = " + modulbaslikTipi.OK_Ker.name().toLowerCase() +  sbilgi.getUser_prog_kodu() + " port = " + Global_Yardimci.ipCevir(sbilgi.getUser_server())[1] + " host = localhost user = " + sbilgi.getUser_server() + " password = " + sbilgi.getUser_pwd_server() + "''," + 
 							"''" + stb.toString() + "'') " ;
 					String dosyaString = sbilgi.getSuperviser().equals("") ? sbilgi.getSuperviser() : sbilgi.getSuperviser() ;
 					serverService.job_olustur_S("KERESTE_" +  sbilgi.getUser_prog_kodu() ,dosyaString , jobString ,sbilgi);
