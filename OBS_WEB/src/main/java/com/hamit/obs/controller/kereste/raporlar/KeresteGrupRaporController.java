@@ -1389,17 +1389,17 @@ public class KeresteGrupRaporController {
 			if (kergrupraporDTO.getBirim().equals("Tutar"))
 			{
 				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
-					kur_dos = "  left outer join OK_Kur" + kurConnDetails.getDatabaseName() + ".dbo.kurlar k on k.Tarih = convert(varchar(10), KERESTE." + hTarString + "Tarih, 120) and (k.kur IS NULL OR k.KUR ='" + kergrupraporDTO.getDoviz() + "') ";
+					kur_dos = "  left outer join " + modulbaslikTipi.OK_Kur.name() + kurConnDetails.getDatabaseName() + ".dbo.kurlar k on k.Tarih = convert(varchar(10), KERESTE." + hTarString + "Tarih, 120) and (k.kur IS NULL OR k.KUR ='" + kergrupraporDTO.getDoviz() + "') ";
 				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
-					kur_dos = "  left outer join ok_kur" + kurConnDetails.getDatabaseName() + ".kurlar k on k.Tarih = DATE(KERESTE." + hTarString + "Tarih) and  k.kur ='" + kergrupraporDTO.getDoviz() + "' ";
+					kur_dos = "  left outer join " + modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnDetails.getDatabaseName() + ".kurlar k on k.Tarih = DATE(KERESTE." + hTarString + "Tarih) and  k.kur ='" + kergrupraporDTO.getDoviz() + "' ";
 				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					String kurServer = "" ; 
 					String[] ipogren = Global_Yardimci.ipCevir(kurConnDetails.getServerIp());
 					if (kerConnDetails.getServerIp().equals(kurConnDetails.getServerIp()))
-						kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
+						kurServer = "dbname = " + modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
 					else
-						kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
+						kurServer = "dbname = " + modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
 					String kurcString = kergrupraporDTO.getDvzturu();
 					String kurcesitString = kergrupraporDTO.getDoviz();
 					kur_dos = " left join  (SELECT * FROM  dblink ('" + kurServer + "'," + 

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.cari.dekontDTO;
@@ -631,7 +632,7 @@ public class CariMsSQL implements ICariDatabase{
 			}
 			String str1 = "";
 			if (cariConnDetails.getServerIp().equals(kurConnectionDetails.getServerIp())) {
-				str1=  "OK_Kur" + kurConnectionDetails.getDatabaseName() + ".dbo.KURLAR";
+				str1 = modulbaslikTipi.OK_Kur.name() + kurConnectionDetails.getDatabaseName() + ".dbo.KURLAR";
 			} else {
 				try (Connection connection = DriverManager.getConnection(
 						cariConnDetails.getJdbcUrl(), 
@@ -894,7 +895,7 @@ public class CariMsSQL implements ICariDatabase{
 			}
 			String str1 = "";
 			if (cariConnDetails.getServerIp().equals(adresConnectionDetails.getServerIp())) {
-				str1=  "OK_Adr" + adresConnectionDetails.getDatabaseName() + ".dbo.Adres as adr ";
+				str1=  modulbaslikTipi.OK_Adr.name() + adresConnectionDetails.getDatabaseName() + ".dbo.Adres as adr ";
 			} else {
 				try (Connection connection = DriverManager.getConnection(
 						cariConnDetails.getJdbcUrl(), 

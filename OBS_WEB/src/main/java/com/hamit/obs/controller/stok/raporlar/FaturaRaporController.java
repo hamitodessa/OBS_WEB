@@ -255,7 +255,7 @@ public class FaturaRaporController {
 		{
 			if(faturaConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 			{
-				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
+				c_yer = modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + "" ;
 				qw1 = " ,(SELECT   Adi FROM " + c_yer + ".dbo.Adres WHERE Adres.M_Kodu = FATURA.Adres_Firma  ) as Unvan " ;
 				qw2 = " ,(SELECT   Vergi_No FROM " + c_yer + ".dbo.Adres WHERE Adres.M_Kodu = FATURA.Adres_Firma  ) as Vergi_No " ;
 				qw3 = "Fatura_No,Gir_Cik,Tarih, Adres_Firma" ;
@@ -265,7 +265,7 @@ public class FaturaRaporController {
 			}
 			else if(faturaConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 			{
-				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
+				c_yer = modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + "" ;
 				qw1 = " ,(SELECT   Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = FATURA.Adres_Firma  ) as Unvan " ;
 				qw2 = " ,(SELECT   Vergi_No FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = FATURA.Adres_Firma  ) as Vergi_No " ;
 				qw3 = "Fatura_No,Gir_Cik,Tarih, Adres_Firma" ;
@@ -275,7 +275,7 @@ public class FaturaRaporController {
 			}
 			if(faturaConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 			{
-				String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
+				String adrServer = "dbname = " + modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 				qw1 = ",(SELECT \"ADI\" FROM  dblink ('"+ adrServer + "', "  
 						+ " 'SELECT \"ADI\" ,\"M_KODU\" FROM \"ADRES\"  ') "  
 						+" AS adr(\"ADI\" character varying,\"M_KODU\" character varying) "

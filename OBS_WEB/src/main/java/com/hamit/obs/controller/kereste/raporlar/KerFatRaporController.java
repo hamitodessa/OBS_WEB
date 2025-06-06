@@ -322,9 +322,9 @@ public class KerFatRaporController {
 		else
 		{
 			if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL) )
-				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + ".dbo" ;
+				c_yer = modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + ".dbo" ;
 			else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL) )
-				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
+				c_yer = modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + "" ;
 			if (turu.equals("GIREN"))
 			{
 				qw1 = " ,(SELECT Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma) as Unvan " ;
@@ -332,8 +332,8 @@ public class KerFatRaporController {
 				qw3 = "Evrak_No,Tarih, Adres_Firma" ; 
 				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
-					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
-					qw1 = ",(SELECT \"ADI\" FROM  dblink ('"+ adrServer + "', "  
+					String adrServer = "dbname = " + modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
+					qw1 = ",(SELECT \"ADI\" FROM  dblink ('" + adrServer + "', "  
 							+ " 'SELECT \"ADI\" ,\"M_KODU\" FROM \"ADRES\"  ') "  
 							+" AS adr(\"ADI\" character varying,\"M_KODU\" character varying) "
 							+" WHERE \"M_KODU\" = \"KERESTE\".\"Adres_Firma\" ) as \"Unvan\"  " ;
@@ -353,7 +353,7 @@ public class KerFatRaporController {
 				qw3 = "Cikis_Evrak,CTarih, CAdres_Firma" ;
 				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
-					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
+					String adrServer = "dbname = " + modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"ADI\" FROM  dblink ('" + adrServer + "', "  
 							+ " 'SELECT \"ADI\" ,\"M_KODU\" FROM \"ADRES\"  ') "  
 							+" AS adr(\"ADI\" character varying,\"M_KODU\" character varying) "
@@ -430,14 +430,14 @@ public class KerFatRaporController {
 		{
 			String qweString = "", ewqString = "" ;
 			if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL) ) {
-				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + ".dbo" ;
+				c_yer = modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + ".dbo" ;
 				qweString = "" ;
 				ewqString = " TOP 1 ";
 			}
 			else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL) ) {
 				qweString = "LIMIT 1" ;
 				ewqString = "" ;
-				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
+				c_yer = modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + "" ;
 			}
 			if (turu.equals("G"))
 			{
@@ -445,7 +445,7 @@ public class KerFatRaporController {
 				qw2 = " Adres_Firma" ;
 				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
-					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
+					String adrServer = "dbname = " + modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"ADI\" FROM  dblink ('"+ adrServer + "', "  
 							+ " 'SELECT \"ADI\" ,\"M_KODU\" FROM \"ADRES\"  ') "  
 							+" AS adr(\"ADI\" character varying,\"M_KODU\" character varying) "
@@ -459,7 +459,7 @@ public class KerFatRaporController {
 				qw2 = " CAdres_Firma" ;
 				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
-					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
+					String adrServer = "dbname = " + modulbaslikTipi.OK_Adr.name() + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"ADI\" FROM  dblink ('"+ adrServer + "', "  
 							+ " 'SELECT \"ADI\" ,\"M_KODU\" FROM \"ADRES\"  ') "  
 							+" AS adr(\"ADI\" character varying,\"M_KODU\" character varying) "

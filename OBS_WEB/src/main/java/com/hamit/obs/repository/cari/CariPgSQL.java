@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
@@ -639,9 +640,9 @@ public class CariPgSQL implements ICariDatabase{
 				throw  new Exception("Cari Dosya ve Kur Dosyasi Farkli SQL dosyalari");
 			String[] ipogren = Global_Yardimci.ipCevir(kurConnectionDetails.getServerIp());
 			if (cariConnDetails.getServerIp().equals(kurConnectionDetails.getServerIp())) {
-				kurServer = "dbname = ok_kur" + kurConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnectionDetails.getUsername() + " password = " + kurConnectionDetails.getPassword() +"" ; 
+				kurServer = "dbname = " + modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnectionDetails.getUsername() + " password = " + kurConnectionDetails.getPassword() +"" ; 
 			}else{
-				kurServer = "dbname = ok_kur" + kurConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnectionDetails.getUsername() + " password = " + kurConnectionDetails.getPassword() +"" ; 
+				kurServer = "dbname = " + modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnectionDetails.getUsername() + " password = " + kurConnectionDetails.getPassword() +"" ; 
 			}
 			if(! dvzcevirmeDTO.getStartDate().equals("1900-01-01") || ! dvzcevirmeDTO.getEndDate().equals("2100-12-31"))
 				tARIH = " AND s.\"TARIH\" BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" + dvzcevirmeDTO.getEndDate() + " 23:59:59.998'" ;
@@ -881,9 +882,9 @@ public class CariPgSQL implements ICariDatabase{
 			
 			String[] ipogren = Global_Yardimci.ipCevir(adresConnectionDetails.getServerIp());
 			if (cariConnDetails.getServerIp().equals(adresConnectionDetails.getServerIp())) {
-				adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
+				adrServer = "dbname = " + modulbaslikTipi.OK_Adr.name() + adresConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
 			}else{
-				adrServer = "dbname = ok_adr" + adresConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
+				adrServer = "dbname = " + modulbaslikTipi.OK_Adr.name() + adresConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + adresConnectionDetails.getUsername() + " password = " + adresConnectionDetails.getPassword() +"" ; 
 			}
 			String cinString = "" , turString="" ,posString = "" ;
 			if(tahrapDTO.getTah_ted() !=0)

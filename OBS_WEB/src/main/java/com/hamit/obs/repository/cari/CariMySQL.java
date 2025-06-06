@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.cari.dekontDTO;
@@ -640,7 +641,7 @@ public class CariMySQL implements ICariDatabase{
 			}
 			String str1 = "";
 			if (cariConnDetails.getServerIp().equals(kurConnectionDetails.getServerIp())) {
-				str1 = "ok_kur" + kurConnectionDetails.getDatabaseName() + ".kurlar as k";
+				str1 = modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnectionDetails.getDatabaseName() + ".kurlar as k";
 			} else {
 				User user = userService.getCurrentUser();
 				String usrString = user.getFirstName().length() > 15 
@@ -945,7 +946,7 @@ public class CariMySQL implements ICariDatabase{
 			}
 			String str1 = "";
 			if (cariConnDetails.getServerIp().equals(adresConnectionDetails.getServerIp())) {
-				str1=  "OK_Adr" + adresConnectionDetails.getDatabaseName() + ".Adres as adr ";
+				str1=  modulbaslikTipi.OK_Adr.name() + adresConnectionDetails.getDatabaseName() + ".Adres as adr ";
 			}
 			else
 			{  

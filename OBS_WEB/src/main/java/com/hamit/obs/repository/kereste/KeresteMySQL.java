@@ -1627,7 +1627,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 				throw new ServiceException("Kereste ve Kur Dosyası farklı SQL sunucularında yer alıyor.");
 			}
 			if (keresteConnDetails.getServerIp().equals(kurConnDetails.getServerIp())) {
-				str1=  "OK_Kur" + kurConnDetails.getDatabaseName() + ".KURLAR";
+				str1=  modulbaslikTipi.OK_Kur.name() + kurConnDetails.getDatabaseName() + ".KURLAR";
 			}
 		}
 		String[] token = kergrupraporDTO.getUkod1().toString().split("-");

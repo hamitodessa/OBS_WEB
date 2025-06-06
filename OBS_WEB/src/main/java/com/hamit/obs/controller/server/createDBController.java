@@ -144,12 +144,12 @@ public class createDBController {
 				}
 				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{ 
-					stb.append(" OPTIMIZE TABLE OK_Car" +  sbilgi.getUser_prog_kodu() + ".satirlar,") ; 
+					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + ".satirlar,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + ".izahat,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + ".hesap,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + ".hesap_detay;") ; 
-					serverService.job_sil_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","/ok_car" + sbilgi.getUser_prog_kodu()  , sbilgi); //"/ok_car019"
-					serverService.job_olustur_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","/ok_car" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
+					serverService.job_sil_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Car.name() + sbilgi.getUser_prog_kodu()  , sbilgi);
+					serverService.job_olustur_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 				}
 				else if(hangi.equals(sqlTipi.PGSQL)) 
 				{ 
@@ -178,7 +178,7 @@ public class createDBController {
 				}
 				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
-					stb.append(" OPTIMIZE TABLE OK_Fat" +  sbilgi.getUser_prog_kodu() + ".fatura,") ; 
+					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + ".fatura,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + ".mal,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + ".stok,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + ".recete;") ; 
@@ -317,7 +317,7 @@ public class createDBController {
 				}
 				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
-					stb.append(" OPTIMIZE TABLE OK_Gun" +  sbilgi.getUser_prog_kodu() + ".gunluk,") ; 
+					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + ".gunluk,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + ".gorev;") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Gun.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Gun.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
@@ -347,7 +347,7 @@ public class createDBController {
 				}
 				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
-					stb.append(" OPTIMIZE TABLE OK_Ker" +  sbilgi.getUser_prog_kodu() + ".kereste,") ; 
+					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + ".kereste,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + ".aciklama;") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Ker.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Ker.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	

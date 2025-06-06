@@ -1700,9 +1700,9 @@ public class KerestePgSQL implements IKeresteDatabase {
 			}
 			String[] ipogren = Global_Yardimci.ipCevir(kurConnDetails.getServerIp());
 			if (keresteConnDetails.getServerIp().equals(kurConnDetails.getServerIp()))
-				kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
+				kurServer = "dbname = " + modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = localhost user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
 			else
-				kurServer = "dbname = ok_kur" + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
+				kurServer = "dbname = " + modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnDetails.getUsername() + " password = " + kurConnDetails.getPassword() +"" ; 
 		}
 		String[] token = kergrupraporDTO.getUkod1().toString().split("-");
 		String ilks ,ilkk,ilkb,ilkg;
