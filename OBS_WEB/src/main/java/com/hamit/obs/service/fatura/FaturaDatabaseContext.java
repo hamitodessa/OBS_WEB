@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.fatura.FaturaMsSQL;
 import com.hamit.obs.repository.fatura.FaturaMySQL;
@@ -22,9 +23,9 @@ public class FaturaDatabaseContext {
 	private UserDetailsService userDetailsService;
 
 	public FaturaDatabaseContext(FaturaMySQL mySQL, FaturaMsSQL msSQL, FaturaPgSQL pgSQL) {
-		strategies.put("MY SQL", mySQL);
-		strategies.put("MS SQL", msSQL);
-		strategies.put("PG SQL", pgSQL);
+		strategies.put(sqlTipi.MYSQL.getValue(), mySQL);
+		strategies.put(sqlTipi.MSSQL.getValue(), msSQL);
+		strategies.put(sqlTipi.PGSQL.getValue(), pgSQL);
 	}
 
 	public IFaturaDatabase getStrategy() {

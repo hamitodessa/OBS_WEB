@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.cari.CariMsSQL;
 import com.hamit.obs.repository.cari.CariMySQL;
@@ -22,9 +23,9 @@ public class CariDatabaseContext {
 	private UserDetailsService userDetailsService;
 
 	public CariDatabaseContext(CariMySQL mySQL, CariMsSQL msSQL, CariPgSQL pgSQL) {
-		strategies.put("MY SQL", mySQL);
-		strategies.put("MS SQL", msSQL);
-		strategies.put("PG SQL", pgSQL);
+		strategies.put(sqlTipi.MYSQL.getValue(), mySQL);
+		strategies.put(sqlTipi.MSSQL.getValue(), msSQL);
+		strategies.put(sqlTipi.PGSQL.getValue(), pgSQL);
 	}
 
 	public ICariDatabase getStrategy() {

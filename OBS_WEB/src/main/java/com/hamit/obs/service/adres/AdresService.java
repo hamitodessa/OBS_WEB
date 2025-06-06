@@ -43,7 +43,7 @@ public class AdresService {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.ADRES);
 		String[] detay = {"","",""};
-		detay[0] = adresConnDetails.getHangisql() ;
+		detay[0] = adresConnDetails.getSqlTipi().getValue() ;
 		detay[1] = adresConnDetails.getDatabaseName() ;
 		detay[2] = adresConnDetails.getServerIp() ;
 		return detay;

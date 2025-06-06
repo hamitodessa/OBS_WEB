@@ -51,7 +51,7 @@ public class KambiyoService {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails kambiyoConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KAMBIYO);
 		String[] detay = {"","",""};
-		detay[0] = kambiyoConnDetails.getHangisql() ;
+		detay[0] = kambiyoConnDetails.getSqlTipi().getValue() ;
 		detay[1] = kambiyoConnDetails.getDatabaseName() ;
 		detay[2] = kambiyoConnDetails.getServerIp() ;
 		return detay;

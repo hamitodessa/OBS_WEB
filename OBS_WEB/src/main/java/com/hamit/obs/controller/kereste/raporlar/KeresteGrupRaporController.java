@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kereste.kergrupraporDTO;
@@ -81,7 +83,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"Kodu\""; 
@@ -120,18 +122,18 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " SUBSTRING(\"KERESTE\".\"Kodu\",1, 2) "; 
 						ozelgrp[0][1] = " Sinif "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) As Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) ";
@@ -169,18 +171,18 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " SUBSTRING(\"KERESTE\".\"Kodu\",1, 1) "; 
 						ozelgrp[0][1] = " Sinif I- "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 1) AS Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 1) AS Sinif ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 1) As Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 1) ";
@@ -218,18 +220,18 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " SUBSTRING(\"KERESTE\".\"Kodu\",2, 1) "; 
 						ozelgrp[0][1] = " Sinif -I "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,2, 1) AS Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,2, 1) AS Sinif ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,2, 1) As Sinif ";
 						grpString = " SUBSTRING(KERESTE.Kodu,2, 1) ";
@@ -267,18 +269,18 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " SUBSTRING(\"KERESTE\".\"Kodu\",4, 3) "; 
 						ozelgrp[0][1] = " Kalinlik "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,4, 3) AS Kalinlik ";
 						grpString = " SUBSTRING(KERESTE.Kodu,4, 3) AS Kalinlik ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,4, 3) As Kalinlik ";
 						grpString = " SUBSTRING(KERESTE.Kodu,4, 3) ";
@@ -316,18 +318,18 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " SUBSTRING(\"KERESTE\".\"Kodu\",13, 4) "; 
 						ozelgrp[0][1] = " Genislik "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,13, 4) AS Genislik ";
 						grpString = " SUBSTRING(KERESTE.Kodu,13, 4) AS Genislik ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,13, 4) As Genislik ";
 						grpString = " SUBSTRING(KERESTE.Kodu,13, 4) ";
@@ -365,18 +367,18 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " SUBSTRING(\"KERESTE\".\"Kodu\",8, 4) "; 
 						ozelgrp[0][1] = " Boy "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,8, 4) AS Boy ";
 						grpString = " SUBSTRING(KERESTE.Kodu,8, 4) AS Boy ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,8, 4) As Boy ";
 						grpString = " SUBSTRING(KERESTE.Kodu,13, 4) ";
@@ -412,7 +414,7 @@ public class KeresteGrupRaporController {
 						hANGI = "" ;
 					else if (kergrupraporDTO.getTuru().equals("CIKAN"))
 						hANGI = "C" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",1, 2)"; 
@@ -420,13 +422,13 @@ public class KeresteGrupRaporController {
 						ozelgrp[1][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",4, 3)"; 
 						ozelgrp[1][1] = "Kal "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ,SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal  " ;
@@ -465,7 +467,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",1, 2)"; 
@@ -473,13 +475,13 @@ public class KeresteGrupRaporController {
 						ozelgrp[1][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",13, 4)"; 
 						ozelgrp[1][1] = "Gen "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ,SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen  " ;
@@ -518,7 +520,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",1, 2)"; 
@@ -526,13 +528,13 @@ public class KeresteGrupRaporController {
 						ozelgrp[1][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",8, 4)"; 
 						ozelgrp[1][1] = "Boy "; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 8, 4) AS Boy " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ,SUBSTRING(KERESTE.Kodu, 8, 4) AS Boy ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 8, 4) AS Gen  " ;
@@ -571,7 +573,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",1, 2)"; 
@@ -581,14 +583,14 @@ public class KeresteGrupRaporController {
 						ozelgrp[2][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",8, 4)"; 
 						ozelgrp[2][1] = "Boy"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						blkString = " SUBSTRING(KERESTE.Kodu, 8, 4) As Boy " ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif , SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal ,SUBSTRING(KERESTE.Kodu, 8, 4) As Boy ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
@@ -628,7 +630,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",1, 2)"; 
@@ -638,14 +640,14 @@ public class KeresteGrupRaporController {
 						ozelgrp[2][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",8, 4)"; 
 						ozelgrp[2][1] = "Gen"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						blkString = " SUBSTRING(KERESTE.Kodu, 13, 4)  AS Gen" ;
 						grpString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ,SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal,SUBSTRING(KERESTE.Kodu, 13, 4)  AS Gen " ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
@@ -685,18 +687,18 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'YYYY')" ;
 						ozelgrp[0][1] = "Yil"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " datepart(yyyy,KERESTE." + hANGI + "Tarih) AS Yil " ;
 						grpString = " datepart(yyyy,KERESTE." + hANGI + "Tarih) AS Yil " ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " YEAR(KERESTE."+ hANGI+"Tarih)  as Yil"   ;
 						grpString = " YEAR(KERESTE."+ hANGI+"Tarih) "   ;
@@ -735,7 +737,7 @@ public class KeresteGrupRaporController {
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
 
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'YYYY')" ;
@@ -743,13 +745,13 @@ public class KeresteGrupRaporController {
 						ozelgrp[1][0] = "TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'MM')"; 
 						ozelgrp[1][1] = "Ay"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						mlkString = " datepart(mm,KERESTE." + hANGI +"Tarih) as Ay " ;
 						blkString = " datepart(yyyy,KERESTE." + hANGI + "Tarih) AS Yil " ;
 						grpString = " datepart(yyyy,KERESTE." + hANGI + "Tarih) AS Yil , datepart(mm,KERESTE." + hANGI +"Tarih) as Ay " ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						mlkString = " MONTH(KERESTE."+ hANGI+"Tarih) as Ay"  ;
 						blkString = " YEAR(KERESTE."+ hANGI+"Tarih) as Yil" ;
@@ -788,7 +790,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"Kodu\""; 
@@ -796,12 +798,12 @@ public class KeresteGrupRaporController {
 						ozelgrp[1][0] = " TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'YYYY')" ;
 						ozelgrp[1][1] = "Yil"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						blkString = " datepart(yyyy,KERESTE." + hANGI + "Tarih) AS Yil " ;
 						grpString = " Kodu , datepart(yyyy,KERESTE." + hANGI + "Tarih) AS Yil " ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						blkString = " YEAR(KERESTE."+ hANGI+"Tarih) as Yil" ;
 						grpString= " Kodu ,YEAR(KERESTE." + hANGI + "Tarih) " ;
@@ -839,7 +841,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"Paket_No\""; 
@@ -851,14 +853,14 @@ public class KeresteGrupRaporController {
 						ozelgrp[3][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",8, 4)"; 
 						ozelgrp[3][1] = "Boy"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " Paket_No, SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						blkString = " SUBSTRING(KERESTE.Kodu, 8, 4) AS Boy" ;
 						grpString = " Paket_No ,SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif , SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal ,SUBSTRING(KERESTE.Kodu, 8, 4) AS Boy ";
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " Paket_No,SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
@@ -899,7 +901,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"Paket_No\""; 
@@ -911,14 +913,14 @@ public class KeresteGrupRaporController {
 						ozelgrp[3][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",13, 4)"; 
 						ozelgrp[3][1] = "Gen"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						blkString = " SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen " ;
 						grpString = " Paket_No,SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif , SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal ,SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen" ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
@@ -959,7 +961,7 @@ public class KeresteGrupRaporController {
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
 
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"Konsimento\""; 
@@ -973,14 +975,14 @@ public class KeresteGrupRaporController {
 						ozelgrp[4][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",13, 4)"; 
 						ozelgrp[4][1] = "Gen"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						blkString = " SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen " ;
 						grpString = " Konsimento,Paket_No,SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif , SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal ,SUBSTRING(KERESTE.Kodu, 13, 4) AS Gen" ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
@@ -1021,7 +1023,7 @@ public class KeresteGrupRaporController {
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
 
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"Konsimento\""; 
@@ -1035,14 +1037,14 @@ public class KeresteGrupRaporController {
 						ozelgrp[4][0] = "SUBSTRING(\"KERESTE\".\"Kodu\",8, 4)"; 
 						ozelgrp[4][1] = "Boy"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
 						blkString = " SUBSTRING(KERESTE.Kodu, 8, 4) AS Boy " ;
 						grpString = " Konsimento,Paket_No,SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif , SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal ,SUBSTRING(KERESTE.Kodu, 8, 4) AS Boy" ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
 						klmString = " SUBSTRING(KERESTE.Kodu,1, 2) AS Sinif ";
 						mlkString = " SUBSTRING(KERESTE.Kodu, 4, 3) AS Kal " ;
@@ -1092,12 +1094,12 @@ public class KeresteGrupRaporController {
 						hANGI = "" ;
 						hESAP = "Cari_Firma" ;
 					}
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"" + hESAP + "\""; 
 						ozelgrp[0][1] = "Hesap"; 
-						String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+						String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 						String carString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
 								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
 								" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
@@ -1105,16 +1107,16 @@ public class KeresteGrupRaporController {
 						ozelgrp[1][0] = carString; 
 						ozelgrp[1][1] = "Unvan"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
-						String c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
+						String c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + "" ;
 						klmString = hESAP + " AS Hesap " ;
 						mlkString = " (SELECT   UNVAN FROM " + c_yer + ".[dbo].[HESAP] WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
 						grpString = hESAP + " AS Hesap , (SELECT   UNVAN FROM " + c_yer + ".[dbo].[HESAP] WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
-						String c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
+						String c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + "" ;
 						klmString = hESAP + " AS Hesap " ;
 						mlkString = " (SELECT   UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
 						grpString = hESAP + "  , (SELECT   UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " ;
@@ -1162,12 +1164,12 @@ public class KeresteGrupRaporController {
 						hANGI = "" ;
 						hESAP = "Cari_Firma" ;
 					}
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"" + hESAP + "\""; 
 						ozelgrp[0][1] = "Hesap"; 
-						String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+						String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 						String carString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
 								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
 								" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
@@ -1175,16 +1177,16 @@ public class KeresteGrupRaporController {
 						ozelgrp[1][0] = carString; 
 						ozelgrp[1][1] = "Unvan"; 
 					}
-					else if(kerConnDetails.getHangisql().equals("MS SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					{
-						String c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
+						String c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + "" ;
 						klmString = hESAP + " AS Hesap " ;
 						mlkString = " (SELECT UNVAN FROM " + c_yer + ".[dbo].[HESAP] WHERE HESAP.HESAP = KERESTE." + hESAP + ")" + " AS Unvan " ;
 						grpString = hESAP + " AS Hesap,(SELECT UNVAN FROM " + c_yer + ".[dbo].[HESAP] WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
 					}
-					else if(kerConnDetails.getHangisql().equals("MY SQL"))
+					else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					{
-						String c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
+						String c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + "" ;
 						klmString = hESAP + " AS Hesap " ;
 						mlkString = " (SELECT UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " + " AS Unvan " ;
 						grpString = hESAP + " ,(SELECT UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE." + hESAP + "  )  " ;
@@ -1221,7 +1223,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"KERESTE\".\"Konsimento\""; 
@@ -1261,7 +1263,7 @@ public class KeresteGrupRaporController {
 						hANGI = "C" ;
 					else if (kergrupraporDTO.getTuru().equals("STOK"))
 						hANGI = "" ;
-					if(kerConnDetails.getHangisql().equals("PG SQL"))
+					if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"Paket_No\""; 
@@ -1332,11 +1334,11 @@ public class KeresteGrupRaporController {
 		{
 			if (kergrupraporDTO.isDvzcevirchc())
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					sstr_4 = " ((("+ hangiFiatString + " * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) )  *  CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) )  ) * Miktar)/1000000000)) - (("+ hangiFiatString + " * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) )  *  CONVERT(INT,SUBSTRING(KERESTE.Kodu,8,4)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu,13,4))) * Miktar)/1000000000)) * "+ hangiIskontoString + ")/100) / iif(k." + kergrupraporDTO.getDvzturu() + " = 0 ,1, k." + kergrupraporDTO.getDvzturu() + ")) as Tutar ";
-				else if (kerConnDetails.getHangisql().equals("MY SQL"))
+				else if (kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					sstr_4 = " ((("+ hangiFiatString + " * (((CONVERT( SUBSTRING(KERESTE.Kodu, 4, 3),DECIMAL )  *  CONVERT( SUBSTRING(KERESTE.Kodu, 8, 4),DECIMAL) * CONVERT(SUBSTRING(KERESTE.Kodu, 13, 4),DECIMAL )  ) * Miktar)/1000000000)) - (("+ hangiFiatString + " * (((CONVERT(SUBSTRING(KERESTE.Kodu, 4, 3),DECIMAL ) * CONVERT(SUBSTRING(KERESTE.Kodu,8,4),DECIMAL) * CONVERT(SUBSTRING(KERESTE.Kodu,13,4),DECIMAL)) * Miktar)/1000000000)) * "+ hangiIskontoString + ")/100) / IF(k." + kergrupraporDTO.getDvzturu() + " = 0 ,1, k." + kergrupraporDTO.getDvzturu() + "))  ";
-				else if (kerConnDetails.getHangisql().equals("PG SQL"))
+				else if (kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					String kurcString = kergrupraporDTO.getDoviz();
 					String kurString  = " / tr.\"" + kurcString + "\"" ;
@@ -1345,11 +1347,11 @@ public class KeresteGrupRaporController {
 			}
 			else
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					sstr_4 = "(("+ hangiFiatString + " * (((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu,8,4)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu,13,4))) * Miktar)/1000000000)) - (("+ hangiFiatString + " * (((CONVERT(INT,SUBSTRING(KERESTE.Kodu,4,3)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu,8,4)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu,13,4))) * Miktar)/1000000000)) * "+ hangiIskontoString + ")/100) as Tutar";
-				else if (kerConnDetails.getHangisql().equals("MY SQL"))
+				else if (kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					sstr_4 = "(("+ hangiFiatString + " * (((CONVERT(SUBSTRING(KERESTE.Kodu, 4, 3),DECIMAL )  *  CONVERT(SUBSTRING(KERESTE.Kodu, 8, 4),DECIMAL) * CONVERT(SUBSTRING(KERESTE.Kodu, 13, 4),DECIMAL )  ) * Miktar)/1000000000)) - (("+ hangiFiatString + " * (((CONVERT(SUBSTRING(KERESTE.Kodu, 4, 3),DECIMAL )  *  CONVERT(SUBSTRING(KERESTE.Kodu,8,4),DECIMAL) * CONVERT(SUBSTRING(KERESTE.Kodu,13,4),DECIMAL)) * Miktar)/1000000000)) * "+ hangiIskontoString + ")/100) ";
-				else if (kerConnDetails.getHangisql().equals("PG SQL"))
+				else if (kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					sstr_4 = "SUM(((\"KERESTE\".\""+ hangiFiatString + "\" * (((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int  *  SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int ) * \"Miktar\")/1000000000)) - ((\"KERESTE\".\""+ hangiFiatString + "\" * (((SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)::int  * SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int ) * \"Miktar\")/1000000000)) * \"KERESTE\".\""+ hangiIskontoString + "\")/100))::DOUBLE PRECISION ";
 			}
 			sstr_5 = "Tutar";
@@ -1358,7 +1360,7 @@ public class KeresteGrupRaporController {
 		{
 			sstr_4 = " Miktar";
 			sstr_5 = "Miktar";
-			if (kerConnDetails.getHangisql().equals("PG SQL"))
+			if (kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 			{
 				sstr_4 = "SUM(\"Miktar\")::DOUBLE PRECISION  ";
 				sstr_5 = "Miktar";
@@ -1366,17 +1368,17 @@ public class KeresteGrupRaporController {
 		}
 		else  if (kergrupraporDTO.getBirim().equals("m3"))
 		{
-			if(kerConnDetails.getHangisql().equals("MS SQL"))
+			if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 			{
 				sstr_4 = " (((CONVERT(INT,SUBSTRING(KERESTE.Kodu,4,3)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu,8,4)) * CONVERT(INT,SUBSTRING(KERESTE.Kodu,13,4))) * Miktar)/1000000000) as m3";
 				sstr_5 = "m3";
 			}
-			else if (kerConnDetails.getHangisql().equals("MY SQL"))
+			else if (kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 			{
 				sstr_4 = " (((CONVERT(SUBSTRING(KERESTE.Kodu,4,3),DECIMAL) * CONVERT(SUBSTRING(KERESTE.Kodu,8,4),DECIMAL) * CONVERT(SUBSTRING(KERESTE.Kodu,13,4),DECIMAL)) * Miktar)/1000000000) ";
 				sstr_5 = "m3";
 			}
-			else if (kerConnDetails.getHangisql().equals("PG SQL"))
+			else if (kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 			{
 				sstr_4 = "SUM((((SUBSTRING(\"KERESTE\".\"Kodu\",4,3)::int  *  SUBSTRING(\"KERESTE\".\"Kodu\",8,4)::int * SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)::int) * \"Miktar\")/1000000000))::DOUBLE PRECISION ";
 				sstr_5 = "m3";
@@ -1386,11 +1388,11 @@ public class KeresteGrupRaporController {
 		{
 			if (kergrupraporDTO.getBirim().equals("Tutar"))
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					kur_dos = "  left outer join OK_Kur" + kurConnDetails.getDatabaseName() + ".dbo.kurlar k on k.Tarih = convert(varchar(10), KERESTE." + hTarString + "Tarih, 120) and (k.kur IS NULL OR k.KUR ='" + kergrupraporDTO.getDoviz() + "') ";
-				else if(kerConnDetails.getHangisql().equals("MY SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					kur_dos = "  left outer join ok_kur" + kurConnDetails.getDatabaseName() + ".kurlar k on k.Tarih = DATE(KERESTE." + hTarString + "Tarih) and  k.kur ='" + kergrupraporDTO.getDoviz() + "' ";
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					String kurServer = "" ; 
 					String[] ipogren = Global_Yardimci.ipCevir(kurConnDetails.getServerIp());
@@ -1502,7 +1504,7 @@ public class KeresteGrupRaporController {
 			}
 			if (kergrupraporDTO.getStunlar().equals("Yil"))
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT datepart(yyyy,KERESTE." + hANGI + "Tarih)","ORDER BY datepart(yyyy,KERESTE." + hANGI + "Tarih)",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1511,7 +1513,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " datepart(yyyy,KERESTE." + hANGI + "Tarih)" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL")) {
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = keresteService.baslik_bak("DISTINCT YEAR(KERESTE." + hANGI + "Tarih)","ORDER BY YEAR(KERESTE."+ hANGI+"Tarih)",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2() ,
@@ -1519,7 +1521,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " YEAR(KERESTE."+ hANGI+"Tarih)" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'YYYY')","ORDER BY TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'YYYY')",jkj.replace("Cikis_Evrak", "\"Cikis_Evrak\""),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1531,7 +1533,7 @@ public class KeresteGrupRaporController {
 			}
 			else if (kergrupraporDTO.getStunlar().equals("Ay"))
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT datepart(mm,KERESTE." + hANGI + "Tarih)","ORDER BY datepart(mm,KERESTE." + hANGI + "Tarih)",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1540,7 +1542,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " datepart(mm,KERESTE." + hANGI + "Tarih)" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL")) {
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = keresteService.baslik_bak("DISTINCT MONTH(KERESTE." + hANGI + "Tarih)","ORDER BY MONTH(KERESTE."+ hANGI+"Tarih)",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2() ,
@@ -1548,7 +1550,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " MONTH(KERESTE."+ hANGI+"Tarih)" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'MM')","ORDER BY TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'MM')",jkj.replace("Cikis_Evrak", "\"Cikis_Evrak\""),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1560,7 +1562,7 @@ public class KeresteGrupRaporController {
 			}
 			else if (kergrupraporDTO.getStunlar().equals("Gun"))
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT datepart(dd,KERESTE." + hANGI + "Tarih)","ORDER BY datepart(dd,KERESTE." + hANGI + "Tarih)",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1569,7 +1571,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " datepart(dd,KERESTE." + hANGI + "Tarih)" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL")) {
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = keresteService.baslik_bak("DISTINCT DAY(KERESTE." + hANGI + "Tarih)","ORDER BY DAY(KERESTE."+ hANGI+"Tarih)",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2() ,
@@ -1577,7 +1579,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " DAY(KERESTE."+ hANGI+"Tarih)" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'DD')","ORDER BY TO_CHAR(\"KERESTE\".\"" + hANGI + "Tarih\",'DD')",jkj.replace("Cikis_Evrak", "\"Cikis_Evrak\""),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1589,7 +1591,7 @@ public class KeresteGrupRaporController {
 			}
 			else if (kergrupraporDTO.getStunlar().equals("Kalinlik"))
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT CONVERT(INT,SUBSTRING(KERESTE.Kodu,4,3)) ", "ORDER BY CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) ) ",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1598,7 +1600,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3) ) " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL")) {
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = keresteService.baslik_bak("DISTINCT CONVERT(SUBSTRING(KERESTE.Kodu,4,3),DECIMAL)  ", "ORDER BY CONVERT(SUBSTRING(KERESTE.Kodu, 4, 3) , DECIMAL) ",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2() ,
@@ -1606,7 +1608,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " CONVERT(SUBSTRING(KERESTE.Kodu, 4, 3) ,DECIMAL) " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT SUBSTRING(\"KERESTE\".\"Kodu\",4,3) ","ORDER BY SUBSTRING(\"KERESTE\".\"Kodu\", 4, 3)",jkj.replace("Cikis_Evrak", "\"Cikis_Evrak\""),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1618,7 +1620,7 @@ public class KeresteGrupRaporController {
 			}
 			else if (kergrupraporDTO.getStunlar().equals("Boy"))
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4) ) ", "ORDER BY CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4) ) ",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1627,7 +1629,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4) ) " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL")) {
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = keresteService.baslik_bak("DISTINCT CONVERT(SUBSTRING(KERESTE.Kodu,8,4),DECIMAL) ", "ORDER BY CONVERT(SUBSTRING(KERESTE.Kodu,8,4),DECIMAL) ",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2() ,
@@ -1635,7 +1637,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " CONVERT(SUBSTRING(KERESTE.Kodu, 8, 4) ,DECIMAL) " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT SUBSTRING(\"KERESTE\".\"Kodu\",8,4) ","ORDER BY SUBSTRING(\"KERESTE\".\"Kodu\", 8, 4)",jkj.replace("Cikis_Evrak", "\"Cikis_Evrak\""),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1647,7 +1649,7 @@ public class KeresteGrupRaporController {
 			}
 			else if (kergrupraporDTO.getStunlar().equals("Genislik"))
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) ) ", "ORDER BY CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) ) ",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1656,7 +1658,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4) ) " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL")) {
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = keresteService.baslik_bak("DISTINCT CONVERT(SUBSTRING(KERESTE.Kodu,13,4),DECIMAL) ", "ORDER BY CONVERT(SUBSTRING(KERESTE.Kodu,13,4),DECIMAL) ",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2() ,
@@ -1664,7 +1666,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " CONVERT(SUBSTRING(KERESTE.Kodu, 13, 4) ,DECIMAL) " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT SUBSTRING(\"KERESTE\".\"Kodu\",13,4) ","ORDER BY SUBSTRING(\"KERESTE\".\"Kodu\", 13, 4)",jkj.replace("Cikis_Evrak", "\"Cikis_Evrak\""),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1676,7 +1678,7 @@ public class KeresteGrupRaporController {
 			}
 			else if (kergrupraporDTO.getStunlar().equals("Sinif"))
 			{
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT SUBSTRING(KERESTE.Kodu,1,2)  ","ORDER BY SUBSTRING(KERESTE.Kodu, 1, 2)  ",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1685,7 +1687,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = "  SUBSTRING(KERESTE.Kodu,1,2) " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL")) {
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = keresteService.baslik_bak("DISTINCT SUBSTRING(KERESTE.Kodu,1,2) ","ORDER BY SUBSTRING(KERESTE.Kodu, 1, 2)  ",jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2() ,
@@ -1693,7 +1695,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = " SUBSTRING(KERESTE.Kodu,1,2) " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT SUBSTRING(\"KERESTE\".\"Kodu\",1,2) ","ORDER BY SUBSTRING(\"KERESTE\".\"Kodu\",1, 2)",jkj.replace("Cikis_Evrak", "\"Cikis_Evrak\""),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1712,7 +1714,7 @@ public class KeresteGrupRaporController {
 					hKODU = "CCari_Firma" ;
 				else if (kergrupraporDTO.getTuru().equals("STOK"))
 					hKODU = "Cari_Firma" ;
-				if(kerConnDetails.getHangisql().equals("MS SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT " + hKODU,"ORDER BY " + hKODU,jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
@@ -1721,7 +1723,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = hKODU ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL")) {
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = keresteService.baslik_bak("DISTINCT " + hKODU,"ORDER BY " + hKODU,jkj,
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,
 							kergrupraporDTO.getCkod1(),kergrupraporDTO.getCkod2() ,
@@ -1729,7 +1731,7 @@ public class KeresteGrupRaporController {
 							kergrupraporDTO.getEvr1(),kergrupraporDTO.getEvr2());
 					sstr_2 = hKODU ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = keresteService.baslik_bak("DISTINCT \"" + hKODU.trim() + "\" ","ORDER BY \"" + hKODU.trim() + "\" ",jkj.replace("Cikis_Evrak", "\"Cikis_Evrak\""),
 							kergrupraporDTO.getUkod1(),kergrupraporDTO.getUkod2() ,

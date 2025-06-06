@@ -626,7 +626,7 @@ public class CariMsSQL implements ICariDatabase{
 		
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
-			if (!cariConnDetails.getHangisql().equals(kurConnectionDetails.getHangisql())) {
+			if (!cariConnDetails.getSqlTipi().equals(kurConnectionDetails.getSqlTipi())) {
 				throw new ServiceException("Cari Dosya ve Kur Dosyası farklı SQL sunucularında yer alıyor.");
 			}
 			String str1 = "";
@@ -889,7 +889,7 @@ public class CariMsSQL implements ICariDatabase{
 	public List<Map<String, Object>> tah_listele(tahrapDTO tahrapDTO, ConnectionDetails cariConnDetails,ConnectionDetails adresConnectionDetails) {
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
-			if (!cariConnDetails.getHangisql().equals(adresConnectionDetails.getHangisql())) {
+			if (!cariConnDetails.getSqlTipi().equals(adresConnectionDetails.getSqlTipi())) {
 				throw new ServiceException("Cari Dosya ve Adres Dosyası farklı SQL sunucularında yer alıyor.");
 			}
 			String str1 = "";

@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.urunDTO;
@@ -2197,7 +2198,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
 		cASE = cASE.substring(0, cASE.length() - 1);
 		String sql =  "SELECT "
-						+ " Hesap_Kodu ,(SELECT DISTINCT  UNVAN FROM ok_car" +  cariConnDetails.getDatabaseName() + ".HESAP WHERE hesap.hesap = Hesap_Kodu  ) as Unvan  , " + 	cASE
+						+ " Hesap_Kodu ,(SELECT DISTINCT  UNVAN FROM " + modulbaslikTipi.OK_Car.name() +  cariConnDetails.getDatabaseName() + ".HESAP WHERE hesap.hesap = Hesap_Kodu  ) as Unvan  , " + 	cASE
 						+ " FROM STOK " + kur_dos + ",MAL " 
 						+ " WHERE   " + jkj 
 						+ " AND " + ch1 
@@ -2244,7 +2245,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 			cASE  = cASE + "Sum(CASE WHEN " + sstr_2 + "  = '" + t.trim() + "'  THEN " + sstr_4 + " ELSE 0 END) AS '"+ t.trim() + "',";
 		cASE = cASE.substring(0, cASE.length() - 1);
 		String sql =  "SELECT "
-						+ " Hesap_Kodu  ,(SELECT DISTINCT  UNVAN FROM ok_car" +  cariConnDetails.getDatabaseName() + ".HESAP WHERE hesap.hesap = Hesap_Kodu  ) as Unvan  , YEAR(Tarih) as Yil, " + 	cASE
+						+ " Hesap_Kodu  ,(SELECT DISTINCT  UNVAN FROM " + modulbaslikTipi.OK_Car.name() +  cariConnDetails.getDatabaseName() + ".HESAP WHERE hesap.hesap = Hesap_Kodu  ) as Unvan  , YEAR(Tarih) as Yil, " + 	cASE
 						+ " FROM STOK " + kur_dos + ",MAL " 
 						+ " WHERE   " + jkj 
 						+ " AND " + ch1 

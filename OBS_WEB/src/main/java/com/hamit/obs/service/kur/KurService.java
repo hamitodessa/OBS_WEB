@@ -44,7 +44,7 @@ public class KurService {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails kurConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KUR);
 		String[] detay = {"","",""};
-		detay[0] = kurConnDetails.getHangisql() ;
+		detay[0] = kurConnDetails.getSqlTipi().getValue() ;
 		detay[1] = kurConnDetails.getDatabaseName() ;
 		detay[2] = kurConnDetails.getServerIp() ;
 		return detay;

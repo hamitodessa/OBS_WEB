@@ -65,7 +65,7 @@ public class CariService {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 		String[] detay = {"","",""};
-		detay[0] = cariConnDetails.getHangisql() ;
+		detay[0] = cariConnDetails.getSqlTipi().getValue() ;
 		detay[1] = cariConnDetails.getDatabaseName() ;
 		detay[2] = cariConnDetails.getServerIp() ;
 		return detay;

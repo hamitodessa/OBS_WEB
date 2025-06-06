@@ -635,7 +635,7 @@ public class CariPgSQL implements ICariDatabase{
 			int pageSize = dvzcevirmeDTO.getPageSize();
 			int offset = page * pageSize;
 			
-			if (!cariConnDetails.getHangisql().equals(kurConnectionDetails.getHangisql()))
+			if (!cariConnDetails.getSqlTipi().equals(kurConnectionDetails.getSqlTipi()))
 				throw  new Exception("Cari Dosya ve Kur Dosyasi Farkli SQL dosyalari");
 			String[] ipogren = Global_Yardimci.ipCevir(kurConnectionDetails.getServerIp());
 			if (cariConnDetails.getServerIp().equals(kurConnectionDetails.getServerIp())) {
@@ -872,11 +872,11 @@ public class CariPgSQL implements ICariDatabase{
 	public List<Map<String, Object>> tah_listele(tahrapDTO tahrapDTO, ConnectionDetails cariConnDetails,ConnectionDetails adresConnectionDetails) {
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
-			if (!cariConnDetails.getHangisql().equals(adresConnectionDetails.getHangisql())) {
+			if (!cariConnDetails.getSqlTipi().equals(adresConnectionDetails.getSqlTipi())) {
 				throw new ServiceException("Cari Dosya ve Adres Dosyası farklı SQL sunucularında yer alıyor.");
 			}
 			String adrServer = "" ;
-			if (!cariConnDetails.getHangisql().equals(adresConnectionDetails.getHangisql()))
+			if (!cariConnDetails.getSqlTipi().equals(adresConnectionDetails.getSqlTipi()))
 				throw  new Exception("Cari Dosya ve Adres Dosyasi Farkli SQL dosyalari");
 			
 			String[] ipogren = Global_Yardimci.ipCevir(adresConnectionDetails.getServerIp());

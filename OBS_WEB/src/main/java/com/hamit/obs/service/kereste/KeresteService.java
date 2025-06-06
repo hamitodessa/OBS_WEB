@@ -55,7 +55,7 @@ public class KeresteService {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails keresteConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.KERESTE);
 		String[] detay = {"","",""};
-		detay[0] = keresteConnDetails.getHangisql() ;
+		detay[0] = keresteConnDetails.getSqlTipi().getValue() ;
 		detay[1] = keresteConnDetails.getDatabaseName() ;
 		detay[2] = keresteConnDetails.getServerIp() ;
 		return detay;

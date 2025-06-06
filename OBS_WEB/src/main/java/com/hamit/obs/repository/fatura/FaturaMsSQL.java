@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.urunDTO;
@@ -2103,7 +2104,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM  (SELECT Hesap_Kodu  , " + 
-				" (SELECT DISTINCT  UNVAN FROM [OK_Car" +  cariConnDetails.getDatabaseName() + "].[dbo].[HESAP] WHERE hesap.hesap = STOK.Hesap_Kodu  ) as Unvan , " +
+				" (SELECT DISTINCT  UNVAN FROM [" + modulbaslikTipi.OK_Car.name() +  cariConnDetails.getDatabaseName() + "].[dbo].[HESAP] WHERE hesap.hesap = STOK.Hesap_Kodu  ) as Unvan , " +
 				sstr_2 + " as  degisken , " + sstr_4 +
 				" FROM STOK " + kur_dos + ",MAL " +
 				" WHERE " + jkj +
@@ -2143,7 +2144,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
 		String sql =   "SELECT * " +
 				" FROM (SELECT  Hesap_Kodu as Musteri_Kodu  ," +
-				" (SELECT DISTINCT  UNVAN FROM [OK_Car" +  cariConnDetails.getDatabaseName() + "].[dbo].[HESAP] WHERE hesap.hesap = STOK.Hesap_Kodu  ) as Unvan  " +
+				" (SELECT DISTINCT  UNVAN FROM [" + modulbaslikTipi.OK_Car.name() +  cariConnDetails.getDatabaseName() + "].[dbo].[HESAP] WHERE hesap.hesap = STOK.Hesap_Kodu  ) as Unvan  " +
 				" ,datepart(yyyy,STOK.Tarih) as Yil  , " + sstr_2 + " as  degisken , " + sstr_4 +
 				" FROM STOK " + kur_dos + ",MAL " +
 				" WHERE " + jkj +

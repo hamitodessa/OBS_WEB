@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -262,26 +264,26 @@ public class KerFatRaporController {
 		if (hangiadres.equals("Cari_Firma"))
 		{
 			String qweString = "", ewqString = "" ;
-			if(kerConnDetails.getHangisql().equals("MS SQL") )
+			if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL) )
 			{
 				qweString = "" ;
 				ewqString = " TOP 1 ";
-				c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + ".dbo" ;
+				c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + ".dbo" ;
 			}
-			else if(kerConnDetails.getHangisql().equals("MY SQL") )
+			else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL) )
 			{
 				qweString = "LIMIT 1" ;
 				ewqString = "" ;
-				c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
+				c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + "" ;
 			}
 			if (turu.equals("G"))
 			{
 				qw1 = " ,(SELECT " + ewqString + "  UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE.Cari_Firma " + qweString +" ) as Unvan " ;
 				qw2 = " ,(SELECT   VERGI_NO FROM " + c_yer + ".HESAP_DETAY WHERE HESAP_DETAY.D_HESAP = KERESTE.Cari_Firma  ) as Vergi_No " ;
 				qw3 = "Evrak_No,Tarih, Cari_Firma" ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
-					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+					String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"UNVAN\" FROM  dblink ('" + carServer + "', "  
 							+ " 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"  ') "  
 							+" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
@@ -292,7 +294,7 @@ public class KerFatRaporController {
 							+" WHERE \"D_HESAP\" = \"KERESTE\".\"Cari_Firma\" ) as \"Vergi_No\"  " ;
 					qw3 = "\"Evrak_No\",\"Tarih\", \"Cari_Firma\"" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					qw3 = "Evrak_No,Tarih, Cari_Firma" ;
 			}
 			else 
@@ -300,9 +302,9 @@ public class KerFatRaporController {
 				qw1 = " ,(SELECT " + ewqString + "  UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE.CCari_Firma " + qweString +" ) as Unvan " ;
 				qw2 = " ,(SELECT   VERGI_NO FROM " + c_yer + ".HESAP_DETAY WHERE HESAP_DETAY.D_HESAP = KERESTE.CCari_Firma  ) as Vergi_No " ;
 				qw3 = "Cikis_Evrak,CTarih, CCari_Firma" ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
-					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+					String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"UNVAN\" FROM  dblink ('" + carServer + "', "  
 							+ " 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"  ') "  
 							+" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
@@ -313,22 +315,22 @@ public class KerFatRaporController {
 							+" WHERE \"D_HESAP\" = \"KERESTE\".\"CCari_Firma\" ) as \"Vergi_No\"  " ;
 					qw3 = "\"Cikis_Evrak\",\"CTarih\", \"CCari_Firma\"" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					qw3 = "Evrak_No,CTarih, Cari_Firma" ;
 			}
 		}
 		else
 		{
-			if(kerConnDetails.getHangisql().equals("MS SQL") )
+			if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL) )
 				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + ".dbo" ;
-			else if(kerConnDetails.getHangisql().equals("MY SQL") )
+			else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL) )
 				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
 			if (turu.equals("GIREN"))
 			{
 				qw1 = " ,(SELECT Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma) as Unvan " ;
 				qw2 = " ,(SELECT Vergi_No FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma  ) as Vergi_No " ;
 				qw3 = "Evrak_No,Tarih, Adres_Firma" ; 
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
 					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"ADI\" FROM  dblink ('"+ adrServer + "', "  
@@ -341,7 +343,7 @@ public class KerFatRaporController {
 							+" WHERE \"M_KODU\" = \"KERESTE\".\"Adres_Firma\" ) as \"Vergi_No\"  " ;
 					qw3 = "\"Evrak_No\",\"Tarih\", \"Adres_Firma\"" ; 
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					qw3 = "Evrak_No,Tarih, Cari_Firma" ;
 			}
 			else 
@@ -349,7 +351,7 @@ public class KerFatRaporController {
 				qw1 = " ,(SELECT Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.CAdres_Firma  ) as Unvan " ;
 				qw2 = " ,(SELECT Vergi_No FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.CAdres_Firma  ) as Vergi_No " ;
 				qw3 = "Cikis_Evrak,CTarih, CAdres_Firma" ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
 					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"ADI\" FROM  dblink ('" + adrServer + "', "  
@@ -362,7 +364,7 @@ public class KerFatRaporController {
 							+" WHERE \"M_KODU\" = \"KERESTE\".\"CAdres_Firma\" ) as \"Vergi_No\"  " ;
 					qw3 = "\"Cikis_Evrak\",\"CTarih\", \"CAdres_Firma\"" ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL"))
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					qw3 = "Evrak_No,CTarih, Cari_Firma" ;
 			}
 		}
@@ -383,25 +385,25 @@ public class KerFatRaporController {
 		if (hangiadres.equals("Cari_Firma"))
 		{
 			String qweString = "", ewqString = "" ;
-			if(kerConnDetails.getHangisql().equals("MS SQL") )
+			if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL) )
 			{
 				qweString = "" ;
 				ewqString = " TOP 1 ";
-				c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + ".dbo" ;
+				c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + ".dbo" ;
 			}
-			else if(kerConnDetails.getHangisql().equals("MY SQL") )
+			else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL) )
 			{
 				qweString = "LIMIT 1" ;
 				ewqString = "" ;
-				c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
+				c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + "" ;
 			}
 			if (turu.equals("G"))
 			{
 				qw1 = " ,(SELECT "+ ewqString + " UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE.Cari_Firma " + qweString+ " ) as Unvan " ;
 				qw2 =" Cari_Firma" ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
-					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+					String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"UNVAN\" FROM  dblink ('" + carServer + "', "  
 							+ " 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"  ') "  
 							+ " AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
@@ -413,9 +415,9 @@ public class KerFatRaporController {
 			{
 				qw1 = " ,(SELECT "+ ewqString +" UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = KERESTE.CCari_Firma " + qweString+ " ) as Unvan " ;
 				qw2 =" CCari_Firma" ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
-					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+					String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"UNVAN\" FROM  dblink ('" + carServer + "', "  
 							+ " 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"  ') "  
 							+" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
@@ -427,12 +429,12 @@ public class KerFatRaporController {
 		else
 		{
 			String qweString = "", ewqString = "" ;
-			if(kerConnDetails.getHangisql().equals("MS SQL") ) {
+			if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL) ) {
 				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + ".dbo" ;
 				qweString = "" ;
 				ewqString = " TOP 1 ";
 			}
-			else if(kerConnDetails.getHangisql().equals("MY SQL") ) {
+			else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL) ) {
 				qweString = "LIMIT 1" ;
 				ewqString = "" ;
 				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
@@ -441,7 +443,7 @@ public class KerFatRaporController {
 			{
 				qw1 = " ,(SELECT  " + ewqString +" Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.Adres_Firma  " + qweString+ ") as Unvan " ;
 				qw2 = " Adres_Firma" ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
 					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"ADI\" FROM  dblink ('"+ adrServer + "', "  
@@ -455,7 +457,7 @@ public class KerFatRaporController {
 			{
 				qw1 = " ,(SELECT " + ewqString +"  Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = KERESTE.CAdres_Firma " + qweString+ " ) as Unvan " ;
 				qw2 = " CAdres_Firma" ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"ADI\" FROM  dblink ('"+ adrServer + "', "  

@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
@@ -1222,7 +1223,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 			aLsAT = "Satis";
 			dURUM =   " Cikis_Evrak <> '' AND" ;
 		}
-		String sql =  " SELECT "+ eVRAKNO + " as Fatura_No,'" + aLsAT + "' as Hareket,DATE_FORMAT(" + hANGI + "Tarih, '%Y.%m.%d')  AS Tarih ,(SELECT   UNVAN FROM  ok_car" + cariConnDetails.getDatabaseName() + ".HESAP WHERE HESAP.HESAP = KERESTE." + hANGI + "Cari_Firma  ) as Unvan  ," + hANGI + "Adres_Firma as Adres_Firma," + hANGI + "Doviz as Doviz, " 
+		String sql =  " SELECT "+ eVRAKNO + " as Fatura_No,'" + aLsAT + "' as Hareket,DATE_FORMAT(" + hANGI + "Tarih, '%Y.%m.%d')  AS Tarih ,(SELECT   UNVAN FROM " + modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + ".HESAP WHERE HESAP.HESAP = KERESTE." + hANGI + "Cari_Firma  ) as Unvan  ," + hANGI + "Adres_Firma as Adres_Firma," + hANGI + "Doviz as Doviz, " 
 				+" SUM( (((CONVERT( SUBSTRING(KERESTE.Kodu, 4, 3),DECIMAL )  *  CONVERT( SUBSTRING(KERESTE.Kodu, 8, 4),DECIMAL) * CONVERT( SUBSTRING(KERESTE.Kodu, 13, 4),DECIMAL )  ) * Miktar)/1000000000))  as m3 ," 
 				+" SUM(((((CONVERT( SUBSTRING(KERESTE.Kodu, 4, 3) ,DECIMAL)  *  CONVERT( SUBSTRING(KERESTE.Kodu, 8, 4),DECIMAL) * CONVERT( SUBSTRING(KERESTE.Kodu, 13, 4) ,DECIMAL)  ) * Miktar)/1000000000)) * "+ hANGI+"Fiat ) as Tutar, " 
 				+" SUM(((((CONVERT( SUBSTRING(KERESTE.Kodu, 4, 3),DECIMAL )  *  CONVERT( SUBSTRING(KERESTE.Kodu, 8, 4),DECIMAL) * CONVERT( SUBSTRING(KERESTE.Kodu, 13, 4),DECIMAL )  ) * Miktar)/1000000000)) * "+ hANGI+"Fiat  ) - SUM(((((((CONVERT( SUBSTRING(KERESTE.Kodu, 4, 3) ,DECIMAL)  *  CONVERT( SUBSTRING(KERESTE.Kodu, 8, 4),DECIMAL) * CONVERT( SUBSTRING(KERESTE.Kodu, 13, 4),DECIMAL )  ) * Miktar)/1000000000)) * "+ hANGI+"Fiat  ) * " + hANGI + "Iskonto)/100) as Iskontolu_Tutar ," 
@@ -1622,7 +1623,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 
 		if(kergrupraporDTO.isDvzcevirchc())
 		{
-			if (!keresteConnDetails.getHangisql().equals(kurConnDetails.getHangisql())) {
+			if (!keresteConnDetails.getSqlTipi().equals(kurConnDetails.getSqlTipi())) {
 				throw new ServiceException("Kereste ve Kur Dosyası farklı SQL sunucularında yer alıyor.");
 			}
 			if (keresteConnDetails.getServerIp().equals(kurConnDetails.getServerIp())) {

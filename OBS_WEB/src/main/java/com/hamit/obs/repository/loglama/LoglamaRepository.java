@@ -14,6 +14,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -39,19 +40,19 @@ public class LoglamaRepository {
 	
 public List<Map<String, Object>> logRapor(String user, String startDate,String endDate,String aciklama ,ConnectionDetails connDetails){
 		String sql = "" ;
-		if(connDetails.getHangisql().equals("MS SQL")) {
+		if(connDetails.getSqlTipi().equals(sqlTipi.MSSQL)) {
 				sql = " SELECT FORMAT (TARIH,'dd.MM.yyyy HH:mm:ss fff') AS TARIH,MESAJ,EVRAK,USER_NAME" +
 					 " FROM LOGLAMA WITH (INDEX (IX_LOGLAMA))" + 
 					 " WHERE MESAJ LIKE N'%" + aciklama + "%'" + 
 					 " AND TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
 					 " AND USER_NAME  LIKE '" + user + "%'";
-		}else if(connDetails.getHangisql().equals("MY SQL")) {
+		}else if(connDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 			sql = "SELECT DATE_FORMAT(TARIH,'%d.%m.%Y %H:%i:%s') AS TARIH,MESAJ,EVRAK,USER_NAME" + 
 					" FROM LOGLAMA USE INDEX (IX_LOGLAMA)" + 
 					" WHERE MESAJ LIKE N'%" + aciklama + "%'" + 
 					" AND TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
 					" AND USER_NAME LIKE '" + user + "%'";
-		} else if(connDetails.getHangisql().equals("PG SQL")) {
+		} else if(connDetails.getSqlTipi().equals(sqlTipi.PGSQL)) {
 			sql = "SELECT TO_CHAR(\"TARIH\",'dd.MM.yyyy HH:mm:ss ms') AS \"TARIH\",\"MESAJ\",\"EVRAK\",\"USER_NAME\"" +
 					" FROM \"LOGLAMA\"" + 
 					" WHERE \"MESAJ\"::text LIKE '%" + aciklama + "%'" +

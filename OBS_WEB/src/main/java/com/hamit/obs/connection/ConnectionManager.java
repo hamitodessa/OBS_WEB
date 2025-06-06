@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.enums.modulbaslikTipi;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.model.user.User_Details;
 import com.hamit.obs.service.user.UserDetailsService;
@@ -59,7 +60,7 @@ public class ConnectionManager {
 				details.getUser_prog_kodu(),
 				details.getUser_server(),
 				TextSifreleme.decrypt(details.getUser_pwd_server()) ,
-				details.getHangi_sql(),
+				sqlTipi.fromString(details.getHangi_sql()),
 				details.getLog(),
 				jdbcUrl ,jdbcUrlLog
 				));
@@ -67,22 +68,22 @@ public class ConnectionManager {
 
 	private String generateJdbcUrl(User_Details details,String modul,String dosbaslangic) {
 		String cnnString="" ;
-		if(details.getHangi_sql().equals("MS SQL"))
+		if(details.getHangi_sql().equals(sqlTipi.MSSQL.getValue()))
 			cnnString = "jdbc:sqlserver://" + details.getUser_ip() + ";databaseName=" + dosbaslangic + details.getUser_prog_kodu() + ";trustServerCertificate=true;";
-		else if(details.getHangi_sql().equals("MY SQL"))
+		else if(details.getHangi_sql().equals(sqlTipi.MYSQL.getValue()))
 			cnnString = "jdbc:mysql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu();
-		else if(details.getHangi_sql().equals("PG SQL"))
+		else if(details.getHangi_sql().equals(sqlTipi.PGSQL.getValue()))
 			cnnString = "jdbc:postgresql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu();
 		return cnnString ;
 	}
 
 	private String generateJdbcUrlLog(User_Details details,String dosbaslangic) {
 		String cnnString="" ;
-		if(details.getHangi_sql().equals("MS SQL"))
+		if(details.getHangi_sql().equals(sqlTipi.MSSQL.getValue()))
 			cnnString = "jdbc:sqlserver://" + details.getUser_ip() + ";databaseName=" + dosbaslangic + details.getUser_prog_kodu() + "_LOG" +	";trustServerCertificate=true;";
-		else if(details.getHangi_sql().equals("MY SQL"))
+		else if(details.getHangi_sql().equals(sqlTipi.MYSQL.getValue()))
 			cnnString = "jdbc:mysql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu()  + "_LOG";
-		else if(details.getHangi_sql().equals("PG SQL"))
+		else if(details.getHangi_sql().equals(sqlTipi.PGSQL.getValue()))
 			cnnString = "jdbc:postgresql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu()  + "_log";
 		return cnnString ;
 	}

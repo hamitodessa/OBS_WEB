@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
@@ -1290,7 +1291,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 			dURUM =   " \"Cikis_Evrak\" <> '' AND" ;
 		}
 		
-		String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+		String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 		String qw1 = ",(SELECT \"UNVAN\" FROM  dblink ('" + carServer + "', "  
 				+ " 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"  ') "  
 				+" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
@@ -1694,7 +1695,7 @@ public class KerestePgSQL implements IKeresteDatabase {
 		String kurServer = "" ;
 		if(kergrupraporDTO.isDvzcevirchc())
 		{
-			if (!keresteConnDetails.getHangisql().equals(kurConnDetails.getHangisql())) {
+			if (!keresteConnDetails.getSqlTipi().equals(kurConnDetails.getSqlTipi())) {
 				throw new ServiceException("Kereste ve Kur Dosyası farklı SQL sunucularında yer alıyor.");
 			}
 			String[] ipogren = Global_Yardimci.ipCevir(kurConnDetails.getServerIp());

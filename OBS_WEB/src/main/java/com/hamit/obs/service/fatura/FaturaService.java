@@ -58,7 +58,7 @@ public class FaturaService {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails faturaConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
 		String[] detay = {"","",""};
-		detay[0] = faturaConnDetails.getHangisql() ;
+		detay[0] = faturaConnDetails.getSqlTipi().getValue() ;
 		detay[1] = faturaConnDetails.getDatabaseName() ;
 		detay[2] = faturaConnDetails.getServerIp() ;
 		return detay;

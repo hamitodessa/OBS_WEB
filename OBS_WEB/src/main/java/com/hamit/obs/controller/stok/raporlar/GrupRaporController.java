@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.stok.raporlar.grupraporDTO;
@@ -72,7 +74,7 @@ public class GrupRaporController {
 				deg_cevirString = deg_cevir(grupraporDTO);
 				if (! baslikbakStrings[0].equals(""))
 				{
-					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"MAL\".\"Kodu\""; 
@@ -102,7 +104,7 @@ public class GrupRaporController {
 				deg_cevirString = deg_cevir(grupraporDTO);
 				if (! baslikbakStrings[0].equals(""))
 				{
-					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"MAL\".\"Kodu\""; 
@@ -135,12 +137,12 @@ public class GrupRaporController {
 				deg_cevirString = deg_cevir(grupraporDTO);
 				if (! baslikbakStrings[0].equals(""))
 				{
-					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"Hesap_Kodu\""; 
 						ozelgrp[0][1] = "Musteri_Kodu"; 
-						String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+						String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 						String adrString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
 								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
 								" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
@@ -168,12 +170,12 @@ public class GrupRaporController {
 				deg_cevirString = deg_cevir(grupraporDTO);
 				if (! baslikbakStrings[0].equals(""))
 				{
-					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = "\"Hesap_Kodu\""; 
 						ozelgrp[0][1] = "Musteri_Kodu"; 
-						String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+						String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 						String adrString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
 								" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\" ') " + 
 								" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
@@ -203,7 +205,7 @@ public class GrupRaporController {
 				deg_cevirString = deg_cevir(grupraporDTO);
 				if (! baslikbakStrings[0].equals(""))
 				{
-					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
@@ -231,7 +233,7 @@ public class GrupRaporController {
 				deg_cevirString = deg_cevir(grupraporDTO);
 				if (! baslikbakStrings[0].equals(""))
 				{
-					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " TO_CHAR(\"STOK\".\"Tarih\",'YYYY')" ;
@@ -257,7 +259,7 @@ public class GrupRaporController {
 				deg_cevirString = deg_cevir(grupraporDTO);
 				if (! baslikbakStrings[0].equals(""))
 				{
-					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " (SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"MAL\".\"Ana_Grup\" )" ;
@@ -285,7 +287,7 @@ public class GrupRaporController {
 				deg_cevirString = deg_cevir(grupraporDTO);
 				if (! baslikbakStrings[0].equals(""))
 				{
-					if(fatConnDetails.getHangisql().equals("PG SQL"))
+					if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					{
 						ozelgrp = new String[7][2];
 						ozelgrp[0][0] = " (SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"MAL\".\"Ana_Grup\" )" ;
@@ -357,7 +359,7 @@ public class GrupRaporController {
 			String sstr_2 = "" ;
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails fatConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
-			if(fatConnDetails.getHangisql().equals("PG SQL"))
+			if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 			{
 				if (grupraporDTO.getTuru().equals("CIKAN"))
 					jkj = " \"STOK\".\"Hareket\" = 'C'  " ;
@@ -375,7 +377,7 @@ public class GrupRaporController {
 
 			if (grupraporDTO.getStunlar().equals("Yil"))
 			{
-				if(fatConnDetails.getHangisql().equals("MS SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT datepart(yyyy,STOK.Tarih)","order by datepart(yyyy,STOK.Tarih)",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -383,14 +385,14 @@ public class GrupRaporController {
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
 					sstr_2 = " datepart(yyyy,STOK.Tarih)" ;
 				}
-				else if(fatConnDetails.getHangisql().equals("MY SQL")) {
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 					baslik = faturaService.baslik_bak("DISTINCT YEAR(STOK.Tarih)", "order by YEAR(STOK.Tarih)",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
 							grupraporDTO.getCkod1(),grupraporDTO.getCkod2() ,
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
 					sstr_2 = " YEAR(STOK.Tarih)" ;
 				}
-				else if(fatConnDetails.getHangisql().equals("PG SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT TO_CHAR(\"STOK\".\"Tarih\",'YYYY') ","order by TO_CHAR(\"STOK\".\"Tarih\",'YYYY')",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -401,7 +403,7 @@ public class GrupRaporController {
 			}
 			else if (grupraporDTO.getStunlar().equals("Ay"))
 			{
-				if(fatConnDetails.getHangisql().equals("MS SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT datepart(mm,STOK.Tarih)", "order by datepart(mm,STOK.Tarih)",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -409,7 +411,7 @@ public class GrupRaporController {
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
 					sstr_2 = "datepart(mm,STOK.Tarih)" ;
 				}
-				else if(fatConnDetails.getHangisql().equals("MY SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT MONTH(STOK.Tarih)", "order by MONTH(STOK.Tarih)",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -417,7 +419,7 @@ public class GrupRaporController {
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
 					sstr_2 = "MONTH(STOK.Tarih)" ;
 				}
-				else if(fatConnDetails.getHangisql().equals("PG SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT TO_CHAR(\"STOK\".\"Tarih\",'MM') ","order by TO_CHAR(\"STOK\".\"Tarih\",'MM')",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -428,7 +430,7 @@ public class GrupRaporController {
 			}
 			else if (grupraporDTO.getStunlar().equals("Gun"))
 			{
-				if(fatConnDetails.getHangisql().equals("MS SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT datepart(dd,STOK.Tarih)", "order by datepart(dd,STOK.Tarih)",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -436,7 +438,7 @@ public class GrupRaporController {
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
 					sstr_2 = "datepart(dd,STOK.Tarih)" ;
 				}
-				else  if(fatConnDetails.getHangisql().equals("MY SQL"))
+				else  if(fatConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT DAY(STOK.Tarih)", "order by DAY(STOK.Tarih)",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -444,7 +446,7 @@ public class GrupRaporController {
 							grupraporDTO.getTar1(),grupraporDTO.getTar2());
 					sstr_2 = "DAY(STOK.Tarih)" ;
 				}
-				else if(fatConnDetails.getHangisql().equals("PG SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT TO_CHAR(\"STOK\".\"Tarih\",'DD') ","order by TO_CHAR(\"STOK\".\"Tarih\",'DD')",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -456,11 +458,11 @@ public class GrupRaporController {
 			else if (grupraporDTO.getStunlar().equals("Ana Grup"))
 			{
 				String ifnul = "";
-				if(fatConnDetails.getHangisql().equals("MS SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					ifnul = "ISNULL";
-				else if(fatConnDetails.getHangisql().equals("MY SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					ifnul = "IFNULL";
-				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					ifnul = "COALESCE";
 					baslik = faturaService.baslik_bak("DISTINCT " + ifnul + "((SELECT \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID\" = \"STOK\".\"Ana_Grup\"),'---')  as \"ANA_GRUP\" ", "order by  \"ANA_GRUP\" ",jkj,ch1,
@@ -480,11 +482,11 @@ public class GrupRaporController {
 			else if (grupraporDTO.getStunlar().equals("Urun Ana Grup"))
 			{
 				String ifnul = "";
-				if(fatConnDetails.getHangisql().equals("MS SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					ifnul = "ISNULL";
-				else if(fatConnDetails.getHangisql().equals("MY SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					ifnul = "IFNULL";
-				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					ifnul = "COALESCE";
 					baslik = faturaService.baslik_bak("DISTINCT "+ ifnul +"((SELECT \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID\" = \"MAL\".\"Ana_Grup\"),'---')  as \"ANA_GRUP\" ", "order by  \"ANA_GRUP\" ",jkj,ch1,
@@ -503,7 +505,7 @@ public class GrupRaporController {
 			}
 			else if (grupraporDTO.getStunlar().equals("Hesap Kodu"))
 			{
-				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					baslik = faturaService.baslik_bak("DISTINCT Case when \"Hesap_Kodu\" = '' then '---'	else \"Hesap_Kodu\" end as \"Hesap_Kodu\"", "order by \"Hesap_Kodu\"",jkj,ch1,
 							grupraporDTO.getUkod1(),grupraporDTO.getUkod2() ,
@@ -592,11 +594,11 @@ public class GrupRaporController {
 			harekString = "G";
 		if (grupraporDTO.isIstenenaychc())
 		{
-			if(fatConnDetails.getHangisql().equals("MS SQL"))
+			if(fatConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				jkj = " datepart(mm,STOK.Tarih) like '" + grupraporDTO.getIstenenay() + "'  AND STOK.Hareket = '" + harekString + "' " ;
-			else if(fatConnDetails.getHangisql().equals("MY SQL"))
+			else if(fatConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 				jkj = " MONTH(STOK.Tarih) like '" + grupraporDTO.getIstenenay() + "'  AND STOK.Hareket = '" + harekString + "' " ;
-			else if(fatConnDetails.getHangisql().equals("PG SQL"))
+			else if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 			{
 				String ay = grupraporDTO.getIstenenay() ;
 				if(grupraporDTO.getIstenenay().length() == 1)
@@ -606,12 +608,12 @@ public class GrupRaporController {
 		}
 		else
 		{
-			if(fatConnDetails.getHangisql().equals("PG SQL"))
+			if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				jkj = " \"STOK\".\"Hareket\" = '" + harekString + "' " ;
 			else
 				jkj = " STOK.Hareket = '" + harekString + "' " ;
 		}
-		if(fatConnDetails.getHangisql().equals("PG SQL"))
+		if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 		{
 			jkj1 = " \"STOK\".\"Hareket\" = '" + harekString + "' " ;
 			ch1 = " \"Evrak_Cins\" = 'FAT' " ;
@@ -625,11 +627,11 @@ public class GrupRaporController {
 		{
 			if (grupraporDTO.isDvzcevirchc())
 			{
-				if(fatConnDetails.getHangisql().equals("MS SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					sstr_4 = " ABS(STOK.Tutar / iif(k." + grupraporDTO.getDvzturu() + " = 0 ,1, k." + grupraporDTO.getDvzturu() + ")) as Tutar ";
-				else if (fatConnDetails.getHangisql().equals("MY SQL"))
+				else if (fatConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					sstr_4 = " ABS(STOK.Tutar / IF(k." + grupraporDTO.getDvzturu() + " = 0 ,1, k." + grupraporDTO.getDvzturu() + ")) as Tutar ";
-				else if(fatConnDetails.getHangisql().equals("PG SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					String kurcString = grupraporDTO.getDvzturu();
 					sstr_4 = "SUM(ABS(\"STOK\".\"Tutar\" / tr.\"" + kurcString + "\"))::DOUBLE PRECISION ";
@@ -637,7 +639,7 @@ public class GrupRaporController {
 			}
 			else
 			{
-				if(fatConnDetails.getHangisql().equals("PG SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 					sstr_4 = " SUM(ABS(\"STOK\".\"Tutar\")) ";
 				else
 					sstr_4 = " ABS(STOK.Tutar) as Tutar";
@@ -648,7 +650,7 @@ public class GrupRaporController {
 		{
 			sstr_4 = " ABS(STOK.Miktar) as Miktar";
 			sstr_5 = "Miktar";
-			if(fatConnDetails.getHangisql().equals("PG SQL"))
+			if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 			{
 				sstr_4 =  " CASE WHEN SUM(ABS(\"STOK\".\"Miktar\")) = 0 THEN null else SUM(ABS(\"STOK\".\"Miktar\")) end " ;
 				sstr_5 = "\"Miktar\"" ;
@@ -658,7 +660,7 @@ public class GrupRaporController {
 		{
 			sstr_4 = " (ABS(STOK.Miktar) * MAL.Agirlik)  as Agirlik";
 			sstr_5 = "Agirlik";
-			if(fatConnDetails.getHangisql().equals("PG SQL"))
+			if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 			{
 				sstr_4 = " CASE WHEN  SUM(ABS(\"STOK\".\"Miktar\" * \"MAL\".\"Agirlik\")) = 0 THEN null ELSE  SUM(ABS(\"STOK\".\"Miktar\" * \"MAL\".\"Agirlik\")) end" ;    //" SUM(ABS(\"STOK\".\"Miktar\" * \"MAL\".\"Agirlik\"))"
 				sstr_5 = "\"Agirlik\"" ;
@@ -668,11 +670,11 @@ public class GrupRaporController {
 		{
 			if (grupraporDTO.getBirim().equals("Tutar"))
 			{
-				if(fatConnDetails.getHangisql().equals("MS SQL"))
+				if(fatConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 					kur_dos = "  left outer join OK_Kur" + kurConnDetails.getDatabaseName() + ".dbo.kurlar k on k.Tarih = convert(varchar(10), STOK.Tarih, 120) and (k.kur IS NULL OR k.KUR ='" + grupraporDTO.getDoviz() + "') ";
-				else if(fatConnDetails.getHangisql().equals("MY SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 					kur_dos = "  left outer join ok_kur" + kurConnDetails.getDatabaseName() + ".kurlar k on k.Tarih = DATE( STOK.Tarih) and  k.kur ='" + grupraporDTO.getDoviz() + "' ";
-				else if(fatConnDetails.getHangisql().equals("PG SQL"))
+				else if(fatConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					String kurServer = "" ; 
 					String[] ipogren = Global_Yardimci.ipCevir(kurConnDetails.getServerIp());

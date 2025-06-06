@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.kereste.kerestedetayraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -66,7 +68,7 @@ public class KerEnvanterController {
 			if(kerestedetayraporDTO.getGruplama().equals("Urun Kodu")) {
 				grupString[0] = " Kodu " ;
 				grupString[1] = " Kodu " ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					grupString[0] = " \"Kodu\" " ;
 					grupString[1] = " \"Kodu\" " ;
@@ -75,26 +77,26 @@ public class KerEnvanterController {
 			else if(kerestedetayraporDTO.getGruplama().equals("Konsimento")) {
 				grupString[0] = " Konsimento , (SELECT ACIKLAMA FROM KONS_ACIKLAMA  WHERE KONS = KERESTE.Konsimento ) as Aciklama " ;
 				grupString[1] = " Konsimento " ;
-				if(kerConnDetails.getHangisql().equals("PG SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					grupString[0] = " \"Konsimento\" , (SELECT \"ACIKLAMA\" FROM \"KONS_ACIKLAMA\"  WHERE \"KONS\" = \"KERESTE\".\"Konsimento\" ) as \"Aciklama\" " ;
 					grupString[1] = " \"Konsimento\" " ;
 				}
 			}
 			else if(kerestedetayraporDTO.getGruplama().equals("Hesap-Kodu")) {
-				if(kerConnDetails.getHangisql().equals("MS SQL") )
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 				{
-					grupString[0] = " Cari_Firma , (SELECT TOP 1  UNVAN FROM OK_Car" + kerConnDetails.getDatabaseName() + ".dbo.HESAP WHERE HESAP.HESAP = KERESTE.Cari_Firma  ) as Unvan  " ;
+					grupString[0] = " Cari_Firma , (SELECT TOP 1  UNVAN FROM " + modulbaslikTipi.OK_Car.name() + kerConnDetails.getDatabaseName() + ".dbo.HESAP WHERE HESAP.HESAP = KERESTE.Cari_Firma  ) as Unvan  " ;
 					grupString[1] = " Cari_Firma " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("MY SQL") )
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 				{
-					grupString[0] = " Cari_Firma , (SELECT  UNVAN FROM OK_Car" + kerConnDetails.getDatabaseName() + ".HESAP WHERE HESAP.HESAP = KERESTE.Cari_Firma Limit 1 ) as Unvan  " ;
+					grupString[0] = " Cari_Firma , (SELECT  UNVAN FROM " + modulbaslikTipi.OK_Car.name() + kerConnDetails.getDatabaseName() + ".HESAP WHERE HESAP.HESAP = KERESTE.Cari_Firma Limit 1 ) as Unvan  " ;
 					grupString[1] = " Cari_Firma " ;
 				}
-				else if(kerConnDetails.getHangisql().equals("PG SQL") )
+				else if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
-					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+					String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 					String carString ="(SELECT \"UNVAN\" FROM  dblink ('"+ carServer + "', " + 
 							" 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"') " + 
 							" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "+
@@ -107,7 +109,7 @@ public class KerEnvanterController {
 				grupString[0] = "  (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup ) as Ana_Grup , "
 						+ " (SELECT DISTINCT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup ) as Alt_Grup " ;
 				grupString[1] = " Ana_Grup ,Alt_Grup  " ;
-				if(kerConnDetails.getHangisql().equals("PG SQL"))
+				if(kerConnDetails.getSqlTipi().equals(sqlTipi.PGSQL))
 				{
 					grupString[0] = "  (SELECT DISTINCT  \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"KERESTE\".\"Ana_Grup\" ) as \"Ana_Grup\" , "
 							+ " (SELECT DISTINCT  \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"KERESTE\".\"Alt_Grup\" ) as \"Alt_Grup\" " ;

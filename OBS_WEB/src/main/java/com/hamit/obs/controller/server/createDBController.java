@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.enums.modulbaslikTipi;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.server.serverBilgiDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -106,7 +107,7 @@ public class createDBController {
 			result = serverService.dosyaolustur(svrBilgiDTO);
 			drm = result != false ? "true" : "false" ;			response.put("olustuDurum",drm ); 
 			response.put("errorMessage", ""); 
-			boolean idxdurum = index_JOB(svrBilgiDTO.getUser_modul(),svrBilgiDTO.getHangi_sql(),svrBilgiDTO);
+			boolean idxdurum = index_JOB(svrBilgiDTO.getUser_modul(),sqlTipi.fromString(svrBilgiDTO.getHangi_sql())   ,svrBilgiDTO);
 			response.put("indexolustuDurum",idxdurum != false ? "true" : "false");
 		} catch (ServiceException e) {
 			response.put("olustuDurum",drm ); 
@@ -120,7 +121,7 @@ public class createDBController {
 		return response;
 	}
 	
-	private boolean index_JOB(String modul , String hangiSQL,serverBilgiDTO sbilgi)
+	private boolean index_JOB(String modul , sqlTipi hangi,serverBilgiDTO sbilgi)
 	{
 		boolean result = false;
 		try {
@@ -128,8 +129,8 @@ public class createDBController {
 			modulTipi modultip = modulTipi.fromDbValue(modul);
 			switch(modultip) {
 			case CARI_HESAP:
-				String hangi = hangiSQL  ;
-				if( hangi.equals("MS SQL")) 
+				
+				if(hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" ALTER INDEX [IX_SATIRLAR] ON [dbo].[SATIRLAR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_SID] ON [dbo].[SATIRLAR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
@@ -141,7 +142,7 @@ public class createDBController {
 					serverService.job_olustur_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() , stb.toString(),sbilgi );
 					serverService.job_baslat_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index",sbilgi);
 				}
-				else if( hangi.equals("MY SQL")) 
+				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{ 
 					stb.append(" OPTIMIZE TABLE OK_Car" +  sbilgi.getUser_prog_kodu() + ".satirlar,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + ".izahat,") ; 
@@ -150,7 +151,7 @@ public class createDBController {
 					serverService.job_sil_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","/ok_car" + sbilgi.getUser_prog_kodu()  , sbilgi); //"/ok_car019"
 					serverService.job_olustur_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","/ok_car" +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 				}
-				else if( hangi.equals("PG SQL")) 
+				else if(hangi.equals(sqlTipi.PGSQL)) 
 				{ 
 					serverService.job_sil_S("CARI_" + sbilgi.getUser_prog_kodu() ,"", sbilgi); 
 					stb.append("REINDEX TABLE \"SATIRLAR\";REINDEX TABLE \"HESAP\"; ") ; 
@@ -162,8 +163,7 @@ public class createDBController {
 				}
 				break;
 			case FATURA:
-				hangi = hangiSQL  ;
-				if( hangi.equals("MS SQL")) 
+				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" ALTER INDEX [IX_FATURA] ON [dbo].[FATURA] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_Kodu] ON [dbo].[MAL] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
@@ -176,7 +176,7 @@ public class createDBController {
 					serverService.job_olustur_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
-				else if( hangi.equals("MY SQL")) 
+				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
 					stb.append(" OPTIMIZE TABLE OK_Fat" +  sbilgi.getUser_prog_kodu() + ".fatura,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + ".mal,") ; 
@@ -185,7 +185,7 @@ public class createDBController {
 					serverService.job_sil_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Fat.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Fat.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
-				else if( hangi.equals("PG SQL")) 
+				else if( hangi.equals(sqlTipi.PGSQL)) 
 				{ 
 					serverService.job_sil_S("STOK_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"DPN\";REINDEX TABLE \"FATURA\"; ") ; 
@@ -198,21 +198,20 @@ public class createDBController {
 				}
 				break;
 			case ADRES:
-				hangi = hangiSQL  ;
-				if( hangi.equals("MS SQL")) 
+				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" ALTER INDEX [IX_SATIRLAR] ON [dbo].[Adres] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
-				else if( hangi.equals("MY SQL")) 
+				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
 					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + ".adres;") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Adr.name() + sbilgi.getUser_prog_kodu()  , sbilgi); 
 					serverService.job_olustur_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 				}
-				else if( hangi.equals("PG SQL")) 
+				else if( hangi.equals(sqlTipi.PGSQL)) 
 				{ 
 					serverService.job_sil_S("ADRES_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"ADRES\" ") ; 
@@ -223,21 +222,20 @@ public class createDBController {
 				}
 				break;
 			case KUR:
-				hangi = hangiSQL  ;
-				if( hangi.equals("MS SQL")) 
+				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" ALTER INDEX [IX_KUR] ON [dbo].[Kurlar] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
-				else if( hangi.equals("MY SQL")) 
+				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
 					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + ".kurlar;") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Kur.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi); 
 					serverService.job_olustur_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Kur.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
-				else if( hangi.equals("PG SQL")) 
+				else if( hangi.equals(sqlTipi.PGSQL)) 
 				{ 
 					serverService.job_sil_S("KUR_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"KURLAR\" ") ; 
@@ -248,21 +246,20 @@ public class createDBController {
 				}
 				break;
 			case KAMBIYO:
-				hangi = hangiSQL  ;
-				if( hangi.equals("MS SQL")) 
+				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" ALTER INDEX [IX_CEK] ON [dbo].[CEK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
-				else if( hangi.equals("MY SQL")) 
+				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
 					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + ".cek;") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Kam.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi); 
 					serverService.job_olustur_S(modulbaslikTipi.OK_Kam.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Kam.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
-				else if( hangi.equals("PG SQL")) 
+				else if( hangi.equals(sqlTipi.PGSQL)) 
 				{ 
 					serverService.job_sil_S("KAMBIYO_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"CEK\" ") ; 
@@ -273,8 +270,7 @@ public class createDBController {
 				}
 				break;
 			case SMS:
-				hangi = hangiSQL  ;
-				if( hangi.equals("MS SQL")) 
+				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" ALTER INDEX [IDX_SMS_HESAP] ON [dbo].[SMS_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_HESAP] ON [dbo].[SMS_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
@@ -288,7 +284,7 @@ public class createDBController {
 					serverService.job_olustur_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
-				else if( hangi.equals("MY SQL")) 
+				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
 					stb.append(" OPTIMIZE TABLE " + modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + ".sms_hesap,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + ".sms_bilgileri,") ; 
@@ -297,7 +293,7 @@ public class createDBController {
 					serverService.job_sil_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Sms.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Sms.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
-				else if( hangi.equals("PG SQL")) 
+				else if( hangi.equals(sqlTipi.PGSQL)) 
 				{ 
 					serverService.job_sil_S("SMS_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"MAIL_BILGILERI\" ;") ; 
@@ -311,8 +307,7 @@ public class createDBController {
 				}
 				break;
 			case GUNLUK:
-				hangi = hangiSQL  ;
-				if( hangi.equals("MS SQL")) 
+				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" ALTER INDEX [IDX_GUNLUK] ON [dbo].[GUNLUK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_GOREV] ON [dbo].[GOREV] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
@@ -320,14 +315,14 @@ public class createDBController {
 					serverService.job_olustur_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
-				else if( hangi.equals("MY SQL")) 
+				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
 					stb.append(" OPTIMIZE TABLE OK_Gun" +  sbilgi.getUser_prog_kodu() + ".gunluk,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + ".gorev;") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Gun.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Gun.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
-				else if( hangi.equals("PG SQL")) 
+				else if( hangi.equals(sqlTipi.PGSQL)) 
 				{ 
 					serverService.job_sil_S("GUNLUK_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"GUNLUK\" ;") ; 
@@ -339,8 +334,7 @@ public class createDBController {
 				}
 				break;
 			case KERESTE:
-				hangi = hangiSQL  ;
-				if( hangi.equals("MS SQL")) 
+				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" ALTER INDEX [IX_GRP_I] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
 					stb.append(" ALTER INDEX [IX_GRP_II] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
@@ -351,14 +345,14 @@ public class createDBController {
 					serverService.job_olustur_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
 				}
-				else if( hangi.equals("MY SQL")) 
+				else if( hangi.equals(sqlTipi.MYSQL)) 
 				{
 					stb.append(" OPTIMIZE TABLE OK_Ker" +  sbilgi.getUser_prog_kodu() + ".kereste,") ; 
 					stb.append("  " + modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + ".aciklama;") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Ker.name().toLowerCase() + sbilgi.getUser_prog_kodu()  , sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index","/" + modulbaslikTipi.OK_Ker.name().toLowerCase() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);	
 				}
-				else if( hangi.equals("PG SQL")) 
+				else if( hangi.equals(sqlTipi.PGSQL)) 
 				{ 
 					serverService.job_sil_S("KERESTE_" + sbilgi.getUser_prog_kodu() ,""   , sbilgi); 
 					stb.append("REINDEX TABLE \"KERESTE\" ;") ; 

@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.enums.modulbaslikTipi;
+import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.stok.raporlar.fatraporDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -212,9 +214,9 @@ public class FaturaRaporController {
 		
 		if (hangiadres.equals("Cari_Firma"))
 		{
-			if(faturaConnDetails.getHangisql().equals("MS SQL"))
+			if(faturaConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 			{
-				c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
+				c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + "" ;
 				qw1 = " ,(SELECT   UNVAN FROM " + c_yer + ".dbo.HESAP WHERE HESAP.HESAP = FATURA.Cari_Firma  ) as Unvan " ;
 				qw2 = " ,(SELECT   VERGI_NO FROM " + c_yer + ".dbo.HESAP_DETAY WHERE HESAP_DETAY.D_HESAP = FATURA.Cari_Firma  ) as Vergi_No " ;
 				qw3 = "Fatura_No,Gir_Cik,Tarih, Cari_Firma" ;
@@ -222,9 +224,9 @@ public class FaturaRaporController {
 				deger[1] = qw2;
 				deger[2] = qw3;
 			}
-			else if(faturaConnDetails.getHangisql().equals("MY SQL"))
+			else if(faturaConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 			{
-				c_yer = "OK_Car" + cariConnDetails.getDatabaseName() + "" ;
+				c_yer = modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName() + "" ;
 				qw1 = " ,(SELECT   UNVAN FROM " + c_yer + ".HESAP WHERE HESAP.HESAP = FATURA.Cari_Firma  ) as Unvan " ;
 				qw2 = " ,(SELECT   VERGI_NO FROM " + c_yer + ".HESAP_DETAY WHERE HESAP_DETAY.D_HESAP = FATURA.Cari_Firma  ) as Vergi_No " ;
 				qw3 = "Fatura_No,Gir_Cik,Tarih, Cari_Firma" ;
@@ -232,9 +234,9 @@ public class FaturaRaporController {
 				deger[1] = qw2;
 				deger[2] = qw3;
 			}
-			if(faturaConnDetails.getHangisql().equals("PG SQL") )
+			if(faturaConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 				{
-					String carServer = "dbname = ok_car" + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
+					String carServer = "dbname = " + modulbaslikTipi.OK_Car.name().toLowerCase() + cariConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(cariConnDetails.getServerIp())[1] + " host = localhost user = " + cariConnDetails.getUsername() +" password = " + cariConnDetails.getPassword() +"" ; 
 					qw1 = ",(SELECT \"UNVAN\" FROM  dblink ('" + carServer + "', "  
 							+ " 'SELECT \"UNVAN\" ,\"HESAP\" FROM \"HESAP\"  ') "  
 							+" AS adr(\"UNVAN\" character varying,\"HESAP\" character varying) "
@@ -251,7 +253,7 @@ public class FaturaRaporController {
 		}
 		else
 		{
-			if(faturaConnDetails.getHangisql().equals("MS SQL"))
+			if(faturaConnDetails.getSqlTipi().equals(sqlTipi.MSSQL))
 			{
 				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
 				qw1 = " ,(SELECT   Adi FROM " + c_yer + ".dbo.Adres WHERE Adres.M_Kodu = FATURA.Adres_Firma  ) as Unvan " ;
@@ -261,7 +263,7 @@ public class FaturaRaporController {
 				deger[1] = qw2;
 				deger[2] = qw3;
 			}
-			else if(faturaConnDetails.getHangisql().equals("MY SQL"))
+			else if(faturaConnDetails.getSqlTipi().equals(sqlTipi.MYSQL))
 			{
 				c_yer = "OK_Adr" + adrConnDetails.getDatabaseName() + "" ;
 				qw1 = " ,(SELECT   Adi FROM " + c_yer + ".Adres WHERE Adres.M_Kodu = FATURA.Adres_Firma  ) as Unvan " ;
@@ -271,7 +273,7 @@ public class FaturaRaporController {
 				deger[1] = qw2;
 				deger[2] = qw3;
 			}
-			if(faturaConnDetails.getHangisql().equals("PG SQL") )
+			if(faturaConnDetails.getSqlTipi().equals(sqlTipi.PGSQL) )
 			{
 				String adrServer = "dbname = ok_adr" + adrConnDetails.getDatabaseName() + " port = " + Global_Yardimci.ipCevir(adrConnDetails.getServerIp())[1] + " host = localhost user = " + adrConnDetails.getUsername() +" password = " + adrConnDetails.getPassword() +"" ; 
 				qw1 = ",(SELECT \"ADI\" FROM  dblink ('"+ adrServer + "', "  
