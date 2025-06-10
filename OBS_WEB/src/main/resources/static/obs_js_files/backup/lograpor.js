@@ -71,14 +71,13 @@ async function logliste(page = 0) {
 				if (!response.ok) {
                let hataMesaji = "";
                try {
-	                    const hataData = await response.json();
-	                    hataMesaji = hataData.message || JSON.stringify(hataData);
+                   const hataData = await response.json();
+                   hataMesaji = hataData.message || JSON.stringify(hataData);
                 } catch {
 	                    hataMesaji = await response.text();
                 }
                 throw new Error(`Sunucu Hatası (${response.status}): ${hataMesaji}`);
 				  }
-
         const data = await response.json();
         tableBody.innerHTML = "";
         data.forEach(row => {

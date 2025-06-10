@@ -1,7 +1,7 @@
 
 async function emirliste() {
     const server = document.getElementById("server").value;
-     const tableBody = document.getElementById("tableBody");
+    const tableBody = document.getElementById("tableBody");
     const errorDiv = document.getElementById("errorDiv");
 		const modul = "emirliste" ;
     const apiKey = document.getElementById("sifre").value;
