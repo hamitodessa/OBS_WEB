@@ -5,7 +5,7 @@ async function emirliste() {
     const errorDiv = document.getElementById("errorDiv");
 		const modul = "emirliste" ;
     const apiKey = document.getElementById("sifre").value;
-    const url = `http://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}`;
+    const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}`;
 		errorDiv.style.display = "none";
 		errorDiv.innerText = "";
     try {

@@ -9,7 +9,7 @@ async function emirismidoldur() {
     const errorDiv = document.getElementById("errorDiv");
     const modul = "emirliste" ;
     
-    const url = `http://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}`;
+    const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}`;
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
 		const tableBody = document.getElementById("tableBody");
@@ -64,7 +64,7 @@ async function logliste(page = 0) {
 		const server = document.getElementById("server").value;
 		const apiKey = document.getElementById("sifre").value;
 
-		const url = `http://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(emir_ismi)}&start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}&page=${page}&limit=${pageSize}`;
+		const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(emir_ismi)}&start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}&page=${page}&limit=${pageSize}`;
 
     try {
         const response = await fetch(url);
