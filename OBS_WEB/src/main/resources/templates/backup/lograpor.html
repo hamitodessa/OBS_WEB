@@ -1,0 +1,113 @@
+    <style>
+        .table-hover tbody tr:hover {
+            background-color: #ced4da !important;
+            color: inherit !important;
+        }
+
+        .table .thead-dark th {
+            color: #fff;
+            background: #214162;
+        }
+		.table-row-height td {
+    		height: 10px;
+    		line-height: 10px;
+  		}
+  		
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            white-space: nowrap;
+        }
+
+        .table-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            height: 60vh;
+        }
+
+        .container {
+            height: 75vh;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        #pagination-controls {
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        #errorDiv {
+            display: none;
+            color: red;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card p-2">
+    <div class="filter-row">
+    	<span style="padding-left: 5px;"></span>
+  		<input type="date" style="width:120px;" id="startDate" class="form-control" value="1900-01-01">
+  		<span style="padding-left: 5px;"></span>
+  		<input type="date" style="width:120px;" id="endDate" class="form-control" value="2100-12-31">
+		<span style="padding-left: 5px;"></span>
+    
+    	<span style="padding-left: 5px;"></span>
+    	<label for="server">Server</label>
+    	<span style="padding-left: 5px;"></span>
+        <input type="text" id="server" class="form-control" style="width: 200px;">
+        <span style="padding-left: 5px;"></span>
+        <label for="sifre">Sifre</label>
+    	<span style="padding-left: 5px;"></span>
+        <input type="password" id="sifre" class="form-control" style="width: 100px;">
+        <span style="padding-left: 5px;"></span>
+       	<select style="width: 150px;" class="form-select"  onchange="logliste()"  id="hangi_emir" name="hangi_emir">
+		</select>
+		<span style="padding-left: 5px;"></span>	
+		<button class="btn btn-primary" type="button" onclick="emirismidoldur()" id="emirismiButton">Emir Ismi Doldur</button>
+    </div>
+</div>
+
+<div id="errorDiv"></div>
+
+<div class="container">
+    <div class="table-container">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>TARİH</th>
+                    <th>MESAJ</th>
+                    <th>EMIR_ISMI</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="pagination-controls">
+        <button class="btn btn-secondary" id="prevPage" onclick="geriSayfa()">◀ Önceki</button>
+        <button class="btn btn-secondary" id="nextPage" onclick="ileriSayfa()">Sonraki ▶</button>
+    </div>
+</div>
+
+<script src="/obs_js_files/backup/lograpor.js"></script>

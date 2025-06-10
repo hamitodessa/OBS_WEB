@@ -65,6 +65,22 @@ formatDate = function (dateString) {
 	return `${day}.${month}.${year}`;
 }
 
+function formatTarihsqlite(tarihStr) {
+    if (!tarihStr) return "";
+    try {
+        const tarih = new Date(tarihStr.replace(" ", "T"));
+        const gun = String(tarih.getDate()).padStart(2, "0");
+        const ay = String(tarih.getMonth() + 1).padStart(2, "0");
+        const yil = tarih.getFullYear();
+        const saat = String(tarih.getHours()).padStart(2, "0");
+        const dakika = String(tarih.getMinutes()).padStart(2, "0");
+        const saniye = String(tarih.getSeconds()).padStart(2, "0");
+        return `${gun}.${ay}.${yil} ${saat}:${dakika}:${saniye}`;
+    } catch (e) {
+        return tarihStr;
+    }
+}
+
 getFullDateWithTimeAndMilliseconds = function (dateInput) {
 	const now = new Date();
 	const hours = now.getHours().toString().padStart(2, '0');

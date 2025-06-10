@@ -24,7 +24,7 @@ public class LogRaporController {
 	private LogRaporService logRaporService;
 
 	@GetMapping("/user/lograpor")
-	public String ekstre() {
+	public String lograpor() {
 		return "user/lograpor";
 	}
 
