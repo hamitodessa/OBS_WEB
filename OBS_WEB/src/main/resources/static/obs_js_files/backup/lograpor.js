@@ -3,6 +3,7 @@ const pageSize = 500;
 
 
 async function emirismidoldur() {
+	document.body.style.cursor = "wait";
     const server = document.getElementById("server").value;
 		const apiKey = document.getElementById("sifre").value;
 		const hangi_emir = document.getElementById("hangi_emir");
@@ -43,14 +44,16 @@ async function emirismidoldur() {
 				                hangi_emir.appendChild(option);
 				            }
 				        });
-				
     } catch (error) {
         errorDiv.style.display = "block";
         errorDiv.innerText = "Hata: " + error.message;
-    }
+		} finally {
+	      document.body.style.cursor = "default";
+	  }
 }
 
 async function logliste(page = 0) {
+	document.body.style.cursor = "wait";
     const emir_ismi = document.getElementById("hangi_emir").value;
 		const errorDiv = document.getElementById("errorDiv");
 		errorDiv.style.display = "none";
@@ -61,6 +64,13 @@ async function logliste(page = 0) {
 		
 		const startDate = document.getElementById("startDate").value;
 		const endDate = document.getElementById("endDate").value;
+		
+		if (!startDate || !endDate) {
+		    errorDiv.innerText = "Lütfen tarih aralığı seçin.";
+		    errorDiv.style.display = "block";
+		    return;
+		}
+		
 		const server = document.getElementById("server").value;
 		const apiKey = document.getElementById("sifre").value;
 
@@ -93,17 +103,18 @@ async function logliste(page = 0) {
         currentPage = page;
         document.getElementById("prevPage").disabled = currentPage === 0;
         document.getElementById("nextPage").disabled = tableBody.rows.length < pageSize;
-
     } catch (error) {
         errorDiv.style.display = "block";
         errorDiv.innerText = "Hata: " + error.message;
+		} finally {
+        document.body.style.cursor = "default";
     }
 }
 
 function ileriSayfa() {
-    lograpor(currentPage + 1);
+    logliste(currentPage + 1);
 }
 
 function geriSayfa() {
-    if (currentPage > 0) lograpor(currentPage - 1);
+    if (currentPage > 0) logliste(currentPage - 1);
 }
