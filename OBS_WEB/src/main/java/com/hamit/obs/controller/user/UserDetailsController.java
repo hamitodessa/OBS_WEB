@@ -177,32 +177,13 @@ public class UserDetailsController {
 		try {
 			modulTipi modultip = modulTipi.fromDbValue(serverBilgiDTO.getUser_modul());
 			switch (modultip) {
-			case CARI_HESAP: {
-				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Car.name());
-				break;
-			}
-			case KUR: {
-				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kur.name());
-				break;
-			}
-			case ADRES: {
-				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Adr.name());
-				break;
-			}
-			case KAMBIYO: {
-				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kam.name());
-				break;
-			}
-			case FATURA: {
-				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Fat.name());
-				break;
-			}
-			case KERESTE: {
-				serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Ker.name());
-				break;
-			}
-			default:
-				break;
+			case CARI_HESAP -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Car.name());
+			case KUR -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kur.name());
+			case ADRES -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Adr.name());
+			case KAMBIYO -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kam.name());
+			case FATURA -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Fat.name());
+			case KERESTE -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Ker.name());
+			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
 			}
 			String sifre = serverBilgiDTO.getUser_pwd_server();
 			if (sifre == null) {

@@ -56,9 +56,8 @@ public class CariService {
 			this.strategy = databaseStrategyContext.getStrategy();
 			masterConnectionManager.loadConnections(modulTipi.CARI_HESAP,useremail);
 			UserSessionManager.addUserSession(useremail, modulTipi.CARI_HESAP, masterConnectionManager.getConnection(modulTipi.CARI_HESAP, useremail));
-		} else {
+		} else
 			throw new ServiceException("No authenticated user found in SecurityContext");
-		}
 	}
 
 	public String[] conn_detail() {
