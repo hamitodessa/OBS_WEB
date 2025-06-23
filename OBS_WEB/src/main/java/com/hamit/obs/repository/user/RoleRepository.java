@@ -7,6 +7,6 @@ import com.hamit.obs.model.user.Role;
 
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    Role findByName(RolEnum name); // Enum kullanımı
+    Role findByName(RolEnum name); 
     
 }

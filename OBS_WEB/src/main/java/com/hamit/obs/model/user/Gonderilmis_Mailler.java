@@ -1,4 +1,3 @@
-// Updated Entity Files for PostgreSQL Compatibility
 
 package com.hamit.obs.model.user;
 
