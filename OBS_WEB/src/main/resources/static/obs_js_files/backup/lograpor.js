@@ -46,7 +46,18 @@ async function emirismidoldur() {
 				        });
     } catch (error) {
         errorDiv.style.display = "block";
-        errorDiv.innerText = "Hata: " + error.message;
+				if (error.message.includes("TypeError: Failed to fetch") || error.message.includes("fetch")) {
+				    errorDiv.innerHTML = `
+				        ❌ Sunucuya bağlantı sağlanamadı.<br>
+				        🔐 Muhtemelen sertifika geçersiz (ERR_CERT_AUTHORITY_INVALID).<br><br>
+				        📌 Lütfen aşağıdaki adımları uygulayın:<br>
+				        1. <a href="${url}" target="_blank">Bu bağlantıya tıklayın</a><br>
+				        2. Açılan sayfada "Advanced" → "Proceed" tıklayın<br>
+				        3. Ardından bu sayfayı yenileyin.
+				    `;
+				} else {
+				    errorDiv.innerText = "Hata: " + (error.message || "Bilinmeyen hata");
+				}
 		} finally {
 	      document.body.style.cursor = "default";
 	  }
@@ -70,10 +81,8 @@ async function logliste(page = 0) {
 		    errorDiv.style.display = "block";
 		    return;
 		}
-		
 		const server = document.getElementById("server").value;
 		const apiKey = document.getElementById("sifre").value;
-
 		const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(emir_ismi)}&start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}&page=${page}&limit=${pageSize}`;
 
     try {
@@ -105,7 +114,18 @@ async function logliste(page = 0) {
         document.getElementById("nextPage").disabled = tableBody.rows.length < pageSize;
     } catch (error) {
         errorDiv.style.display = "block";
-        errorDiv.innerText = "Hata: " + error.message;
+				if (error.message.includes("TypeError: Failed to fetch") || error.message.includes("fetch")) {
+				    errorDiv.innerHTML = `
+				        ❌ Sunucuya bağlantı sağlanamadı.<br>
+				        🔐 Muhtemelen sertifika geçersiz (ERR_CERT_AUTHORITY_INVALID).<br><br>
+				        📌 Lütfen aşağıdaki adımları uygulayın:<br>
+				        1. <a href="${url}" target="_blank">Bu bağlantıya tıklayın</a><br>
+				        2. Açılan sayfada "Advanced" → "Proceed" tıklayın<br>
+				        3. Ardından bu sayfayı yenileyin.
+				    `;
+				} else {
+				    errorDiv.innerText = "Hata: " + (error.message || "Bilinmeyen hata");
+				}
 		} finally {
         document.body.style.cursor = "default";
     }

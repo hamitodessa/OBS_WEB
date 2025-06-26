@@ -14,6 +14,7 @@ async function emirliste() {
 
     try {
         const response = await fetch(url);
+
         if (!response.ok) {
             let hataMesaji = "";
             try {
@@ -24,8 +25,10 @@ async function emirliste() {
             }
             throw new Error(`Sunucu Hatası (${response.status}): ${hataMesaji}`);
         }
+
         const data = await response.json();
         tableBody.innerHTML = "";
+
         data.forEach(row => {
             const tr = document.createElement("tr");
             tr.classList.add("table-row-height");
@@ -41,8 +44,20 @@ async function emirliste() {
         });
 
     } catch (error) {
+        console.error("Fetch hatası:", error);
         errorDiv.style.display = "block";
-        errorDiv.innerText = "Hata: " + (error.message || "Bilinmeyen hata");
+        if (error.message.includes("TypeError: Failed to fetch") || error.message.includes("fetch")) {
+            errorDiv.innerHTML = `
+                ❌ Sunucuya bağlantı sağlanamadı.<br>
+                🔐 Muhtemelen sertifika geçersiz (ERR_CERT_AUTHORITY_INVALID).<br><br>
+                📌 Lütfen aşağıdaki adımları uygulayın:<br>
+                1. <a href="${url}" target="_blank">Bu bağlantıya tıklayın</a><br>
+                2. Açılan sayfada "Advanced" → "Proceed" tıklayın<br>
+                3. Ardından bu sayfayı yenileyin.
+            `;
+        } else {
+            errorDiv.innerText = "Hata: " + (error.message || "Bilinmeyen hata");
+        }
     } finally {
         document.body.style.cursor = "default";
     }
