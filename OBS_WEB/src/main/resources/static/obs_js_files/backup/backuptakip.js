@@ -14,7 +14,6 @@ async function emirliste() {
 
     try {
         const response = await fetch(url);
-
         if (!response.ok) {
             let hataMesaji = "";
             try {
