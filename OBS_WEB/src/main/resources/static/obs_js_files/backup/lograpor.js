@@ -101,11 +101,11 @@ async function logliste(page = 0) {
         tableBody.innerHTML = "";
         data.forEach(row => {
              const tr = document.createElement("tr");
-						 tr.classList.add("table-row-height");
-              tr.innerHTML = `
-                    <td>${row.TARIH}</td>
-                    <td>${row.ACIKLAMA}</td>
-                    <td>${row.EMIR_ISMI}</td>
+			 tr.classList.add("table-row-height");
+             tr.innerHTML = `
+                <td>${row.TARIH}</td>
+                <td>${row.ACIKLAMA}</td>
+                <td>${row.EMIR_ISMI}</td>
                 `;
                 tableBody.appendChild(tr);
             });
