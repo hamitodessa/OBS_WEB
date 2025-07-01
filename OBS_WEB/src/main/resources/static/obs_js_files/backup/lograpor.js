@@ -8,9 +8,10 @@ async function emirismidoldur() {
 		const apiKey = document.getElementById("sifre").value;
 		const hangi_emir = document.getElementById("hangi_emir");
     const errorDiv = document.getElementById("errorDiv");
+		const user = document.getElementById("kullaniciAdi").innerText.trim();
     const modul = "emirliste" ;
     
-    const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}`;
+    const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}&user=${encodeURIComponent(user)}`;
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
 		const tableBody = document.getElementById("tableBody");
@@ -81,7 +82,7 @@ async function logliste(page = 0) {
 		
 		const startDate = document.getElementById("startDate").value;
 		const endDate = document.getElementById("endDate").value;
-		
+		const user = document.getElementById("kullaniciAdi").innerText.trim();
 		if (!startDate || !endDate) {
 		    errorDiv.innerText = "Lütfen tarih aralığı seçin.";
 		    errorDiv.style.display = "block";
@@ -89,7 +90,7 @@ async function logliste(page = 0) {
 		}
 		const server = document.getElementById("server").value;
 		const apiKey = document.getElementById("sifre").value;
-		const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(emir_ismi)}&start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}&page=${page}&limit=${pageSize}`;
+		const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(emir_ismi)}&start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}&page=${page}&limit=${pageSize}&user=${encodeURIComponent(user)}`;
 
     try {
         const response = await fetch(url);

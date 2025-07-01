@@ -6,8 +6,9 @@ async function emirliste() {
     const tableBody = document.getElementById("tableBody");
     const errorDiv = document.getElementById("errorDiv");
     const apiKey = document.getElementById("sifre").value.trim();
+		const user = document.getElementById("kullaniciAdi").innerText.trim();
     const modul = "emirliste";
-    const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}`;
+    const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}&user=${encodeURIComponent(user)}`;
 
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
@@ -39,6 +40,7 @@ async function emirliste() {
                 <td>${row.MESAJ || ""}</td>
                 <td>${row.INSTANCE || ""}</td>
                 <td>${formatTarihsqlite(row.SON_YUKLEME)}</td>
+								<td>${row.GELECEK_YEDEKLEME || ""}</td>
             `;
             tableBody.appendChild(tr);
         });

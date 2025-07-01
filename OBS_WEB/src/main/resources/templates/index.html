@@ -43,7 +43,7 @@
 									th:src="'data:image/jpeg;base64,' + ${profileImage}" alt="#" />
 							</div>
 							<div class="user_info">
-								<span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+								<span id="kullaniciAdi" sec:authorize="isAuthenticated()" sec:authentication="name"></span>
 								<p><span class="online_animation"></span> Online </p>
 							</div>
 						</div>
