@@ -30,12 +30,18 @@ async function emirismidoldur() {
         const data = await response.json();
 				const defaultOption = document.createElement("option");
 				const defaultOption1 = document.createElement("option");
+				const systemption = document.createElement("option");
 				        defaultOption.text = "Lütfen seçiniz";
 				        defaultOption.value = "";
 				        hangi_emir.appendChild(defaultOption);
+						
 								defaultOption1.text = "Hepsi";
 								defaultOption1.value = "Hepsi";
 								hangi_emir.appendChild(defaultOption1);
+								systemption.text = "System";
+								systemption.value = "System";
+								hangi_emir.appendChild(systemption);
+																
 				        data.forEach(item => {
 				            if (item.EMIR_ISMI) {
 				                const option = document.createElement("option");
