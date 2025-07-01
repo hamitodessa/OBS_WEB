@@ -35,12 +35,12 @@ async function emirismidoldur() {
 				        defaultOption.value = "";
 				        hangi_emir.appendChild(defaultOption);
 						
-								defaultOption1.text = "Hepsi";
-								defaultOption1.value = "Hepsi";
-								hangi_emir.appendChild(defaultOption1);
-								systemption.text = "System";
-								systemption.value = "System";
-								hangi_emir.appendChild(systemption);
+						defaultOption1.text = "Hepsi";
+						defaultOption1.value = "Hepsi";
+						hangi_emir.appendChild(defaultOption1);
+						systemption.text = "System";
+						systemption.value = "System";
+						hangi_emir.appendChild(systemption);
 																
 				        data.forEach(item => {
 				            if (item.EMIR_ISMI) {
