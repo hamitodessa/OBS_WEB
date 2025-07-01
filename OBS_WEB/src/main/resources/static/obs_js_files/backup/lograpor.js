@@ -105,16 +105,20 @@ async function logliste(page = 0) {
 				  }
         const data = await response.json();
         tableBody.innerHTML = "";
-        data.forEach(row => {
-             const tr = document.createElement("tr");
-			 tr.classList.add("table-row-height");
-             tr.innerHTML = `
-                <td>${row.TARIH}</td>
-                <td>${row.ACIKLAMA}</td>
-                <td>${row.EMIR_ISMI}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
+		data.forEach(row => {
+		    const tr = document.createElement("tr");
+		    tr.classList.add("table-row-height");
+		    const td1 = document.createElement("td");
+		    td1.innerText = row.TARIH;
+		    const td2 = document.createElement("td");
+		    td2.innerText = row.ACIKLAMA;
+		    const td3 = document.createElement("td");
+		    td3.innerText = row.EMIR_ISMI;
+		    tr.appendChild(td1);
+		    tr.appendChild(td2);
+		    tr.appendChild(td3);
+		    tableBody.appendChild(tr);
+		});
         currentPage = page;
         document.getElementById("prevPage").disabled = currentPage === 0;
         document.getElementById("nextPage").disabled = tableBody.rows.length < pageSize;
