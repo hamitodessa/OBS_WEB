@@ -8,8 +8,6 @@ async function emirliste() {
     const apiKey = document.getElementById("sifre").value.trim();
     const user = document.getElementById("kullaniciAdi").innerText.trim();
     const url = `/backup/emirliste?server=${encodeURIComponent(server)}&key=${encodeURIComponent(apiKey)}&user=${encodeURIComponent(user)}`;
-
-	
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
 

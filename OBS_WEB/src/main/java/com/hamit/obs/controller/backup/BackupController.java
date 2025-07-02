@@ -24,45 +24,86 @@ public class BackupController {
 	public String backuptakip() {
 		return "backup/backuptakip";
 	}
-	
+
 	@GetMapping("/backup/lograpor")
 	public String lograpor() {
 		return "backup/lograpor";
 	}
-	
+
 	@GetMapping("/backup/emirliste")
 	public ResponseEntity<String> emirliste(
-	        @RequestParam String server,
-	        @RequestParam String key,
-	        @RequestParam String user) {
-	    String modul = "emirliste";
-	    String fullUrl = "https://" + server + "/loglar?key=" + key + "&emir=" + modul + "&user=" + user;
-	    try {
-	        TrustManager[] trustAllCerts = new TrustManager[]{
-	            new X509TrustManager() {
-	                public void checkClientTrusted(X509Certificate[] certs, String authType) {}
-	                public void checkServerTrusted(X509Certificate[] certs, String authType) {}
-	                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
-	            }
-	        };
-	        SSLContext sslContext = SSLContext.getInstance("TLS");
-	        sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-	        HttpClient client = HttpClient.newBuilder()
-	                .connectTimeout(Duration.ofSeconds(10))
-	                .sslContext(sslContext)
-	                .build();
-	        HttpRequest request = HttpRequest.newBuilder()
-	                .uri(URI.create(fullUrl))
-	                .GET()
-	                .build();
-	        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-	        return ResponseEntity
-	                .status(response.statusCode())
-	                .body(response.body());
-	    } catch (Exception e) {
-	        return ResponseEntity
-	                .status(500)
-	                .body("{\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}");
-	    }
+			@RequestParam String server,
+			@RequestParam String key,
+			@RequestParam String user) {
+		String modul = "emirliste";
+		String fullUrl = "https://" + server + "/loglar?key=" + key + "&emir=" + modul + "&user=" + user;
+		try {
+			TrustManager[] trustAllCerts = new TrustManager[]{
+					new X509TrustManager() {
+						public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+						public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+						public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+					}
+			};
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpClient client = HttpClient.newBuilder()
+					.connectTimeout(Duration.ofSeconds(10))
+					.sslContext(sslContext)
+					.build();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(fullUrl))
+					.GET()
+					.build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			return ResponseEntity
+					.status(response.statusCode())
+					.body(response.body());
+		} catch (Exception e) {
+			return ResponseEntity
+					.status(500)
+					.body("{\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}");
+		}
 	}
+	
+	@GetMapping("/backup/logliste")
+	public ResponseEntity<String> logliste(
+			@RequestParam String server,
+			@RequestParam String key,
+			@RequestParam String emir,
+			@RequestParam String start,
+			@RequestParam String end,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "500") int limit,
+			@RequestParam String user) {
+		String url = String.format("https://%s/loglar?key=%s&emir=%s&start=%s&end=%s&page=%d&limit=%d&user=%s",
+				server, key, emir, start, end, page, limit, user);
+		try {
+			TrustManager[] trustAllCerts = new TrustManager[]{
+					new X509TrustManager() {
+						public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+						public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+						public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+					}
+			};
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpClient client = HttpClient.newBuilder()
+					.connectTimeout(Duration.ofSeconds(10))
+					.sslContext(sslContext)
+					.build();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(url))
+					.GET()
+					.build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			return ResponseEntity
+					.status(response.statusCode())
+					.body(response.body());
+		} catch (Exception e) {
+			return ResponseEntity
+					.status(500)
+					.body("{\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}");
+		}
 	}
+}
