@@ -6,10 +6,10 @@ async function emirliste() {
     const tableBody = document.getElementById("tableBody");
     const errorDiv = document.getElementById("errorDiv");
     const apiKey = document.getElementById("sifre").value.trim();
-		const user = document.getElementById("kullaniciAdi").innerText.trim();
-    const modul = "emirliste";
-    const url = `https://${server}/loglar?key=${apiKey}&emir=${encodeURIComponent(modul)}&user=${encodeURIComponent(user)}`;
+    const user = document.getElementById("kullaniciAdi").innerText.trim();
+    const url = `/backup/emirliste?server=${encodeURIComponent(server)}&key=${encodeURIComponent(apiKey)}&user=${encodeURIComponent(user)}`;
 
+	
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
 
@@ -40,7 +40,7 @@ async function emirliste() {
                 <td>${row.MESAJ || ""}</td>
                 <td>${row.INSTANCE || ""}</td>
                 <td>${formatTarihsqlite(row.SON_YUKLEME)}</td>
-								<td>${row.GELECEK_YEDEKLEME || ""}</td>
+                <td>${row.GELECEK_YEDEKLEME || ""}</td>
             `;
             tableBody.appendChild(tr);
         });
@@ -48,18 +48,7 @@ async function emirliste() {
     } catch (error) {
         console.error("Fetch hatası:", error);
         errorDiv.style.display = "block";
-        if (error.message.includes("TypeError: Failed to fetch") || error.message.includes("fetch")) {
-            errorDiv.innerHTML = `
-                ❌ Sunucuya bağlantı sağlanamadı.<br>
-                🔐 Muhtemelen sertifika geçersiz (ERR_CERT_AUTHORITY_INVALID).<br><br>
-                📌 Lütfen aşağıdaki adımları uygulayın:<br>
-                1. <a href="${url}" target="_blank">Bu bağlantıya tıklayın</a><br>
-                2. Açılan sayfada "Advanced" → "Proceed" tıklayın<br>
-                3. Ardından bu sayfayı yenileyin.
-            `;
-        } else {
-            errorDiv.innerText = "Hata: " + (error.message || "Bilinmeyen hata");
-        }
+        errorDiv.innerText = "Hata: " + (error.message || "Bilinmeyen hata");
     } finally {
         document.body.style.cursor = "default";
     }
