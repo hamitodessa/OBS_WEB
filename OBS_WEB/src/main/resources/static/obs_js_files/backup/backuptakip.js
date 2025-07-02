@@ -34,16 +34,12 @@ async function emirliste() {
 		    }
 		    throw new Error(`Sunucu Hatası (${response.status}): ${hataMesaji}`);
 		}
-
         const data = await response.json();
         tableBody.innerHTML = "";
 		data.forEach(row => {
 		    const tr = document.createElement("tr");
 		    tr.classList.add("table-row-height");
 		    const durumText = row.DURUM == 1 ? "Aktif" : "Pasif";
-		    if (durumText === "Pasif") {
-		        tr.style.color = "red";
-		    }
 		    tr.innerHTML = `
 		        <td>${row.EMIR_ISMI}</td>
 		        <td>${durumText}</td>
@@ -52,10 +48,11 @@ async function emirliste() {
 		        <td>${formatTarihsqlite(row.SON_YUKLEME)}</td>
 		        <td>${row.GELECEK_YEDEKLEME || ""}</td>
 		    `;
+		    if (row.DURUM != 1) {
+		        tr.querySelectorAll("td").forEach(td => td.style.color = "red");
+		    }
 		    tableBody.appendChild(tr);
 		});
-
-
     } catch (error) {
         console.error("Fetch hatası:", error);
         errorDiv.style.display = "block";
