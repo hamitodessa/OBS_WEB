@@ -22,7 +22,7 @@ async function emirismidoldur() {
     errorDiv.innerText = "";
     const tableBody = document.getElementById("tableBody");
     tableBody.innerHTML = "";
-
+	hangi_emir.innerHTML = "";
     try {
         const response = await fetch(url);
         if (!response.ok) {
