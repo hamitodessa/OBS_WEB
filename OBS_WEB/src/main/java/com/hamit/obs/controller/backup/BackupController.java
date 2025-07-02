@@ -65,7 +65,7 @@ public class BackupController {
 					.body("{\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}");
 		}
 	}
-	
+
 	@GetMapping("/backup/logliste")
 	public ResponseEntity<String> logliste(
 			@RequestParam String server,

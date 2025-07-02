@@ -1,11 +1,17 @@
 
 async function emirliste() {
     document.body.style.cursor = "wait";
-
     const server = document.getElementById("server").value.trim();
+	const apiKey = document.getElementById("sifre").value.trim();
+	if (!server || !apiKey) {
+	    errorDiv.style.display = "block";
+	    errorDiv.innerText = "⚠️ Lütfen sunucu ve şifre bilgilerini girin.";
+	    return;
+	}
+	
     const tableBody = document.getElementById("tableBody");
     const errorDiv = document.getElementById("errorDiv");
-    const apiKey = document.getElementById("sifre").value.trim();
+   
     const user = document.getElementById("kullaniciAdi").innerText.trim();
     const url = `/backup/emirliste?server=${encodeURIComponent(server)}&key=${encodeURIComponent(apiKey)}&user=${encodeURIComponent(user)}`;
     errorDiv.style.display = "none";
@@ -13,7 +19,6 @@ async function emirliste() {
 
     try {
         const response = await fetch(url);
-
         if (!response.ok) {
             let hataMesaji = "";
             try {
@@ -24,10 +29,8 @@ async function emirliste() {
             }
             throw new Error(`Sunucu Hatası (${response.status}): ${hataMesaji}`);
         }
-
         const data = await response.json();
         tableBody.innerHTML = "";
-
         data.forEach(row => {
             const tr = document.createElement("tr");
             tr.classList.add("table-row-height");
