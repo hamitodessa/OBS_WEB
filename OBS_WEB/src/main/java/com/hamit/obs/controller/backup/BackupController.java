@@ -4,14 +4,14 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.security.cert.X509Certificate;
 import java.time.Duration;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.springframework.http.HttpStatus;
+import java.security.cert.X509Certificate;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +38,18 @@ public class BackupController {
 	    String modul = "emirliste";
 	    String fullUrl = "https://" + server + "/loglar?key=" + key + "&emir=" + modul + "&user=" + user;
 	    try {
+	        TrustManager[] trustAllCerts = new TrustManager[]{
+	            new X509TrustManager() {
+	                public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+	                public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+	                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+	            }
+	        };
+	        SSLContext sslContext = SSLContext.getInstance("TLS");
+	        sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 	        HttpClient client = HttpClient.newBuilder()
 	                .connectTimeout(Duration.ofSeconds(10))
+	                .sslContext(sslContext)
 	                .build();
 	        HttpRequest request = HttpRequest.newBuilder()
 	                .uri(URI.create(fullUrl))
@@ -55,4 +65,4 @@ public class BackupController {
 	                .body("{\"error\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}");
 	    }
 	}
-}
+	}
