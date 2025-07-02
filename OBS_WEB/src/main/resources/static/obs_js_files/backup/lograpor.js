@@ -87,16 +87,18 @@ async function logliste(page = 0) {
 
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            let hataMesaji = "";
-            try {
-                const hataData = await response.json();
-                hataMesaji = hataData.message || JSON.stringify(hataData);
-            } catch {
-                hataMesaji = await response.text();
-            }
-            throw new Error(`Sunucu Hatası (${response.status}): ${hataMesaji}`);
-        }
+		if (!response.ok) {
+		    let hataMesaji = "";
+		    const rawText = await response.text(); 
+		    try {
+		        const hataData = JSON.parse(rawText); 
+		        hataMesaji = hataData.message || rawText;
+		    } catch {
+		        hataMesaji = rawText;
+		    }
+		    throw new Error(`Sunucu Hatası (${response.status}): ${hataMesaji}`);
+		}
+		
         const data = await response.json();
         data.forEach(row => {
             const tr = document.createElement("tr");

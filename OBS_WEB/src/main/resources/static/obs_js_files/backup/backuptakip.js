@@ -19,32 +19,42 @@ async function emirliste() {
 
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            let hataMesaji = "";
-            try {
-                const hataData = await response.json();
-                hataMesaji = hataData.message || JSON.stringify(hataData);
-            } catch {
-                hataMesaji = await response.text();
-            }
-            throw new Error(`Sunucu Hatası (${response.status}): ${hataMesaji}`);
-        }
+		if (!response.ok) {
+		    let hataMesaji = "";
+		    try {
+		        const rawText = await response.text();
+		        try {
+		            const hataData = JSON.parse(rawText);
+		            hataMesaji = hataData.message || rawText;
+		        } catch {
+		            hataMesaji = rawText;
+		        }
+		    } catch (e) {
+		        hataMesaji = "Hata mesajı alınamadı.";
+		    }
+		    throw new Error(`Sunucu Hatası (${response.status}): ${hataMesaji}`);
+		}
+
         const data = await response.json();
         tableBody.innerHTML = "";
-        data.forEach(row => {
-            const tr = document.createElement("tr");
-            tr.classList.add("table-row-height");
-            const durumText = row.DURUM == 1 ? "Aktif" : "Pasif";
-            tr.innerHTML = `
-                <td>${row.EMIR_ISMI}</td>
-                <td>${durumText}</td>
-                <td>${row.MESAJ || ""}</td>
-                <td>${row.INSTANCE || ""}</td>
-                <td>${formatTarihsqlite(row.SON_YUKLEME)}</td>
-                <td>${row.GELECEK_YEDEKLEME || ""}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
+		data.forEach(row => {
+		    const tr = document.createElement("tr");
+		    tr.classList.add("table-row-height");
+		    const durumText = row.DURUM == 1 ? "Aktif" : "Pasif";
+		    if (durumText === "Pasif") {
+		        tr.style.color = "red";
+		    }
+		    tr.innerHTML = `
+		        <td>${row.EMIR_ISMI}</td>
+		        <td>${durumText}</td>
+		        <td>${row.MESAJ || ""}</td>
+		        <td>${row.INSTANCE || ""}</td>
+		        <td>${formatTarihsqlite(row.SON_YUKLEME)}</td>
+		        <td>${row.GELECEK_YEDEKLEME || ""}</td>
+		    `;
+		    tableBody.appendChild(tr);
+		});
+
 
     } catch (error) {
         console.error("Fetch hatası:", error);
