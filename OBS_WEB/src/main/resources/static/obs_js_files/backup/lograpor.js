@@ -9,7 +9,7 @@ async function emirismidoldur() {
     const hangi_emir = document.getElementById("hangi_emir");
     const errorDiv = document.getElementById("errorDiv");
     const user = document.getElementById("kullaniciAdi").innerText.trim();
-    const url = `/backup/emirlistesi?server=${encodeURIComponent(server)}&key=${encodeURIComponent(apiKey)}&user=${encodeURIComponent(user)}`;
+    const url = `/backup/emirliste?server=${encodeURIComponent(server)}&key=${encodeURIComponent(apiKey)}&user=${encodeURIComponent(user)}`;
 
     errorDiv.style.display = "none";
     errorDiv.innerText = "";
