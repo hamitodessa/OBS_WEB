@@ -3,7 +3,7 @@ const pageSize = 500;
 
 
 async function emirismidoldur() {
-    document.body.style.cursor = "wait";
+    
     const server = document.getElementById("server").value;
     const apiKey = document.getElementById("sifre").value;
     const hangi_emir = document.getElementById("hangi_emir");
@@ -14,7 +14,7 @@ async function emirismidoldur() {
 	    errorDiv.innerText = "⚠️ Lütfen sunucu ve şifre bilgilerini girin.";
 	    return;
 	}
-	
+	document.body.style.cursor = "wait";
     const user = document.getElementById("kullaniciAdi").innerText.trim();
     const url = `/backup/emirliste?server=${encodeURIComponent(server)}&key=${encodeURIComponent(apiKey)}&user=${encodeURIComponent(user)}`;
 
@@ -56,7 +56,7 @@ async function emirismidoldur() {
 }
 
 async function logliste(page = 0) {
-    document.body.style.cursor = "wait";
+   
     const emir_ismi = document.getElementById("hangi_emir").value;
     const errorDiv = document.getElementById("errorDiv");
 
@@ -82,7 +82,7 @@ async function logliste(page = 0) {
 		    errorDiv.innerText = "⚠️ Lütfen sunucu ve şifre bilgilerini girin.";
 		    return;
 		}
-
+	document.body.style.cursor = "wait";
     const url = `/backup/logliste?server=${encodeURIComponent(server)}&key=${encodeURIComponent(apiKey)}&emir=${encodeURIComponent(emir_ismi)}&start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}&page=${page}&user=${encodeURIComponent(user)}`;
 
     try {

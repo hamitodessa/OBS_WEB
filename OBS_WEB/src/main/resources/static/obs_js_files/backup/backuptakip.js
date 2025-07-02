@@ -1,6 +1,6 @@
 
 async function emirliste() {
-    document.body.style.cursor = "wait";
+   
     const server = document.getElementById("server").value.trim();
 	const apiKey = document.getElementById("sifre").value.trim();
 	if (!server || !apiKey) {
@@ -8,7 +8,7 @@ async function emirliste() {
 	    errorDiv.innerText = "⚠️ Lütfen sunucu ve şifre bilgilerini girin.";
 	    return;
 	}
-	
+	document.body.style.cursor = "wait";
     const tableBody = document.getElementById("tableBody");
     const errorDiv = document.getElementById("errorDiv");
    
