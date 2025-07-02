@@ -2,8 +2,6 @@ let currentPage = 0;
 const pageSize = 500;
 
 
-// ✅ BACKEND KONTROLLÜ YAPIYA UYGUN HALE GETİRİLMİŞ YENİ VERSİYON
-
 async function emirismidoldur() {
     document.body.style.cursor = "wait";
     const server = document.getElementById("server").value;
