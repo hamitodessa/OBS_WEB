@@ -1,9 +1,11 @@
 package com.hamit.obs.controller.backup;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import javax.net.ssl.SSLContext;
@@ -74,11 +76,16 @@ public class BackupController {
 			@RequestParam String start,
 			@RequestParam String end,
 			@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "500") int limit,
 			@RequestParam String user) {
-		String url = String.format("https://%s/loglar?key=%s&emir=%s&start=%s&end=%s&page=%d&limit=%d&user=%s",
-				server, key, emir, start, end, page, limit, user);
-		try {
+		String url = String.format("https://%s/loglar?key=%s&emir=%s&start=%s&end=%s&page=%d&user=%s",
+			    server,
+			    URLEncoder.encode(key, StandardCharsets.UTF_8),
+			    URLEncoder.encode(emir, StandardCharsets.UTF_8),
+			    URLEncoder.encode(start, StandardCharsets.UTF_8),
+			    URLEncoder.encode(end, StandardCharsets.UTF_8),
+			    page, 
+			    URLEncoder.encode(user, StandardCharsets.UTF_8)
+			);		try {
 			TrustManager[] trustAllCerts = new TrustManager[]{
 					new X509TrustManager() {
 						public void checkClientTrusted(X509Certificate[] certs, String authType) {}

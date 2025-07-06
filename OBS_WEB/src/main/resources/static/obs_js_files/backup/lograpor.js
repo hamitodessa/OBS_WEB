@@ -77,12 +77,12 @@ async function logliste(page = 0) {
     }
     const server = document.getElementById("server").value;
     const apiKey = document.getElementById("sifre").value;
-	if (!server || !apiKey) {
+	  if (!server || !apiKey) {
 		    errorDiv.style.display = "block";
 		    errorDiv.innerText = "⚠️ Lütfen sunucu ve şifre bilgilerini girin.";
 		    return;
 		}
-	document.body.style.cursor = "wait";
+	  document.body.style.cursor = "wait";
     const url = `/backup/logliste?server=${encodeURIComponent(server)}&key=${encodeURIComponent(apiKey)}&emir=${encodeURIComponent(emir_ismi)}&start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}&page=${page}&user=${encodeURIComponent(user)}`;
 
     try {
