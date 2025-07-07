@@ -78,14 +78,15 @@ public class BackupController {
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam String user) {
 		String url = String.format("https://%s/loglar?key=%s&emir=%s&start=%s&end=%s&page=%d&user=%s",
-			    server,
-			    URLEncoder.encode(key, StandardCharsets.UTF_8),
-			    URLEncoder.encode(emir, StandardCharsets.UTF_8),
-			    URLEncoder.encode(start, StandardCharsets.UTF_8),
-			    URLEncoder.encode(end, StandardCharsets.UTF_8),
-			    page, 
-			    URLEncoder.encode(user, StandardCharsets.UTF_8)
-			);		try {
+				server,
+				URLEncoder.encode(key, StandardCharsets.UTF_8),
+				URLEncoder.encode(emir, StandardCharsets.UTF_8),
+				URLEncoder.encode(start, StandardCharsets.UTF_8),
+				URLEncoder.encode(end, StandardCharsets.UTF_8),
+				page, 
+				URLEncoder.encode(user, StandardCharsets.UTF_8)
+				);		
+		try {
 			TrustManager[] trustAllCerts = new TrustManager[]{
 					new X509TrustManager() {
 						public void checkClientTrusted(X509Certificate[] certs, String authType) {}
