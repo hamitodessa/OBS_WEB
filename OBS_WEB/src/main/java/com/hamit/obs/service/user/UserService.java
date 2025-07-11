@@ -18,8 +18,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +38,6 @@ import com.hamit.obs.repository.user.UserRepository;
 @Service
 public class UserService {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -97,21 +94,12 @@ public class UserService {
 
 	public boolean checkLogin(String username, String password) {
 		User user = userRepository.findByEmail(username);
-
-		logger.info("Gelen Username: {}", username);
-		logger.info("Gelen Password: {}", password);
-		logger.info("Encode Edilmiş Şifre (Test Amaçlı): {}", passwordEncoder.encode(password));
-
 		if (user != null) {
-			logger.info("Veritabanındaki Şifre (Hash): {}", user.getPassword());
 			boolean match = passwordEncoder.matches(password, user.getPassword());
-			logger.info("Şifre Doğru mu? {}", match);
 			return match;
 		} else {
-			logger.info("Kullanıcı bulunamadı!");
+			return false;
 		}
-
-		return false;
 	}
 
 	public Map<String, String> getPasswordDetails(String username, String password) {
