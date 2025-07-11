@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 import com.hamit.obs.service.user.CustomUserDetails;
 
 @Configuration
@@ -24,7 +25,8 @@ public class SecurityConfig {
 		.authorizeHttpRequests(request -> request
 				.requestMatchers(
 						"/css/**", "/images/**","/style/**", "/user/send_password", "/user/register"
-						).permitAll()
+								, "/mobillogin")
+						.permitAll()
 				.anyRequest().authenticated() 
 				)
 		.formLogin(form -> form
