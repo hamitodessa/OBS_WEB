@@ -1,36 +1,36 @@
 package com.hamit.obs.service.user;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.hamit.obs.model.user.User;
-import com.hamit.obs.model.user.User_Details;
-import com.hamit.obs.repository.user.RoleRepository;
-import com.hamit.obs.repository.user.UserRepository;
-import com.hamit.obs.custom.yardimci.PasswordGenerator;
-import com.hamit.obs.model.user.Email_Details;
-import com.hamit.obs.model.user.Etiket_Ayarlari;
-import com.hamit.obs.model.user.RolEnum;
-import com.hamit.obs.model.user.Role;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.mail.Message.RecipientType;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.hamit.obs.custom.yardimci.PasswordGenerator;
+import com.hamit.obs.model.user.Email_Details;
+import com.hamit.obs.model.user.Etiket_Ayarlari;
+import com.hamit.obs.model.user.RolEnum;
+import com.hamit.obs.model.user.Role;
+import com.hamit.obs.model.user.User;
+import com.hamit.obs.model.user.User_Details;
+import com.hamit.obs.repository.user.RoleRepository;
+import com.hamit.obs.repository.user.UserRepository;
 
 
 @Service
@@ -89,6 +89,14 @@ public class UserService {
 
 	public User findUserByUsername(String username) {
 		return userRepository.findByEmail(username);
+	}
+
+	public boolean checkLogin(String username, String password) {
+		User user = userRepository.findByEmail(username);
+		if (user != null) {
+			return passwordEncoder.matches(password, user.getPassword());
+		}
+		return false;
 	}
 
 	public void saveUser(User user) {

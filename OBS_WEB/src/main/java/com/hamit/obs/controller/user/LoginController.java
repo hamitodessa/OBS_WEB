@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
@@ -66,6 +68,17 @@ public class LoginController {
 	    return "login"; 
 	}
 	
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody Map<String, String> payload) {
+		String username = payload.get("username");
+		String password = payload.get("password");
+		if (userService.checkLogin(username, password)) {
+			return ResponseEntity.ok("success");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error");
+		}
+	}
+
 	@GetMapping("/index")
 	public Model index(Model model) {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
