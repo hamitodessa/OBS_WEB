@@ -1,8 +1,10 @@
 package com.hamit.obs.service.user;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -110,6 +112,21 @@ public class UserService {
 		}
 
 		return false;
+	}
+
+	public Map<String, String> getPasswordDetails(String username, String password) {
+		User user = userRepository.findByEmail(username);
+		Map<String, String> result = new HashMap<>();
+
+		if (user != null) {
+			result.put("encodedInput", passwordEncoder.encode(password));
+			result.put("dbPassword", user.getPassword());
+		} else {
+			result.put("encodedInput", passwordEncoder.encode(password));
+			result.put("dbPassword", "NO_USER");
+		}
+
+		return result;
 	}
 
 

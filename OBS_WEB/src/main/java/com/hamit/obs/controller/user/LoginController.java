@@ -72,11 +72,23 @@ public class LoginController {
 	public ResponseEntity<?> login(@RequestBody Map<String, String> payload) {
 		String username = payload.get("username");
 		String password = payload.get("password");
-		if (userService.checkLogin(username, password)) {
-			return ResponseEntity.ok("success");
-		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error");
-		}
+//		if (userService.checkLogin(username, password)) {
+//			return ResponseEntity.ok("success");
+//		} else {
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error");
+//		}
+		Map<String, String> passwords = userService.getPasswordDetails(username, password);
+
+		String encodedInput = passwords.get("encodedInput");
+		String dbPassword = passwords.get("dbPassword");
+
+		System.out.println("Encoded Input Password: " + encodedInput);
+		System.out.println("Database Password: " + dbPassword);
+
+		// Sonradan kontrol istersen:
+
+		return ResponseEntity.ok("Encoded Input Password: " + encodedInput + "==" + "Database Password: " + dbPassword);
+
 	}
 
 	@GetMapping("/index")
