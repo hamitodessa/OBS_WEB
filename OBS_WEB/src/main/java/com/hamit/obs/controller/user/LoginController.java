@@ -72,16 +72,11 @@ public class LoginController {
 	public ResponseEntity<?> login(@RequestBody Map<String, String> payload) {
 		String username = payload.get("username");
 		String password = payload.get("password");
-//		if (userService.checkLogin(username, password)) {
-//			return ResponseEntity.ok("success");
-//		} else {
-//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error");
-//		}
-		Map<String, String> passwords = userService.getPasswordDetails(username, password);
-		String encodedInput = passwords.get("encodedInput");
-		String dbPassword = passwords.get("dbPassword");
-		// Şifreleri geri döndür → sadece test için!
-		return ResponseEntity.ok("Encoded Input Password: " + encodedInput + " == Database Password: " + dbPassword);
+		if (userService.checkLogin(username, password)) {
+			return ResponseEntity.ok("success");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error");
+		}
 	}
 
 	@GetMapping("/index")
