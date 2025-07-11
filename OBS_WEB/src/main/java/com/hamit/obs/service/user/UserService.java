@@ -93,11 +93,26 @@ public class UserService {
 
 	public boolean checkLogin(String username, String password) {
 		User user = userRepository.findByEmail(username);
+
+		System.out.println("Gelen Username: " + username);
+		System.out.println("Gelen Password: " + password);
+
+		// Şifreyi encode edip logla (sadece test için!)
+		String encodedPassword = passwordEncoder.encode(password);
+		System.out.println("Encode Edilmiş Şifre (Test Amaçlı): " + encodedPassword);
+
 		if (user != null) {
-			return passwordEncoder.matches(password, user.getPassword());
+			System.out.println("Veritabanındaki Şifre (Hash): " + user.getPassword());
+			boolean match = passwordEncoder.matches(password, user.getPassword());
+			System.out.println("Şifre Doğru mu? " + match);
+			return match;
+		} else {
+			System.out.println("Kullanıcı bulunamadı!");
 		}
+
 		return false;
 	}
+
 
 	public void saveUser(User user) {
 		userRepository.save(user);
