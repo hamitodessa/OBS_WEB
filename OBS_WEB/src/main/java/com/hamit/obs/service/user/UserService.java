@@ -16,6 +16,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +38,7 @@ import com.hamit.obs.repository.user.UserRepository;
 @Service
 public class UserService {
 
-
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -94,20 +96,17 @@ public class UserService {
 	public boolean checkLogin(String username, String password) {
 		User user = userRepository.findByEmail(username);
 
-		System.out.println("Gelen Username: " + username);
-		System.out.println("Gelen Password: " + password);
-
-		// Şifreyi encode edip logla (sadece test için!)
-		String encodedPassword = passwordEncoder.encode(password);
-		System.out.println("Encode Edilmiş Şifre (Test Amaçlı): " + encodedPassword);
+		logger.info("Gelen Username: {}", username);
+		logger.info("Gelen Password: {}", password);
+		logger.info("Encode Edilmiş Şifre (Test Amaçlı): {}", passwordEncoder.encode(password));
 
 		if (user != null) {
-			System.out.println("Veritabanındaki Şifre (Hash): " + user.getPassword());
+			logger.info("Veritabanındaki Şifre (Hash): {}", user.getPassword());
 			boolean match = passwordEncoder.matches(password, user.getPassword());
-			System.out.println("Şifre Doğru mu? " + match);
+			logger.info("Şifre Doğru mu? {}", match);
 			return match;
 		} else {
-			System.out.println("Kullanıcı bulunamadı!");
+			logger.info("Kullanıcı bulunamadı!");
 		}
 
 		return false;
