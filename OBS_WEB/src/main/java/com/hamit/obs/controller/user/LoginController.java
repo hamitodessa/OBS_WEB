@@ -72,22 +72,23 @@ public class LoginController {
 	public ResponseEntity<?> login(@RequestBody Map<String, String> payload) {
 		String username = payload.get("username");
 		String password = payload.get("password");
+		return ResponseEntity.ok("OK TATLİM, İSTEĞİN GELDİ!");
 //		if (userService.checkLogin(username, password)) {
 //			return ResponseEntity.ok("success");
 //		} else {
 //			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error");
 //		}
-		Map<String, String> passwords = userService.getPasswordDetails(username, password);
+//		Map<String, String> passwords = userService.getPasswordDetails(username, password);
+//
+//		String encodedInput = passwords.get("encodedInput");
+//		String dbPassword = passwords.get("dbPassword");
 
-		String encodedInput = passwords.get("encodedInput");
-		String dbPassword = passwords.get("dbPassword");
-
-		System.out.println("Encoded Input Password: " + encodedInput);
-		System.out.println("Database Password: " + dbPassword);
+//		System.out.println("Encoded Input Password: " + encodedInput);
+//		System.out.println("Database Password: " + dbPassword);
 
 		// Sonradan kontrol istersen:
 
-		return ResponseEntity.ok("Encoded Input Password: " + encodedInput + "==" + "Database Password: " + dbPassword);
+//		return ResponseEntity.ok("Encoded Input Password: " + encodedInput + "==" + "Database Password: " + dbPassword);
 
 	}
 
