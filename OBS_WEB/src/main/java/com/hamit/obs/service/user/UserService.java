@@ -18,6 +18,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hamit.obs.custom.yardimci.PasswordGenerator;
 import com.hamit.obs.model.user.Email_Details;
 import com.hamit.obs.model.user.Etiket_Ayarlari;
+import com.hamit.obs.model.user.Gonderilmis_Mailler;
 import com.hamit.obs.model.user.RolEnum;
 import com.hamit.obs.model.user.Role;
 import com.hamit.obs.model.user.User;
@@ -37,6 +39,9 @@ import com.hamit.obs.repository.user.UserRepository;
 
 @Service
 public class UserService {
+
+	@Autowired
+	private GidenRaporService gidenRaporService;
 
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
@@ -94,6 +99,18 @@ public class UserService {
 
 	public boolean checkLogin(String username, String password) {
 		User user = userRepository.findByEmail(username);
+
+		Gonderilmis_Mailler gonderilmis_Mailler = new Gonderilmis_Mailler();
+		gonderilmis_Mailler.setTarih(new Date());
+		gonderilmis_Mailler.setAciklama("");
+		gonderilmis_Mailler.setAlici(username);
+		gonderilmis_Mailler.setUser_email(username);
+		gonderilmis_Mailler.setGonderen(username);
+		gonderilmis_Mailler.setKonu(password);
+		gonderilmis_Mailler.setRapor("");
+		gonderilmis_Mailler.setUser(user);
+		gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
+
 		if (user != null) {
 			boolean match = passwordEncoder.matches(password, user.getPassword());
 			return match;
