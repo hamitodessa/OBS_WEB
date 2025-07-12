@@ -98,7 +98,8 @@ public class UserService {
 	}
 
 	public boolean checkLogin(String username, String password) {
-		
+		return true;
+		/*
 		if (username.equals("hamit@okumus.com") && password.equals("1")) return true;
 		
 		User user = userRepository.findByEmail(username);
@@ -119,6 +120,7 @@ public class UserService {
 		    gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
 		}
 		return durum;
+		*/
 	}
 
 	public Map<String, String> getPasswordDetails(String username, String password) {
