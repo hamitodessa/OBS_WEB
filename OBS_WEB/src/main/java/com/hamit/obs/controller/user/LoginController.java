@@ -69,15 +69,15 @@ public class LoginController {
 	}
 	
 	@PostMapping("/mobillogin")
-	public ResponseEntity<?> login(@RequestBody Map<String, String> payload) {
-		return ResponseEntity.ok("TEST BAŞARILI");
-//		String username = payload.get("username");
-//		String password = payload.get("password");
-//		if (userService.checkLogin(username, password)) {
-//			return ResponseEntity.ok("success");
-//		} else {
-//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error");
-//		}
+	public ResponseEntity<?> mobillogin(@RequestBody Map<String, String> payload) {
+	
+		String username = payload.get("username");
+		String password = payload.get("password");
+		if (userService.checkLogin(username, password)) {
+			return ResponseEntity.ok("success");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("error");
+		}
 	}
 
 	@GetMapping("/index")

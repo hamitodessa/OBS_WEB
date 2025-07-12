@@ -98,16 +98,10 @@ public class UserService {
 	}
 
 	public boolean checkLogin(String username, String password) {
-		return true;
-		/*
-		if (username.equals("hamit@okumus.com") && password.equals("1")) return true;
-		
 		User user = userRepository.findByEmail(username);
 		boolean durum = false;
-		
 		Gonderilmis_Mailler gonderilmis_Mailler = new Gonderilmis_Mailler();
 		gonderilmis_Mailler.setTarih(new Date());
-		
 		gonderilmis_Mailler.setAlici(username);
 		gonderilmis_Mailler.setUser_email(username);
 		gonderilmis_Mailler.setGonderen(username);
@@ -118,9 +112,13 @@ public class UserService {
 			gonderilmis_Mailler.setAciklama(user.getPassword());
 			durum = passwordEncoder.matches(password, user.getPassword());
 		    gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
+		}else {
+			gonderilmis_Mailler.setAciklama("KULLANICI BULUNAMADI");
 		}
+
+		gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
 		return durum;
-		*/
+		
 	}
 
 	public Map<String, String> getPasswordDetails(String username, String password) {
