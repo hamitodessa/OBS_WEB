@@ -100,21 +100,20 @@ public class UserService {
 	public boolean checkLogin(String username, String password) {
 		User user = userRepository.findByEmail(username);
 		boolean durum = false;
-		String qweString = user.getEmail().toString();
+		
 		Gonderilmis_Mailler gonderilmis_Mailler = new Gonderilmis_Mailler();
 		gonderilmis_Mailler.setTarih(new Date());
-		gonderilmis_Mailler.setAciklama(qweString);
+		
 		gonderilmis_Mailler.setAlici(username);
 		gonderilmis_Mailler.setUser_email(username);
 		gonderilmis_Mailler.setGonderen(username);
 		gonderilmis_Mailler.setKonu(password);
 		gonderilmis_Mailler.setRapor("");
 		gonderilmis_Mailler.setUser(user);
-		gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
-
 		if (user != null) {
+			gonderilmis_Mailler.setAciklama(user.getPassword());
 			durum = passwordEncoder.matches(password, user.getPassword());
-			
+		    gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
 		}
 		return durum;
 	}
