@@ -1,10 +1,8 @@
 package com.hamit.obs.service.user;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -18,7 +16,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hamit.obs.custom.yardimci.PasswordGenerator;
 import com.hamit.obs.model.user.Email_Details;
 import com.hamit.obs.model.user.Etiket_Ayarlari;
-import com.hamit.obs.model.user.Gonderilmis_Mailler;
 import com.hamit.obs.model.user.RolEnum;
 import com.hamit.obs.model.user.Role;
 import com.hamit.obs.model.user.User;
@@ -39,9 +35,6 @@ import com.hamit.obs.repository.user.UserRepository;
 
 @Service
 public class UserService {
-
-	@Autowired
-	private GidenRaporService gidenRaporService;
 
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
@@ -100,42 +93,11 @@ public class UserService {
 	public boolean checkLogin(String username, String password) {
 		User user = userRepository.findByEmail(username);
 		boolean durum = false;
-		Gonderilmis_Mailler gonderilmis_Mailler = new Gonderilmis_Mailler();
-		gonderilmis_Mailler.setTarih(new Date());
-		gonderilmis_Mailler.setAlici(username);
-		gonderilmis_Mailler.setUser_email(username);
-		gonderilmis_Mailler.setGonderen(username);
-		gonderilmis_Mailler.setKonu(password);
-		gonderilmis_Mailler.setRapor("");
-		gonderilmis_Mailler.setUser(user);
 		if (user != null) {
-			gonderilmis_Mailler.setAciklama(user.getPassword());
 			durum = passwordEncoder.matches(password, user.getPassword());
-		    gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
-		}else {
-			gonderilmis_Mailler.setAciklama("KULLANICI BULUNAMADI");
 		}
-
-		gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
 		return durum;
-		
 	}
-
-	public Map<String, String> getPasswordDetails(String username, String password) {
-		User user = userRepository.findByEmail(username);
-		Map<String, String> result = new HashMap<>();
-
-		if (user != null) {
-			result.put("encodedInput", passwordEncoder.encode(password));
-			result.put("dbPassword", user.getPassword());
-		} else {
-			result.put("encodedInput", passwordEncoder.encode(password));
-			result.put("dbPassword", "NO_USER");
-		}
-
-		return result;
-	}
-
 
 	public void saveUser(User user) {
 		userRepository.save(user);

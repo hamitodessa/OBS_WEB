@@ -102,7 +102,7 @@ public class UserDetailsController {
 		}
 		return response;
 	}
-
+	
 	@PostMapping("user/user_details_save")
 	@ResponseBody
 	public Map<String, Object> saveUserDetails(@RequestBody User_Details userDetails) {

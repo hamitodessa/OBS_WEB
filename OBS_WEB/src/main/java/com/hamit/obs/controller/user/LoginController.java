@@ -70,7 +70,6 @@ public class LoginController {
 	
 	@PostMapping("/mobillogin")
 	public ResponseEntity<?> mobillogin(@RequestBody Map<String, String> payload) {
-	
 		String username = payload.get("username");
 		String password = payload.get("password");
 		if (userService.checkLogin(username, password)) {

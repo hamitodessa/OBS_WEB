@@ -59,7 +59,7 @@ public class CariService {
 		} else
 			throw new ServiceException("No authenticated user found in SecurityContext");
 	}
-
+	
 	public String[] conn_detail() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
