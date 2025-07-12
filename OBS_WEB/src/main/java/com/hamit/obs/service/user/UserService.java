@@ -99,10 +99,11 @@ public class UserService {
 
 	public boolean checkLogin(String username, String password) {
 		User user = userRepository.findByEmail(username);
-
+		boolean durum = false;
+		String qweString = user.getEmail().toString();
 		Gonderilmis_Mailler gonderilmis_Mailler = new Gonderilmis_Mailler();
 		gonderilmis_Mailler.setTarih(new Date());
-		gonderilmis_Mailler.setAciklama("");
+		gonderilmis_Mailler.setAciklama(qweString);
 		gonderilmis_Mailler.setAlici(username);
 		gonderilmis_Mailler.setUser_email(username);
 		gonderilmis_Mailler.setGonderen(username);
@@ -112,11 +113,10 @@ public class UserService {
 		gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
 
 		if (user != null) {
-			boolean match = passwordEncoder.matches(password, user.getPassword());
-			return match;
-		} else {
-			return false;
+			durum = passwordEncoder.matches(password, user.getPassword());
+			
 		}
+		return durum;
 	}
 
 	public Map<String, String> getPasswordDetails(String username, String password) {
