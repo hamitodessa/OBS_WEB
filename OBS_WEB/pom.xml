@@ -143,6 +143,11 @@
     		<artifactId>poi-ooxml-schemas</artifactId>
    			<version>4.1.2</version>
 		</dependency>
+		<dependency>
+    		<groupId>commons-net</groupId>
+    		<artifactId>commons-net</artifactId>
+    		<version>3.9.0</version> <!-- en güncel sürüm -->
+		</dependency>
 	</dependencies>
 	<build>
 	<finalName>OBS_WEB</finalName>
