@@ -48,13 +48,16 @@ public class GpsServices {
 
 		List<CoordDto> list = new ArrayList<>();
 		String line;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
 
 		while ((line = reader.readLine()) != null) {
 			String[] parts = line.split(",");
 			if (parts.length >= 3) {
 				try {
-					LocalDateTime time = LocalDateTime.parse(parts[0], formatter);
+					String raw = parts[0];
+					String trimmed = raw.contains(".") ? raw.substring(0, raw.indexOf(".")) : raw;
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					LocalDateTime time = LocalDateTime.parse(trimmed, formatter);
+
 					if (!time.toLocalDate().isBefore(start) && !time.toLocalDate().isAfter(end)) {
 						double lat = Double.parseDouble(parts[1]);
 						double lng = Double.parseDouble(parts[2]);
@@ -65,6 +68,7 @@ public class GpsServices {
 				}
 			}
 		}
+
 		ftp.completePendingCommand();
 		ftp.logout();
 		ftp.disconnect();
