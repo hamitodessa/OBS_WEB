@@ -43,14 +43,12 @@ public class GpsServices {
 		FTPClient ftp = new FTPClient();
 		ftp.connect("78.189.76.247");
 		ftp.login("hamitadmin", "SDFks9hfji3#DEd");
+		ftp.enterLocalPassiveMode();
 		ftp.changeWorkingDirectory("GPS");
-
 		InputStream inputStream = ftp.retrieveFileStream(fileName);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
 		List<CoordDto> list = new ArrayList<>();
 		String line;
-
 		while ((line = reader.readLine()) != null) {
 			String[] parts = line.split(",");
 			if (parts.length >= 3) {
@@ -70,11 +68,9 @@ public class GpsServices {
 				}
 			}
 		}
-
 		ftp.completePendingCommand();
 		ftp.logout();
 		ftp.disconnect();
 		return list;
 	}
-
 }
