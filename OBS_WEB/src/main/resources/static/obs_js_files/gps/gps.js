@@ -1,18 +1,25 @@
 fileselect();
 
 async function fileselect() {
+    document.body.style.cursor = "wait";
     const sel = document.getElementById("fileSelect");
-    const response = await fetch("gps/files");
-    const files = await response.json();
-    files.forEach(file => {
-        const opt = document.createElement("option");
-        opt.value = file;
-        opt.text = file;
-        sel.appendChild(opt);
-    });
-};
-
-console.log("burda");
+    sel.innerHTML = ""; 
+    try {
+        const response = await fetch("gps/files");
+        const files = await response.json();
+        files.forEach(file => {
+            const opt = document.createElement("option");
+            opt.value = file;
+            opt.text = file;
+            sel.appendChild(opt);
+        });
+    } catch (error) {
+        console.error("Dosya listesi alınırken hata oluştu:", error);
+        alert("Dosya listesi alınamadı tatlım 😢");
+    } finally {
+        document.body.style.cursor = "default";
+    }
+}
 let currentIndex = 0;
 let coords = [];
 let map;
@@ -39,25 +46,29 @@ function initMapLayers() {
 }
 
 async function goster() {
-	if (!osm) initMapLayers(); // eğer ilk defa çağrılıyorsa oluştur
+    if (!osm) initMapLayers();
     const file = document.getElementById("fileSelect").value;
     const start = document.getElementById("startDate").value;
     const end = document.getElementById("endDate").value;
+    document.body.style.cursor = "wait";
     try {
         const response = await fetch(`gps/data?file=${file}&start=${start}&end=${end}`);
         coords = await response.json();
         currentIndex = 0;
         if (!coords || coords.length === 0) {
+					   document.body.style.cursor = "default";
             alert("Seçilen tarih aralığında konum verisi bulunamadı tatlım 😢");
             return;
         }
         drawMap(coords);
         updateMarker(currentIndex);
     } catch (error) {
-        console.error("Hata oluştu:", error);
-        alert("Veri alınırken hata oluştu.");
+        alert("Veri alınırken hata oluştu tatlım 😢\n\n" + error.message);
+    } finally {
+        document.body.style.cursor = "default";
     }
 }
+
 
 function drawMap(coords) {
     if (map) {
