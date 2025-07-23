@@ -21,24 +21,26 @@ import com.hamit.obs.dto.gps.CoordDto;
 public class GpsServices {
 
 
-	public List<String> listGpsTxtFiles() throws Exception {
+	public List<String> listGpsTxtFiles(String userEmail) throws Exception {
 		FTPClient ftp = new FTPClient();
-		//ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true));
 		ftp.connect("78.189.76.247");
 		ftp.login("hamitadmin", "SDFks9hfji3#DEd");
 		ftp.enterLocalPassiveMode();
 		ftp.changeWorkingDirectory("GPS");
 		FTPFile[] files = ftp.listFiles();
 		List<String> list = new ArrayList<>();
+		String filePrefix = userEmail.replaceAll("[^a-zA-Z0-9@._-]", "_");
 		for (FTPFile file : files) {
-			if (file.getName().endsWith(".txt")) {
-				list.add(file.getName());
+			String name = file.getName();
+			if (name.startsWith(filePrefix) && name.endsWith("_log.txt")) {
+				list.add(name);
 			}
 		}
 		ftp.logout();
 		ftp.disconnect();
 		return list;
 	}
+
 	public List<CoordDto> readCoordsFromFtp(String fileName, LocalDate start, LocalDate end) throws Exception {
 		FTPClient ftp = new FTPClient();
 		ftp.connect("78.189.76.247");

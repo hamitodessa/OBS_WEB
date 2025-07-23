@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +28,8 @@ public class GpsController {
 	@GetMapping("/gps/files")
 	@ResponseBody
 	public ResponseEntity<List<String>> getFiles() throws Exception {
-		return ResponseEntity.ok(gpsServices.listGpsTxtFiles());
+		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+		return ResponseEntity.ok(gpsServices.listGpsTxtFiles(useremail));
 	}
 
 	@GetMapping("/gps/data")
