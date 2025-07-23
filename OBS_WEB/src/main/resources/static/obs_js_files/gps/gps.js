@@ -3,10 +3,12 @@ fileselect();
 async function fileselect() {
     document.body.style.cursor = "wait";
     const sel = document.getElementById("fileSelect");
-    sel.innerHTML = ""; 
+    sel.innerHTML = "";
+
     try {
-        const response = await fetch("gps/files");
-        const files = await response.json();
+        const files = await fetchWithSessionCheck("gps/files");
+       
+
         files.forEach(file => {
             const opt = document.createElement("option");
             opt.value = file;
@@ -14,11 +16,13 @@ async function fileselect() {
             sel.appendChild(opt);
         });
     } catch (error) {
-        alert("Dosya listesi alınamadı 😢" + error.message);
+        alert("📁 Dosya listesi alınamadı 😢\n\n" + error.message);
     } finally {
         document.body.style.cursor = "default";
     }
 }
+
+
 let currentIndex = 0;
 let coords = [];
 let map;
@@ -46,27 +50,34 @@ function initMapLayers() {
 
 async function goster() {
     if (!osm) initMapLayers();
+
     const file = document.getElementById("fileSelect").value;
     const start = document.getElementById("startDate").value;
     const end = document.getElementById("endDate").value;
+
     document.body.style.cursor = "wait";
+
     try {
-        const response = await fetch(`gps/data?file=${file}&start=${start}&end=${end}`);
-        coords = await response.json();
+        const response = await fetchWithSessionCheck(`gps/data?file=${file}&start=${start}&end=${end}`);
+        
+
+        coords = response;
         currentIndex = 0;
+
         if (!coords || coords.length === 0) {
-					   document.body.style.cursor = "default";
             alert("Seçilen tarih aralığında konum verisi bulunamadı tatlım 😢");
             return;
         }
+
         drawMap(coords);
         updateMarker(currentIndex);
     } catch (error) {
-        alert("Veri alınırken hata oluştu tatlım 😢\n\n" + error.message);
+        alert("Veri alınırken hata oluştu  😢\n\n" + error.message);
     } finally {
         document.body.style.cursor = "default";
     }
 }
+
 
 
 function drawMap(coords) {
