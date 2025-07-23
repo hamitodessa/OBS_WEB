@@ -14,8 +14,7 @@ async function fileselect() {
             sel.appendChild(opt);
         });
     } catch (error) {
-        console.error("Dosya listesi alınırken hata oluştu:", error);
-        alert("Dosya listesi alınamadı tatlım 😢");
+        alert("Dosya listesi alınamadı 😢" + error.message);
     } finally {
         document.body.style.cursor = "default";
     }
@@ -87,7 +86,7 @@ function drawMap(coords) {
         map.removeLayer(polyline);
     }
     polyline = L.polyline(latlngs, {
-			    color: '#6fa8dc', // daha pastel ve tatlı mavi
+			    color: '#0000FF', 
 			    weight: 4,
 			    opacity: 0.9,
 			    smoothFactor: 1
