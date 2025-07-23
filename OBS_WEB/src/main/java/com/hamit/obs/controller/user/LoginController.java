@@ -87,6 +87,9 @@ public class LoginController {
 		List<RolEnum> roleNames =userService.getRoleNamesByEmail(useremail);
 		boolean isAdmin = roleNames.contains(RolEnum.ADMIN);
 		model.addAttribute("menuitemvisible", isAdmin);
+
+		boolean isAdmingps = "hamit@okumus.com".equals(useremail);
+		model.addAttribute("menuitemvisiblegps", isAdmingps);
 		String apiUrl = "https://api.ipify.org?format=text";
 		RestTemplate restTemplate = new RestTemplate();
 		model.addAttribute("ip", restTemplate.getForObject(apiUrl, String.class));
