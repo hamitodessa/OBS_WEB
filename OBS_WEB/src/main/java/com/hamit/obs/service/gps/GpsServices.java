@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 //import org.apache.commons.net.PrintCommandListener;
@@ -59,7 +60,6 @@ public class GpsServices {
 					String trimmed = raw.contains(".") ? raw.substring(0, raw.indexOf(".")) : raw;
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 					LocalDateTime time = LocalDateTime.parse(trimmed, formatter);
-
 					if (!time.toLocalDate().isBefore(start) && !time.toLocalDate().isAfter(end)) {
 						double lat = Double.parseDouble(parts[1]);
 						double lng = Double.parseDouble(parts[2]);
@@ -73,6 +73,7 @@ public class GpsServices {
 		ftp.completePendingCommand();
 		ftp.logout();
 		ftp.disconnect();
+		list.sort(Comparator.comparing(CoordDto::getTimeAsLocalDateTime));
 		return list;
 	}
 }
