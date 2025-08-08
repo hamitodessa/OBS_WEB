@@ -35,11 +35,11 @@ async function toplampagesize() {
     const modul = document.getElementById("user_modul").value;
     const startDate = document.getElementById("startDate").value;
     const endDate = document.getElementById("endDate").value;
-
+	const aciklama = document.getElementById("aciklama").value;
     const resp = await fetchWithSessionCheck("user/logsize", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ modul, startDate, endDate })
+      body: JSON.stringify({ modul, startDate, endDate ,aciklama})
     });
 
     const totalRecords = resp.totalRecords ?? 0;

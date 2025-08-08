@@ -64,8 +64,9 @@ public class LogRaporController {
 		try {
 			String startDate = (String) params.get("startDate");
 			String endDate = (String) params.get("endDate");
+			String aciklama = (String) params.get("aciklama");
 			modulTipi modultip = modulTipi.fromDbValue((String) params.get("modul"));
-			double logsize = logRaporService.logsize(startDate, endDate,modultip);
+			double logsize = logRaporService.logsize(startDate, endDate,modultip,aciklama);
 			response.put("totalRecords", logsize);
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {

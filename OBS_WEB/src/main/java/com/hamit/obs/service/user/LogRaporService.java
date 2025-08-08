@@ -45,13 +45,13 @@ public class LogRaporService {
 		}
 	}
 	
-	public double logsize(String startDate,String endDate,modulTipi modul){
+	public double logsize(String startDate,String endDate,modulTipi modul,String aciklama){
 		try {
 			String useremail = userService.getCurrentUser().getEmail();
 			masterConnectionManager.loadConnections(modul,useremail);
 			connConnDetails = masterConnectionManager.getConnection(modul, useremail);
 			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
-			return loglamaRepository.log_raporsize(startDate,endDate,usrString,connConnDetails);
+			return loglamaRepository.log_raporsize(startDate,endDate,usrString,aciklama,connConnDetails);
 		} catch (ServiceException e) {
 			String originalMessage = e.getMessage();
 			Throwable cause = e.getCause();

@@ -80,23 +80,26 @@ public class LoglamaRepository {
 		return resultList; 
 	}
 
-	public double log_raporsize(String startDate, String endDate,String user, ConnectionDetails connDetails) {
+	public double log_raporsize(String startDate, String endDate,String user,String aciklama, ConnectionDetails connDetails) {
 		double result = 0 ;
 		String sql = "" ;
 		if(connDetails.getSqlTipi().equals(sqlTipi.MSSQL)) {
 			sql = " SELECT COUNT (TARIH) as size" +
 					" FROM LOGLAMA WITH (INDEX (IX_LOGLAMA))" + 
-					" WHERE TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
+					" WHERE MESAJ LIKE N'%" + aciklama + "%'" +
+					" AND TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
 					" AND USER_NAME  LIKE '" + user + "%'";
 		}else if(connDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
 			sql = "SELECT COUNT (TARIH) as size " + 
 					" FROM LOGLAMA USE INDEX (IX_LOGLAMA)" + 
-					" WHERE TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
+					" WHERE MESAJ LIKE N'%" + aciklama + "%'" +   
+					" AND TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
 					" AND USER_NAME LIKE '" + user + "%'";
 		} else if(connDetails.getSqlTipi().equals(sqlTipi.PGSQL)) {
 			sql = "SELECT COUNT(\"TARIH\") as size" +
 					" FROM \"LOGLAMA\"" + 
-					" WHERE \"TARIH\" BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
+					" WHERE \"MESAJ\"::text LIKE '%" + aciklama + "%'" +
+					" AND \"TARIH\" BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
 					" AND \"USER_NAME\"::text LIKE '" + user + "'";
 		}
 		try (Connection connection = DriverManager.getConnection(connDetails.getJdbcUrlLog(), connDetails.getUsername(), connDetails.getPassword());
