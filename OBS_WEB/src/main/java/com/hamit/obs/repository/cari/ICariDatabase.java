@@ -61,5 +61,4 @@ public interface ICariDatabase {
 	void cari_kod_degis_tahsilat(String eskikod,String yenikod,ConnectionDetails cariConnDetails);
 	List<Map<String, Object>> kasa_kontrol(String hesap , String t1 ,ConnectionDetails cariConnDetails) ;
 	List<Map<String, Object>> kasa_mizan(String kod,String ilktarih,String sontarih,ConnectionDetails cariConnDetails) ;
-
 }
