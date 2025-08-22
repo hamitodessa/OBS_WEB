@@ -424,9 +424,7 @@ async function tahyenifis() {
 			},
 			body: new URLSearchParams({ tah_ted: tah_ted }),
 		});
-		if (!response.ok) {
-			throw new Error(`HTTP error! Status: ${response.status}`);
-		}
+		
 		const data = response;
 		const fisNoInput = document.getElementById('tahevrakNo');
 		const errorDiv = document.getElementById('errorDiv');
