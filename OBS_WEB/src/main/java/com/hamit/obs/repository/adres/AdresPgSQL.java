@@ -35,10 +35,10 @@ public class AdresPgSQL implements IAdresDatabase {
 	}
 
 	@Override
-	public adresDTO hsp_pln(String hesap, ConnectionDetails adresConnDetails) {
+	public adresDTO hsp_pln(String hesapisim, ConnectionDetails adresConnDetails) {
 		String sql = "SELECT  * " + 
 				" FROM \"ADRES\" " + 
-				" WHERE \"M_KODU\" = '" + hesap + "'";
+				" WHERE \"ADI\" LIKE '" + hesapisim + "%' OR \"M_KODU\" like '" + hesapisim + "%'" + " LIMIT 1;";
 		adresDTO hsdto = new adresDTO();
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

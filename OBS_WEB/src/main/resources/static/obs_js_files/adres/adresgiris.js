@@ -158,11 +158,12 @@ function adrgetDTO() {
 }
 
 async function adraramaYap() {
-	const aramaInput = document.getElementById("arama").value;
+	const aramaInput = document.getElementById("arama").value.trim();
 	document.getElementById("kodKontrol").innerText = "";
-	if (!aramaInput || aramaInput === "") {
-		return;
-	}
+	if (aramaInput === "") {
+		  adrIlk();
+	    return;
+	  }
 	document.body.style.cursor = "wait";
 	try {
 
@@ -175,7 +176,8 @@ async function adraramaYap() {
 		});
 
 		const dto = response;
-		if (dto.errorMessage === "Bu Numarada Kayıtlı Hesap Yok") {
+		if (dto.errorMessage != "") {
+			document.getElementById("errorDiv").style.display = "block";
 			document.getElementById("errorDiv").innerText = dto.errorMessage;
 			return;
 		}

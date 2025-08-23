@@ -35,10 +35,11 @@ public class AdresMsSQL implements IAdresDatabase {
 	}
 
 	@Override
-	public adresDTO hsp_pln(String hesap, ConnectionDetails adresConnDetails) {
-		String sql = "SELECT  * " + 
+	public adresDTO hsp_pln(String hesapisim, ConnectionDetails adresConnDetails) {
+		String sql = "SELECT TOP 1  * " +
 				" FROM Adres " + 
-				" WHERE M_Kodu = '" + hesap + "'";
+				" WHERE Adi LIKE '" + hesapisim + "%' OR M_Kodu like '" + hesapisim + "%'";
+
 		adresDTO hsdto = new adresDTO();
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

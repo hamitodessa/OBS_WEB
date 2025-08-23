@@ -65,11 +65,11 @@ public class AdresService {
 		}
 	}
 
-	public adresDTO hsp_pln(String hesap){
+	public adresDTO hsp_pln(String hesapisim) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails adresConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.ADRES);
-			return strategy.hsp_pln(hesap,adresConnDetails);
+			return strategy.hsp_pln(hesapisim, adresConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

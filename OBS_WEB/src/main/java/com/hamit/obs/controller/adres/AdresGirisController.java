@@ -49,16 +49,18 @@ public class AdresGirisController {
 	public ResponseEntity<?> hsplnArama(@RequestParam String arama) {
 		adresDTO adresDTO = new adresDTO();
 		try {
-			adresDTO =  adresService.hsp_pln(arama);
-			if (adresDTO.getKodu().equals("")) {
-				throw new ServiceException("Bu Numarada Kayıtlı Hesap Yok");
+			adresDTO = adresService.hsp_pln(arama);
+			if (adresDTO.getKodu() == null || adresDTO.getKodu().isBlank()) {
+				adresDTO.setErrorMessage("Bu Numarada Kayıtlı Hesap Yok");
+			} else {
+				if (adresDTO.getImage() != null) {
+					String base64Image = Base64.getEncoder().encodeToString(adresDTO.getImage());
+					adresDTO.setBase64Resim(base64Image);
+					adresDTO.setImage(null);
+				}
+				adresDTO.setErrorMessage("");
 			}
-			if (adresDTO.getImage() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(adresDTO.getImage());
-				adresDTO.setBase64Resim(base64Image);
-				adresDTO.setImage(null) ;
-			}
-			adresDTO.setErrorMessage(""); 
+			adresDTO.setImage(null);
 		} catch (ServiceException e) {
 			adresDTO.setErrorMessage(e.getMessage());
 		} catch (Exception e) {
