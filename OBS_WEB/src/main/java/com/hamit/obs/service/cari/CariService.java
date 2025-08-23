@@ -25,6 +25,7 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.cari.ICariDatabase;
 import com.hamit.obs.repository.loglama.LoglamaRepository;
 import com.hamit.obs.service.adres.AdresService;
+import com.hamit.obs.service.context.CariDatabaseContext;
 import com.hamit.obs.service.kur.KurService;
 
 @Service

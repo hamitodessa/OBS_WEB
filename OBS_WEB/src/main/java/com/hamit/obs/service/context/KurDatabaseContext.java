@@ -1,40 +1,40 @@
-package com.hamit.obs.service.cari;
+package com.hamit.obs.service.context;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.exception.ServiceException;
-import com.hamit.obs.repository.cari.CariMsSQL;
-import com.hamit.obs.repository.cari.CariMySQL;
-import com.hamit.obs.repository.cari.CariPgSQL;
-import com.hamit.obs.repository.cari.ICariDatabase;
+import com.hamit.obs.repository.kur.IKurDatabase;
+import com.hamit.obs.repository.kur.KurMS;
+import com.hamit.obs.repository.kur.KurMY;
+import com.hamit.obs.repository.kur.KurPG;
 import com.hamit.obs.service.user.UserDetailsService;
 
 @Service
-public class CariDatabaseContext {
-	private final Map<String, ICariDatabase> strategies = new HashMap<>();
+public class KurDatabaseContext {
+	private final Map<String, IKurDatabase> strategies = new HashMap<>();
 
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	public CariDatabaseContext(CariMySQL mySQL, CariMsSQL msSQL, CariPgSQL pgSQL) {
+	public KurDatabaseContext(KurMY mySQL, KurMS msSQL, KurPG pgSQL) {
 		strategies.put(sqlTipi.MYSQL.getValue(), mySQL);
 		strategies.put(sqlTipi.MSSQL.getValue(), msSQL);
 		strategies.put(sqlTipi.PGSQL.getValue(), pgSQL);
 	}
 
-	public ICariDatabase getStrategy() {
+	public IKurDatabase getStrategy() {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-	        String config = userDetailsService.findHangiSQLByUserId(modulTipi.CARI_HESAP.getDbValue(), useremail);
+	        String config = userDetailsService.findHangiSQLByUserId("Kur", useremail);
 	        if (config == null || config.isEmpty())
 	        	throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
-	        ICariDatabase strategy = strategies.get(config);
+	        IKurDatabase strategy = strategies.get(config);
 	        if (strategy == null)
 	        	throw new ServiceException("Belirtilen konfigürasyona uygun strateji bulunamadı: " + config);
 	        return strategy;

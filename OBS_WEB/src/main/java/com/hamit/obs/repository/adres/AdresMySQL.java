@@ -29,7 +29,7 @@ public class AdresMySQL implements IAdresDatabase{
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService genel hatası.", e);
+			throw new ServiceException("Hesap kodlari genel hatası.", e);
 		}
 		return resultList; 
 	}

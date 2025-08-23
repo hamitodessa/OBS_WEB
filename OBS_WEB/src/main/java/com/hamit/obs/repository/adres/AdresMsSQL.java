@@ -29,7 +29,7 @@ public class AdresMsSQL implements IAdresDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService genel hatası.", e);
+			throw new ServiceException("MS Adres Kodlari genel hatası.", e);
 		}
 		return resultList; 
 	}

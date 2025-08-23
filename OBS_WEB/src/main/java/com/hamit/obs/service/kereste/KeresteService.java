@@ -21,6 +21,7 @@ import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.kereste.IKeresteDatabase;
 import com.hamit.obs.repository.loglama.LoglamaRepository;
+import com.hamit.obs.service.context.KeresteDatabaseContext;
 
 @Service
 public class KeresteService {

@@ -14,6 +14,7 @@ import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.dto.adres.adresDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.adres.IAdresDatabase;
+import com.hamit.obs.service.context.AdresDatabaseContext;
 
 @Service
 public class AdresService {

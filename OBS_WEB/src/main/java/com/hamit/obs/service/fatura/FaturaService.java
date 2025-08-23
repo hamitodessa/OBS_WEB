@@ -24,6 +24,7 @@ import com.hamit.obs.dto.stok.raporlar.stokdetayDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.fatura.IFaturaDatabase;
 import com.hamit.obs.repository.loglama.LoglamaRepository;
+import com.hamit.obs.service.context.FaturaDatabaseContext;
 
 @Service
 public class FaturaService {
