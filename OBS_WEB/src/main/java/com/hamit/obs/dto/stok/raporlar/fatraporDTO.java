@@ -29,6 +29,8 @@ public class fatraporDTO {
 	private String dvz1;
 	private String dvz2;
 	private String caradr;
+	private String irsno1;
+	private String irsno2;
 	
 	private String bir;
 	private String iki;

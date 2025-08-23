@@ -1,9 +1,5 @@
 package com.hamit.obs.repository.fatura;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -2892,5 +2891,24 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		}
 		return resultList; 
 
+	}
+
+	@Override
+	public List<Map<String, Object>> irs_rapor(fatraporDTO fatraporDTO, Pageable pageable,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double irs_raporsize(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> irs_detay_rapor(String fno, String turu, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
 	} 
 }

@@ -33,6 +33,9 @@ function openFirstModal(nerdenGeldi) {
 	else if (nerden === "fatrapor") {
 		openfatrapModal(modal);
 	}
+	else if (nerden === "irsrapor") {
+	  openirsrapModal(modal);
+	}
 	else if (nerden === "imarapor") {
 		openimarapModal(modal);
 	}
@@ -310,6 +313,32 @@ function saveToMain() {
 		const hiddenField = $('#ara_content #fatrapBilgi');
 		hiddenField.val(degerler);
 	}
+	else if (nerden === "irsrapor") {
+	    const irsno1 = $('#irsno1').val() || "";
+	    const irsno2 = $('#irsno2').val() || "";
+	    const anagrp = $('#anagrp').val() || "";
+	    const tar1 = $('#tar1').val() || "";
+	    const tar2 = $('#tar2').val() || "";
+	    const altgrp = $('#altgrp').val() || "";
+	    const ckod1 = $('#ckod1').val() || "";
+	    const ckod2 = $('#ckod2').val() || "";
+	    const turu = $('#turu').val() || "";
+	    const ukod1 = $('#ukod1').val() || "";
+	    const ukod2 = $('#ukod2').val() || "";
+	    const okod1 = $('#okod1').val() || "";
+	    const okod2 = $('#okod2').val() || "";
+	    const dvz1 = $('#dvz1').val() || "";
+	    const dvz2 = $('#dvz2').val() || "";
+			const fatno1 = $('#fatno1').val() || "";
+			const fatno2 = $('#fatno2').val() || "";
+			const adr1 = $('#fatno1').val() || "";
+			const adr2 = $('#fatno2').val() || "";
+						
+	    const degerler = [irsno1,irsno2, anagrp, tar1, tar2, altgrp, ckod1, ckod2, turu, ukod1, ukod2, okod1, okod2
+	      ,  dvz1, dvz2,fatno1, fatno2,adr1,adr2].join(",");
+	    const hiddenField = $('#ara_content #irsrapBilgi');
+	    hiddenField.val(degerler);
+	  }
 	else if (nerden === "imarapor") {
 		const evrno1 = $('#evrno1').val() || "";
 		const evrno2 = $('#evrno2').val() || "";
@@ -666,6 +695,13 @@ function saveToMain() {
 		const reportFormat = document.getElementById("fatrapreportFormat");
 		reportFormat.disabled = false;
 	}
+	else if (nerden === "irsrapor") {
+	    irsdoldur();
+	    const mailButton = document.getElementById("irsrapmailButton");
+	    mailButton.disabled = false;
+	    const reportFormat = document.getElementById("irsrapreportFormat");
+	    reportFormat.disabled = false;
+	  }
 	else if (nerden === "imarapor") {
 		imafetchTableData();
 		const mailButton = document.getElementById("imarapmailButton");

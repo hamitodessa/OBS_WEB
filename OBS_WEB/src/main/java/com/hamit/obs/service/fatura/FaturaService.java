@@ -625,6 +625,16 @@ public class FaturaService {
 		}
 	}
 	
+	public List<Map<String, Object>> irs_rapor(fatraporDTO fatraporDTO, Pageable pageable) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			return strategy.irs_rapor(fatraporDTO, pageable, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 	public double fat_raporsize(fatraporDTO fatraporDTO) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -635,6 +645,16 @@ public class FaturaService {
 		}
 	}
 	
+	public double irs_raporsize(fatraporDTO fatraporDTO) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			return strategy.irs_raporsize(fatraporDTO, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 	public List<Map<String, Object>> fat_detay_rapor(String fno , String turu){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -645,6 +665,16 @@ public class FaturaService {
 		}
 	}
 	
+	public List<Map<String, Object>> irs_detay_rapor(String fno, String turu) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			return strategy.irs_detay_rapor(fno, turu, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();

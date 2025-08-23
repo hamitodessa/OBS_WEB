@@ -2604,4 +2604,23 @@ public class FaturaMySQL implements IFaturaDatabase {
 		}
 		return resultList; 
 	}
+
+	@Override
+	public List<Map<String, Object>> irs_rapor(fatraporDTO fatraporDTO, Pageable pageable,
+			ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double irs_raporsize(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> irs_detay_rapor(String fno, String turu, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

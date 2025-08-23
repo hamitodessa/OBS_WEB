@@ -106,4 +106,11 @@ public interface IFaturaDatabase {
 			String qwq7,String qwq8,String qwq9,String s1 ,String s2,String k1,String k2,String t1,String t2,
 			String sstr_1,String ordrr,String sstr_55,String ozelgrp[][],Set<String> sabitkolonlar,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> stok_rapor(stokdetayDTO stokdetayDTO,ConnectionDetails faturaConnDetails);
+
+	List<Map<String, Object>> irs_rapor(fatraporDTO fatraporDTO, Pageable pageable,
+			ConnectionDetails faturaConnDetails);
+
+	double irs_raporsize(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails);
+
+	List<Map<String, Object>> irs_detay_rapor(String fno, String turu, ConnectionDetails faturaConnDetails);
 }

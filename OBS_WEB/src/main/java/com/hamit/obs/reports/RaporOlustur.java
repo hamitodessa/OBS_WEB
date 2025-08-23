@@ -338,6 +338,10 @@ public class RaporOlustur {
 		return excellToDataSource.export_excell(tableData);
 	}
 
+	public ByteArrayDataSource irsrap(List<Map<String, String>> tableData) throws Exception {
+		return excellToDataSource.export_excell(tableData);
+	}
+
 	public ByteArrayDataSource envanter(List<Map<String, String>> tableData)  throws Exception {
 		return excellToDataSource.export_excell(tableData);
 	}

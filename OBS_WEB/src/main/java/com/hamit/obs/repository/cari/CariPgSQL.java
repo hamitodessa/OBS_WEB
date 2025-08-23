@@ -678,7 +678,6 @@ public class CariPgSQL implements ICariDatabase{
 		double result = 0 ;
 		try {
 			String tarihFilter = "";
-			System.out.println(dvzcevirmeDTO.getStartDate());
 			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || 	!dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
 				tarihFilter = " AND s.\"TARIH\" BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" + dvzcevirmeDTO.getEndDate() + " 23:59:59.998'" ;
 			}

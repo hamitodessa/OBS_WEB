@@ -9,16 +9,17 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
+import javax.mail.Message.RecipientType;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -63,7 +64,8 @@ public class RaporEmailGonderme {
 		boolean durum = false ;
 		try {
 			String nerden = raporEmailDegiskenler.getNerden(); 
-			if(nerden.equals("fatrapor") || nerden.equals("imarapor") || nerden.equals("envanter") || nerden.equals("stok")
+			if (nerden.equals("fatrapor") || nerden.equals("irsrapor") || nerden.equals("imarapor")
+					|| nerden.equals("envanter") || nerden.equals("stok")
 					 || nerden.equals("stokdetay")  || nerden.equals("tahrap")|| nerden.equals("cekrap") || nerden.equals("kerdetay")
 					 || nerden.equals("kerenvanter") || nerden.equals("kerortfiat"))
 				gonder_excell();

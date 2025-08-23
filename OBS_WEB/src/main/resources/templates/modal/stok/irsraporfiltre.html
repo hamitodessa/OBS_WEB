@@ -1,0 +1,141 @@
+<style>
+.modal-dialog {
+	height: 500px; /* Modal yüksekliği */
+	margin: 0 auto; /* Modalı ortalar */
+}
+
+.modal-content {
+	overflow-y: auto; /* Fazla içerik için kaydırma */
+}
+
+.modal-backdrop {
+	z-index: 1040 !important; /* Birinci modalın üstüne çıkacak */
+}
+
+#secondModal {
+	z-index: 1050 !important; /* İkinci modal birinciden daha yukarıda */
+}
+</style>
+
+<!-- Modal -->
+<div class="modal fade" th:fragment="modalirsrap" id="firstModal"
+	data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered"
+		style="min-width: 790px;">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Irsaliye Raporlama</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+
+			<div class="modal-body">
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk ve Son Irsaliye</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="irsno1" style="max-width: 120px;" class="form-control"> 
+					<span style="padding-left: 5px;"></span>
+					<input type="text" id="irsno2" style="max-width: 120px;" value="ZZZZZZZZZZ" class="form-control">
+
+					<span style="padding-left: 5px;"></span>
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ana Grup</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					
+						<select class="form-select cins_bold"
+							style="width: 150px; " id="anagrp" onchange="anagrpChanged(this)">
+							
+						</select> 
+						
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk Son Tarih</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="date" id="tar1" style="max-width: 120px;"  
+						class="form-control" value="1900-01-01"> 
+					<span style="padding-left: 5px;"></span> 
+					<input type="date" id="tar2" style="max-width: 120px;" class="form-control"
+						value="2100-12-31"> 
+					<span style="padding-left: 5px;"></span>
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Alt Grup</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					
+						<select class="form-select cins_bold" style="width: 150px;" id="altgrp" disabled>
+						</select> 
+						
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk Son Cari</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="ckod1" style="max-width: 120px;" class="form-control"  ondblclick="openSecondModal('ckod1')">
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="ckod2" style="max-width: 120px;" value="ZZZZZZZZZZ"
+						class="form-control"  ondblclick="openSecondModal('ckod2')"> 
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk Son Adres</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="adr1" style="max-width: 120px;" class="form-control">
+					<span style="padding-left: 5px;"></span>
+					<input type="text" id="adr2" style="max-width: 120px;" value="ZZZZZZZZZZ"
+						class="form-control"> 
+					<span style="padding-left: 5px;"></span>
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Turu</span>
+					</div>
+					<span style="padding-left: 5px;"></span>
+					<select class="form-select cins_bold" style="width:150px; " id="turu">
+						<option value=""></option>
+						<option value="GIREN">GIREN</option>
+						<option value="CIKAN">CIKAN</option>
+					</select> 
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk Son Urun kodu</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="ukod1" style="max-width: 120px;" class="form-control"
+					ondblclick="openurunkodlariModal('ukod1', 'irsrapor','ukodukod')">
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="ukod2" style="max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control"
+						ondblclick="openurunkodlariModal('ukod2', 'irsrapor','ukodukod')">
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk Son Ozel kod</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="okod1" style="max-width: 120px;" class="form-control" > 
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="okod2" style="max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control" >
+				</div>
+				<div class="input-group" style="padding: 2px;">
+					<div class="input-group-prepend">
+						<span class="input-group-text" style="width: 130px;">Ilk Son Fatura</span>
+					</div>
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="fatno1" style="max-width: 120px;" class="form-control" > 
+					<span style="padding-left: 5px;"></span> 
+					<input type="text" id="fatno2" style="max-width: 120px;" value="ZZZZZZZZZZ" class="form-control" > 
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Raporla</button>
+			</div>
+		</div>
+	</div>
+</div>

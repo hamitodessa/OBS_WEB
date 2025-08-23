@@ -482,61 +482,43 @@ function updateTableHeadersfnotar(headers) {
 }
 
 async function openfatrapModal(modal) {
-	$(modal).modal('show');
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("stok/anadepo", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const ana = response.anaKodlari;
-		const dpo = response.depoKodlari;
-		const anaSelect = document.getElementById("anagrp");
-		const dpoSelect = document.getElementById("depo");
-		anaSelect.innerHTML = "";
-		dpoSelect.innerHTML = "";
+  $(modal).modal('show');
+  document.body.style.cursor = "wait";
+  try {
+    const response = await fetchWithSessionCheck("stok/anadepo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (response.errorMessage) throw new Error(response.errorMessage);
 
-		const optionbos = document.createElement("option");
-		optionbos.value = "";
-		optionbos.textContent = "";
-		anaSelect.appendChild(optionbos);
-		ana.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.ANA_GRUP;
-			option.textContent = item.ANA_GRUP;
-			anaSelect.appendChild(option);
-		});
-		optionbos.value = "";
-		optionbos.textContent = "";
-		dpoSelect.appendChild(optionbos);
-		dpo.forEach(item => {
-			const option = document.createElement("option");
-			option.value = item.DEPO;
-			option.textContent = item.DEPO;
-			dpoSelect.appendChild(option);
-		});
-		const newOption = document.createElement("option");
-		newOption.value = "Bos Olanlar";
-		newOption.textContent = "Bos Olanlar";
+    const ana = response.anaKodlari || [];
+    const dpo = response.depoKodlari || [];
 
-		const newOption2 = document.createElement("option");
-		newOption2.value = "Bos Olanlar";
-		newOption2.textContent = "Bos Olanlar";
+    const anaSelect = document.getElementById("anagrp");
+    const dpoSelect = document.getElementById("depo");
+    anaSelect.innerHTML = "";
+    dpoSelect.innerHTML = "";
 
-		anaSelect.insertBefore(newOption, anaSelect.options[1]);
-		dpoSelect.insertBefore(newOption2, dpoSelect.options[1]);
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
+    const fillSelect = (selectEl, arr, key) => {
+      selectEl.add(new Option("", ""));
+      selectEl.add(new Option("Bos Olanlar", "Bos Olanlar"));
+      const seen = new Set();
+      for (const it of arr) {
+        const v = (it[key] || "").trim();
+        if (!v || seen.has(v)) continue;
+        seen.add(v);
+        selectEl.add(new Option(v, v));
+      }
+    };
+    fillSelect(anaSelect, ana, "ANA_GRUP");
+    fillSelect(dpoSelect, dpo, "DEPO");
+  } catch (error) {
+    const modalError = document.getElementById("errorDiv");
+    modalError.style.display = "block";
+    modalError.innerText = `Bir hata oluştu: ${error.message}`;
+  } finally {
+    document.body.style.cursor = "default";
+  }
 }
 
 async function fatrapdownloadReport() {

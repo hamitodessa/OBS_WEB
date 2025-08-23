@@ -1778,7 +1778,6 @@ public class KerestePgSQL implements IKeresteDatabase {
 					" \"Konsimento\" between N'" + kergrupraporDTO.getKons1() + "' AND N'" + kergrupraporDTO.getKons2() + "'" +
 					" GROUP BY  " + iu ;
 		}
-		System.out.println(sql);
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

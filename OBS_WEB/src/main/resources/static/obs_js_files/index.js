@@ -91,6 +91,10 @@ $(document).ready(function () {
 			stokBaslik();
 			fetchkoddepo();
 		},
+		"/stok/irsaliye": () => {
+		      stokBaslik();
+		      fetchkoddepo();
+		},
 		"/stok/recete": () => {
 			stokBaslik();
 			fetchkod();
@@ -101,6 +105,7 @@ $(document).ready(function () {
 		},
 		"/stok/imarapor": stokBaslik,
 		"/stok/fatrapor": stokBaslik,
+		"/stok/irsrapor": stokBaslik,
 		"/stok/grprapor": stokBaslik,
 		"/stok/imagrprapor": stokBaslik,
 		"/stok/stokdetay": stokBaslik,
