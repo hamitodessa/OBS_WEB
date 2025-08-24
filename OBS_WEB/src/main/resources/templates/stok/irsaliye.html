@@ -108,25 +108,23 @@ datalist {
 				aria-controls="tab3" aria-selected="false">Ek Bilgiler</button>
 		</li>
 		<li class="nav-item" role="presentation">
-			<button class="nav-link" id="tab3-tab" style="font-weight: bold;"
-				data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab"
-				aria-controls="tab3" aria-selected="false">Fatura Bilgileri</button>
+			<button class="nav-link" id="tab4-tab" style="font-weight: bold;"
+				data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab"
+				aria-controls="tab4" aria-selected="false">Fatura Bilgileri</button>
 		</li>
 	</ul>
 </div>
 <!-- Tab Content -->
 <div class="tab-content" id="myTabContent">
 	<!-- Tab 1 Content -->
-	<div class="tab-pane fade show active" id="tab1" role="tabpanel"
-		aria-labelledby="tab1-tab">
+	<div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
 		<div class="cardd p-0">
 		<div class="child">
-			<!-- ****************************************************************************************************** -->
 			<div class="group-box">
 				<div style="display: flex; align-items: center; ">
 					<label style="min-width:85px;">Fis No</label>
 					<div style="min-width: 120px;max-width: 120px;">
-						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') fatOku()" ondblclick="yeniFis();">
+						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') irsOku()" ondblclick="yeniFis();">
 					</div>
 					<span style="padding-left: 5px;"></span>
 					<button type="button" class="btn btn-secondary ml-2" onclick="sonfis()">
@@ -161,14 +159,16 @@ datalist {
 					<label style="min-width:85px;">Cari Kod</label>
 					<div style="min-width: 120px;max-width: 120px;">
 						<input class="form-control" style="font-weight: bold;" id="carikod"
-						  ondblclick="openSecondModal('carikod', 'fatura')"
+						  ondblclick="openSecondModal('carikod', 'irsaliye')"
 								maxlength="12" 
 								oninput="hesapAdiOgren(this.value, 'cariadilbl')">
 					</div>
-					<span style="padding-left: 187px;"></span> 
+					<span style="padding-left: 50px;"></span> 
+					<input type="date" id="sevkTarih" class="form-control"  style="width: 125px; " />
+					<span style="padding-left: 10px;"></span> 
 					<label style="width:70px;">Adres Kod</label>
 					<span style="padding-left: 5px;"></span> 
-					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')" ondblclick="openadrkodlariModal('adreskod', 'fatura')"  style="width: 120px; font-weight: bold;" />
+					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')" ondblclick="openadrkodlariModal('adreskod', 'irsaliye')"  style="width: 120px; font-weight: bold;" />
 					<span style="padding-left: 35px;"></span> 	
 					<label style="width:80px;">Varsayilan</label>	
 					
@@ -193,19 +193,19 @@ datalist {
 					<span style="padding-left: 85px;"></span> 
 					<label style="width:350px;" id="cariadilbl"></label>
 					<span style="padding-left: 5px;"></span> 
-					<span style="padding-left: 45px;"></span> 	
+					<span style="padding-left: 30px;"></span> 	
 					<label style="min-width:350px;" id="adresadilbl"></label>	
 				</div>
 			<!-- 3 SATIR  SONU -->
 			</div>
 			<div class="group-box">
 				<div class="form-row">
-					<button class="btn btn-primary" type="button" id="fatkaydetButton"
-						onclick="fatKayit()">Kaydet</button>
+					<button class="btn btn-primary" type="button" id="irskaydetButton"
+						onclick="irsKayit()">Kaydet</button>
 					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="fatsilButton"	onclick="fatYoket()">Sil</button>
+					<button class="btn btn-primary" type="button" id="irssilButton"	onclick="irsYoket()">Sil</button>
 					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="carkayitButton"	onclick="openFirstModal('fatura')">Cari Kaydet</button>
+					<button class="btn btn-primary" type="button" id="carkayitButton"	onclick="openFirstModal('irsaliye')">Cari Kaydet</button>
 					<span style="padding-left: 25%;"></span>
 					
 							<select class="form-select" style="width: 150px;font-weight: bold;" id="gircik" >
@@ -261,7 +261,6 @@ datalist {
 		</div>
 	</div>
 	<div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
-		
 	<div class="card p-4">
 		<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
@@ -283,35 +282,24 @@ datalist {
 			</div>
 		</div>
 	</div>
-	<!-- Tab 3 Content -->
+	<!-- Tab 4 Content -->
 	<div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
-		
-	<div class="card p-4">
-		<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">1 -</span>
+		<div class="card p-4">
+			<div class="group-box">
+				<div style="display: flex; align-items: center; ">
+					<span style="padding-left: 20px;"></span> 
+					<label style="min-width:85px;">Fatura No</label>
+					<div style="min-width: 150px;max-width: 150px;">
+						<input type="text"	id="fatno" class="form-control" >
+					</div>
 				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="a1" class="form-control" style="max-width: 300px;">
 			</div>
-		</div>
-			<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">2 -</span>
-				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="a2" class="form-control" style="max-width: 300px;">
-			</div>
-			</div>
-		</div>
+		</div>	
 	</div>	
-		
 </div>
 <button type="button" class="btn btn-secondary ml-2" onclick="satirekle()"><i class="fa fa-plus"></i></button>
 
-<table class="table table-bordered" id="fatTable"
+<table class="table table-bordered" id="irsTable"
 	style="margin-top: 5px;">
 	<thead class="thead-dark">
 		<tr>

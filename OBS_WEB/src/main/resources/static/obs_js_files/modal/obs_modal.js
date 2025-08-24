@@ -18,6 +18,12 @@ function openFirstModal(nerdenGeldi) {
 			return;
 		}
 	}
+	else if (nerdenGeldi === "irsaliye") {
+	    const fisno = document.getElementById("fisno").value.trim();
+	    if (!fisno || fisno === "0") {
+	      return;
+	    }
+	}
 	else if (nerdenGeldi === "kerestegiris") {
 		const fisno = document.getElementById("fisno").value.trim();
 		if (!fisno || fisno === "0") {
@@ -157,6 +163,9 @@ function selectValue(inputId, selectedValue, secondnerden) {
 		else if (secondnerden === "fatura") {
 			inputElement.oninput();
 		}
+		else if (secondnerden === "irsaliye") {
+		      inputElement.oninput();
+		}
 		document.getElementById("modalSearch").value = "";
 		$('#secondModal').modal('hide');
 	}
@@ -284,6 +293,11 @@ function saveToMain() {
 		const hesapKodu = $('#ckodu').val() || "";
 		const hiddenField = $('#ara_content #faturaBilgi');
 		hiddenField.val(hesapKodu);
+	}
+	else if (nerden === "irsaliye") {
+	    const hesapKodu = $('#ckodu').val() || "";
+	    const hiddenField = $('#ara_content #irsaliyeBilgi');
+	    hiddenField.val(hesapKodu);
 	}
 	else if (nerden === "fatrapor") {
 		const fatno1 = $('#fatno1').val() || "";
@@ -684,6 +698,9 @@ function saveToMain() {
 	}
 	else if (nerden === "fatura") {
 		fatcariIsle();
+	}
+	else if (nerden === "irsaliye") {
+	    irscariIsle();
 	}
 	else if (nerden === "kerestegiris") {
 		kercariIsle();

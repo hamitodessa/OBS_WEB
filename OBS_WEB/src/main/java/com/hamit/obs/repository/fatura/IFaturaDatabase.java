@@ -107,9 +107,18 @@ public interface IFaturaDatabase {
 			String sstr_1,String ordrr,String sstr_55,String ozelgrp[][],Set<String> sabitkolonlar,ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> stok_rapor(stokdetayDTO stokdetayDTO,ConnectionDetails faturaConnDetails);
 
+	List<Map<String, Object>> irsaliye_oku(String irsno, String cins, ConnectionDetails faturaConnDetails);
+
+	void irs_giris_sil(String fno, String cins, ConnectionDetails faturaConnDetails);
+	int irsaliye_no_al(String cins, ConnectionDetails faturaConnDetails);
+	String son_irsno_al(String cins, ConnectionDetails faturaConnDetails);
 	List<Map<String, Object>> irs_rapor(fatraporDTO fatraporDTO, Pageable pageable,
 			ConnectionDetails faturaConnDetails);
 
+	void irs_kaydet(String irsno, String kodu, int depo, double fiat, double tevkifat, double miktar, String gircik,
+			double tutar, double iskonto, double kdv, String tarih, String izah, String doviz, String adrfirma,
+			String carfirma, String ozkod, double kur, String cins, int anagrp, int altgrp, String usr,
+			String fatno, String sevktarih, ConnectionDetails faturaConnDetails);
 	double irs_raporsize(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails);
 
 	List<Map<String, Object>> irs_detay_rapor(String fno, String turu, ConnectionDetails faturaConnDetails);

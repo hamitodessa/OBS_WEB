@@ -32,4 +32,7 @@ public class faturaDTO {
 	private double miktar;
 	private double tutar;
 	
+	private String fatno;
+	private String sevktarih;
+
 }

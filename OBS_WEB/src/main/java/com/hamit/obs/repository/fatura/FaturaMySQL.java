@@ -2623,4 +2623,38 @@ public class FaturaMySQL implements IFaturaDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Map<String, Object>> irsaliye_oku(String irsno, String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String son_irsno_al(String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int irsaliye_no_al(String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void irs_giris_sil(String fno, String cins, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void irs_kaydet(String irsno, String kodu, int depo, double fiat, double tevkifat, double miktar,
+			String gircik, double tutar, double iskonto, double kdv, String tarih, String izah, String doviz,
+			String adrfirma, String carfirma, String ozkod, double kur, String cins, int anagrp, int altgrp, String usr,
+			String fatno, String sevktarih, ConnectionDetails faturaConnDetails) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

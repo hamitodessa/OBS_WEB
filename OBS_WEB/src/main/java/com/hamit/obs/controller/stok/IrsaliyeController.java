@@ -2,12 +2,10 @@ package com.hamit.obs.controller.stok;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.yardimci.Formatlama;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
-import com.hamit.obs.custom.yardimci.KusurYuvarla;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.dto.stok.faturaDTO;
@@ -47,7 +44,7 @@ public class IrsaliyeController {
 	private UserService userService;
 
 	@GetMapping("stok/irsaliye")
-	public Model fatura(Model model) {
+	public Model irsaliye(Model model) {
 		try {
 			List<Map<String, Object>> anaKodlari = faturaService.stk_kod_degisken_oku("ANA_GRUP", "AGID_Y",
 					"ANA_GRUP_DEGISKEN");
@@ -79,30 +76,19 @@ public class IrsaliyeController {
 	public Map<String, Object> irsOku(@RequestParam String fisno, @RequestParam String cins) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			List<Map<String, Object>> fatura = new ArrayList<>();
+			List<Map<String, Object>> irsaliye = new ArrayList<>();
 			if (cins.toString().equals("SATIS")) {
-				fatura = faturaService.fatura_oku(fisno.trim(), "C");
+				irsaliye = faturaService.irsaliye_oku(fisno.trim(), "C");
 				response.put("a1", faturaService.aciklama_oku("IRS", 1, fisno.trim(), "C"));
 				response.put("a2", faturaService.aciklama_oku("IRS", 2, fisno.trim(), "C"));
-				response.put("dipnot", faturaService.dipnot_oku(fisno.trim(), "F", "C"));
+				response.put("dipnot", faturaService.dipnot_oku(fisno.trim(), "I", "C"));
 			} else {
-				fatura = faturaService.fatura_oku(fisno.trim(), "G");
+				irsaliye = faturaService.irsaliye_oku(fisno.trim(), "G");
 				response.put("a1", faturaService.aciklama_oku("IRS", 1, fisno.trim(), "G"));
 				response.put("a2", faturaService.aciklama_oku("IRS", 2, fisno.trim(), "G"));
-				response.put("dipnot", faturaService.dipnot_oku(fisno.trim(), "F", "G"));
+				response.put("dipnot", faturaService.dipnot_oku(fisno.trim(), "I", "G"));
 			}
-
-			fatura = fatura.stream().map(item -> {
-				if (item.containsKey("Resim") && item.get("Resim") instanceof byte[]) {
-					String base64Image = Base64.getEncoder().encodeToString((byte[]) item.get("Resim"));
-					item.put("base64Resim", base64Image); // Base64 string olarak ekliyoruz
-					item.remove("Resim"); // Orijinal byte[] alanını kaldırıyoruz (isteğe bağlı)
-				}
-				return item;
-			}).collect(Collectors.toList());
-
-			response.put("data", (fatura != null) ? fatura : new ArrayList<>());
-
+			response.put("data", (irsaliye != null) ? irsaliye : new ArrayList<>());
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("data", Collections.emptyList());
@@ -119,9 +105,9 @@ public class IrsaliyeController {
 		Map<String, String> response = new HashMap<>();
 		try {
 			if (cins.toString().equals("SATIS"))
-				response.put("fisno", faturaService.son_no_al("C"));
+				response.put("fisno", faturaService.son_irsno_al("C"));
 			else
-				response.put("fisno", faturaService.son_no_al("G"));
+				response.put("fisno", faturaService.son_irsno_al("G"));
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
 			response.put("errorMessage", e.getMessage());
@@ -138,9 +124,9 @@ public class IrsaliyeController {
 		try {
 			int sno = 0;
 			if (cins.toString().equals("SATIS"))
-				sno = faturaService.fatura_no_al("C");
+				sno = faturaService.irsaliye_no_al("C");
 			else
-				sno = faturaService.fatura_no_al("G");
+				sno = faturaService.irsaliye_no_al("G");
 			int kj = 10 - Integer.toString(sno).length();
 			StringBuilder strBuilder = new StringBuilder();
 			for (int i = 0; i < kj; i++) {
@@ -164,11 +150,11 @@ public class IrsaliyeController {
 		Map<String, String> response = new HashMap<>();
 		try {
 			if (cins.toString().equals("SATIS")) {
-				faturaService.fat_giris_sil(fisno.trim(), "C");
+				faturaService.irs_giris_sil(fisno.trim(), "C");
 				faturaService.dipnot_sil(fisno.trim(), "I", "C");
 				faturaService.aciklama_sil("IRS", fisno.trim(), "C");
 			} else {
-				faturaService.fat_giris_sil(fisno.trim(), "G");
+				faturaService.irs_giris_sil(fisno.trim(), "G");
 				faturaService.dipnot_sil(fisno.trim(), "I", "G");
 				faturaService.aciklama_sil("IRS", fisno.trim(), "G");
 			}
@@ -183,7 +169,7 @@ public class IrsaliyeController {
 
 	@PostMapping("stok/irsKayit")
 	@ResponseBody
-	public Map<String, Object> fatKayit(@RequestBody faturakayitDTO faturakayitDTO) {
+	public Map<String, Object> irsKayit(@RequestBody faturakayitDTO faturakayitDTO) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			faturaDTO dto = faturakayitDTO.getFaturaDTO();
@@ -191,11 +177,11 @@ public class IrsaliyeController {
 			String tarih = Tarih_Cevir.dateFormaterSaatli(dto.getTarih());
 			String mesajlog = "";
 			if (dto.getFatcins().toString().equals("SATIS")) {
-				faturaService.fat_giris_sil(dto.getFisno().trim(), "C");
-				mesajlog = dto.getFisno().trim() + " Nolu Cikis Fatura Silindi";
+				faturaService.irs_giris_sil(dto.getFisno().trim(), "C");
+				mesajlog = dto.getFisno().trim() + " Nolu Cikis Irsaliye Silindi";
 			} else {
-				mesajlog = dto.getFisno().trim() + " Nolu Giris Fatura Silindi";
-				faturaService.fat_giris_sil(dto.getFisno().trim(), "G");
+				mesajlog = dto.getFisno().trim() + " Nolu Giris Irsaliye Silindi";
+				faturaService.irs_giris_sil(dto.getFisno().trim(), "G");
 			}
 			String userrString = Global_Yardimci
 					.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -243,68 +229,38 @@ public class IrsaliyeController {
 				isk = row.getIskonto();
 				double kdv = 0;
 				kdv = row.getKdv();
-				faturaService.fat_kaydet(dto.getFisno().trim(), row.getUkodu().trim(), dpo, fiat, tevk, miktar, gircik,
+				System.out.println("==" + dto.getFatno());
+				faturaService.irs_kaydet(dto.getFisno().trim(), row.getUkodu().trim(), dpo, fiat, tevk, miktar, gircik,
 						tutar, isk, kdv, tarih, izahat, dto.getDvzcins(), dto.getAdreskod().trim(),
-						dto.getCarikod().trim(), dto.getOzelkod(), kur, "", ana, alt, userrString);
+						dto.getCarikod().trim(), dto.getOzelkod(), kur, "", ana, alt, userrString, dto.getFatno(),
+						dto.getSevktarih());
 			}
 
 			if (dto.getFatcins().toString().equals("SATIS")) {
-				faturaService.dipnot_sil(dto.getFisno().trim(), "F", "C");
+				faturaService.dipnot_sil(dto.getFisno().trim(), "I", "C");
 				faturaService.dipnot_yaz(dto.getFisno().trim(), dto.getNot1().trim(), dto.getNot2().trim(),
-						dto.getNot3().trim(), "F", "C", userrString);
+						dto.getNot3().trim(), "I", "C", userrString);
 
-				faturaService.aciklama_sil("FAT", dto.getFisno().trim(), "C");
-				faturaService.aciklama_yaz("FAT", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "C");
-				faturaService.aciklama_yaz("FAT", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "C");
+				faturaService.aciklama_sil("IRS", dto.getFisno().trim(), "C");
+				faturaService.aciklama_yaz("IRS", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "C");
+				faturaService.aciklama_yaz("IRS", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "C");
 
 			} else {
-				faturaService.dipnot_sil(dto.getFisno().trim(), "F", "G");
+				faturaService.dipnot_sil(dto.getFisno().trim(), "I", "G");
 				faturaService.dipnot_yaz(dto.getFisno().trim(), dto.getNot1().trim(), dto.getNot2().trim(),
-						dto.getNot3().trim(), "F", "G", userrString);
+						dto.getNot3().trim(), "I", "G", userrString);
 
-				faturaService.aciklama_sil("FAT", dto.getFisno().trim(), "G");
-				faturaService.aciklama_yaz("FAT", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "G");
-				faturaService.aciklama_yaz("FAT", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "G");
+				faturaService.aciklama_sil("IRS", dto.getFisno().trim(), "G");
+				faturaService.aciklama_yaz("IRS", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "G");
+				faturaService.aciklama_yaz("IRS", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "G");
 
 			}
 			if (dto.getFatcins().toString().equals("SATIS")) {
-				mesajlog = dto.getFisno().trim() + " Nolu Cikis Fatura Silindi";
-				faturaService.stok_sil(dto.getFisno().trim(), "FAT", "C", mesajlog);
+				mesajlog = dto.getFisno().trim() + " Nolu Cikis Irsaliye Silindi";
+				faturaService.stok_sil(dto.getFisno().trim(), "IRS", "C", mesajlog);
 			} else {
-				mesajlog = dto.getFisno().trim() + " Nolu Giris Fatura Silindi";
-				faturaService.stok_sil(dto.getFisno().trim(), "FAT", "G", mesajlog);
-			}
-			double tutar, kdvlitut;
-			String har, izah;
-			for (faturadetayDTO row : tableData) {
-				har = "";
-				izah = "";
-				miktar = 0;
-				tutar = 0;
-				kdvlitut = 0;
-				if (dto.getFatcins().toString().equals("SATIS")) {
-					miktar = row.getMiktar();
-					miktar = miktar * -1;
-					tutar = row.getTutar();
-					tutar = tutar - ((tutar * row.getIskonto()) / 100);
-					tutar = tutar * -1;
-					kdvlitut = sat_toplam(row.getTutar(), row.getIskonto(), row.getKdv(), dto.getTevoran());
-					kdvlitut = kdvlitut * -1;
-					har = "C";
-					izah = row.getIzahat() + " Nolu Satis Faturasi...";
-				} else {
-					miktar = row.getMiktar();
-					tutar = row.getTutar();
-					tutar = tutar - ((tutar * row.getIskonto()) / 100);
-					kdvlitut = sat_toplam(row.getTutar(), row.getIskonto(), row.getKdv(), dto.getTevoran());
-					har = "G";
-					izah = row.getIzahat() + " Nolu Giris Faturasi...";
-				}
-				mesajlog = "Fatura Stok Kayit  H:" + har + "   Kod:" + row.getUkodu().trim() + " Miktar:" + miktar
-						+ " Fiat:" + row.getFiat();
-				faturaService.stk_kaydet(dto.getFisno().trim(), "FAT", tarih, dpo, row.getUkodu().trim(), miktar,
-						row.getFiat(), KusurYuvarla.round(tutar, 2), KusurYuvarla.round(kdvlitut, 2), har, izah, ana,
-						alt, dto.getKur(), "", dto.getDvzcins(), dto.getCarikod().trim(), userrString, mesajlog);
+				mesajlog = dto.getFisno().trim() + " Nolu Giris Irsaliye Silindi";
+				faturaService.stok_sil(dto.getFisno().trim(), "IRS", "G", mesajlog);
 			}
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
@@ -315,15 +271,6 @@ public class IrsaliyeController {
 		return response;
 	}
 
-	private static double sat_toplam(double tutar, double isk, double kdv, double tev) {
-		double double_0, double_1, double_2;
-		double_1 = (tutar * isk) / 100; // ' iskonto
-		double_2 = ((tutar - (tutar * isk) / 100) * kdv) / 100; // ' kdv
-		// '**********Tevkif Islemi
-		// **********************************************************
-		double_0 = (tutar - double_1) + (double_2 - (double_2 / 10) * tev);
-		return double_0;
-	}
 
 	@PostMapping("stok/irscariKayit")
 	@ResponseBody

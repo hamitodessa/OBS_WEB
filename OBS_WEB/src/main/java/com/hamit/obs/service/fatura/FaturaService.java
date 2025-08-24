@@ -433,6 +433,16 @@ public class FaturaService {
 		}
 	}
 	
+	public List<Map<String, Object>> irsaliye_oku(String irsno, String cins) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			return strategy.irsaliye_oku(irsno, cins, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 	public String[] dipnot_oku(String ino,String cins ,String gircik){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -453,6 +463,16 @@ public class FaturaService {
 		}
 	}
 	
+	public String son_irsno_al(String cins) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			return strategy.son_irsno_al(cins, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 	public int fatura_no_al(String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -463,6 +483,16 @@ public class FaturaService {
 		}
 	}
 	
+	public int irsaliye_no_al(String cins) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			return strategy.irsaliye_no_al(cins, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 	public void fat_giris_sil(String fno,String cins) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -479,6 +509,23 @@ public class FaturaService {
 		}
 	}
 	
+	public void irs_giris_sil(String fno, String cins) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+
+			loglamaDTO.setEvrak(fno);
+			loglamaDTO.setmESAJ(fno + " Nolu Giris Irsaliye Silindi");
+			loglamaDTO.setUser(
+					Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+
+			strategy.irs_giris_sil(fno, cins, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 	public void dipnot_sil(String ino,String cins,String gircik) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -521,6 +568,25 @@ public class FaturaService {
 		}
 	}
 	
+	public void irs_kaydet(String irsno, String kodu, int depo, double fiat, double tevkifat, double miktar,
+			String gircik, double tutar, double iskonto, double kdv, String tarih, String izah, String doviz,
+			String adrfirma, String carfirma, String ozkod, double kur, String cins, int anagrp, int altgrp,
+			String usr, String fatno, String sevktarih) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails fatConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.FATURA);
+			loglamaDTO.setEvrak(fatno);
+			loglamaDTO.setmESAJ(gircik + " Irsaliye Kayit " + kodu + " Mik=" + miktar + " Tut=" + tutar);
+			loglamaDTO.setUser(
+					Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName()));
+			loglamaRepository.log_kaydet(loglamaDTO, fatConnDetails);
+			strategy.irs_kaydet(irsno, kodu, depo, fiat, tevkifat, miktar, gircik, tutar, iskonto, kdv, tarih, izah,
+					doviz, adrfirma, carfirma, ozkod, kur, cins, anagrp, altgrp, usr, fatno, sevktarih, fatConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+
 	public void dipnot_yaz(String eno,String bir,String iki,String uc,String tip,String gircik,String usr) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();

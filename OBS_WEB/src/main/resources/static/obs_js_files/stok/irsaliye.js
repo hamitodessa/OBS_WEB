@@ -6,15 +6,7 @@ document.querySelector('table').addEventListener('focusin', (event) => {
     document.getElementById("urunadi").innerText = cells[11]?.textContent;
     document.getElementById("anaalt").innerText = cells[12]?.textContent;
 
-    const imgElement = document.getElementById("resimGoster");
-    if (cells[13]?.textContent != '') {
-      const base64String = 'data:image/jpeg;base64,' + cells[13]?.textContent.trim();
-      imgElement.src = base64String;
-      imgElement.style.display = "block";
-    } else {
-      imgElement.src = "";
-      imgElement.style.display = "none";
-    }
+   
   }
 });
 
@@ -52,7 +44,7 @@ function initializeRows() {
   }
 }
 function satirekle() {
-  const table = document.getElementById("fatTable").getElementsByTagName("tbody")[0];
+  const table = document.getElementById("irsTable").getElementsByTagName("tbody")[0];
   const newRow = table.insertRow();
   incrementRowCounter();
 
@@ -119,7 +111,7 @@ function satirekle() {
     </td>
     <td style="display: none;"></td>
     <td style="display: none;"></td>
-    <td style="display: none;"></td>
+   
       `;
 }
 
@@ -283,7 +275,7 @@ async function updateRowValues(inputElement) {
     const birimCell = cells[7];
     cells[11].innerText = response.dto.adi || '';
     cells[12].innerText = response.dto.anagrup + " / " + response.dto.altgrup || '';
-    cells[13].innerText = response.dto.base64Resim || '';
+    
     setLabelContent(birimCell, response.dto.birim);
 
     barkodCell.value = response.dto.barkod;
@@ -412,7 +404,7 @@ function clearInputs() {
 
 }
 
-async function fatOku() {
+async function irsOku() {
   const fisno = document.getElementById("fisno").value;
   if (!fisno) {
     return;
@@ -421,7 +413,7 @@ async function fatOku() {
   const errorDiv = document.getElementById("errorDiv");
   document.body.style.cursor = "wait";
   try {
-    const response = await fetchWithSessionCheck("stok/fatOku", {
+    const response = await fetchWithSessionCheck("stok/irsOku", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -429,6 +421,7 @@ async function fatOku() {
       body: new URLSearchParams({ fisno: fisno, cins: gircikdeger }),
     });
     const data = response;
+		console.info(data);
     clearInputs();
     if (response.errorMessage) {
       throw new Error(response.errorMessage);
@@ -436,7 +429,7 @@ async function fatOku() {
     const dataSize = data.data.length;
     if (dataSize === 0) return;
 
-    const table = document.getElementById('fatTable');
+    const table = document.getElementById('irsTable');
     const rowss = table.querySelectorAll('tbody tr');
     if (data.data.length > rowss.length) {
       const additionalRows = data.data.length - rowss.length;
@@ -468,21 +461,23 @@ async function fatOku() {
       if (izahatInput) izahatInput.value = item.Izahat || "";
       cells[11].innerText = item.Adi || '';
       cells[12].innerText = item.Ur_AnaGrup + " / " + item.Ur_AltGrup;
-      cells[13].innerText = item.base64Resim || '';
+     
     });
 
     for (let i = 0; i < data.data.length; i++) {
       const item = data.data[i];
       document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
+			document.getElementById("sevkTarih").value = formatdateSaatsiz(item.Sevk_Tarihi);
       document.getElementById("anagrp").value = item.Ana_Grup || '';
       document.getElementById("kur").value = item.Kur;
       await anagrpChanged(document.getElementById("anagrp"));
       document.getElementById("altgrp").value = item.Alt_Grup || ''
       document.getElementById("ozelkod").value = item.Ozel_Kod || ''
       document.getElementById("tevoran").value = item.Tevkifat || '0'
-      document.getElementById("carikod").value = item.Cari_Firma || '';
-      document.getElementById("adreskod").value = item.Adres_Firma || '';
+      document.getElementById("carikod").value = item.Cari_Hesap_Kodu || '';
+      document.getElementById("adreskod").value = item.Firma || '';
       document.getElementById("dovizcins").value = item.Doviz || '';
+			document.getElementById("fatno").value = item.Fatura_No || '';
       break;
     }
     document.getElementById("a1").value = data.a1;
@@ -511,7 +506,7 @@ async function sonfis() {
   const gircikdeger = document.getElementById("gircik").value;
   document.body.style.cursor = "wait";
   try {
-    const response = await fetchWithSessionCheck('stok/sonfatfis', {
+    const response = await fetchWithSessionCheck('stok/sonirsfis', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -536,7 +531,7 @@ async function sonfis() {
       errorDiv.style.display = 'block';
     } else {
       errorDiv.style.display = 'none';
-      fatOku();
+      irsOku();
     }
   } catch (error) {
     const errorDiv = document.getElementById('errorDiv');
@@ -575,7 +570,7 @@ async function yeniFis() {
   }
 }
 
-async function fatYoket() {
+async function irsYoket() {
   const fisNoInput = document.getElementById('fisno').value;
   const gircikdeger = document.getElementById("gircik").value;
   if (["0", ""].includes(fisNoInput.value)) {
@@ -616,6 +611,7 @@ function prepareureKayit() {
   const faturaDTO = {
     fisno: document.getElementById("fisno").value || "",
     tarih: document.getElementById("fisTarih").value || "",
+		sevktarih: document.getElementById("sevkTarih").value || "",
     ozelkod: document.getElementById("ozelkod").value || "",
     anagrup: document.getElementById("anagrp").value || "",
     altgrup: document.getElementById("altgrp").value || "",
@@ -633,16 +629,18 @@ function prepareureKayit() {
 
     acik1: document.getElementById("a1").value || "",
     acik2: document.getElementById("a2").value || "",
+		fatno: document.getElementById("fatno").value || "",
 
     fatcins: document.getElementById("gircik").value,
 
   };
+	console.info(document.getElementById("fatno").value);
   tableData = getTableData();
   return { faturaDTO, tableData, };
 }
 
 function getTableData() {
-  const table = document.getElementById('fatTable');
+  const table = document.getElementById('irsTable');
   const rows = table.querySelectorAll('tbody tr');
   const data = [];
   rows.forEach((row) => {
@@ -665,9 +663,9 @@ function getTableData() {
   });
   return data;
 }
-async function fatKayit() {
+async function irsKayit() {
   const fisno = document.getElementById("fisno").value;
-  const table = document.getElementById('fatTable');
+  const table = document.getElementById('irsTable');
   const rows = table.rows;
   if (!fisno || fisno === "0" || rows.length === 0) {
     alert("Geçerli bir evrak numarası giriniz.");
@@ -675,12 +673,12 @@ async function fatKayit() {
   }
   const faturakayitDTO = prepareureKayit();
   const errorDiv = document.getElementById('errorDiv');
-  const $kaydetButton = $('#fatkaydetButton');
+  const $kaydetButton = $('#irskaydetButton');
   $kaydetButton.prop('disabled', true).text('İşleniyor...');
 
   document.body.style.cursor = 'wait';
   try {
-    const response = await fetchWithSessionCheck('stok/fatKayit', {
+    const response = await fetchWithSessionCheck('stok/irsKayit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -704,9 +702,9 @@ async function fatKayit() {
 }
 
 async function fatcariIsle() {
-  const hesapKodu = $('#faturaBilgi').val();
+  const hesapKodu = $('#irsaliyeBilgi').val();
   const fisno = document.getElementById("fisno").value;
-  const table = document.getElementById('fatTable');
+  const table = document.getElementById('irsTable');
   const rows = table.rows;
   if (!fisno || fisno === "0" || rows.length === 0) {
     alert("Geçerli bir evrak numarası giriniz.");
@@ -727,7 +725,7 @@ async function fatcariIsle() {
   const errorDiv = document.getElementById('errorDiv');
   document.body.style.cursor = 'wait';
   try {
-    const response = await fetchWithSessionCheck('stok/fatcariKayit', {
+    const response = await fetchWithSessionCheck('stok/irscariKayit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
