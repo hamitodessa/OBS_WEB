@@ -72,7 +72,6 @@ public class IrsaliyeController {
 		return model;
 	}
 
-
 	@PostMapping("stok/irsOku")
 	@ResponseBody
 	public Map<String, Object> irsOku(@RequestParam String fisno, @RequestParam String cins) {
@@ -90,7 +89,6 @@ public class IrsaliyeController {
 				response.put("a2", faturaService.aciklama_oku("IRS", 2, fisno.trim(), "G"));
 				response.put("dipnot", faturaService.dipnot_oku(fisno.trim(), "I", "G"));
 			}
-
 			irsaliye = irsaliye.stream().map(item -> {
 				if (item.containsKey("Resim") && item.get("Resim") instanceof byte[]) {
 					String base64Image = Base64.getEncoder().encodeToString((byte[]) item.get("Resim"));
@@ -99,7 +97,6 @@ public class IrsaliyeController {
 				}
 				return item;
 			}).collect(Collectors.toList());
-
 			response.put("data", (irsaliye != null) ? irsaliye : new ArrayList<>());
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
@@ -141,9 +138,8 @@ public class IrsaliyeController {
 				sno = faturaService.irsaliye_no_al("G");
 			int kj = 10 - Integer.toString(sno).length();
 			StringBuilder strBuilder = new StringBuilder();
-			for (int i = 0; i < kj; i++) {
+			for (int i = 0; i < kj; i++)
 				strBuilder.append("0");
-			}
 			strBuilder.append(sno);
 			String str_ = strBuilder.toString();
 			response.put("fisno", str_.equals("0000000000") ? "0000000001" : str_);
@@ -229,7 +225,6 @@ public class IrsaliyeController {
 					miktar = row.getMiktar();
 					gircik = "G";
 				}
-
 				double kur = 0;
 				double tutar = row.getTutar();
 				izahat = row.getIzahat();
@@ -241,7 +236,6 @@ public class IrsaliyeController {
 				isk = row.getIskonto();
 				double kdv = 0;
 				kdv = row.getKdv();
-				System.out.println("==" + dto.getFatno());
 				faturaService.irs_kaydet(dto.getFisno().trim(), row.getUkodu().trim(), dpo, fiat, tevk, miktar, gircik,
 						tutar, isk, kdv, tarih, izahat, dto.getDvzcins(), dto.getAdreskod().trim(),
 						dto.getCarikod().trim(), dto.getOzelkod(), kur, "", ana, alt, userrString, dto.getFatno(),
@@ -252,7 +246,6 @@ public class IrsaliyeController {
 				faturaService.dipnot_sil(dto.getFisno().trim(), "I", "C");
 				faturaService.dipnot_yaz(dto.getFisno().trim(), dto.getNot1().trim(), dto.getNot2().trim(),
 						dto.getNot3().trim(), "I", "C", userrString);
-
 				faturaService.aciklama_sil("IRS", dto.getFisno().trim(), "C");
 				faturaService.aciklama_yaz("IRS", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "C");
 				faturaService.aciklama_yaz("IRS", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "C");
@@ -261,11 +254,9 @@ public class IrsaliyeController {
 				faturaService.dipnot_sil(dto.getFisno().trim(), "I", "G");
 				faturaService.dipnot_yaz(dto.getFisno().trim(), dto.getNot1().trim(), dto.getNot2().trim(),
 						dto.getNot3().trim(), "I", "G", userrString);
-
 				faturaService.aciklama_sil("IRS", dto.getFisno().trim(), "G");
 				faturaService.aciklama_yaz("IRS", 1, dto.getFisno().trim(), dto.getAcik1().trim(), "G");
 				faturaService.aciklama_yaz("IRS", 2, dto.getFisno().trim(), dto.getAcik2().trim(), "G");
-
 			}
 			if (dto.getFatcins().toString().equals("SATIS")) {
 				mesajlog = dto.getFisno().trim() + " Nolu Cikis Irsaliye Silindi";
@@ -283,7 +274,6 @@ public class IrsaliyeController {
 		return response;
 	}
 
-
 	@PostMapping("stok/irscariKayit")
 	@ResponseBody
 	public ResponseEntity<?> irscariKayit(@RequestBody faturaDTO faturaDTO) {
@@ -294,7 +284,6 @@ public class IrsaliyeController {
 			if (hesapIsmi[0].equals("")) {
 				throw new ServiceException("Girilen Alacakli Hesap Kodunda  bir  hesaba rastlanmadi!!!!");
 			}
-
 			double sdf = dto.getMiktar();
 			String aciklama = "";
 			String userrString = Global_Yardimci

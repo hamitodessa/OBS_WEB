@@ -429,7 +429,6 @@ async function irsOku() {
       body: new URLSearchParams({ fisno: fisno, cins: gircikdeger }),
     });
     const data = response;
-		console.info(data);
     clearInputs();
     if (response.errorMessage) {
       throw new Error(response.errorMessage);
@@ -641,7 +640,6 @@ function prepareureKayit() {
     fatcins: document.getElementById("gircik").value,
 
   };
-	console.info(document.getElementById("fatno").value);
   tableData = getTableData();
   return { faturaDTO, tableData, };
 }
@@ -708,7 +706,7 @@ async function irsKayit() {
   }
 }
 
-async function fatcariIsle() {
+async function irscariIsle() {
   const hesapKodu = $('#irsaliyeBilgi').val();
   const fisno = document.getElementById("fisno").value;
   const table = document.getElementById('irsTable');

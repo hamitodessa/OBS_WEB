@@ -51,7 +51,6 @@ public class IrsRaporController {
 					fatraporDTO.getTuru());
 			fatraporDTO.setAnagrp(turuString[0]);
 			fatraporDTO.setAltgrp(turuString[1]);
-
 			fatraporDTO.setTuru(turuString[2]);
 			List<Map<String, Object>> irs_listele = new ArrayList<>();
 			Pageable pageable = PageRequest.of(fatraporDTO.getPage(), fatraporDTO.getPageSize());

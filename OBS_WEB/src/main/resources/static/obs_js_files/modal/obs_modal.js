@@ -40,7 +40,7 @@ function openFirstModal(nerdenGeldi) {
 		openfatrapModal(modal);
 	}
 	else if (nerden === "irsrapor") {
-	  openirsrapModal(modal);
+	 openirsrapModal(modal);
 	}
 	else if (nerden === "imarapor") {
 		openimarapModal(modal);
@@ -345,8 +345,8 @@ function saveToMain() {
 	    const dvz2 = $('#dvz2').val() || "";
 			const fatno1 = $('#fatno1').val() || "";
 			const fatno2 = $('#fatno2').val() || "";
-			const adr1 = $('#fatno1').val() || "";
-			const adr2 = $('#fatno2').val() || "";
+			const adr1 = $('#adr1').val() || "";
+			const adr2 = $('#adr2').val() || "";
 						
 	    const degerler = [irsno1,irsno2, anagrp, tar1, tar2, altgrp, ckod1, ckod2, turu, ukod1, ukod2, okod1, okod2
 	      ,  dvz1, dvz2,fatno1, fatno2,adr1,adr2].join(",");
@@ -700,7 +700,7 @@ function saveToMain() {
 		fatcariIsle();
 	}
 	else if (nerden === "irsaliye") {
-	    irscariIsle();
+	  irscariIsle();
 	}
 	else if (nerden === "kerestegiris") {
 		kercariIsle();

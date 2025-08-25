@@ -102,10 +102,12 @@ function getirsraporDTO() {
     ukod2: parsedValues[10],
     okod1: parsedValues[11],
     okod2: parsedValues[12],
-    fatno1: parsedValues[13],
-    fatno2: parsedValues[14],
-		adr1: parsedValues[15],
-		adr2: parsedValues[16]
+		dvz1: parsedValues[13],
+		dvz2: parsedValues[14],
+    fatno1: parsedValues[15],
+    fatno2: parsedValues[16],
+		adr1: parsedValues[17],
+		adr2: parsedValues[18]
   };
 }
 
