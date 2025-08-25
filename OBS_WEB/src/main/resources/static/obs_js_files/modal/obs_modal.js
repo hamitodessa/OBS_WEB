@@ -79,6 +79,7 @@ function openFirstModal(nerdenGeldi) {
 		$(modal).modal('show');
 	}
 }
+//tableBody.classList.add("table-row-height");
 
 async function openSecondModal(inputId, secondnerden) {
 	activeNestedInputId = inputId;
@@ -120,6 +121,10 @@ async function openSecondModal(inputId, secondnerden) {
 		modalError.innerText = `Bir hata oluştu: ${error.message}`;
 	} finally {
 		document.body.style.cursor = "default";
+		setTimeout(() => {
+		      const searchInput = document.getElementById("modalSearch");
+		      if (searchInput) searchInput.focus();
+		    }, 200);
 	}
 }
 

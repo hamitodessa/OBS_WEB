@@ -47,6 +47,9 @@ function adrselectValue(inputId, selectedKodu, secondnerden) {
     if (secondnerden === "fatura") {
         adrhesapAdiOgren(inputId, 'adresadilbl');
     }
+		else if (secondnerden === "irsaliye") {
+		    adrhesapAdiOgren(inputId, 'adresadilbl');
+		}
 }
 
 function adrfilterTable() {
