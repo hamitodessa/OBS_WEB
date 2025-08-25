@@ -2,10 +2,12 @@ package com.hamit.obs.controller.stok;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -88,6 +90,16 @@ public class IrsaliyeController {
 				response.put("a2", faturaService.aciklama_oku("IRS", 2, fisno.trim(), "G"));
 				response.put("dipnot", faturaService.dipnot_oku(fisno.trim(), "I", "G"));
 			}
+
+			irsaliye = irsaliye.stream().map(item -> {
+				if (item.containsKey("Resim") && item.get("Resim") instanceof byte[]) {
+					String base64Image = Base64.getEncoder().encodeToString((byte[]) item.get("Resim"));
+					item.put("base64Resim", base64Image);
+					item.remove("Resim");
+				}
+				return item;
+			}).collect(Collectors.toList());
+
 			response.put("data", (irsaliye != null) ? irsaliye : new ArrayList<>());
 			response.put("errorMessage", "");
 		} catch (ServiceException e) {
@@ -274,7 +286,7 @@ public class IrsaliyeController {
 
 	@PostMapping("stok/irscariKayit")
 	@ResponseBody
-	public ResponseEntity<?> fatcariKayit(@RequestBody faturaDTO faturaDTO) {
+	public ResponseEntity<?> irscariKayit(@RequestBody faturaDTO faturaDTO) {
 		try {
 			faturaDTO dto = faturaDTO;
 			String[] hesapIsmi = { "", "" };
@@ -288,7 +300,7 @@ public class IrsaliyeController {
 			String userrString = Global_Yardimci
 					.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			if (dto.getFatcins().toString().equals("SATIS")) {
-				aciklama = dto.getFisno() + "'Fatura ile " + Formatlama.doub_0(sdf) + " Urun Satisi";
+				aciklama = dto.getFisno() + "'Irsaliye ile " + Formatlama.doub_0(sdf) + " Urun Satisi";
 				dekontDTO dekontDTO = new dekontDTO();
 				dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
 				dekontDTO.setFisNo(cariservice.yenifisno());
@@ -305,7 +317,7 @@ public class IrsaliyeController {
 				dekontDTO.setUser(userrString);
 				cariservice.cari_dekont_kaydet(dekontDTO);
 			} else {
-				aciklama = dto.getFisno() + "'Fatura ile " + Formatlama.doub_0(sdf) + " Urun Girisi";
+				aciklama = dto.getFisno() + "'Irsaliye ile " + Formatlama.doub_0(sdf) + " Urun Girisi";
 				dekontDTO dekontDTO = new dekontDTO();
 				dekontDTO.setTar(Tarih_Cevir.dateFormaterSaatli(dto.getTarih()));
 				dekontDTO.setFisNo(cariservice.yenifisno());

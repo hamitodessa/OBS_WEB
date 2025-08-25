@@ -6,7 +6,15 @@ document.querySelector('table').addEventListener('focusin', (event) => {
     document.getElementById("urunadi").innerText = cells[11]?.textContent;
     document.getElementById("anaalt").innerText = cells[12]?.textContent;
 
-   
+		const imgElement = document.getElementById("resimGoster");
+		    if (cells[13]?.textContent != '') {
+		      const base64String = 'data:image/jpeg;base64,' + cells[13]?.textContent.trim();
+		      imgElement.src = base64String;
+		      imgElement.style.display = "block";
+		    } else {
+		      imgElement.src = "";
+		      imgElement.style.display = "none";
+		    }
   }
 });
 
@@ -111,7 +119,7 @@ function satirekle() {
     </td>
     <td style="display: none;"></td>
     <td style="display: none;"></td>
-   
+		<td style="display: none;"></td>
       `;
 }
 
@@ -275,7 +283,7 @@ async function updateRowValues(inputElement) {
     const birimCell = cells[7];
     cells[11].innerText = response.dto.adi || '';
     cells[12].innerText = response.dto.anagrup + " / " + response.dto.altgrup || '';
-    
+		cells[13].innerText = response.dto.base64Resim || '';
     setLabelContent(birimCell, response.dto.birim);
 
     barkodCell.value = response.dto.barkod;
@@ -352,7 +360,6 @@ function focusNextCell(event, element) {
 }
 
 function clearInputs() {
-
   document.getElementById("barkod").value = '';
   document.getElementById("urunadi").innerText = '';
   document.getElementById("anaalt").innerText = '';
@@ -388,6 +395,7 @@ function clearInputs() {
 
   document.getElementById("a1").value = '';
   document.getElementById("a2").value = '';
+	document.getElementById("fatno").value = '';
 
 
   const tableBody = document.getElementById("tbody");
@@ -461,7 +469,7 @@ async function irsOku() {
       if (izahatInput) izahatInput.value = item.Izahat || "";
       cells[11].innerText = item.Adi || '';
       cells[12].innerText = item.Ur_AnaGrup + " / " + item.Ur_AltGrup;
-     
+			cells[13].innerText = item.base64Resim || '';
     });
 
     for (let i = 0; i < data.data.length; i++) {
@@ -486,7 +494,6 @@ async function irsOku() {
     document.getElementById("not1").value = data.dipnot[0];
     document.getElementById("not2").value = data.dipnot[1];
     document.getElementById("not3").value = data.dipnot[2];
-
 
     updateColumnTotal();
 
@@ -549,7 +556,7 @@ async function yeniFis() {
   clearInputs();
   document.body.style.cursor = "wait";
   try {
-    const response = await fetchWithSessionCheck('stok/yenifis', {
+    const response = await fetchWithSessionCheck('stok/irsyenifis', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -584,7 +591,7 @@ async function irsYoket() {
   const $silButton = $('#fatsilButton');
   $silButton.prop('disabled', true).text('Siliniyor...');
   try {
-    const response = await fetchWithSessionCheck("stok/fatYoket", {
+    const response = await fetchWithSessionCheck("stok/irsYoket", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

@@ -2556,7 +2556,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = IRSALIYE.Alt_Grup ) , '') AS Alt_Grup, "
 				+ " ISNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) , '') AS Ur_AnaGrup, "
 				+ " ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) , '') AS Ur_AltGrup, "
-				+ " Birim,MAL.Barkod,Mal.Adi ,Tutar,Kur,Izahat"
+				+ " Birim,MAL.Barkod,Mal.Adi ,Tutar,Kur,Izahat,Resim"
 				+ " FROM IRSALIYE WITH (INDEX (IX_IRSALIYE)) , MAL WITH (INDEX (IX_MAL)) "
 				+ " Where IRSALIYE.KODU = MAL.Kodu " + " AND Irsaliye_No = N'" + irsno + "'" + " AND Hareket = '" + cins
 				+ "'";
