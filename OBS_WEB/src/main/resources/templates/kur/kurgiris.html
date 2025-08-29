@@ -106,7 +106,7 @@ th:nth-child(7), td:nth-child(7) {
 		<div class="aramagroup-box">
 			<span style="padding-left: 5px;"></span> 
 			
-				<select style="width: 150px;" class="form-select" id="doviz_tur" onchange=kurSatirOku() name="doviz_tur">
+				<select style="width: 150px;" class="form-select" id="doviz_tur" onchange="kurSatirOku()" name="doviz_tur">
 					<option value="USD">USD</option>
 					<option value="EUR">EUR</option>
 					<option value="RUB">RUB</option>
@@ -117,7 +117,7 @@ th:nth-child(7), td:nth-child(7) {
 				<i class="fa fa-backward"></i>
 			</button>
 			<span style="width: 10px;"></span> 
-			<input type="date" id="tarih" class="form-control" style="width: 150px; font-weight: bold;" th:value="${tarih}" onkeypress="checkEnter(event)" /> 
+			<input type="date" id="tarih" class="form-control" style="width: 150px; font-weight: bold;" th:value="${tarih}" onchange="kuroku()" onkeypress="checkEnter(event)" /> 
 			<span style="width: 10px;"></span>
 			<button type="button" id="ileriButton" onclick="tarihIleri()" class="btn btn-secondary ml-2" >	
 			<i class="fa fa-forward"></i>

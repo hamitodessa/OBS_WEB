@@ -122,6 +122,12 @@ function kurSatirOku() {
 		document.getElementById("ba").value = matchedRow.cells[5].textContent.trim();
 		document.getElementById("bs").value = matchedRow.cells[6].textContent.trim();
 	} else {
+		document.getElementById("ma").value = formatNumber4(0);
+		    document.getElementById("ms").value = formatNumber4(0);
+		    document.getElementById("sa").value = formatNumber4(0);
+		    document.getElementById("ss").value = formatNumber4(0);
+		    document.getElementById("ba").value = formatNumber4(0);
+		    document.getElementById("bs").value = formatNumber4(0);
 	}
 }
 function formatNumber4(value) {
