@@ -1,5 +1,6 @@
-let currentPage = 0;
-const pageSize = 500;
+currentPage = 0;
+totalPages = 0;
+pageSize = 500;
 
 
 async function emirismidoldur() {
@@ -98,7 +99,7 @@ async function logliste(page = 0) {
 
       tableBody.appendChild(tr);
     });
-
+		pageSize = 500;
     currentPage = page;
     document.getElementById("prevPage").disabled = currentPage === 0;
     document.getElementById("nextPage").disabled = tableBody.rows.length < pageSize;

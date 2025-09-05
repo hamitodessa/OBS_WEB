@@ -1,6 +1,6 @@
-let currentPage = 0;
-let totalPages = 0;
-const pageSize = 500;
+currentPage = 0;
+totalPages = 0;
+pageSize = 500;
 
 function setDisabled(el, yes) { el.disabled = !!yes; }
 function updatePaginationUI(disableAllWhileLoading = false) {
@@ -41,7 +41,6 @@ async function toplampagesize() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ hesapKodu, startDate, endDate, dvz_tur, dvz_cins }),
     });
-
     const totalRecords = response?.totalRecords ?? 0;
     totalPages = Math.max(0, Math.ceil(totalRecords / pageSize));
   } catch (error) {

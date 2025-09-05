@@ -1,3 +1,5 @@
+currentPage = 0;
+totalPages = 0;
 pageSize = 250;
 
 async function anagrpChanged(anagrpElement) {

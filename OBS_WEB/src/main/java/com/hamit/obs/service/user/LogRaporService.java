@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.connection.ConnectionDetails;
@@ -30,7 +31,7 @@ public class LogRaporService {
 
 	public List<Map<String, Object>> lograpor(String startDate,String endDate,String aciklama,modulTipi modul,Pageable pageable){
 		try {
-			String useremail = userService.getCurrentUser().getEmail();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			masterConnectionManager.loadConnections(modul,useremail);
 			connConnDetails = masterConnectionManager.getConnection(modul, useremail);
 			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
@@ -47,7 +48,7 @@ public class LogRaporService {
 	
 	public double logsize(String startDate,String endDate,modulTipi modul,String aciklama){
 		try {
-			String useremail = userService.getCurrentUser().getEmail();
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			masterConnectionManager.loadConnections(modul,useremail);
 			connConnDetails = masterConnectionManager.getConnection(modul, useremail);
 			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());

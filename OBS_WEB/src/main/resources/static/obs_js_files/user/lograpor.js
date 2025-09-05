@@ -1,6 +1,6 @@
-let currentPage = 0;
-let totalPages = 0;
-const pageSize = 300;
+currentPage = 0;
+totalPages = 0;
+pageSize = 500;
 
 function setDisabled(el, yes) { el.disabled = !!yes; }
 
@@ -12,7 +12,6 @@ function updatePaginationUI() {
 
   const noData = totalPages === 0;
 
-  // İlk/Önceki: ilk sayfadaysa ya da hiç veri yoksa kapat
   setDisabled(first, noData || currentPage <= 0);
   setDisabled(prev,  noData || currentPage <= 0);
 

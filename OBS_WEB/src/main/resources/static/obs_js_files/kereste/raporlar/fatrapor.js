@@ -1,4 +1,7 @@
+currentPage = 0;
+totalPages = 0;
 pageSize = 250;
+
 async function anagrpChanged(anagrpElement) {
 	const anagrup = anagrpElement.value;
 	const errorDiv = document.getElementById("errorDiv");

@@ -1,6 +1,6 @@
-let currentPage = 0;
-let totalPages  = 0;
-const pageSize  = 250;
+currentPage = 0;
+totalPages = 0;
+pageSize = 250;
 
 function setDisabled(el, yes) { el.disabled = !!yes; }
 function updatePaginationUI(disableAllWhileLoading = false) {
