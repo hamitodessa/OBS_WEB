@@ -2896,14 +2896,77 @@ public class FaturaPgSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> irs_rapor(fatraporDTO fatraporDTO, Pageable pageable,
 			ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		fatraporDTO.setAnagrp(fatraporDTO.getAnagrp().replace("Like", "::text Like"));
+		fatraporDTO.setAltgrp(fatraporDTO.getAltgrp().replace("Like", "::text Like"));
+		String sql = "SELECT \"IRSALIYE\".\"Irsaliye_No\",CASE WHEN \"Hareket\" = 'C' THEN 'Satis' ELSE 'Alis' END as \"Hareket\" , \"IRSALIYE\".\"Tarih\",\"IRSALIYE\".\"Cari_Hesap_Kodu\",\"IRSALIYE\".\"Firma\" as \"Adres_Firma\",  "
+				+ " \"MAL\".\"Birim\", SUM(\"IRSALIYE\".\"Miktar\") AS \"Miktar\" ,sum((\"IRSALIYE\".\"Miktar\" * \"IRSALIYE\".\"Fiat\")) as \"Tutar\" "
+				+ " FROM  \"IRSALIYE\"  , \"MAL\"  " + " WHERE \"IRSALIYE\".\"Kodu\" = \"MAL\".\"Kodu\" "
+				+ " AND \"IRSALIYE\".\"Irsaliye_No\" >= '" + fatraporDTO.getIrsno1()
+				+ "' AND  \"IRSALIYE\".\"Irsaliye_No\" <= '" + fatraporDTO.getIrsno2() + "'"
+				+ " AND \"IRSALIYE\".\"Tarih\" >= '" + fatraporDTO.getTar1() + "' AND  \"IRSALIYE\".\"Tarih\" <= '"
+				+ fatraporDTO.getTar2() + " 23:59:59.998'" + " AND \"IRSALIYE\".\"Cari_Hesap_Kodu\" >= N'"
+				+ fatraporDTO.getCkod1() + "' AND  \"IRSALIYE\".\"Cari_Hesap_Kodu\" <= N'" + fatraporDTO.getCkod2()
+				+ "' " + " AND \"IRSALIYE\".\"Firma\" >= N'" + fatraporDTO.getAdr1()
+				+ "' AND  \"IRSALIYE\".\"Firma\" <= N'" + fatraporDTO.getAdr2() + "' "
+				+ " AND \"IRSALIYE\".\"Kodu\" >= N'" + fatraporDTO.getUkod1() + "' AND \"IRSALIYE\".\"Kodu\" <= N'"
+				+ fatraporDTO.getUkod2() + "' " + " AND \"IRSALIYE\".\"Fatura_No\" >= '" + fatraporDTO.getFatno1()
+				+ "' AND \"IRSALIYE\".\"Fatura_No\" <= '" + fatraporDTO.getFatno2() + "' "
+				+ " AND \"IRSALIYE\".\"Ana_Grup\" " + fatraporDTO.getAnagrp() + " AND \"IRSALIYE\".\"Alt_Grup\" "
+				+ fatraporDTO.getAltgrp() + " AND \"Ozel_Kod\" >= N'" + fatraporDTO.getOkod1()
+				+ "' AND \"Ozel_Kod\" <= N'" + fatraporDTO.getOkod2() + "' " + " AND \"Hareket\"::text Like '"
+				+ fatraporDTO.getTuru() + "%' "
+				+ " GROUP BY \"IRSALIYE\".\"Irsaliye_No\",\"Hareket\"  , \"IRSALIYE\".\"Tarih\",\"IRSALIYE\".\"Cari_Hesap_Kodu\",\"IRSALIYE\".\"Firma\", \"MAL\".\"Birim\" "
+				+ " ORDER BY \"IRSALIYE\".\"Irsaliye_No\"  LIMIT ? OFFSET ? ";
+		int page = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize();
+		int offset = page * pageSize;
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setInt(1, offset);
+			preparedStatement.setInt(2, pageSize);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet);
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList;
+
 	}
 
 	@Override
 	public double irs_raporsize(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return 0;
+		double result = 0;
+		String sql = "SELECT COUNT(*) AS satir" + " FROM (" + " SELECT \"Irsaliye_No\" "
+				+ " FROM   \"IRSALIYE\"  , \"MAL\"   " + " WHERE \"IRSALIYE\".\"Kodu\" = \"MAL\".\"Kodu\" "
+				+ " AND \"IRSALIYE\".\"Irsaliye_No\" >= '" + fatraporDTO.getIrsno1()
+				+ "' AND  \"IRSALIYE\".\"Irsaliye_No\" <= '" + fatraporDTO.getIrsno2() + "'"
+				+ " AND \"IRSALIYE\".\"Tarih\" >= '" + fatraporDTO.getTar1() + "' AND  \"IRSALIYE\".\"Tarih\" <= '"
+				+ fatraporDTO.getTar2() + " 23:59:59.998'" + " AND \"IRSALIYE\".\"Cari_Hesap_Kodu\" >= N'"
+				+ fatraporDTO.getCkod1() + "' AND  \"IRSALIYE\".\"Cari_Hesap_Kodu\" <= N'" + fatraporDTO.getCkod2()
+				+ "' " + " AND \"IRSALIYE\".\"Firma\" >= N'" + fatraporDTO.getAdr1()
+				+ "' AND  \"IRSALIYE\".\"Firma\" <= N'" + fatraporDTO.getAdr2() + "' "
+				+ " AND \"IRSALIYE\".\"Kodu\" >= N'" + fatraporDTO.getUkod1() + "' AND \"IRSALIYE\".\"Kodu\" <= N'"
+				+ fatraporDTO.getUkod2() + "' " + " AND \"IRSALIYE\".\"Fatura_No\" >= '" + fatraporDTO.getFatno1()
+				+ "' AND \"IRSALIYE\".\"Fatura_No\" <= '" + fatraporDTO.getFatno2() + "' "
+				+ " AND \"IRSALIYE\".\"Ana_Grup\" " + fatraporDTO.getAnagrp() + " AND \"IRSALIYE\".\"Alt_Grup\" "
+				+ fatraporDTO.getAltgrp() + " AND \"Ozel_Kod\" >= N'" + fatraporDTO.getOkod1()
+				+ "' AND \"Ozel_Kod\" <= N'" + fatraporDTO.getOkod2() + "' " + " AND \"Hareket\"::text Like '"
+				+ fatraporDTO.getTuru() + "%' "
+				+ " GROUP BY \"IRSALIYE\".\"Irsaliye_No\",\"Hareket\"  , \"IRSALIYE\".\"Tarih\",\"IRSALIYE\".\"Cari_Hesap_Kodu\",\"IRSALIYE\".\"Firma\", \"MAL\".\"Birim\" ) AS Gruplanmis ";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				result = resultSet.getInt("satir");
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return result;
+
 	}
 
 	@Override

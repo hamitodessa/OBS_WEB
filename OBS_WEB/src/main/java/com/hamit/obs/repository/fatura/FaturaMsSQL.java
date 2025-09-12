@@ -2164,7 +2164,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ fatraporDTO.getAnagrp() + " AND IRSALIYE.Alt_Grup " + fatraporDTO.getAltgrp() + " AND Ozel_Kod >= N'"
 				+ fatraporDTO.getOkod1() + "' AND Ozel_Kod <= N'" + fatraporDTO.getOkod2() + "' "
 				+ " AND Hareket Like '" + fatraporDTO.getTuru() + "%' "
-				+ " GROUP BY Irsaliye_No,Hareket,Tarih ,Cari_Hesap_Kodu,Firma,Doviz  " + " ) AS Gruplanmis";
+				+ " GROUP BY Irsaliye_No,Hareket,Tarih ,Cari_Hesap_Kodu,Firma, mal.Birim  " + " ) AS Gruplanmis";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
@@ -2268,7 +2268,6 @@ public class FaturaMsSQL implements IFaturaDatabase {
 					"Fatura Numaralarinda onceden harf ve rakkam kullanildigindan otomatik numara verilemez....");
 		}
 		return E_NUMBER;
-
 	}
 
 	@Override
