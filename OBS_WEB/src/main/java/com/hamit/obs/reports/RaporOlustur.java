@@ -397,17 +397,13 @@ public class RaporOlustur {
 
 	private ByteArrayDataSource exportRapor(JasperPrint jp, String format) throws Exception {
 		RaportToDataSource raporttoDatasource = new RaportToDataSource();
-		switch (format.toLowerCase()) {
-		case "pdf":
-			return raporttoDatasource.export_pdf(jp);
-		case "xlsx":
-			return raporttoDatasource.export_xls(jp);
-		case "word":
-			return raporttoDatasource.export_docx(jp);
-		case "xml":
-			return raporttoDatasource.export_xml(jp);
-		default:
+		return switch (format.toLowerCase()) {
+		case "pdf" -> raporttoDatasource.export_pdf(jp);
+		case "xlsx" -> raporttoDatasource.export_xls(jp);
+		case "word" -> raporttoDatasource.export_docx(jp);
+		case "xml" -> raporttoDatasource.export_xml(jp);
+		default ->
 			throw new IllegalArgumentException("Unsupported file format: " + format);
-		}
+		};
 	}
 }

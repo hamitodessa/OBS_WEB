@@ -165,56 +165,40 @@ public class RaporEmailGonderme {
 	}
 
 	private String getRaporAdi(String nerden) {
-		switch (nerden) {
-		case "cariekstre":
-			return "Cari_Ekstre_";
-		case "carimizan":
-			return "Cari_Mizan_";
-		case "cariozelmizan":
-			return "Cari_Ozel_Mizan_";
-		case "dvzcevir":
-			return "Cari_Dovize_Cevirme_";
-		case "cgbordro":
-			return "Giris_Bordro_";
-		case "ccbordro":
-			return "Cikis_Bordro_";
-		default:
+		return switch (nerden) {
+		case "cariekstre" -> "Cari_Ekstre_";
+		case "carimizan" -> "Cari_Mizan_";
+		case "cariozelmizan" -> "Cari_Ozel_Mizan_";
+		case "dvzcevir" -> "Cari_Dovize_Cevirme_";
+		case "cgbordro" -> "Giris_Bordro_";
+		case "ccbordro" -> "Cikis_Bordro_";
+		default ->
 			throw new IllegalArgumentException("Unsupported report type: " + nerden);
-		}
+		};
 	}
 
 	private ByteArrayDataSource getDataSource(String nerden, String degerler, String format) throws Exception {
-		switch (nerden) {
-		case "cariekstre":
-			return cari_ekstre(degerler, format);
-		case "carimizan":
-			return cari_mizan(degerler, format);
-		case "cariozelmizan":
-			return cari_mizan(degerler, format);
-		case "dvzcevir":
-			return cari_dvzcevir(degerler, format);
-		case "cgbordro":
-			return kam_gbordro(degerler, format);
-		case "ccbordro":
-			return kam_cbordro(degerler, format);
-		default:
+		return switch (nerden) {
+		case "cariekstre" -> cari_ekstre(degerler, format);
+		case "carimizan" -> cari_mizan(degerler, format);
+		case "cariozelmizan" -> cari_mizan(degerler, format);
+		case "dvzcevir" -> cari_dvzcevir(degerler, format);
+		case "cgbordro" -> kam_gbordro(degerler, format);
+		case "ccbordro" -> kam_cbordro(degerler, format);
+		default ->
 			throw new IllegalArgumentException("Unsupported report type: " + nerden);
-		}
+		};
 	}
 
 	private String getDosyaUzantisi(String format) {
-		switch (format) {
-		case "pdf":
-			return ".pdf";
-		case "xlsx":
-			return ".xlsx";
-		case "WORD":
-			return ".docx";
-		case "XML":
-			return ".xml";
-		default:
+		return switch (format) {
+		case "pdf" -> ".pdf";
+		case "xlsx" -> ".xlsx";
+		case "WORD" -> ".docx";
+		case "XML" -> ".xml";
+		default ->
 			throw new IllegalArgumentException("Unsupported file format: " + format);
-		}
+		};
 	}
 
 	public ByteArrayDataSource cari_ekstre(String degerler,String format) throws Exception{

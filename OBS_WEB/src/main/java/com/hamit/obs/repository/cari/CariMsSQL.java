@@ -374,22 +374,15 @@ public class CariMsSQL implements ICariDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		StringBuilder sqlBuilder = new StringBuilder();
 		String havingClause = "";
-		switch (mizanDTO.getHangi_tur()) {
-		case "borcluhesaplar":
-			havingClause = " HAVING ROUND(SUM(SATIRLAR.ALACAK - SATIRLAR.BORC),2) < 0 ";
-			break;
-		case "alacaklihesaplar":
-			havingClause = " HAVING ROUND(SUM(SATIRLAR.ALACAK - SATIRLAR.BORC),2) > 0 ";
-			break;
-		case "sifirolanlar":
-			havingClause = " HAVING ROUND(SUM(SATIRLAR.ALACAK - SATIRLAR.BORC),2) = 0 ";
-			break;
-		case "sifirolmayanlar":
-			havingClause = " HAVING ROUND(SUM(SATIRLAR.ALACAK - SATIRLAR.BORC),2) <> 0 ";
-			break;
-		default:
-			break;
-		}
+
+		havingClause = switch (mizanDTO.getHangi_tur()) {
+		case "borcluhesaplar" -> " HAVING ROUND(SUM(SATIRLAR.ALACAK - SATIRLAR.BORC),2) < 0 ";
+		case "alacaklihesaplar" -> " HAVING ROUND(SUM(SATIRLAR.ALACAK - SATIRLAR.BORC),2) > 0 ";
+		case "sifirolanlar" -> " HAVING ROUND(SUM(SATIRLAR.ALACAK - SATIRLAR.BORC),2) = 0 ";
+		case "sifirolmayanlar" -> " HAVING ROUND(SUM(SATIRLAR.ALACAK - SATIRLAR.BORC),2) <> 0 ";
+		default -> ""; // boş bırakmak istersen böyle
+		};
+
 		sqlBuilder.append("SELECT SATIRLAR.HESAP, HESAP.UNVAN, HESAP.HESAP_CINSI AS H_CINSI, ")
 		.append("SUM(SATIRLAR.BORC) AS BORC, SUM(SATIRLAR.ALACAK) AS ALACAK, ")
 		.append("SUM(SATIRLAR.ALACAK) - SUM(SATIRLAR.BORC) AS BAKIYE ")
