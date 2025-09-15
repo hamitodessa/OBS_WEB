@@ -40,7 +40,7 @@ function openFirstModal(nerdenGeldi) {
 		openfatrapModal(modal);
 	}
 	else if (nerden === "irsrapor") {
-	 openirsrapModal(modal);
+	 	openirsrapModal(modal);
 	}
 	else if (nerden === "imarapor") {
 		openimarapModal(modal);

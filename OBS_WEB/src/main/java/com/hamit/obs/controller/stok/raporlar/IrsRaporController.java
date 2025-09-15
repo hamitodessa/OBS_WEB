@@ -75,7 +75,6 @@ public class IrsRaporController {
 					fatraporDTO.getTuru());
 			fatraporDTO.setAnagrp(turuString[0]);
 			fatraporDTO.setAltgrp(turuString[1]);
-
 			fatraporDTO.setTuru(turuString[2]);
 			double fatdetaysize = faturaService.irs_raporsize(fatraporDTO);
 			response.put("totalRecords", fatdetaysize);

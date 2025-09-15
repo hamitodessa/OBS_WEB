@@ -1143,7 +1143,7 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				result  = resultSet.getInt("satir");
 			} 
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return result;
 	}
@@ -2890,7 +2890,6 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return resultList; 
-
 	}
 
 	@Override
@@ -2924,15 +2923,14 @@ public class FaturaPgSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			preparedStatement.setInt(1, offset);
-			preparedStatement.setInt(2, pageSize);
+			preparedStatement.setInt(1, pageSize);
+			preparedStatement.setInt(2, offset);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PGstkService genel hatası.", e);
 		}
 		return resultList;
-
 	}
 
 	@Override
@@ -2963,40 +2961,115 @@ public class FaturaPgSQL implements IFaturaDatabase {
 				result = resultSet.getInt("satir");
 			}
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("PG stkService genel hatası.", e);
 		}
 		return result;
-
 	}
 
 	@Override
-	public List<Map<String, Object>> irs_detay_rapor(String fno, String turu, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Map<String, Object>> irs_detay_rapor(String ino, String turu, ConnectionDetails faturaConnDetails) {
+		String sql = "SELECT \"IRSALIYE\".\"Kodu\",  \"MAL\".\"Adi\", \"IRSALIYE\".\"Miktar\", " +
+				" \"MAL\".\"Birim\",\"IRSALIYE\".\"Fiat\",(\"IRSALIYE\".\"Miktar\" * \"IRSALIYE\".\"Fiat\") as \"Tutar\" " +
+				" ,\"IRSALIYE\".\"Kdv\" as \"Kdv\",\"IRSALIYE\".\"Doviz\",    \"IRSALIYE\".\"Iskonto\", " +
+				" COALESCE((SELECT \"ANA_GRUP\" FROM \"ANA_GRUP_DEGISKEN\" WHERE \"ANA_GRUP_DEGISKEN\".\"AGID_Y\" = \"IRSALIYE\".\"Ana_Grup\"),'') \"Ana_Grup\" , " +
+				" COALESCE((SELECT \"ALT_GRUP\" FROM \"ALT_GRUP_DEGISKEN\" WHERE \"ALT_GRUP_DEGISKEN\".\"ALID_Y\" = \"IRSALIYE\".\"Alt_Grup\"),'') AS \"Alt_Grup\" , " +
+				" \"Ozel_Kod\"  ,\"Fatura_No\" " +
+				" FROM \"IRSALIYE\" , \"MAL\"  " +
+				" WHERE \"IRSALIYE\".\"Kodu\" = \"MAL\".\"Kodu\" " +
+				" AND  \"IRSALIYE\".\"Irsaliye_No\" = '" + ino + "'"  +
+				" AND \"Hareket\"::text Like '" + turu + "%' " +
+				" ORDER BY \"IRSALIYE\".\"Kodu\"";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet);
+		} catch (Exception e) {
+			throw new ServiceException("PG stkService genel hatası.", e);
+		}
+		return resultList;
 	}
 
 	@Override
 	public List<Map<String, Object>> irsaliye_oku(String irsno, String cins, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT \"Irsaliye_No\",\"IRSALIYE\".\"Kodu\" ,\"Tarih\" ,\"IRSALIYE\".\"Kdv\",\"Doviz\",abs(\"Miktar\") as \"Miktar\",\"IRSALIYE\".\"Fiat\",\"Firma\",\"Iskonto\" ," + 
+				"\"Fatura_No\" ,\"Sevk_Tarihi\",COALESCE((Select \"DEPO\" FROM \"DEPO_DEGISKEN\" WHERE \"DEPO_DEGISKEN\".\"DPID_Y\" = \"IRSALIYE\".\"Depo\" ) , '') AS \"Depo\" , " +
+				" \"Cari_Hesap_Kodu\",\"Ozel_Kod\" ,\"IRSALIYE\".\"Ana_Grup\" ,\"IRSALIYE\".\"Alt_Grup\" ,\"Birim\",\"MAL\".\"Barkod\",\"MAL\".\"Adi\" ,\"Tutar\",\"Kur\",\"Izahat\"" +
+				" , \"Resim\" "  +
+				" FROM \"IRSALIYE\"  , \"MAL\"  " +
+				" Where \"IRSALIYE\".\"Kodu\" = \"MAL\".\"Kodu\" " +
+				" AND \"Irsaliye_No\" = N'" + irsno + "'" +
+				" AND \"Hareket\" = '" + cins + "'";
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			resultList = ResultSetConverter.convertToList(resultSet);
+			resultSet.close();
+		} catch (Exception e) {
+			throw new ServiceException("PG stkService genel hatası.", e);
+		}
+		return resultList;
 	}
 
 	@Override
 	public String son_irsno_al(String cins, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+				String son_no = "";
+		String sql = "SELECT max(\"Irsaliye_No\")  as \"NO\" FROM \"IRSALIYE\" WHERE \"Hareket\" = '" + cins + "' ";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				son_no = resultSet.getString("NO");
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Firma adı okunamadı", e);
+		}
+		return son_no;
 	}
 
 	@Override
 	public int irsaliye_no_al(String cins, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-		return 0;
+		int E_NUMBER = 0;
+		String sql = "SELECT  CASE WHEN max(\"Irsaliye_No\")  = '' THEN '1' ELSE   max(\"Irsaliye_No\")::int + 1  END  AS \"NO\"  FROM \"IRSALIYE\" WHERE \"Hareket\" = '" + cins + "' ";
+
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (!resultSet.isBeforeFirst()) {
+					E_NUMBER = 0;
+				} else {
+					resultSet.next();
+					E_NUMBER = resultSet.getInt("NO");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException(
+					"Irsaliye Numaralarinda onceden harf ve rakkam kullanildigindan otomatik numara verilemez....");
+		}
+		return E_NUMBER;
 	}
 
 	@Override
 	public void irs_giris_sil(String fno, String cins, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-
+		String sql = " DELETE " +
+				" FROM \"IRSALIYE\"" +
+				" WHERE \"Irsaliye_No\"  = ? " +
+				" AND \"Hareket\" = ? ";
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(), faturaConnDetails.getPassword())) {
+			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+				stmt.setString(1, fno);
+				stmt.setString(2, cins);
+				stmt.executeUpdate();
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
+		}
 	}
 
 	@Override
@@ -3004,8 +3077,38 @@ public class FaturaPgSQL implements IFaturaDatabase {
 			String gircik, double tutar, double iskonto, double kdv, String tarih, String izah, String doviz,
 			String adrfirma, String carfirma, String ozkod, double kur, String cins, int anagrp, int altgrp, String usr,
 			String fatno, String sevktarih, ConnectionDetails faturaConnDetails) {
-		// TODO Auto-generated method stub
-
+		String sql  ="INSERT INTO \"IRSALIYE\" (\"Irsaliye_No\",\"Kodu\",\"Depo\",\"Fiat\",\"Iskonto\",\"Miktar\",\"Tutar\",\"Kdv\", \"Tarih\",\"Doviz\",\"Kur\",\"Firma\" " +
+				",\"Cari_Hesap_Kodu\",\"Sevk_Tarihi\",\"Ozel_Kod\",\"Ana_Grup\",\"Alt_Grup\",\"Fatura_No\",\"Hareket\",\"Cins\",\"USER\",\"Izahat\") " +
+				" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" ;
+		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
+				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, irsno);
+			stmt.setString(2, kodu);
+			stmt.setInt(3, depo);
+			stmt.setDouble(4, fiat);
+			stmt.setDouble(5, iskonto);
+			stmt.setDouble(6, miktar);
+			stmt.setDouble(7, tutar);
+			stmt.setDouble(8, kdv);
+			stmt.setTimestamp(9, Timestamp.valueOf(tarih));
+			stmt.setString(10, doviz);
+			stmt.setDouble(11, kur);
+			stmt.setString(12, adrfirma);
+			stmt.setString(13, carfirma);
+			stmt.setString(14, sevktarih);
+			stmt.setString(15, ozkod);
+			stmt.setInt(16, anagrp);
+			stmt.setInt(17, altgrp);
+			stmt.setString(18, fatno);
+			stmt.setString(19, gircik);
+			stmt.setString(20, cins);
+			stmt.setString(21, usr);
+			stmt.setString(22, izah);
+			stmt.executeUpdate();
+			stmt.close();
+		} catch (Exception e) {
+			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
+		}
 	}
-
 }

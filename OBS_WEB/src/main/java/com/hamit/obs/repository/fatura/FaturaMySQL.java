@@ -2609,7 +2609,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 	public List<Map<String, Object>> irs_rapor(fatraporDTO fatraporDTO, Pageable pageable,
 			ConnectionDetails faturaConnDetails) {
 		String sql = "SELECT IRSALIYE.Irsaliye_No, "
-				+ " CASE WHEN i.Hareket = 'C' THEN 'Satis' ELSE 'Alis' END AS Hareket , "
+				+ " CASE WHEN IRSALIYE.Hareket = 'C' THEN 'Satis' ELSE 'Alis' END AS Hareket , "
 				+ " IRSALIYE.Tarih,IRSALIYE.Cari_Hesap_Kodu,IRSALIYE.Firma as Adres_Firma,  "
 				+ " mal.Birim, SUM(IRSALIYE.Miktar) AS Miktar ,sum((IRSALIYE.Miktar * IRSALIYE.Fiat)) as Tutar "
 				+ " FROM  IRSALIYE USE INDEX (IX_IRSALIYE) , MAL USE INDEX (IX_MAL) "
@@ -2634,12 +2634,12 @@ public class FaturaMySQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			preparedStatement.setInt(1, offset);
-			preparedStatement.setInt(2, pageSize);
+			preparedStatement.setInt(1, pageSize);
+			preparedStatement.setInt(2, offset);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList;
 	}
@@ -2670,7 +2670,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 				result = resultSet.getInt("satir");
 			}
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return result;
 
@@ -2685,7 +2685,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 				+ " ) AS Ana_Grup,"
 				+ " COALESCE((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = IRSALIYE.Alt_Grup),''"
 				+ " ) AS Alt_Grup, " + " Ozel_Kod  ,Fatura_No "
-				+ " FROM USE INDEX (IX_IRSALIYE) , MAL USE INDEX (IX_MAL) " + " WHERE IRSALIYE.Kodu = MAL.Kodu "
+				+ " FROM IRSALIYE USE INDEX (IX_IRSALIYE) , MAL USE INDEX (IX_MAL) " + " WHERE IRSALIYE.Kodu = MAL.Kodu "
 				+ " AND  IRSALIYE.Irsaliye_No = '" + ino + "'" + " AND Hareket Like '" + turu + "%' "
 				+ " ORDER BY IRSALIYE.Kodu";
 		List<Map<String, Object>> resultList = new ArrayList<>();
@@ -2695,7 +2695,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList;
 
@@ -2705,12 +2705,12 @@ public class FaturaMySQL implements IFaturaDatabase {
 	public List<Map<String, Object>> irsaliye_oku(String irsno, String cins, ConnectionDetails faturaConnDetails) {
 		String sql = "SELECT Irsaliye_No,IRSALIYE.Kodu ,Tarih ,IRSALIYE.Kdv,Doviz,abs(Miktar) as Miktar,IRSALIYE.Fiat,Firma,Iskonto ,"
 				+ " Fatura_No ,Sevk_Tarihi,"
-				+ " ISNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = IRSALIYE.DEPO ) , '') AS Depo , "
+				+ " COALESCE((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = IRSALIYE.DEPO ) , '') AS Depo , "
 				+ " Cari_Hesap_Kodu," + " Ozel_Kod ,"
-				+ " IFNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = IRSALIYE.Ana_Grup ) , '') AS Ana_Grup, "
-				+ " IFNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = IRSALIYE.Alt_Grup ) , '') AS Alt_Grup, "
-				+ " IFNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) , '') AS Ur_AnaGrup, "
-				+ " IFNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) , '') AS Ur_AltGrup, "
+				+ " COALESCE((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = IRSALIYE.Ana_Grup ) , '') AS Ana_Grup, "
+				+ " COALESCE((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = IRSALIYE.Alt_Grup ) , '') AS Alt_Grup, "
+				+ " COALESCE((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) , '') AS Ur_AnaGrup, "
+				+ " COALESCE((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) , '') AS Ur_AltGrup, "
 				+ " Birim,MAL.Barkod,Mal.Adi ,Tutar,Kur,Izahat,Resim"
 				+ " FROM IRSALIYE USE INDEX (IX_IRSALIYE) , MAL USE INDEX (IX_MAL) "
 				+ " Where IRSALIYE.KODU = MAL.Kodu " + " AND Irsaliye_No = N'" + irsno + "'" + " AND Hareket = '" + cins
@@ -2723,8 +2723,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 			resultList = ResultSetConverter.convertToList(resultSet);
 			resultSet.close();
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MY stkService genel hatası.", e);
 		}
 		return resultList;
 
@@ -2791,7 +2790,7 @@ public class FaturaMySQL implements IFaturaDatabase {
 			String adrfirma, String carfirma, String ozkod, double kur, String cins, int anagrp, int altgrp, String usr,
 			String fatno, String sevktarih, ConnectionDetails faturaConnDetails) {
 		String sql = "INSERT INTO IRSALIYE (Irsaliye_No,Kodu,Depo,Fiat,Iskonto,Miktar,Tutar,Kdv, Tarih,Doviz,Kur,Firma "
-				+ ",Cari_Hesap_Kodu,Sevk_Tarihi,Ozel_Kod,Ana_Grup,Alt_Grup,Fatura_No,Hareket,Cins,[USER],Izahat) "
+				+ ",Cari_Hesap_Kodu,Sevk_Tarihi,Ozel_Kod,Ana_Grup,Alt_Grup,Fatura_No,Hareket,Cins,USER,Izahat) "
 				+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
