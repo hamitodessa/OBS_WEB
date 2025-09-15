@@ -3,28 +3,47 @@ package com.hamit.obs.custom.yardimci;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class ResultSetConverter {
-	public static List<Map<String, Object>> convertToList(ResultSet resultSet) throws SQLException {
-		List<Map<String, Object>> resultList = new ArrayList<>();
-		ResultSetMetaData metaData = resultSet.getMetaData();
-		int columnCount = metaData.getColumnCount();
-		while (resultSet.next()) {
-			Map<String, Object> rowMap = new HashMap<>();
-			for (int i = 1; i <= columnCount; i++) {
-				String columnName = metaData.getColumnLabel(i);
-				Object columnValue = resultSet.getObject(i);
-				rowMap.put(columnName, columnValue);
-			}
-			resultList.add(rowMap);
-		}
-		return resultList;
+	public static List<Map<String, Object>> convertToList(ResultSet rs) throws SQLException {
+		List<Map<String, Object>> out = new ArrayList<>();
+	    ResultSetMetaData md = rs.getMetaData();
+	    int n = md.getColumnCount();
+
+	    while (rs.next()) {
+	        Map<String, Object> row = new LinkedHashMap<>(n);
+	        for (int i = 1; i <= n; i++) {
+	            String col = Optional.ofNullable(md.getColumnLabel(i))
+	                                 .orElse(md.getColumnName(i))
+	                                 .trim();
+
+	            int sqlType = md.getColumnType(i);
+	            Object val;
+	            Object raw = rs.getObject(i);
+	            if (raw == null) {
+	                val = null;
+	            } else {
+	                switch (sqlType) {
+	                    case Types.CHAR, Types.VARCHAR, Types.LONGVARCHAR,
+	                         Types.NCHAR, Types.NVARCHAR, Types.LONGNVARCHAR -> {
+	                        String s = rs.getString(i);
+	                        val = (s == null) ? null : s.trim();
+	                    }
+	                    default -> val = raw;
+	                }
+	            }
+	            row.put(col, val);
+	        }
+	        out.add(row);
+	    }
+	    return out;
 	}
 
 	public static List<Map<String, Object>> convertToListPIVOT(ResultSet resultSet, Set<String> sabitKolonlar) throws SQLException {
