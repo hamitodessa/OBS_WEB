@@ -222,7 +222,7 @@ public class CariMySQL implements ICariDatabase{
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService genel hatası.", e);
+			throw new ServiceException("MY CariService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -235,7 +235,7 @@ public class CariMySQL implements ICariDatabase{
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService genel hatası.", e);
+			throw new ServiceException("MY CariService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -343,7 +343,7 @@ public class CariMySQL implements ICariDatabase{
 			}
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService Evrak Okuma", e);
+			throw new ServiceException("MY CariService Evrak Okuma", e);
 		}
 		return dekontDTO; 
 	}
@@ -761,7 +761,7 @@ public class CariMySQL implements ICariDatabase{
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService genel hatası.", e);
+			throw new ServiceException("MY CariService genel hatası.", e);
 		}
 		return resultList;
 	}
@@ -791,7 +791,7 @@ public class CariMySQL implements ICariDatabase{
 			}
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService Evrak Okuma", e);
+			throw new ServiceException("MY CariService Evrak Okuma", e);
 		}
 		return dto; 
 
@@ -806,7 +806,7 @@ public class CariMySQL implements ICariDatabase{
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
-			throw new ServiceException("MS CariService genel hatası.", e);
+			throw new ServiceException("MY CariService genel hatası.", e);
 		}
 		return resultList; 
 	}
@@ -830,12 +830,14 @@ public class CariMySQL implements ICariDatabase{
 	@Override
 	public int cari_tah_fisno_al(String tah_ted, ConnectionDetails cariConnDetails) {
 		int evrakNo = 0;
-		String query = "UPDATE TAH_EVRAK SET NO = NO + 1 OUTPUT INSERTED.NO WHERE CINS = '" + tah_ted + "'";
+		String query = "CALL return_tah_evrak(?,?);";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, 1);
+			preparedStatement.setString(2, tah_ted);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next())
-					evrakNo = resultSet.getInt("NO");
+					evrakNo = resultSet.getInt(1);
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Hesap adı okunamadı", e); 

@@ -37,9 +37,10 @@ public class CariMsSQL implements ICariDatabase{
 	public String[] hesap_adi_oku(String hesap,  ConnectionDetails cariConnDetails) {
 		String[] firmaIsmi = {"",""};
 		String query = "SELECT HESAP,HESAP_CINSI,KARTON,UNVAN FROM HESAP " + 
-				" WHERE HESAP = N'" + hesap + "'";
+				" WHERE HESAP = ? ";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setNString(1, hesap);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					firmaIsmi[0] = resultSet.getString("UNVAN");

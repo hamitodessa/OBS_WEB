@@ -248,16 +248,16 @@ public class createMYSQL {
 		}
 		sql = "CREATE PROCEDURE return_evrak (artino int)"
 				+ " BEGIN"
-				+ " UPDATE EVRAK_NO SET EVRAK = EVRAK + artino WHERE EID = 1;"
-				+ " SELECT EVRAK FROM EVRAK_NO WHERE EID = 1;"
+				+ " UPDATE EVRAK_NO SET EVRAK = LAST_INSERT_ID(EVRAK + artino) WHERE EID = 1;"
+				+ " SELECT LAST_INSERT_ID() AS EVRAK;"
 				+ " END";
 		try (Statement stmt = connection.createStatement()) {
 			stmt.executeUpdate(sql);
 		}
 		sql = "CREATE PROCEDURE return_tah_evrak (artino int,cins VARCHAR(10))"
 				+ " BEGIN"
-				+ " UPDATE TAH_EVRAK SET NO = NO + artino WHERE CINS = cins;"
-				+ " SELECT NO FROM TAH_EVRAK WHERE CINS = cins;"
+				+ " UPDATE TAH_EVRAK SET `NO` = LAST_INSERT_ID(`NO` + artino) WHERE CINS = cinsi;"
+				+ " SELECT LAST_INSERT_ID() AS `NO`;"
 				+ " END";
 		try (Statement stmt = connection.createStatement()) {
 			stmt.executeUpdate(sql);
