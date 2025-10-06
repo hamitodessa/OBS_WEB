@@ -1,5 +1,7 @@
 package com.hamit.obs.custom.yardimci;
 
+import java.time.LocalDate;
+
 public class Global_Yardimci {
 
 	public static String[] ipCevir(String ip) {
@@ -33,4 +35,11 @@ public class Global_Yardimci {
 			result = true;
 		return result ;
 	}
+	
+	public static LocalDate toLocalDateSafe(String s) {
+		String t = s == null ? "" : s.trim();
+		if (t.length() >= 10) t = t.substring(0, 10); 
+		return LocalDate.parse(t);
+	}
+
 }

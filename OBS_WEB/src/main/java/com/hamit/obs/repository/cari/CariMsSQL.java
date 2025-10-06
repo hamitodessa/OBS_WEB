@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.enums.modulbaslikTipi;
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.cari.dekontDTO;
@@ -60,9 +62,9 @@ public class CariMsSQL implements ICariDatabase{
 		int pageSize = pageable.getPageSize();
 		int offset = page * pageSize;
 
-		if (!t1.equals("1900-01-01") || !t2.equals("2100-12-31")) {
-			tARIH = " AND TARIH BETWEEN ? AND ?";
-		}
+		boolean hasDate = !("1900-01-01".equals(t1) && "2100-12-31".equals(t2));
+		if (hasDate)
+			tARIH = " AND TARIH >= ? AND TARIH < ? ";
 		String sql = "SELECT SID ,TARIH, SATIRLAR.EVRAK, ISNULL(IZAHAT.IZAHAT, '') AS IZAHAT, KOD, KUR, BORC, ALACAK, " +
 				"SUM(ALACAK - BORC) OVER(ORDER BY TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE, [USER] " +
 				"FROM SATIRLAR LEFT JOIN IZAHAT " +
@@ -74,9 +76,13 @@ public class CariMsSQL implements ICariDatabase{
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, hesap);
-			if (!t1.equals("1900-01-01") || ! t2.equals("2100-12-31")) {
-				preparedStatement.setString(2, t1);
-				preparedStatement.setString(3, t2 + " 23:59:59.998");
+			if (hasDate) {
+				LocalDate startDate = Global_Yardimci.toLocalDateSafe(t1);
+				LocalDate endDate = Global_Yardimci.toLocalDateSafe(t2);
+				Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
+				Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay());
+				preparedStatement.setTimestamp(2, ts1);
+				preparedStatement.setTimestamp(3, ts2);
 			}
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
@@ -87,7 +93,7 @@ public class CariMsSQL implements ICariDatabase{
 				double alacak = 0;
 				double bakiye =0;
 				if(offset == 0) {
-					List<Map<String, Object>> mizanList = ekstre_mizan(hesap,"1900-01-01",Tarih_Cevir.tarihEksi1(t1) + " 23:59:59.000","   ", "ZZZ","     ", "ZZZZZ",cariConnDetails);
+					List<Map<String, Object>> mizanList = ekstre_mizan(hesap,"1900-01-01",t1,"   ", "ZZZ","     ", "ZZZZZ",cariConnDetails);
 					borc = (double) mizanList.get(0).getOrDefault("ISLEM", 0.0);
 					alacak = (double) mizanList.get(0).getOrDefault("ISLEM2", 0.0);
 					bakiye = alacak - borc;
@@ -133,16 +139,20 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> eski_bakiye(String hesap,String t2, ConnectionDetails cariConnDetails){
+		
+		LocalDate endDate = Global_Yardimci.toLocalDateSafe(t2);
+		Timestamp ts2 = Timestamp.valueOf(endDate.atStartOfDay());
 		String sql = "SELECT SID,TARIH, BORC, ALACAK, " +
 				" SUM(ALACAK - BORC) OVER(ORDER BY TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE" +
 				" FROM SATIRLAR  " +
 				" WHERE HESAP = ? " +
-				" AND SATIRLAR.TARIH <= '" + t2 + "' " + 
+				" AND SATIRLAR.TARIH < ? " + 
 				" ORDER BY TARIH";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, hesap);
+			preparedStatement.setTimestamp(2, ts2);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
 			}
@@ -185,18 +195,28 @@ public class CariMsSQL implements ICariDatabase{
 	@Override
 	public List<Map<String, Object>> ekstre_mizan(String kod, String ilktarih, String sontarih, String ilkhcins,
 			String sonhcins, String ilkkar, String sonkar, ConnectionDetails cariConnDetails) {
+		LocalDate start = Global_Yardimci.toLocalDateSafe(ilktarih);
+		LocalDate end = Global_Yardimci.toLocalDateSafe(sontarih);
 		String sql = "SELECT SATIRLAR.HESAP,HESAP.UNVAN,HESAP.HESAP_CINSI,SUM(SATIRLAR.BORC) AS ISLEM,SUM(SATIRLAR.ALACAK) AS ISLEM2,SUM(SATIRLAR.ALACAK - SATIRLAR.BORC) AS BAKIYE" +
 				" FROM SATIRLAR LEFT JOIN" +
-				" HESAP ON SATIRLAR.HESAP = HESAP.HESAP " +
-				" WHERE SATIRLAR.HESAP =N'" + kod + "'   " + 
-				" AND SATIRLAR.TARIH >= '" + ilktarih + "' AND SATIRLAR.TARIH < '" + sontarih + "' " + 
-				" AND HESAP.HESAP_CINSI BETWEEN N'" + ilkhcins + "'  AND  " +
-				" N'" + sonhcins + "' AND HESAP.KARTON BETWEEN N'" + ilkkar + "' AND N'" + sonkar + "'" +
-				" GROUP BY SATIRLAR.HESAP,HESAP.UNVAN,HESAP.HESAP_CINSI" +
-				" ORDER BY SATIRLAR.HESAP";
+				" HESAP ON SATIRLAR.HESAP = HESAP.HESAP " 
+				+ "WHERE SATIRLAR.HESAP = ? " 
+				+ "AND SATIRLAR.TARIH >= ? AND SATIRLAR.TARIH <  ? " 
+				+ "AND HESAP.HESAP_CINSI BETWEEN ? AND ? " 
+				+ "AND HESAP.KARTON      BETWEEN ? AND ? "
+				+ " GROUP BY SATIRLAR.HESAP,HESAP.UNVAN,HESAP.HESAP_CINSI" 
+				+ " ORDER BY SATIRLAR.HESAP";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			int i = 1;
+			preparedStatement.setNString(i++, kod);
+			preparedStatement.setTimestamp(i++, Timestamp.valueOf(start.atStartOfDay()));
+			preparedStatement.setTimestamp(i++, Timestamp.valueOf(end.atStartOfDay())); 
+			preparedStatement.setNString(i++, ilkhcins);
+			preparedStatement.setNString(i++, sonhcins);
+			preparedStatement.setNString(i++, ilkkar);
+			preparedStatement.setNString(i++, sonkar);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
