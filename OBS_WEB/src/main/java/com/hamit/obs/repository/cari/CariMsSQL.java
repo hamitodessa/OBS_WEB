@@ -1103,7 +1103,7 @@ public class CariMsSQL implements ICariDatabase{
 			LocalDate start = toLocalDateSafe(tahrapDTO.getStartDate());
 			LocalDate end   = toLocalDateSafe(tahrapDTO.getEndDate());
 			Timestamp tsStart = Timestamp.valueOf(start.atStartOfDay());
-			Timestamp tsEnd   = Timestamp.valueOf(end.atStartOfDay());
+			Timestamp tsEnd   = Timestamp.valueOf(end.plusDays(1).atStartOfDay());
 			
 			try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 					PreparedStatement preparedStatement = connection.prepareStatement(sql,
