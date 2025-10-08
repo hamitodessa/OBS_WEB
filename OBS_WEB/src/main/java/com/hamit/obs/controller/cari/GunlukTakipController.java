@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.cari.CariService;
 
@@ -46,7 +45,7 @@ public class GunlukTakipController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			List<Map<String, Object>> kasa_kontrol = cariservice.kasa_kontrol(kodu, tarih);
-			List<Map<String, Object>> kasa_mizan = cariservice.kasa_mizan(kodu,"1900.01.01" ,Tarih_Cevir.tarihEksi1(tarih));
+			List<Map<String, Object>> kasa_mizan = cariservice.kasa_mizan(kodu,"1900-01-01" ,tarih);
 			response.put("data", (kasa_kontrol != null) ? kasa_kontrol : new ArrayList<>());
 			response.put("onceki", (kasa_mizan != null) ? kasa_mizan : new ArrayList<>());
 			response.put("errorMessage", "");
