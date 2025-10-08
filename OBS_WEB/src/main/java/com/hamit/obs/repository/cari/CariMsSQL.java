@@ -42,7 +42,9 @@ public class CariMsSQL implements ICariDatabase{
 		String query = "SELECT HESAP,HESAP_CINSI,KARTON,UNVAN FROM HESAP " + 
 				" WHERE HESAP = ? ";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			preparedStatement.setNString(1, hesap);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
@@ -75,7 +77,9 @@ public class CariMsSQL implements ICariDatabase{
 				" OFFSET " + offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			preparedStatement.setString(1, hesap);
 			if (hasDate) {
 				LocalDate startDate = Global_Yardimci.toLocalDateSafe(t1);
@@ -151,7 +155,9 @@ public class CariMsSQL implements ICariDatabase{
 				" ORDER BY TARIH";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			preparedStatement.setString(1, hesap);
 			preparedStatement.setTimestamp(2, ts2);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -176,7 +182,7 @@ public class CariMsSQL implements ICariDatabase{
 		if (hasDate)
 			tARIH = " AND TARIH >= ? AND TARIH < ? ";
 
-		String sql = "SELECT COUNT(*)  satir " +
+		String sql = "SELECT COUNT(*)  " +
 				" FROM SATIRLAR " +
 				" WHERE HESAP = ? " +
 				tARIH ;
@@ -184,7 +190,9 @@ public class CariMsSQL implements ICariDatabase{
 				cariConnDetails.getJdbcUrl(), 
 				cariConnDetails.getUsername(), 
 				cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			preparedStatement.setString(1, hesap);
 			preparedStatement.setTimestamp(2, ts1);
 			preparedStatement.setTimestamp(3, ts2);
@@ -213,7 +221,9 @@ public class CariMsSQL implements ICariDatabase{
 				+ " ORDER BY SATIRLAR.HESAP";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			int i = 1;
 			preparedStatement.setNString(i++, kod);
 			preparedStatement.setTimestamp(i++, Timestamp.valueOf(start.atStartOfDay()));
@@ -235,7 +245,9 @@ public class CariMsSQL implements ICariDatabase{
 		String sql = "SELECT HESAP FROM HESAP ORDER BY HESAP";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -248,7 +260,9 @@ public class CariMsSQL implements ICariDatabase{
 		String sql = "SELECT * FROM HESAP ORDER BY HESAP";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -259,12 +273,14 @@ public class CariMsSQL implements ICariDatabase{
 	@Override
 	public int cari_sonfisno(ConnectionDetails cariConnDetails) {
 		int evrakNo = 0;
-		String query = "SELECT MAX(EVRAK) AS MAX_NO FROM SATIRLAR";
+		String query = "SELECT MAX(EVRAK)  FROM SATIRLAR";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next())
-					evrakNo = resultSet.getInt("MAX_NO");
+					evrakNo = resultSet.getInt(1);
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Hesap adı okunamadı", e); 
@@ -456,13 +472,15 @@ public class CariMsSQL implements ICariDatabase{
 
 		String sql = sqlBuilder.toString();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			preparedStatement.setString(1, mizanDTO.getHkodu1());
-			preparedStatement.setString(2, mizanDTO.getHkodu2());
-			preparedStatement.setString(3, mizanDTO.getCins1());
-			preparedStatement.setString(4, mizanDTO.getCins2());
-			preparedStatement.setString(5, mizanDTO.getKarton1());
-			preparedStatement.setString(6, mizanDTO.getKarton2());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
+			preparedStatement.setNString(1, mizanDTO.getHkodu1());
+			preparedStatement.setNString(2, mizanDTO.getHkodu2());
+			preparedStatement.setNString(3, mizanDTO.getCins1());
+			preparedStatement.setNString(4, mizanDTO.getCins2());
+			preparedStatement.setNString(5, mizanDTO.getKarton1());
+			preparedStatement.setNString(6, mizanDTO.getKarton2());
 			int paramIndex = 7;
 			if (hasDate) {
 				LocalDate startDate = Global_Yardimci.toLocalDateSafe(mizanDTO.getStartDate());
@@ -485,7 +503,9 @@ public class CariMsSQL implements ICariDatabase{
 		String firmaIsmi = "";
 		String query = "SELECT FIRMA_ADI FROM OZEL";
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
+				PreparedStatement preparedStatement = connection.prepareStatement(query,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
 			if (resultSet.next())
 				firmaIsmi = resultSet.getString("FIRMA_ADI");
@@ -572,7 +592,9 @@ public class CariMsSQL implements ICariDatabase{
 				" HESAP.HESAP = HESAP_DETAY.D_HESAP  WHERE HESAP.HESAP = ? ORDER BY HESAP";
 		hesapplaniDTO hsdto = new hesapplaniDTO();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			preparedStatement.setNString(1, hesap);
 			ResultSet rs = preparedStatement.executeQuery();
 			if (rs.isBeforeFirst()) {
@@ -670,7 +692,7 @@ public class CariMsSQL implements ICariDatabase{
 	             sql,
 	             ResultSet.TYPE_FORWARD_ONLY,
 	             ResultSet.CONCUR_READ_ONLY)) {
-	        //connection.setReadOnly(true);
+	        connection.setReadOnly(true);
 	        int i = 1;
 	        ps.setNString(i++, mizanDTO.getHkodu1());
 	        ps.setNString(i++, mizanDTO.getHkodu2());
@@ -733,10 +755,16 @@ public class CariMsSQL implements ICariDatabase{
 						+ kurConnectionDetails.getPassword() + "', 'SELECT * FROM [OK_Kur" 
 						+ kurConnectionDetails.getDatabaseName() + "].[dbo].[KURLAR]')";
 			}
+			
+			LocalDate startDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getStartDate());
+			LocalDate endDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getEndDate());
+			Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
+			Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay());
+			
+			
 			String tarihFilter = "";
 			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || 	!dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
-				tarihFilter = " AND s.TARIH BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" 
-						+ dvzcevirmeDTO.getEndDate() + " 23:59:59.998'";
+				tarihFilter = " AND s.TARIH >= ?  AND s.TARIH < ?";
 			}
 			String sql = "SELECT s.TARIH, s.EVRAK, I.IZAHAT, " +
 					" ISNULL(IIF(k." + dvzcevirmeDTO.getDvz_cins() + " = 0, 1, k." + dvzcevirmeDTO.getDvz_cins() + "), 1) as CEV_KUR, " +
@@ -748,17 +776,24 @@ public class CariMsSQL implements ICariDatabase{
 					" FROM (SATIRLAR as s LEFT OUTER JOIN IZAHAT as I ON s.EVRAK = I.EVRAK) " +
 					" LEFT OUTER JOIN " + str1 + " as k " +
 					" ON CONVERT(VARCHAR(25), s.TARIH, 101) = CONVERT(VARCHAR(25), k.Tarih, 101) " +
-					" WHERE s.HESAP = N'" + dvzcevirmeDTO.getHesapKodu() + "' " + tarihFilter +
+					" WHERE s.HESAP = ? " + tarihFilter +
 					" AND (k.Kur IS NULL OR k.Kur = '" + dvzcevirmeDTO.getDvz_tur() + "') " +
 					" ORDER BY s.TARIH" +
 					" OFFSET " + offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
 			try (Connection connection = DriverManager.getConnection(
-					cariConnDetails.getJdbcUrl(), 
-					cariConnDetails.getUsername(), 
-					cariConnDetails.getPassword());
-					PreparedStatement stmt = connection.prepareStatement(sql);
-					ResultSet rss = stmt.executeQuery()) {
-				resultList = ResultSetConverter.convertToList(rss);
+			         cariConnDetails.getJdbcUrl(),
+			         cariConnDetails.getUsername(),
+			         cariConnDetails.getPassword());
+			     PreparedStatement stmt = connection.prepareStatement(sql,
+							ResultSet.TYPE_FORWARD_ONLY,
+							ResultSet.CONCUR_READ_ONLY)) {
+			    int i = 1;
+			    stmt.setNString(1, dvzcevirmeDTO.getHesapKodu());
+			    stmt.setTimestamp(i++, ts1);
+			    stmt.setTimestamp(i++, ts2);
+			    try (ResultSet rs = stmt.executeQuery()) {
+			        resultList = ResultSetConverter.convertToList(rs);
+			    }
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Dvz Cevirme: " + e.getMessage(), e);
@@ -771,22 +806,30 @@ public class CariMsSQL implements ICariDatabase{
 		double result = 0 ;
 		try {
 			String tarihFilter = "";
+			LocalDate startDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getStartDate());
+			LocalDate endDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getEndDate());
+			Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
+			Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay());
 			if (!dvzcevirmeDTO.getStartDate().equals("1900-01-01") || 	!dvzcevirmeDTO.getEndDate().equals("2100-12-31")) {
-				tarihFilter = " AND s.TARIH BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" 
-						+ dvzcevirmeDTO.getEndDate() + " 23:59:59.998'";
+				tarihFilter = " AND TARIH >= ?  AND TARIH < ?";
 			}
-			String sql = "SELECT COUNT(TARIH) as satir " +
+			String sql = "SELECT COUNT(TARIH)  " +
 					" FROM SATIRLAR " +
-					" WHERE HESAP = N'" + dvzcevirmeDTO.getHesapKodu() + "' " + tarihFilter +
-					" ORDER BY satir ";
+					" WHERE HESAP = ?  " + tarihFilter ;
 			try (Connection connection = DriverManager.getConnection(
-					cariConnDetails.getJdbcUrl(), 
-					cariConnDetails.getUsername(), 
-					cariConnDetails.getPassword());
-					PreparedStatement stmt = connection.prepareStatement(sql);
-					ResultSet resultSet = stmt.executeQuery()) {
-				if (resultSet.next())
-					result  = resultSet.getInt("satir");
+			         cariConnDetails.getJdbcUrl(),
+			         cariConnDetails.getUsername(),
+			         cariConnDetails.getPassword());
+			     PreparedStatement stmt = connection.prepareStatement(sql,
+							ResultSet.TYPE_FORWARD_ONLY,
+							ResultSet.CONCUR_READ_ONLY)) {
+					stmt.setNString(1, dvzcevirmeDTO.getHesapKodu());
+					stmt.setTimestamp(2, ts1);
+				    stmt.setTimestamp(3, ts2);
+				    try (ResultSet rs = stmt.executeQuery()) {
+				        if (rs.next())
+				        	result = rs.getInt(1);
+				    }
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Dvz Cevirme: " + e.getMessage(), e);
@@ -801,7 +844,9 @@ public class CariMsSQL implements ICariDatabase{
 				" ORDER BY " + nerden;
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
@@ -813,12 +858,18 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public tahsilatDTO tahfiskon(String fisNo,Integer tah_ted, ConnectionDetails cariConnDetails) {
-		String sql = "SELECT * FROM TAH_DETAY WHERE EVRAK = '" + fisNo + "' AND CINS = '" + tah_ted + "'";
+		String sql = "SELECT * FROM TAH_DETAY WHERE EVRAK = ? AND CINS = ? ";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		tahsilatDTO dto = new tahsilatDTO();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
+			preparedStatement.setNString(1, fisNo); 
+			preparedStatement.setInt(2, tah_ted);
+			
 			ResultSet resultSet = preparedStatement.executeQuery();
+			
 			if (resultSet.isBeforeFirst()) {
 				resultSet.next();
 				dto.setFisNo(resultSet.getString("EVRAK"));
@@ -843,10 +894,14 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> tah_cek_doldur(String fisNo, Integer tah_ted, ConnectionDetails cariConnDetails) {
-		String sql = "SELECT * FROM TAH_CEK WHERE EVRAK = '"+ fisNo +"' AND CINS = '" + tah_ted + "'";
+		String sql = "SELECT * FROM TAH_CEK WHERE EVRAK = ? AND CINS = ?";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
+			preparedStatement.setNString(1, fisNo);
+			preparedStatement.setInt(2, tah_ted);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
@@ -859,9 +914,14 @@ public class CariMsSQL implements ICariDatabase{
 	@Override
 	public int cari_tahsonfisno(Integer tah_ted,ConnectionDetails cariConnDetails) {
 		int evrakNo = 0;
-		String query = "SELECT MAX(CONVERT(int,EVRAK)) AS MAX_NO FROM TAH_DETAY WHERE CINS = '" + tah_ted + "'";
+		String sql = "SELECT MAX(TRY_CONVERT(int, EVRAK)) AS MAX_NO " +
+				"FROM TAH_DETAY " +
+				"WHERE CINS = ? AND TRY_CONVERT(int, EVRAK) IS NOT NULL";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
+			preparedStatement.setInt(1, tah_ted);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next())
 					evrakNo = resultSet.getInt("MAX_NO");
@@ -875,9 +935,10 @@ public class CariMsSQL implements ICariDatabase{
 	@Override
 	public int cari_tah_fisno_al(String tah_ted, ConnectionDetails cariConnDetails) {
 		int evrakNo = 0;
-		String query = "UPDATE TAH_EVRAK SET NO = NO + 1 OUTPUT INSERTED.NO WHERE CINS = '" + tah_ted + "'";
+		String query = "UPDATE TAH_EVRAK SET NO = NO + 1 OUTPUT INSERTED.NO WHERE CINS = ? ";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setNString(1, tah_ted);   
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next())
 					evrakNo = resultSet.getInt("NO");
@@ -890,13 +951,15 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public void tah_kayit(tahsilatDTO tahsilatDTO, ConnectionDetails cariConnDetails) {
-		String sql1 = "DELETE FROM TAH_DETAY WHERE EVRAK = '" + tahsilatDTO.getFisNo() + "' AND CINS = '" + tahsilatDTO.getTah_ted() + "'";
+		String sql1 = "DELETE FROM TAH_DETAY WHERE EVRAK = ? AND CINS = ? ";
 		String sql = "INSERT INTO TAH_DETAY (EVRAK, TARIH, C_HES, A_HES, CINS, TUTAR, TUR, ACIKLAMA, DVZ_CINS, POS_BANKA)" +
 				" VALUES (?,?,?,?,?,?,?,?,?,?)";
 		try (Connection connection = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql1);
 				PreparedStatement insertStmt = connection.prepareStatement(sql)) {
+			deleteStmt.setNString(1, tahsilatDTO.getFisNo());
+			deleteStmt.setInt(2, tahsilatDTO.getTah_ted());
 			deleteStmt.executeUpdate();
 			insertStmt.setString(1, tahsilatDTO.getFisNo());
 			insertStmt.setTimestamp(2, Timestamp.valueOf(tahsilatDTO.getTahTarih()));
@@ -916,10 +979,12 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public void tah_cek_sil(tahsilatDTO tahsilatDTO, ConnectionDetails cariConnDetails) {
-		String sql = "DELETE FROM TAH_CEK WHERE EVRAK = '" + tahsilatDTO.getFisNo() + "' AND CINS = '" + tahsilatDTO.getTah_ted() + "'" ;
+		String sql = "DELETE FROM TAH_CEK WHERE EVRAK = ? AND CINS = ? " ;
 		try (Connection connection = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
+			deleteStmt.setNString(1, tahsilatDTO.getFisNo()); 
+			deleteStmt.setInt(2, tahsilatDTO.getTah_ted());
 			deleteStmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Tahsilat cek silme sırasında bir hata oluştu", e);
@@ -951,17 +1016,34 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public void tah_sil(String fisno, Integer tah_ted, ConnectionDetails cariConnDetails) {
-		String sql1 = "DELETE FROM TAH_CEK WHERE EVRAK = '" + fisno + "' AND CINS = '" + tah_ted + "'" ;
-		String sql = "DELETE FROM TAH_DETAY WHERE EVRAK = '" + fisno + "' AND CINS = '" + tah_ted + "'" ;
-		try (Connection connection = DriverManager.getConnection(
-				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement deleteStmt = connection.prepareStatement(sql1);
-				PreparedStatement insertStmt = connection.prepareStatement(sql)) {
-			deleteStmt.executeUpdate();
-			insertStmt.executeUpdate();
-		} catch (Exception e) {
-			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
-		}
+		String sqlCek = "DELETE FROM TAH_CEK WHERE EVRAK = ? AND CINS = ? " ;
+		String sqlDetay = "DELETE FROM TAH_DETAY WHERE EVRAK = ? AND CINS = ? " ;
+		try (Connection con = DriverManager.getConnection(
+	            cariConnDetails.getJdbcUrl(),
+	            cariConnDetails.getUsername(),
+	            cariConnDetails.getPassword())) {
+
+	        boolean oldAuto = con.getAutoCommit();
+	        con.setAutoCommit(false);
+	        try (PreparedStatement psDetay = con.prepareStatement(sqlDetay);
+	             PreparedStatement psCek   = con.prepareStatement(sqlCek)) {
+	            psDetay.setNString(1, fisno);
+	            psDetay.setInt(2, tah_ted);
+	            psDetay.executeUpdate();
+
+	            psCek.setNString(1, fisno);
+	            psCek.setInt(2, tah_ted);
+	            psCek.executeUpdate();
+	            con.commit();
+	        } catch (Exception ex) {
+	            try { con.rollback(); } catch (SQLException ignore) {}
+	            throw new ServiceException("Evrak silme sırasında hata oluştu", ex);
+	        } finally {
+	            try { con.setAutoCommit(oldAuto); } catch (SQLException ignore) {}
+	        }
+	    } catch (SQLException e) {
+	        throw new ServiceException("Bağlantı hatası", e);
+	    }
 	}
 
 	@Override
@@ -1013,12 +1095,26 @@ public class CariMsSQL implements ICariDatabase{
 					" DVZ_CINS,TUTAR" +
 					" FROM TAH_DETAY left join " + str1 + " on adr.M_Kodu = A_HES" + 
 					" WHERE " + cinString  + turString  + posString +
-					" TARIH >= '" + tahrapDTO.getStartDate() + "' AND TARIH < '" + tahrapDTO.getEndDate() + "'" + 
-					" AND EVRAK >= '" + tahrapDTO.getEvrak1() + "' AND EVRAK < '" + tahrapDTO.getEvrak2() + "'" + 
-					" AND C_HES >= '" + tahrapDTO.getHkodu1() + "' AND C_HES < '" + tahrapDTO.getHkodu2() + "'" + 
+					" TARIH >= ? AND TARIH < ? " + 
+					" AND EVRAK >= ? AND EVRAK <= ? " + 
+					" AND C_HES >= ? AND C_HES <= ? " + 
 					" ORDER BY TARIH,EVRAK" ;
+			
+			LocalDate start = toLocalDateSafe(tahrapDTO.getStartDate());
+			LocalDate end   = toLocalDateSafe(tahrapDTO.getEndDate());
+			Timestamp tsStart = Timestamp.valueOf(start.atStartOfDay());
+			Timestamp tsEnd   = Timestamp.valueOf(end.atStartOfDay());
+			
 			try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-					PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+					PreparedStatement preparedStatement = connection.prepareStatement(sql,
+							ResultSet.TYPE_FORWARD_ONLY,
+							ResultSet.CONCUR_READ_ONLY)) {
+				preparedStatement.setTimestamp(1, tsStart);
+				preparedStatement.setTimestamp(2, tsEnd);
+				preparedStatement.setString(3, tahrapDTO.getEvrak1() );
+				preparedStatement.setString(4,  tahrapDTO.getEvrak2());
+				preparedStatement.setString(5, tahrapDTO.getHkodu1() );
+				preparedStatement.setString(6, tahrapDTO.getHkodu2());
 				ResultSet resultSet = preparedStatement.executeQuery();
 				resultList = ResultSetConverter.convertToList(resultSet); 
 				resultSet.close();
@@ -1034,7 +1130,9 @@ public class CariMsSQL implements ICariDatabase{
 		String sql = "SELECT * FROM TAH_AYARLAR";
 		tahayarDTO tahayarDTO = new tahayarDTO();
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			ResultSet rs = preparedStatement.executeQuery();
 			if (rs.isBeforeFirst()) {
 				rs.next();
@@ -1055,26 +1153,38 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public void tahayar_kayit(tahayarDTO tahayarDTO, ConnectionDetails cariConnDetails) {
-		String sql = "INSERT INTO TAH_AYARLAR (FIR_ISMI,ADR_1,ADR_2,VD_VN,MAIL,DIGER,LOGO,KASE)" +
+		String SQL_INSERT = "INSERT INTO TAH_AYARLAR (FIR_ISMI,ADR_1,ADR_2,VD_VN,MAIL,DIGER,LOGO,KASE)" +
 				" VALUES (?,?,?,?,?,?,?,?)" ;
-		String deletesql=  "DELETE FROM TAH_AYARLAR " ;
-		try (Connection connection = DriverManager.getConnection(
-				cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement deleteStmt = connection.prepareStatement(deletesql);
-				PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1,tahayarDTO.getAdi());
-			stmt.setString(2, tahayarDTO.getAd1());
-			stmt.setString(3, tahayarDTO.getAd2());
-			stmt.setString(4, tahayarDTO.getVdvn());
-			stmt.setString(5, tahayarDTO.getMail());
-			stmt.setString(6, tahayarDTO.getDiger());
-			stmt.setBytes(7, tahayarDTO.getImagelogo());
-			stmt.setBytes(8, tahayarDTO.getImagekase());
-			deleteStmt.executeUpdate();
-			stmt.executeUpdate();
-		} catch (Exception e) {
-			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
-		}
+		String SQL_DELETE=  "DELETE FROM TAH_AYARLAR " ;
+		try (Connection con = DriverManager.getConnection(
+	            cariConnDetails.getJdbcUrl(),
+	            cariConnDetails.getUsername(),
+	            cariConnDetails.getPassword())) {
+	        boolean old = con.getAutoCommit();
+	        con.setAutoCommit(false);
+	        try (PreparedStatement psDel = con.prepareStatement(SQL_DELETE);
+	             PreparedStatement psIns = con.prepareStatement(SQL_INSERT)) {
+	            psDel.executeUpdate();
+	            int i = 1;
+	            psIns.setString(i++, tahayarDTO.getAdi());
+	            psIns.setString(i++, tahayarDTO.getAd1());
+	            psIns.setString(i++, tahayarDTO.getAd2());
+	            psIns.setString(i++, tahayarDTO.getVdvn());
+	            psIns.setString(i++, tahayarDTO.getMail());
+	            psIns.setString(i++, tahayarDTO.getDiger());
+	            psIns.setBytes(i++, tahayarDTO.getImagelogo());
+	            psIns.setBytes(i++, tahayarDTO.getImagekase());
+	            psIns.executeUpdate();
+	            con.commit();
+	        } catch (Exception ex) {
+	            try { con.rollback(); } catch (Exception ignore) {}
+	            throw new ServiceException("TAH_AYARLAR kaydı sırasında hata", ex);
+	        } finally {
+	            try { con.setAutoCommit(old); } catch (Exception ignore) {}
+	        }
+	    } catch (SQLException e) {
+	        throw new ServiceException("Bağlantı hatası", e);
+	    }
 	}
 
 	@Override
@@ -1082,7 +1192,9 @@ public class CariMsSQL implements ICariDatabase{
 		String sql = "SELECT * FROM TAH_AYARLAR";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -1098,10 +1210,14 @@ public class CariMsSQL implements ICariDatabase{
 						+ " TA.KASE,TC.BANKA,TC.SUBE,TC.SERI,TC.HESAP,TC.BORCLU,TC.TARIH,TC.TUTAR "
 						+ " FROM TAH_AYARLAR TA "
 						+ " CROSS JOIN TAH_CEK TC "
-						+ " WHERE TC.EVRAK = '" +fisno + "' AND TC.CINS = '" + tah_ted + "'";
+						+ " WHERE TC.EVRAK = ? AND TC.CINS = ? ";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
+			preparedStatement.setNString(1, fisno); 
+			preparedStatement.setInt(2, tah_ted); 
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -1132,7 +1248,9 @@ public class CariMsSQL implements ICariDatabase{
 				" HESAP.HESAP = HESAP_DETAY.D_HESAP ORDER BY HESAP";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -1144,12 +1262,12 @@ public class CariMsSQL implements ICariDatabase{
 	@Override
 	public int hesap_plani_kayit_adedi(ConnectionDetails cariConnDetails) {
 		int kayitSayi = 0;
-		String query = "SELECT COUNT(HESAP) AS SAYI FROM HESAP";
+		String query = "SELECT COUNT(*) FROM HESAP";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next())
-					kayitSayi = resultSet.getInt("SAYI");
+					kayitSayi = resultSet.getInt(1);
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Yeni Evrak No Alinamadi", e); 
@@ -1159,21 +1277,35 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public void cari_kod_degis_hesap(String eskikod, String yenikod, ConnectionDetails cariConnDetails) {
-	    String sql = "UPDATE HESAP SET HESAP = ? WHERE HESAP = ?";
-	    String sql2 = "UPDATE HESAP_DETAY SET D_HESAP = ? WHERE D_HESAP = ?";
-	    try (Connection connection = DriverManager.getConnection(
-	            cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword())) {
-	        try (PreparedStatement stmt1 = connection.prepareStatement(sql);
-	             PreparedStatement stmt2 = connection.prepareStatement(sql2)) {
-	            stmt1.setString(1, yenikod);
-	            stmt1.setString(2, eskikod);
-	            stmt1.executeUpdate();
-	            stmt2.setString(1, yenikod);
-	            stmt2.setString(2, eskikod);
-	            stmt2.executeUpdate();
+	    String SQL_UPD_HESAP = "UPDATE HESAP SET HESAP = ? WHERE HESAP = ? ";
+	    String SQL_UPD_HESAP_DETAY = "UPDATE HESAP_DETAY SET D_HESAP = ? WHERE D_HESAP = ?";
+	    try (Connection con = DriverManager.getConnection(
+	            cariConnDetails.getJdbcUrl(),
+	            cariConnDetails.getUsername(),
+	            cariConnDetails.getPassword())) {
+
+	        boolean oldAuto = con.getAutoCommit();
+	        con.setAutoCommit(false);
+	        try {
+	            try (PreparedStatement ps1 = con.prepareStatement(SQL_UPD_HESAP);
+	                 PreparedStatement ps2 = con.prepareStatement(SQL_UPD_HESAP_DETAY)) {
+	                ps1.setString(1, yenikod);
+	                ps1.setString(2, eskikod);
+	                ps1.executeUpdate();
+
+	                ps2.setString(1, yenikod);
+	                ps2.setString(2, eskikod);
+	                ps2.executeUpdate();
+	            }
+	            con.commit();
+	        } catch (Exception ex) {
+	            try { con.rollback(); } catch (Exception ignore) {}
+	            throw new ServiceException("Hesap kodu değiştirme sırasında hata", ex);
+	        } finally {
+	            try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
 	        }
-	    } catch (Exception e) {
-	        throw new ServiceException(e.getMessage());
+	    } catch (SQLException e) {
+	        throw new ServiceException("Bağlantı hatası", e);
 	    }
 	}
 
@@ -1207,14 +1339,27 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> kasa_kontrol(String hesap, String t1, ConnectionDetails cariConnDetails) {
-		String sql =  "SELECT SATIRLAR.EVRAK,IZAHAT,KOD,BORC,ALACAK,[USER]" +
-				" FROM SATIRLAR,IZAHAT" +
-				" WHERE SATIRLAR.EVRAK = IZAHAT.EVRAK and HESAP =N'" + hesap + "'" +
-				" AND CONVERT(VARCHAR(25),TARIH,121) LIKE '" + t1 + "%'" +
-				" ORDER BY SATIRLAR.EVRAK";
+		String sql =  "SELECT S.EVRAK, I.IZAHAT AS IZAHAT, S.KOD, S.BORC, S.ALACAK, S.[USER] " +
+				"FROM SATIRLAR S " +
+				"JOIN IZAHAT I ON S.EVRAK = I.EVRAK " +
+				"WHERE S.HESAP = ? " +
+				"  AND S.TARIH >= ? " +
+				"  AND S.TARIH < ? " +
+				"ORDER BY S.EVRAK";
+		
+		LocalDate start = toLocalDateSafe(t1);
+		Timestamp tsStart = Timestamp.valueOf(start.atStartOfDay());
+		Timestamp tsEnd   = Timestamp.valueOf(start.plusDays(1).atStartOfDay());
+		
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
+			int i = 1;
+			preparedStatement.setNString(i++, hesap);
+			preparedStatement.setTimestamp(i++, tsStart);
+			preparedStatement.setTimestamp(i++, tsEnd);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -1226,16 +1371,30 @@ public class CariMsSQL implements ICariDatabase{
 	@Override
 	public List<Map<String, Object>> kasa_mizan(String kod, String ilktarih, String sontarih,
 			ConnectionDetails cariConnDetails) {
-		String sql =  "SELECT SATIRLAR.HESAP,HESAP.UNVAN,HESAP.HESAP_CINSI, SUM(SATIRLAR.BORC) AS islem, SUM(SATIRLAR.ALACAK) AS islem2, SUM(SATIRLAR.ALACAK - SATIRLAR.BORC) AS bakiye" +
-				" FROM SATIRLAR LEFT JOIN" +
-				" HESAP ON SATIRLAR.HESAP = HESAP.HESAP" +
-				" WHERE SATIRLAR.HESAP = N'" + kod + "'" + 
-				" AND SATIRLAR.TARIH >= '" + ilktarih + "' AND SATIRLAR.TARIH < '" + sontarih + " 23:59:59.998'" +
-				" GROUP BY SATIRLAR.HESAP,HESAP.UNVAN,HESAP.HESAP_CINSI" +
-				" ORDER BY SATIRLAR.HESAP";
+		String sql =  "SELECT S.HESAP, H.UNVAN, H.HESAP_CINSI, " 
+				+ "       SUM(S.BORC)   AS islem, "
+				+ "       SUM(S.ALACAK) AS islem2, "
+				+ "       SUM(S.ALACAK - S.BORC) AS bakiye " 
+				+ "FROM SATIRLAR S "
+				+ "LEFT JOIN HESAP H ON S.HESAP = H.HESAP " 
+				+ "WHERE S.HESAP = ? " 
+				+ "  AND S.TARIH >= ? "
+				+ "  AND S.TARIH <  ? "
+				+ "GROUP BY S.HESAP, H.UNVAN, H.HESAP_CINSI " 
+				+ "ORDER BY S.HESAP";
+		
+		LocalDate start = toLocalDateSafe(ilktarih);
+		LocalDate end = toLocalDateSafe(sontarih);
+		
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
+			int i = 1;
+			preparedStatement.setNString(i++, kod);
+			preparedStatement.setTimestamp(i++, Timestamp.valueOf(start.atStartOfDay()));
+			preparedStatement.setTimestamp(i++, Timestamp.valueOf(end.atStartOfDay()));
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {

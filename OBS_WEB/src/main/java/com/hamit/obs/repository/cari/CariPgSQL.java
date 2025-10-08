@@ -896,9 +896,9 @@ public class CariPgSQL implements ICariDatabase{
 					" \"DVZ_CINS\",\"TUTAR\"" +
 					" FROM \"TAH_DETAY\" " + 
 					" WHERE " + cinString  + turString  + posString +
-					" \"TARIH\" >= '" + tahrapDTO.getStartDate() + "' AND \"TARIH\" < '" + tahrapDTO.getEndDate() + "'" + 
-					" AND \"EVRAK\" >= '" + tahrapDTO.getEvrak1() + "' AND \"EVRAK\" < '" + tahrapDTO.getEvrak2() + "'" + 
-					" AND \"C_HES\" >= '" + tahrapDTO.getHkodu1() + "' AND \"C_HES\" < '" + tahrapDTO.getHkodu2() + "'" + 
+					" \"TARIH\" >= '" + tahrapDTO.getStartDate() + "' AND \"TARIH\" <= '" + tahrapDTO.getEndDate() + "'" + 
+					" AND \"EVRAK\" >= '" + tahrapDTO.getEvrak1() + "' AND \"EVRAK\" <= '" + tahrapDTO.getEvrak2() + "'" + 
+					" AND \"C_HES\" >= '" + tahrapDTO.getHkodu1() + "' AND \"C_HES\" <= '" + tahrapDTO.getHkodu2() + "'" + 
 					" ORDER BY \"TARIH\",\"EVRAK\"" ;
 			try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 					PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
