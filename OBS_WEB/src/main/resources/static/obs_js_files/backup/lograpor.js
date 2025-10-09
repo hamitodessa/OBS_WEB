@@ -139,3 +139,15 @@ async function logliste(page = 0) {
     document.body.style.cursor = "default";
   }
 }
+
+function ileriSayfa()
+ { 
+	logliste(currentPage + 1); 
+	
+ }
+ 
+  function geriSayfa() 
+	{ if (currentPage > 0) 
+		logliste(currentPage - 1); 
+	
+	}
