@@ -114,7 +114,7 @@ async function logliste(page = 0) {
       const tr = document.createElement("tr");
       tr.classList.add("table-row-height");
 
-      [row.TARIH, row.ACIKLAMA, row.EMIR_ISMI].forEach(text => {
+      [row.TARIH,row.MSJTYPE, row.ACIKLAMA, row.EMIR_ISMI].forEach(text => {
         const td = document.createElement("td");
         td.innerText = text ?? "";
         tr.appendChild(td);
