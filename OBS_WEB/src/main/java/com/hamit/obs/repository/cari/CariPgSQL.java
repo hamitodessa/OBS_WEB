@@ -41,7 +41,9 @@ public class CariPgSQL implements ICariDatabase{
 		String query = "SELECT \"HESAP\",\"HESAP_CINSI\",\"KARTON\",\"UNVAN\" FROM \"HESAP\"" + 
 				" WHERE \"HESAP\" = '" + hesap + "'";
 		try (Connection connection =  DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query,
+						ResultSet.TYPE_FORWARD_ONLY,
+						ResultSet.CONCUR_READ_ONLY)) {
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					firmaIsmi[0] = resultSet.getString("UNVAN");

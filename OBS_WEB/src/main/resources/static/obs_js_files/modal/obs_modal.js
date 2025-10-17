@@ -79,7 +79,6 @@ function openFirstModal(nerdenGeldi) {
 		$(modal).modal('show');
 	}
 }
-//tableBody.classList.add("table-row-height");
 
 async function openSecondModal(inputId, secondnerden) {
 	activeNestedInputId = inputId;
