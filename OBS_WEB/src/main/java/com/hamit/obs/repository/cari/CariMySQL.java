@@ -66,7 +66,7 @@ public class CariMySQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable, ConnectionDetails cariConnDetails) {
-		
+
 		int page = pageable.getPageNumber();
 		int pageSize = pageable.getPageSize();
 		int offset = page * pageSize;
@@ -74,7 +74,7 @@ public class CariMySQL implements ICariDatabase{
 		boolean hasDate = !("1900-01-01".equals(t1) && "2100-12-31".equals(t2));
 		if (hasDate)
 			tARIH = " AND TARIH >= ? AND TARIH < ? ";
-		
+
 		String sql = "SELECT SID,TARIH,SATIRLAR.EVRAK ," + 
 				" IFNULL(IZAHAT.IZAHAT,'') AS IZAHAT,KOD,KUR,BORC,ALACAK," + 
 				" SUM(ALACAK-BORC) OVER(ORDER BY TARIH ROWS BETWEEN UNBOUNDED PRECEDING And CURRENT ROW) AS BAKIYE,USER" + 
@@ -126,14 +126,14 @@ public class CariMySQL implements ICariDatabase{
 				else {
 					List<Map<String, Object>> komplelist = eski_bakiye(hesap,resultList.get(0).get("TARIH").toString(),cariConnDetails);
 					if (komplelist != null && !komplelist.isEmpty()) {
-					    for (int i = komplelist.size() - 1; i > 0; i--) {
-					        if (komplelist.get(i).get("SID").toString().equals(resultList.get(0).get("SID").toString())) {
-					            bakiye = (double) komplelist.get(i - 1).get("BAKIYE");
-					            komplelist.clear();
-					            komplelist = null;
-					            break;
-					        }
-					    }
+						for (int i = komplelist.size() - 1; i > 0; i--) {
+							if (komplelist.get(i).get("SID").toString().equals(resultList.get(0).get("SID").toString())) {
+								bakiye = (double) komplelist.get(i - 1).get("BAKIYE");
+								komplelist.clear();
+								komplelist = null;
+								break;
+							}
+						}
 					}
 				}
 				for (Map<String, Object> row : resultList) {
@@ -148,7 +148,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return resultList;
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> eski_bakiye(String hesap,String t2,ConnectionDetails cariConnDetails){
 		LocalDate endDate = Global_Yardimci.toLocalDateSafe(t2);
@@ -172,7 +172,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return resultList;
 	}
-	
+
 	@Override
 	public double eks_raporsize(String hesap, String t1, String t2, ConnectionDetails cariConnDetails) {
 		double result = 0 ;
@@ -259,7 +259,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return resultList; 
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> hp_pln(ConnectionDetails cariConnDetails) {
 		String sql = "SELECT * FROM HESAP ORDER BY HESAP";
@@ -275,7 +275,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return resultList; 
 	}
-	
+
 	@Override
 	public int cari_sonfisno(ConnectionDetails cariConnDetails) {
 		int evrakNo = 0;
@@ -293,7 +293,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return evrakNo;
 	}
-	
+
 	@Override
 	public boolean cari_dekont_kaydet(dekontDTO dBilgi, ConnectionDetails cariConnDetails) {
 		String sql = "INSERT INTO SATIRLAR (HESAP,TARIH,H,EVRAK,CINS,KUR,BORC,ALACAK,KOD,USER) " +
@@ -314,7 +314,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return true;		
 	}
-	
+
 	private void addSatir(PreparedStatement stmt, String hesap, String tarih, String h, int evrak,
 			String cins, double kur, double borc, double alacak, String kod, String user) throws SQLException {
 		stmt.setString(1, hesap);
@@ -338,7 +338,7 @@ public class CariMySQL implements ICariDatabase{
 			stmt3.executeUpdate();
 		}
 	}
-	
+
 	@Override
 	public List<dekontDTO> fiskon(int fisNo, ConnectionDetails cariConnDetails) {
 		String sql = "SELECT HESAP,TARIH,H,SATIRLAR.EVRAK,CINS, KUR,BORC,ALACAK,IFNULL(IZAHAT,'') AS IZAHAT,KOD,USER" +
@@ -390,7 +390,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return dekontDTO; 
 	}
-	
+
 	@Override
 	public int yenifisno(ConnectionDetails cariConnDetails) {
 		int evrakNo = 0;
@@ -408,7 +408,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return evrakNo;
 	}
-	
+
 	@Override
 	public void evrak_yoket(int evrakno,ConnectionDetails cariConnDetails) {
 		String delSatirlar = "DELETE FROM SATIRLAR WHERE EVRAK = ?";
@@ -464,7 +464,7 @@ public class CariMySQL implements ICariDatabase{
 		boolean hasDate = !("1900-01-01".equals(mizanDTO.getStartDate()) && "2100-12-31".equals(mizanDTO.getEndDate()));
 		if (hasDate)
 			sqlBuilder.append(" AND TARIH >= ? AND TARIH < ? ");
-		
+
 		sqlBuilder.append("GROUP BY SATIRLAR.HESAP, HESAP.UNVAN, HESAP.HESAP_CINSI ")
 		.append(havingClause)
 		.append("ORDER BY SATIRLAR.HESAP ASC ");
@@ -496,7 +496,7 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return resultList;
 	}
-	
+
 	@Override
 	public String cari_firma_adi(ConnectionDetails cariConnDetails) {
 		String firmaIsmi = "";
@@ -513,41 +513,41 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return firmaIsmi;
 	}
-	
+
 	@Override
 	public void hsp_sil(String hesap,ConnectionDetails cariConnDetails) {
 		String queryHesap = "DELETE FROM HESAP WHERE HESAP = ?";
 		String queryHesapDetay = "DELETE FROM HESAP_DETAY WHERE D_HESAP = ?";
 		Connection con = null;
-	    boolean oldAuto = true;
-	    try {
-	        con = DriverManager.getConnection(
-	                cariConnDetails.getJdbcUrl(),
-	                cariConnDetails.getUsername(),
-	                cariConnDetails.getPassword());
-	        oldAuto = con.getAutoCommit();
-	        con.setAutoCommit(false);
-	        try (PreparedStatement psDetay = con.prepareStatement(queryHesapDetay);
-	             PreparedStatement psHesap = con.prepareStatement(queryHesap)) {
-	            psDetay.setString(1, hesap);
-	            psDetay.executeUpdate();
-	            psHesap.setString(1, hesap);
-	            psHesap.executeUpdate();
-	        }
-	        con.commit();
-	    } catch (Exception e) {
-	        if (con != null) {
-	            try { con.rollback(); } catch (Exception ignore) {}
-	        }
-	        throw new ServiceException("Hesap silme sırasında bir hata oluştu", e);
-	    } finally {
-	        if (con != null) {
-	            try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
-	            try { con.close(); } catch (Exception ignore) {}
-	        }
-	    }	
+		boolean oldAuto = true;
+		try {
+			con = DriverManager.getConnection(
+					cariConnDetails.getJdbcUrl(),
+					cariConnDetails.getUsername(),
+					cariConnDetails.getPassword());
+			oldAuto = con.getAutoCommit();
+			con.setAutoCommit(false);
+			try (PreparedStatement psDetay = con.prepareStatement(queryHesapDetay);
+					PreparedStatement psHesap = con.prepareStatement(queryHesap)) {
+				psDetay.setString(1, hesap);
+				psDetay.executeUpdate();
+				psHesap.setString(1, hesap);
+				psHesap.executeUpdate();
+			}
+			con.commit();
+		} catch (Exception e) {
+			if (con != null) {
+				try { con.rollback(); } catch (Exception ignore) {}
+			}
+			throw new ServiceException("Hesap silme sırasında bir hata oluştu", e);
+		} finally {
+			if (con != null) {
+				try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
+				try { con.close(); } catch (Exception ignore) {}
+			}
+		}	
 	}
-	
+
 	@Override
 	public void hpln_kayit(hesapplaniDTO hesapplaniDTO, ConnectionDetails cariConnDetails) {
 		String sql = "INSERT INTO HESAP (HESAP,UNVAN,KARTON,HESAP_CINSI,USER) " +
@@ -565,7 +565,7 @@ public class CariMySQL implements ICariDatabase{
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
 		}
 	}
-	
+
 	@Override
 	public void hpln_detay_kayit(hesapplaniDTO hesapplaniDTO, ConnectionDetails cariConnDetails) {
 		String sql = "INSERT INTO HESAP_DETAY (D_HESAP,YETKILI,ADRES_1,ADRES_2,SEMT,SEHIR,VERGI_DAIRESI,VERGI_NO,TEL_1,TEL_2, " + 
@@ -600,7 +600,7 @@ public class CariMySQL implements ICariDatabase{
 			throw new ServiceException("Veritabanı hatası: " + e.getErrorCode(), e);
 		}
 	}
-	
+
 	@Override
 	public hesapplaniDTO hsp_pln(String hesap, ConnectionDetails cariConnDetails) {
 		String sql = "SELECT HESAP,UNVAN,HESAP_CINSI,KARTON,YETKILI,ADRES_1,ADRES_2,SEMT,SEHIR,VERGI_DAIRESI," + 
@@ -650,77 +650,77 @@ public class CariMySQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> ozel_mizan(mizanDTO mizanDTO, ConnectionDetails cariConnDetails) {
-	    List<Map<String, Object>> resultList = new ArrayList<>();
-	    LocalDate start = Global_Yardimci.toLocalDateSafe(mizanDTO.getStartDate());
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		LocalDate start = Global_Yardimci.toLocalDateSafe(mizanDTO.getStartDate());
 		LocalDate end   = Global_Yardimci.toLocalDateSafe(mizanDTO.getEndDate());
 		Timestamp tsStart = Timestamp.valueOf(start.atStartOfDay());
 		Timestamp tsEnd   = Timestamp.valueOf(end.atStartOfDay());
-		
-	    String havingCondition = "";
-	    if (mizanDTO.getHangi_tur().equals("Borclu Hesaplar")) {
-	        havingCondition = " HAVING BAKIYE < 0 ";
-	    } else if (mizanDTO.getHangi_tur().equals("Alacakli Hesaplar")) {
-	        havingCondition = " HAVING BAKIYE > 0 ";
-	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olanlar")) {
-	        havingCondition = " HAVING BAKIYE = 0 ";
-	    } else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olmayanlar")) {
-	        havingCondition = " HAVING BAKIYE <> 0 ";
-	    }
 
-    String sql =  "SELECT s.HESAP, h.UNVAN, h.HESAP_CINSI, " +
-        "COALESCE(ROUND(ozet.ONCEKI_BAKIYE, 2), 0) AS ONCEKI_BAKIYE, " +
-        "COALESCE(ROUND(donem.BORC, 2), 0) AS BORC, " +
-        "COALESCE(ROUND(donem.ALACAK, 2), 0) AS ALACAK, " +
-        "ROUND(COALESCE(donem.ALACAK, 0) - COALESCE(donem.BORC, 0), 2) AS BAK_KVARTAL, " +
-        "ROUND(COALESCE(ozet.ONCEKI_BAKIYE, 0) + COALESCE(donem.ALACAK, 0) - COALESCE(donem.BORC, 0), 2) AS BAKIYE " +
-        "FROM SATIRLAR s USE INDEX (IXS_HESAP) " +
-        "LEFT JOIN HESAP h ON h.HESAP = s.HESAP " +
-        "LEFT JOIN (" +
-        "  SELECT HESAP, SUM(ALACAK) - SUM(BORC) AS ONCEKI_BAKIYE " +
-        "  FROM SATIRLAR USE INDEX (IXS_HESAP) WHERE TARIH < ? GROUP BY HESAP " +
-        ") AS ozet ON ozet.HESAP = s.HESAP " +
-        "LEFT JOIN (" +
-        "  SELECT HESAP, SUM(BORC) AS BORC, SUM(ALACAK) AS ALACAK " +
-        "  FROM SATIRLAR USE INDEX (IXS_HESAP) WHERE TARIH >= ? AND TARIH < ? GROUP BY HESAP " +
-        ") AS donem ON donem.HESAP = s.HESAP " +
-        "WHERE s.HESAP > ? AND s.HESAP < ? " +
-        "AND h.HESAP_CINSI BETWEEN ? AND ? " +
-        "AND h.KARTON BETWEEN ? AND ? " +
-        "GROUP BY s.HESAP, h.UNVAN, h.HESAP_CINSI, ozet.ONCEKI_BAKIYE, donem.BORC, donem.ALACAK " +
-        havingCondition + " " +
-        "ORDER BY s.HESAP ASC";
+		String havingCondition = "";
+		if (mizanDTO.getHangi_tur().equals("Borclu Hesaplar")) {
+			havingCondition = " HAVING BAKIYE < 0 ";
+		} else if (mizanDTO.getHangi_tur().equals("Alacakli Hesaplar")) {
+			havingCondition = " HAVING BAKIYE > 0 ";
+		} else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olanlar")) {
+			havingCondition = " HAVING BAKIYE = 0 ";
+		} else if (mizanDTO.getHangi_tur().equals("Bakiyesi 0 Olmayanlar")) {
+			havingCondition = " HAVING BAKIYE <> 0 ";
+		}
 
-	    try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-	         PreparedStatement preparedStatement = connection.prepareStatement(sql,
+		String sql =  "SELECT s.HESAP, h.UNVAN, h.HESAP_CINSI, " +
+				"COALESCE(ROUND(ozet.ONCEKI_BAKIYE, 2), 0) AS ONCEKI_BAKIYE, " +
+				"COALESCE(ROUND(donem.BORC, 2), 0) AS BORC, " +
+				"COALESCE(ROUND(donem.ALACAK, 2), 0) AS ALACAK, " +
+				"ROUND(COALESCE(donem.ALACAK, 0) - COALESCE(donem.BORC, 0), 2) AS BAK_KVARTAL, " +
+				"ROUND(COALESCE(ozet.ONCEKI_BAKIYE, 0) + COALESCE(donem.ALACAK, 0) - COALESCE(donem.BORC, 0), 2) AS BAKIYE " +
+				"FROM SATIRLAR s USE INDEX (IXS_HESAP) " +
+				"LEFT JOIN HESAP h ON h.HESAP = s.HESAP " +
+				"LEFT JOIN (" +
+				"  SELECT HESAP, SUM(ALACAK) - SUM(BORC) AS ONCEKI_BAKIYE " +
+				"  FROM SATIRLAR USE INDEX (IXS_HESAP) WHERE TARIH < ? GROUP BY HESAP " +
+				") AS ozet ON ozet.HESAP = s.HESAP " +
+				"LEFT JOIN (" +
+				"  SELECT HESAP, SUM(BORC) AS BORC, SUM(ALACAK) AS ALACAK " +
+				"  FROM SATIRLAR USE INDEX (IXS_HESAP) WHERE TARIH >= ? AND TARIH < ? GROUP BY HESAP " +
+				") AS donem ON donem.HESAP = s.HESAP " +
+				"WHERE s.HESAP > ? AND s.HESAP < ? " +
+				"AND h.HESAP_CINSI BETWEEN ? AND ? " +
+				"AND h.KARTON BETWEEN ? AND ? " +
+				"GROUP BY s.HESAP, h.UNVAN, h.HESAP_CINSI, ozet.ONCEKI_BAKIYE, donem.BORC, donem.ALACAK " +
+				havingCondition + " " +
+				"ORDER BY s.HESAP ASC";
+
+		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql,
 						ResultSet.TYPE_FORWARD_ONLY,
 						ResultSet.CONCUR_READ_ONLY)) {
-	    	preparedStatement.setTimestamp(1, tsStart);
-	    	preparedStatement.setTimestamp(2, tsStart);
-	    	preparedStatement.setTimestamp(3, tsEnd);
-	        preparedStatement.setString(4, mizanDTO.getHkodu1());
-	        preparedStatement.setString(5, mizanDTO.getHkodu2());
-	        preparedStatement.setString(6, mizanDTO.getCins1());
-	        preparedStatement.setString(7, mizanDTO.getCins2());
-	        preparedStatement.setString(8, mizanDTO.getKarton1());
-	        preparedStatement.setString(9, mizanDTO.getKarton2());
-	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-	            resultList = ResultSetConverter.convertToList(resultSet);
-	        }
-	    } catch (SQLException e) {
-	        throw new ServiceException("Mizan okunamadı", e);
-	    }
-	    return resultList;
+			preparedStatement.setTimestamp(1, tsStart);
+			preparedStatement.setTimestamp(2, tsStart);
+			preparedStatement.setTimestamp(3, tsEnd);
+			preparedStatement.setString(4, mizanDTO.getHkodu1());
+			preparedStatement.setString(5, mizanDTO.getHkodu2());
+			preparedStatement.setString(6, mizanDTO.getCins1());
+			preparedStatement.setString(7, mizanDTO.getCins2());
+			preparedStatement.setString(8, mizanDTO.getKarton1());
+			preparedStatement.setString(9, mizanDTO.getKarton2());
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+		} catch (SQLException e) {
+			throw new ServiceException("Mizan okunamadı", e);
+		}
+		return resultList;
 	}
 
 	@Override
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO, 
 			ConnectionDetails cariConnDetails, 
 			ConnectionDetails kurConnectionDetails) {
-		
+
 		int page = dvzcevirmeDTO.getPage();
 		int pageSize = dvzcevirmeDTO.getPageSize();
 		int offset = page * pageSize;
-		
+
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
 			if (!cariConnDetails.getSqlTipi().equals(kurConnectionDetails.getSqlTipi())) {
@@ -737,7 +737,7 @@ public class CariMySQL implements ICariDatabase{
 				create_federated(cariConnDetails, kurConnectionDetails, usrString);
 				str1 = "obs_federated." + usrString + "_kurlar_federated AS k USE INDEX (IX_KUR)";
 			}
-			
+
 			LocalDate startDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getStartDate());
 			LocalDate endDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getEndDate());
 			Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
@@ -746,7 +746,7 @@ public class CariMySQL implements ICariDatabase{
 			boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate()) && "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
 			if (hasDate)
 				tarihFilter = " AND s.TARIH  >= ?  AND s.TARIH < ? ";
-			
+
 			String islem = "/";
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT DATE(s.TARIH) as TARIH, s.EVRAK, IFNULL(I.IZAHAT, '') AS IZAHAT, ")
@@ -770,7 +770,7 @@ public class CariMySQL implements ICariDatabase{
 
 			if (hasDate)
 				sql.append( tarihFilter );
-			
+
 			sql.append("ORDER BY s.TARIH");
 			sql.append(" LIMIT " + pageSize + " OFFSET " + offset + " ");
 			try (Connection connection = DriverManager.getConnection(
@@ -794,45 +794,45 @@ public class CariMySQL implements ICariDatabase{
 		}
 		return resultList;
 	}
-	
+
 	@Override
 	public double dvz_raporsize(dvzcevirmeDTO dvzcevirmeDTO, ConnectionDetails cariConnDetails,ConnectionDetails kurConnectionDetails) {
 		long count = 0;
-	    try {
-	        LocalDate startDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getStartDate());
-	        LocalDate endDate   = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getEndDate());
-	        Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
-	        Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay()); // [start, end+1)
-	        boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate())
-	                         && "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
-	        StringBuilder sql = new StringBuilder();
-	        sql.append("SELECT COUNT(*) AS satir ")
-	           .append("FROM SATIRLAR ")
-	           .append("WHERE HESAP = ? ");
-	        if (hasDate) {
-	            sql.append("AND TARIH >= ? AND TARIH < ? ");
-	        }
-	        try (Connection con = DriverManager.getConnection(
-	                    cariConnDetails.getJdbcUrl(),
-	                    cariConnDetails.getUsername(),
-	                    cariConnDetails.getPassword());
-	             PreparedStatement stmt = con.prepareStatement(sql.toString())) {
-	            int idx = 1;
-	            stmt.setString(idx++, dvzcevirmeDTO.getHesapKodu());
-	            if (hasDate) {
-	                stmt.setTimestamp(idx++, ts1);
-	                stmt.setTimestamp(idx++, ts2);
-	            }
-	            try (ResultSet rs = stmt.executeQuery()) {
-	                if (rs.next()) {
-	                    count = rs.getLong("satir");
-	                }
-	            }
-	        }
-	    } catch (Exception e) {
-	        throw new ServiceException("Dvz Cevirme (rapor size) sırasında hata: " + e.getMessage(), e);
-	    }
-	    return (double) count;	
+		try {
+			LocalDate startDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getStartDate());
+			LocalDate endDate   = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getEndDate());
+			Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
+			Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay()); // [start, end+1)
+			boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate())
+					&& "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT COUNT(*) AS satir ")
+			.append("FROM SATIRLAR ")
+			.append("WHERE HESAP = ? ");
+			if (hasDate) {
+				sql.append("AND TARIH >= ? AND TARIH < ? ");
+			}
+			try (Connection con = DriverManager.getConnection(
+					cariConnDetails.getJdbcUrl(),
+					cariConnDetails.getUsername(),
+					cariConnDetails.getPassword());
+					PreparedStatement stmt = con.prepareStatement(sql.toString())) {
+				int idx = 1;
+				stmt.setString(idx++, dvzcevirmeDTO.getHesapKodu());
+				if (hasDate) {
+					stmt.setTimestamp(idx++, ts1);
+					stmt.setTimestamp(idx++, ts2);
+				}
+				try (ResultSet rs = stmt.executeQuery()) {
+					if (rs.next()) {
+						count = rs.getLong("satir");
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("Dvz Cevirme (rapor size) sırasında hata: " + e.getMessage(), e);
+		}
+		return (double) count;	
 	}
 
 	private  void create_federated(ConnectionDetails cariConnDetails, 
@@ -979,40 +979,40 @@ public class CariMySQL implements ICariDatabase{
 		String sqlIns = "INSERT INTO TAH_DETAY (EVRAK, TARIH, C_HES, A_HES, CINS, TUTAR, TUR, ACIKLAMA, DVZ_CINS, POS_BANKA)" +
 				" VALUES (?,?,?,?,?,?,?,?,?,?)";
 		Connection con = null;
-	    boolean oldAuto = true;
-	    try {
-	        con = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-	        oldAuto = con.getAutoCommit();
-	        con.setAutoCommit(false);
-	        try (PreparedStatement psDel = con.prepareStatement(sqlDel);
-	             PreparedStatement psIns = con.prepareStatement(sqlIns)) {
-	            psDel.setString(1, tahsilatDTO.getFisNo());
-	            psDel.setInt(2, tahsilatDTO.getTah_ted());
-	            psDel.executeUpdate();
-	            int i = 1;
-	            psIns.setString(i++, tahsilatDTO.getFisNo());
-	            psIns.setTimestamp(i++, Timestamp.valueOf(tahsilatDTO.getTahTarih()));
-	            psIns.setString(i++, tahsilatDTO.getTcheskod());
-	            psIns.setString(i++, tahsilatDTO.getAdresheskod());
-	            psIns.setInt(i++, tahsilatDTO.getTah_ted());
-	            psIns.setDouble(i++, tahsilatDTO.getTutar());
-	            psIns.setInt(i++, tahsilatDTO.getTur());
-	            psIns.setString(i++, "");
-	            psIns.setString(i++, tahsilatDTO.getDvz_cins());
-	            psIns.setString(i++, tahsilatDTO.getPosBanka());
-	            psIns.executeUpdate();
-	        }
+		boolean oldAuto = true;
+		try {
+			con = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+			oldAuto = con.getAutoCommit();
+			con.setAutoCommit(false);
+			try (PreparedStatement psDel = con.prepareStatement(sqlDel);
+					PreparedStatement psIns = con.prepareStatement(sqlIns)) {
+				psDel.setString(1, tahsilatDTO.getFisNo());
+				psDel.setInt(2, tahsilatDTO.getTah_ted());
+				psDel.executeUpdate();
+				int i = 1;
+				psIns.setString(i++, tahsilatDTO.getFisNo());
+				psIns.setTimestamp(i++, Timestamp.valueOf(tahsilatDTO.getTahTarih()));
+				psIns.setString(i++, tahsilatDTO.getTcheskod());
+				psIns.setString(i++, tahsilatDTO.getAdresheskod());
+				psIns.setInt(i++, tahsilatDTO.getTah_ted());
+				psIns.setDouble(i++, tahsilatDTO.getTutar());
+				psIns.setInt(i++, tahsilatDTO.getTur());
+				psIns.setString(i++, "");
+				psIns.setString(i++, tahsilatDTO.getDvz_cins());
+				psIns.setString(i++, tahsilatDTO.getPosBanka());
+				psIns.executeUpdate();
+			}
 
-	        con.commit();
-	    } catch (Exception e) {
-	        if (con != null) try { con.rollback(); } catch (Exception ignore) {}
-	        throw new ServiceException("Tahsilat Kayıt sırasında bir hata oluştu", e);
-	    } finally {
-	        if (con != null) {
-	            try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
-	            try { con.close(); } catch (Exception ignore) {}
-	        }
-	    }	
+			con.commit();
+		} catch (Exception e) {
+			if (con != null) try { con.rollback(); } catch (Exception ignore) {}
+			throw new ServiceException("Tahsilat Kayıt sırasında bir hata oluştu", e);
+		} finally {
+			if (con != null) {
+				try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
+				try { con.close(); } catch (Exception ignore) {}
+			}
+		}	
 	}
 
 	@Override
@@ -1078,7 +1078,7 @@ public class CariMySQL implements ICariDatabase{
 				turString = " TUR = '" + (tahrapDTO.getHangi_tur() - 1) + "' AND";
 			if(! tahrapDTO.getPos().equals(""))
 				posString = " POS_BANKA = '" + tahrapDTO.getPos() + "' AND";
-			
+
 			if (!cariConnDetails.getSqlTipi().equals(adresConnectionDetails.getSqlTipi())) {
 				throw new ServiceException("Cari Dosya ve Adres Dosyası farklı SQL sunucularında yer alıyor.");
 			}
@@ -1112,7 +1112,7 @@ public class CariMySQL implements ICariDatabase{
 			LocalDate end   = Global_Yardimci.toLocalDateSafe(tahrapDTO.getEndDate());
 			Timestamp tsStart = Timestamp.valueOf(start.atStartOfDay());
 			Timestamp tsEnd   = Timestamp.valueOf(end.plusDays(1).atStartOfDay());
-			
+
 			try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 					PreparedStatement preparedStatement = connection.prepareStatement(sql,
 							ResultSet.TYPE_FORWARD_ONLY,
@@ -1202,10 +1202,10 @@ public class CariMySQL implements ICariDatabase{
 	public List<Map<String, Object>> tah_cek_kayit_aktar(String fisno, Integer tah_ted,
 			ConnectionDetails cariConnDetails) {
 		String sql = "SELECT TA.LOGO, TA.FIR_ISMI,TA.ADR_1,TA.ADR_2,TA.VD_VN, TA.MAIL,TA.DIGER, " 
-						+ " TA.KASE,TC.BANKA,TC.SUBE,TC.SERI,TC.HESAP,TC.BORCLU,TC.TARIH,TC.TUTAR "
-						+ " FROM TAH_AYARLAR TA "
-						+ " CROSS JOIN TAH_CEK TC "
-						+ " WHERE TC.EVRAK = '" +fisno + "' AND TC.CINS = '" + tah_ted + "'";
+				+ " TA.KASE,TC.BANKA,TC.SUBE,TC.SERI,TC.HESAP,TC.BORCLU,TC.TARIH,TC.TUTAR "
+				+ " FROM TAH_AYARLAR TA "
+				+ " CROSS JOIN TAH_CEK TC "
+				+ " WHERE TC.EVRAK = '" +fisno + "' AND TC.CINS = '" + tah_ted + "'";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql,
@@ -1272,8 +1272,8 @@ public class CariMySQL implements ICariDatabase{
 
 	@Override
 	public void cari_kod_degis_hesap(String eskikod, String yenikod, ConnectionDetails cariConnDetails) {
-	    String SQL_UPD_HESAP = "UPDATE HESAP SET HESAP = ? WHERE HESAP = ?";
-	    String SQL_UPD_HESAP_DETAY = "UPDATE HESAP_DETAY SET D_HESAP = ? WHERE D_HESAP = ?";
+		String SQL_UPD_HESAP = "UPDATE HESAP SET HESAP = ? WHERE HESAP = ?";
+		String SQL_UPD_HESAP_DETAY = "UPDATE HESAP_DETAY SET D_HESAP = ? WHERE D_HESAP = ?";
 		try (Connection con = DriverManager.getConnection(
 				cariConnDetails.getJdbcUrl(),
 				cariConnDetails.getUsername(),

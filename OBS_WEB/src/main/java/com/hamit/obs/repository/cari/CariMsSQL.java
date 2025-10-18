@@ -512,34 +512,34 @@ public class CariMsSQL implements ICariDatabase{
 		String queryHesap = "DELETE FROM HESAP WHERE HESAP = ?";
 		String queryHesapDetay = "DELETE FROM HESAP_DETAY WHERE D_HESAP = ?";
 		Connection con = null;
-	    boolean oldAuto = true;
-	    try {
-	        con = DriverManager.getConnection(
-	                cariConnDetails.getJdbcUrl(),
-	                cariConnDetails.getUsername(),
-	                cariConnDetails.getPassword());
+		boolean oldAuto = true;
+		try {
+			con = DriverManager.getConnection(
+					cariConnDetails.getJdbcUrl(),
+					cariConnDetails.getUsername(),
+					cariConnDetails.getPassword());
 
-	        oldAuto = con.getAutoCommit();
-	        con.setAutoCommit(false);
-	        try (PreparedStatement psDetay = con.prepareStatement(queryHesapDetay);
-	             PreparedStatement psHesap = con.prepareStatement(queryHesap)) {
-	            psDetay.setNString(1, hesap);
-	            psDetay.executeUpdate();
-	            psHesap.setNString(1, hesap);
-	            psHesap.executeUpdate();
-	        }
-	        con.commit();
-	    } catch (Exception e) {
-	        if (con != null) {
-	            try { con.rollback(); } catch (Exception ignore) {}
-	        }
-	        throw new ServiceException("Hesap silme sırasında bir hata oluştu", e);
-	    } finally {
-	        if (con != null) {
-	            try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
-	            try { con.close(); } catch (Exception ignore) {}
-	        }
-	    }	
+			oldAuto = con.getAutoCommit();
+			con.setAutoCommit(false);
+			try (PreparedStatement psDetay = con.prepareStatement(queryHesapDetay);
+					PreparedStatement psHesap = con.prepareStatement(queryHesap)) {
+				psDetay.setNString(1, hesap);
+				psDetay.executeUpdate();
+				psHesap.setNString(1, hesap);
+				psHesap.executeUpdate();
+			}
+			con.commit();
+		} catch (Exception e) {
+			if (con != null) {
+				try { con.rollback(); } catch (Exception ignore) {}
+			}
+			throw new ServiceException("Hesap silme sırasında bir hata oluştu", e);
+		} finally {
+			if (con != null) {
+				try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
+				try { con.close(); } catch (Exception ignore) {}
+			}
+		}	
 	}
 
 	@Override
@@ -859,7 +859,7 @@ public class CariMsSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql,
 						ResultSet.TYPE_FORWARD_ONLY,
 						ResultSet.CONCUR_READ_ONLY)) {
-			
+
 			try (ResultSet rs = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(rs);
 			}
@@ -965,39 +965,39 @@ public class CariMsSQL implements ICariDatabase{
 		String sqlIns = "INSERT INTO TAH_DETAY (EVRAK, TARIH, C_HES, A_HES, CINS, TUTAR, TUR, ACIKLAMA, DVZ_CINS, POS_BANKA)" +
 				" VALUES (?,?,?,?,?,?,?,?,?,?)";
 		Connection con = null;
-	    boolean oldAuto = true;
-	    try {
-	        con = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-	        oldAuto = con.getAutoCommit();
-	        con.setAutoCommit(false);
-	        try (PreparedStatement psDel = con.prepareStatement(sqlDel);
-	             PreparedStatement psIns = con.prepareStatement(sqlIns)) {
-	            psDel.setString(1, tahsilatDTO.getFisNo());
-	            psDel.setInt(2, tahsilatDTO.getTah_ted());
-	            psDel.executeUpdate();
-	            int i = 1;
-	            psIns.setString(i++, tahsilatDTO.getFisNo());
-	            psIns.setTimestamp(i++, Timestamp.valueOf(tahsilatDTO.getTahTarih()));
-	            psIns.setString(i++, tahsilatDTO.getTcheskod());
-	            psIns.setString(i++, tahsilatDTO.getAdresheskod());
-	            psIns.setInt(i++, tahsilatDTO.getTah_ted());
-	            psIns.setDouble(i++, tahsilatDTO.getTutar());
-	            psIns.setInt(i++, tahsilatDTO.getTur());
-	            psIns.setString(i++, "");
-	            psIns.setString(i++, tahsilatDTO.getDvz_cins());
-	            psIns.setString(i++, tahsilatDTO.getPosBanka());
-	            psIns.executeUpdate();
-	        }
-	        con.commit();
-	    } catch (Exception e) {
-	        if (con != null) try { con.rollback(); } catch (Exception ignore) {}
-	        throw new ServiceException("Tahsilat Kayıt sırasında bir hata oluştu", e);
-	    } finally {
-	        if (con != null) {
-	            try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
-	            try { con.close(); } catch (Exception ignore) {}
-	        }
-	    }	
+		boolean oldAuto = true;
+		try {
+			con = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
+			oldAuto = con.getAutoCommit();
+			con.setAutoCommit(false);
+			try (PreparedStatement psDel = con.prepareStatement(sqlDel);
+					PreparedStatement psIns = con.prepareStatement(sqlIns)) {
+				psDel.setString(1, tahsilatDTO.getFisNo());
+				psDel.setInt(2, tahsilatDTO.getTah_ted());
+				psDel.executeUpdate();
+				int i = 1;
+				psIns.setString(i++, tahsilatDTO.getFisNo());
+				psIns.setTimestamp(i++, Timestamp.valueOf(tahsilatDTO.getTahTarih()));
+				psIns.setString(i++, tahsilatDTO.getTcheskod());
+				psIns.setString(i++, tahsilatDTO.getAdresheskod());
+				psIns.setInt(i++, tahsilatDTO.getTah_ted());
+				psIns.setDouble(i++, tahsilatDTO.getTutar());
+				psIns.setInt(i++, tahsilatDTO.getTur());
+				psIns.setString(i++, "");
+				psIns.setString(i++, tahsilatDTO.getDvz_cins());
+				psIns.setString(i++, tahsilatDTO.getPosBanka());
+				psIns.executeUpdate();
+			}
+			con.commit();
+		} catch (Exception e) {
+			if (con != null) try { con.rollback(); } catch (Exception ignore) {}
+			throw new ServiceException("Tahsilat Kayıt sırasında bir hata oluştu", e);
+		} finally {
+			if (con != null) {
+				try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
+				try { con.close(); } catch (Exception ignore) {}
+			}
+		}	
 	}
 
 	@Override
