@@ -1,5 +1,6 @@
 package com.hamit.obs.custom.yardimci;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class Global_Yardimci {
@@ -35,6 +36,19 @@ public class Global_Yardimci {
 			result = true;
 		return result ;
 	}
+	
+	public static Timestamp[] rangeDayT2plusDay(String t1, String t2) {
+		LocalDate d1 = toLocalDateSafe(t1);
+	    if (d1 == null) return null;
+	    LocalDate d2 = toLocalDateSafe(t2);
+	    if (d2 == null) d2 = d1;
+
+	    return new Timestamp[] {
+	        Timestamp.valueOf(d1.atStartOfDay()),
+	        Timestamp.valueOf(d2.plusDays(1).atStartOfDay())
+	    };
+    }
+
 	
 	public static LocalDate toLocalDateSafe(String s) {
 		String t = s == null ? "" : s.trim();

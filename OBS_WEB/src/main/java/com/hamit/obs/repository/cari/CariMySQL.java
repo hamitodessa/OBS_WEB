@@ -89,12 +89,9 @@ public class CariMySQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, hesap);
 			if (hasDate) {
-				LocalDate startDate = Global_Yardimci.toLocalDateSafe(t1);
-				LocalDate endDate = Global_Yardimci.toLocalDateSafe(t2);
-				Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
-				Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay());
-				preparedStatement.setTimestamp(2, ts1);
-				preparedStatement.setTimestamp(3, ts2);
+				Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(t1, t2);
+				preparedStatement.setTimestamp(2, ts[0]);
+				preparedStatement.setTimestamp(3, ts[1]);
 			}
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
@@ -177,10 +174,7 @@ public class CariMySQL implements ICariDatabase{
 	public double eks_raporsize(String hesap, String t1, String t2, ConnectionDetails cariConnDetails) {
 		double result = 0 ;
 		String tARIH = "";
-		LocalDate startDate = Global_Yardimci.toLocalDateSafe(t1);
-		LocalDate endDate = Global_Yardimci.toLocalDateSafe(t2);
-		Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
-		Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay());
+		Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(t1, t2);
 		boolean hasDate = !("1900-01-01".equals(t1) && "2100-12-31".equals(t2));
 		if (hasDate)
 			tARIH = " AND TARIH >= ? AND TARIH < ? ";
@@ -197,8 +191,8 @@ public class CariMySQL implements ICariDatabase{
 						ResultSet.CONCUR_READ_ONLY)) {
 			preparedStatement.setString(1, hesap);
 			if (hasDate) {
-				preparedStatement.setTimestamp(2, ts1);
-				preparedStatement.setTimestamp(3, ts2);
+				preparedStatement.setTimestamp(2, ts[0]);
+				preparedStatement.setTimestamp(3, ts[1]);
 			}
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next())
@@ -481,12 +475,9 @@ public class CariMySQL implements ICariDatabase{
 			preparedStatement.setString(6, mizanDTO.getKarton2());
 			int paramIndex = 7;
 			if (hasDate) {
-				LocalDate startDate = Global_Yardimci.toLocalDateSafe(mizanDTO.getStartDate());
-				LocalDate endDate = Global_Yardimci.toLocalDateSafe(mizanDTO.getEndDate());
-				Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
-				Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay());
-				preparedStatement.setTimestamp(paramIndex++, ts1);
-				preparedStatement.setTimestamp(paramIndex, ts2);
+				Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(mizanDTO.getStartDate(), mizanDTO.getEndDate());
+				preparedStatement.setTimestamp(paramIndex++, ts[0]);
+				preparedStatement.setTimestamp(paramIndex, ts[1]);
 			}
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(resultSet);
@@ -737,11 +728,7 @@ public class CariMySQL implements ICariDatabase{
 				create_federated(cariConnDetails, kurConnectionDetails, usrString);
 				str1 = "obs_federated." + usrString + "_kurlar_federated AS k USE INDEX (IX_KUR)";
 			}
-
-			LocalDate startDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getStartDate());
-			LocalDate endDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getEndDate());
-			Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
-			Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay());
+			Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(dvzcevirmeDTO.getStartDate(), dvzcevirmeDTO.getEndDate());
 			String tarihFilter = "";
 			boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate()) && "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
 			if (hasDate)
@@ -782,8 +769,8 @@ public class CariMySQL implements ICariDatabase{
 				stmt.setString(1, dvzcevirmeDTO.getHesapKodu());
 				stmt.setString(2, dvzcevirmeDTO.getDvz_tur());
 				if (hasDate) {
-					stmt.setTimestamp(3, ts1);
-					stmt.setTimestamp(4, ts2);
+					stmt.setTimestamp(3, ts[0]);
+					stmt.setTimestamp(4, ts[1]);
 				}
 				try (ResultSet rss = stmt.executeQuery()) {
 					resultList = ResultSetConverter.convertToList(rss);
@@ -799,10 +786,7 @@ public class CariMySQL implements ICariDatabase{
 	public double dvz_raporsize(dvzcevirmeDTO dvzcevirmeDTO, ConnectionDetails cariConnDetails,ConnectionDetails kurConnectionDetails) {
 		long count = 0;
 		try {
-			LocalDate startDate = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getStartDate());
-			LocalDate endDate   = Global_Yardimci.toLocalDateSafe(dvzcevirmeDTO.getEndDate());
-			Timestamp ts1 = Timestamp.valueOf(startDate.atStartOfDay());
-			Timestamp ts2 = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay()); // [start, end+1)
+			Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(dvzcevirmeDTO.getStartDate(), dvzcevirmeDTO.getEndDate());
 			boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate())
 					&& "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
 			StringBuilder sql = new StringBuilder();
@@ -820,8 +804,8 @@ public class CariMySQL implements ICariDatabase{
 				int idx = 1;
 				stmt.setString(idx++, dvzcevirmeDTO.getHesapKodu());
 				if (hasDate) {
-					stmt.setTimestamp(idx++, ts1);
-					stmt.setTimestamp(idx++, ts2);
+					stmt.setTimestamp(idx++, ts[0]);
+					stmt.setTimestamp(idx++, ts[1]);
 				}
 				try (ResultSet rs = stmt.executeQuery()) {
 					if (rs.next()) {
@@ -1108,17 +1092,13 @@ public class CariMySQL implements ICariDatabase{
 					" AND EVRAK >= ? AND EVRAK <= ? " + 
 					" AND C_HES >= ? AND C_HES <= ? " + 
 					" ORDER BY TARIH,EVRAK" ;
-			LocalDate start = Global_Yardimci.toLocalDateSafe(tahrapDTO.getStartDate());
-			LocalDate end   = Global_Yardimci.toLocalDateSafe(tahrapDTO.getEndDate());
-			Timestamp tsStart = Timestamp.valueOf(start.atStartOfDay());
-			Timestamp tsEnd   = Timestamp.valueOf(end.plusDays(1).atStartOfDay());
-
+			Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(tahrapDTO.getStartDate(), tahrapDTO.getEndDate());
 			try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 					PreparedStatement preparedStatement = connection.prepareStatement(sql,
 							ResultSet.TYPE_FORWARD_ONLY,
 							ResultSet.CONCUR_READ_ONLY)) {
-				preparedStatement.setTimestamp(1, tsStart);
-				preparedStatement.setTimestamp(2, tsEnd);
+				preparedStatement.setTimestamp(1, ts[0]);
+				preparedStatement.setTimestamp(2, ts[1]);
 				preparedStatement.setNString(3, tahrapDTO.getEvrak1() );
 				preparedStatement.setNString(4,  tahrapDTO.getEvrak2());
 				preparedStatement.setNString(5, tahrapDTO.getHkodu1() );
@@ -1337,9 +1317,7 @@ public class CariMySQL implements ICariDatabase{
 				" WHERE SATIRLAR.EVRAK = IZAHAT.EVRAK and HESAP = ? " +
 				" AND TARIH >= AND TARIH < " +
 				" ORDER BY SATIRLAR.EVRAK";
-		LocalDate start = Global_Yardimci.toLocalDateSafe(t1);
-		Timestamp tsStart = Timestamp.valueOf(start.atStartOfDay());
-		Timestamp tsEnd   = Timestamp.valueOf(start.plusDays(1).atStartOfDay());
+		Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(t1, t1);
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql,
@@ -1347,8 +1325,8 @@ public class CariMySQL implements ICariDatabase{
 						ResultSet.CONCUR_READ_ONLY)) {
 			int i = 1;
 			preparedStatement.setString(i++, hesap);
-			preparedStatement.setTimestamp(i++, tsStart);
-			preparedStatement.setTimestamp(i++, tsEnd);
+			preparedStatement.setTimestamp(i++, ts[0]);
+			preparedStatement.setTimestamp(i++, ts[1]);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {

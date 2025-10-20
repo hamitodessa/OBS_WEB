@@ -32,7 +32,7 @@ public class KurMY implements  IKurDatabase{
 			resultList = ResultSetConverter.convertToList(resultSet); 
 			resultSet.close();
 		} catch (Exception e) {
-			throw new ServiceException("MS KurService genel hatası.", e);
+			throw new ServiceException("My KurService genel hatası.", e);
 		}
 		return resultList;
 	}
