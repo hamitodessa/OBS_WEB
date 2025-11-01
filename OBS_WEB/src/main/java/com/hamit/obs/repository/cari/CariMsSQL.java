@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +21,6 @@ import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
-import com.hamit.obs.custom.yardimci.Tarih_Cevir;
 import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.dto.cari.dvzcevirmeDTO;
 import com.hamit.obs.dto.cari.hesapplaniDTO;
@@ -60,82 +58,89 @@ public class CariMsSQL implements ICariDatabase{
 
 	@Override
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable, ConnectionDetails cariConnDetails) {
-		String tARIH = "";
 		int page = pageable.getPageNumber();
-		int pageSize = pageable.getPageSize();
-		int offset = page * pageSize;
-		boolean hasDate = !("1900-01-01".equals(t1) && "2100-12-31".equals(t2));
-		if (hasDate)
-			tARIH = " AND TARIH >= ? AND TARIH < ? ";
-		String sql = "SELECT SID ,TARIH, SATIRLAR.EVRAK, ISNULL(IZAHAT.IZAHAT, '') AS IZAHAT, KOD, KUR, BORC, ALACAK, " +
-				"SUM(ALACAK - BORC) OVER(ORDER BY TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE, [USER] " +
-				"FROM SATIRLAR LEFT JOIN IZAHAT " +
-				"ON SATIRLAR.EVRAK = IZAHAT.EVRAK WHERE HESAP = ? " +
-				tARIH +
-				" ORDER BY TARIH" +
-				" OFFSET " + offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
-		List<Map<String, Object>> resultList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql,
-						ResultSet.TYPE_FORWARD_ONLY,
-						ResultSet.CONCUR_READ_ONLY)) {
-			preparedStatement.setNString(1, hesap);
-			if (hasDate) {
-				Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(t1, t2);
-				preparedStatement.setTimestamp(2, ts[0]);
-				preparedStatement.setTimestamp(3, ts[1]);
-			}
-			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				resultList = ResultSetConverter.convertToList(resultSet);
-			}
-			if (!t1.equals("1900-01-01")) {
-				Map<String, Object> newRow = new HashMap<>();
-				double borc = 0;
-				double alacak = 0;
-				double bakiye =0;
-				if(offset == 0) {
-					List<Map<String, Object>> mizanList = ekstre_mizan(hesap,"1900-01-01",t1,"   ", "ZZZ","     ", "ZZZZZ",cariConnDetails);
-					borc = (double) mizanList.get(0).getOrDefault("ISLEM", 0.0);
-					alacak = (double) mizanList.get(0).getOrDefault("ISLEM2", 0.0);
-					bakiye = alacak - borc;
-					newRow.put("TARIH", Tarih_Cevir.stringtoDate(t1));
-					newRow.put("EVRAK", 0);
-					newRow.put("IZAHAT", "Devir");
-					newRow.put("KOD", "");
-					newRow.put("KUR", 0.0);
-					newRow.put("BORC", borc);
-					newRow.put("ALACAK", alacak);
-					newRow.put("BAKIYE", bakiye);
-					newRow.put("USER", "");
-					resultList.add(0, newRow);
-					borc = 0.00;
-					alacak = 0.00;
-					bakiye = 0.00;
-				}
-				else {
-					List<Map<String, Object>> komplelist = eski_bakiye(hesap,resultList.get(0).get("TARIH").toString(),cariConnDetails);
-					if (komplelist != null && !komplelist.isEmpty()) {
-						for (int i = komplelist.size() - 1; i > 0; i--) {
-							if (komplelist.get(i).get("SID").toString().equals(resultList.get(0).get("SID").toString())) {
-								bakiye = (double) komplelist.get(i - 1).get("BAKIYE");
-								komplelist.clear();
-								komplelist = null;
-								break;
-							}
-						}
-					}
-				}
-				for (Map<String, Object> row : resultList) {
-					borc = (double) row.getOrDefault("BORC", 0.0);
-					alacak = (double) row.getOrDefault("ALACAK", 0.0);
-					bakiye += alacak - borc;
-					row.put("BAKIYE", bakiye);
-				}
-			}
-		} catch (Exception e) {
-			throw new ServiceException("Ekstre okunamadı", e);
-		}
-		return resultList;
+	    int pageSize = pageable.getPageSize();
+	    if (page < 0) page = 0;
+	    int offset = page * pageSize;
+	    int startRn = offset + 1;
+	    int endRn   = offset + pageSize;
+	    boolean hasDate = !("1900-01-01".equals(t1) && "2100-12-31".equals(t2));
+	    final String orderKey = "S.TARIH, S.EVRAK, S.H, S.SID";
+	    String sql;
+	    if (hasDate) {
+	        sql =
+	            "WITH R AS ( " +
+	            "  SELECT " +
+	            "    S.SID, S.TARIH, S.EVRAK, ISNULL(I.IZAHAT,'') AS IZAHAT, " +
+	            "    S.KOD, S.KUR, S.BORC, S.ALACAK, S.[USER], " +
+	            "    SUM(S.ALACAK - S.BORC) OVER (ORDER BY " + orderKey + " " +
+	            "        ROWS UNBOUNDED PRECEDING) AS RUNNING, " +
+	            "    (SELECT CAST(ISNULL(SUM(ALACAK - BORC),0) AS decimal(18,2)) " +
+	            "       FROM SATIRLAR " +
+	            "      WHERE HESAP = ? AND TARIH < ?) AS DEVREDEN, " +
+	            "    ROW_NUMBER() OVER (ORDER BY " + orderKey + ") AS rn " +
+	            "  FROM SATIRLAR S " +
+	            "  LEFT JOIN IZAHAT I ON S.EVRAK = I.EVRAK " +
+	            "  WHERE S.HESAP = ? AND S.TARIH >= ? AND S.TARIH < ? " +
+	            ") " +
+	            "SELECT " +
+	            "  SID, TARIH, EVRAK, IZAHAT, KOD, KUR, BORC, ALACAK, " +
+	            "  CAST(DEVREDEN + RUNNING AS decimal(18,2)) AS BAKIYE, [USER] " +
+	            "FROM R " +
+	            "WHERE rn BETWEEN ? AND ? " +
+	            "ORDER BY rn;";
+	    } else {
+	        sql =
+	            "WITH R AS ( " +
+	            "  SELECT " +
+	            "    S.SID, S.TARIH, S.EVRAK, ISNULL(I.IZAHAT,'') AS IZAHAT, " +
+	            "    S.KOD, S.KUR, S.BORC, S.ALACAK, S.[USER], " +
+	            "    SUM(S.ALACAK - S.BORC) OVER (ORDER BY " + orderKey + " " +
+	            "        ROWS UNBOUNDED PRECEDING) AS BAKIYE, " +
+	            "    ROW_NUMBER() OVER (ORDER BY " + orderKey + ") AS rn " +
+	            "  FROM SATIRLAR S " +
+	            "  LEFT JOIN IZAHAT I ON S.EVRAK = I.EVRAK " +
+	            "  WHERE S.HESAP = ? " +
+	            ") " +
+	            "SELECT " +
+	            "  SID, TARIH, EVRAK, IZAHAT, KOD, KUR, BORC, ALACAK, BAKIYE, [USER] " +
+	            "FROM R " +
+	            "WHERE rn BETWEEN ? AND ? " +
+	            "ORDER BY rn;";
+	    }
+
+	    List<Map<String, Object>> resultList = new ArrayList<>();
+	    try (Connection connection = DriverManager.getConnection(
+	                cariConnDetails.getJdbcUrl(),
+	                cariConnDetails.getUsername(),
+	                cariConnDetails.getPassword());
+	         PreparedStatement ps = connection.prepareStatement(
+	                sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+
+	        int p = 1;
+	        if (hasDate) {
+	            ps.setNString(p++, hesap);
+	            Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(t1, t2);
+	            ps.setTimestamp(p++, ts[0]);   // TARIH < t1
+
+	            ps.setNString(p++, hesap);
+	            ps.setTimestamp(p++, ts[0]);   // TARIH >= t1
+	            ps.setTimestamp(p++, ts[1]);   // TARIH < t2(+1)
+
+	            ps.setInt(p++, startRn);
+	            ps.setInt(p++, endRn);
+	        } else {
+	            ps.setNString(p++, hesap);
+	            ps.setInt(p++, startRn);
+	            ps.setInt(p++, endRn);
+	        }
+	        try (ResultSet rs = ps.executeQuery()) {
+	            resultList = ResultSetConverter.convertToList(rs);
+	        }
+	    } catch (Exception e) {
+	        throw new ServiceException("Ekstre okunamadı", e);
+	    }
+	    return resultList;
 	}
 
 	@Override
