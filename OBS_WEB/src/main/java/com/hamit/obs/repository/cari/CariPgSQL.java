@@ -63,7 +63,7 @@ public class CariPgSQL implements ICariDatabase{
 		int startRn = offset + 1;
 		int endRn   = offset + pageSize;
 		boolean hasDate = !("1900-01-01".equals(t1) && "2100-12-31".equals(t2));
-		Timestamp[] ts = hasDate ? Global_Yardimci.rangeDayT2plusDay(t1, t2) : null;
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(t1, t2) ;
 		final String orderKey = "S.\"TARIH\", S.\"EVRAK\", S.\"H\", S.\"SID\"";
 		String sql;
 		if (hasDate) {
