@@ -1,20 +1,9 @@
 package com.hamit.obs.service.user;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
-import javax.mail.Message.RecipientType;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hamit.obs.custom.yardimci.PasswordGenerator;
+import com.hamit.obs.mailcenter.MailCenter;
 import com.hamit.obs.model.user.Email_Details;
 import com.hamit.obs.model.user.Etiket_Ayarlari;
 import com.hamit.obs.model.user.RolEnum;
@@ -109,44 +99,30 @@ public class UserService {
 
 	public boolean sendPasswordByEmail(String email) {
 		User user = findUserByUsername(email);
-		if (user != null) {
-			try {
-				String randomPassword =  PasswordGenerator.generateRandomPassword();
-				user.setPassword(passwordEncoder.encode(randomPassword));
-				saveUser(user);
-				MimeBodyPart messagePart = null ;
-				Properties props = System.getProperties();
-				props.put("mail.smtp.starttls.enable", false);
-				props.put("mail.smtp.host", "mail.okumus.gen.tr");
-				props.put("mail.smtp.user", "info@okumus.gen.tr");
-				props.put("mail.smtp.password", "oOk271972");
-				props.put("mail.smtp.port", 587);
-				props.put("mail.smtp.auth", "true");
-				props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-				Session session = Session.getDefaultInstance(props,new javax.mail.Authenticator() {
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication("info@okumus.gen.tr","oOk271972");
-					}
-				});
-				MimeMessage message = new MimeMessage(session);
-				message.setFrom(new InternetAddress("info@okumus.gen.tr","Obs Sistem"));
-				message.setRecipient(RecipientType.TO, new InternetAddress(user.getEmail().trim()));
-				messagePart = new MimeBodyPart();
-				messagePart.setText("Hesabınızın Gecici şifresi: " + randomPassword,"UTF-8");
-				Multipart multipart = new MimeMultipart();
-				multipart.addBodyPart(messagePart);
-				message.setSubject("Hesap Şifreniz", "UTF-8");
-				message.setContent(multipart);
-				message.setSentDate(new Date());
-				Transport.send(message);
-				message = null;
-				session = null;
-				return true;
-			} catch (Exception e) {
-				throw new RuntimeException("Bir hata oluştu. E-posta gönderilemedi.");
-			}
-		}
-		else {
+		if (user == null) return false;
+		try {
+			String randomPassword = PasswordGenerator.generateRandomPassword();
+			user.setPassword(passwordEncoder.encode(randomPassword));
+			saveUser(user);
+			MailCenter.Cfg c = new MailCenter.Cfg();
+			c.host     = "mail.okumus.gen.tr";
+			c.port     = 587;
+			c.ssl      = false;   // 465 ise true
+			c.starttls = true;    // 587 ise true
+			c.user     = "info@okumus.gen.tr";
+			c.pass     = "oOk271972";
+			c.fromAddr = "info@okumus.gen.tr";
+			c.fromName = "Obs Sistem";
+			// c.tlsProtocols = "TLSv1.2"; // istersen açıkça belirt
+
+			MailCenter mc = new MailCenter(c);
+			String to = user.getEmail().trim();
+			String subject = "Hesap Şifreniz";
+			String body = "Hesabınızın Geçici şifresi: " + randomPassword;
+
+			mc.sendWithOptionalAttachment(to, null, subject, body, null);
+			return true;
+		} catch (Exception e) {
 			return false;
 		}
 	}

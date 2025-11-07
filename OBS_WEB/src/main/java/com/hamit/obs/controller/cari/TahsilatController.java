@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +32,8 @@ import com.hamit.obs.dto.cari.tahsilatTableRowDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.cari.CariService;
+
+import jakarta.mail.util.ByteArrayDataSource;
 
 @Controller
 public class TahsilatController {

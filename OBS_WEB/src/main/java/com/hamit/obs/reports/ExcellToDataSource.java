@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -35,6 +34,8 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.kereste.KeresteService;
 
+import jakarta.mail.util.ByteArrayDataSource;
+
 @Component
 public class ExcellToDataSource {
 
@@ -44,8 +45,8 @@ public class ExcellToDataSource {
 	@Autowired
 	private KeresteService keresteService;
 	
-	public ByteArrayDataSource export_excell(List<Map<String, String>> tableData) {
-		ByteArrayDataSource ds = null ;
+	public jakarta.mail.util.ByteArrayDataSource export_excell(List<Map<String, String>> tableData) {
+		jakarta.mail.util.ByteArrayDataSource ds = null ;
 		try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 			Sheet sheet = workbook.createSheet("Excell_Rapor");
 			if (!tableData.isEmpty()) {

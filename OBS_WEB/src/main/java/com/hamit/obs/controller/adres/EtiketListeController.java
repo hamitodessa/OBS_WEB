@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -49,7 +48,7 @@ public class EtiketListeController {
 
 	@PostMapping("adres/etiket_download")
 	public ResponseEntity<byte[]> downloadReport(@RequestBody Map<String, List<Map<String, String>>> request) {
-		ByteArrayDataSource dataSource ;
+		jakarta.mail.util.ByteArrayDataSource dataSource ;
 		try {
 			dataSource =  raporOlustur.etiket(request.get("selectedRows"));
 			if (dataSource == null) {

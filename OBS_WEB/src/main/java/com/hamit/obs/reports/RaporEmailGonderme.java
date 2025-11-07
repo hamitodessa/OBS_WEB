@@ -2,23 +2,11 @@ package com.hamit.obs.reports;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import javax.activation.DataHandler;
-import javax.mail.Message.RecipientType;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,12 +19,16 @@ import com.hamit.obs.dto.kambiyo.bordroPrinter;
 import com.hamit.obs.dto.kereste.keresteyazdirDTO;
 import com.hamit.obs.dto.user.RaporEmailDegiskenler;
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.mailcenter.MailCenter;
+import com.hamit.obs.mailcenter.MailCfgFactory;
 import com.hamit.obs.model.user.Email_Details;
 import com.hamit.obs.model.user.Gonderilmis_Mailler;
 import com.hamit.obs.model.user.User;
 import com.hamit.obs.service.user.EmailService;
 import com.hamit.obs.service.user.GidenRaporService;
 import com.hamit.obs.service.user.UserService;
+
+import jakarta.mail.util.ByteArrayDataSource;
 
 @Component
 public class RaporEmailGonderme {
@@ -282,81 +274,49 @@ public class RaporEmailGonderme {
 	private void son_gonderme(ByteArrayDataSource ds,String rapdosadi) 
 	{
 		try {
-			User user = userService.getCurrentUser();
-			MimeBodyPart messagePart = null ;
-			String[] to = { raporEmailDegiskenler.getToo()  };
-			Properties props = System.getProperties();
-			Email_Details email_Details = emailService.findByEmail(user.getEmail());
-			props.put("mail.smtp.starttls.enable", email_Details.getBtsl());
-			if (email_Details.getBssl())
-			{
-				props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");   
-				//props.put("mail.smtp.startsls.enable", SSL);
-			}
-			String sifre = TextSifreleme.decrypt(email_Details.getSifre());
-			props.put("mail.smtp.host",email_Details.getHost());
-			props.put("mail.smtp.user", email_Details.getHesap());
-			props.put("mail.smtp.password",sifre);
-			props.put("mail.smtp.port", email_Details.getPort());
-			props.put("mail.smtp.auth", "true");
-			props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-			Session session = Session.getDefaultInstance(props,new javax.mail.Authenticator() {
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(email_Details.getHesap(), sifre);
-				}
-			});
-			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(email_Details.getHesap(),email_Details.getGon_isim()));
-			InternetAddress[] toAddress = new InternetAddress[to.length];
-			for (int i = 0; i < to.length; i++)
-				toAddress[i] = new InternetAddress(to[i].toString().trim());
-			for (int i = 0; i < toAddress.length; i++)
-				message.setRecipient(RecipientType.TO,  toAddress[i]);
-			if(! raporEmailDegiskenler.getCcc().toString().equals(""))
-				message.setRecipient(RecipientType.CC,new InternetAddress( raporEmailDegiskenler.getCcc()));
-			messagePart = new MimeBodyPart();
-			messagePart.setText(raporEmailDegiskenler.getAciklama().toString().trim(), "UTF-8", "plain");
-			
-			Multipart multipart = new MimeMultipart();
-			if(ds != null) {
-				MimeBodyPart attachment = new MimeBodyPart();
-				attachment.setDataHandler(new DataHandler(ds));
-				attachment.setFileName(rapdosadi);
-				multipart.addBodyPart(attachment);
-			}
-			message.setSubject(raporEmailDegiskenler.getKonu().toString().trim(), "UTF-8");
-			multipart.addBodyPart(messagePart);
-			message.setContent(multipart);
-			message.setSentDate(new Date());
-			Transport.send(message);
-			message= null;
-			session = null;
-			Gonderilmis_Mailler gonderilmis_Mailler = new Gonderilmis_Mailler();
-			gonderilmis_Mailler.setTarih(new Date());
-			gonderilmis_Mailler.setAciklama(raporEmailDegiskenler.getAciklama().toString().trim());
-			gonderilmis_Mailler.setAlici(raporEmailDegiskenler.getToo().toString().trim());
-			gonderilmis_Mailler.setUser_email(userService.getCurrentUser().getEmail());
-			gonderilmis_Mailler.setGonderen(raporEmailDegiskenler.getHesap().toString().trim());
-			gonderilmis_Mailler.setKonu(raporEmailDegiskenler.getKonu().toString().trim());
-			gonderilmis_Mailler.setRapor(rapdosadi);
-			gonderilmis_Mailler.setUser(user);
-			gidenRaporService.savegonderilmisMailler(gonderilmis_Mailler);
-			if(! raporEmailDegiskenler.getCcc().toString().equals(""))
-			{
-				Gonderilmis_Mailler ikinciGonderilmisMailler = new Gonderilmis_Mailler();
-				ikinciGonderilmisMailler.setTarih(new Date());
-				ikinciGonderilmisMailler.setAciklama(raporEmailDegiskenler.getAciklama().toString().trim());
-				ikinciGonderilmisMailler.setAlici(raporEmailDegiskenler.getCcc().toString().trim());
-				ikinciGonderilmisMailler.setUser_email(userService.getCurrentUser().getEmail());
-				ikinciGonderilmisMailler.setGonderen(raporEmailDegiskenler.getHesap().toString().trim());
-				ikinciGonderilmisMailler.setKonu(raporEmailDegiskenler.getKonu().toString().trim());
-				ikinciGonderilmisMailler.setRapor(rapdosadi);
-				ikinciGonderilmisMailler.setUser(user);
-				gidenRaporService.savegonderilmisMailler(ikinciGonderilmisMailler);
-			}
-		} catch (Exception ex) 
-		{
-			throw new ServiceException(ex.getMessage());
-		}
+	        User user = userService.getCurrentUser();
+	        Email_Details email_Details = emailService.findByEmail(user.getEmail());
+	        MailCenter mc = MailCfgFactory.fromEmailDetails(
+	                email_Details,
+	                TextSifreleme::decrypt
+	        );
+	        String to  = raporEmailDegiskenler.getToo().trim();
+	        String cc  = String.valueOf(raporEmailDegiskenler.getCcc()).trim();
+	        String sub = raporEmailDegiskenler.getKonu().trim();
+	        String body= raporEmailDegiskenler.getAciklama().trim();
+
+	        List<jakarta.activation.DataSource> atts = new ArrayList<>();
+	        if (ds != null) {
+	            ds.setName(rapdosadi); 
+	            atts.add(ds);
+	        }
+
+	        mc.sendWithOptionalAttachment(to, cc, sub, body, atts);
+
+	        Gonderilmis_Mailler gm = new Gonderilmis_Mailler();
+	        gm.setTarih(new Date());
+	        gm.setAciklama(body);
+	        gm.setAlici(to);
+	        gm.setUser_email(user.getEmail());
+	        gm.setGonderen(raporEmailDegiskenler.getHesap().toString().trim());
+	        gm.setKonu(sub);
+	        gm.setRapor(rapdosadi);
+	        gm.setUser(user);
+	        gidenRaporService.savegonderilmisMailler(gm);
+	        if (!cc.isEmpty()) {
+	            Gonderilmis_Mailler gm2 = new Gonderilmis_Mailler();
+	            gm2.setTarih(new Date());
+	            gm2.setAciklama(body);
+	            gm2.setAlici(cc);
+	            gm2.setUser_email(user.getEmail());
+	            gm2.setGonderen(raporEmailDegiskenler.getHesap().toString().trim());
+	            gm2.setKonu(sub);
+	            gm2.setRapor(rapdosadi);
+	            gm2.setUser(user);
+	            gidenRaporService.savegonderilmisMailler(gm2);
+	        }
+	    } catch (Exception ex) {
+	        throw new ServiceException(ex.getMessage());
+	    }
 	}
 }

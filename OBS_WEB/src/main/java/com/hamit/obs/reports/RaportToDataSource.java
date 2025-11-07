@@ -4,8 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.mail.util.ByteArrayDataSource;
-
+import jakarta.mail.util.ByteArrayDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -20,7 +19,7 @@ import net.sf.jasperreports.export.SimpleXmlExporterOutput;
 
 public class RaportToDataSource {
 
-	public ByteArrayDataSource export_pdf(JasperPrint jp) throws Exception
+	public jakarta.mail.util.ByteArrayDataSource export_pdf(JasperPrint jp) throws Exception
 	{
 		jp.setLocaleCode("UTF-8");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();

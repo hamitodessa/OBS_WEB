@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -34,6 +33,7 @@ import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.user.EtiketAyarService;
 import com.hamit.obs.service.user.UserService;
 
+import jakarta.mail.util.ByteArrayDataSource;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JasperCompileManager;

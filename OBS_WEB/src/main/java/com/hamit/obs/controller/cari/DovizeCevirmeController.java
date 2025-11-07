@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.util.ByteArrayDataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -79,7 +78,7 @@ public class DovizeCevirmeController {
 
 	@PostMapping("cari/dvzcevirme_download")
 	public ResponseEntity<byte[]> downloadReport(@RequestBody dvzcevirmeDTO dvzcevirmeDTO) {
-		ByteArrayDataSource dataSource ;
+		jakarta.mail.util.ByteArrayDataSource dataSource ;
 		try {
 			dataSource =  raporOlustur.dvzcevirme(dvzcevirmeDTO);
 			if (dataSource == null) {
