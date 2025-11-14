@@ -108,7 +108,7 @@ public class LoglamaRepository {
 			if (resultSet.next())
 				result  = resultSet.getInt("size");
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("Loglama genel hatası.", e);
 		}
 		return result;
 	}

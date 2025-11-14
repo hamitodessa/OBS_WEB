@@ -75,7 +75,7 @@ public class CariMsSQL implements ICariDatabase{
 	            "    S.KOD, S.KUR, S.BORC, S.ALACAK, S.[USER], " +
 	            "    SUM(S.ALACAK - S.BORC) OVER (ORDER BY " + orderKey + " " +
 	            "        ROWS UNBOUNDED PRECEDING) AS RUNNING, " +
-	            "    (SELECT CAST(ISNULL(SUM(ALACAK - BORC),0) AS decimal(18,2)) " +
+	            "    (SELECT ISNULL(SUM(ALACAK - BORC),0)  " +
 	            "       FROM SATIRLAR " +
 	            "      WHERE HESAP = ? AND TARIH < ?) AS DEVREDEN, " +
 	            "    ROW_NUMBER() OVER (ORDER BY " + orderKey + ") AS rn " +
@@ -85,7 +85,7 @@ public class CariMsSQL implements ICariDatabase{
 	            ") " +
 	            "SELECT " +
 	            "  SID, TARIH, EVRAK, IZAHAT, KOD, KUR, BORC, ALACAK, " +
-	            "  CAST(DEVREDEN + RUNNING AS decimal(18,2)) AS BAKIYE, [USER] " +
+	            "  DEVREDEN + RUNNING AS BAKIYE, [USER] " +
 	            "FROM R " +
 	            "WHERE rn BETWEEN ? AND ? " +
 	            "ORDER BY rn;";
@@ -678,7 +678,7 @@ public class CariMsSQL implements ICariDatabase{
 						"         ISNULL(donem.BORC,0)         AS BORC, " +
 						"         ISNULL(donem.ALACAK,0)       AS ALACAK, " +
 						"         ISNULL(donem.ALACAK,0) - ISNULL(donem.BORC,0) AS BAK_KVARTAL, " +
-						"        ISNULL(ozet.ONCEKI_BAKIYE,0) +( ISNULL(donem.ALACAK,0) - ISNULL(donem.BORC,0)) AS BAKIYE " +
+						"        ISNULL(ozet.ONCEKI_BAKIYE,0) +(ISNULL(donem.ALACAK,0) - ISNULL(donem.BORC,0)) AS BAKIYE " +
 						"  FROM H " +
 						"  LEFT JOIN ozet  ON ozet.HESAP  = H.HESAP " +
 						"  LEFT JOIN donem ON donem.HESAP = H.HESAP " +

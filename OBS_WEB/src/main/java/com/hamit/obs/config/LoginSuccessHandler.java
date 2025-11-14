@@ -1,9 +1,6 @@
 package com.hamit.obs.config;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +17,10 @@ import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.kur.KurService;
 
-import java.io.IOException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 
 
 @Component
@@ -54,7 +54,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			String ip       = request.getRemoteAddr();
 			String ua       = request.getHeader("User-Agent");
 			String uri      = request.getRequestURI();
-
 			log.info("LOGIN OK   - user={} ip={} ua={} uri={}", username, ip, ua, uri);
 
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -67,6 +66,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			keresteService.initialize();
 			response.sendRedirect("/index");
 		} catch (Exception e) {
+			log.error("LOGIN   - user={} ",  SecurityContextHolder.getContext().getAuthentication().getName(), e);
 			response.sendRedirect("/index?trigger=userdetails");
 		} 
 	}

@@ -1,14 +1,27 @@
 package com.hamit.obs.mailcenter;
 
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
-
-import java.io.UnsupportedEncodingException;
-import java.util.*;
+import jakarta.mail.Authenticator;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 
 public class MailCenter {
+	
 	public static final class Cfg {
         public String host;
         public int    port;

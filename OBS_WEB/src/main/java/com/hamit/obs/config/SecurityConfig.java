@@ -18,7 +18,6 @@ public class SecurityConfig {
 	public SecurityConfig(CustomUserDetails customUserDetails) {
 		this.customUserDetails = customUserDetails;
 	}
-	
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSuccessHandler successHandler , LoginFailureHandler loginFailureHandler ) throws Exception {
