@@ -6,9 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +27,8 @@ import com.hamit.obs.service.adres.AdresService;
 
 @Controller
 public class AdresGirisController {
-
+	private static final Logger log = LoggerFactory.getLogger(AdresGirisController.class);
+	
 	@Autowired
 	private AdresService adresService;
 
@@ -38,8 +43,10 @@ public class AdresGirisController {
 							: "";
 			model.addAttribute("hesapKodu", qwString);
 		} catch (ServiceException e) {
+			log.error("Adres Giris: user={} reason={}",currentUser(), e.getMessage(),e);
 			model.addAttribute("message", e.getMessage());
 		} catch (Exception e) {
+			log.error("Adres Giris: user={} reason={}",currentUser() , e.getMessage(),e);
 			model.addAttribute("message", "Hata: " + e.getMessage());
 		}
 		return model;
@@ -62,8 +69,10 @@ public class AdresGirisController {
 			}
 			adresDTO.setImage(null);
 		} catch (ServiceException e) {
+			log.error("Adres Arama: user={} reason={}",currentUser() , e.getMessage(),e);
 			adresDTO.setErrorMessage(e.getMessage());
 		} catch (Exception e) {
+			log.error("Adres Arama: user={} reason={}",currentUser() , e.getMessage(),e);
 			adresDTO.setErrorMessage("Hata: " + e.getMessage());
 		}
 		return ResponseEntity.ok(adresDTO);
@@ -77,14 +86,15 @@ public class AdresGirisController {
 			response.put("baslik", adresService.adres_firma_adi());
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
+			log.error("Adres Get Baslik: user={} reason={}",currentUser(), e.getMessage(),e);
 			response.put("baslik", ""); 
-			response.put("errorMessage", e.getMessage()); // Hata mesajı
+			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			log.error("Adres Get Baslik: user={} reason={}",currentUser() , e.getMessage(),e);
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
 	}
-
 
 	@PostMapping("adres/adrkayit")
 	@ResponseBody
@@ -104,9 +114,11 @@ public class AdresGirisController {
 			adresService.adres_kayit(adresDTO);
 			return ResponseEntity.ok(Map.of("errorMessage", ""));
 		} catch (ServiceException e) {
+			log.error("Adres Kayit: user={} reason={}",currentUser() , e.getMessage(),e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("errorMessage", e.getMessage()));
 		} catch (Exception e) {
+			log.error("Adres Kayit: user={} reason={}",currentUser() , e.getMessage(),e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("errorMessage", e.getMessage()));
 		}
@@ -126,9 +138,11 @@ public class AdresGirisController {
 				response.put("errorMessage", ""); 
 			}
 		} catch (ServiceException e) {
+			log.error("Adres Hesap Adi: user={} reason={}",currentUser() , e.getMessage(),e);
 			response.put("hesapAdi", ""); 
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			log.error("Adres Hesap Adi: user={} reason={}",currentUser(), e.getMessage(),e);
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
@@ -142,10 +156,23 @@ public class AdresGirisController {
 			adresService.adres_sil(adrId);
 			response.put("errorMessage", ""); 
 		} catch (ServiceException e) {
+			log.error("Adres Sil HATA: user={} reason={}", 
+					currentUser(),
+				    e.getMessage(), 
+				    e);
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			log.error("Adres Sil HATA: user={} reason={}", 
+					currentUser(),
+				    e.getMessage(), 
+				    e);
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;
+	}
+	
+	private String currentUser() {
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    return auth != null ? auth.getName() : "ANONYMOUS";
 	}
 }

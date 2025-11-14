@@ -13,16 +13,18 @@ import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.model.user.User_Details;
 import com.hamit.obs.service.user.UserDetailsService;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Component
 public class ConnectionManager {
-
+	private static final Logger log = LoggerFactory.getLogger(ConnectionManager.class);
 	private final Map<String, ConnectionDetails> userConnectionMap = new HashMap<>();
 
 	@Autowired
 	private UserDetailsService userDetailsService;
 
 	public ConnectionDetails getConnection(modulTipi modul, String userEmail) {
+		log.info("Get Connect: {}", userEmail);
 		return getConnect(userEmail, modul.getDbValue());
 	}
 

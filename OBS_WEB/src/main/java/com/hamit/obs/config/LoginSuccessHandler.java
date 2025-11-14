@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +22,12 @@ import com.hamit.obs.service.kur.KurService;
 
 import java.io.IOException;
 
+
 @Component
 @AllArgsConstructor
 
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-	
+	private static final Logger log = LoggerFactory.getLogger(LoginSuccessHandler.class);
 	@Autowired
 	private CariService cariService ;
 	
@@ -47,6 +50,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		try {
+			String username = authentication.getName();
+			String ip       = request.getRemoteAddr();
+			String ua       = request.getHeader("User-Agent");
+			String uri      = request.getRequestURI();
+
+			log.info("LOGIN OK   - user={} ip={} ua={} uri={}", username, ip, ua, uri);
+
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			UserSessionManager.removeUserSessionsByUsername(useremail);
 			cariService.initialize();

@@ -18,9 +18,10 @@ public class SecurityConfig {
 	public SecurityConfig(CustomUserDetails customUserDetails) {
 		this.customUserDetails = customUserDetails;
 	}
+	
 
 	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSuccessHandler successHandler) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSuccessHandler successHandler , LoginFailureHandler loginFailureHandler ) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 		.authorizeHttpRequests(request -> request
 				.requestMatchers(
@@ -32,7 +33,7 @@ public class SecurityConfig {
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
 				.successHandler(successHandler)
-				.failureUrl("/login?error=true")
+				.failureHandler(loginFailureHandler)
 				.permitAll()
 				)
 		.logout(logout -> logout
