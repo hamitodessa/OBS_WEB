@@ -722,9 +722,14 @@ public class CariMsSQL implements ICariDatabase{
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO, 
 			ConnectionDetails cariConnDetails, 
 			ConnectionDetails kurConnectionDetails) {
+		
 		int page = dvzcevirmeDTO.getPage();
-		int pageSize = dvzcevirmeDTO.getPageSize();
-		int offset = page * pageSize;
+	    int pageSize = dvzcevirmeDTO.getPageSize();
+	    if (page < 0) page = 0;
+	    int offset = page * pageSize;
+	    int startRn = offset + 1;
+	    int endRn   = offset + pageSize;
+	    
 
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
@@ -757,38 +762,119 @@ public class CariMsSQL implements ICariDatabase{
 						+ kurConnectionDetails.getDatabaseName() + "].[dbo].[KURLAR]')";
 			}
 			Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(dvzcevirmeDTO.getStartDate(), dvzcevirmeDTO.getEndDate());
-			String tarihFilter = "";
 			boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate()) && "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
-			if (hasDate)
-				tarihFilter = " AND s.TARIH  >= ?  AND s.TARIH < ? ";
-			String sql = "SELECT s.TARIH, s.EVRAK, I.IZAHAT, " +
-					" ISNULL(IIF(k." + dvzcevirmeDTO.getDvz_cins() + " = 0, 1, k." + dvzcevirmeDTO.getDvz_cins() + "), 1) as CEV_KUR, " +
-					" ((s.ALACAK - s.BORC) / ISNULL(NULLIF(k." + dvzcevirmeDTO.getDvz_cins() + ", 0), 1)) as DOVIZ_TUTAR, " +
-					" SUM((s.ALACAK - s.BORC) / ISNULL(NULLIF(k." + dvzcevirmeDTO.getDvz_cins() + ", 0), 1)) OVER (ORDER BY s.TARIH " +
-					" ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as DOVIZ_BAKIYE, " +
-					" SUM(s.ALACAK - s.BORC) OVER (ORDER BY s.TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as BAKIYE, " +
-					" s.KUR, BORC, ALACAK, s.[USER] " +
-					" FROM (SATIRLAR as s LEFT OUTER JOIN IZAHAT as I ON s.EVRAK = I.EVRAK) " +
-					" LEFT OUTER JOIN " + str1 + " as k " +
-					" ON CONVERT(VARCHAR(25), s.TARIH, 101) = CONVERT(VARCHAR(25), k.Tarih, 101) " +
-					" WHERE s.HESAP = ? " + tarihFilter +
-					" AND (k.Kur IS NULL OR k.Kur = '" + dvzcevirmeDTO.getDvz_tur() + "') " +
-					" ORDER BY s.TARIH" +
-					" OFFSET " + offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
+			final String orderKey = "s.TARIH, s.EVRAK, s.H, s.SID";
+			final String sqlHasDate =
+			    "WITH K_RATE AS ( " +
+			    "  SELECT CAST(k.Tarih AS date) AS Tar, " +
+			    "         MAX(CASE WHEN k." + dvzcevirmeDTO.getDvz_cins() + " IS NULL OR k." + dvzcevirmeDTO.getDvz_cins() + " = 0 " +
+			    "                  THEN 1.0 ELSE k." + dvzcevirmeDTO.getDvz_cins() + " END) AS KCINS " +
+			    "  FROM " + str1 + " k " +
+			    "  WHERE k.Kur = ? " +  
+			    "  GROUP BY CAST(k.Tarih AS date) " +
+			    "), IZH AS ( " +
+			    "  SELECT I.EVRAK, I.IZAHAT, " +
+			    "         ROW_NUMBER() OVER (PARTITION BY I.EVRAK ORDER BY I.EVRAK) AS rk " +
+			    "  FROM IZAHAT I " +
+			    "), S_BASE AS ( " +
+			    "  SELECT s.SID, s.TARIH, s.EVRAK, ISNULL(IZH.IZAHAT,'') AS IZAHAT, " +
+			    "         s.KUR, s.BORC, s.ALACAK, s.[USER], s.H " +
+			    "  FROM SATIRLAR s " +
+			    "  LEFT JOIN IZH ON s.EVRAK = IZH.EVRAK AND IZH.rk = 1 " +
+			    "  WHERE s.HESAP = ? AND s.TARIH >= ? AND s.TARIH < ? " +
+			    "), R AS ( " +
+			    "  SELECT " +
+			    "    s.SID, s.TARIH, s.EVRAK, s.IZAHAT, " +
+			    "    ISNULL(KR.KCINS,1) AS CEV_KUR, " +
+			    "    ((s.ALACAK - s.BORC) / ISNULL(KR.KCINS,1)) AS DOVIZ_TUTAR, " +
+			    "    SUM(((s.ALACAK - s.BORC) / ISNULL(KR.KCINS,1))) " +
+			    "      OVER (ORDER BY " + orderKey + " ROWS UNBOUNDED PRECEDING) AS RUNNING_DOVIZ, " +
+			    "    SUM(s.ALACAK - s.BORC) " +
+			    "      OVER (ORDER BY " + orderKey + " ROWS UNBOUNDED PRECEDING) AS RUNNING_TL, " +
+			    "    s.KUR, s.BORC, s.ALACAK, s.[USER], " +
+			    "    ROW_NUMBER() OVER (ORDER BY " + orderKey + ") AS rn " +
+			    "  FROM S_BASE s " +
+			    "  LEFT JOIN K_RATE KR ON CAST(s.TARIH AS date) = KR.Tar " +
+			    "), DEV_TL AS ( " +
+			    "  SELECT CAST(ISNULL(SUM(s2.ALACAK - s2.BORC),0) AS decimal(18,2)) AS V " +
+			    "  FROM SATIRLAR s2 " +
+			    "  WHERE s2.HESAP = ? AND s2.TARIH < ? " +
+			    "), DEV_DVZ AS ( " +
+			    "  SELECT CAST(ISNULL(SUM((s2.ALACAK - s2.BORC) / ISNULL(KR2.KCINS,1)),0) AS decimal(18,2)) AS V " +
+			    "  FROM SATIRLAR s2 " +
+			    "  LEFT JOIN K_RATE KR2 ON CAST(s2.TARIH AS date) = KR2.Tar " +
+			    "  WHERE s2.HESAP = ? AND s2.TARIH < ? " +
+			    ") " +
+			    "SELECT " +
+			    "  R.TARIH, R.EVRAK, R.IZAHAT, R.CEV_KUR, R.DOVIZ_TUTAR, " +
+			    "  CAST(DEV_DVZ.V + R.RUNNING_DOVIZ AS decimal(18,2)) AS DOVIZ_BAKIYE, " +
+			    "  CAST(DEV_TL.V  + R.RUNNING_TL   AS decimal(18,2)) AS BAKIYE, " +
+			    "  R.KUR, R.BORC, R.ALACAK, R.[USER] " +
+			    "FROM R " +
+			    "CROSS JOIN DEV_TL " +
+			    "CROSS JOIN DEV_DVZ " +
+			    "WHERE R.rn BETWEEN ? AND ? " +
+			    "ORDER BY R.rn; ";
+			final String sqlAll =
+				    "WITH K_RATE AS ( " +
+				    "  SELECT CAST(k.Tarih AS date) AS Tar, " +
+				    "         MAX(CASE WHEN k." + dvzcevirmeDTO.getDvz_cins() + " IS NULL OR k." + dvzcevirmeDTO.getDvz_cins() + " = 0 " +
+				    "                  THEN 1.0 ELSE k." + dvzcevirmeDTO.getDvz_cins() + " END) AS KCINS " +
+				    "  FROM " + str1 + " k " +
+				    "  WHERE k.Kur = ? " +
+				    "  GROUP BY CAST(k.Tarih AS date) " +
+				    "), IZH AS ( " +
+				    "  SELECT I.EVRAK, I.IZAHAT, " +
+				    "         ROW_NUMBER() OVER (PARTITION BY I.EVRAK ORDER BY I.EVRAK) AS rk " +
+				    "  FROM IZAHAT I " +
+				    "), R AS ( " +
+				    "  SELECT " +
+				    "    s.TARIH, s.EVRAK, ISNULL(IZH.IZAHAT,'') AS IZAHAT, " +
+				    "    ISNULL(KR.KCINS,1) AS CEV_KUR, " +
+				    "    ((s.ALACAK - s.BORC) / ISNULL(KR.KCINS,1)) AS DOVIZ_TUTAR, " +
+				    "    SUM(((s.ALACAK - s.BORC) / ISNULL(KR.KCINS,1))) " +
+				    "      OVER (ORDER BY s.TARIH, s.EVRAK, s.H, s.SID ROWS UNBOUNDED PRECEDING) AS DOVIZ_BAKIYE, " +
+				    "    SUM(s.ALACAK - s.BORC) " +
+				    "      OVER (ORDER BY s.TARIH, s.EVRAK, s.H, s.SID ROWS UNBOUNDED PRECEDING) AS BAKIYE, " +
+				    "    s.KUR, s.BORC, s.ALACAK, s.[USER], " +
+				    "    ROW_NUMBER() OVER (ORDER BY s.TARIH, s.EVRAK, s.H, s.SID) AS rn " +
+				    "  FROM SATIRLAR s " +
+				    "  LEFT JOIN IZH   ON s.EVRAK = IZH.EVRAK AND IZH.rk = 1 " +
+				    "  LEFT JOIN K_RATE KR ON CAST(s.TARIH AS date) = KR.Tar " +
+				    "  WHERE s.HESAP = ? " +
+				    ") " +
+				    "SELECT TARIH, EVRAK, IZAHAT, CEV_KUR, DOVIZ_TUTAR, DOVIZ_BAKIYE, " +
+				    "       BAKIYE, KUR, BORC, ALACAK, [USER] " +
+				    "FROM R " +
+				    "WHERE rn BETWEEN ? AND ? " +
+				    "ORDER BY rn; ";
+
 			try (Connection connection = DriverManager.getConnection(
 					cariConnDetails.getJdbcUrl(),
 					cariConnDetails.getUsername(),
 					cariConnDetails.getPassword());
-					PreparedStatement stmt = connection.prepareStatement(sql,
+					PreparedStatement ps = connection.prepareStatement(hasDate ? sqlHasDate : sqlAll,
 							ResultSet.TYPE_FORWARD_ONLY,
 							ResultSet.CONCUR_READ_ONLY)) {
-
-				stmt.setNString(1, dvzcevirmeDTO.getHesapKodu());
+				int p = 1;
 				if (hasDate) {
-					stmt.setTimestamp(2, ts[0]);
-					stmt.setTimestamp(3, ts[1]);
+				    ps.setString(p++, dvzcevirmeDTO.getDvz_tur());
+				    ps.setNString(p++, dvzcevirmeDTO.getHesapKodu());
+				    ps.setTimestamp(p++, ts[0]);
+				    ps.setTimestamp(p++, ts[1]);
+				    ps.setNString(p++, dvzcevirmeDTO.getHesapKodu());
+				    ps.setTimestamp(p++, ts[0]);
+				    ps.setNString(p++, dvzcevirmeDTO.getHesapKodu());
+				    ps.setTimestamp(p++, ts[0]);
+				    ps.setInt(p++, startRn);
+				    ps.setInt(p++, endRn);
+				} else {
+				    ps.setString(p++, dvzcevirmeDTO.getDvz_tur());
+				    ps.setNString(p++, dvzcevirmeDTO.getHesapKodu());
+				    ps.setInt(p++, startRn);
+				    ps.setInt(p++, endRn);
 				}
-				try (ResultSet rs = stmt.executeQuery()) {
+				try (ResultSet rs = ps.executeQuery()) {
 					resultList = ResultSetConverter.convertToList(rs);
 				}
 			}

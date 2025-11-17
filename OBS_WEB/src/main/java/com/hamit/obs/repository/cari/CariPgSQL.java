@@ -622,15 +622,16 @@ public class CariPgSQL implements ICariDatabase{
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO, 
 			ConnectionDetails cariConnDetails, 
 			ConnectionDetails kurConnectionDetails) {
+		int page = dvzcevirmeDTO.getPage();
+	    int pageSize = dvzcevirmeDTO.getPageSize();
+	    if (page < 0) page = 0;
+	    int offset = page * pageSize;
+	    int startRn = offset + 1;
+	    int endRn   = offset + pageSize;
+
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
-			String sql = "" ;
-			String tARIH = "" ;
 			String kurServer = "" ;
-			
-			int page = dvzcevirmeDTO.getPage();
-			int pageSize = dvzcevirmeDTO.getPageSize();
-			int offset = page * pageSize;
 			
 			if (!cariConnDetails.getSqlTipi().equals(kurConnectionDetails.getSqlTipi()))
 				throw  new Exception("Cari Dosya ve Kur Dosyasi Farkli SQL dosyalari");
@@ -640,28 +641,123 @@ public class CariPgSQL implements ICariDatabase{
 			}else{
 				kurServer = "dbname = " + modulbaslikTipi.OK_Kur.name().toLowerCase() + kurConnectionDetails.getDatabaseName() + " port = " + ipogren[1] + " host = " +   ipogren[0] + " user = " + kurConnectionDetails.getUsername() + " password = " + kurConnectionDetails.getPassword() +"" ; 
 			}
-			if(! dvzcevirmeDTO.getStartDate().equals("1900-01-01") || ! dvzcevirmeDTO.getEndDate().equals("2100-12-31"))
-				tARIH = " AND s.\"TARIH\" BETWEEN '" + dvzcevirmeDTO.getStartDate() + "' AND '" + dvzcevirmeDTO.getEndDate() + " 23:59:59.998'" ;
-			sql = "SELECT s.\"TARIH\", s.\"EVRAK\",I.\"IZAHAT\",COALESCE(NULLIF(\"" + dvzcevirmeDTO.getDvz_cins() + "\",0),1) as \"CEV_KUR\"," +
-					" ((s.\"ALACAK\" - s.\"BORC\") / COALESCE(NULLIF(\"" + dvzcevirmeDTO.getDvz_cins() + "\",0),1)) as \"DOVIZ_TUTAR\"," +
-					" SUM((s.\"ALACAK\" - s.\"BORC\") / COALESCE(NULLIF(\"" + dvzcevirmeDTO.getDvz_cins() + "\",0),1)) OVER(ORDER BY s.\"TARIH\"" + 
-					" ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as \"DOVIZ_BAKIYE\"," +
-					" SUM(s.\"ALACAK\" - s.\"BORC\") OVER(ORDER BY s.\"TARIH\" ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS \"BAKIYE\"," +  
-					" s.\"KUR\",\"BORC\",\"ALACAK\",s.\"USER\""+  
-					" FROM \"SATIRLAR\" as s  LEFT OUTER JOIN \"IZAHAT\" as I on s.\"EVRAK\" = I.\"EVRAK\"" + 
-					" LEFT OUTER JOIN dblink('" + kurServer + "'," + 
-					" 'SELECT \"TARIH\",\"" + dvzcevirmeDTO.getDvz_cins() + "\" FROM \"KURLAR\" WHERE \"KUR\" = ''" + dvzcevirmeDTO.getDvz_tur() + "''')" +   
-					" AS k (\"TARIH\" timestamp ,\"" + dvzcevirmeDTO.getDvz_cins() + "\" double precision) on DATE(s.\"TARIH\") = DATE(k.\"TARIH\")" +
-					" WHERE \"HESAP\" = '" + dvzcevirmeDTO.getHesapKodu() + "'" + 	
-					tARIH +
-					" ORDER BY \"TARIH\"" +
-					" LIMIT " + pageSize + " OFFSET " + offset + " ";
+			boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate()) && "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
+		final String orderKey = "s.\"TARIH\", s.\"EVRAK\", s.\"H\", s.\"SID\"";
+		String islem = "/" ;
+		final String sqlHasDate =
+		    "WITH K_RAW AS ( " +
+		    "  SELECT * FROM dblink('" + kurServer + "', " +
+		    "    'SELECT \"TARIH\", \"" + dvzcevirmeDTO.getDvz_cins() + "\" FROM \"KURLAR\" WHERE \"KUR\" = ''" +  dvzcevirmeDTO.getDvz_tur() + "'' ' " +
+		    "  ) AS t(\"TARIH\" timestamp, \"KCINS\" double precision) " +
+		    "), K AS ( " +
+		    "  SELECT DATE(\"TARIH\") AS \"Tar\", " +
+		    "         COALESCE(NULLIF(MAX(\"KCINS\"),0),1) AS \"KCINS\" " + 
+		    "  FROM K_RAW " +
+		    "  GROUP BY DATE(\"TARIH\") " +
+		    "), IZH AS ( " +
+		    "  SELECT I.\"EVRAK\", I.\"IZAHAT\", " +
+		    "         ROW_NUMBER() OVER (PARTITION BY I.\"EVRAK\" ORDER BY I.\"EVRAK\") AS rk " +
+		    "  FROM \"IZAHAT\" I " +
+		    "), S0 AS ( " +
+		    "  SELECT s.\"SID\", s.\"TARIH\", s.\"EVRAK\", s.\"H\", s.\"KUR\", s.\"BORC\", s.\"ALACAK\", s.\"USER\", " +
+		    "         ROW_NUMBER() OVER (ORDER BY " + orderKey + ") AS rn " +
+		    "  FROM \"SATIRLAR\" s " +
+		    "  WHERE s.\"HESAP\" = ? AND s.\"TARIH\" >= ? AND s.\"TARIH\" < ? " +
+		    "), S1 AS ( " +
+		    "  SELECT S0.rn, S0.\"TARIH\", S0.\"EVRAK\", S0.\"KUR\", S0.\"BORC\", S0.\"ALACAK\", S0.\"USER\", " +
+		    "         COALESCE(IZH.\"IZAHAT\",'') AS \"IZAHAT\", " +
+		    "         COALESCE(K.\"KCINS\",1)     AS \"CEV_KUR\" " +
+		    "  FROM S0 " +
+		    "  LEFT JOIN IZH ON S0.\"EVRAK\" = IZH.\"EVRAK\" AND IZH.rk = 1 " +
+		    "  LEFT JOIN K   ON DATE(S0.\"TARIH\") = K.\"Tar\" " +
+		    "), R AS ( " +
+		    "  SELECT " +
+		    "    S1.rn, S1.\"TARIH\", S1.\"EVRAK\", S1.\"IZAHAT\", S1.\"CEV_KUR\", S1.\"KUR\", S1.\"BORC\", S1.\"ALACAK\", S1.\"USER\", " +
+		    "    ((S1.\"ALACAK\" - S1.\"BORC\") " + islem + " S1.\"CEV_KUR\") AS \"DOVIZ_TUTAR\", " +
+		    "    SUM(((S1.\"ALACAK\" - S1.\"BORC\") " + islem + " S1.\"CEV_KUR\")) OVER (ORDER BY S1.rn ROWS UNBOUNDED PRECEDING) AS \"RUNNING_DOVIZ\", " +
+		    "    SUM(  S1.\"ALACAK\" - S1.\"BORC\")              OVER (ORDER BY S1.rn ROWS UNBOUNDED PRECEDING) AS \"RUNNING_TL\" " +
+		    "  FROM S1 " +
+		    "), DEV_TL AS ( " +
+		    "  SELECT COALESCE(SUM(s2.\"ALACAK\" - s2.\"BORC\"),0)::numeric(18,2) AS V " +
+		    "  FROM \"SATIRLAR\" s2 " +
+		    "  WHERE s2.\"HESAP\" = ? AND s2.\"TARIH\" < ? " +
+		    "), DEV_DVZ AS ( " +
+		    "  SELECT COALESCE(SUM((s2.\"ALACAK\" - s2.\"BORC\") " + islem + " COALESCE(K2.\"KCINS\",1)),0)::numeric(18,2) AS V " +
+		    "  FROM \"SATIRLAR\" s2 " +
+		    "  LEFT JOIN K K2 ON DATE(s2.\"TARIH\") = K2.\"Tar\" " +
+		    "  WHERE s2.\"HESAP\" = ? AND s2.\"TARIH\" < ? " +
+		    ") " +
+		    "SELECT " +
+		    "  R.\"TARIH\", R.\"EVRAK\", R.\"IZAHAT\", R.\"CEV_KUR\", R.\"DOVIZ_TUTAR\", " +
+		    "  (DEV_DVZ.V + R.\"RUNNING_DOVIZ\") AS \"DOVIZ_BAKIYE\", " +
+		    "  (DEV_TL.V  + R.\"RUNNING_TL\")   AS \"BAKIYE\", " +
+		    "  R.\"KUR\", R.\"BORC\", R.\"ALACAK\", R.\"USER\" " +
+		    "FROM R " +
+		    "CROSS JOIN DEV_TL " +
+		    "CROSS JOIN DEV_DVZ " +
+		    "WHERE R.rn BETWEEN ? AND ? " +
+		    "ORDER BY R.rn; ";
+
+		final String sqlAll =
+			    "WITH K_RAW AS ( " +
+			    "  SELECT * FROM dblink('" + kurServer + "', " +
+			    "    'SELECT \"TARIH\", \"" + dvzcevirmeDTO.getDvz_cins() + "\" FROM \"KURLAR\" WHERE \"KUR\" = ''" +  dvzcevirmeDTO.getDvz_tur() + "'' ' " +
+			    "  ) AS t(\"TARIH\" timestamp, \"KCINS\" double precision) " +
+			    "), K AS ( " +  
+			    "  SELECT DATE(\"TARIH\") AS \"Tar\", COALESCE(NULLIF(MAX(\"KCINS\"),0),1) AS \"KCINS\" " +
+			    "  FROM K_RAW GROUP BY DATE(\"TARIH\") " +
+			    "), IZH AS ( " + 
+			    "  SELECT I.\"EVRAK\", I.\"IZAHAT\", " +
+			    "         ROW_NUMBER() OVER (PARTITION BY I.\"EVRAK\" ORDER BY I.\"EVRAK\") AS rk " +
+			    "  FROM \"IZAHAT\" I " +
+			    "), S0 AS ( " + 
+			    "  SELECT s.\"SID\", s.\"TARIH\", s.\"EVRAK\", s.\"H\", s.\"KUR\", s.\"BORC\", s.\"ALACAK\", s.\"USER\", " +
+			    "         ROW_NUMBER() OVER (ORDER BY " + orderKey + ") AS rn " +
+			    "  FROM \"SATIRLAR\" s " +
+			    "  WHERE s.\"HESAP\" = ? " + 
+			    "), S1 AS ( " +
+			    "  SELECT " +
+			    "    S0.rn, S0.\"TARIH\", S0.\"EVRAK\", " +
+			    "    COALESCE(IZH.\"IZAHAT\",'') AS \"IZAHAT\", " +
+			    "    COALESCE(K.\"KCINS\",1)     AS \"CEV_KUR\", " +
+			    "    ((S0.\"ALACAK\" - S0.\"BORC\") * COALESCE(K.\"KCINS\",1)) AS \"DOVIZ_TUTAR\", " +
+			    "    SUM(((S0.\"ALACAK\" - S0.\"BORC\") * COALESCE(K.\"KCINS\",1))) OVER (ORDER BY S0.rn ROWS UNBOUNDED PRECEDING) AS \"DOVIZ_BAKIYE\", " +
+			    "    SUM(  S0.\"ALACAK\" - S0.\"BORC\")                      OVER (ORDER BY S0.rn ROWS UNBOUNDED PRECEDING) AS \"BAKIYE\", " +
+			    "    S0.\"KUR\", S0.\"BORC\", S0.\"ALACAK\", S0.\"USER\" " +
+			    "  FROM S0 " +
+			    "  LEFT JOIN IZH ON S0.\"EVRAK\" = IZH.\"EVRAK\" AND IZH.rk = 1 " +
+			    "  LEFT JOIN K   ON DATE(S0.\"TARIH\") = K.\"Tar\" " +
+			    ") " +
+			    "SELECT " +
+			    "  \"TARIH\", \"EVRAK\", \"IZAHAT\", \"CEV_KUR\", \"DOVIZ_TUTAR\", " +
+			    "  \"DOVIZ_BAKIYE\", \"BAKIYE\", \"KUR\", \"BORC\", \"ALACAK\", \"USER\" " +
+			    "FROM S1 " +
+			    "WHERE rn BETWEEN ? AND ? " +  
+			    "ORDER BY rn; ";
+		final String sql = hasDate ? sqlHasDate : sqlAll;
 			Connection connection = DriverManager.getConnection(
 					cariConnDetails.getJdbcUrl(), 
 					cariConnDetails.getUsername(), 
 					cariConnDetails.getPassword());
-			PreparedStatement stmt = connection.prepareStatement(sql);
-			ResultSet rss = stmt.executeQuery();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(dvzcevirmeDTO.getStartDate(), dvzcevirmeDTO.getEndDate());
+			int p = 1;
+			if (hasDate) {
+			    ps.setString(p++,  dvzcevirmeDTO.getHesapKodu());
+			    ps.setTimestamp(p++, ts[0]);
+			    ps.setTimestamp(p++, ts[1]);
+			    ps.setString(p++,  dvzcevirmeDTO.getHesapKodu());   
+			    ps.setTimestamp(p++, ts[0]);
+			    ps.setString(p++,  dvzcevirmeDTO.getHesapKodu());   
+			    ps.setTimestamp(p++, ts[0]);
+			    ps.setInt(p++, startRn);   
+			    ps.setInt(p++, endRn);  
+			} else {
+			    ps.setString(p++,  dvzcevirmeDTO.getHesapKodu());   
+			    ps.setInt(p++, startRn);    
+			    ps.setInt(p++, endRn);    
+			}
+			ResultSet rss = ps.executeQuery();
 			resultList = ResultSetConverter.convertToList(rss);
 		} catch (Exception e) {
 			throw new ServiceException("PG " + e.getMessage(), e);

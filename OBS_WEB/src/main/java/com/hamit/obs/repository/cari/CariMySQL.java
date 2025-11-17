@@ -35,6 +35,7 @@ import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.User;
 import com.hamit.obs.service.user.UserService;
 
+
 @Component
 public class CariMySQL implements ICariDatabase{
 
@@ -712,8 +713,11 @@ public class CariMySQL implements ICariDatabase{
 			ConnectionDetails kurConnectionDetails) {
 
 		int page = dvzcevirmeDTO.getPage();
-		int pageSize = dvzcevirmeDTO.getPageSize();
-		int offset = page * pageSize;
+	    int pageSize = dvzcevirmeDTO.getPageSize();
+	    if (page < 0) page = 0;
+	    int offset = page * pageSize;
+	    int startRn = offset + 1;
+	    int endRn   = offset + pageSize;
 
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
@@ -732,50 +736,119 @@ public class CariMySQL implements ICariDatabase{
 				str1 = "obs_federated." + usrString + "_kurlar_federated AS k USE INDEX (IX_KUR)";
 			}
 			Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(dvzcevirmeDTO.getStartDate(), dvzcevirmeDTO.getEndDate());
-			String tarihFilter = "";
+			String sql = "";
+			String tARIH = "";
+			String islem = "/" ;
 			boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate()) && "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
-			if (hasDate)
-				tarihFilter = " AND s.TARIH  >= ?  AND s.TARIH < ? ";
-
-			String islem = "/";
-			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT DATE(s.TARIH) as TARIH, s.EVRAK, IFNULL(I.IZAHAT, '') AS IZAHAT, ")
-			.append("IFNULL(IF(k.")
-			.append(dvzcevirmeDTO.getDvz_cins())
-			.append(" = 0, 1, k.")
-			.append(dvzcevirmeDTO.getDvz_cins())
-			.append("), 1) AS CEV_KUR, ")
-			.append("((s.ALACAK - s.BORC) ").append(islem)
-			.append(" IFNULL(NULLIF(k.").append(dvzcevirmeDTO.getDvz_cins()).append(", 0), 1)) AS DOVIZ_TUTAR, ")
-			.append("SUM((s.ALACAK - s.BORC) ").append(islem)
-			.append(" IFNULL(NULLIF(k.").append(dvzcevirmeDTO.getDvz_cins()).append(", 0), 1)) OVER(ORDER BY s.TARIH ")
-			.append("ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS DOVIZ_BAKIYE, ")
-			.append("SUM(s.ALACAK - s.BORC) OVER(ORDER BY s.TARIH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS BAKIYE, ")
-			.append("s.KUR, BORC, ALACAK, s.USER ")
-			.append("FROM SATIRLAR AS s USE INDEX (IX_SATIRLAR) ")
-			.append("LEFT OUTER JOIN IZAHAT AS I USE INDEX (IX_IZAHAT) ON s.EVRAK = I.EVRAK ")
-			.append("LEFT OUTER JOIN ")
-			.append(str1).append(" ON DATE(k.TARIH) = DATE(s.TARIH) ")
-			.append("WHERE s.HESAP = ? AND (k.KUR IS NULL OR k.KUR = ?) ");
-
-			if (hasDate)
-				sql.append( tarihFilter );
-
-			sql.append("ORDER BY s.TARIH");
-			sql.append(" LIMIT " + pageSize + " OFFSET " + offset + " ");
+			if (hasDate) tARIH = " AND s.TARIH >= ? AND s.TARIH < ? ";
+			String orderKey = "s.TARIH, s.EVRAK, s.SID";
+			if (hasDate) {
+			    // KISMİ TARİH: DEVREDEN + RUNNING
+			    sql =
+			    "WITH K AS ( " +
+			    "  SELECT DATE(k.Tarih) AS Tar, k.Kur, k." + dvzcevirmeDTO.getDvz_cins() + " AS KCINS, " +
+			    "         ROW_NUMBER() OVER (PARTITION BY DATE(k.Tarih), k.Kur ORDER BY k.Tarih DESC, k.ID DESC) AS rk " +
+			    "  FROM " + str1 + " k " +
+			    "), IZH AS ( " +
+			    "  SELECT I.EVRAK, I.IZAHAT, ROW_NUMBER() OVER (PARTITION BY I.EVRAK ORDER BY I.EVRAK) AS rk " +
+			    "  FROM IZAHAT I " +
+			    "), R AS ( " +
+			    "  SELECT " +
+			    "    DATE(s.TARIH) AS TARIH, s.EVRAK, IFNULL(IZH.IZAHAT,'') AS IZAHAT, " +
+			    "    IFNULL(IF(K.KCINS = 0, 1, K.KCINS), 1) AS CEV_KUR, " +
+			    "    ((s.ALACAK - s.BORC) " + islem + " IFNULL(NULLIF(K.KCINS,0),1)) AS DOVIZ_TUTAR, " +
+			    "    SUM(((s.ALACAK - s.BORC) " + islem + " IFNULL(NULLIF(K.KCINS,0),1))) OVER ( " +
+			    "        ORDER BY " + orderKey + " ROWS UNBOUNDED PRECEDING) AS RUNNING_DOVIZ, " +
+			    "    SUM(s.ALACAK - s.BORC) OVER ( " +
+			    "        ORDER BY " + orderKey + " ROWS UNBOUNDED PRECEDING) AS RUNNING_TL, " +
+			    "    s.KUR, s.BORC, s.ALACAK, s.`USER`, " +
+			    "    ROW_NUMBER() OVER (ORDER BY " + orderKey + ") AS rn, " +
+			    "    (SELECT CAST(IFNULL(SUM(s2.ALACAK - s2.BORC),0) AS DECIMAL(18,2)) " +
+			    "       FROM SATIRLAR s2 WHERE s2.HESAP = ? AND s2.TARIH < ?) AS DEVREDEN_TL, " +
+			    "    (SELECT CAST(IFNULL(SUM((s2.ALACAK - s2.BORC) " + islem + " IFNULL(NULLIF(K2.KCINS,0),1)),0) AS DECIMAL(18,2)) " +
+			    "       FROM SATIRLAR s2 " +
+			    "       LEFT JOIN K K2 ON DATE(s2.TARIH) = K2.Tar AND (K2.Kur IS NULL OR K2.Kur = ?) AND K2.rk = 1 " +
+			    "      WHERE s2.HESAP = ? AND s2.TARIH < ?) AS DEVREDEN_DOVIZ " +
+			    "  FROM (SATIRLAR AS s USE INDEX (IX_SATIRLAR) " +
+			    "        LEFT OUTER JOIN IZH USE INDEX (IX_IZAHAT) ON s.EVRAK = IZH.EVRAK AND IZH.rk = 1) " +
+			    "  LEFT OUTER JOIN " + str1 + " K0 " +
+			    "         ON DATE(s.TARIH) = DATE(K0.Tarih) " +
+			    "  LEFT OUTER JOIN K " +
+			    "         ON DATE(s.TARIH) = K.Tar AND (K.Kur IS NULL OR K.Kur = ?) AND K.rk = 1 " +
+			    "  WHERE s.HESAP = ? " + tARIH + "" +
+			    ") " +
+			    "SELECT " +
+			    "  TARIH, EVRAK, IZAHAT, CEV_KUR, DOVIZ_TUTAR, " +
+			    "  CAST(DEVREDEN_DOVIZ + RUNNING_DOVIZ AS DECIMAL(18,2)) AS DOVIZ_BAKIYE, " +
+			    "  CAST(DEVREDEN_TL   + RUNNING_TL   AS DECIMAL(18,2))   AS BAKIYE, " +
+			    "  KUR, BORC, ALACAK, `USER` " +
+			    "FROM R " +
+			    "WHERE rn BETWEEN ? AND ? " +
+			    "ORDER BY rn; ";
+			} else {
+			    // TAM ARALIK: sadece RUNNING
+			    sql =
+			    "WITH K AS ( " +
+			    "  SELECT DATE(k.Tarih) AS Tar, k.Kur, k." + dvzcevirmeDTO.getDvz_cins() + " AS KCINS, " +
+			    "         ROW_NUMBER() OVER (PARTITION BY DATE(k.Tarih), k.Kur ORDER BY k.Tarih DESC, k.ID DESC) AS rk " +
+			    "  FROM " + str1 + " k " +
+			    "), IZH AS ( " +
+			    "  SELECT I.EVRAK, I.IZAHAT, ROW_NUMBER() OVER (PARTITION BY I.EVRAK ORDER BY I.EVRAK) AS rk " +
+			    "  FROM IZAHAT I " +
+			    "), R AS ( " +
+			    "  SELECT " +
+			    "    DATE(s.TARIH) AS TARIH, s.EVRAK, IFNULL(IZH.IZAHAT,'') AS IZAHAT, " +
+			    "    IFNULL(IF(K.KCINS = 0, 1, K.KCINS), 1) AS CEV_KUR, " +
+			    "    ((s.ALACAK - s.BORC) " + islem + " IFNULL(NULLIF(K.KCINS,0),1)) AS DOVIZ_TUTAR, " +
+			    "    SUM(((s.ALACAK - s.BORC) " + islem + " IFNULL(NULLIF(K.KCINS,0),1))) OVER ( " +
+			    "        ORDER BY " + orderKey + " ROWS UNBOUNDED PRECEDING) AS DOVIZ_BAKIYE, " +
+			    "    SUM(s.ALACAK - s.BORC) OVER ( " +
+			    "        ORDER BY " + orderKey + " ROWS UNBOUNDED PRECEDING) AS BAKIYE, " +
+			    "    s.KUR, s.BORC, s.ALACAK, s.`USER`, " +
+			    "    ROW_NUMBER() OVER (ORDER BY " + orderKey + ") AS rn " +
+			    "  FROM (SATIRLAR AS s USE INDEX (IX_SATIRLAR) " +
+			    "        LEFT OUTER JOIN IZH USE INDEX (IX_IZAHAT) ON s.EVRAK = IZH.EVRAK AND IZH.rk = 1) " +
+			    "  LEFT OUTER JOIN K " +
+			    "         ON DATE(s.TARIH) = K.Tar AND (K.Kur IS NULL OR K.Kur = ?) AND K.rk = 1 " +
+			    "  WHERE s.HESAP = ? " +
+			    ") " +
+			    "SELECT " +
+			    "  TARIH, EVRAK, IZAHAT, CEV_KUR, DOVIZ_TUTAR, DOVIZ_BAKIYE, " +
+			    "  BAKIYE, KUR, BORC, ALACAK, `USER` " +
+			    "FROM R " +
+			    "WHERE rn BETWEEN ? AND ? " +
+			    "ORDER BY rn; ";
+			}
 			try (Connection connection = DriverManager.getConnection(
 					cariConnDetails.getJdbcUrl(), 
 					cariConnDetails.getUsername(), 
 					cariConnDetails.getPassword());
-					PreparedStatement stmt = connection.prepareStatement(sql.toString(),
+					PreparedStatement ps = connection.prepareStatement(sql.toString(),
 							ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
-				stmt.setString(1, dvzcevirmeDTO.getHesapKodu());
-				stmt.setString(2, dvzcevirmeDTO.getDvz_tur());
+				int p = 1;
 				if (hasDate) {
-					stmt.setTimestamp(3, ts[0]);
-					stmt.setTimestamp(4, ts[1]);
+				    // DEVREDEN_TL
+				    ps.setString(p++,  dvzcevirmeDTO.getHesapKodu());
+				    ps.setTimestamp(p++, ts[0]);
+				    // DEVREDEN_DOVIZ
+				    ps.setString(p++,  dvzcevirmeDTO.getDvz_tur());
+				    ps.setString(p++,  dvzcevirmeDTO.getHesapKodu());
+				    ps.setTimestamp(p++, ts[0]);
+				    // Ana R (K join + WHERE)
+				    ps.setString(p++,  dvzcevirmeDTO.getDvz_tur());
+				    ps.setString(p++,  dvzcevirmeDTO.getHesapKodu());
+				    ps.setTimestamp(p++, ts[0]); 
+				    ps.setTimestamp(p++, ts[1]);
+				    // rn aralığı
+				    ps.setInt(p++, startRn);
+				    ps.setInt(p++, endRn);
+				} else {
+				    ps.setString(p++,  dvzcevirmeDTO.getDvz_tur());  
+				    ps.setString(p++,  dvzcevirmeDTO.getHesapKodu());  
+				    ps.setInt(p++, startRn);
+				    ps.setInt(p++, endRn);
 				}
-				try (ResultSet rss = stmt.executeQuery()) {
+				try (ResultSet rss = ps.executeQuery()) {
 					resultList = ResultSetConverter.convertToList(rss);
 				}
 			}
