@@ -764,6 +764,7 @@ public class CariMsSQL implements ICariDatabase{
 			Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(dvzcevirmeDTO.getStartDate(), dvzcevirmeDTO.getEndDate());
 			boolean hasDate = !("1900-01-01".equals(dvzcevirmeDTO.getStartDate()) && "2100-12-31".equals(dvzcevirmeDTO.getEndDate()));
 			final String orderKey = "s.TARIH, s.EVRAK, s.H, s.SID";
+			String islem = "/" ;
 			final String sqlHasDate =
 			    "WITH K_RATE AS ( " +
 			    "  SELECT CAST(k.Tarih AS date) AS Tar, " +
@@ -786,8 +787,8 @@ public class CariMsSQL implements ICariDatabase{
 			    "  SELECT " +
 			    "    s.SID, s.TARIH, s.EVRAK, s.IZAHAT, " +
 			    "    ISNULL(KR.KCINS,1) AS CEV_KUR, " +
-			    "    ((s.ALACAK - s.BORC) / ISNULL(KR.KCINS,1)) AS DOVIZ_TUTAR, " +
-			    "    SUM(((s.ALACAK - s.BORC) / ISNULL(KR.KCINS,1))) " +
+			    "    ((s.ALACAK - s.BORC) " + islem + " ISNULL(KR.KCINS,1)) AS DOVIZ_TUTAR, " +
+			    "    SUM(((s.ALACAK - s.BORC) " + islem + " ISNULL(KR.KCINS,1))) " +
 			    "      OVER (ORDER BY " + orderKey + " ROWS UNBOUNDED PRECEDING) AS RUNNING_DOVIZ, " +
 			    "    SUM(s.ALACAK - s.BORC) " +
 			    "      OVER (ORDER BY " + orderKey + " ROWS UNBOUNDED PRECEDING) AS RUNNING_TL, " +
@@ -796,19 +797,19 @@ public class CariMsSQL implements ICariDatabase{
 			    "  FROM S_BASE s " +
 			    "  LEFT JOIN K_RATE KR ON CAST(s.TARIH AS date) = KR.Tar " +
 			    "), DEV_TL AS ( " +
-			    "  SELECT CAST(ISNULL(SUM(s2.ALACAK - s2.BORC),0) AS decimal(18,2)) AS V " +
+			    "  SELECT ISNULL(SUM(s2.ALACAK - s2.BORC),0) AS V " +
 			    "  FROM SATIRLAR s2 " +
 			    "  WHERE s2.HESAP = ? AND s2.TARIH < ? " +
 			    "), DEV_DVZ AS ( " +
-			    "  SELECT CAST(ISNULL(SUM((s2.ALACAK - s2.BORC) / ISNULL(KR2.KCINS,1)),0) AS decimal(18,2)) AS V " +
+			    "  SELECT ISNULL(SUM((s2.ALACAK - s2.BORC) " + islem + " ISNULL(KR2.KCINS,1)),0) AS V " +
 			    "  FROM SATIRLAR s2 " +
 			    "  LEFT JOIN K_RATE KR2 ON CAST(s2.TARIH AS date) = KR2.Tar " +
 			    "  WHERE s2.HESAP = ? AND s2.TARIH < ? " +
 			    ") " +
 			    "SELECT " +
 			    "  R.TARIH, R.EVRAK, R.IZAHAT, R.CEV_KUR, R.DOVIZ_TUTAR, " +
-			    "  CAST(DEV_DVZ.V + R.RUNNING_DOVIZ AS decimal(18,2)) AS DOVIZ_BAKIYE, " +
-			    "  CAST(DEV_TL.V  + R.RUNNING_TL   AS decimal(18,2)) AS BAKIYE, " +
+			    "  DEV_DVZ.V + R.RUNNING_DOVIZ AS DOVIZ_BAKIYE, " +
+			    "  DEV_TL.V  + R.RUNNING_TL AS BAKIYE, " +
 			    "  R.KUR, R.BORC, R.ALACAK, R.[USER] " +
 			    "FROM R " +
 			    "CROSS JOIN DEV_TL " +
@@ -831,8 +832,8 @@ public class CariMsSQL implements ICariDatabase{
 				    "  SELECT " +
 				    "    s.TARIH, s.EVRAK, ISNULL(IZH.IZAHAT,'') AS IZAHAT, " +
 				    "    ISNULL(KR.KCINS,1) AS CEV_KUR, " +
-				    "    ((s.ALACAK - s.BORC) / ISNULL(KR.KCINS,1)) AS DOVIZ_TUTAR, " +
-				    "    SUM(((s.ALACAK - s.BORC) / ISNULL(KR.KCINS,1))) " +
+				    "    ((s.ALACAK - s.BORC) " + islem + " ISNULL(KR.KCINS,1)) AS DOVIZ_TUTAR, " +
+				    "    SUM(((s.ALACAK - s.BORC) " + islem + " ISNULL(KR.KCINS,1))) " +
 				    "      OVER (ORDER BY s.TARIH, s.EVRAK, s.H, s.SID ROWS UNBOUNDED PRECEDING) AS DOVIZ_BAKIYE, " +
 				    "    SUM(s.ALACAK - s.BORC) " +
 				    "      OVER (ORDER BY s.TARIH, s.EVRAK, s.H, s.SID ROWS UNBOUNDED PRECEDING) AS BAKIYE, " +
