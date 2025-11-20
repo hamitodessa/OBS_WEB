@@ -316,8 +316,6 @@ public class CariMsSQL implements ICariDatabase{
 		} catch (Exception e) {
 			if (connection != null) try { connection.rollback(); } catch (SQLException ignore) {}
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
-		} finally {
-			if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		}
 	}
 
@@ -430,8 +428,6 @@ public class CariMsSQL implements ICariDatabase{
 		} catch (Exception e) {
 			if (con != null) try { con.rollback(); } catch (SQLException ignore) {}
 			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
-		} finally {
-			if (con != null) try { con.close(); } catch (SQLException ignore) {}
 		}
 	}
 
@@ -514,7 +510,6 @@ public class CariMsSQL implements ICariDatabase{
 					cariConnDetails.getJdbcUrl(),
 					cariConnDetails.getUsername(),
 					cariConnDetails.getPassword());
-
 			oldAuto = con.getAutoCommit();
 			con.setAutoCommit(false);
 			try (PreparedStatement psDetay = con.prepareStatement(queryHesapDetay);
@@ -533,7 +528,6 @@ public class CariMsSQL implements ICariDatabase{
 		} finally {
 			if (con != null) {
 				try { con.setAutoCommit(oldAuto); } catch (Exception ignore) {}
-				try { con.close(); } catch (Exception ignore) {}
 			}
 		}	
 	}
@@ -722,15 +716,12 @@ public class CariMsSQL implements ICariDatabase{
 	public List<Map<String, Object>> dvzcevirme(dvzcevirmeDTO dvzcevirmeDTO, 
 			ConnectionDetails cariConnDetails, 
 			ConnectionDetails kurConnectionDetails) {
-		
 		int page = dvzcevirmeDTO.getPage();
 	    int pageSize = dvzcevirmeDTO.getPageSize();
 	    if (page < 0) page = 0;
 	    int offset = page * pageSize;
 	    int startRn = offset + 1;
 	    int endRn   = offset + pageSize;
-	    
-
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try {
 			if (!cariConnDetails.getSqlTipi().equals(kurConnectionDetails.getSqlTipi())) {
@@ -933,7 +924,6 @@ public class CariMsSQL implements ICariDatabase{
 				PreparedStatement preparedStatement = connection.prepareStatement(sql,
 						ResultSet.TYPE_FORWARD_ONLY,
 						ResultSet.CONCUR_READ_ONLY)) {
-
 			try (ResultSet rs = preparedStatement.executeQuery()) {
 				resultList = ResultSetConverter.convertToList(rs);
 			}
@@ -1435,7 +1425,6 @@ public class CariMsSQL implements ICariDatabase{
 				"AND S.TARIH < ? " +
 				"ORDER BY S.EVRAK";
 		Timestamp ts[] = Global_Yardimci.rangeDayT2plusDay(t1, t1);
-
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(cariConnDetails.getJdbcUrl(), cariConnDetails.getUsername(), cariConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql,

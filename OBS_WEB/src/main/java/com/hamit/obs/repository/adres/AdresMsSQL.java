@@ -141,11 +141,13 @@ public class AdresMsSQL implements IAdresDatabase {
 	@Override
 	public void adres_sil(int id, ConnectionDetails adresConnDetails) {
 		String sql = "DELETE " +
-				" FROM Adres WHERE ID = '" + id + "'"  ;
+				" FROM Adres WHERE ID = ? "  ;
 		try (Connection connection = DriverManager.getConnection(
-				adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
-				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
-			deleteStmt.executeUpdate();
+				adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword())){
+				try(PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
+					deleteStmt.setInt(1, id);
+					deleteStmt.executeUpdate();
+				}
 		} catch (Exception e) {
 			throw new ServiceException("Silme sırasında bir hata oluştu", e);
 		}
@@ -154,12 +156,15 @@ public class AdresMsSQL implements IAdresDatabase {
 	@Override
 	public String kod_ismi(String kodu, ConnectionDetails adresConnDetails) {
 		String kodIsmi = null;
-		String query = "SELECT Adi  FROM Adres WHERE M_Kodu = N'" + kodu + "'";
-		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
-			if (resultSet.next()) {
-				kodIsmi = resultSet.getString("Adi");
+		String query = "SELECT Adi  FROM Adres WHERE M_Kodu = ? ";
+		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(),
+				adresConnDetails.getUsername(), adresConnDetails.getPassword())){
+			try(PreparedStatement preparedStatement = connection.prepareStatement(query)){
+				preparedStatement.setNString(1, kodu);
+				ResultSet resultSet = preparedStatement.executeQuery();
+				if (resultSet.next()) {
+					kodIsmi = resultSet.getString("Adi");
+				}
 			}
 		} catch (SQLException e) {
 			throw new ServiceException("Firma adı okunamadı", e);

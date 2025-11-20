@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kambiyo.bordrodetayDTO;
 import com.hamit.obs.dto.kambiyo.cekraporDTO;
@@ -92,13 +94,16 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 	public List<Map<String, Object>> bordroOku(String bordroNo, String cek_sen, String gir_cik,
 			ConnectionDetails kambiyoConnDetails) {
 		String sql = "SELECT * " +
-				" FROM " + cek_sen + " WHERE " + gir_cik + " = N'" + bordroNo + "'" +
+				" FROM " + cek_sen + " WHERE " + gir_cik + " = ? " +
 				" ORDER BY Vade ";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
-		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
+		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(),
+				kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword())){
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				preparedStatement.setNString(1, bordroNo);
+				ResultSet resultSet = preparedStatement.executeQuery();
+				resultList = ResultSetConverter.convertToList(resultSet); 
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MS CariService genel hatası.", e);
 		}
@@ -109,17 +114,24 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 	public String kam_aciklama_oku(String cek_sen, int satir, String bordroNo, String gircik,
 			ConnectionDetails kambiyoConnDetails) {
 		String aciklama = "";
-		String sql = "SELECT * " +
+		String sql = "SELECT ACIKLAMA " +
 				" FROM ACIKLAMA " +
-				" WHERE EVRAK_NO = N'" + bordroNo + "'" +
-				" AND SATIR = '" + satir + "'" +
-				" AND EVRAK_CINS = '" + cek_sen + "'" +
-				" AND Gir_Cik = '" + gircik + "'";
-		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
+				" WHERE EVRAK_NO = ? " +
+				" AND SATIR = ? " +
+				" AND EVRAK_CINS = ? " +
+				" AND Gir_Cik = ? ";
+		try (Connection connection = DriverManager.getConnection(
+				kambiyoConnDetails.getJdbcUrl(),
+				kambiyoConnDetails.getUsername(),
+				kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, bordroNo);
+			preparedStatement.setInt(2, satir);
+			preparedStatement.setString(3, cek_sen);
+			preparedStatement.setString(4, gircik);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
-					aciklama = resultSet.getString("ACIKLAMA");
+					return resultSet.getString("ACIKLAMA");
 				}
 			}
 		} catch (Exception e) {
@@ -132,13 +144,16 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 	public void bordro_sil(String bordroNo, String cek_sen, String gir_cik, ConnectionDetails kambiyoConnDetails) {
 		String sql = " DELETE " +
 				" FROM " + cek_sen + "" +
-				" WHERE " + gir_cik +"  ='" + bordroNo + "'" ;
+				" WHERE " + gir_cik + "  = ? " ;
 		try (Connection connection = DriverManager.getConnection(
-				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
+				kambiyoConnDetails.getJdbcUrl(),
+				kambiyoConnDetails.getUsername(),
+				kambiyoConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
+			deleteStmt.setString(1, bordroNo);
 			deleteStmt.executeUpdate();
 		} catch (Exception e) {
-			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
+			throw new ServiceException("Bordro silme sırasında bir hata oluştu", e);
 		}
 	}
 
@@ -214,9 +229,10 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 	@Override
 	public int kam_bordro_no_al(String cins, ConnectionDetails kambiyoConnDetails) {
 		int evrakNo = 0;
-		String query = "UPDATE EVRAK SET NO = NO + 1 OUTPUT INSERTED.NO WHERE EVRAK = '" + cins + "'";
+		String query = "UPDATE EVRAK SET NO = NO + 1 OUTPUT INSERTED.NO WHERE EVRAK = ? ";
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setNString(1, cins);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					evrakNo = resultSet.getInt("NO");
@@ -230,7 +246,7 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 
 	@Override
 	public List<Map<String, Object>> kalan_cek_liste(ConnectionDetails kambiyoConnDetails) {
-		String sql = " SELECT  Cek_No " +
+		String sql = " SELECT Cek_No " +
 				" FROM CEK " +
 				" WHERE " +
 				" Cikis_Bordro = ''" +
@@ -251,9 +267,10 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 		String bordrono = "";
 		String sql =  "SELECT Banka, Cek_No, Cikis_Bordro, Cikis_Musteri, Cikis_Tarihi, Cins, Durum, Giris_Bordro, Giris_Musteri, Giris_Tarihi, Ilk_Borclu, " +
 				" Seri_No, Sube, T_Tarih, Tutar, Vade, Cek_Hesap_No ,Cikis_Ozel_Kod,Giris_Ozel_Kod " +
-				" FROM cek WHERE Cek_No = N'" + cekno + "' COLLATE SQL_Latin1_General_Cp1_CS_AS";
+				" FROM cek WHERE Cek_No = ? COLLATE SQL_Latin1_General_Cp1_CS_AS";
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, cekno);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					bordrono = resultSet.getString("Giris_Bordro");
@@ -335,46 +352,112 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 
 	@Override
 	public List<Map<String, Object>> cek_rapor(cekraporDTO cekraporDTO, ConnectionDetails kambiyoConnDetails) {
-		String qweString = "" ;
-		if(cekraporDTO.getHangi_tur().equals("C"))
-			qweString = " AND Cikis_Bordro <> '' " ;
-		else if(cekraporDTO.getHangi_tur().equals("M"))
-			qweString = " AND Cikis_Bordro = '' " ;
-		else if(cekraporDTO.getHangi_tur().equals("G"))
-			qweString = " AND Giris_Bordro <> '' " ;
+		String ekstraKosul = "";
+	    switch (cekraporDTO.getHangi_tur()) {
+	        case "C" -> ekstraKosul = " AND Cikis_Bordro <> '' ";
+	        case "M" -> ekstraKosul = " AND Cikis_Bordro = '' ";
+	        case "G" -> ekstraKosul = " AND Giris_Bordro <> '' ";
+	        default  -> ekstraKosul = "";
+	    }
+	    StringBuilder sql = new StringBuilder();
+	    sql.append("""
+	            SELECT  Cek_No,
+	                    Vade,
+	                    Giris_Bordro,
+	                    Giris_Tarihi,
+	                    Giris_Musteri,
+	                    Banka,
+	                    Sube,
+	                    Cins,
+	                    Tutar,
+	                    CASE Durum
+	                        WHEN '1' THEN 'Iade'
+	                        WHEN '2' THEN 'Protesto'
+	                        WHEN '3' THEN 'Tahsil'
+	                    END as Durum,
+	                    IIF(T_Tarih = '1900.01.01', '',
+	                        RIGHT(T_Tarih,2) + '.' + SUBSTRING(CONVERT(nvarchar, T_Tarih),6,2) + '.' + LEFT(T_Tarih,4)
+	                    ) as T_Tarih,
+	                    Giris_Ozel_Kod,
+	                    Cikis_Bordro,
+	                    IIF(Cikis_Tarihi = '1900-01-01', '',
+	                        RIGHT(Cikis_Tarihi,2) + '.' + SUBSTRING(CONVERT(nvarchar, Cikis_Tarihi),6,2) + '.' + LEFT(Cikis_Tarihi,4)
+	                    ) as Cikis_Tarihi,
+	                    Cikis_Musteri,
+	                    Cikis_Ozel_Kod,
+	                    CEK.[USER]
+	            FROM CEK
+	            WHERE 1 = 1
+	              AND Cek_No      >= ?  AND Cek_No      <= ?
+	              AND Vade        >= ?  AND Vade        <  ?
+	              AND Giris_Bordro>= ?  AND Giris_Bordro<= ?
+	              AND Giris_Tarihi>= ?  AND Giris_Tarihi<  ?
+	              AND Cikis_Bordro>= ?  AND Cikis_Bordro<= ?
+	              AND Cikis_Tarihi>= ?  AND Cikis_Tarihi<  ?
+	              AND Giris_Musteri>= ? AND Giris_Musteri<= ?
+	              AND Cikis_Musteri>= ? AND Cikis_Musteri<= ?
+	              AND Durum       >= ?  AND Durum       <= ?
+	              AND T_Tarih     >= ?  AND T_Tarih     <  ?
+	              AND Cins        >= ?  AND Cins        <= ?
+	              AND Giris_Ozel_Kod LIKE ?
+	              AND Cikis_Ozel_Kod LIKE ?
+	            """);
+	    sql.append(ekstraKosul);
+	    sql.append(" ORDER BY Cek_No ");
+	    List<Map<String, Object>> resultList = new ArrayList<>();
+	    try (Connection connection = DriverManager.getConnection(
+	                kambiyoConnDetails.getJdbcUrl(),
+	                kambiyoConnDetails.getUsername(),
+	                kambiyoConnDetails.getPassword());
+	         PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+	        Timestamp[] tsVade = Global_Yardimci.rangeDayT2plusDay(cekraporDTO.getVade1(), cekraporDTO.getVade2());
+	        Timestamp[] tsGiris = Global_Yardimci.rangeDayT2plusDay(cekraporDTO.getGtar1(), cekraporDTO.getGtar2());
+	        Timestamp[] tsCikis = Global_Yardimci.rangeDayT2plusDay(cekraporDTO.getCtar1(), cekraporDTO.getCtar2());
+	        Timestamp[] tsTTarih = Global_Yardimci.rangeDayT2plusDay(cekraporDTO.getTtar1(), cekraporDTO.getTtar2());
+	        int p = 1;
+	        ps.setString(p++, cekraporDTO.getCekno1());
+	        ps.setString(p++, cekraporDTO.getCekno2());
 
-		String sql = " SELECT  Cek_No, Vade, Giris_Bordro,Giris_Tarihi, " +
-				" Giris_Musteri, Banka, Sube, Cins, Tutar, CASE Durum  WHEN '1' THEN 'Iade'  WHEN '2' THEN 'Protesto' WHEN '3' THEN 'Tahsil' END as Durum, " +
-				" IIF(T_Tarih = '1900.01.01', '',right(T_Tarih,2) +  '.' + Substring(Convert(nvarchar, T_Tarih), 6, 2) + '.' + left(T_Tarih,4) ) as T_Tarih, " +
-				" Giris_Ozel_Kod ,Cikis_Bordro , " + 
-				" IIF(Cikis_Tarihi = '1900-01-01', '',right(Cikis_Tarihi,2) +  '.' + Substring(Convert(nvarchar, Cikis_Tarihi), 6, 2) + '.' + left(Cikis_Tarihi,4) ) as Cikis_Tarihi," +
-				" Cikis_Musteri, Cikis_Ozel_Kod,CEK.[USER] " +
-				" FROM CEK " +
-				" WHERE Cek_No >='" + cekraporDTO.getCekno1() + "' AND Cek_No <='" + cekraporDTO.getCekno2() + "'" +
-				" AND Vade >='" + cekraporDTO.getVade1() + "' AND Vade <='" + cekraporDTO.getVade2() + "'" +
-				" AND Giris_Bordro >='" + cekraporDTO.getGbor1() + "' AND Giris_Bordro <='" + cekraporDTO.getGbor2() + "'" +
-				" AND Giris_Tarihi >='" + cekraporDTO.getGtar1() + "' AND Giris_Tarihi <='" + cekraporDTO.getGtar2() + "'" +
-				" AND Cikis_Bordro >='" + cekraporDTO.getCbor1() + "' AND Cikis_Bordro <='" + cekraporDTO.getCbor2() + "'" +
-				" AND Cikis_Tarihi >='" + cekraporDTO.getCtar1() + "' AND Cikis_Tarihi <='" + cekraporDTO.getCtar2() + "'" +
-				" AND Giris_Musteri >='" + cekraporDTO.getGhes1() + "' AND Giris_Musteri <='" + cekraporDTO.getGhes2() + "'" +
-				" AND Cikis_Musteri >='" + cekraporDTO.getChes1() + "' AND Cikis_Musteri <='" + cekraporDTO.getChes2() + "'" +
-				" AND Durum >='" + cekraporDTO.getDurum1() + "' AND Durum <='" + cekraporDTO.getDurum2() + "'" +
-				" AND T_Tarih >='" + cekraporDTO.getTtar1() + "'  AND T_Tarih <='" + cekraporDTO.getTtar2() + "'" +
-				" AND Cins >='" + cekraporDTO.getCins1() + "' AND Cins <='" + cekraporDTO.getCins2() + "'" +
-				" AND Giris_Ozel_Kod  LIKE '" + cekraporDTO.getGozel() + "'" +
-				" AND Cikis_Ozel_Kod  LIKE '" + cekraporDTO.getCozel() + "'" +
-				qweString +
-				" ORDER BY Cek_No ";
-		List<Map<String, Object>> resultList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
-		} catch (Exception e) {
-			throw new ServiceException("MS KambiyoService genel hatası.", e);
-		}
-		return resultList; 
+	        ps.setTimestamp(p++, tsVade[0]);
+	        ps.setTimestamp(p++, tsVade[1]);
+
+	        ps.setString(p++, cekraporDTO.getGbor1());
+	        ps.setString(p++, cekraporDTO.getGbor2());
+
+	        ps.setTimestamp(p++, tsGiris[0]);
+	        ps.setTimestamp(p++, tsGiris[1]);
+
+	        ps.setString(p++, cekraporDTO.getCbor1());
+	        ps.setString(p++, cekraporDTO.getCbor2());
+
+	        ps.setTimestamp(p++, tsCikis[0]);
+	        ps.setTimestamp(p++, tsCikis[1]);
+
+	        ps.setString(p++, cekraporDTO.getGhes1());
+	        ps.setString(p++, cekraporDTO.getGhes2());
+
+	        ps.setString(p++, cekraporDTO.getChes1());
+	        ps.setString(p++, cekraporDTO.getChes2());
+
+	        ps.setString(p++, cekraporDTO.getDurum1());
+	        ps.setString(p++, cekraporDTO.getDurum2());
+
+	        ps.setTimestamp(p++, tsTTarih[0]);
+	        ps.setTimestamp(p++, tsTTarih[1]);
+
+	        ps.setString(p++, cekraporDTO.getCins1());
+	        ps.setString(p++, cekraporDTO.getCins2());
+
+	        ps.setString(p++, cekraporDTO.getGozel()); 
+	        ps.setString(p++, cekraporDTO.getCozel());
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            resultList = ResultSetConverter.convertToList(rs);
+	        }
+	    } catch (Exception e) {
+	        throw new ServiceException("MS KambiyoService genel hatası.", e);
+	    }
+	    return resultList;
 	}
 
 	@Override
@@ -396,9 +479,10 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 		String sql =  "SELECT Banka, Cek_No, Cikis_Bordro, Cikis_Musteri, Cikis_Tarihi, Cins, Durum, Giris_Bordro,"
 				+ " Giris_Musteri, Giris_Tarihi, Ilk_Borclu, " +
 				" Seri_No, Sube, T_Tarih, Tutar, Vade, Cek_Hesap_No ,Cikis_Ozel_Kod,Giris_Ozel_Kod " +
-				" FROM cek WHERE Cek_No = N'" + cekno + "' COLLATE SQL_Latin1_General_Cp1_CS_AS";
+				" FROM cek WHERE Cek_No = ? COLLATE SQL_Latin1_General_Cp1_CS_AS";
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, cekno);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					dto.setBanka(resultSet.getString("Banka"));
@@ -432,11 +516,12 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 	@Override
 	public void kam_durum_yaz(String cekno, String ceksen_from, String ceksen_where, String durum, String ttarih,
 			ConnectionDetails kambiyoConnDetails) {
-		String sql = "UPDATE "+ ceksen_from + " SET Durum = '"+ durum + "', T_Tarih = '"+ ttarih + "'" + 
-				" WHERE " + ceksen_where + "  ='" + cekno + "'" ;
+		String sql = "UPDATE "+ ceksen_from + " SET Durum = '" + durum + "', T_Tarih = '" + ttarih + "'" + 
+				" WHERE " + ceksen_where + "  =? " ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setNString(1, cekno);
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
