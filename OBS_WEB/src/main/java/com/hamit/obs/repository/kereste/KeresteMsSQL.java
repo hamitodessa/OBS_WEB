@@ -1051,12 +1051,15 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		.append("FROM KERESTE WHERE 1=1 ")
 
 		.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ")
+		.append(" AND CTarih BETWEEN '").append(kerestedetayraporDTO.getCtar1()).append("' AND '").append(kerestedetayraporDTO.getCtar2()).append(" 23:59:59.998' AND ")
 		.append(kODU.toString())
+		.append(" AND CCari_Firma BETWEEN N'").append(kerestedetayraporDTO.getCfirma1()).append("' AND N'").append(kerestedetayraporDTO.getCfirma2()).append("' ")
 		.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ")
+		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
+
 		.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ")
 		.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ")
 		.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ")
-		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
 
 		.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" )
 		.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) 
@@ -1113,13 +1116,16 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		sql.append("SELECT count(Evrak_No) as satir ") 
 		.append("FROM KERESTE ")
 		.append(" WHERE Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ")
+		.append(" WHERE CTarih BETWEEN '").append(kerestedetayraporDTO.getCtar1()).append("' AND '").append(kerestedetayraporDTO.getCtar2()).append(" 23:59:59.998' AND ")
 		.append(kODU.toString())
+		.append(" AND CCari_Firma BETWEEN N'").append(kerestedetayraporDTO.getCfirma1()).append("' AND N'").append(kerestedetayraporDTO.getCfirma2()).append("' ")
+
 		.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ")
+		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
 		.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ")
 		.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ")
 		.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ")
-		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
-
+		
 		.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" )
 		.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) 
 		.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" )
