@@ -1024,60 +1024,76 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		if (! token[3].equals("9999"))
 			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
 
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT [Evrak_No], [Barkod], [Kodu], [Paket_No], [Konsimento], [Miktar], ")
-		.append("(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3)) * ")
-		.append("CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * ")
-		.append("CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4))) * Miktar) / 1000000000) AS m3, ")
-		.append("[Tarih], [Kdv], [Doviz], [Fiat], [Tutar], [Kur], [Cari_Firma], [Adres_Firma], ")
-		.append("[Iskonto], [Tevkifat], ")
-		.append("ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup), '') AS Ana_Grup, ")
-		.append("ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup), '') AS Alt_Grup, ")
-		.append("ISNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei), '') AS Mensei, ")
-		.append("ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo), '') AS Depo, ")
-		.append("ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.Ozel_Kod),'') Ozel_Kod, ")
-		.append("[Izahat], ")
-		.append("ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci), '') AS Nakliyeci, ")
-		.append("[USER], [Cikis_Evrak], ")
-		.append("ISNULL(CASE WHEN CONVERT(DATE, CTarih) = '1900-01-01' THEN '' ELSE CONVERT(CHAR(10), CTarih, 104) END, '') AS CTarih, ")
-		.append("[CKdv],[CDoviz],[CFiat],[CTutar],[CKur],[CCari_Firma],[CAdres_Firma],[CIskonto],[CTevkifat],")
-		.append("ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.CAna_Grup),'') AS C_Ana_Grup, ")
-		.append("ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.CAlt_Grup),'') AS C_Alt_Grup, ")
-		.append("ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo),'') AS C_Depo, ")
-		.append("ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.COzel_Kod),'') COzel_Kod, ")
-		.append("[CIzahat] ," )
-		.append("ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci),'' ) as C_Nakliyeci, ") 
-		.append("[CUSER] ") 
-		.append("FROM KERESTE WHERE 1=1 ")
+		String sql = "SELECT [Evrak_No], [Barkod], [Kodu], [Paket_No], [Konsimento], [Miktar], "
+		+ "(((CONVERT(INT, SUBSTRING(KERESTE.Kodu, 4, 3)) * "
+		+ "CONVERT(INT, SUBSTRING(KERESTE.Kodu, 8, 4)) * "
+		+ "CONVERT(INT, SUBSTRING(KERESTE.Kodu, 13, 4))) * Miktar) / 1000000000) AS m3, "
+		+ "[Tarih], [Kdv], [Doviz], [Fiat], [Tutar], [Kur], [Cari_Firma], [Adres_Firma], "
+		+ "[Iskonto], [Tevkifat], "
+		+ "ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup), '') AS Ana_Grup, "
+		+ "ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup), '') AS Alt_Grup, "
+		+ "ISNULL((SELECT MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei), '') AS Mensei, "
+		+ "ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.Depo), '') AS Depo, "
+		+ "ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.Ozel_Kod),'') Ozel_Kod, "
+		+ "[Izahat], "
+		+ "ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.Nakliyeci), '') AS Nakliyeci, "
+		+ "[USER], [Cikis_Evrak], "
+		+ "ISNULL(CASE WHEN CONVERT(DATE, CTarih) = '1900-01-01' THEN '' ELSE CONVERT(CHAR(10), CTarih, 104) END, '') AS CTarih, "
+		+ "[CKdv],[CDoviz],[CFiat],[CTutar],[CKur],[CCari_Firma],[CAdres_Firma],[CIskonto],[CTevkifat],"
+		+ "ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.CAna_Grup),'') AS C_Ana_Grup, "
+		+ "ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.CAlt_Grup),'') AS C_Alt_Grup, "
+		+ "ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo),'') AS C_Depo, "
+		+ "ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID_Y = KERESTE.COzel_Kod),'') COzel_Kod, "
+		+ "[CIzahat] ," 
+		+ "ISNULL((SELECT UNVAN FROM NAKLIYECI WHERE NAKLIYECI.NAKID_Y = KERESTE.CNakliyeci),'' ) as C_Nakliyeci, " 
+		+ "[CUSER] "
+		+ "FROM KERESTE WHERE 1=1 "
 
-		.append(" AND Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ")
-		.append(" AND CTarih BETWEEN '").append(kerestedetayraporDTO.getCtar1()).append("' AND '").append(kerestedetayraporDTO.getCtar2()).append(" 23:59:59.998' AND ")
-		.append(kODU.toString())
-		.append(" AND CCari_Firma BETWEEN N'").append(kerestedetayraporDTO.getCfirma1()).append("' AND N'").append(kerestedetayraporDTO.getCfirma2()).append("' ")
-		.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ")
-		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
+		+ " AND Tarih >= ? AND Tarih < ? "
+		+ " AND CTarih >= ? AND CTarih < ? AND "
+		+ kODU.toString()
+		+ " CCari_Firma BETWEEN ?  AND ? "
+		+ " AND Paket_No BETWEEN ? AND ? "
+		+ " AND Cikis_Evrak BETWEEN ? AND ? "
 
-		.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ")
-		.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ")
-		.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ")
+		+ " AND Cari_Firma BETWEEN ? AND ? "
+		+ " AND Evrak_No BETWEEN ? AND ? "
+		+ " AND Konsimento BETWEEN ? AND ? "
 
-		.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" )
-		.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) 
-		.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" )
-		.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" )
+		+ " AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND"
+		+ " Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" 
+		+ " Depo " + kerestedetayraporDTO.getGdepo()  + " AND"
+		+ " Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND"
 
-		.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" )
-		.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" )
-		.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " )
-		.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ) 
-		.append(" ORDER BY Tarih DESC OFFSET ").append(offset).append(" ROWS FETCH NEXT ").append(pageSize).append(" ROWS ONLY");
-
+		+ " CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND"
+		+ " CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND"
+		+ " CDepo " + kerestedetayraporDTO.getCdepo()  + " AND "
+		+ " COzel_Kod " + kerestedetayraporDTO.getCozkod() 
+		+ " ORDER BY Tarih DESC OFFSET "
+		+ offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(), 
 				keresteConnDetails.getUsername(), 
 				keresteConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
-
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			Timestamp[] tsg = Global_Yardimci.rangeDayT2plusDay(kerestedetayraporDTO.getGtar1(), kerestedetayraporDTO.getGtar2());
+			preparedStatement.setTimestamp(1, tsg[0]);
+			preparedStatement.setTimestamp(2, tsg[1]);
+			Timestamp[] tsc = Global_Yardimci.rangeDayT2plusDay(kerestedetayraporDTO.getCtar1(), kerestedetayraporDTO.getCtar2());
+			preparedStatement.setTimestamp(3, tsc[0]);
+			preparedStatement.setTimestamp(4, tsc[1]);
+			preparedStatement.setNString(5, kerestedetayraporDTO.getCfirma1());
+			preparedStatement.setNString(6, kerestedetayraporDTO.getCfirma2());
+			preparedStatement.setNString(7, kerestedetayraporDTO.getPak1());
+			preparedStatement.setNString(8, kerestedetayraporDTO.getPak2());
+			preparedStatement.setNString(9, kerestedetayraporDTO.getCevr1());
+			preparedStatement.setNString(10, kerestedetayraporDTO.getCevr2());
+			preparedStatement.setNString(11, kerestedetayraporDTO.getGfirma1());
+			preparedStatement.setNString(12, kerestedetayraporDTO.getGfirma2());
+			preparedStatement.setNString(13, kerestedetayraporDTO.getEvr1());
+			preparedStatement.setNString(14, kerestedetayraporDTO.getEvr2());
+			preparedStatement.setNString(15, kerestedetayraporDTO.getKons1());
+			preparedStatement.setNString(16, kerestedetayraporDTO.getKons2());
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 
@@ -1112,35 +1128,51 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			kODU.append( " SUBSTRING(KERESTE.Kodu, 13, 4) <= '" + token[3] + "'  AND"  );
 
 
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT count(Evrak_No) as satir ") 
-		.append("FROM KERESTE ")
-		.append(" WHERE Tarih BETWEEN '").append(kerestedetayraporDTO.getGtar1()).append("' AND '").append(kerestedetayraporDTO.getGtar2()).append(" 23:59:59.998' AND ")
-		.append(" WHERE CTarih BETWEEN '").append(kerestedetayraporDTO.getCtar1()).append("' AND '").append(kerestedetayraporDTO.getCtar2()).append(" 23:59:59.998' AND ")
-		.append(kODU.toString())
-		.append(" AND CCari_Firma BETWEEN N'").append(kerestedetayraporDTO.getCfirma1()).append("' AND N'").append(kerestedetayraporDTO.getCfirma2()).append("' ")
+		String sql = "SELECT count(Evrak_No) as satir " 
+		+ "FROM KERESTE " 
+		+ " WHERE Tarih >= ? AND Tarih < ? "
+		+ " AND CTarih >= ? AND CTarih < ? AND "
+		+ kODU.toString()
+		+ " CCari_Firma BETWEEN ?  AND ? "
+		+ " AND Paket_No BETWEEN ? AND ? "
+		+ " AND Cikis_Evrak BETWEEN ? AND ? "
 
-		.append(" Paket_No BETWEEN N'").append(kerestedetayraporDTO.getPak1()).append("' AND N'").append(kerestedetayraporDTO.getPak2()).append("' ")
-		.append(" AND Cikis_Evrak BETWEEN N'").append(kerestedetayraporDTO.getCevr1()).append("' AND N'").append(kerestedetayraporDTO.getCevr2()).append("' ")
-		.append(" AND Cari_Firma BETWEEN N'").append(kerestedetayraporDTO.getGfirma1()).append("' AND N'").append(kerestedetayraporDTO.getGfirma2()).append("' ")
-		.append(" AND Evrak_No BETWEEN N'").append(kerestedetayraporDTO.getEvr1()).append("' AND N'").append(kerestedetayraporDTO.getEvr2()).append("' ")
-		.append(" AND Konsimento BETWEEN N'").append(kerestedetayraporDTO.getKons1()).append("' AND N'").append(kerestedetayraporDTO.getKons2()).append("' ")
-		
-		.append(" AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" )
-		.append(" Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" ) 
-		.append(" Depo " + kerestedetayraporDTO.getGdepo()  + " AND" )
-		.append(" Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" )
+		+ " AND Cari_Firma BETWEEN ? AND ? "
+		+ " AND Evrak_No BETWEEN ? AND ? "
+		+ " AND Konsimento BETWEEN ? AND ? "		
+		+ " AND Ana_Grup " + kerestedetayraporDTO.getGana()  + " AND" 
+		+ " Alt_Grup " + kerestedetayraporDTO.getGalt()  + " AND" 
+		+ " Depo " + kerestedetayraporDTO.getGdepo()  + " AND"
+		+ " Ozel_Kod " + kerestedetayraporDTO.getGozkod() + " AND" 
 
-		.append(" CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" )
-		.append(" CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" )
-		.append(" CDepo " + kerestedetayraporDTO.getCdepo()  + " AND " )
-		.append(" COzel_Kod " + kerestedetayraporDTO.getCozkod() ); 
+		+ " CAna_Grup " + kerestedetayraporDTO.getCana()  + " AND" 
+		+ " CAlt_Grup " + kerestedetayraporDTO.getCalt()  + " AND" 
+		+ " CDepo " + kerestedetayraporDTO.getCdepo()  + " AND "
+		+ " COzel_Kod " + kerestedetayraporDTO.getCozkod(); 
 
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(), 
 				keresteConnDetails.getUsername(), 
 				keresteConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			Timestamp[] tsg = Global_Yardimci.rangeDayT2plusDay(kerestedetayraporDTO.getGtar1(), kerestedetayraporDTO.getGtar2());
+			preparedStatement.setTimestamp(1, tsg[0]);
+			preparedStatement.setTimestamp(2, tsg[1]);
+			Timestamp[] tsc = Global_Yardimci.rangeDayT2plusDay(kerestedetayraporDTO.getCtar1(), kerestedetayraporDTO.getCtar2());
+			preparedStatement.setTimestamp(3, tsc[0]);
+			preparedStatement.setTimestamp(4, tsc[1]);
+			preparedStatement.setNString(5, kerestedetayraporDTO.getCfirma1());
+			preparedStatement.setNString(6, kerestedetayraporDTO.getCfirma2());
+			preparedStatement.setNString(7, kerestedetayraporDTO.getPak1());
+			preparedStatement.setNString(8, kerestedetayraporDTO.getPak2());
+			preparedStatement.setNString(9, kerestedetayraporDTO.getCevr1());
+			preparedStatement.setNString(10, kerestedetayraporDTO.getCevr2());
+			preparedStatement.setNString(11, kerestedetayraporDTO.getGfirma1());
+			preparedStatement.setNString(12, kerestedetayraporDTO.getGfirma2());
+			preparedStatement.setNString(13, kerestedetayraporDTO.getEvr1());
+			preparedStatement.setNString(14, kerestedetayraporDTO.getEvr2());
+			preparedStatement.setNString(15, kerestedetayraporDTO.getKons1());
+			preparedStatement.setNString(16, kerestedetayraporDTO.getKons2());
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				result  = resultSet.getInt("satir");
@@ -1248,9 +1280,9 @@ public class KeresteMsSQL implements IKeresteDatabase {
 				qwq6 + " " + qwq7 + " " + qwq8 + " " + dpo +
 				kODU + " " +
 				dURUM + "Cari_Firma between ? AND ? " +
-				" AND " + qweString  + " ? AND ? " +
+				" AND " + qweString  + " between ? AND ? " +
 				" AND Konsimento between ? AND ? " +
-				" AND KERESTE." + dURUM + "Tarih >= ? AND  KERESTE." + dURUM + "Tarih < ?" +
+				" AND KERESTE." + dURUM + "Tarih >= ? AND  KERESTE." + dURUM + "Tarih < ? " +
 				" ) AS s " +
 				" PIVOT" +
 				" (" +

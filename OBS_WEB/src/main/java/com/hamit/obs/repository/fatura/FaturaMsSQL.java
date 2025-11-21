@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +67,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	public urunDTO stk_urun(String sira, String arama, ConnectionDetails faturaConnDetails) {
 		String sql = "SELECT Kodu,Adi,Birim,Kusurat,Sinif,Ana_Grup,Alt_Grup,Aciklama_1,Aciklama_2 ,"
 				+ " Ozel_Kod_1 ,Ozel_Kod_2 ,Barkod,Mensei,Agirlik,Resim,Fiat,Fiat_2,Fiat_3,Recete,[USER]"
-				+ " FROM MAL WITH (INDEX (IX_MAL))  WHERE Kodu = '" + arama + "'  ORDER by " + sira;
+				+ " FROM MAL WITH (INDEX (IX_MAL))  WHERE Kodu = ?  ORDER by " + sira;
 		urunDTO urdto = new urunDTO();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, arama);
 			ResultSet rs = preparedStatement.executeQuery();
 			if (rs.isBeforeFirst()) {
 				rs.next();
@@ -111,12 +111,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public String urun_kod_degisken_ara(String fieldd, String sno, String nerden, String arama,
 			ConnectionDetails faturaConnDetails) {
-		String query = "SELECT  " + fieldd + " FROM " + nerden + " WHERE " + sno + " = N'" + arama + "'";
+		String query = "SELECT  " + fieldd + " FROM " + nerden + " WHERE " + sno + " = ? ";
 		String deger = "";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+			preparedStatement.setNString(1, arama);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				deger = resultSet.getString(fieldd);
 			}
@@ -144,12 +145,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> stk_kod_alt_grup_degisken_oku(int sno, ConnectionDetails faturaConnDetails) {
-		String sql = "SELECT ALID_Y , ALT_GRUP FROM ALT_GRUP_DEGISKEN   " + " WHERE ANA_GRUP = N'" + sno
-				+ "' ORDER BY ALT_GRUP";
+		String sql = "SELECT ALID_Y , ALT_GRUP FROM ALT_GRUP_DEGISKEN   " 
+				+ " WHERE ANA_GRUP = ? ORDER BY ALT_GRUP";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setInt(1, sno);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 			resultSet.close();
@@ -162,11 +164,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public String ur_kod_bak(String kodu, ConnectionDetails faturaConnDetails) {
 		String firmaIsmi = "";
-		String query = "SELECT Adi FROM MAL  WITH (INDEX (IX_MAL))  WHERE Kodu = N'" + kodu + "'";
+		String query = "SELECT Adi FROM MAL  WITH (INDEX (IX_MAL))  WHERE Kodu = ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+			preparedStatement.setNString(1, kodu);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				firmaIsmi = resultSet.getString("Adi");
 			}
@@ -178,7 +181,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public void stk_ur_sil(String kodu, ConnectionDetails faturaConnDetails) {
-		String sql = " DELETE FROM MAL WHERE Kodu= ?";
+		String sql = " DELETE FROM MAL WHERE Kodu = ?";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -266,11 +269,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " (SELECT Adi FROM MAL  WHERE MAL.Kodu = STOK.Urun_Kodu ) as Adi , "
 				+ " (SELECT Birim FROM MAL  WHERE MAL.Kodu = STOK.Urun_Kodu ) as Birim , "
 				+ " (SELECT Barkod FROM MAL  WHERE MAL.Kodu = STOK.Urun_Kodu ) as Barkod , " + " Izahat ,Doviz"
-				+ " FROM STOK  " + " WHERE Evrak_No  =N'" + eno + "'" + " AND Evrak_Cins = '" + cins + "'";
+				+ " FROM STOK  " + " WHERE Evrak_No  = ? AND Evrak_Cins = ? ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, eno);
+			preparedStatement.setNString(2, cins);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 			resultSet.close();
@@ -285,12 +290,16 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	public String aciklama_oku(String evrcins, int satir, String evrno, String gircik,
 			ConnectionDetails faturaConnDetails) {
 		String aciklama = "";
-		String query = "SELECT * " + " FROM ACIKLAMA " + " WHERE EVRAK_NO = N'" + evrno + "'" + " AND SATIR = '" + satir
-				+ "'" + " AND EVRAK_CINS = '" + evrcins + "'" + " AND Gir_Cik = '" + gircik + "'";
+		String query = "SELECT * " + " FROM ACIKLAMA " + " WHERE EVRAK_NO = ? AND SATIR = ? " 
+				+ " AND EVRAK_CINS = ? AND Gir_Cik = ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+			preparedStatement.setNString(1, evrno);
+			preparedStatement.setInt(2, satir);
+			preparedStatement.setNString(3, evrcins);
+			preparedStatement.setNString(4, gircik);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				aciklama = resultSet.getString("ACIKLAMA");
 			}
@@ -303,13 +312,14 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public urunDTO urun_adi_oku(String kodu, String kodbarcode, ConnectionDetails faturaConnDetails) {
 		String sql = "SELECT Kodu,Adi,Birim,Kusurat,Barkod,Depo,Fiat,Fiat_2,Fiat_3,Agirlik, Sinif,Recete,"
-				+ " (SELECT  ANA_GRUP FROM ANA_GRUP_DEGISKEN    WHERE AGID_Y = MAL.Ana_Grup) AS Ana_Grup ,  "
-				+ " (SELECT  ALT_GRUP FROM ALT_GRUP_DEGISKEN    WHERE ALID_Y = MAL.Alt_Grup) AS Alt_Grup,Resim "
-				+ "FROM MAL WITH (INDEX (IX_MAL))  WHERE " + kodbarcode + " = N'" + kodu + "'";
+				+ " (SELECT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE AGID_Y = MAL.Ana_Grup) AS Ana_Grup ,  "
+				+ " (SELECT  ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALID_Y = MAL.Alt_Grup) AS Alt_Grup,Resim "
+				+ "FROM MAL WITH (INDEX (IX_MAL))  WHERE " + kodbarcode + " = ? ";
 		urunDTO urdto = new urunDTO();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, kodu);
 			ResultSet rs = preparedStatement.executeQuery();
 			if (rs.isBeforeFirst()) {
 				rs.next();
@@ -337,12 +347,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	public double son_imalat_fiati_oku(String kodu, ConnectionDetails faturaConnDetails) {
 		double fiat = 0;
 		String query = "SELECT TOP 1 Fiat " + " FROM STOK WITH (INDEX (IX_STOK)) "
-				+ " WHERE Evrak_Cins = 'URE' and Hareket ='C'  " + " AND Urun_Kodu = N'" + kodu + "' "
+				+ " WHERE Evrak_Cins = 'URE' and Hareket ='C'  " + " AND Urun_Kodu = ? "
 				+ " ORDER BY  Tarih DESC OPTION (FAST 1)";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+			preparedStatement.setNString(1, kodu);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				fiat = resultSet.getDouble("Fiat");
 			}
@@ -357,14 +368,20 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		String result_tar = "1900-01-01";
 		String query = "SELECT Urun_Kodu ,  Evrak_Cins,Tarih ,Miktar , "
 				+ " SUM(Miktar) OVER(ORDER BY Tarih  ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as Miktar_Bakiye "
-				+ " FROM STOK WITH (INDEX (IX_STOK))  WHERE  STOK.Tarih >= '" + baslangic + "'  AND STOK.Tarih < '"
-				+ tar + " 23:59:59.998'" + " And STOK.Urun_Kodu = N'" + ukodu + "' AND Evrak_Cins <> 'DPO'"
+				+ " FROM STOK WITH (INDEX (IX_STOK))  WHERE  STOK.Tarih >= ? AND STOK.Tarih < ? "
+				+ " And STOK.Urun_Kodu = ?  AND Evrak_Cins <> 'DPO'"
 				+ " Order by Tarih";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				Statement preparedStatement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-						ResultSet.CONCUR_READ_ONLY);
-				ResultSet resultSet = preparedStatement.executeQuery(query)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE,
+						ResultSet.CONCUR_READ_ONLY)){
+
+			Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(tar, tar);
+			preparedStatement.setTimestamp(1, ts[0]);
+			preparedStatement.setTimestamp(2, ts[1]);
+			preparedStatement.setNString(3, ukodu);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				resultSet.last();
 				int kayit_sayi = resultSet.getRow();
@@ -389,12 +406,17 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	public double gir_ort_fiati_oku(String kodu, String ilkt, String tarih, ConnectionDetails faturaConnDetails) {
 		double fiat = 0;
 		String query = "SELECT  ISNULL( SUM(Tutar) / SUM(Miktar),0) as Ortalama "
-				+ " FROM STOK  WITH (INDEX (IX_STOK)) " + " WHERE  Urun_Kodu = N'" + kodu + "' "
-				+ " AND Hareket = 'G' AND Tarih > '" + ilkt + "' AND  Tarih < '" + tarih + " 23:59:59.998'";
+				+ " FROM STOK  WITH (INDEX (IX_STOK)) " + " WHERE  Urun_Kodu = ? "
+				+ " AND Hareket = 'G' AND Tarih > ? AND  Tarih < ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+			preparedStatement.setNString(1, kodu);
+			Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(ilkt, tarih);
+			preparedStatement.setTimestamp(2, ts[0]);
+			preparedStatement.setTimestamp(3, ts[1]);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				fiat = resultSet.getDouble("Ortalama");
 			}
@@ -428,11 +450,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " (SELECT ANA_GRUP from ANA_GRUP_DEGISKEN WHERE AGID_Y = RECETE.Ana_Grup ) as Ana_Grup , "
 				+ " (SELECT ALT_GRUP from ALT_GRUP_DEGISKEN WHERE ALID_Y = RECETE.Alt_Grup ) as Alt_Grup , "
 				+ " MAL.Kusurat ,RECETE.[USER] " + " FROM RECETE  , MAL WITH (INDEX (IX_MAL)) "
-				+ " Where RECETE.KODU = MAL.Kodu " + " AND Recete_No = N'" + rno + "' ORDER BY Tur ";
+				+ " Where RECETE.KODU = MAL.Kodu " + " AND Recete_No = ? ORDER BY Tur ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, rno);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 			resultSet.close();
@@ -444,7 +467,9 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public void stok_sil(String eno, String ecins, String cins, ConnectionDetails faturaConnDetails) {
-		String sql = "DELETE FROM STOK " + "WHERE Evrak_No = ? " + "AND Evrak_Cins = ? " + "AND Hareket = ?";
+		String sql = "DELETE FROM STOK " + "WHERE Evrak_No = ? " 
+				+ "AND Evrak_Cins = ? " 
+				+ "AND Hareket = ?";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -494,7 +519,8 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public void aciklama_yaz(String evrcins, int satir, String evrno, String aciklama, String gircik,
 			ConnectionDetails faturaConnDetails) {
-		String sql = "INSERT INTO ACIKLAMA (EVRAK_CINS,SATIR,EVRAK_NO,ACIKLAMA,Gir_Cik) " + " VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO ACIKLAMA (EVRAK_CINS,SATIR,EVRAK_NO,ACIKLAMA,Gir_Cik) " 
+				+ " VALUES (?,?,?,?,?)";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -533,7 +559,8 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup),'') AS Alt_Grup, "
 				+ " ISNULL((SELECT OZEL_KOD_1 FROM OZ_KOD_1_DEGISKEN WHERE OZ_KOD_1_DEGISKEN.OZ1ID = MAL.Ozel_Kod_1),'') as Ozel_Kod_1, "
 				+ " ISNULL((SELECT OZEL_KOD_2 FROM OZ_KOD_2_DEGISKEN WHERE OZ_KOD_2_DEGISKEN.OZ2ID = MAL.Ozel_Kod_2),'') as Ozel_Kod_2, "
-				+ " mal.Aciklama_1,mal.Aciklama_2 " + " FROM MAL WITH (INDEX (IX_MAL)) ORDER BY MAL.Kodu ";
+				+ " mal.Aciklama_1,mal.Aciklama_2 " 
+				+ " FROM MAL WITH (INDEX (IX_MAL)) ORDER BY MAL.Kodu ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
@@ -550,7 +577,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public void urun_degisken_eski(String fieldd, String degiskenAdi, String nerden, String sno, int id,
 			ConnectionDetails faturaConnDetails) {
-		String sql = "UPDATE " + nerden + " SET " + fieldd + " = ? WHERE " + sno + " = ?";
+		String sql = "UPDATE " + nerden + " SET " + fieldd + " = ? WHERE " + sno + " = ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -639,7 +666,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				"SELECT * FROM FATURA WHERE Ana_Grup = ? AND Alt_Grup = ?",
 				"SELECT * FROM IRSALIYE WHERE Ana_Grup = ? AND Alt_Grup = ?",
 				"SELECT * FROM RECETE WHERE Ana_Grup = ? AND Alt_Grup = ?",
-				"SELECT * FROM STOK WHERE Ana_Grup = ? AND Alt_Grup = ?" };
+		"SELECT * FROM STOK WHERE Ana_Grup = ? AND Alt_Grup = ?" };
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword())) {
 
@@ -691,13 +718,16 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public double son_satis_fiati_oku(String kodu, String muskodu, String gircik, ConnectionDetails faturaConnDetails) {
 		double fiat = 0.0;
-		String sql = "SELECT TOP 1  Fiat " + " FROM FATURA WITH (INDEX (IX_FATURA)) " + " WHERE  Cari_Firma = N'"
-				+ muskodu + "'" + " AND  Kodu = N'" + kodu + "'" + " AND Gir_Cik = '" + gircik + "'"
+		String sql = "SELECT TOP 1  Fiat " + " FROM FATURA WITH (INDEX (IX_FATURA)) " 
+				+ " WHERE  Cari_Firma = ? AND  Kodu = ? AND Gir_Cik = ? "
 				+ " ORDER BY  Tarih desc  OPTION (FAST 1)";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+			preparedStatement.setString(1, muskodu);
+			preparedStatement.setString(2, kodu);
+			preparedStatement.setString(1, gircik);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				fiat = resultSet.getDouble("Fiat");
 			}
@@ -718,12 +748,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " ISNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) , '') AS Ur_AnaGrup, "
 				+ " ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) , '') AS Ur_AltGrup, "
 				+ " Resim" + " FROM Fatura WITH (INDEX (IX_FATURA)), MAL WITH (INDEX (IX_MAL)) "
-				+ " WHERE Fatura.Kodu = MAL.Kodu " + " AND Fatura_No = N'" + fno + "'" + " AND Gir_Cik = '" + cins
-				+ "'";
+				+ " WHERE Fatura.Kodu = MAL.Kodu " + " AND Fatura_No = ? AND Gir_Cik = ? ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, fno);
+			preparedStatement.setString(2, cins);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 			resultSet.close();
@@ -737,19 +768,23 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public String[] dipnot_oku(String ino, String cins, String gircik, ConnectionDetails faturaConnDetails) {
 		String[] dipnot = { "", "", "" };
-		String sql = "SELECT * " + " FROM DPN " + " WHERE Evrak_NO = N'" + ino + "'" + " AND DPN.Tip = N'" + cins + "'"
-				+ " AND Gir_Cik = '" + gircik + "'";
+		String sql = "SELECT * " + " FROM DPN " 
+				+ " WHERE Evrak_NO = ? AND DPN.Tip = ? "
+				+ " AND Gir_Cik = ? ";
 
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (resultSet.next()) {
-					dipnot[0] = resultSet.getString("Bir");
-					dipnot[1] = resultSet.getString("Iki");
-					dipnot[2] = resultSet.getString("Uc");
-				}
+			preparedStatement.setString(1, ino);
+			preparedStatement.setString(2, cins);
+			preparedStatement.setString(3, gircik);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				dipnot[0] = resultSet.getString("Bir");
+				dipnot[1] = resultSet.getString("Iki");
+				dipnot[2] = resultSet.getString("Uc");
 			}
+
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -759,11 +794,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public String son_no_al(String cins, ConnectionDetails faturaConnDetails) {
 		String son_no = "";
-		String query = "SELECT max(Fatura_No)  as NO FROM FATURA WHERE Gir_Cik = '" + cins + "' ";
+		String query = "SELECT max(Fatura_No)  as NO FROM FATURA WHERE Gir_Cik = ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+			preparedStatement.setString(1, cins);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				son_no = resultSet.getString("NO");
 			}
@@ -776,10 +812,11 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public int fatura_no_al(String cins, ConnectionDetails faturaConnDetails) {
 		int E_NUMBER = 0;
-		String sql = "SELECT max(Fatura_No + 1) AS NO  FROM FATURA WHERE Gir_Cik = '" + cins + "' ";
+		String sql = "SELECT max(Fatura_No + 1) AS NO  FROM FATURA WHERE Gir_Cik = ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, cins);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (!resultSet.isBeforeFirst()) {
 					E_NUMBER = 0;
@@ -834,11 +871,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public List<Map<String, Object>> fat_oz_kod(String cins, ConnectionDetails faturaConnDetails) {
-		String sql = "SELECT DISTINCT  Ozel_Kod  " + "  FROM FATURA WHERE Gir_Cik = '" + cins + "'";
+		String sql = "SELECT DISTINCT  Ozel_Kod  " 
+				+ "  FROM FATURA WHERE Gir_Cik = ? ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, cins);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 		} catch (Exception e) {
@@ -889,7 +928,8 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public void dipnot_yaz(String eno, String bir, String iki, String uc, String tip, String gircik, String usr,
 			ConnectionDetails faturaConnDetails) {
-		String sql = "INSERT INTO DPN (Evrak_No,Tip,Bir,Iki,Uc,Gir_Cik,[USER]) " + " VALUES (?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO DPN (Evrak_No,Tip,Bir,Iki,Uc,Gir_Cik,[USER]) " 
+				+ " VALUES (?,?,?,?,?,?,?)";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -960,10 +1000,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 
 	@Override
 	public void kod_recete_yaz(String ukodu, String rec, ConnectionDetails faturaConnDetails) {
-		String sql = "UPDATE MAL SET Recete = N'" + rec + "' WHERE Kodu = N'" + ukodu + "'";
+		String sql = "UPDATE MAL SET Recete = ? WHERE Kodu = ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, rec);
+			stmt.setString(2, ukodu);
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Evrak yok etme sırasında bir hata oluştu", e);
@@ -1037,12 +1079,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " (SELECT Adi FROM MAL  WHERE MAL.Kodu = STOK.Urun_Kodu ) as Adi , "
 				+ " (SELECT Birim FROM MAL  WHERE MAL.Kodu = STOK.Urun_Kodu ) as Birim , "
 				+ " (SELECT Barkod FROM MAL  WHERE MAL.Kodu = STOK.Urun_Kodu ) as Barkod , " + " Izahat ,Doviz"
-				+ " FROM STOK  " + " WHERE Evrak_No  =N'" + eno + "'" + " AND Evrak_Cins = '" + cins
-				+ "' AND Hareket ='C'";
+				+ " FROM STOK  " + " WHERE Evrak_No  = ? AND Evrak_Cins = ? AND Hareket ='C'";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, eno);
+			preparedStatement.setString(2, cins);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 			resultSet.close();
@@ -1057,19 +1100,19 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			ConnectionDetails faturaConnDetails) {
 		String sql = " SELECT Fatura_No ,IIF(Gir_Cik = 'C','Satis','Alis') as Hareket,Tarih ,Cari_Firma ,Adres_Firma,Doviz , sum(Miktar) as Miktar ,sum(Fiat * Miktar) as Tutar, "
 				+ " SUM(Fiat * Miktar) - sum(((Fiat * Miktar) * Iskonto)/100) as Iskontolu_Tutar,count(Fatura_No) as fatsayi "
-				+ " FROM FATURA WITH (INDEX (IX_FATURA)) " + " WHERE FATURA.Fatura_No >= N'" + fatraporDTO.getFatno1()
-				+ "' AND  FATURA.Fatura_No <= N'" + fatraporDTO.getFatno2() + "'" + " AND FATURA.Tarih >= '"
-				+ fatraporDTO.getTar1() + "' AND  FATURA.Tarih <= '" + fatraporDTO.getTar2() + " 23:59:59.998'"
-				+ " AND FATURA.Cari_Firma >= N'" + fatraporDTO.getCkod1() + "' AND  FATURA.Cari_Firma <= N'"
-				+ fatraporDTO.getCkod2() + "' " + " AND FATURA.Adres_Firma >= N'" + fatraporDTO.getAdr1()
-				+ "' AND  FATURA.Adres_Firma <= N'" + fatraporDTO.getAdr2() + "' " + " AND FATURA.Kodu >= N'"
-				+ fatraporDTO.getUkod1() + "' AND FATURA.Kodu <= N'" + fatraporDTO.getUkod2() + "' "
-				+ " AND FATURA.Doviz >= N'" + fatraporDTO.getDvz1() + "' AND FATURA.Doviz <= N'" + fatraporDTO.getDvz2()
-				+ "' " + " AND FATURA.Tevkifat >= '" + fatraporDTO.getTev1() + "' AND FATURA.Tevkifat <= '"
-				+ fatraporDTO.getTev2() + "' " + " AND FATURA.Ozel_Kod >= N'" + fatraporDTO.getOkod1()
-				+ "' AND FATURA.Ozel_Kod <= N'" + fatraporDTO.getOkod2() + "' " + " AND FATURA.Ana_Grup "
-				+ fatraporDTO.getAnagrp() + " AND FATURA.Alt_Grup " + fatraporDTO.getAltgrp() + " AND FATURA.Depo "
-				+ fatraporDTO.getDepo() + " AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'"
+				+ " FROM FATURA WITH (INDEX (IX_FATURA)) " 
+				+ " WHERE FATURA.Fatura_No >= ?  AND  FATURA.Fatura_No <= ? " 
+				+ " AND FATURA.Tarih >= ? AND  FATURA.Tarih < ? "
+				+ " AND FATURA.Cari_Firma >= ? AND  FATURA.Cari_Firma <= ? " 
+				+ " AND FATURA.Adres_Firma >= ? AND  FATURA.Adres_Firma <= ? " 
+				+ " AND FATURA.Kodu >= ? AND FATURA.Kodu <= ? "
+				+ " AND FATURA.Doviz >= ? AND FATURA.Doviz <= ? " 
+				+ " AND FATURA.Tevkifat >= ? AND FATURA.Tevkifat <= ? " 
+				+ " AND FATURA.Ozel_Kod >= ? AND FATURA.Ozel_Kod <= ? " 
+				+ " AND FATURA.Ana_Grup " + fatraporDTO.getAnagrp() 
+				+ " AND FATURA.Alt_Grup " + fatraporDTO.getAltgrp() 
+				+ " AND FATURA.Depo " + fatraporDTO.getDepo() 
+				+ " AND FATURA.Gir_Cik Like ? "
 				+ " GROUP BY Fatura_No,Gir_Cik,Tarih ,Cari_Firma,Adres_Firma,Doviz  "
 				+ " ORDER BY  Fatura_No OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
@@ -1080,8 +1123,26 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			preparedStatement.setInt(1, offset);
-			preparedStatement.setInt(2, pageSize);
+			preparedStatement.setString(1, fatraporDTO.getFatno1());
+			preparedStatement.setString(2, fatraporDTO.getFatno2());
+			Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(fatraporDTO.getTar1(), fatraporDTO.getTar2());
+			preparedStatement.setTimestamp(3, ts[0]);
+			preparedStatement.setTimestamp(4, ts[1]);
+			preparedStatement.setString(5, fatraporDTO.getCkod1());
+			preparedStatement.setString(6, fatraporDTO.getCkod2());
+			preparedStatement.setString(7, fatraporDTO.getAdr1());
+			preparedStatement.setString(8, fatraporDTO.getAdr2());
+			preparedStatement.setString(9, fatraporDTO.getUkod1());
+			preparedStatement.setString(10, fatraporDTO.getUkod2());
+			preparedStatement.setString(11, fatraporDTO.getDvz1());
+			preparedStatement.setString(12, fatraporDTO.getDvz2());
+			preparedStatement.setString(13, fatraporDTO.getTev1());
+			preparedStatement.setString(14, fatraporDTO.getTev2());
+			preparedStatement.setString(15, fatraporDTO.getOkod1());
+			preparedStatement.setString(16, fatraporDTO.getOkod2());
+			preparedStatement.setString(17, fatraporDTO.getTuru() + "%");
+			preparedStatement.setInt(18, offset);
+			preparedStatement.setInt(19, pageSize);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 		} catch (Exception e) {
@@ -1094,23 +1155,41 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	public double fat_raporsize(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
 		double result = 0;
 		String sql = "SELECT COUNT(*) AS satir" + " FROM (" + " SELECT Fatura_No "
-				+ " FROM FATURA WITH (INDEX (IX_FATURA)) " + " WHERE FATURA.Fatura_No >= N'" + fatraporDTO.getFatno1()
-				+ "' AND  FATURA.Fatura_No <= N'" + fatraporDTO.getFatno2() + "'" + " AND FATURA.Tarih >= '"
-				+ fatraporDTO.getTar1() + "' AND  FATURA.Tarih <= '" + fatraporDTO.getTar2() + " 23:59:59.998'"
-				+ " AND FATURA.Cari_Firma >= N'" + fatraporDTO.getCkod1() + "' AND  FATURA.Cari_Firma <= N'"
-				+ fatraporDTO.getCkod2() + "' " + " AND FATURA.Adres_Firma >= N'" + fatraporDTO.getAdr1()
-				+ "' AND  FATURA.Adres_Firma <= N'" + fatraporDTO.getAdr2() + "' " + " AND FATURA.Kodu >= N'"
-				+ fatraporDTO.getUkod1() + "' AND FATURA.Kodu <= N'" + fatraporDTO.getUkod2() + "' "
-				+ " AND FATURA.Doviz >= N'" + fatraporDTO.getDvz1() + "' AND FATURA.Doviz <= N'" + fatraporDTO.getDvz2()
-				+ "' " + " AND FATURA.Tevkifat >= '" + fatraporDTO.getTev1() + "' AND FATURA.Tevkifat <= '"
-				+ fatraporDTO.getTev2() + "' " + " AND FATURA.Ozel_Kod >= N'" + fatraporDTO.getOkod1()
-				+ "' AND FATURA.Ozel_Kod <= N'" + fatraporDTO.getOkod2() + "' " + " AND FATURA.Ana_Grup "
-				+ fatraporDTO.getAnagrp() + " AND FATURA.Alt_Grup " + fatraporDTO.getAltgrp() + " AND FATURA.Depo "
-				+ fatraporDTO.getDepo() + " AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'"
+				+ " FROM FATURA WITH (INDEX (IX_FATURA)) " 
+				+ " WHERE FATURA.Fatura_No >= ?  AND  FATURA.Fatura_No <= ? " 
+				+ " AND FATURA.Tarih >= ? AND  FATURA.Tarih < ? "
+				+ " AND FATURA.Cari_Firma >= ? AND  FATURA.Cari_Firma <= ? " 
+				+ " AND FATURA.Adres_Firma >= ? AND  FATURA.Adres_Firma <= ? " 
+				+ " AND FATURA.Kodu >= ? AND FATURA.Kodu <= ? "
+				+ " AND FATURA.Doviz >= ? AND FATURA.Doviz <= ? " 
+				+ " AND FATURA.Tevkifat >= ? AND FATURA.Tevkifat <= ? " 
+				+ " AND FATURA.Ozel_Kod >= ? AND FATURA.Ozel_Kod <= ? " 
+				+ " AND FATURA.Ana_Grup " + fatraporDTO.getAnagrp() 
+				+ " AND FATURA.Alt_Grup " + fatraporDTO.getAltgrp() 
+				+ " AND FATURA.Depo " + fatraporDTO.getDepo() 
+				+ " AND FATURA.Gir_Cik Like ? "
 				+ " GROUP BY Fatura_No,Gir_Cik,Tarih ,Cari_Firma,Adres_Firma,Doviz  " + " ) AS Gruplanmis";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			preparedStatement.setString(1, fatraporDTO.getFatno1());
+			preparedStatement.setString(2, fatraporDTO.getFatno2());
+			Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(fatraporDTO.getTar1(), fatraporDTO.getTar2());
+			preparedStatement.setTimestamp(3, ts[0]);
+			preparedStatement.setTimestamp(4, ts[1]);
+			preparedStatement.setString(5, fatraporDTO.getCkod1());
+			preparedStatement.setString(6, fatraporDTO.getCkod2());
+			preparedStatement.setString(7, fatraporDTO.getAdr1());
+			preparedStatement.setString(8, fatraporDTO.getAdr2());
+			preparedStatement.setString(9, fatraporDTO.getUkod1());
+			preparedStatement.setString(10, fatraporDTO.getUkod2());
+			preparedStatement.setString(11, fatraporDTO.getDvz1());
+			preparedStatement.setString(12, fatraporDTO.getDvz2());
+			preparedStatement.setString(13, fatraporDTO.getTev1());
+			preparedStatement.setString(14, fatraporDTO.getTev2());
+			preparedStatement.setString(15, fatraporDTO.getOkod1());
+			preparedStatement.setString(16, fatraporDTO.getOkod2());
+			preparedStatement.setString(17, fatraporDTO.getTuru() + "%");
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				result = resultSet.getInt("satir");
@@ -1139,12 +1218,14 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " ISNULL((SELECT Alt_Grup FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup),'') AS Alt_Grup  , "
 				+ " ISNULL((SELECT Depo FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = FATURA.Depo),'') AS Depo , "
 				+ " Ozel_Kod ,Izahat, IIF(Gir_Cik = 'C','Satis','Alis') as Hareket ,FATURA.[USER]" + " FROM FATURA,MAL "
-				+ " WHERE FATURA.Fatura_No = '" + fno + "' " + " AND FATURA.Gir_Cik Like '" + turu + "%'"
+				+ " WHERE FATURA.Fatura_No = ? AND FATURA.Gir_Cik Like ? "
 				+ " AND FATURA .Kodu = mal.Kodu ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, fno);
+			preparedStatement.setString(2, turu + "%");
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 		} catch (Exception e) {
@@ -1156,105 +1237,396 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> fat_rapor_fat_tar(fatraporDTO fatraporDTO, Pageable pageable,
 			ConnectionDetails faturaConnDetails) {
-		String sql = " SELECT Fatura_No,IIF(Gir_Cik = 'C','Satis','Alis') as Hareket,Tarih " + " "
-				+ fatraporDTO.getBir() + "" + " " + fatraporDTO.getIki() + "" + " , sum( Miktar) as Miktar "
-				+ " ,sum([Fiat] * [Miktar]) as Tutar "
-				+ " ,sum((Fiat * Miktar) - ((Fiat * Miktar) * Iskonto)/100) as Iskontolu_Tutar  "
-				+ " ,sum((((Fiat * Miktar) - ((Fiat * Miktar) * Iskonto)/100) * Fatura.kdv)/100)  AS Kdv_Tutar "
-				+ " ,sum((Fiat * Miktar) - ((Fiat * Miktar) * Iskonto)/100 +   (((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100)    as Toplam_Tutar "
-				+ " FROM FATURA WITH (INDEX (IX_FATURA)) " + " WHERE FATURA.Fatura_No >= N'" + fatraporDTO.getFatno1()
-				+ "' AND  FATURA.Fatura_No <= N'" + fatraporDTO.getFatno2() + "'" + " AND FATURA.Tarih >= '"
-				+ fatraporDTO.getTar1() + "' AND  FATURA.Tarih <= '" + fatraporDTO.getTar2() + " 23:59:59.998'"
-				+ " AND FATURA.Cari_Firma >= N'" + fatraporDTO.getCkod1() + "' AND  FATURA.Cari_Firma <= N'"
-				+ fatraporDTO.getCkod2() + "' " + " AND FATURA.Adres_Firma >= N'" + fatraporDTO.getAdr1()
-				+ "' AND  FATURA.Adres_Firma <= N'" + fatraporDTO.getAdr2() + "' " + " AND FATURA.Kodu >= N'"
-				+ fatraporDTO.getUkod1() + "' AND FATURA.Kodu <= N'" + fatraporDTO.getUkod2() + "' "
-				+ " AND FATURA.Doviz >= N'" + fatraporDTO.getDvz1() + "' AND FATURA.Doviz <= N'" + fatraporDTO.getDvz2()
-				+ "' " + " AND FATURA.Tevkifat >= '" + fatraporDTO.getTev1() + "' AND FATURA.Tevkifat <= '"
-				+ fatraporDTO.getTev2() + "' " + " AND FATURA.Ozel_Kod >= N'" + fatraporDTO.getOkod1()
-				+ "' AND FATURA.Ozel_Kod <= N'" + fatraporDTO.getOkod2() + "' " + " AND FATURA.Ana_Grup "
-				+ fatraporDTO.getAnagrp() + " AND FATURA.Alt_Grup " + fatraporDTO.getAltgrp() + " AND FATURA.Depo "
-				+ fatraporDTO.getDepo() + " AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'" + " GROUP BY "
-				+ fatraporDTO.getUc() + "" + " ORDER BY  " + fatraporDTO.getUc() + "";
-		List<Map<String, Object>> resultList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
-				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet);
-		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				fatraporDTO.getTar1(),
+				fatraporDTO.getTar2()
+				);
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT Fatura_No, IIF(Gir_Cik = 'C','Satis','Alis') as Hareket, Tarih ")
+		.append(" ").append(fatraporDTO.getBir()).append(" ").append(fatraporDTO.getIki())
+		.append(" , SUM(Miktar) as Miktar ")
+		.append(" , SUM([Fiat] * [Miktar]) as Tutar ")
+		.append(" , SUM((Fiat * Miktar) - ((Fiat * Miktar) * Iskonto) / 100) as Iskontolu_Tutar ")
+		.append(" , SUM((((Fiat * Miktar) - ((Fiat * Miktar) * Iskonto) / 100) * Fatura.kdv) / 100) AS Kdv_Tutar ")
+		.append(" , SUM((Fiat * Miktar) - ((Fiat * Miktar) * Iskonto) / 100 ")
+		.append("       + (((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv) / 100) ")
+		.append("   as Toplam_Tutar ")
+		.append(" FROM FATURA WITH (INDEX (IX_FATURA)) ")
+		.append(" WHERE FATURA.Fatura_No >= ? ")
+		.append("   AND FATURA.Fatura_No <= ? ")
+		.append("   AND FATURA.Tarih >= ? ")
+		.append("   AND FATURA.Tarih <  ? ")
+		.append("   AND FATURA.Cari_Firma >= ? AND FATURA.Cari_Firma <= ? ")
+		.append("   AND FATURA.Adres_Firma >= ? AND FATURA.Adres_Firma <= ? ")
+		.append("   AND FATURA.Kodu >= ? AND FATURA.Kodu <= ? ")
+		.append("   AND FATURA.Doviz >= ? AND FATURA.Doviz <= ? ")
+		.append("   AND FATURA.Tevkifat >= ? AND FATURA.Tevkifat <= ? ")
+		.append("   AND FATURA.Ozel_Kod >= ? AND FATURA.Ozel_Kod <= ? ")
+		// Şu üçü zaten hazır parça ( = '...' / LIKE '%' vs. ) olarak DTO’dan geliyor:
+		.append("   AND FATURA.Ana_Grup ").append(fatraporDTO.getAnagrp())
+		.append("   AND FATURA.Alt_Grup ").append(fatraporDTO.getAltgrp())
+		.append("   AND FATURA.Depo ").append(fatraporDTO.getDepo())
+		.append("   AND FATURA.Gir_Cik LIKE ? ")
+		.append(" GROUP BY ").append(fatraporDTO.getUc())
+		.append(" ORDER BY ").append(fatraporDTO.getUc());
+
+		if (pageable != null) {
+			sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 		}
-		return resultList;
-	}
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+			int idx = 1;
+			preparedStatement.setString(idx++, fatraporDTO.getFatno1());
+			preparedStatement.setString(idx++, fatraporDTO.getFatno2());
+
+			preparedStatement.setTimestamp(idx++, ts[0]); // baslangic (>=)
+			preparedStatement.setTimestamp(idx++, ts[1]); // bitis  (<)
+
+			preparedStatement.setString(idx++, fatraporDTO.getCkod1());
+			preparedStatement.setString(idx++, fatraporDTO.getCkod2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getAdr1());
+			preparedStatement.setString(idx++, fatraporDTO.getAdr2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getUkod1());
+			preparedStatement.setString(idx++, fatraporDTO.getUkod2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getDvz1());
+			preparedStatement.setString(idx++, fatraporDTO.getDvz2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getTev1());
+			preparedStatement.setString(idx++, fatraporDTO.getTev2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getOkod1());
+			preparedStatement.setString(idx++, fatraporDTO.getOkod2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getTuru() + "%");
+
+			if (pageable != null) {
+				preparedStatement.setLong(idx++, pageable.getOffset());
+				preparedStatement.setInt(idx++, pageable.getPageSize());
+			}
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+
+		} catch (Exception e) {
+			throw new ServiceException("MS fatService genel hatası.", e);
+		}
+
+		return resultList;	}
 
 	@Override
 	public List<Map<String, Object>> fat_rapor_cari_kod(fatraporDTO fatraporDTO, Pageable pageable,
 			ConnectionDetails faturaConnDetails) {
-		String sql = " SELECT  " + fatraporDTO.getUc() + " ,IIF(Gir_Cik = 'C','Satis','Alis') as Hareket " + "  "
-				+ fatraporDTO.getBir() + " " + " ,sum([Miktar]) as Miktar " + " ,sum([Fiat] * [Miktar]) as Tutar "
-				+ " ,SUM(Fiat * Miktar) - sum(((Fiat * Miktar) * Iskonto)/100) as Iskontolu_Tutar "
-				+ " ,sum((((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100)  AS Kdv_Tutar "
-				+ " ,SUM(Fiat * Miktar) - sum(((Fiat * Miktar) * Iskonto)/100) +   sum((((Fatura.Fiat * [Miktar]) - ((Fatura.Fiat * [Miktar]) * [Iskonto]) / 100) * Fatura.kdv ) / 100)    as Toplam_Tutar"
-				+ " FROM FATURA WITH (INDEX (IX_FATURA)) " + " WHERE FATURA.Fatura_No >= N'" + fatraporDTO.getFatno1()
-				+ "' AND  FATURA.Fatura_No <= N'" + fatraporDTO.getFatno2() + "'" + " AND FATURA.Tarih >= '"
-				+ fatraporDTO.getTar1() + "' AND  FATURA.Tarih <= '" + fatraporDTO.getTar2() + " 23:59:59.998'"
-				+ " AND FATURA.Cari_Firma >= N'" + fatraporDTO.getCkod1() + "' AND  FATURA.Cari_Firma <= N'"
-				+ fatraporDTO.getCkod2() + "' " + " AND FATURA.Adres_Firma >= N'" + fatraporDTO.getAdr1()
-				+ "' AND  FATURA.Adres_Firma <= N'" + fatraporDTO.getAdr2() + "' " + " AND FATURA.Kodu >= N'"
-				+ fatraporDTO.getUkod1() + "' AND FATURA.Kodu <= N'" + fatraporDTO.getUkod2() + "' "
-				+ " AND FATURA.Doviz >= N'" + fatraporDTO.getDvz1() + "' AND FATURA.Doviz <= N'" + fatraporDTO.getDvz2()
-				+ "' " + " AND FATURA.Tevkifat >= '" + fatraporDTO.getTev1() + "' AND FATURA.Tevkifat <= '"
-				+ fatraporDTO.getTev2() + "' " + " AND FATURA.Ozel_Kod >= N'" + fatraporDTO.getOkod1()
-				+ "' AND FATURA.Ozel_Kod <= N'" + fatraporDTO.getOkod2() + "' " + " AND FATURA.Ana_Grup "
-				+ fatraporDTO.getAnagrp() + " AND FATURA.Alt_Grup " + fatraporDTO.getAltgrp() + " AND FATURA.Depo "
-				+ fatraporDTO.getDepo() + " AND FATURA.Gir_Cik Like '" + fatraporDTO.getTuru() + "%'" + " GROUP BY "
-				+ fatraporDTO.getUc() + "" + " ORDER BY  " + fatraporDTO.getUc() + "";
-		List<Map<String, Object>> resultList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
-				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet);
-		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				fatraporDTO.getTar1(),
+				fatraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT ")
+		.append(fatraporDTO.getUc())
+		.append(" , IIF(Gir_Cik = 'C','Satis','Alis') as Hareket ")
+		.append(" ").append(fatraporDTO.getBir())
+		.append(" , SUM(Miktar) as Miktar ")
+		.append(" , SUM(Fiat * Miktar) as Tutar ")
+		.append(" , SUM(Fiat * Miktar) - SUM(((Fiat * Miktar) * Iskonto) / 100) as Iskontolu_Tutar ")
+		.append(" , SUM((((Fatura.Fiat * Miktar) - ((Fatura.Fiat * Miktar) * Iskonto) / 100) * Fatura.kdv ) / 100) AS Kdv_Tutar ")
+		.append(" , SUM(Fiat * Miktar) - SUM(((Fiat * Miktar) * Iskonto) / 100) ")
+		.append("   + SUM((((Fatura.Fiat * Miktar) - ((Fatura.Fiat * Miktar) * Iskonto) / 100) * Fatura.kdv ) / 100) as Toplam_Tutar ")
+		.append(" FROM FATURA WITH (INDEX (IX_FATURA)) ")
+		.append(" WHERE FATURA.Fatura_No >= ? ")
+		.append("   AND FATURA.Fatura_No <= ? ")
+		.append("   AND FATURA.Tarih >= ? ")
+		.append("   AND FATURA.Tarih <  ? ")
+		.append("   AND FATURA.Cari_Firma >= ? AND FATURA.Cari_Firma <= ? ")
+		.append("   AND FATURA.Adres_Firma >= ? AND FATURA.Adres_Firma <= ? ")
+		.append("   AND FATURA.Kodu >= ? AND FATURA.Kodu <= ? ")
+		.append("   AND FATURA.Doviz >= ? AND FATURA.Doviz <= ? ")
+		.append("   AND FATURA.Tevkifat >= ? AND FATURA.Tevkifat <= ? ")
+		.append("   AND FATURA.Ozel_Kod >= ? AND FATURA.Ozel_Kod <= ? ")
+		.append("   AND FATURA.Ana_Grup ").append(fatraporDTO.getAnagrp())
+		.append("   AND FATURA.Alt_Grup ").append(fatraporDTO.getAltgrp())
+		.append("   AND FATURA.Depo ").append(fatraporDTO.getDepo())
+		.append("   AND FATURA.Gir_Cik LIKE ? ")
+		.append(" GROUP BY ").append(fatraporDTO.getUc())
+		.append(" ORDER BY ").append(fatraporDTO.getUc());
+
+		if (pageable != null) {
+			sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 		}
-		return resultList;
-	}
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int idx = 1;
+
+			preparedStatement.setString(idx++, fatraporDTO.getFatno1());
+			preparedStatement.setString(idx++, fatraporDTO.getFatno2());
+
+			preparedStatement.setTimestamp(idx++, ts[0]); // baslangic (>=)
+			preparedStatement.setTimestamp(idx++, ts[1]); // bitis  (<)
+
+			preparedStatement.setString(idx++, fatraporDTO.getCkod1());
+			preparedStatement.setString(idx++, fatraporDTO.getCkod2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getAdr1());
+			preparedStatement.setString(idx++, fatraporDTO.getAdr2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getUkod1());
+			preparedStatement.setString(idx++, fatraporDTO.getUkod2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getDvz1());
+			preparedStatement.setString(idx++, fatraporDTO.getDvz2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getTev1());
+			preparedStatement.setString(idx++, fatraporDTO.getTev2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getOkod1());
+			preparedStatement.setString(idx++, fatraporDTO.getOkod2());
+
+			preparedStatement.setString(idx++, fatraporDTO.getTuru() + "%");
+
+			if (pageable != null) {
+				preparedStatement.setLong(idx++, pageable.getOffset());
+				preparedStatement.setInt(idx++, pageable.getPageSize());
+			}
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+
+		} catch (Exception e) {
+			throw new ServiceException("MS fatService genel hatası.", e);
+		}
+
+		return resultList;	}
 
 	@Override
 	public List<Map<String, Object>> imalat_rapor(imaraporDTO imaraporDTO, ConnectionDetails faturaConnDetails) {
-		String sql = "SELECT Evrak_No, Tarih,Urun_Kodu, Adi , " + " Miktar,  Birim ,(Miktar * Mal.Agirlik) as Agirlik ,"
-				+ " (SELECT DEPO from DEPO_DEGISKEN WHERE DPID_Y = STOK.DEPO ) as Depo , "
-				+ " (SELECT ANA_GRUP from ANA_GRUP_DEGISKEN WHERE AGID_Y = STOK.Ana_Grup ) as Ana_Grup , "
-				+ " (SELECT ALT_GRUP from ALT_GRUP_DEGISKEN WHERE ALID_Y = STOK.Alt_Grup ) as Alt_Grup  , "
-				+ " Barkod  , " + " Recete ,STOK.[USER]"
-				+ " FROM STOK WITH (INDEX (IX_STOK)) ,MAL WITH (INDEX (IX_MAL))" + " WHERE Evrak_Cins = 'URE' "
-				+ " AND MAL.Ana_Grup " + imaraporDTO.getUranagrp() + " AND MAL.Alt_Grup " + imaraporDTO.getUraltgrp()
-				+ " AND Hareket = 'G' " + " AND Stok.Urun_Kodu = MAL.Kodu  " + " AND STOK.Evrak_No >= '"
-				+ imaraporDTO.getEvrno1() + "' AND  STOK.Evrak_No <= '" + imaraporDTO.getEvrno2() + "'"
-				+ " AND Tarih >= '" + imaraporDTO.getTar1() + "' AND  Tarih <= '" + imaraporDTO.getTar2()
-				+ " 23:59:59.998'" + " AND STOK.Urun_Kodu >= N'" + imaraporDTO.getUkod1()
-				+ "' AND  STOK.Urun_Kodu <= N'" + imaraporDTO.getUkod2() + "' " + " AND Recete >= N'"
-				+ imaraporDTO.getRec1() + "' AND Recete <= N'" + imaraporDTO.getRec2() + "' " + " AND Barkod >= N'"
-				+ imaraporDTO.getBkod1() + "' AND Barkod <= N'" + imaraporDTO.getBkod2() + "' " + " AND STOK.Ana_Grup "
-				+ imaraporDTO.getAnagrp() + " AND STOK.Alt_Grup " + imaraporDTO.getAltgrp() + " AND STOK.Depo "
-				+ imaraporDTO.getDepo() + " ORDER BY Evrak_No ";
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				imaraporDTO.getTar1(),
+				imaraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT ")
+		.append("  STOK.Evrak_No, ")
+		.append("  STOK.Tarih, ")
+		.append("  STOK.Urun_Kodu, ")
+		.append("  MAL.Adi, ")
+		.append("  STOK.Miktar, ")
+		.append("  MAL.Birim, ")
+		.append("  (STOK.Miktar * MAL.Agirlik) AS Agirlik, ")
+		.append("  (SELECT DEPO FROM DEPO_DEGISKEN WHERE DPID_Y = STOK.Depo) AS Depo, ")
+		.append("  (SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE AGID_Y = STOK.Ana_Grup) AS Ana_Grup, ")
+		.append("  (SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALID_Y = STOK.Alt_Grup) AS Alt_Grup, ")
+		.append("  STOK.Barkod, ")
+		.append("  STOK.Recete, ")
+		.append("  STOK.[USER] ")
+		.append("FROM STOK WITH (INDEX (IX_STOK)) ")
+		.append("JOIN MAL  WITH (INDEX (IX_MAL)) ON STOK.Urun_Kodu = MAL.Kodu ")
+		.append("WHERE STOK.Evrak_Cins = 'URE' ")
+		.append("  AND MAL.Ana_Grup ").append(imaraporDTO.getUranagrp())
+		.append("  AND MAL.Alt_Grup ").append(imaraporDTO.getUraltgrp())
+		.append("  AND STOK.Hareket = 'G' ")
+		.append("  AND STOK.Evrak_No >= ? ")
+		.append("  AND STOK.Evrak_No <= ? ")
+		.append("  AND STOK.Tarih >= ? ")
+		.append("  AND STOK.Tarih <  ? ")
+		.append("  AND STOK.Urun_Kodu >= ? ")
+		.append("  AND STOK.Urun_Kodu <= ? ")
+		.append("  AND STOK.Recete >= ? ")
+		.append("  AND STOK.Recete <= ? ")
+		.append("  AND STOK.Barkod >= ? ")
+		.append("  AND STOK.Barkod <= ? ")
+		.append("  AND STOK.Ana_Grup ").append(imaraporDTO.getAnagrp())
+		.append("  AND STOK.Alt_Grup ").append(imaraporDTO.getAltgrp())
+		.append("  AND STOK.Depo ").append(imaraporDTO.getDepo())
+		.append("ORDER BY STOK.Evrak_No");
+
 		List<Map<String, Object>> resultList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
-				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet);
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int idx = 1;
+
+			preparedStatement.setString(idx++, imaraporDTO.getEvrno1());
+			preparedStatement.setString(idx++, imaraporDTO.getEvrno2());
+
+			preparedStatement.setTimestamp(idx++, ts[0]); // baslangic (>=)
+			preparedStatement.setTimestamp(idx++, ts[1]); // bitis  (<)
+
+			preparedStatement.setString(idx++, imaraporDTO.getUkod1());
+			preparedStatement.setString(idx++, imaraporDTO.getUkod2());
+
+			preparedStatement.setString(idx++, imaraporDTO.getRec1());
+			preparedStatement.setString(idx++, imaraporDTO.getRec2());
+
+			preparedStatement.setString(idx++, imaraporDTO.getBkod1());
+			preparedStatement.setString(idx++, imaraporDTO.getBkod2());
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
-		return resultList;
-	}
+
+		return resultList;	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor(envanterDTO envanterDTO, ConnectionDetails faturaConnDetails) {
 
+		String calisanPara = envanterDTO.getDoviz();
+
+		String wee = envanterDTO.isDepohardahil()
+				? " LIKE '%'"
+						: " <> 'DPO'";
+
+		String ure1 = envanterDTO.isUretfisdahil()
+				? " LIKE '%'"
+						: " <> 'URE'";
+
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				envanterDTO.getTar1(),
+				envanterDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT ")
+		.append("    mal.Kodu  AS Kodu, ")
+		.append("    mal.Adi   AS Adi, ")
+		.append("    mal.Birim AS Simge, ")
+
+		.append("    CASE mal.Kusurat ")
+		.append("        WHEN 0 THEN FORMAT(ISNULL(s.giris_miktar,0),'N0') ")
+		.append("        WHEN 1 THEN FORMAT(ISNULL(s.giris_miktar,0),'N1') ")
+		.append("        WHEN 2 THEN FORMAT(ISNULL(s.giris_miktar,0),'N2') ")
+		.append("        ELSE     FORMAT(ISNULL(s.giris_miktar,0),'N3') ")
+		.append("    END AS Giris_Miktari, ")
+
+		.append("    ISNULL(s.giris_tutar,0) AS Giris_Tutar, ")
+
+		.append("    CASE mal.Kusurat ")
+		.append("        WHEN 0 THEN FORMAT(ISNULL(s.cikis_miktar,0),'N0') ")
+		.append("        WHEN 1 THEN FORMAT(ISNULL(s.cikis_miktar,0),'N1') ")
+		.append("        WHEN 2 THEN FORMAT(ISNULL(s.cikis_miktar,0),'N2') ")
+		.append("        ELSE     FORMAT(ISNULL(s.cikis_miktar,0),'N3') ")
+		.append("    END AS Cikis_Miktari, ")
+
+		.append("    ISNULL(s.cikis_tutar,0) AS Cikis_Tutar, ")
+
+		.append("    ISNULL( ")
+		.append("        s.cikis_miktar * ")
+		.append("        (CASE WHEN ISNULL(s.giris_miktar_for_cost,0) = 0 ")
+		.append("              THEN 0 ")
+		.append("              ELSE ISNULL(s.giris_tutar,0) / s.giris_miktar_for_cost ")
+		.append("         END), 0) AS Cikis_Maliyet, ")
+
+		.append("    CASE mal.Kusurat ")
+		.append("        WHEN 0 THEN FORMAT(ISNULL(s.stok_miktar,0),'N0') ")
+		.append("        WHEN 1 THEN FORMAT(ISNULL(s.stok_miktar,0),'N1') ")
+		.append("        WHEN 2 THEN FORMAT(ISNULL(s.stok_miktar,0),'N2') ")
+		.append("        ELSE     FORMAT(ISNULL(s.stok_miktar,0),'N3') ")
+		.append("    END AS Stok_Miktari, ")
+
+		.append("    CASE WHEN ISNULL(s.giris_miktar_for_cost,0) = 0 ")
+		.append("         THEN 0 ")
+		.append("         ELSE ISNULL(s.giris_tutar,0) / s.giris_miktar_for_cost ")
+		.append("    END AS Maliyet, ")
+
+		.append("    ISNULL( ")
+		.append("        s.stok_miktar * ")
+		.append("        (CASE WHEN ISNULL(s.giris_miktar_for_cost,0) = 0 ")
+		.append("              THEN 0 ")
+		.append("              ELSE ISNULL(s.giris_tutar,0) / s.giris_miktar_for_cost ")
+		.append("         END), 0) AS Tutar ")
+
+		.append("FROM MAL WITH (INDEX (IX_MAL)) ")
+
+		.append("LEFT JOIN ( ")
+		.append("    SELECT ")
+		.append("        d.Urun_Kodu, ")
+		.append("        SUM(CASE WHEN d.Hareket = 'G' THEN d.Miktar       ELSE 0 END) AS giris_miktar, ")
+		.append("        SUM(CASE WHEN d.Hareket = 'G' THEN d.Tutar        ELSE 0 END) AS giris_tutar, ")
+		.append("        SUM(CASE WHEN d.Hareket = 'C' THEN ABS(d.Miktar)  ELSE 0 END) AS cikis_miktar, ")
+		.append("        SUM(CASE WHEN d.Hareket = 'C' ")
+		.append("                 THEN IIF(d.Doviz = ?, ABS(d.Tutar), ABS(d.Tutar) * d.Kur) ")
+		.append("                 ELSE 0 END) AS cikis_tutar, ")
+		.append("        SUM(CASE WHEN d.Hareket = 'G' THEN IIF(d.Miktar = 0, 1, d.Miktar) ELSE 0 END) AS giris_miktar_for_cost, ")
+		.append("        SUM(CASE ")
+		.append("                WHEN d.Hareket = 'G' THEN d.Miktar ")
+		.append("                WHEN d.Hareket = 'C' THEN -ABS(d.Miktar) ")
+		.append("                ELSE 0 ")
+		.append("            END) AS stok_miktar ")
+		.append("    FROM STOK d WITH (INDEX (IX_STOK)) ")
+		.append("    WHERE d.Tarih >= ? AND d.Tarih < ? ")
+		.append("      AND d.Urun_Kodu >= ? AND d.Urun_Kodu <= ? ")
+		.append("      AND d.Evrak_No >= ? AND d.Evrak_No <= ? ")
+		.append("      AND d.Ana_Grup ").append(envanterDTO.getAnagrp()).append(" ")
+		.append("      AND d.Alt_Grup ").append(envanterDTO.getAltgrp()).append(" ")
+		.append("      AND d.Depo ").append(envanterDTO.getDepo()).append(" ")
+		.append("      AND d.Evrak_Cins ").append(wee).append(" ")
+		.append("      AND d.Evrak_Cins ").append(ure1).append(" ")
+		.append("    GROUP BY d.Urun_Kodu ")
+		.append(") s ON s.Urun_Kodu = MAL.Kodu ")
+
+		.append("WHERE MAL.Kodu >= ? AND MAL.Kodu <= ? ")
+		.append("  AND MAL.Ana_Grup ").append(envanterDTO.getUranagrp()).append(" ")
+		.append("  AND MAL.Alt_Grup ").append(envanterDTO.getUraltgrp()).append(" ")
+		.append("ORDER BY MAL.Kodu ");
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int idx = 1;
+
+			preparedStatement.setString(idx++, calisanPara);
+
+			preparedStatement.setTimestamp(idx++, ts[0]); // >=
+			preparedStatement.setTimestamp(idx++, ts[1]); // <
+
+			preparedStatement.setString(idx++, envanterDTO.getUkod1());
+			preparedStatement.setString(idx++, envanterDTO.getUkod2());
+
+			preparedStatement.setString(idx++, envanterDTO.getEvrno1());
+			preparedStatement.setString(idx++, envanterDTO.getEvrno2());
+
+			preparedStatement.setString(idx++, envanterDTO.getUkod1());
+			preparedStatement.setString(idx++, envanterDTO.getUkod2());
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String calisanpara = envanterDTO.getDoviz();
 		String wee = "";
 		if (envanterDTO.isDepohardahil())
@@ -1438,6 +1810,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
@@ -1616,6 +1989,88 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public List<Map<String, Object>> envanter_rapor_u_kodu_oncekitarih(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
+		String wee = envanterDTO.isDepohardahil() ? " LIKE '%'" : " <> 'DPO'";
+		String ure1 = envanterDTO.isUretfisdahil() ? " LIKE '%'" : " <> 'URE'";
+
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				envanterDTO.getTar1(),
+				envanterDTO.getTar2()
+				);
+		Timestamp start = ts[0];
+		Timestamp end   = ts[1];
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT ")
+		.append("  s.Urun_Kodu AS Kodu, ")
+		.append("  s.Adi, ")
+		.append("  s.Birim AS Simge, ")
+		.append("  ISNULL(s.onceki_giris_ag - s.onceki_cikis_ag, 0) AS Onceki_Bakiye, ")
+		.append("  ISNULL(s.periyot_giris_ag, 0) AS Periyot_Giris_Agirlik, ")
+		.append("  ISNULL(s.periyot_cikis_ag, 0) AS Periyot_Cikis_Agirlik, ")
+		.append("  ISNULL(s.periyot_giris_ag - s.periyot_cikis_ag, 0) AS Periyot_Stok_Agirlik, ")
+		.append("  ISNULL(s.onceki_giris_ag - s.onceki_cikis_ag ")
+		.append("       + s.periyot_giris_ag - s.periyot_cikis_ag, 0) AS Bakiye ")
+		.append("FROM ( ")
+		.append("    SELECT ")
+		.append("      d.Urun_Kodu, ")
+		.append("      m.Adi, ")
+		.append("      m.Birim, ")
+		.append("      SUM(CASE WHEN d.Tarih <  ? AND d.Hareket = 'G' ")
+		.append("               THEN d.Miktar * m.Agirlik ELSE 0 END) AS onceki_giris_ag, ")
+		.append("      SUM(CASE WHEN d.Tarih <  ? AND d.Hareket = 'C' ")
+		.append("               THEN ABS(d.Miktar) * m.Agirlik ELSE 0 END) AS onceki_cikis_ag, ")
+		.append("      SUM(CASE WHEN d.Tarih >= ? AND d.Tarih < ? AND d.Hareket = 'G' ")
+		.append("               THEN d.Miktar * m.Agirlik ELSE 0 END) AS periyot_giris_ag, ")
+		.append("      SUM(CASE WHEN d.Tarih >= ? AND d.Tarih < ? AND d.Hareket = 'C' ")
+		.append("               THEN ABS(d.Miktar) * m.Agirlik ELSE 0 END) AS periyot_cikis_ag ")
+		.append("    FROM STOK d WITH (INDEX (IX_STOK)) ")
+		.append("    JOIN MAL  m WITH (INDEX (IX_MAL)) ON m.Kodu = d.Urun_Kodu ")
+		.append("    WHERE d.Urun_Kodu >= ? AND d.Urun_Kodu <= ? ")
+		.append("      AND d.Evrak_No  >= ? AND d.Evrak_No  <= ? ")
+		.append("      AND d.Ana_Grup ").append(envanterDTO.getAnagrp()).append(" ")
+		.append("      AND d.Alt_Grup ").append(envanterDTO.getAltgrp()).append(" ")
+		.append("      AND d.Depo     ").append(envanterDTO.getDepo()).append(" ")
+		.append("      AND d.Evrak_Cins ").append(wee).append(" ")
+		.append("      AND d.Evrak_Cins ").append(ure1).append(" ")
+		.append("      AND m.Ana_Grup ").append(envanterDTO.getUranagrp()).append(" ")
+		.append("      AND m.Alt_Grup ").append(envanterDTO.getUraltgrp()).append(" ")
+		.append("      AND d.Tarih < ? ")
+		.append("    GROUP BY d.Urun_Kodu, m.Adi, m.Birim ")
+		.append(") s ")
+		.append("ORDER BY s.Urun_Kodu, s.Adi, s.Birim");
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+			int idx = 1;
+			ps.setTimestamp(idx++, start); // d.Tarih < ?
+			ps.setTimestamp(idx++, start); // d.Tarih < ?
+
+			ps.setTimestamp(idx++, start); // d.Tarih >= ?
+			ps.setTimestamp(idx++, end);   // d.Tarih <  ?
+
+			ps.setTimestamp(idx++, start); // d.Tarih >= ?
+			ps.setTimestamp(idx++, end);   // d.Tarih <  ?
+
+			ps.setString(idx++, envanterDTO.getUkod1());
+			ps.setString(idx++, envanterDTO.getUkod2());
+
+			ps.setString(idx++, envanterDTO.getEvrno1());
+			ps.setString(idx++, envanterDTO.getEvrno2());
+
+			ps.setTimestamp(idx++, end);
+			try (ResultSet rs = ps.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+		return resultList;
+		/*
 		String wee = "";
 		if (envanterDTO.isDepohardahil())
 			wee = " Like '%' ";
@@ -1687,11 +2142,92 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor_u_kodu(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
+		String wee;
+		if (envanterDTO.isDepohardahil())
+			wee = " LIKE '%' ";
+		else
+			wee = " <> 'DPO' ";
+
+		String ure1;
+		if (envanterDTO.isUretfisdahil())
+			ure1 = " LIKE '%' ";
+		else
+			ure1 = " <> 'URE' ";
+
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				envanterDTO.getTar1(),
+				envanterDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT STOK.Urun_Kodu as Kodu, ")
+		.append("        MAL.Adi, ")
+		.append("        MAL.Birim as Simge, ")
+		.append("        SUM(IIF(Hareket = 'G', Miktar, 0))                      as Giris_Miktari, ")
+		.append("        SUM(IIF(Hareket = 'G', Miktar, 0) * MAL.Agirlik)       as Giris_Agirlik, ")
+		.append("        SUM(IIF(Hareket = 'C', ABS(Miktar), 0))                as Cikis_Miktari, ")
+		.append("        SUM(IIF(Hareket = 'C', ABS(Miktar), 0) * MAL.Agirlik)  as Cikis_Agirlik, ")
+		.append("        SUM(IIF(Hareket = 'G', Miktar, 0)) ")
+		.append("          - SUM(IIF(Hareket = 'C', ABS(Miktar), 0))            as Stok_Miktari, ")
+		.append("        SUM(IIF(Hareket = 'G', Miktar, 0) * MAL.Agirlik) ")
+		.append("          - SUM(IIF(Hareket = 'C', ABS(Miktar), 0) * MAL.Agirlik) as Stok_Agirlik ")
+		.append(" FROM STOK WITH (INDEX (IX_STOK)), MAL WITH (INDEX (IX_MAL)) ")
+		.append(" WHERE MAL.Kodu = STOK.Urun_Kodu ")
+		.append("   AND MAL.Kodu       >= ? ")
+		.append("   AND MAL.Kodu       <= ? ")
+		.append("   AND MAL.Ana_Grup   ").append(envanterDTO.getUranagrp())
+		.append("   AND MAL.Alt_Grup   ").append(envanterDTO.getUraltgrp())
+		.append("   AND STOK.Tarih    >= ? ")
+		.append("   AND STOK.Tarih    <  ? ")
+		.append("   AND STOK.Urun_Kodu >= ? ")
+		.append("   AND STOK.Urun_Kodu <= ? ")
+		.append("   AND STOK.Evrak_No  >= ? ")
+		.append("   AND STOK.Evrak_No  <= ? ")
+		.append("   AND STOK.Ana_Grup  ").append(envanterDTO.getAnagrp())
+		.append("   AND STOK.Alt_Grup  ").append(envanterDTO.getAltgrp())
+		.append("   AND STOK.Depo      ").append(envanterDTO.getDepo())
+		.append("   AND STOK.Evrak_Cins ").append(wee)
+		.append("   AND STOK.Evrak_Cins ").append(ure1)
+		.append(" GROUP BY STOK.Urun_Kodu, MAL.Adi, MAL.Birim ")
+		.append(" ORDER BY STOK.Urun_Kodu, MAL.Adi, MAL.Birim ");
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int idx = 1;
+
+			preparedStatement.setString(idx++, envanterDTO.getUkod1());
+			preparedStatement.setString(idx++, envanterDTO.getUkod2());
+
+			preparedStatement.setTimestamp(idx++, ts[0]);
+			preparedStatement.setTimestamp(idx++, ts[1]);
+
+			preparedStatement.setString(idx++, envanterDTO.getUkod1());
+			preparedStatement.setString(idx++, envanterDTO.getUkod2());
+
+			preparedStatement.setString(idx++, envanterDTO.getEvrno1());
+			preparedStatement.setString(idx++, envanterDTO.getEvrno2());
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String wee = "";
 		if (envanterDTO.isDepohardahil())
 			wee = " Like '%' ";
@@ -1729,11 +2265,109 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> envanter_rapor_ana_grup_alt_grup(envanterDTO envanterDTO,
 			ConnectionDetails faturaConnDetails) {
+		String wee;
+		if (envanterDTO.isDepohardahil())
+			wee = " LIKE '%' ";
+		else
+			wee = " <> 'DPO' ";
+
+		String ure1;
+		if (envanterDTO.isUretfisdahil())
+			ure1 = " LIKE '%' ";
+		else
+			ure1 = " <> 'URE' ";
+
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				envanterDTO.getTar1(),
+				envanterDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT ")
+		.append("   anaDegisken.ANA_GRUP, ")
+		.append("   altDegisken.ALT_GRUP, ")
+		.append("   SUM(t.Giris_Miktar)      AS Giris_Miktar, ")
+		.append("   SUM(t.Giris_Agirlik)     AS Giris_Agirlik, ")
+		.append("   SUM(t.Cikis_Miktar)      AS Cikis_Miktar, ")
+		.append("   SUM(t.Cikis_Agirlik)     AS Cikis_Agirlik, ")
+		.append("   SUM(t.Giris_Miktar - ABS(t.Cikis_Miktar)) AS Stok_Miktar, ")
+		.append("   SUM(t.Stok_Agirlik)      AS Stok_Agirlik ")
+		.append(" FROM ( ")
+		.append("   SELECT ")
+		.append("     m.Kodu, ")
+		.append("     SUM(CASE WHEN s.Hareket = 'G' THEN s.Miktar ELSE 0 END)              AS Giris_Miktar, ")
+		.append("     SUM(CASE WHEN s.Hareket = 'G' THEN s.Miktar ELSE 0 END) * m.Agirlik AS Giris_Agirlik, ")
+		.append("     SUM(CASE WHEN s.Hareket = 'C' THEN ABS(s.Miktar) ELSE 0 END)        AS Cikis_Miktar, ")
+		.append("     SUM(CASE WHEN s.Hareket = 'C' THEN ABS(s.Miktar) ELSE 0 END) * m.Agirlik AS Cikis_Agirlik, ")
+		.append("     (  SUM(CASE WHEN s.Hareket = 'G' THEN s.Miktar ELSE 0 END) ")
+		.append("      - SUM(CASE WHEN s.Hareket = 'C' THEN ABS(s.Miktar) ELSE 0 END) ")
+		.append("     ) * m.Agirlik AS Stok_Agirlik, ")
+		.append("     m.Ana_Grup, ")
+		.append("     m.Alt_Grup ")
+		.append("   FROM MAL m WITH (INDEX (IX_MAL)) ")
+		.append("   LEFT OUTER JOIN STOK s WITH (INDEX (IX_STOK)) ON m.Kodu = s.Urun_Kodu ")
+		.append("   WHERE m.Kodu       >= ? ")
+		.append("     AND m.Kodu       <= ? ")
+		.append("     AND m.Ana_Grup   ").append(envanterDTO.getUranagrp())
+		.append("     AND m.Alt_Grup   ").append(envanterDTO.getUraltgrp())
+		.append("     AND s.Tarih     >= ? ")
+		.append("     AND s.Tarih     <  ? ")
+		.append("     AND s.Urun_Kodu >= ? ")
+		.append("     AND s.Urun_Kodu <= ? ")
+		.append("     AND s.Evrak_No  >= ? ")
+		.append("     AND s.Evrak_No  <= ? ")
+		.append("     AND s.Ana_Grup  ").append(envanterDTO.getAnagrp())
+		.append("     AND s.Alt_Grup  ").append(envanterDTO.getAltgrp())
+		.append("     AND s.Depo      ").append(envanterDTO.getDepo())
+		.append("     AND s.Evrak_Cins ").append(wee)
+		.append("     AND s.Evrak_Cins ").append(ure1)
+		.append("   GROUP BY m.Kodu, m.Agirlik, m.Ana_Grup, m.Alt_Grup ")
+		.append(" ) AS t ")
+		.append(" LEFT OUTER JOIN ANA_GRUP_DEGISKEN anaDegisken ")
+		.append("   ON t.Ana_Grup = anaDegisken.AGID_Y ")
+		.append(" LEFT OUTER JOIN ALT_GRUP_DEGISKEN altDegisken ")
+		.append("   ON t.Alt_Grup = altDegisken.ALID_Y ")
+		.append(" GROUP BY anaDegisken.ANA_GRUP, altDegisken.ALT_GRUP ")
+		.append(" ORDER BY anaDegisken.ANA_GRUP, altDegisken.ALT_GRUP ");
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int idx = 1;
+
+			preparedStatement.setString(idx++, envanterDTO.getUkod1());
+			preparedStatement.setString(idx++, envanterDTO.getUkod2());
+
+			preparedStatement.setTimestamp(idx++, ts[0]);
+			preparedStatement.setTimestamp(idx++, ts[1]);
+
+			preparedStatement.setString(idx++, envanterDTO.getUkod1());
+			preparedStatement.setString(idx++, envanterDTO.getUkod2());
+
+			preparedStatement.setString(idx++, envanterDTO.getEvrno1());
+			preparedStatement.setString(idx++, envanterDTO.getEvrno2());
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String wee = "";
 		if (envanterDTO.isDepohardahil())
 			wee = " Like '%' ";
@@ -1777,11 +2411,58 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> baslik_bak(String baslik, String ordr, String jkj, String ch1, String k1,
 			String k2, String f1, String f2, String t1, String t2, ConnectionDetails faturaConnDetails) {
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(t1, t2);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT ")
+		.append(baslik)
+		.append(" FROM STOK ")
+		.append(" WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND Hesap_Kodu BETWEEN ? AND ? ")
+		.append(" AND Tarih >= ? ")
+		.append(" AND Tarih <  ? ")
+		.append(" ")
+		.append(ordr);
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int idx = 1;
+
+			preparedStatement.setString(idx++, k1);
+			preparedStatement.setString(idx++, k2);
+
+			preparedStatement.setString(idx++, f1);
+			preparedStatement.setString(idx++, f2);
+
+			preparedStatement.setTimestamp(idx++, ts[0]); // Tarih >=
+			preparedStatement.setTimestamp(idx++, ts[1]); // Tarih <
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT " + baslik + "  FROM STOK  " + " WHERE " + jkj + " AND " + ch1
 				+ " AND Urun_Kodu between N'" + k1 + "' and N'" + k2 + "'" + " AND Hesap_Kodu between N'" + f1
 				+ "' and N'" + f2 + "'" + " AND Tarih BETWEEN '" + t1 + "'" + " AND '" + t2 + " 23:59:59.998'" + " "
@@ -1796,22 +2477,95 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_urn_kodlu(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails) {
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				grupraporDTO.getTar1(),
+				grupraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT * ")
+		.append("FROM ( ")
+		.append("  SELECT ")
+		.append("    MAL.Kodu AS Urun_Kodu, ")
+		.append("    MAL.Adi  AS Urun_Adi, ")
+		.append("    MAL.Birim, ")
+		.append("    ").append(sstr_2).append(" AS degisken, ")
+		.append("    ").append(sstr_4).append(" ")
+		.append("  FROM STOK ").append(kur_dos).append(" , MAL ")
+		.append("  WHERE ").append(jkj)
+		.append("    AND ").append(ch1)
+		.append("    AND MAL.Ana_Grup ").append(grupraporDTO.getUranagrp())
+		.append("    AND MAL.Alt_Grup ").append(grupraporDTO.getUraltgrp())
+		.append("    AND MAL.Ozel_Kod_1 ").append(grupraporDTO.getUrozkod())
+		.append("    AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append("    AND MAL.Sinif BETWEEN ? AND ? ")
+		.append("    AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append("    AND STOK.Hesap_Kodu BETWEEN ? AND ? ")
+		.append("    AND STOK.Tarih >= ? ")
+		.append("    AND STOK.Tarih <  ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("  SUM(").append(sstr_5).append(") ")
+		.append("  FOR degisken IN ( ").append(sstr_1).append(" ) ")
+		.append(") AS p ")
+		.append("ORDER BY Urun_Kodu");
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int idx = 1;
+
+			preparedStatement.setString(idx++, grupraporDTO.getSinif1());
+			preparedStatement.setString(idx++, grupraporDTO.getSinif2());
+
+			preparedStatement.setString(idx++, grupraporDTO.getUkod1());
+			preparedStatement.setString(idx++, grupraporDTO.getUkod2());
+
+			preparedStatement.setString(idx++, grupraporDTO.getCkod1());
+			preparedStatement.setString(idx++, grupraporDTO.getCkod2());
+
+			preparedStatement.setTimestamp(idx++, ts[0]); // Tarih >=
+					preparedStatement.setTimestamp(idx++, ts[1]); // Tarih <
+
+					try (ResultSet resultSet = preparedStatement.executeQuery()) {
+						resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+					}
+
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT * " + " FROM (SELECT MAL.Kodu as Urun_Kodu, Adi as Urun_Adi , Birim ," + sstr_2
 				+ " as  degisken , " + sstr_4 + " FROM STOK " + kur_dos + ",MAL " + " WHERE " + jkj + " AND " + ch1
-				+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() + " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp()
-				+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() + " AND STOK.Urun_Kodu = MAL.Kodu "
+				+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+				+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp()
+				+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+				+ " AND STOK.Urun_Kodu = MAL.Kodu "
 				+ " AND MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'"
 				+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'"
 				+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'"
 				+ " AND STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" + " AND '" + grupraporDTO.getTar2()
-				+ " 23:59:59.998'" + " ) as s  " + " PIVOT " + " ( " + " SUM(" + sstr_5 + ") " + " FOR degisken "
-				+ " IN ( " + sstr_1 + ") " + " ) " + " AS p" + " ORDER BY Urun_Kodu ";
+				+ " 23:59:59.998'" + " ) as s  " 
+				+ " PIVOT " + " ( " + " SUM(" + sstr_5 + ") " 
+				+ " FOR degisken "
+				+ " IN ( " + sstr_1 + ") " 
+				+ " ) " 
+				+ " AS p" 
+				+ " ORDER BY Urun_Kodu ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
@@ -1822,22 +2576,93 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_urn_kodlu_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails) {
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				grupraporDTO.getTar1(),
+				grupraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT * ")
+		.append("FROM ( ")
+		.append("  SELECT ")
+		.append("    MAL.Kodu AS Urun_Kodu, ")
+		.append("    MAL.Adi  AS Urun_Adi, ")
+		.append("    MAL.Birim, ")
+		.append("    DATEPART(yyyy, STOK.Tarih) AS Yil, ")
+		.append("    ").append(sstr_2).append(" AS degisken, ")
+		.append("    ").append(sstr_4).append(" ")
+		.append("  FROM STOK ").append(kur_dos).append(" , MAL ")
+		.append("  WHERE ").append(jkj)
+		.append("    AND ").append(ch1)
+		.append("    AND MAL.Ana_Grup ").append(grupraporDTO.getUranagrp())
+		.append("    AND MAL.Alt_Grup ").append(grupraporDTO.getUraltgrp())
+		.append("    AND MAL.Ozel_Kod_1 ").append(grupraporDTO.getUrozkod())
+		.append("    AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append("    AND MAL.Sinif BETWEEN ? AND ? ")
+		.append("    AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append("    AND STOK.Hesap_Kodu BETWEEN ? AND ? ")
+		.append("    AND STOK.Tarih >= ? ")
+		.append("    AND STOK.Tarih <  ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("  SUM(").append(sstr_5).append(") ")
+		.append("  FOR degisken IN ( ").append(sstr_1).append(" ) ")
+		.append(") AS p ")
+		.append("ORDER BY Urun_Kodu, Yil");
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int idx = 1;
+
+			preparedStatement.setString(idx++, grupraporDTO.getSinif1());
+			preparedStatement.setString(idx++, grupraporDTO.getSinif2());
+
+			preparedStatement.setString(idx++, grupraporDTO.getUkod1());
+			preparedStatement.setString(idx++, grupraporDTO.getUkod2());
+
+			preparedStatement.setString(idx++, grupraporDTO.getCkod1());
+			preparedStatement.setString(idx++, grupraporDTO.getCkod2());
+
+			preparedStatement.setTimestamp(idx++, ts[0]);
+			preparedStatement.setTimestamp(idx++, ts[1]);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+			}
+
+		} catch (Exception e) {
+			throw new ServiceException("MS stkService genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT * " + " FROM (SELECT MAL.Kodu as Urun_Kodu, Adi as Urun_Adi , Birim ,"
 				+ " DATEPART(yyyy,STOK.Tarih) as Yil  , " + sstr_2 + " as  degisken , " + sstr_4 + " FROM STOK "
-				+ kur_dos + ",MAL " + " WHERE " + jkj + " AND " + ch1 + " AND MAL.Ana_Grup "
-				+ grupraporDTO.getUranagrp() + " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp()
-				+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() + " AND STOK.Urun_Kodu = MAL.Kodu "
+				+ kur_dos + ",MAL " 
+				+ " WHERE " + jkj + " AND " + ch1 
+				+ " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() 
+				+ " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp()
+				+ " AND Mal.Ozel_Kod_1 " + grupraporDTO.getUrozkod() 
+				+ " AND STOK.Urun_Kodu = MAL.Kodu "
 				+ " AND MAL.Sinif BETWEEN N'" + grupraporDTO.getSinif1() + "' and N'" + grupraporDTO.getSinif2() + "'"
 				+ " AND Urun_Kodu between N'" + grupraporDTO.getUkod1() + "' and N'" + grupraporDTO.getUkod2() + "'"
 				+ " AND Hesap_Kodu BETWEEN N'" + grupraporDTO.getCkod1() + "' and N'" + grupraporDTO.getCkod2() + "'"
 				+ " AND STOK.Tarih BETWEEN '" + grupraporDTO.getTar1() + "'" + " AND '" + grupraporDTO.getTar2()
-				+ " 23:59:59.998'" + " ) as s  " + " PIVOT " + " ( " + " SUM(" + sstr_5 + ") " + " FOR degisken "
+				+ " 23:59:59.998'" + " ) as s  " 
+				+ " PIVOT " + " ( " + " SUM(" + sstr_5 + ") " + " FOR degisken "
 				+ " IN ( " + sstr_1 + ") " + " ) " + " AS p" + " ORDER BY Urun_Kodu, Yil ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
@@ -1849,12 +2674,92 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_mus_kodlu(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		// 🔹 Senin tarih helper'ı
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				grupraporDTO.getTar1(),
+				grupraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * ")
+		.append("FROM ( ")
+		.append("    SELECT ")
+		.append("        STOK.Hesap_Kodu, ")
+		.append("        (SELECT DISTINCT H.UNVAN ")
+		.append("           FROM [")
+		.append(modulbaslikTipi.OK_Car.name())
+		.append(cariConnDetails.getDatabaseName())
+		.append("].[dbo].[HESAP] H ")
+		.append("          WHERE H.HESAP = STOK.Hesap_Kodu) AS Unvan, ")
+		.append("        ").append(sstr_2).append(" AS degisken, ")
+		.append("        ").append(sstr_4).append(" ")
+		.append("    FROM STOK ")
+		.append(kur_dos)
+		.append(", MAL ")
+		.append("    WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND MAL.Ana_Grup ")
+		.append(grupraporDTO.getUranagrp())
+		.append(" AND MAL.Alt_Grup ")
+		.append(grupraporDTO.getUraltgrp())
+		.append(" AND MAL.Ozel_Kod_1 ")
+		.append(grupraporDTO.getUrozkod())
+		.append(" AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append(" AND MAL.Sinif BETWEEN ? AND ? ")
+		.append(" AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Hesap_Kodu BETWEEN ? AND ? ")
+		// 🔹 Tarih artık helper’a göre
+		.append(" AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("    SUM(").append(sstr_5).append(") ")
+		.append("    FOR degisken IN (")
+		.append(sstr_1)
+		.append(") ")
+		.append(") AS p ")
+		.append("ORDER BY Hesap_Kodu");
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod2());
+
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS grp_mus_kodlu genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT * " + " FROM  (SELECT Hesap_Kodu  , " + " (SELECT DISTINCT  UNVAN FROM ["
 				+ modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName()
 				+ "].[dbo].[HESAP] WHERE hesap.hesap = STOK.Hesap_Kodu  ) as Unvan , " + sstr_2 + " as  degisken , "
@@ -1877,12 +2782,92 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_mus_kodlu_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails, ConnectionDetails cariConnDetails) {
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		// 🔹 Tarih aralığı (tar2 + 1 gün mantığı)
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				grupraporDTO.getTar1(),
+				grupraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * ")
+		.append("FROM ( ")
+		.append("    SELECT ")
+		.append("        STOK.Hesap_Kodu AS Musteri_Kodu, ")
+		.append("        (SELECT DISTINCT H.UNVAN ")
+		.append("           FROM [")
+		.append(modulbaslikTipi.OK_Car.name())
+		.append(cariConnDetails.getDatabaseName())
+		.append("].[dbo].[HESAP] H ")
+		.append("          WHERE H.HESAP = STOK.Hesap_Kodu) AS Unvan, ")
+		.append("        DATEPART(yyyy, STOK.Tarih) AS Yil, ")
+		.append("        ").append(sstr_2).append(" AS degisken, ")
+		.append("        ").append(sstr_4).append(" ")
+		.append("    FROM STOK ")
+		.append(kur_dos)
+		.append(", MAL ")
+		.append("    WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND MAL.Ana_Grup ")
+		.append(grupraporDTO.getUranagrp())
+		.append(" AND MAL.Alt_Grup ")
+		.append(grupraporDTO.getUraltgrp())
+		.append(" AND MAL.Ozel_Kod_1 ")
+		.append(grupraporDTO.getUrozkod())
+		.append(" AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append(" AND MAL.Sinif BETWEEN ? AND ? ")
+		.append(" AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Hesap_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("    SUM(").append(sstr_5).append(") ")
+		.append("    FOR degisken IN (")
+		.append(sstr_1)
+		.append(") ")
+		.append(") AS p ")
+		.append("ORDER BY Musteri_Kodu, Yil");
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod2());
+
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS grp_mus_kodlu_yil genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT * " + " FROM (SELECT  Hesap_Kodu as Musteri_Kodu  ," + " (SELECT DISTINCT  UNVAN FROM ["
 				+ modulbaslikTipi.OK_Car.name() + cariConnDetails.getDatabaseName()
 				+ "].[dbo].[HESAP] WHERE hesap.hesap = STOK.Hesap_Kodu  ) as Unvan  "
@@ -1906,12 +2891,85 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_yil_ay(grupraporDTO grupraporDTO, String sstr_2, String sstr_4, String kur_dos,
 			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails) {
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		// 🔹 Tarih aralığı: [tar1, tar2+1) mantığı
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				grupraporDTO.getTar1(),
+				grupraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * ")
+		.append("FROM ( ")
+		.append("    SELECT ")
+		.append("        DATEPART(yy, STOK.Tarih) AS Yil, ")
+		.append("        DATEPART(mm, STOK.Tarih) AS Ay, ")
+		.append("        ").append(sstr_2).append(" AS degisken, ")
+		.append("        ").append(sstr_4).append(" ")
+		.append("    FROM STOK ")
+		.append(kur_dos)
+		.append(", MAL ")
+		.append("    WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND MAL.Ana_Grup ")
+		.append(grupraporDTO.getUranagrp())
+		.append(" AND MAL.Alt_Grup ")
+		.append(grupraporDTO.getUraltgrp())
+		.append(" AND MAL.Ozel_Kod_1 ")
+		.append(grupraporDTO.getUrozkod())
+		.append(" AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append(" AND MAL.Sinif BETWEEN ? AND ? ")
+		.append(" AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Hesap_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("    SUM(").append(sstr_5).append(") ")
+		.append("    FOR degisken IN (")
+		.append(sstr_1)
+		.append(") ")
+		.append(") AS p ")
+		.append("ORDER BY Yil, Ay");
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod2());
+
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS grp_yil_ay genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT * " + " FROM (SELECT datepart(yy,STOK.Tarih) as Yil , datepart(mm,STOK.Tarih) as Ay , "
 				+ " " + sstr_2 + " as  degisken , " + sstr_4 + " FROM STOK " + kur_dos + ",MAL " + " WHERE " + jkj
 				+ " AND " + ch1 + " AND MAL.Ana_Grup " + grupraporDTO.getUranagrp() + " AND MAL.Alt_Grup "
@@ -1932,12 +2990,85 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4, String kur_dos,
 			String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails) {
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		// 🔹 Tarih aralığı: [tar1, tar2+1) mantığı
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				grupraporDTO.getTar1(),
+				grupraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * ")
+		.append("FROM ( ")
+		.append("    SELECT ")
+		.append("        DATEPART(yyyy, STOK.Tarih) AS Yil, ")
+		.append("        ").append(sstr_2).append(" AS degisken, ")
+		.append("        ").append(sstr_4).append(" ")
+		.append("    FROM STOK ")
+		.append(kur_dos)
+		.append(", MAL ")
+		.append("    WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND MAL.Ana_Grup ")
+		.append(grupraporDTO.getUranagrp())
+		.append(" AND MAL.Alt_Grup ")
+		.append(grupraporDTO.getUraltgrp())
+		.append(" AND MAL.Ozel_Kod_1 ")
+		.append(grupraporDTO.getUrozkod())
+		.append(" AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append(" AND MAL.Sinif BETWEEN ? AND ? ")
+		.append(" AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Hesap_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("    SUM(").append(sstr_5).append(") ")
+		.append("    FOR degisken IN (")
+		.append(sstr_1)
+		.append(") ")
+		.append(") AS p ")
+		.append("ORDER BY Yil");
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod2());
+
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS grp_yil genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT * " + " FROM (SELECT  datepart(yyyy,STOK.Tarih) as Yil , " + sstr_2 + " as  degisken , "
 				+ sstr_4 + " FROM STOK " + kur_dos + ",MAL " + " WHERE " + jkj + " AND " + ch1 + " AND MAL.Ana_Grup "
 				+ grupraporDTO.getUranagrp() + " AND MAL.Alt_Grup " + grupraporDTO.getUraltgrp()
@@ -1958,12 +3089,89 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_ana_grup(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails) {
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		// 🔹 Tarih aralığı: [tar1, tar2+1) mantığı
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				grupraporDTO.getTar1(),
+				grupraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * ")
+		.append("FROM ( ")
+		.append("    SELECT ")
+		.append("        (SELECT DISTINCT ANA_GRUP ")
+		.append("           FROM ANA_GRUP_DEGISKEN ")
+		.append("          WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup) AS Ana_Grup, ")
+		.append("        (SELECT DISTINCT ALT_GRUP ")
+		.append("           FROM ALT_GRUP_DEGISKEN ")
+		.append("          WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup) AS Alt_Grup, ")
+		.append("        ").append(sstr_2).append(" AS degisken, ")
+		.append("        ").append(sstr_4).append(" ")
+		.append("    FROM STOK ")
+		.append(kur_dos)
+		.append(", MAL ")
+		.append("    WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND MAL.Ana_Grup ")
+		.append(grupraporDTO.getUranagrp())
+		.append(" AND MAL.Alt_Grup ")
+		.append(grupraporDTO.getUraltgrp())
+		.append(" AND MAL.Ozel_Kod_1 ")
+		.append(grupraporDTO.getUrozkod())
+		.append(" AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append(" AND MAL.Sinif BETWEEN ? AND ? ")
+		.append(" AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Hesap_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("    SUM(").append(sstr_5).append(") ")
+		.append("    FOR degisken IN (")
+		.append(sstr_1)
+		.append(") ")
+		.append(") AS p ")
+		.append("ORDER BY Ana_Grup, Alt_Grup");
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod2());
+
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS grp_ana_grup genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT * "
 				+ " FROM (SELECT (SELECT DISTINCT  ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  "
 				+ " ,(SELECT DISTINCT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup, "
@@ -1987,12 +3195,91 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> grp_ana_grup_yil(grupraporDTO grupraporDTO, String sstr_2, String sstr_4,
 			String kur_dos, String jkj, String ch1, String jkj1, String sstr_5, String sstr_1, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails) {
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		// 🔹 Tarih aralığı: [tar1, tar2+1) mantığı
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				grupraporDTO.getTar1(),
+				grupraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * ")
+		.append("FROM ( ")
+		.append("    SELECT ")
+		.append("        (SELECT DISTINCT ANA_GRUP ")
+		.append("           FROM ANA_GRUP_DEGISKEN ")
+		.append("          WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup) AS Ana_Grup, ")
+		.append("        (SELECT DISTINCT ALT_GRUP ")
+		.append("           FROM ALT_GRUP_DEGISKEN ")
+		.append("          WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup) AS Alt_Grup, ")
+		.append("        DATEPART(yyyy, STOK.Tarih) AS Yil, ")
+		.append("        ").append(sstr_2).append(" AS degisken, ")
+		.append("        ").append(sstr_4).append(" ")
+		.append("    FROM STOK ")
+		.append(kur_dos)
+		.append(", MAL ")
+		.append("    WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND MAL.Ana_Grup ")
+		.append(grupraporDTO.getUranagrp())
+		.append(" AND MAL.Alt_Grup ")
+		.append(grupraporDTO.getUraltgrp())
+		.append(" AND MAL.Ozel_Kod_1 ")
+		.append(grupraporDTO.getUrozkod())
+		.append(" AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append(" AND MAL.Sinif BETWEEN ? AND ? ")
+		.append(" AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Hesap_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("    SUM(").append(sstr_5).append(") ")
+		.append("    FOR degisken IN (")
+		.append(sstr_1)
+		.append(") ")
+		.append(") AS p ")
+		.append("ORDER BY Ana_Grup, Alt_Grup, Yil");
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getSinif2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getUkod2());
+
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, grupraporDTO.getCkod2());
+
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS grp_ana_grup_yil genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT * "
 				+ " FROM (SELECT (SELECT DISTINCT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup ) as Ana_Grup  "
 				+ " ,(SELECT DISTINCT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) as Alt_Grup, "
@@ -2016,26 +3303,60 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> ima_baslik_bak(String bas, String jkj, String ch1, String qwq6, String qwq7,
 			String qwq8, String qwq9, String k1, String k2, String t1, String t2, String ordrr,
 			ConnectionDetails faturaConnDetails) {
-		String sql = "SELECT " + bas + " FROM STOK,MAL " + " WHERE " + jkj + " AND " + ch1
-				+ " AND STOK.Urun_Kodu = MAL.Kodu " + " AND MAL.Ana_Grup " + qwq6 + " AND MAL.Alt_Grup " + qwq7
-				+ " AND STOK.Ana_Grup " + qwq8 + " AND STOK.Alt_Grup " + qwq9 + " AND Urun_Kodu between N'" + k1
-				+ "' and N'" + k2 + "'" + " AND STOK.Tarih BETWEEN '" + t1 + "'" + " AND '" + t2 + " 23:59:59.998'" + ""
-				+ ordrr + " ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
-				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet);
+
+		// 🔹 Tarih aralığı: [t1, t2+1) mantığı
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(t1, t2);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT ")
+		.append(bas)
+		.append(" FROM STOK, MAL ")
+		.append(" WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append(" AND MAL.Ana_Grup ")
+		.append(qwq6)
+		.append(" AND MAL.Alt_Grup ")
+		.append(qwq7)
+		.append(" AND STOK.Ana_Grup ")
+		.append(qwq8)
+		.append(" AND STOK.Alt_Grup ")
+		.append(qwq9)
+		.append(" AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append(ordrr != null ? ordrr : "");
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			preparedStatement.setString(paramIndex++, k1);
+			preparedStatement.setString(paramIndex++, k2);
+
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MS ima_baslik_bak genel hatası.", e);
 		}
+
 		return resultList;
 	}
 
@@ -2044,27 +3365,164 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			String ch1, String qwq6, String qwq7, String qwq8, String qwq9, String s1, String s2, String k1, String k2,
 			String t1, String t2, String sstr_1, String ordrr, String sstr_55, String[][] ozelgrp,
 			Set<String> sabitkolonlar, ConnectionDetails faturaConnDetails) {
-		String sql = "SELECT * " + " FROM (SELECT " + slct + sstr_5 + sstr_2 + " as  degisken , " + sstr_4
-				+ " FROM STOK,MAL " + " WHERE " + jkj + " AND " + ch1 + " AND MAL.Ana_Grup " + qwq6
-				+ " AND MAL.Alt_Grup " + qwq7 + " AND STOK.Ana_Grup " + qwq8 + " AND STOK.Alt_Grup " + qwq9
-				+ " AND STOK.Urun_Kodu = MAL.Kodu " + " AND MAL.Sinif BETWEEN N'" + s1 + "' and N'" + s2 + "'"
-				+ " AND Urun_Kodu between N'" + k1 + "' and N'" + k2 + "'" + " AND STOK.Tarih BETWEEN '" + t1 + "'"
-				+ " AND '" + t2 + " 23:59:59.998'" + " ) as s  " + " PIVOT " + " ( " + " SUM(" + sstr_55 + ") "
-				+ " FOR degisken " + " IN ( " + sstr_1 + ") " + " ) " + " AS p" + " ORDER BY  " + ordrr + " ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
-				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+
+		// 🔹 Tarih aralığı: [t1, t2+1) mantığı
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(t1, t2);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT * ")
+		.append("FROM (SELECT ")
+		.append(slct)              // dinamik select kısmı
+		.append(sstr_5)
+		.append(sstr_2)
+		.append(" AS degisken, ")
+		.append(sstr_4)
+		.append(" FROM STOK, MAL ")
+		.append(" WHERE ")
+		.append(jkj)
+		.append(" AND ")
+		.append(ch1)
+		.append(" AND MAL.Ana_Grup ")
+		.append(qwq6)
+		.append(" AND MAL.Alt_Grup ")
+		.append(qwq7)
+		.append(" AND STOK.Ana_Grup ")
+		.append(qwq8)
+		.append(" AND STOK.Alt_Grup ")
+		.append(qwq9)
+		.append(" AND STOK.Urun_Kodu = MAL.Kodu ")
+		.append(" AND MAL.Sinif BETWEEN ? AND ? ")
+		.append(" AND STOK.Urun_Kodu BETWEEN ? AND ? ")
+		.append(" AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append(") AS s ")
+		.append("PIVOT ( ")
+		.append("    SUM(").append(sstr_55).append(") ")
+		.append("    FOR degisken IN (")
+		.append(sstr_1)
+		.append(") ")
+		.append(") AS p ")
+		.append("ORDER BY ")
+		.append(ordrr);
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			preparedStatement.setString(paramIndex++, s1);
+			preparedStatement.setString(paramIndex++, s2);
+
+			preparedStatement.setString(paramIndex++, k1);
+			preparedStatement.setString(paramIndex++, k2);
+
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToListPIVOT(resultSet, sabitkolonlar);
+			}
 		} catch (Exception e) {
-			throw new ServiceException("MS stkService genel hatası.", e);
+			throw new ServiceException("MS ima_alt_kod genel hatası.", e);
 		}
-		return resultList;
-	}
+
+		return resultList;	}
 
 	@Override
 	public List<Map<String, Object>> stok_rapor(stokdetayDTO stokdetayDTO, ConnectionDetails faturaConnDetails) {
+		String kjk;
+		if (stokdetayDTO.isDepohardahil()) {
+			kjk = " Evrak_Cins LIKE '%' ";
+		} else {
+			kjk = " Evrak_Cins <> 'DPO' ";
+		}
+
+		// Üretim fişi dahil / hariç
+		String ure1;
+		if (stokdetayDTO.isUretfisdahil()) {
+			ure1 = " Evrak_Cins LIKE '%' ";
+		} else {
+			ure1 = " Evrak_Cins <> 'URE' ";
+		}
+
+		// 🔹 Tarih aralığı: [tar1, tar2+1)
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				stokdetayDTO.getTar1(),
+				stokdetayDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT ")
+		.append("    Urun_Kodu, Barkod, Adi, Izahat, Evrak_No, ")
+		.append("    IIF(STOK.Evrak_Cins = 'URE', '', Hesap_Kodu) AS Hesap_Kodu, ")
+		.append("    Evrak_Cins, Tarih, Miktar, Birim, STOK.Fiat, STOK.Doviz, ")
+		.append("    SUM(Miktar) OVER (ORDER BY Tarih ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Miktar_Bakiye, ")
+		.append("    Tutar, ")
+		.append("    SUM(Tutar) OVER (ORDER BY Tarih ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Tutar_Bakiye, ")
+		.append("    ISNULL((SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = MAL.Ana_Grup), '') AS Ana_Grup, ")
+		.append("    ISNULL((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup), '') AS Alt_Grup, ")
+		.append("    ISNULL((SELECT DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = STOK.Depo), '') AS Depo, ")
+		.append("    STOK.[USER] ")
+		.append("FROM STOK WITH (INDEX (IX_STOK)), ")
+		.append("     MAL  WITH (INDEX (IX_MAL)) ")
+		.append("WHERE MAL.Kodu = STOK.Urun_Kodu ")
+		.append("  AND MAL.Ana_Grup ").append(stokdetayDTO.getUranagrp())
+		.append("  AND MAL.Alt_Grup ").append(stokdetayDTO.getUraltgrp())
+		.append("  AND STOK.Ana_Grup ").append(stokdetayDTO.getAnagrp())
+		.append("  AND STOK.Alt_Grup ").append(stokdetayDTO.getAltgrp())
+		.append("  AND STOK.Depo ").append(stokdetayDTO.getDepo())
+		// Parametreli alanlar
+		.append("  AND STOK.Evrak_No >= ? AND STOK.Evrak_No <= ? ")
+		.append("  AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
+		.append("  AND STOK.Urun_Kodu >= N? AND STOK.Urun_Kodu <= N? ")
+		.append("  AND STOK.Hesap_Kodu >= N? AND STOK.Hesap_Kodu <= N? ")
+		.append("  AND ").append(kjk)
+		.append("  AND ").append(ure1)
+		.append("  AND STOK.Hareket LIKE ? ")
+		.append("ORDER BY Tarih");
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			// STOK.Evrak_No
+			preparedStatement.setString(paramIndex++, stokdetayDTO.getEvrno1());
+			preparedStatement.setString(paramIndex++, stokdetayDTO.getEvrno2());
+
+			// STOK.Tarih
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+
+			// STOK.Urun_Kodu
+			preparedStatement.setString(paramIndex++, stokdetayDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, stokdetayDTO.getUkod2());
+
+			// STOK.Hesap_Kodu
+			preparedStatement.setString(paramIndex++, stokdetayDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, stokdetayDTO.getCkod2());
+
+			// STOK.Hareket LIKE ?
+			preparedStatement.setString(paramIndex++, stokdetayDTO.getTuru() + "%");
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS stok_rapor genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String kjk = "";
 		if (stokdetayDTO.isDepohardahil())
 			kjk = " Evrak_Cins Like '%' ";
@@ -2106,13 +3564,127 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
-
+		 */
 	}
 
 	@Override
 	public List<Map<String, Object>> irs_rapor(fatraporDTO fatraporDTO, Pageable pageable,
 			ConnectionDetails faturaConnDetails) {
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				fatraporDTO.getTar1(),
+				fatraporDTO.getTar2()
+				);
 
+		int page = pageable.getPageNumber();
+		int pageSize = pageable.getPageSize();
+		int offset = page * pageSize;
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT ")
+		.append("    IRSALIYE.Irsaliye_No, ")
+		.append("    IIF(Hareket = 'C', 'Satis', 'Alis') AS Hareket, ")
+		.append("    IRSALIYE.Tarih, ")
+		.append("    IRSALIYE.Cari_Hesap_Kodu, ")
+		.append("    IRSALIYE.Firma AS Adres_Firma, ")
+		.append("    MAL.Birim, ")
+		.append("    SUM(IRSALIYE.Miktar) AS Miktar, ")
+		.append("    SUM(IRSALIYE.Miktar * IRSALIYE.Fiat) AS Tutar ")
+		.append("FROM IRSALIYE WITH (INDEX (IX_IRSALIYE)), ")
+		.append("     MAL      WITH (INDEX (IX_MAL)) ")
+		.append("WHERE IRSALIYE.Kodu = MAL.Kodu ")
+		// Irsaliye_No
+		.append("  AND IRSALIYE.Irsaliye_No >= ? ")
+		.append("  AND IRSALIYE.Irsaliye_No <= ? ")
+		// Tarih
+		.append("  AND IRSALIYE.Tarih >= ? ")
+		.append("  AND IRSALIYE.Tarih < ? ")
+		// Cari hesap kodu
+		.append("  AND IRSALIYE.Cari_Hesap_Kodu >= ? ")
+		.append("  AND IRSALIYE.Cari_Hesap_Kodu <= ? ")
+		// Firma
+		.append("  AND IRSALIYE.Firma >= ? ")
+		.append("  AND IRSALIYE.Firma <= ? ")
+		// Ürün kodu
+		.append("  AND IRSALIYE.Kodu >= ? ")
+		.append("  AND IRSALIYE.Kodu <= ? ")
+		// Fatura no
+		.append("  AND IRSALIYE.Fatura_No >= ? ")
+		.append("  AND IRSALIYE.Fatura_No <= ? ")
+		// Ana / Alt grup (bunlar SQL fragment, aynı bırakıyoruz)
+		.append("  AND IRSALIYE.Ana_Grup ")
+		.append(fatraporDTO.getAnagrp())
+		.append("  AND IRSALIYE.Alt_Grup ")
+		.append(fatraporDTO.getAltgrp())
+		// Özel kod
+		.append("  AND Ozel_Kod >= ? ")
+		.append("  AND Ozel_Kod <= ? ")
+		// Hareket
+		.append("  AND Hareket LIKE ? ")
+		.append("GROUP BY ")
+		.append("    IRSALIYE.Irsaliye_No, ")
+		.append("    Hareket, ")
+		.append("    IRSALIYE.Tarih, ")
+		.append("    IRSALIYE.Cari_Hesap_Kodu, ")
+		.append("    IRSALIYE.Firma, ")
+		.append("    MAL.Birim ")
+		.append("ORDER BY IRSALIYE.Irsaliye_No ")
+		.append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			// Irsaliye_No
+			preparedStatement.setString(paramIndex++, fatraporDTO.getIrsno1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getIrsno2());
+
+			// Tarih
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+
+			// Cari hesap kodu
+			preparedStatement.setString(paramIndex++, fatraporDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getCkod2());
+
+			// Firma
+			preparedStatement.setString(paramIndex++, fatraporDTO.getAdr1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getAdr2());
+
+			// Ürün kodu
+			preparedStatement.setString(paramIndex++, fatraporDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getUkod2());
+
+			// Fatura no
+			preparedStatement.setString(paramIndex++, fatraporDTO.getFatno1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getFatno2());
+
+			// Özel kod
+			preparedStatement.setString(paramIndex++, fatraporDTO.getOkod1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getOkod2());
+
+			// Hareket LIKE ?
+			preparedStatement.setString(paramIndex++, fatraporDTO.getTuru() + "%");
+
+			// Paging
+			preparedStatement.setInt(paramIndex++, offset);
+			preparedStatement.setInt(paramIndex,   pageSize);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(resultSet);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS irs_rapor genel hatası.", e);
+		}
+
+		return resultList;
+		/*
 		String sql = "SELECT IRSALIYE.Irsaliye_No, IIF(Hareket = 'C','Satis','Alis') as Hareket , IRSALIYE.Tarih,IRSALIYE.Cari_Hesap_Kodu,IRSALIYE.Firma as Adres_Firma,  "
 				+ " mal.Birim, SUM(IRSALIYE.Miktar) AS Miktar ,sum((IRSALIYE.Miktar * IRSALIYE.Fiat)) as Tutar "
 				+ " FROM  IRSALIYE WITH (INDEX (IX_IRSALIYE)) , MAL WITH (INDEX (IX_MAL)) "
@@ -2145,10 +3717,108 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return resultList;
+		 */
 	}
 
 	@Override
 	public double irs_raporsize(fatraporDTO fatraporDTO, ConnectionDetails faturaConnDetails) {
+		double result = 0;
+
+		// 🔹 Tarih aralığı: [tar1, tar2+1)
+		Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(
+				fatraporDTO.getTar1(),
+				fatraporDTO.getTar2()
+				);
+
+		StringBuilder sql = new StringBuilder();
+
+		sql.append("SELECT COUNT(*) AS satir ")
+		.append("FROM ( ")
+		.append("    SELECT IRSALIYE.Irsaliye_No ")
+		.append("    FROM IRSALIYE WITH (INDEX (IX_IRSALIYE)), ")
+		.append("         MAL      WITH (INDEX (IX_MAL)) ")
+		.append("    WHERE IRSALIYE.Kodu = MAL.Kodu ")
+		// Irsaliye_No
+		.append("      AND IRSALIYE.Irsaliye_No >= ? ")
+		.append("      AND IRSALIYE.Irsaliye_No <= ? ")
+		// Tarih
+		.append("      AND IRSALIYE.Tarih >= ? ")
+		.append("      AND IRSALIYE.Tarih < ? ")
+		// Cari hesap kodu
+		.append("      AND IRSALIYE.Cari_Hesap_Kodu >= ? ")
+		.append("      AND IRSALIYE.Cari_Hesap_Kodu <= ? ")
+		// Firma
+		.append("      AND IRSALIYE.Firma >= ? ")
+		.append("      AND IRSALIYE.Firma <= ? ")
+		// Ürün kodu
+		.append("      AND IRSALIYE.Kodu >= ? ")
+		.append("      AND IRSALIYE.Kodu <= ? ")
+		// Fatura no
+		.append("      AND IRSALIYE.Fatura_No >= ? ")
+		.append("      AND IRSALIYE.Fatura_No <= ? ")
+		// Ana / Alt grup fragment
+		.append("      AND IRSALIYE.Ana_Grup ")
+		.append(fatraporDTO.getAnagrp())
+		.append("      AND IRSALIYE.Alt_Grup ")
+		.append(fatraporDTO.getAltgrp())
+		// Özel kod
+		.append("      AND Ozel_Kod >= ? ")
+		.append("      AND Ozel_Kod <= ? ")
+		// Hareket
+		.append("      AND Hareket LIKE ? ")
+		.append("    GROUP BY IRSALIYE.Irsaliye_No, Hareket, Tarih, Cari_Hesap_Kodu, Firma, MAL.Birim ")
+		.append(") AS Gruplanmis");
+
+		try (Connection connection = DriverManager.getConnection(
+				faturaConnDetails.getJdbcUrl(),
+				faturaConnDetails.getUsername(),
+				faturaConnDetails.getPassword());
+				PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+			int paramIndex = 1;
+
+			// Irsaliye_No
+			preparedStatement.setString(paramIndex++, fatraporDTO.getIrsno1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getIrsno2());
+
+			// Tarih
+			preparedStatement.setTimestamp(paramIndex++, ts[0]);
+			preparedStatement.setTimestamp(paramIndex++, ts[1]);
+
+			// Cari hesap kodu
+			preparedStatement.setString(paramIndex++, fatraporDTO.getCkod1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getCkod2());
+
+			// Firma
+			preparedStatement.setString(paramIndex++, fatraporDTO.getAdr1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getAdr2());
+
+			// Ürün kodu
+			preparedStatement.setString(paramIndex++, fatraporDTO.getUkod1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getUkod2());
+
+			// Fatura no
+			preparedStatement.setString(paramIndex++, fatraporDTO.getFatno1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getFatno2());
+
+			// Özel kod
+			preparedStatement.setString(paramIndex++, fatraporDTO.getOkod1());
+			preparedStatement.setString(paramIndex++, fatraporDTO.getOkod2());
+
+			// Hareket LIKE ?
+			preparedStatement.setString(paramIndex++, fatraporDTO.getTuru() + "%");
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					result = resultSet.getLong("satir");
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("MS irs_raporsize genel hatası.", e);
+		}
+
+		return result;
+		/*
 		double result = 0;
 		String sql = "SELECT COUNT(*) AS satir" + " FROM (" + " SELECT Irsaliye_No "
 				+ " FROM  IRSALIYE WITH (INDEX (IX_IRSALIYE)) , MAL WITH (INDEX (IX_MAL)) "
@@ -2176,7 +3846,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
 		return result;
-
+		 */
 	}
 
 	@Override
@@ -2188,12 +3858,15 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " ) AS Ana_Grup,"
 				+ " COALESCE((SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = IRSALIYE.Alt_Grup),''"
 				+ " ) AS Alt_Grup, " + " Ozel_Kod  ,Fatura_No " + " FROM     IRSALIYE , MAL WITH (INDEX (IX_MAL)) "
-				+ " WHERE IRSALIYE.Kodu = MAL.Kodu " + " AND  IRSALIYE.Irsaliye_No = '" + ino + "'"
-				+ " AND Hareket Like '" + turu + "%' " + " ORDER BY IRSALIYE.Kodu";
+				+ " WHERE IRSALIYE.Kodu = MAL.Kodu " + " AND  IRSALIYE.Irsaliye_No = ? "
+				+ " AND Hareket Like ? " 
+				+ " ORDER BY IRSALIYE.Kodu";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, ino);
+			preparedStatement.setNString(2, turu + "%");
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 		} catch (Exception e) {
@@ -2214,12 +3887,15 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				+ " ISNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = MAL.Alt_Grup ) , '') AS Ur_AltGrup, "
 				+ " Birim,MAL.Barkod,Mal.Adi ,Tutar,Kur,Izahat,Resim"
 				+ " FROM IRSALIYE WITH (INDEX (IX_IRSALIYE)) , MAL WITH (INDEX (IX_MAL)) "
-				+ " Where IRSALIYE.KODU = MAL.Kodu " + " AND Irsaliye_No = N'" + irsno + "'" + " AND Hareket = '" + cins
-				+ "'";
+				+ " Where IRSALIYE.KODU = MAL.Kodu " 
+				+ " AND Irsaliye_No = ? " 
+				+ " AND Hareket = ? ";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, irsno);
+			preparedStatement.setNString(2, cins);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet);
 			resultSet.close();
@@ -2234,11 +3910,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public String son_irsno_al(String cins, ConnectionDetails faturaConnDetails) {
 		String son_no = "";
-		String query = "SELECT max(Irsaliye_No)  as NO FROM IRSALIYE WHERE Hareket = '" + cins + "' ";
+		String query = "SELECT max(Irsaliye_No)  as NO FROM IRSALIYE WHERE Hareket = ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+			preparedStatement.setNString(1, cins);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				son_no = resultSet.getString("NO");
 			}
@@ -2251,10 +3928,11 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public int irsaliye_no_al(String cins, ConnectionDetails faturaConnDetails) {
 		int E_NUMBER = 0;
-		String sql = "SELECT max(Irsaliye_No + 1) AS NO  FROM IRSALIYE WHERE Hareket = '" + cins + "' ";
+		String sql = "SELECT max(Irsaliye_No + 1) AS NO  FROM IRSALIYE WHERE Hareket = ? ";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(), faturaConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, cins);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (!resultSet.isBeforeFirst()) {
 					E_NUMBER = 0;
