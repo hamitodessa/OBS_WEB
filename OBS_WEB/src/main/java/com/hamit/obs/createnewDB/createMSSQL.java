@@ -328,6 +328,10 @@ public class createMSSQL {
 		try (Statement stmt = connection.createStatement()) {
 			stmt.executeUpdate(sql);
 		}
+		sql = "CREATE NONCLUSTERED INDEX [IX_ADRES]  ON [dbo].[Adres] ([M_Kodu],[Adi])";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
 		sql = "CREATE TABLE OZEL(OZID int identity(1,1) CONSTRAINT PKeyOZID PRIMARY KEY,YONETICI nvarchar(25), YON_SIFRE nvarchar(15) , FIRMA_ADI nvarchar(50))";
 		try (Statement stmt = connection.createStatement()) {
 			stmt.executeUpdate(sql);

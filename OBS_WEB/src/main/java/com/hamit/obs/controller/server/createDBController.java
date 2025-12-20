@@ -132,12 +132,17 @@ public class createDBController {
 				
 				if(hangi.equals(sqlTipi.MSSQL)) 
 				{
-					stb.append(" ALTER INDEX [IX_SATIRLAR] ON [dbo].[SATIRLAR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_SID] ON [dbo].[SATIRLAR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_EVRAK] ON [dbo].[IZAHAT] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_HESAP] ON [dbo].[HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IDX_HESAP] ON [dbo].[HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [D_HESAP] ON [dbo].[HESAP_DETAY] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
+					stb.append(" SET QUOTED_IDENTIFIER ON; ");
+					stb.append(" SET ANSI_NULLS ON; ");
+					stb.append(" SET ANSI_PADDING ON; ");
+					stb.append(" SET ANSI_WARNINGS ON; ");
+					stb.append(" SET CONCAT_NULL_YIELDS_NULL ON; ");
+					stb.append(" SET NUMERIC_ROUNDABORT OFF; ");
+					stb.append(" ALTER INDEX [IX_SATIRLAR] ON [dbo].[SATIRLAR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_SID] ON [dbo].[SATIRLAR] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_EVRAK] ON [dbo].[IZAHAT] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_HESAP] ON [dbo].[HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [D_HESAP] ON [dbo].[HESAP_DETAY] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index","",sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() , stb.toString(),sbilgi );
 					serverService.job_baslat_S(modulbaslikTipi.OK_Car.name() +  sbilgi.getUser_prog_kodu() + "_Index",sbilgi);
@@ -165,13 +170,18 @@ public class createDBController {
 			case FATURA:
 				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
-					stb.append(" ALTER INDEX [IX_FATURA] ON [dbo].[FATURA] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_Kodu] ON [dbo].[MAL] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_GRUP] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_Cikan] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_Giren] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_STOK] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_RECETE] ON [dbo].[RECETE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
+					stb.append(" SET QUOTED_IDENTIFIER ON; ");
+					stb.append(" SET ANSI_NULLS ON; ");
+					stb.append(" SET ANSI_PADDING ON; ");
+					stb.append(" SET ANSI_WARNINGS ON; ");
+					stb.append(" SET CONCAT_NULL_YIELDS_NULL ON; ");
+					stb.append(" SET NUMERIC_ROUNDABORT OFF; ");
+					stb.append(" ALTER INDEX [IX_FATURA] ON [dbo].[FATURA] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_Kodu] ON [dbo].[MAL] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_Cikan] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_Giren] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_STOK] ON [dbo].[STOK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_RECETE] ON [dbo].[RECETE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index", "",sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Fat.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
@@ -200,7 +210,13 @@ public class createDBController {
 			case ADRES:
 				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
-					stb.append(" ALTER INDEX [IX_SATIRLAR] ON [dbo].[Adres] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
+					stb.append(" SET QUOTED_IDENTIFIER ON; ");
+					stb.append(" SET ANSI_NULLS ON; ");
+					stb.append(" SET ANSI_PADDING ON; ");
+					stb.append(" SET ANSI_WARNINGS ON; ");
+					stb.append(" SET CONCAT_NULL_YIELDS_NULL ON; ");
+					stb.append(" SET NUMERIC_ROUNDABORT OFF; ");
+					stb.append(" ALTER INDEX [IX_ADRES] ON [dbo].[Adres] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Adr.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
@@ -224,7 +240,13 @@ public class createDBController {
 			case KUR:
 				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
-					stb.append(" ALTER INDEX [IX_KUR] ON [dbo].[Kurlar] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
+					stb.append(" SET QUOTED_IDENTIFIER ON; ");
+					stb.append(" SET ANSI_NULLS ON; ");
+					stb.append(" SET ANSI_PADDING ON; ");
+					stb.append(" SET ANSI_WARNINGS ON; ");
+					stb.append(" SET CONCAT_NULL_YIELDS_NULL ON; ");
+					stb.append(" SET NUMERIC_ROUNDABORT OFF; ");
+					stb.append(" ALTER INDEX [IX_KUR] ON [dbo].[Kurlar] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Kur.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
@@ -272,14 +294,20 @@ public class createDBController {
 			case SMS:
 				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
-					stb.append(" ALTER INDEX [IDX_SMS_HESAP] ON [dbo].[SMS_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_HESAP] ON [dbo].[SMS_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IDX_SMS_BILGILERI] ON [dbo].[SMS_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_SID] ON [dbo].[SMS_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IDX_MAIL_HESAP] ON [dbo].[MAIL_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_MAIL] ON [dbo].[MAIL_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IDX_MAIL_BILGILERI] ON [dbo].[MAIL_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_MID] ON [dbo].[MAIL_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
+					stb.append(" SET QUOTED_IDENTIFIER ON; ");
+					stb.append(" SET ANSI_NULLS ON; ");
+					stb.append(" SET ANSI_PADDING ON; ");
+					stb.append(" SET ANSI_WARNINGS ON; ");
+					stb.append(" SET CONCAT_NULL_YIELDS_NULL ON; ");
+					stb.append(" SET NUMERIC_ROUNDABORT OFF; ");
+					stb.append(" ALTER INDEX [IDX_SMS_HESAP] ON [dbo].[SMS_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_HESAP] ON [dbo].[SMS_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IDX_SMS_BILGILERI] ON [dbo].[SMS_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_SID] ON [dbo].[SMS_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IDX_MAIL_HESAP] ON [dbo].[MAIL_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_MAIL] ON [dbo].[MAIL_HESAP] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IDX_MAIL_BILGILERI] ON [dbo].[MAIL_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_MID] ON [dbo].[MAIL_BILGILERI] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Sms.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
@@ -309,8 +337,14 @@ public class createDBController {
 			case GUNLUK:
 				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
-					stb.append(" ALTER INDEX [IDX_GUNLUK] ON [dbo].[GUNLUK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_GOREV] ON [dbo].[GOREV] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
+					stb.append(" SET QUOTED_IDENTIFIER ON; ");
+					stb.append(" SET ANSI_NULLS ON; ");
+					stb.append(" SET ANSI_PADDING ON; ");
+					stb.append(" SET ANSI_WARNINGS ON; ");
+					stb.append(" SET CONCAT_NULL_YIELDS_NULL ON; ");
+					stb.append(" SET NUMERIC_ROUNDABORT OFF; ");
+					stb.append(" ALTER INDEX [IDX_GUNLUK] ON [dbo].[GUNLUK] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_GOREV] ON [dbo].[GOREV] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Gun.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
@@ -336,11 +370,17 @@ public class createDBController {
 			case KERESTE:
 				if( hangi.equals(sqlTipi.MSSQL)) 
 				{
-					stb.append(" ALTER INDEX [IX_GRP_I] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_GRP_II] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_KERESTE] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [PID] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
-					stb.append(" ALTER INDEX [IX_ACIKLAMA] ON [dbo].[ACIKLAMA] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)") ; 
+					stb.append(" SET QUOTED_IDENTIFIER ON; ");
+					stb.append(" SET ANSI_NULLS ON; ");
+					stb.append(" SET ANSI_PADDING ON; ");
+					stb.append(" SET ANSI_WARNINGS ON; ");
+					stb.append(" SET CONCAT_NULL_YIELDS_NULL ON; ");
+					stb.append(" SET NUMERIC_ROUNDABORT OFF; ");
+					stb.append(" ALTER INDEX [IX_GRP_I] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_GRP_II] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_KERESTE] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [PID] ON [dbo].[KERESTE] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
+					stb.append(" ALTER INDEX [IX_ACIKLAMA] ON [dbo].[ACIKLAMA] REBUILD PARTITION = ALL WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON);") ; 
 					serverService.job_sil_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index","", sbilgi);
 					serverService.job_olustur_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index",modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() , stb.toString() ,sbilgi);
 					serverService.job_baslat_S(modulbaslikTipi.OK_Ker.name() +  sbilgi.getUser_prog_kodu() + "_Index", sbilgi);
