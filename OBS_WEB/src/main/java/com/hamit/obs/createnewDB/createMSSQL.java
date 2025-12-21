@@ -146,8 +146,8 @@ public class createMSSQL {
 			stmt.executeUpdate(sql);
 		}
 		sql = "CREATE NONCLUSTERED INDEX [IX_SATIRLAR] "
-				+"	ON [dbo].[SATIRLAR] ([HESAP],[TARIH])"
-				+"	INCLUDE ([EVRAK])";
+				+ "	ON [dbo].[SATIRLAR] ([HESAP],[TARIH])"
+				+ "	INCLUDE ([EVRAK])";
 		try (Statement stmt = connection.createStatement()) {
 			stmt.executeUpdate(sql);
 		}
