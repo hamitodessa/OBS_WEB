@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.PageRequest;
@@ -251,7 +250,7 @@ public class RaporOlustur {
 			parameters.put("Tarih",Tarih_Cevir.tarihTers(bordroPrinter.getGirisTarihi()));
 			List<Map<String, Object>> bordrooku = kambiyoService.bordroOku(bordroPrinter.getGirisBordro(),"CEK","Giris_Bordro");
 			String adt = Integer.toString(bordrooku.size());
-			String adetle =sayiyiYaziyaCevir.yaziyaCevir(adt, 2, "", "" , "#", null, null, null,"SAYIILE");
+			String adetle = sayiyiYaziyaCevir.yaziyaCevir(adt, 2, "", "" , "#", null, null, null,"SAYIILE");
 			parameters.put("Adet",bordrooku.size() + "  (" + adetle + ")");
 			String qwe = Double.toString(bordroPrinter.getTutar());
 			String cnt  = "" ;
@@ -279,7 +278,7 @@ public class RaporOlustur {
 			parameters.put("Tarih",Tarih_Cevir.tarihTers(bordroPrinter.getCikisTarihi()));
 			List<Map<String, Object>> bordrooku = kambiyoService.bordroOku(bordroPrinter.getCikisBordro(),"CEK","Cikis_Bordro");
 			String adt = Integer.toString(bordrooku.size());
-			String adetle =sayiyiYaziyaCevir.yaziyaCevir(adt, 2, "", "" , "#", null, null, null,"SAYIILE");
+			String adetle = sayiyiYaziyaCevir.yaziyaCevir(adt, 2, "", "" , "#", null, null, null,"SAYIILE");
 			parameters.put("Adet",bordrooku.size() + "  (" + adetle + ")");
 			String qwe = Double.toString(bordroPrinter.getTutar());
 			String cnt  = "" ;
@@ -287,7 +286,7 @@ public class RaporOlustur {
 				cnt = "KURUŞ" ;
 			else
 				cnt = "Cent" ;
-			String yaziyla= sayiyiYaziyaCevir.yaziyaCevir(qwe, 2, bordroPrinter.getDvzcins(), cnt , "#", null, null, null,"");
+			String yaziyla = sayiyiYaziyaCevir.yaziyaCevir(qwe, 2, bordroPrinter.getDvzcins(), cnt , "#", null, null, null,"");
 			parameters.put("Yazi",yaziyla);
 			JasperPrint jp = prepareJasperPrint("BORDRO.jrxml", parameters, bordrooku,UygulamaSabitleri.KambiyoRaporYeri);
 			return exportRapor(jp, "pdf");

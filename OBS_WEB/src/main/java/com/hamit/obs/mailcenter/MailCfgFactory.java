@@ -1,12 +1,14 @@
 package com.hamit.obs.mailcenter;
 
+import java.util.function.Function;
+
 import com.hamit.obs.model.user.Email_Details;
 
 public class MailCfgFactory {
 
 	private MailCfgFactory() {}
 
-    public static MailCenter fromEmailDetails(Email_Details ed, java.util.function.Function<String,String> decryptor) {
+    public static MailCenter fromEmailDetails(Email_Details ed, Function<String,String> decryptor) {
         if (ed == null) throw new IllegalArgumentException("Email_Details null");
 
         MailCenter.Cfg c = new MailCenter.Cfg();

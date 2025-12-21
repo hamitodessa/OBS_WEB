@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
+import jakarta.activation.FileDataSource;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -19,6 +20,8 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.internet.MimeUtility;
+import jakarta.mail.util.ByteArrayDataSource;
 
 public class MailCenter {
 	
@@ -91,14 +94,14 @@ public class MailCenter {
         mp.addBodyPart(text);
 
         if (atts != null) {
-        	for (jakarta.activation.DataSource ds : atts) {
+        	for (DataSource ds : atts) {
                 MimeBodyPart att = new MimeBodyPart();
                 att.setDataHandler(new DataHandler(ds));
                 String name = ds.getName();
                 if (name == null || name.isBlank()) {
                     name = "attachment";
                 }
-                att.setFileName(jakarta.mail.internet.MimeUtility.encodeText(name, "UTF-8", null));
+                att.setFileName(MimeUtility.encodeText(name, "UTF-8", null));
                 mp.addBodyPart(att);
             }
         }
@@ -108,12 +111,11 @@ public class MailCenter {
         Transport.send(m);
     }
 
-    // Yardımcılar
-    public static jakarta.activation.DataSource fileDs(String path) {
-        return new jakarta.activation.FileDataSource(path);
+    public static DataSource fileDs(String path) {
+        return new FileDataSource(path);
     }
-    public static jakarta.activation.DataSource bytesDs(byte[] data, String mime, String fileName) {
-        var ds = new jakarta.mail.util.ByteArrayDataSource(data, mime);
+    public static DataSource bytesDs(byte[] data, String mime, String fileName) {
+        var ds = new ByteArrayDataSource(data, mime);
         ds.setName(fileName);
         return ds;
     }

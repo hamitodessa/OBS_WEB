@@ -66,7 +66,7 @@ public class createMSSQL {
 		try (Connection initialConnection = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 				Statement stmt = initialConnection.createStatement()) {
 			stmt.executeUpdate(createDatabaseQuery);
-			String databaseConnectionString = "jdbc:sqlserver://" + sbilgi.getUser_ip() + ";database=" + veritabaniAdi+ ";trustServerCertificate=true;";
+			String databaseConnectionString = "jdbc:sqlserver://" + sbilgi.getUser_ip() + ";databaseName=" + veritabaniAdi+ ";trustServerCertificate=true;";
 			try (Connection databaseConnection = DriverManager.getConnection(databaseConnectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
 				modulTipi modultip = modulTipi.fromDbValue(sbilgi.getUser_modul());
 				switch (modultip) {
@@ -1239,7 +1239,7 @@ public class createMSSQL {
 		try (Connection initialConnection = DriverManager.getConnection(connectionUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 				Statement stmt = initialConnection.createStatement()) {
 			stmt.executeUpdate(createDatabaseSql);
-			String logDatabaseUrl =  "jdbc:sqlserver://" + sbilgi.getUser_ip() + ";database=" + databaseName+ ";trustServerCertificate=true;";
+			String logDatabaseUrl =  "jdbc:sqlserver://" + sbilgi.getUser_ip() + ";databaseName=" + databaseName+ ";trustServerCertificate=true;";
 			try (Connection logConnection = DriverManager.getConnection(logDatabaseUrl, sbilgi.getUser_server(), sbilgi.getUser_pwd_server())) {
 				createTableLog(logConnection);
 			}
@@ -1301,7 +1301,7 @@ public class createMSSQL {
 			Connection connection = DriverManager.getConnection(connectionString, sbilgi.getUser_server(), sbilgi.getUser_pwd_server());
 			if(msAgentKontrol_S(connection))
 			{
-				PreparedStatement stmt = connection.prepareStatement("USE msdb  EXEC sp_start_job  N'"+ jobName + "'");
+				PreparedStatement stmt = connection.prepareStatement("USE msdb  EXEC sp_start_job  N'" + jobName + "'");
 				stmt.execute();
 				stmt.close();
 				connection.close();

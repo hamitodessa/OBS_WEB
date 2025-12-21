@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -45,8 +44,8 @@ public class ExcellToDataSource {
 	@Autowired
 	private KeresteService keresteService;
 	
-	public jakarta.mail.util.ByteArrayDataSource export_excell(List<Map<String, String>> tableData) {
-		jakarta.mail.util.ByteArrayDataSource ds = null ;
+	public ByteArrayDataSource export_excell(List<Map<String, String>> tableData) {
+		ByteArrayDataSource ds = null ;
 		try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 			Sheet sheet = workbook.createSheet("Excell_Rapor");
 			if (!tableData.isEmpty()) {
@@ -170,14 +169,12 @@ public class ExcellToDataSource {
 		return ds;
 	}
 
-	@SuppressWarnings({ "resource", "unused" })
 	public ByteArrayDataSource export_excell_kercikis(keresteyazdirDTO keresteyazdirDTO) {
 		ByteArrayDataSource ds = null ;
 		keresteDTO dto = keresteyazdirDTO.getKeresteDTO();
 		List<kerestedetayDTO> tableData = keresteyazdirDTO.getTableData();
 		cikisbilgiDTO cikisbilgiDTO = keresteyazdirDTO.getCikisbilgiDTO();
-		try {
-			XSSFWorkbook workbook = new XSSFWorkbook();
+		try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 			XSSFSheet sheet = workbook.createSheet("Evrak_" + dto.getFisno());
 			XSSFFont headerFont = workbook.createFont();
 			headerFont.setBold(true);
@@ -261,7 +258,7 @@ public class ExcellToDataSource {
 			satirStyleTOPTUT.setAlignment(HorizontalAlignment.RIGHT);
 
 			Cell cell ;
-			Row bosRow = sheet.createRow(1);
+			sheet.createRow(1);
 
 			Row satir1 = sheet.createRow(2);
 			cell = satir1.createCell(0);
@@ -297,7 +294,7 @@ public class ExcellToDataSource {
 			
 			cell.setCellValue(hesadi[0]);
 
-			Row bosRow5 = sheet.createRow(5);
+			sheet.createRow(5);
 
 			Row aCIKLAMA = sheet.createRow(6);
 
@@ -536,14 +533,12 @@ public class ExcellToDataSource {
 		return ds;
 	}
 	
-	@SuppressWarnings({ "resource", "unused" })
 	public ByteArrayDataSource export_excell_kergiris(keresteyazdirDTO keresteyazdirDTO) {
 		ByteArrayDataSource ds = null ;
 		keresteDTO dto = keresteyazdirDTO.getKeresteDTO();
 		List<kerestedetayDTO> tableData = keresteyazdirDTO.getTableData();
 		cikisbilgiDTO cikisbilgiDTO = keresteyazdirDTO.getCikisbilgiDTO();
-		try {
-			XSSFWorkbook workbook = new XSSFWorkbook();
+		try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 			XSSFSheet sheet = workbook.createSheet("Evrak_" + dto.getFisno());
 			XSSFFont headerFont = workbook.createFont();
 			headerFont.setBold(true);
@@ -627,7 +622,7 @@ public class ExcellToDataSource {
 			satirStyleTOPTUT.setAlignment(HorizontalAlignment.RIGHT);
 
 			Cell cell ;
-			Row bosRow = sheet.createRow(1);
+			sheet.createRow(1);
 
 			Row satir1 = sheet.createRow(2);
 			cell = satir1.createCell(0);
@@ -663,7 +658,7 @@ public class ExcellToDataSource {
 			
 			cell.setCellValue(hesadi[0]);
 
-			Row bosRow5 = sheet.createRow(5);
+			sheet.createRow(5);
 
 			Row aCIKLAMA = sheet.createRow(6);
 

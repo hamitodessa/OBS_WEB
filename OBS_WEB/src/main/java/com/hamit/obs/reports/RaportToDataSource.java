@@ -19,7 +19,7 @@ import net.sf.jasperreports.export.SimpleXmlExporterOutput;
 
 public class RaportToDataSource {
 
-	public jakarta.mail.util.ByteArrayDataSource export_pdf(JasperPrint jp) throws Exception
+	public ByteArrayDataSource export_pdf(JasperPrint jp) throws Exception
 	{
 		jp.setLocaleCode("UTF-8");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();

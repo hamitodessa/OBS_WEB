@@ -290,7 +290,6 @@ public class RaporEmailGonderme {
 	            ds.setName(rapdosadi); 
 	            atts.add(ds);
 	        }
-
 	        mc.sendWithOptionalAttachment(to, cc, sub, body, atts);
 
 	        Gonderilmis_Mailler gm = new Gonderilmis_Mailler();
