@@ -38,11 +38,13 @@ public class AdresMySQL implements IAdresDatabase{
 	public adresDTO hsp_pln(String hesapisim, ConnectionDetails adresConnDetails) {
 		String sql = "SELECT  * " + 
 				" FROM Adres " + 
-				" WHERE Adi LIKE '" + hesapisim + "%' OR M_Kodu like '" + hesapisim + "%'" + " LIMIT 1;";
+				" WHERE Adi LIKE ? OR M_Kodu like ? LIMIT 1;";
 
 		adresDTO hsdto = new adresDTO();
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1,  hesapisim + "%");
+			preparedStatement.setString(2,  hesapisim + "%");
 			ResultSet rs = preparedStatement.executeQuery();
 			if (rs.isBeforeFirst()) {
 				rs.next();
@@ -140,11 +142,13 @@ public class AdresMySQL implements IAdresDatabase{
 	@Override
 	public void adres_sil(int id, ConnectionDetails adresConnDetails) {
 		String sql = "DELETE " +
-				" FROM Adres WHERE ID = '" + id + "'"  ;
+				" FROM Adres WHERE ID = ? "  ;
 		try (Connection connection = DriverManager.getConnection(
-				adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
-				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
-			deleteStmt.executeUpdate();
+				adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword())){
+				try(PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
+					deleteStmt.setInt(1, id);
+					deleteStmt.executeUpdate();
+				}
 		} catch (Exception e) {
 			throw new ServiceException("Silme sırasında bir hata oluştu", e);
 		}
@@ -153,10 +157,11 @@ public class AdresMySQL implements IAdresDatabase{
 	@Override
 	public String kod_ismi(String kodu, ConnectionDetails adresConnDetails) {
 		String kodIsmi = null;
-		String query = "SELECT Adi  FROM Adres WHERE M_Kodu = N'" + kodu + "'";
+		String query = "SELECT Adi  FROM Adres WHERE M_Kodu = ? ";
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+				preparedStatement.setNString(1, kodu);
+				ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				kodIsmi = resultSet.getString("Adi");
 			}
@@ -170,10 +175,11 @@ public class AdresMySQL implements IAdresDatabase{
 	public String[] adr_etiket_arama_kod(String kodu, ConnectionDetails adresConnDetails) {
 		String[] kodIsmi = {"","","","","",""};
 		String query = "SELECT Adi,Adres_1,Adres_2,Tel_1,Semt,Sehir FROM Adres"
-				+ " WHERE M_Kodu Like N'" + kodu + "%'";
+				+ " WHERE M_Kodu Like ? ";
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+				preparedStatement.setString(1,  kodu + "%");
+				ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				kodIsmi[0] = resultSet.getString("Adi");
 				kodIsmi[1] = resultSet.getString("Adres_1");

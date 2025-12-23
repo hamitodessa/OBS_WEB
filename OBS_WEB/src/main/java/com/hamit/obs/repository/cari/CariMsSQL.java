@@ -1036,7 +1036,7 @@ public class CariMsSQL implements ICariDatabase{
 			con.setAutoCommit(false);
 			try (PreparedStatement psDel = con.prepareStatement(sqlDel);
 					PreparedStatement psIns = con.prepareStatement(sqlIns)) {
-				psDel.setString(1, tahsilatDTO.getFisNo());
+				psDel.setNString(1, tahsilatDTO.getFisNo());
 				psDel.setInt(2, tahsilatDTO.getTah_ted());
 				psDel.executeUpdate();
 				int i = 1;

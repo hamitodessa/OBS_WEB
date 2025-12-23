@@ -38,10 +38,12 @@ public class AdresPgSQL implements IAdresDatabase {
 	public adresDTO hsp_pln(String hesapisim, ConnectionDetails adresConnDetails) {
 		String sql = "SELECT  * " + 
 				" FROM \"ADRES\" " + 
-				" WHERE \"ADI\" LIKE '" + hesapisim + "%' OR \"M_KODU\" like '" + hesapisim + "%'" + " LIMIT 1;";
+				" WHERE \"ADI\"::text LIKE ? OR \"M_KODU\"::text like ? LIMIT 1;";
 		adresDTO hsdto = new adresDTO();
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1,  hesapisim + "%");
+			preparedStatement.setString(2,  hesapisim + "%");
 			ResultSet rs = preparedStatement.executeQuery();
 			if (rs.isBeforeFirst()) {
 				rs.next();
@@ -139,10 +141,11 @@ public class AdresPgSQL implements IAdresDatabase {
 	@Override
 	public void adres_sil(int id, ConnectionDetails adresConnDetails) {
 		String sql = "DELETE " +
-				" FROM \"ADRES\" WHERE \"ID\" = '" + id + "'"  ;
+				" FROM \"ADRES\" WHERE \"ID\" = ? "  ;
 		try (Connection connection = DriverManager.getConnection(
 				adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
+			deleteStmt.setInt(1, id);
 			deleteStmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Silme sırasında bir hata oluştu", e);
@@ -152,10 +155,11 @@ public class AdresPgSQL implements IAdresDatabase {
 	@Override
 	public String kod_ismi(String kodu, ConnectionDetails adresConnDetails) {
 		String kodIsmi = null;
-		String query = "SELECT \"ADI\" FROM \"ADRES\" WHERE \"M_KODU\" = '" + kodu + "'";
+		String query = "SELECT \"ADI\" FROM \"ADRES\" WHERE \"M_KODU\" = ? ";
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+				preparedStatement.setNString(1, kodu);
+				ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				kodIsmi = resultSet.getString("ADI");
 			}
@@ -169,10 +173,11 @@ public class AdresPgSQL implements IAdresDatabase {
 	public String[] adr_etiket_arama_kod(String kodu, ConnectionDetails adresConnDetails) {
 		String[] kodIsmi = {"","","","","",""};
 		String sql = "SELECT \"ADI\",\"ADRES_1\",\"ADRES_2\", \"TEL_1\",\"SEMT\",\"SEHIR\"  FROM \"ADRES\" "
-				+ " WHERE \"M_KODU\" Like '" + kodu + "%'";
+				+ " WHERE \"M_KODU\"::text Like ? ";
 		try (Connection connection = DriverManager.getConnection(adresConnDetails.getJdbcUrl(), adresConnDetails.getUsername(), adresConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+				preparedStatement.setString(1,  kodu + "%");
+				ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				kodIsmi[0] = resultSet.getString("ADI");
 				kodIsmi[1] = resultSet.getString("ADRES_1");
