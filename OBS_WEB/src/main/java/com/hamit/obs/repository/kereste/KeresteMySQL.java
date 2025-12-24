@@ -52,9 +52,9 @@ public class KeresteMySQL implements IKeresteDatabase {
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MY stkService genel hatası.", e);
 		}
@@ -65,11 +65,12 @@ public class KeresteMySQL implements IKeresteDatabase {
 	@Override
 	public String urun_kod_degisken_ara(String fieldd, String sno, String nerden, String arama,
 			ConnectionDetails keresteConnDetails) {
-		String query = "SELECT  " + fieldd + " FROM " + nerden + " WHERE " + sno + " = N'" + arama + "'";
+		String query = "SELECT  " + fieldd + " FROM " + nerden + " WHERE " + sno + " = ? ";
 		String deger = "" ;
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(query);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+			preparedStatement.setString(1, arama);
+				ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				deger = resultSet.getString(fieldd);
 			}
@@ -83,13 +84,14 @@ public class KeresteMySQL implements IKeresteDatabase {
 	@Override
 	public List<Map<String, Object>> ker_kod_alt_grup_degisken_oku(int sno, ConnectionDetails keresteConnDetails) {
 		String sql =  "SELECT ALID_Y , ALT_GRUP FROM ALT_GRUP_DEGISKEN   " +
-				" WHERE ANA_GRUP = N'" + sno + "' ORDER BY ALT_GRUP";
+				" WHERE ANA_GRUP = ? ORDER BY ALT_GRUP";
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			preparedStatement.setInt(1, sno);
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MY stkService genel hatası.", e);
 		}
@@ -318,7 +320,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 		String sql = "";
 		if (cins.equals("G")) 
 		{
-			sql = "SELECT    Evrak_No  , Barkod  , Kodu , Paket_No , Konsimento  , Miktar , Tarih , Kdv  , Doviz  , Fiat   , Tutar  , Kur   , Cari_Firma , Adres_Firma   , Iskonto  , Tevkifat,  "
+			sql = "SELECT Evrak_No  , Barkod  , Kodu , Paket_No , Konsimento  , Miktar , Tarih , Kdv  , Doviz  , Fiat   , Tutar  , Kur   , Cari_Firma , Adres_Firma   , Iskonto  , Tevkifat,  "
 					+ " IFNULL((Select ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE ANA_GRUP_DEGISKEN.AGID_Y = KERESTE.Ana_Grup ) , '') AS Ana_Grup   ," 
 					+ " IFNULL((Select ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALT_GRUP_DEGISKEN.ALID_Y = KERESTE.Alt_Grup ) , '') AS Alt_Grup   ," 
 					+ " IFNULL((Select MENSEI FROM MENSEI_DEGISKEN WHERE MENSEI_DEGISKEN.MEID_Y = KERESTE.Mensei ) , '') AS Mensei   ," 
@@ -330,7 +332,7 @@ public class KeresteMySQL implements IKeresteDatabase {
 					+ "	Cikis_Evrak   , DATE_FORMAT(CTarih,'%d.%m.%Y %H:%i:%s') AS CTarih    , CKdv  , CDoviz   , CFiat  , CTutar  , CKur  , CCari_Firma  , CAdres_Firma  , CIskonto   , CTevkifat  "
 					+ "	,CAna_Grup     , CAlt_Grup   ,CDepo  , COzel_Kod    , CIzahat   , CNakliyeci   , CUSER ,CSatir" 
 					+ " FROM KERESTE   " 
-					+ " WHERE Evrak_No  = N'" + eno + "'  ORDER BY  Satir Limit 250"  ; 
+					+ " WHERE Evrak_No  = ?  ORDER BY  Satir Limit 250"  ; 
 		}
 		else {
 			sql = "SELECT    Evrak_No  , Barkod  , Kodu , Paket_No , Konsimento  , Miktar , Tarih , Kdv  , Doviz  , Fiat   , Tutar  , Kur   , Cari_Firma , Adres_Firma   , Iskonto  , Tevkifat , "
@@ -345,11 +347,12 @@ public class KeresteMySQL implements IKeresteDatabase {
 					+ "	,Cikis_Evrak   , CTarih    , CKdv  , CDoviz   , CFiat  , CTutar  , CKur  , CCari_Firma  , CAdres_Firma  , CIskonto   , CTevkifat  "
 					+ "	,CAna_Grup     , CAlt_Grup   ,IFNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo ) , '') AS CDepo  , COzel_Kod    , CIzahat   , CNakliyeci   , CUSER ,Satir" 
 					+ " FROM KERESTE   " 
-					+ " WHERE Cikis_Evrak  = N'" + eno + "' Order By CSatir Limit 250 " ;
+					+ " WHERE Cikis_Evrak  = ? Order By CSatir Limit 250 " ;
 		}
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, eno);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -364,13 +367,18 @@ public class KeresteMySQL implements IKeresteDatabase {
 		String result = "";
 		String sql = "SELECT * " +
 				" FROM ACIKLAMA " +
-				" WHERE EVRAK_NO = N'" + evrno + "'" +
-				" AND SATIR = '" + satir + "'" +
-				" AND EVRAK_CINS = '" + evrcins + "'" +
-				" AND Gir_Cik = '" + gircik + "'";
+				" WHERE EVRAK_NO = ? " +
+				" AND SATIR = ? " +
+				" AND EVRAK_CINS = ? " +
+				" AND Gir_Cik = ? ";
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
-				PreparedStatement preparedStatement = connection.prepareStatement(sql);
-				ResultSet resultSet = preparedStatement.executeQuery()) {
+				PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+			int p = 1;
+			preparedStatement.setString(p++, evrno);
+			preparedStatement.setInt(p++, satir);
+			preparedStatement.setString(p++, evrcins);
+			preparedStatement.setString(p++, gircik);
+			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				result = resultSet.getString("ACIKLAMA");
 			}
@@ -386,11 +394,15 @@ public class KeresteMySQL implements IKeresteDatabase {
 		String[] dipnot = {"","",""};
 		String sql =  "SELECT * " +
 				" FROM DPN  " +
-				" WHERE Evrak_No = N'" + ino + "'" +
-				" AND DPN.Tip = N'" + cins + "'" +
-				" AND Gir_Cik = '" + gircik + "'";
+				" WHERE Evrak_No = ? " +
+				" AND DPN.Tip = ? " +
+				" AND Gir_Cik = ? ";
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			int p = 1;
+			preparedStatement.setString(p++, ino);
+			preparedStatement.setString(p++, cins);
+			preparedStatement.setString(p++, gircik);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				dipnot[0] = resultSet.getString("Bir");
@@ -415,11 +427,13 @@ public class KeresteMySQL implements IKeresteDatabase {
 				+ "	IFNULL((Select DEPO FROM DEPO_DEGISKEN WHERE DEPO_DEGISKEN.DPID_Y = KERESTE.CDepo ) , '') AS CDepo  , "
 				+ " COzel_Kod , CIzahat   , CNakliyeci   , CUSER ,Satir " 
 				+ " FROM KERESTE   " 
-				+ " WHERE Paket_No = N'" + token[0] + "' AND Konsimento = N'"+ token[1]  +"' " 
+				+ " WHERE Paket_No = ? AND Konsimento = ? " 
 				+ " " + dURUMString + " ORDER BY Satir" ;
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setNString(1, token[0]);
+			preparedStatement.setNString(2, token[1]);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -510,14 +524,18 @@ public class KeresteMySQL implements IKeresteDatabase {
 	public void dipnot_sil(String ino, String cins, String gircik, ConnectionDetails keresteConnDetails) {
 		String sql = " DELETE " +
 				" FROM DPN" +
-				" WHERE Evrak_No = N'" + ino + "'" +
-				" AND Tip = N'" + cins + "'" +
-				" AND Gir_Cik = '" + gircik + "'";
+				" WHERE Evrak_No = ? " +
+				" AND Tip = ? " +
+				" AND Gir_Cik = ? ";
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(),
 				keresteConnDetails.getUsername(),
 				keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			 int p = 1;
+			 preparedStatement.setString(p++, ino);
+			 preparedStatement.setString(p++, cins);
+			 preparedStatement.setString(p++, gircik);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);
@@ -551,14 +569,18 @@ public class KeresteMySQL implements IKeresteDatabase {
 	public void aciklama_sil(String evrcins, String evrno, String cins, ConnectionDetails keresteConnDetails) {
 		String sql = " DELETE " +
 				" FROM ACIKLAMA " +
-				" WHERE EVRAK_CINS = N'" + evrcins + "'" +
-				" AND EVRAK_NO = N'" + evrno + "'" +
-				" AND Gir_Cik = N'" + cins + "'";
+				" WHERE EVRAK_CINS = ? " +
+				" AND EVRAK_NO = ? " +
+				" AND Gir_Cik = ? ";
 		try (Connection connection = DriverManager.getConnection(
 				keresteConnDetails.getJdbcUrl(),
 				keresteConnDetails.getUsername(),
 				keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			int p = 1;
+			preparedStatement.setString(p++, evrcins);
+			preparedStatement.setString(p++, evrno);
+			preparedStatement.setString(p++, cins);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			throw new ServiceException("stok sil", e);

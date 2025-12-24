@@ -87,9 +87,9 @@ public class KeresteMsSQL implements IKeresteDatabase {
 		try (Connection connection = DriverManager.getConnection(keresteConnDetails.getJdbcUrl(), keresteConnDetails.getUsername(), keresteConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setInt(1, sno);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MS stkService genel hatası.", e);
 		}
@@ -502,7 +502,6 @@ public class KeresteMsSQL implements IKeresteDatabase {
 			stmt.setInt(43, kerestedetayDTO.getSatir());
 			stmt.setInt(44, kerestedetayDTO.getCsatir());
 			stmt.executeUpdate();
-			stmt.close();
 		} catch (Exception e) {
 			throw new ServiceException("Urun kayit Hata:" + e.getMessage());
 		}

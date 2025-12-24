@@ -45,9 +45,9 @@ public class KambiyoMySQL implements IKambiyoDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MS KambiyoService genel hatası.", e);
 		}
@@ -112,10 +112,10 @@ public class KambiyoMySQL implements IKambiyoDatabase{
 		String aciklama = "";
 		String sql = "SELECT * " +
 				" FROM ACIKLAMA " +
-				" WHERE EVRAK_NO = N'" + bordroNo + "'" +
-				" AND SATIR = '" + satir + "'" +
-				" AND EVRAK_CINS = '" + cek_sen + "'" +
-				" AND Gir_Cik = '" + gircik + "'";
+				" WHERE EVRAK_NO = ? " +
+				" AND SATIR = ? " +
+				" AND EVRAK_CINS = ? " +
+				" AND Gir_Cik = ? ";
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setString(1, bordroNo);
@@ -137,7 +137,7 @@ public class KambiyoMySQL implements IKambiyoDatabase{
 	public void bordro_sil(String bordroNo, String cek_sen, String gir_cik, ConnectionDetails kambiyoConnDetails) {
 		String sql = " DELETE " +
 				" FROM " + cek_sen + "" +
-				" WHERE " + gir_cik +"  = ? " ;
+				" WHERE " + gir_cik + "  = ? " ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
@@ -407,9 +407,10 @@ public class KambiyoMySQL implements IKambiyoDatabase{
 		String sql =  "SELECT Banka, Cek_No, Cikis_Bordro, Cikis_Musteri, Cikis_Tarihi, Cins, Durum, Giris_Bordro,"
 				+ " Giris_Musteri, Giris_Tarihi, Ilk_Borclu, " +
 				" Seri_No, Sube, T_Tarih, Tutar, Vade, Cek_Hesap_No ,Cikis_Ozel_Kod,Giris_Ozel_Kod " +
-				" FROM cek WHERE Cek_No = BINARY '" + cekno + "' ";
+				" FROM cek WHERE Cek_No = BINARY ? ";
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, cekno);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					dto.setBanka(resultSet.getString("Banka"));
@@ -442,11 +443,12 @@ public class KambiyoMySQL implements IKambiyoDatabase{
 	@Override
 	public void kam_durum_yaz(String cekno, String ceksen_from, String ceksen_where, String durum, String ttarih,
 			ConnectionDetails kambiyoConnDetails) {
-		String sql = "UPDATE "+ ceksen_from + " SET Durum = '"+ durum + "', T_Tarih = '"+ ttarih + "'" + 
-				" WHERE " + ceksen_where + "  ='" + cekno + "'" ;
+		String sql = "UPDATE "+ ceksen_from + " SET Durum = '" + durum + "', T_Tarih = '" + ttarih + "'" + 
+				" WHERE " + ceksen_where + "  = ? " ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, cekno);
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);

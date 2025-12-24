@@ -519,8 +519,8 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 	@Override
 	public void kam_durum_yaz(String cekno, String ceksen_from, String ceksen_where, String durum, String ttarih,
 			ConnectionDetails kambiyoConnDetails) {
-		String sql = "UPDATE "+ ceksen_from + " SET Durum = '" + durum + "', T_Tarih = '" + ttarih + "'" + 
-				" WHERE " + ceksen_where + "  =? " ;
+		String sql = "UPDATE " + ceksen_from + " SET Durum = '" + durum + "', T_Tarih = '" + ttarih + "'" + 
+				" WHERE " + ceksen_where + "  = ? " ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {

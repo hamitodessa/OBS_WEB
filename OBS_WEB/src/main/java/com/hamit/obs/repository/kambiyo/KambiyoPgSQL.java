@@ -28,9 +28,9 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MS KambiyoService genel hatası.", e);
 		}
@@ -45,9 +45,9 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MS KambiyoService genel hatası.", e);
 		}
@@ -92,11 +92,12 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 	public List<Map<String, Object>> bordroOku(String bordroNo, String cek_sen, String gir_cik,
 			ConnectionDetails kambiyoConnDetails) {
 		String sql = "SELECT * " +
-				" FROM \"" + cek_sen + "\" WHERE \"" + gir_cik + "\" = '" + bordroNo + "'" +
+				" FROM \"" + cek_sen + "\" WHERE \"" + gir_cik + "\" = ? " +
 				" ORDER BY \"Vade\"";
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, bordroNo);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultList = ResultSetConverter.convertToList(resultSet); 
 		} catch (Exception e) {
@@ -111,12 +112,16 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 		String aciklama = "";
 		String sql = "SELECT * " +
 				" FROM \"ACIKLAMA\" " +
-				" WHERE \"EVRAK_NO\" = N'" + bordroNo + "'" +
-				" AND \"SATIR\" = '" + satir + "'" +
-				" AND \"EVRAK_CINS\" = '" + cek_sen + "'" +
-				" AND \"Gir_Cik\" = '" + gircik + "'";
+				" WHERE \"EVRAK_NO\" = ? " +
+				" AND \"SATIR\" = ? " +
+				" AND \"EVRAK_CINS\" = ? " +
+				" AND \"Gir_Cik\" = ? ";
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, bordroNo);
+			preparedStatement.setInt(2, satir);
+			preparedStatement.setString(3, cek_sen);
+			preparedStatement.setString(4, gircik);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					aciklama = resultSet.getString("ACIKLAMA");
@@ -132,10 +137,11 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 	public void bordro_sil(String bordroNo, String cek_sen, String gir_cik, ConnectionDetails kambiyoConnDetails) {
 		String sql = " DELETE " +
 				" FROM \"" + cek_sen + "\"" +
-				" WHERE \"" + gir_cik +"\"  ='" + bordroNo + "'" ;
+				" WHERE \"" + gir_cik +"\"  = ? " ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
+			deleteStmt.setString(1, bordroNo);
 			deleteStmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
@@ -199,12 +205,15 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 	@Override
 	public void kam_aciklama_sil(String cek_sen, String bordroNo, String gircik,ConnectionDetails kambiyoConnDetails) {
 		String sql = " DELETE  FROM \"ACIKLAMA\" " +
-				" WHERE \"EVRAK_CINS\" = '" + cek_sen + "'" +
-				" AND \"EVRAK_NO\" = '" + bordroNo + "'" +
-				" AND \"Gir_Cik\" = '" + gircik + "'" ;
+				" WHERE \"EVRAK_CINS\" = ? " +
+				" AND \"EVRAK_NO\" = ? " +
+				" AND \"Gir_Cik\" = ? " ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
+			deleteStmt.setString(1, cek_sen);
+			deleteStmt.setString(2, bordroNo);
+			deleteStmt.setString(3, gircik);
 			deleteStmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Silme sırasında bir hata oluştu", e);
@@ -214,9 +223,10 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 	@Override
 	public int kam_bordro_no_al(String cins, ConnectionDetails kambiyoConnDetails) {
 		int evrakNo = 0;
-		String query = "UPDATE \"EVRAK\" SET \"NO\" = \"NO\" + 1 WHERE \"EVRAK\" = '" + cins + "' RETURNING \"NO\";";
+		String query = "UPDATE \"EVRAK\" SET \"NO\" = \"NO\" + 1 WHERE \"EVRAK\" = ? RETURNING \"NO\";";
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setString(1, cins);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					evrakNo = resultSet.getInt("NO");
@@ -252,10 +262,11 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 		String sql =   "SELECT \"Banka\", \"Cek_No\", \"Cikis_Bordro\", \"Cikis_Musteri\", \"Cikis_Tarihi\", \"Cins\", \"Durum\", \"Giris_Bordro\", " + 
 				" \"Giris_Musteri\", \"Giris_Tarihi\", \"Ilk_Borclu\", \"Seri_No\", \"Sube\", \"T_Tarih\", "+ 
 				" \"Tutar\", \"Vade\", \"Cek_Hesap_No\" ,\"Cikis_Ozel_Kod\",\"Giris_Ozel_Kod\" " +
-				" FROM \"CEK\" WHERE \"Cek_No\" = '" + cekno + "' ";
+				" FROM \"CEK\" WHERE \"Cek_No\" = ? ";
 		
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, cekno);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					bordrono = resultSet.getString("Giris_Bordro");
@@ -381,7 +392,7 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 
 	@Override
 	public void kambiyo_firma_adi_kayit(String fadi, ConnectionDetails kambiyoConnDetails) {
-		String sql = "UPDATE \"OZEL\" SET \"FIRMA_ADI\" = '" + fadi + "'";
+		String sql = "UPDATE \"OZEL\" SET \"FIRMA_ADI\" = ? ";
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -398,9 +409,10 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 		String sql = "SELECT \"Banka\", \"Cek_No\", \"Cikis_Bordro\", \"Cikis_Musteri\", \"Cikis_Tarihi\", \"Cins\", \"Durum\", \"Giris_Bordro\", " + 
 				" \"Giris_Musteri\", \"Giris_Tarihi\", \"Ilk_Borclu\", \"Seri_No\", \"Sube\", \"T_Tarih\", "+ 
 				" \"Tutar\", \"Vade\", \"Cek_Hesap_No\" ,\"Cikis_Ozel_Kod\",\"Giris_Ozel_Kod\" " +
-				" FROM \"CEK\" WHERE \"Cek_No\" = '" + cekno + "' ";
+				" FROM \"CEK\" WHERE \"Cek_No\" = ? ";
 		try (Connection connection =  DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, cekno);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
 					dto.setBanka(resultSet.getString("Banka"));
@@ -433,11 +445,12 @@ public class KambiyoPgSQL implements IKambiyoDatabase{
 	@Override
 	public void kam_durum_yaz(String cekno, String ceksen_from, String ceksen_where, String durum, String ttarih,
 			ConnectionDetails kambiyoConnDetails) {
-		String sql = "UPDATE \""+ ceksen_from + "\" SET \"Durum\" = '" + durum + "', \"T_Tarih\" = '" + ttarih + "'" + 
-				" WHERE \"" + ceksen_where + "\"  ='" + cekno + "'" ;
+		String sql = "UPDATE \"" + ceksen_from + "\" SET \"Durum\" = '" + durum + "', \"T_Tarih\" = '" + ttarih + "'" + 
+				" WHERE \"" + ceksen_where + "\"  = ? " ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, cekno);
 			stmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Kayıt sırasında bir hata oluştu", e);
