@@ -33,9 +33,9 @@ public class KurMS implements  IKurDatabase{
 		try (Connection connection = DriverManager.getConnection(kurConnDetails.getJdbcUrl(), kurConnDetails.getUsername(), kurConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setDate(1, Date.valueOf(LocalDate.parse(tarih)));
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MS KurService genel hatası.", e);
 		}

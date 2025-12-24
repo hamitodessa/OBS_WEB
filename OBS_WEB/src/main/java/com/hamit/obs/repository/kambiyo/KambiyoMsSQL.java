@@ -30,9 +30,9 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MS KambiyoService genel hatası.", e);
 		}
@@ -47,9 +47,9 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		try (Connection connection = DriverManager.getConnection(kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("MS KambiyoService genel hatası.", e);
 		}
@@ -214,12 +214,15 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 	@Override
 	public void kam_aciklama_sil(String cek_sen, String bordroNo, String gircik,ConnectionDetails kambiyoConnDetails) {
 		String sql = " DELETE  FROM ACIKLAMA " +
-				" WHERE EVRAK_CINS = N'" + cek_sen + "'" +
-				" AND EVRAK_NO = N'" + bordroNo + "'" +
-				" AND Gir_Cik = N'" + gircik + "'" ;
+				" WHERE EVRAK_CINS = ? " +
+				" AND EVRAK_NO = ? " +
+				" AND Gir_Cik = ? " ;
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {
+			deleteStmt.setNString(1, cek_sen);
+			deleteStmt.setNString(2, bordroNo);
+			deleteStmt.setNString(3, gircik);
 			deleteStmt.executeUpdate();
 		} catch (Exception e) {
 			throw new ServiceException("Silme sırasında bir hata oluştu", e);
@@ -317,7 +320,7 @@ public class KambiyoMsSQL implements IKambiyoDatabase{
 	public void bordro_cikis_sil(String bordroNo, String cek_sen, ConnectionDetails kambiyoConnDetails) {
 		String sql = "UPDATE " + cek_sen + 
 				" SET Cikis_Bordro = ?, Cikis_Musteri = ?, Cikis_Tarihi = ? " +
-				"WHERE Cikis_Bordro = ?";
+				"WHERE Cikis_Bordro = ? ";
 		try (Connection connection = DriverManager.getConnection(
 				kambiyoConnDetails.getJdbcUrl(), kambiyoConnDetails.getUsername(), kambiyoConnDetails.getPassword());
 				PreparedStatement deleteStmt = connection.prepareStatement(sql)) {

@@ -1,10 +1,13 @@
 package com.hamit.obs.repository.kur;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +15,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.hamit.obs.connection.ConnectionDetails;
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.custom.yardimci.ResultSetConverter;
 import com.hamit.obs.dto.kur.kurgirisDTO;
 import com.hamit.obs.dto.kur.kurraporDTO;
@@ -25,14 +29,15 @@ public class KurPG implements  IKurDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		String sql = "SELECT \"KUR\" as \"Kur\",\"MA\",\"MS\",\"SA\",\"SS\",\"BA\",\"BS\"" +
 				" FROM \"KURLAR\"" +
-				" WHERE \"TARIH\" = '" + tarih + "' ORDER BY \"KUR\"";
+				" WHERE \"TARIH\" = ? ORDER BY \"KUR\"";
 		try (Connection connection = DriverManager.getConnection(kurConnDetails.getJdbcUrl(), kurConnDetails.getUsername(), kurConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			preparedStatement.setDate(1, Date.valueOf(LocalDate.parse(tarih)));
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+				resultList = ResultSetConverter.convertToList(rs);
+			}
 		} catch (Exception e) {
-			throw new ServiceException("MS KurService genel hatası.", e);
+			throw new ServiceException("PG KurService genel hatası.", e);
 		}
 		return resultList;
 	}
@@ -45,7 +50,7 @@ public class KurPG implements  IKurDatabase{
 		try (Connection connection = DriverManager.getConnection(
 				kurConnDetails.getJdbcUrl(), kurConnDetails.getUsername(), kurConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setDate(1, java.sql.Date.valueOf(tarih));
+			stmt.setDate(1, Date.valueOf(tarih));
 			stmt.setString(2, kurTuru);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
@@ -61,7 +66,7 @@ public class KurPG implements  IKurDatabase{
 		try (Connection connection = DriverManager.getConnection(
 				kurConnDetails.getJdbcUrl(), kurConnDetails.getUsername(), kurConnDetails.getPassword());
 				PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setDate(1, java.sql.Date.valueOf(kurgirisDTO.getTar()));
+			stmt.setDate(1, Date.valueOf(kurgirisDTO.getTar()));
 			stmt.setString(2, kurgirisDTO.getDvz_turu());
 			stmt.setDouble(3, kurgirisDTO.getMa());
 			stmt.setDouble(4, kurgirisDTO.getMs());
@@ -82,15 +87,21 @@ public class KurPG implements  IKurDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		String sql = "SELECT \"TARIH\" as \"Tarih\",\"KUR\" as \"Kur\",\"MA\",\"MS\",\"BA\",\"BS\",\"SA\",\"SS\"" +
 				" FROM \"KURLAR\"" +
-				" WHERE \"TARIH\" BETWEEN '" + kurraporDTO.getStartDate() + "' AND '" + kurraporDTO.getEndDate() + "'" +
-				" AND \"KUR\" BETWEEN '" +kurraporDTO.getCins1() + "' AND '" + kurraporDTO.getCins2() + "' ORDER BY \"TARIH\" DESC,\"KUR\"";
+				" WHERE \"TARIH\" >= ? AND \"TARIH\" < ? " +
+				" AND \"KUR\" >= ? AND \"KUR\" < ? ORDER BY \"TARIH\" DESC,\"KUR\"";
 		try (Connection connection = DriverManager.getConnection(kurConnDetails.getJdbcUrl(), kurConnDetails.getUsername(), kurConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(kurraporDTO.getStartDate(), kurraporDTO.getEndDate());
+			int p = 1;
+			preparedStatement.setTimestamp(p++, ts[0]);            
+			preparedStatement.setTimestamp(p++, ts[1]);            
+			preparedStatement.setString(p++, kurraporDTO.getCins1());    
+			preparedStatement.setString(p++, kurraporDTO.getCins2());   
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+	            resultList = ResultSetConverter.convertToList(rs);
+	        }
 		} catch (Exception e) {
-			throw new ServiceException("MS KurService genel hatası.", e);
+			throw new ServiceException("PG KurService genel hatası.", e);
 		}
 		return resultList;
 	}
@@ -100,14 +111,19 @@ public class KurPG implements  IKurDatabase{
 		List<Map<String, Object>> resultList = new ArrayList<>();
 		String sql = "SELECT \"KUR\",\"MA\",\"MS\",\"SA\",\"SS\",\"BA\",\"BS\",\"TARIH\"" +
 				" FROM \"KURLAR\"" +
-				" WHERE \"TARIH\" ='" + kurgirisDTO.getTar()  + "' AND \"KUR\" = '" + kurgirisDTO.getDvz_turu() + "'";
+				" WHERE \"TARIH\" >= ? AND \"TARIH\" < ? AND \"KUR\" = ?";
 		try (Connection connection = DriverManager.getConnection(kurConnDetails.getJdbcUrl(), kurConnDetails.getUsername(), kurConnDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultList = ResultSetConverter.convertToList(resultSet); 
-			resultSet.close();
+			Timestamp[] ts = Global_Yardimci.rangeDayT2plusDay(kurgirisDTO.getTar(), kurgirisDTO.getTar());
+	        int p = 1;
+	        preparedStatement.setTimestamp(p++, ts[0]);           
+	        preparedStatement.setTimestamp(p++, ts[1]);           
+	        preparedStatement.setString(p++, kurgirisDTO.getDvz_turu());
+			try (ResultSet rs = preparedStatement.executeQuery()) {
+	            resultList = ResultSetConverter.convertToList(rs);
+	        }
 		} catch (Exception e) {
-			throw new ServiceException("MS KurService genel hatası.", e);
+			throw new ServiceException("PG KurService genel hatası.", e);
 		}
 		return resultList;
 	}
