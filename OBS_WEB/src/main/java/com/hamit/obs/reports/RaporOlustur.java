@@ -321,9 +321,8 @@ public class RaporOlustur {
 			JasperReport jr = JasperCompileManager.compileReport(jasper);
 			List<ETIKET_ISIM> etISIM = new ArrayList<ETIKET_ISIM>();
 			for (Map<String, String> row : selectedRows) {
-				ETIKET_ISIM ets1  = new ETIKET_ISIM(row.get("Adi"),row.get("Adres_1"),row.get("Adres_2")
-						,row.get("Semt"),row.get("Sehir"),row.get("Tel_1"));
-				etISIM.add(ets1);
+				etISIM.add(new ETIKET_ISIM(row.get("Adi"),row.get("Adres_1"),row.get("Adres_2")
+						,row.get("Semt"),row.get("Sehir"),row.get("Tel_1")));
 			}
 			JRBeanCollectionDataSource qazBe = new JRBeanCollectionDataSource(etISIM);
 			JasperPrint jp = JasperFillManager.fillReport(jr,null, qazBe);
