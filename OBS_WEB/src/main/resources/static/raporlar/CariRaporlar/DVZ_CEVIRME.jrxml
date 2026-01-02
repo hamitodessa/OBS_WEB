@@ -1,16 +1,15 @@
 <!-- Created with Jaspersoft Studio version 7.0.0.final using JasperReports Library version 7.0.0-b478feaa9aab4375eba71de77b4ca138ad2f62aa  -->
-<jasperReport name="Ekstre" language="java" pageWidth="612" pageHeight="792" columnWidth="590" leftMargin="10" rightMargin="10" topMargin="12" bottomMargin="12" uuid="3eb8280c-4b57-4ef1-b327-bbbef56f2fe0">
+<jasperReport name="Dvz_Cevirme" language="java" columnCount="1" pageWidth="595" pageHeight="842" columnWidth="571" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="3eb8280c-4b57-4ef1-b327-bbbef56f2fe0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.jrdax"/>
-	<property name="com.jaspersoft.studio.unit." value="inch"/>
-	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
-	<property name="com.jaspersoft.studio.unit.pageWidth" value="inch"/>
-	<property name="com.jaspersoft.studio.unit.topMargin" value="inch"/>
-	<property name="com.jaspersoft.studio.unit.bottomMargin" value="inch"/>
-	<property name="com.jaspersoft.studio.unit.leftMargin" value="inch"/>
-	<property name="com.jaspersoft.studio.unit.rightMargin" value="inch"/>
-	<property name="com.jaspersoft.studio.unit.columnWidth" value="inch"/>
-	<property name="com.jaspersoft.studio.unit.columnSpacing" value="inch"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="Kod" class="java.lang.String"/>
 	<parameter name="Kur" class="java.lang.String"/>
 	<field name="TARIH" class="java.util.Date">
@@ -62,99 +61,142 @@
 				<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 			</box>
 		</element>
-		<element kind="textField" uuid="c0d851e1-4548-4c4e-9be8-49800f54e696" x="0" y="26" width="130" height="14" fontName="Arial" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="textField" uuid="c0d851e1-4548-4c4e-9be8-49800f54e696" x="2" y="26" width="130" height="14" fontName="Arial" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<expression><![CDATA[$P{Kod}]]></expression>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
 		</element>
-		<element kind="textField" uuid="a7f59084-ef9e-4989-962e-2aa82a274a6c" x="0" y="46" width="322" height="14" fontName="Arial" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="textField" uuid="a7f59084-ef9e-4989-962e-2aa82a274a6c" x="2" y="46" width="322" height="14" fontName="Arial" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<expression><![CDATA[$P{Kur}]]></expression>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
 		</element>
-		<element kind="textField" uuid="25ff32a8-4cd5-4632-b60b-7f44d0da0329" x="480" y="26" width="104" height="14" fontName="Arial" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="25ff32a8-4cd5-4632-b60b-7f44d0da0329" x="463" y="26" width="105" height="14" fontName="Arial" pdfFontName="/static/fonts/Helvetica-Bold.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy" bold="true" hTextAlign="Right">
 			<expression><![CDATA[new java.util.Date()]]></expression>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
 	</title>
 	<pageHeader height="13" splitType="Stretch">
-		<element kind="staticText" uuid="5327c3a8-b2ff-4950-84bd-095cbcfe759c" x="0" y="0" width="40" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="staticText" uuid="5327c3a8-b2ff-4950-84bd-095cbcfe759c" x="2" y="0" width="39" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<text><![CDATA[TARIH]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
 		<element kind="staticText" uuid="d60e2e5a-e784-4e2b-8dff-dad505f12d36" x="41" y="0" width="26" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
-			<text><![CDATA[EVR]]></text>
+			<text><![CDATA[EVR.]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
 		</element>
-		<element kind="staticText" uuid="a81a6e24-edee-4b87-9be7-dece516c7b20" x="68" y="0" width="158" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
+		<element kind="staticText" uuid="a81a6e24-edee-4b87-9be7-dece516c7b20" x="67" y="0" width="154" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true">
 			<text><![CDATA[IZAHAT]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="staticText" uuid="1317d79a-22b0-4a2b-b2c0-e7dfb0a58267" x="255" y="0" width="51" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="1317d79a-22b0-4a2b-b2c0-e7dfb0a58267" x="250" y="0" width="48" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[DVZ.TUTAR]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="staticText" uuid="765c888f-3352-4b46-b915-2bda6424d23b" x="460" y="0" width="67" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="765c888f-3352-4b46-b915-2bda6424d23b" x="444" y="0" width="68" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[BORC]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="staticText" uuid="51f6d23d-429e-4f78-b814-c69de8a64b81" x="527" y="0" width="59" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="51f6d23d-429e-4f78-b814-c69de8a64b81" x="512" y="0" width="56" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[ALACAK]]></text>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="staticText" uuid="c84a6681-379e-4b0a-8c26-25486e3eb8c0" x="360" y="0" width="68" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="c84a6681-379e-4b0a-8c26-25486e3eb8c0" x="348" y="0" width="64" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[+ / - BAKIYE]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="line" uuid="0697f70d-383e-4ffc-820d-a6229a2f07c3" x="0" y="12" width="586" height="1"/>
-		<element kind="staticText" uuid="b06516bd-78fe-4a94-aa6f-513fce0bb718" x="226" y="0" width="29" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="line" uuid="0697f70d-383e-4ffc-820d-a6229a2f07c3" x="2" y="12" width="566" height="1">
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="staticText" uuid="b06516bd-78fe-4a94-aa6f-513fce0bb718" x="221" y="0" width="29" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[C.KUR]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
 		</element>
-		<element kind="staticText" uuid="7a4798dc-d99a-46f2-b843-748c18768ba3" x="306" y="0" width="54" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="7a4798dc-d99a-46f2-b843-748c18768ba3" x="298" y="0" width="50" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[DVZ.BAKIYE]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
-		<element kind="staticText" uuid="afdc4a0a-f3d6-476e-8ee9-3c9295b366f1" x="428" y="0" width="32" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
+		<element kind="staticText" uuid="afdc4a0a-f3d6-476e-8ee9-3c9295b366f1" x="412" y="0" width="32" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow_bold.ttf" pdfEncoding="Identity-H" bold="true" hTextAlign="Right">
 			<text><![CDATA[KUR]]></text>
 			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
 		</element>
 	</pageHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
-			<element kind="textField" uuid="6e476637-fc25-424b-8d6a-a0adc9133481" key="D_TARIH" x="0" y="0" width="40" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy" vTextAlign="Middle">
+			<element kind="textField" uuid="6e476637-fc25-424b-8d6a-a0adc9133481" key="D_TARIH" x="2" y="0" width="39" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy" vTextAlign="Middle">
 				<expression><![CDATA[$F{TARIH}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
-			<element kind="textField" uuid="d9c49145-0747-43b3-861e-3bfdbfc07a92" x="41" y="0" width="27" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" vTextAlign="Middle">
+			<element kind="textField" uuid="d9c49145-0747-43b3-861e-3bfdbfc07a92" x="41" y="0" width="26" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" vTextAlign="Middle">
 				<expression><![CDATA[$F{EVRAK}]]></expression>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
-			<element kind="textField" uuid="7a48c8be-18c3-483c-812f-7450bb08f9cc" x="68" y="0" width="158" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" vTextAlign="Middle">
+			<element kind="textField" uuid="7a48c8be-18c3-483c-812f-7450bb08f9cc" x="67" y="0" width="154" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" vTextAlign="Middle">
 				<expression><![CDATA[$F{IZAHAT}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
-			<element kind="textField" uuid="620e344f-cbe4-4fec-b073-60e58cf4ed41" x="527" y="0" width="59" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
+			<element kind="textField" uuid="620e344f-cbe4-4fec-b073-60e58cf4ed41" x="512" y="0" width="56" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
 				<expression><![CDATA[$F{ALACAK}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
-			<element kind="textField" uuid="29ba41dc-2085-4978-acd9-51b57a2acf32" x="460" y="0" width="68" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
+			<element kind="textField" uuid="29ba41dc-2085-4978-acd9-51b57a2acf32" x="444" y="0" width="68" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
 				<expression><![CDATA[$F{BORC}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
 			</element>
-			<element kind="textField" uuid="2f5ceb92-b739-4491-b060-3ffe19370be5" x="360" y="0" width="69" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
+			<element kind="textField" uuid="2f5ceb92-b739-4491-b060-3ffe19370be5" x="348" y="0" width="64" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
 				<expression><![CDATA[$F{BAKIYE}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
-			<element kind="line" uuid="ff428adc-bdfa-490a-88f7-11eee43aae72" x="0" y="12" width="586" height="1">
+			<element kind="line" uuid="ff428adc-bdfa-490a-88f7-11eee43aae72" x="2" y="12" width="566" height="1">
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				<pen lineStyle="Dotted"/>
 			</element>
-			<element kind="textField" uuid="9047564e-fa99-47c7-b406-1aba6cef87a2" x="226" y="0" width="29" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.0000" hTextAlign="Right">
+			<element kind="textField" uuid="9047564e-fa99-47c7-b406-1aba6cef87a2" x="221" y="0" width="29" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.0000" hTextAlign="Right">
 				<expression><![CDATA[$F{CEV_KUR}]]></expression>
-				<property name="com.jaspersoft.studio.unit.width" value="inch"/>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
-			<element kind="textField" uuid="da7be9bf-797d-4698-968a-69a8c819d817" x="255" y="0" width="51" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
+			<element kind="textField" uuid="da7be9bf-797d-4698-968a-69a8c819d817" x="250" y="0" width="48" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
 				<expression><![CDATA[$F{DOVIZ_TUTAR}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
-			<element kind="textField" uuid="f3ac554e-b041-4b83-8300-50afb3f44c17" x="306" y="0" width="54" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
+			<element kind="textField" uuid="f3ac554e-b041-4b83-8300-50afb3f44c17" x="298" y="0" width="50" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.00" hTextAlign="Right" vTextAlign="Middle">
 				<expression><![CDATA[$F{DOVIZ_BAKIYE}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
-			<element kind="textField" uuid="f167fdf9-43c5-4f04-b431-fc83b5e4e6bf" x="429" y="0" width="31" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.0000" hTextAlign="Right">
+			<element kind="textField" uuid="f167fdf9-43c5-4f04-b431-fc83b5e4e6bf" x="412" y="0" width="32" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="#,##0.0000" hTextAlign="Right">
 				<expression><![CDATA[$F{KUR}]]></expression>
+				<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
 		</band>
 	</detail>
 	<pageFooter height="17" splitType="Stretch">
-		<element kind="textField" uuid="49b15540-6a49-41c0-93a5-3c16be3e7619" x="484" y="3" width="102" height="14" fontName="Arial" bold="true" hTextAlign="Right">
+		<element kind="textField" uuid="49b15540-6a49-41c0-93a5-3c16be3e7619" x="484" y="3" width="84" height="14" fontName="Arial" bold="true" hTextAlign="Right">
 			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
 	</pageFooter>
 </jasperReport>

@@ -1,5 +1,5 @@
 <!-- Created with Jaspersoft Studio version 7.0.0.final using JasperReports Library version 7.0.0-b478feaa9aab4375eba71de77b4ca138ad2f62aa  -->
-<jasperReport name="Blank_A4" language="java" columnCount="1" pageWidth="595" pageHeight="842" columnWidth="568" leftMargin="7" rightMargin="20" topMargin="25" bottomMargin="20" uuid="68da6de0-69e1-401b-8a60-d3af172bcd35">
+<jasperReport name="Tahsilat" language="java" columnCount="1" pageWidth="595" pageHeight="842" columnWidth="568" leftMargin="7" rightMargin="20" topMargin="25" bottomMargin="20" uuid="68da6de0-69e1-401b-8a60-d3af172bcd35">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="479"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="521"/>
