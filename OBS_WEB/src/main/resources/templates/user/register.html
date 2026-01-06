@@ -1,143 +1,412 @@
-<html lang="tr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-<title>OBS Kullanici Ekleme</title>
-<link rel="icon" href="/images/favicon.png" type="image/png" />
-<link rel="stylesheet" href="/css/font-awesome.css" />
-<link rel="stylesheet" href="/style/style.css" />
-<link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OBS Kullanıcı Ekleme</title>
 
+  <link rel="icon" href="/images/favicon.png" type="image/png" />
+ 
 
-      
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f2a3a;
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.65);
+      --accent:#22c55e;
+      --accent2:#38bdf8;
+      --danger:#fb7185;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --ring: 0 0 0 4px rgba(56,189,248,.18);
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; min-height:100vh;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(1000px 500px at 20% 10%, rgba(56,189,248,.22), transparent 55%),
+        radial-gradient(900px 500px at 80% 20%, rgba(34,197,94,.18), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display:grid;
+      place-items:center;
+      padding: 28px 16px;
+    }
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+      opacity:.25; pointer-events:none;
+      mix-blend-mode: overlay;
+    }
+
+    /* TEK PANEL ORTA */
+    .obs-shell{
+      width:min(560px, 100%);
+      display:block;
+    }
+
+    .obs-panel{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 22px 18px;
+      backdrop-filter: blur(14px);
+    }
+
+    .obs-panelTop{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 6px 0 14px;
+    }
+    .obs-panelTop img{
+      max-width: 200px;
+      height:auto;
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,.25));
+    }
+
+    .obs-title{ margin: 0 0 6px; font-size: 18px; text-align:center; }
+    .obs-hint{ margin: 0 0 16px; color: var(--muted); font-size: 13px; text-align:center; }
+
+    .obs-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .obs-grid-1{ grid-column: 1 / -1; }
+
+    .obs-field{ position:relative; }
+    .obs-input, .obs-select, .obs-file{
+      width:100%;
+      padding: 16px 14px 14px 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(10,18,32,.35);
+      color: var(--text);
+      outline:none;
+      font-size: 14px;
+      transition: .15s ease;
+    }
+    .obs-select{
+      appearance:none;
+      padding-right: 44px;
+    }
+    .obs-input:focus, .obs-select:focus, .obs-file:focus{
+      border-color: rgba(56,189,248,.6);
+      box-shadow: var(--ring);
+      background: rgba(10,18,32,.50);
+    }
+
+    .obs-label{
+      position:absolute;
+      left:44px; top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,.55);
+      font-size: 14px;
+      pointer-events:none;
+      transition:.15s ease;
+    }
+    .obs-input:focus + .obs-label,
+    .obs-input:not(:placeholder-shown) + .obs-label{
+      top: 9px;
+      transform:none;
+      font-size: 12px;
+      color: rgba(255,255,255,.70);
+    }
+
+    .obs-icon{
+      position:absolute;
+      left:14px; top:50%;
+      transform: translateY(-50%);
+      width:18px; height:18px;
+      opacity:.75;
+      pointer-events:none;
+    }
+    .obs-caret{
+      position:absolute;
+      right:14px; top:50%;
+      transform: translateY(-50%);
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    .obs-help{
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,.65);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .obs-badge{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      font-weight:700;
+    }
+
+    .obs-msg{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(56,189,248,.25);
+      background: rgba(56,189,248,.08);
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+    }
+    .obs-error{
+      border-color: rgba(251,113,133,.35) !important;
+      background: rgba(251,113,133,.10) !important;
+    }
+
+    .obs-btn{
+      width:100%;
+      border:none;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 800;
+      letter-spacing:.2px;
+      color: #05210f;
+      background: linear-gradient(135deg, #22c55e, #4ade80);
+      cursor:pointer;
+      transition: .15s ease;
+    }
+    .obs-btn:hover{ transform: translateY(-1px); filter: brightness(1.02); }
+    .obs-btn:active{ transform: translateY(0px); }
+
+    .obs-row{
+      display:flex; align-items:center; justify-content:center;
+      gap:10px; margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align:center;
+      flex-wrap:wrap;
+    }
+    .obs-row a{
+      color: rgba(56,189,248,.92);
+      text-decoration:none;
+      font-weight:800;
+    }
+    .obs-row a:hover{ text-decoration: underline; }
+
+    @media (max-width: 720px){
+      .obs-grid{ grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body class="inner_page login">
-	<div class="full_container">
-		<div class="container">
-			<div class="center verticle_center full_height">
-				<div class="login_section">
-					<div class="logo_login">
-						<div class="center">
-							<img width="210" th:src="@{/images/logo/logo.png}" alt="#" />
-						</div>
-					</div>
-					<div class="login_form">
-						<form action="/user/register" method="POST" id="registrationForm" enctype="multipart/form-data" onsubmit="return validateForm()">
-							<fieldset>
-								<div class="field">
-									<label class="label_field">Email Address</label>
-									<input type="email" name="email" id="email" placeholder="E-mail" required />
-								</div>
-								<div class="field">
-									<label class="label_field">Adi</label>
-									<input type="text" name="firstName" id="firstName" placeholder="Adi" required />
-								</div>
-								<div class="field">
-									<label class="label_field">Soy Adi</label>
-									<input type="text" name="lastName" id="lastName" placeholder="Soy Adi" required />
-								</div>
-								<div class="field">
-									<label class="label_field">Sifre</label>
-									<input type="password" name="password" id="password" onkeyup='check();'  placeholder="Sifre" required />
-								</div>
-								<div class="field">
-									<label class="label_field">Sifre Tekrar</label>
-									<input type="password" name="verifypassword" id="verifypassword" onkeyup='check();' placeholder="Sifre Tekrar" required />
-								</div>
-								<div class="field" style="display: flex;">
-									<label class="label_field">Role</label>
-									<select class="form-select" onchange="toggleAdminHesap()" style="max-width:100px;" id="role" name="role">
-										<option value="ADMIN">ADMIN</option>
-										<option value="USER">USER</option>
-									</select>
-								</div>
-								<div class="field" style="display: flex;">
-									<label class="label_field">Doviz Turu</label>
-									<select class="form-select" onchange="toggleAdminHesap()" style="max-width:100px;" id="calisandvzcinsi" name="calisandvzcinsi">
-										<option value="TL">TL</option>
-										<option value="USD">USD</option>
-										<option value="EUR">GRV</option>
-										<option value="GRV">GRV</option>
-									</select>
-								</div>
-								<div class="field" id="adminhesap" style="display: none;">
-									<label class="label_field">Email Address</label>
-									<input type="email" name="adminemail" id="adminemail" placeholder="Admin Hesap"/>
-								</div>
-								<div class="field">
-									<label class="label_field hidden">hidden label</label> 
-									<label id="error" th:if="${error}" class="forgot" th:text="${error}" ></label>
-									<span id="message"  style="font-weight:bold;"></span>
-								</div>
-								<div class="field">
-									<label class="label_field hidden">hidden label</label>
-									<input type="file" name="image" id="image" accept="image/*" />
-								</div>
-								
-								<div class="field margin_0">
-									<label class="label_field hidden">hidden label</label>
-									<button type="submit" class="main_bt" id="submitBtn">Kaydet</button>
-								</div>
-								<div class="field">
-									<label class="label_field hidden">hidden label</label> 
-									<a>Zaten bir hesabınız var mı?</a>
-									<a class="register" href="/login"  style="font-weight:bold;">Login</a>
-								</div>
-							</fieldset>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+
+<body>
+
+<div class="obs-shell">
+
+  <section class="obs-panel">
+    <div class="obs-panelTop">
+      <img th:src="@{/images/logo/obs_logo_new.svg}"
+           alt="OBS Logo"
+           style="max-width:200px;height:auto;" />
+    </div>
+
+    <h3 class="obs-title">Kullanıcı Ekle</h3>
+    <p class="obs-hint">Bilgileri doldur ve kaydet.</p>
+
+    <form action="/user/register" method="POST" id="registrationForm"
+          enctype="multipart/form-data" onsubmit="return validateForm()">
+
+      <div class="obs-grid">
+
+        <!-- Email -->
+        <div class="obs-field obs-grid-1">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M4 7l8 6 8-6" stroke="rgba(255,255,255,.75)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M4.5 6.5h15v11h-15z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+          </svg>
+          <input class="obs-input" type="email" name="email" id="email" placeholder=" " required />
+          <label class="obs-label">E-mail</label>
+        </div>
+
+        <!-- Ad -->
+        <div class="obs-field">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/>
+            <path d="M4.5 20c1.4-4.2 13.6-4.2 15 0" stroke="rgba(255,255,255,.55)" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <input class="obs-input" type="text" name="firstName" id="firstName" placeholder=" " required />
+          <label class="obs-label">Adı</label>
+        </div>
+
+        <!-- Soyad -->
+        <div class="obs-field">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/>
+            <path d="M4.5 20c1.4-4.2 13.6-4.2 15 0" stroke="rgba(255,255,255,.55)" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <input class="obs-input" type="text" name="lastName" id="lastName" placeholder=" " required />
+          <label class="obs-label">Soyadı</label>
+        </div>
+
+        <!-- Şifre -->
+        <div class="obs-field">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="rgba(255,255,255,.75)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M6.5 11.5h11v8h-11z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+            <path d="M12 15v2" stroke="rgba(255,255,255,.75)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <input class="obs-input" type="password" name="password" id="password"
+                 placeholder=" " required onkeyup="check();" />
+          <label class="obs-label">Şifre</label>
+        </div>
+
+        <!-- Şifre Tekrar -->
+        <div class="obs-field">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="rgba(255,255,255,.75)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M6.5 11.5h11v8h-11z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+            <path d="M12 15v2" stroke="rgba(255,255,255,.75)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <input class="obs-input" type="password" name="verifypassword" id="verifypassword"
+                 placeholder=" " required onkeyup="check();" />
+          <label class="obs-label">Şifre Tekrar</label>
+        </div>
+
+        <!-- Role -->
+        <div class="obs-field">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2l7 4v6c0 5-3 9-7 10C8 21 5 17 5 12V6l7-4Z"
+                  stroke="rgba(255,255,255,.7)" stroke-width="1.4"/>
+          </svg>
+          <select class="obs-select" onchange="toggleAdminHesap()" id="role" name="role">
+            <option value="ADMIN">ADMIN</option>
+            <option value="USER">USER</option>
+          </select>
+          <span class="obs-caret">▾</span>
+          <span class="obs-label" style="top:9px;transform:none;font-size:12px;color:rgba(255,255,255,.70);">Role</span>
+        </div>
+
+        <!-- Döviz -->
+        <div class="obs-field">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M4 7h16M6 12h12M8 17h8" stroke="rgba(255,255,255,.7)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <select class="obs-select" id="calisandvzcinsi" name="calisandvzcinsi">
+            <option value="TL">TL</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GRV">GRV</option>
+          </select>
+          <span class="obs-caret">▾</span>
+          <span class="obs-label" style="top:9px;transform:none;font-size:12px;color:rgba(255,255,255,.70);">Döviz Türü</span>
+        </div>
+
+        <!-- Admin Email (USER ise) -->
+        <div class="obs-field obs-grid-1" id="adminhesap" style="display:none;">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/>
+            <path d="M14 14.5h6v6h-6z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+            <path d="M16.2 17.5l1.1 1.1 2.2-2.2" stroke="rgba(34,197,94,.95)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <input class="obs-input" type="email" name="adminemail" id="adminemail" placeholder=" " />
+          <label class="obs-label">Admin Hesap (E-mail)</label>
+        </div>
+
+        <!-- Mesajlar -->
+        <div class="obs-grid-1">
+          <div id="error" th:if="${error}" class="obs-msg obs-error" th:text="${error}"></div>
+          <div id="message" class="obs-msg" style="display:none;"></div>
+        </div>
+
+        <!-- Resim -->
+        <div class="obs-field obs-grid-1">
+          <svg class="obs-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M4.5 7.5h15v11h-15z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+            <path d="M8.5 10.5a1.5 1.5 0 1 0 0.01 0Z" fill="rgba(255,255,255,.55)"/>
+            <path d="M6.8 16.5l3.2-3 2.6 2.4 2.1-1.9 2.5 2.5" stroke="rgba(56,189,248,.75)" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <input class="obs-file" type="file" name="image" id="image" accept="image/*" style="padding-top:14px;" />
+          <span class="obs-label" style="top:9px;transform:none;font-size:12px;color:rgba(255,255,255,.70);">Profil Resmi (opsiyonel)</span>
+          <div class="obs-help">
+            <span class="obs-badge">Max 500 KB</span>
+            <span>JPG / PNG</span>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="obs-grid-1">
+          <button type="submit" class="obs-btn" id="submitBtn">Kaydet</button>
+        </div>
+
+      </div>
+
+      <div class="obs-row">
+        <span>Zaten bir hesabınız var mı?</span>
+        <a href="/login">Login</a>
+      </div>
+
+    </form>
+  </section>
+
+</div>
+
 <script>
-var check = function() {
-	  if (document.getElementById('password').value ==
-	    document.getElementById('verifypassword').value) {
-	    document.getElementById('message').style.color = 'green';
-	    document.getElementById('message').textContent = 'sifre uyumlu';
-	  } else {
-	    document.getElementById('message').style.color = 'red';
-	    document.getElementById('message').textContent = 'sifre uyusmuyor';
-	  }
-	}
-	
-document.getElementById('image').addEventListener('change', function (event) {
+  var check = function() {
+    const msg = document.getElementById('message');
+    msg.style.display = "block";
+
+    if (document.getElementById('password').value === document.getElementById('verifypassword').value) {
+      msg.className = "obs-msg";
+      msg.style.borderColor = "rgba(34,197,94,.35)";
+      msg.style.background = "rgba(34,197,94,.10)";
+      msg.textContent = "Şifre uyumlu";
+    } else {
+      msg.className = "obs-msg obs-error";
+      msg.textContent = "Şifre uyuşmuyor";
+    }
+  }
+
+  document.getElementById('image').addEventListener('change', function (event) {
     const file = event.target.files[0];
     const maxSizeInKB = 500;
-    const maxSizeInBytes = maxSizeInKB * 1024; 
+    const maxSizeInBytes = maxSizeInKB * 1024;
+
+    const msg = document.getElementById('message');
 
     if (file && file.size > maxSizeInBytes) {
-    	document.getElementById('message').style.color = 'red';
-        document.getElementById('message').textContent = 
-            `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-        event.target.value = ''; 
-    } else {
-        document.getElementById('message').textContent = '';
+      msg.style.display = "block";
+      msg.className = "obs-msg obs-error";
+      msg.textContent = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
+      event.target.value = '';
     }
-});	
-function toggleAdminHesap() {
+  });
+
+  function toggleAdminHesap() {
     const role = document.getElementById("role").value;
     const adminHesap = document.getElementById("adminhesap");
-    
-    if (role === "USER") {
-        adminHesap.style.display = "block"; // Görünür yap
-    } else {
-        adminHesap.style.display = "none"; // Gizle
-    }
-}
 
-function validateForm() {
+    if (role === "USER") adminHesap.style.display = "block";
+    else adminHesap.style.display = "none";
+  }
+
+  function validateForm() {
     const role = document.getElementById("role").value;
     const adminEmail = document.getElementById("adminemail").value;
+
     if (role === "USER" && adminEmail.trim() === "") {
-        alert("Lütfen Admin Hesap alanını doldurun.");
-        return false;
+      alert("Lütfen Admin Hesap alanını doldurun.");
+      return false;
     }
     return true;
-}
+  }
 </script>
+
 </body>
 </html>

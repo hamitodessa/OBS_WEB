@@ -1,93 +1,459 @@
-<html lang="tr" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OBS Sistem</title>
-<meta name="keywords" content="">
-<meta name="description" content="">
-<meta name="author" content="">
-<link rel="icon" href="images/favicon.png" type="image/png" />
-<link rel="stylesheet" href="css/bootstrap.min.css" />
-<link rel="stylesheet" href="style/style.css" />
-</head>
-<body class="inner_page login">
-	<div class="full_container">
-		<div class="container">
-			<div class="center verticle_center full_height">
-				<div class="login_section">
-					<div class="logo_login">
-						<div class="center">
-							<img width="210" src="images/logo/obs_logo.png" alt="#" />
-						</div>
-					</div>
-					<div class="login_form">
-						<form action="/login" method="POST" onsubmit="return showLoader(event)">
-							<fieldset>
-								<div class="field">
-									<label class="label_field">Email Address</label> <input
-										 type="email" name="username"
-										placeholder="E-mail" />
-								</div>
-								<div class="field">
-									<label class="label_field">Password</label> <input 
-										type="password" name="password" placeholder="Password" />
-								</div>
-								<div class="field forgot" th:if="${param.error}">
-    								<label class="label_field hidden"></label>
-    								<label style="font-weight:bold;">Kullanıcı adı veya şifre hatalı!</label>
-								</div>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBS Sistem • Giriş</title>
 
-								<div class="field margin_0">
-									<label class="label_field hidden">hidden label</label>
-									<button class="main_bt" type="submit" >Giris Yap</button>
-								</div>
-								
-								<div class="field">
-									<label class="label_field hidden">hidden label</label>
-                        			<div id="progressBar" style="display: none; margin-top: 10px;">
-                            			<div style="width: 100%; background: #f0f0f0; border-radius: 10px;">
-                                			<div id="progress" style="width: 0%; height: 5px; background: #214162; border-radius: 10px; transition: width 0.5s;"></div>
-                            			</div>
-                        			</div>
-								</div>
-								
-								<div class="field">
-									<label class="label_field hidden">hidden label</label> <a
-										class="forgot" th:href="@{/user/send_password}">Şifremi Unuttum</a> 
-										<br> 
-										<label class="label_field hidden">hidden label</label>
-										<a class="register" th:href="@{/user/register}">Hesabınız yok mu?</a>
-								</div>
-								
-							</fieldset>
-						</form>
-						<a class="register" style="font-weight:bold;" href="http://www.okumus.gen.tr" target="_blank">OBS Masaüstü versiyon indirme</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <link rel="icon" th:href="@{/images/favicon.png}" type="image/png" />
+
+  <style>
+    :root{
+      --bg1:#070b14;
+      --bg2:#071c2a;
+      --card1: rgba(255,255,255,.10);
+      --card2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.16);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --a1:#38bdf8;
+      --a2:#22c55e;
+      --danger:#fb7185;
+      --shadow: 0 22px 70px rgba(0,0,0,.55);
+      --radius: 22px;
+      --ring: 0 0 0 5px rgba(56,189,248,.18);
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; min-height:100vh;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 650px at 18% 10%, rgba(56,189,248,.22), transparent 60%),
+        radial-gradient(900px 600px at 85% 18%, rgba(34,197,94,.16), transparent 60%),
+        radial-gradient(700px 450px at 50% 95%, rgba(251,113,133,.10), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display:grid;
+      place-items:center;
+      padding: 30px 16px;
+      overflow-x:hidden;
+    }
+
+    /* premium noise */
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E");
+      opacity:.25; pointer-events:none;
+      mix-blend-mode: overlay;
+    }
+
+    /* subtle animated glow */
+    body:after{
+      content:"";
+      position:fixed;
+      inset:-120px;
+      background:
+        radial-gradient(520px 420px at 20% 20%, rgba(56,189,248,.18), transparent 60%),
+        radial-gradient(520px 420px at 80% 30%, rgba(34,197,94,.14), transparent 60%),
+        radial-gradient(520px 420px at 50% 85%, rgba(251,113,133,.10), transparent 60%);
+      filter: blur(12px);
+      opacity:.75;
+      animation: floatGlow 10s ease-in-out infinite alternate;
+      pointer-events:none;
+    }
+    @keyframes floatGlow{
+      from{ transform: translate3d(0,0,0) scale(1); }
+      to{ transform: translate3d(18px,-10px,0) scale(1.03); }
+    }
+
+    .wrap{
+      width:min(460px, 100%);
+      position:relative;
+    }
+
+    .panel{
+      position:relative;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--card1), var(--card2));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 22px 18px;
+      backdrop-filter: blur(16px);
+      overflow:hidden;
+    }
+
+    .panel:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(650px 350px at 10% 10%, rgba(56,189,248,.20), transparent 55%),
+        radial-gradient(650px 350px at 90% 20%, rgba(34,197,94,.16), transparent 55%);
+      filter: blur(16px);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .top{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 10px;
+      padding: 6px 0 14px;
+      z-index:1;
+    }
+
+    .logo{
+      width: 62px; height: 62px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(34,197,94,.95));
+      display:grid; place-items:center;
+      box-shadow:
+        0 18px 38px rgba(0,0,0,.35),
+        0 0 0 1px rgba(255,255,255,.18) inset;
+    }
+    .logo svg{ width:34px; height:34px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.25)); }
+
+    .brandImg{
+      margin-top: 2px;
+      max-width: 220px;
+      height:auto;
+      filter: drop-shadow(0 14px 24px rgba(0,0,0,.30));
+    }
+
+    h1{
+      margin: 2px 0 0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .hint{
+      margin:0;
+      font-size: 13px;
+      color: var(--muted);
+      text-align:center;
+    }
+
+    .field{ position:relative; margin: 12px 0; z-index:1; }
+
+    .input{
+      width:100%;
+      padding: 16px 14px 14px 46px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(8,14,26,.38);
+      color: var(--text);
+      outline:none;
+      font-size: 14px;
+      transition: .16s ease;
+    }
+    .input:focus{
+      border-color: rgba(56,189,248,.65);
+      box-shadow: var(--ring);
+      background: rgba(8,14,26,.55);
+    }
+
+    .label{
+      position:absolute;
+      left:46px; top:50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,.55);
+      font-size: 14px;
+      pointer-events:none;
+      transition: .16s ease;
+    }
+    .input:focus + .label,
+    .input:not(:placeholder-shown) + .label{
+      top: 9px;
+      transform:none;
+      font-size: 12px;
+      color: rgba(255,255,255,.72);
+    }
+
+    .icon{
+      position:absolute;
+      left:14px; top:50%;
+      transform: translateY(-50%);
+      width:18px; height:18px;
+      opacity:.80;
+      pointer-events:none;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin: 10px 0 14px;
+      font-size: 13px;
+      z-index:1;
+      position:relative;
+    }
+    .row a{
+      color: rgba(56,189,248,.95);
+      text-decoration:none;
+      font-weight: 750;
+    }
+    .row a:hover{ text-decoration: underline; }
+
+    .btn{
+      width:100%;
+      border:none;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      color: #062014;
+      background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(34,197,94,.95));
+      cursor:pointer;
+      transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+      box-shadow: 0 14px 34px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.35);
+      position:relative;
+      z-index:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 22px 50px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.45);
+    }
+    .btn:active{ transform: translateY(0); }
+
+    .btn[disabled]{
+      opacity:.75;
+      cursor:not-allowed;
+      transform:none !important;
+      filter:none !important;
+    }
+
+    .spinner{
+      width: 16px; height:16px;
+      border-radius:50%;
+      border: 2px solid rgba(6,32,20,.35);
+      border-top-color: rgba(6,32,20,.95);
+      display:none;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
+
+    .error{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(251,113,133,.35);
+      background: rgba(251,113,133,.10);
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+      z-index:1;
+      position:relative;
+    }
+    .shake{ animation: shake .25s ease-in-out 0s 2; }
+    @keyframes shake{
+      0%{ transform: translateX(0); }
+      25%{ transform: translateX(-6px); }
+      50%{ transform: translateX(6px); }
+      75%{ transform: translateX(-4px); }
+      100%{ transform: translateX(0); }
+    }
+
+    .divider{
+      display:flex; align-items:center; gap:10px;
+      color: rgba(255,255,255,.42);
+      font-size: 12px;
+      margin: 16px 0;
+      z-index:1;
+      position:relative;
+    }
+    .divider:before, .divider:after{
+      content:""; flex:1;
+      height:1px; background: rgba(255,255,255,.14);
+    }
+
+    .cta{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      text-decoration:none;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.16);
+      color: rgba(255,255,255,.90);
+      font-weight: 850;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
+      transition: .16s ease;
+      z-index:1;
+      position:relative;
+    }
+    .cta:hover{
+      transform: translateY(-2px);
+      border-color: rgba(56,189,248,.35);
+      background: rgba(255,255,255,.08);
+    }
+    .cta .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:36px; height:36px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(34,197,94,.95));
+      color:#062014;
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
+      font-size: 18px;
+    }
+    .cta small{
+      display:block;
+      margin-top: 2px;
+      font-size: 12px;
+      color: rgba(255,255,255,.62);
+      font-weight:700;
+    }
+
+    /* progress */
+    #progressBar{ display:none; margin-top: 12px; z-index:1; position:relative; }
+    .track{
+      width:100%;
+      height: 8px;
+      background: rgba(255,255,255,.10);
+      border-radius: 999px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    #progress{
+      width:0%;
+      height:100%;
+      background: linear-gradient(90deg, rgba(56,189,248,.95), rgba(34,197,94,.95));
+      transition: width 0.35s ease;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <section class="panel">
+
+      <div class="top">
+       
+
+        <!-- asıl logo -->
+        <img class="brandImg" th:src="@{/images/logo/obs_logo_new.svg}" alt="OBS Logo">
+
+        <h1>OBS Sistem</h1>
+        <p class="hint">E-posta ve şifrenle giriş yap.</p>
+      </div>
+
+      <form action="/login" method="POST" onsubmit="return showLoader(event)">
+        <div class="field">
+          <svg class="icon" viewBox="0 0 24 24" fill="none">
+            <path d="M4 7l8 6 8-6" stroke="rgba(255,255,255,.78)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M4.5 6.5h15v11h-15z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+          </svg>
+          <input class="input" type="email" name="username" placeholder=" " required autocomplete="username">
+          <label class="label">E-mail</label>
+        </div>
+
+        <div class="field">
+          <svg class="icon" viewBox="0 0 24 24" fill="none">
+            <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="rgba(255,255,255,.78)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M6.5 11.5h11v8h-11z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+            <path d="M12 15v2" stroke="rgba(255,255,255,.78)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <input class="input" type="password" name="password" placeholder=" " required autocomplete="current-password">
+          <label class="label">Şifre</label>
+        </div>
+
+        <div id="errBox" class="error" th:if="${param.error}">
+          Kullanıcı adı veya şifre hatalı!
+        </div>
+
+        <div class="row">
+          <a th:href="@{/user/send_password}">Şifremi Unuttum</a>
+          <a th:href="@{/user/register}">Hesabınız yok mu?</a>
+        </div>
+
+        <button id="loginBtn" class="btn" type="submit">
+          <span id="btnText">Giriş Yap</span>
+          <span id="spin" class="spinner"></span>
+        </button>
+
+        <div id="progressBar">
+          <div class="track"><div id="progress"></div></div>
+        </div>
+
+        <div class="divider">diğer</div>
+
+        <a class="cta" href="https://www.okumus.gen.tr" target="_blank" rel="noopener">
+          <span class="pill">⬇️</span>
+          <span>
+            <strong>OBS Masaüstü</strong>
+            <small>Windows için indir</small>
+          </span>
+        </a>
+      </form>
+
+    </section>
+  </div>
+
+<script>
+  let progressInterval;
+
+  function showLoader(event) {
+    const progressBar = document.getElementById("progressBar");
+    const progress = document.getElementById("progress");
+    const btn = document.getElementById("loginBtn");
+    const spin = document.getElementById("spin");
+    const btnText = document.getElementById("btnText");
+
+    document.body.style.cursor = "wait";
+    progressBar.style.display = "block";
+    progress.style.width = "0%";
+
+    // button premium loading
+    btn.disabled = true;
+    spin.style.display = "inline-block";
+    btnText.textContent = "Giriş yapılıyor...";
+
+    let width = 0;
+    clearInterval(progressInterval);
+
+    progressInterval = setInterval(() => {
+      width = (width >= 100) ? 0 : (width + 5);
+      progress.style.width = width + "%";
+    }, 125);
+
+    // hata varsa shake (sayfa geri dönerse)
+    setTimeout(() => {
+      const err = document.getElementById("errBox");
+      if (err) err.classList.add("shake");
+    }, 50);
+
+    return true;
+  }
+
+  // sayfa geri döndüğünde (validation/hata), butonu geri aç
+  window.addEventListener("pageshow", () => {
+    document.body.style.cursor = "default";
+    const btn = document.getElementById("loginBtn");
+    const spin = document.getElementById("spin");
+    const btnText = document.getElementById("btnText");
+    const pb = document.getElementById("progressBar");
+
+    if (btn) btn.disabled = false;
+    if (spin) spin.style.display = "none";
+    if (btnText) btnText.textContent = "Giriş Yap";
+    if (pb) pb.style.display = "none";
+    clearInterval(progressInterval);
+
+    const err = document.getElementById("errBox");
+    if (err) err.classList.add("shake");
+  });
+</script>
+
 </body>
 </html>
-<script>
-    let progressInterval;
-    function showLoader(event) {
-        const progressBar = document.getElementById("progressBar");
-        const progress = document.getElementById("progress");
-        document.body.style.cursor = "wait";
-        progressBar.style.display = "block";
-        progress.style.width = "0%";
-        let width = 0;
-        progressInterval = setInterval(() => {
-            if (width >= 100) {
-                width = 0;
-            } else {
-                width += 5;
-            }
-            progress.style.width = width + "%";
-        }, 125);
-        return true;
-    }
-</script>

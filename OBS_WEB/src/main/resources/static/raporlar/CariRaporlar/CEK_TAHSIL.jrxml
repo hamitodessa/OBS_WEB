@@ -77,10 +77,10 @@
 	<pageHeader height="361" splitType="Stretch">
 		<element kind="image" uuid="dd66ef6e-eebf-41b6-973c-e809ea1d9367" stretchType="NoStretch" x="365" y="30" width="181" height="77" scaleImage="FillFrame">
 			<expression><![CDATA[$F{LOGO}]]></expression>
-			<property name="com.jaspersoft.studio.unit.y" value="inch"/>
-			<property name="com.jaspersoft.studio.unit.x" value="inch"/>
-			<property name="com.jaspersoft.studio.unit.height" value="inch"/>
-			<property name="com.jaspersoft.studio.unit.width" value="inch"/>
+			<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.x" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 		</element>
 		<element kind="textField" uuid="7bfe05e3-cdf2-4c0a-880e-4db46e1b0709" x="28" y="36" width="324" height="14" pdfFontName="/static/fonts/Helvetica.ttf" pdfEncoding="Identity-H">
 			<expression><![CDATA[$F{FIR_ISMI}]]></expression>
@@ -174,17 +174,17 @@
 		<band height="13">
 			<element kind="textField" uuid="59a0a9cf-63fd-433e-8b2b-2698f3b74625" x="3" y="0" width="98" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{BANKA}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="inch"/>
+				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				<property name="com.jaspersoft.studio.unit.x" value="px"/>
 			</element>
 			<element kind="textField" uuid="7465d9c2-0a52-4af3-85d0-66bffd3c4232" x="276" y="0" width="64" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{HESAP}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="inch"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<property name="com.jaspersoft.studio.unit.x" value="px"/>
 			</element>
 			<element kind="textField" uuid="26b62b6b-d3ec-452e-b300-ab76f55a552a" x="457" y="0" width="38" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H" pattern="dd.MM.yyyy">
 				<expression><![CDATA[$F{TARIH}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="inch"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
@@ -195,19 +195,19 @@
 			</element>
 			<element kind="textField" uuid="e95a3bcb-b048-4cc7-a7cf-f5a40432998e" x="340" y="0" width="117" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{BORCLU}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="inch"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
 			<element kind="textField" uuid="d040556c-9d78-4354-9b05-c4547042f020" x="101" y="0" width="103" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{SUBE}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="inch"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
 			<element kind="textField" uuid="410cca48-3940-4e55-a93c-a5df3f215202" x="204" y="0" width="72" height="12" fontName="Arial Narrow" fontSize="9.0" pdfFontName="/static/fonts/arialnarrow.ttf" pdfEncoding="Identity-H">
 				<expression><![CDATA[$F{SERI}]]></expression>
-				<property name="com.jaspersoft.studio.unit.height" value="inch"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				<property name="com.jaspersoft.studio.unit.x" value="px"/>
 			</element>
 			<element kind="line" uuid="2a706cae-28cc-4932-8f77-dbf508d0b960" x="3" y="12" width="565" height="1">
