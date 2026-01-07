@@ -1,30 +1,235 @@
+<style>
+/* =========================
+   2026 CAM – ACCOUNT DELETE
+   ========================= */
+:root{
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.70);
+  --border: rgba(255,255,255,.16);
+  --ring: 0 0 0 5px rgba(56,189,248,.18);
+}
+
+#ara_content{
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
+}
+
+/* cam card */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* başlık */
+#ara_content .acc-title{
+  font-size: 18px;
+  font-weight: 900;
+  margin: 0 0 6px 0;
+}
+#ara_content .acc-sub{
+  margin: 0 0 14px 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* user badge */
+#ara_content .acc-user{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  font-weight: 900;
+  font-size: 13px;
+}
+
+/* danger button */
+#ara_content .btn-danger-2026{
+  height: 52px;
+  border: 1px solid rgba(251,113,133,.35) !important;
+  border-radius: 16px;
+  font-weight: 900;
+  letter-spacing: .2px;
+  color: #fff !important;
+  background: linear-gradient(135deg, rgba(251,113,133,.95), rgba(239,68,68,.95)) !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.20);
+  transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#ara_content .btn-danger-2026:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+  box-shadow: 0 22px 50px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.25);
+}
+#ara_content .btn-danger-2026:active{ transform: translateY(0); }
+#ara_content .btn-danger-2026[disabled]{ opacity:.6; cursor:not-allowed; transform:none !important; }
+
+/* confirm box */
+#ara_content .confirm-box{
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.05);
+  display: none;
+}
+#ara_content .confirm-row{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#ara_content .confirm-input{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: var(--text);
+  padding: 0 12px;
+  outline: none;
+  transition: .16s ease;
+  width: min(260px, 100%);
+}
+#ara_content .confirm-input:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: var(--ring);
+  background: rgba(8,14,26,.65);
+}
+
+/* message box */
+#ara_content #errorDiv{
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+  display:none;
+}
+
+/* ===== FOREGROUND FIX (SİYAH YAZILAR) ===== */
+#ara_content,
+#ara_content *{
+  color: rgba(255,255,255,.92);
+}
+
+/* bootstrap bazı sınıflar siyah basabiliyor */
+#ara_content .card,
+#ara_content .card *{
+  color: rgba(255,255,255,.92) !important;
+}
+
+#ara_content .acc-title{
+  color: rgba(255,255,255,.95) !important;
+}
+
+#ara_content .acc-sub{
+  color: rgba(255,255,255,.72) !important;
+}
+
+#ara_content .acc-user{
+  color: rgba(255,255,255,.90) !important;
+}
+
+#ara_content .acc-user span{
+  color: rgba(255,255,255,.90) !important;
+}
+
+
+</style>
+
 <div class="card p-4">
-	<span sec:authorize="isAuthenticated()" sec:authentication="name" style="font-weight: bold;"></span>
-	<br>
-	<button class="btn btn-primary" type="button" id="hesapyoketButton"
-		style="width: 150px;" onclick="deleteAccount()">Hesap Sil</button>
+  <div class="acc-title">Hesap İşlemleri</div>
+  <div class="acc-sub">Bu işlem geri alınamaz. Hesabı silmeden önce emin ol.</div>
+
+  <div class="acc-user">
+    <span>👤</span>
+    <span sec:authorize="isAuthenticated()" sec:authentication="name" style="font-weight:900;"></span>
+  </div>
+
+  <div style="height:14px;"></div>
+
+  <button class="btn btn-danger-2026" type="button" id="hesapyoketButton" onclick="openConfirm()">
+    🧨 Hesap Sil
+  </button>
+
+  <!-- 2. adım onay -->
+  <div id="confirmBox" class="confirm-box">
+    <div style="font-weight:900; margin-bottom:8px;">Onay için <span style="color:#fb7185;">SIL</span> yaz</div>
+    <div class="confirm-row">
+      <input id="confirmText" class="confirm-input" type="text" placeholder="SIL yaz ve onayla">
+      <button class="btn btn-danger-2026" type="button" id="confirmDeleteBtn" onclick="deleteAccount()" disabled>
+        Evet, Sil
+      </button>
+      <button class="btn btn-secondary" type="button" style="height:46px;border-radius:14px;" onclick="closeConfirm()">
+        Vazgeç
+      </button>
+    </div>
+  </div>
+
+  <div id="errorDiv"></div>
 </div>
 
 <script>
+function openConfirm(){
+  $("#errorDiv").hide().text("");
+  $("#confirmBox").slideDown(150);
+  $("#confirmText").val("").focus();
+  $("#confirmDeleteBtn").prop("disabled", true);
+}
+
+function closeConfirm(){
+  $("#confirmBox").slideUp(150);
+  $("#confirmText").val("");
+  $("#confirmDeleteBtn").prop("disabled", true);
+}
+
+$(document).off("input", "#confirmText");
+$(document).on("input", "#confirmText", function(){
+  const ok = ($(this).val() || "").trim().toUpperCase() === "SIL";
+  $("#confirmDeleteBtn").prop("disabled", !ok);
+});
 
 async function deleteAccount() {
-	   document.body.style.cursor = "wait";
-	   try {
-	        const response = await fetchWithSessionCheck("user/accountdelete", {
-	        	method: 'GET',
-				headers: {
-					'Content-Type': 'text/html',
-				},
-	        });
-			if (response.errorMessage) {
-				throw new Error(response.errorMessage);
-			}
-	        window.location.href = "/logout";
-	    } catch (error) {
-	        document.getElementById("errorDiv").style.display = "block";
-	        document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	    } finally {
-	        document.body.style.cursor = "default";
-	     }
-	}
+  const $btnMain = $("#hesapyoketButton");
+  const $btnConf = $("#confirmDeleteBtn");
+  const $err = $("#errorDiv");
+
+  $err.hide().text("");
+  document.body.style.cursor = "wait";
+  $btnMain.prop("disabled", true);
+  $btnConf.prop("disabled", true).text("Siliniyor...");
+
+  try {
+    const response = await fetchWithSessionCheck("user/accountdelete", {
+      method: "GET",
+      headers: { "Content-Type": "text/html" }
+    });
+
+    if (response && response.errorMessage) {
+      throw new Error(response.errorMessage);
+    }
+
+    window.location.href = "/logout";
+
+  } catch (error) {
+    $err.show().text(error?.message || "Beklenmeyen bir hata oluştu.");
+    $btnMain.prop("disabled", false);
+    $btnConf.text("Evet, Sil").prop("disabled", false);
+  } finally {
+    document.body.style.cursor = "default";
+  }
+}
 </script>

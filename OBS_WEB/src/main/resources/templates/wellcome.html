@@ -15,6 +15,72 @@
 	box-sizing: border-box;
 	align-items: center;
 }
+
+/* =========================
+   2026 AUTO CAM CARD (welcome)
+   ========================= */
+
+/* 1) Bootstrap .card'ları cam karta çevir */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: rgba(255,255,255,.92);
+}
+
+/* kart içindeki link */
+#ara_content .card a{
+  color: rgba(56,189,248,.95);
+  font-weight: 900;
+  text-decoration: none;
+}
+#ara_content .card a:hover{
+  text-decoration: underline;
+}
+
+/* kart içi yazı biraz daha premium */
+#ara_content .card{
+  line-height: 1.55;
+}
+
+/* 2) group-box / child: eski gri çerçeveleri modernleştir */
+#ara_content .child{
+  width: min(720px, 100%);
+  padding: 10px;
+  margin: 0 auto;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  background: rgba(0,0,0,.10);
+}
+
+#ara_content .group-box{
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin: 10px 0;
+  background: rgba(255,255,255,.04);
+}
+
+/* label görünsün */
+#ara_content .group-box label{
+  color: rgba(255,255,255,.86);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+/* 3) hata div'i cam içinde daha iyi dursun */
+#errorDiv{
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: rgba(255,255,255,.92);
+}
+
 </style>
 <div class="card p-4">Merhaba , OBS Sisteme hos geldiniz </div>
 <br>

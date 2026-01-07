@@ -1,76 +1,392 @@
-
 <style>
-    .pmessage {
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    .psuccess {
-        color: green;
-    }
-    .perror {
-        color: red;
-    }
-    .pvisible {
-        opacity: 1;
-    }
- </style>
-<div class="center verticle_center">
-    <div class="login_section">
-        <div class="login_form">
-            <form id="passwordForm">
-                 <fieldset>
-                    <div class="field">
-                        <label class="label_field">Şifre</label>
-                        <input type="password" name="oldPassword" id="oldPassword" placeholder="Şifre" required />
-                    </div>
-                    <div class="field">
-                        <label class="label_field">Şifre Tekrar</label>
-                        <input type="password" name="newPassword" id="newPassword" placeholder="Yeni Şifre" required />
-                    </div>
-                    
-                     <div class="field  margin_0">
-						<label class="label_field hidden">hidden label</label> 
-						<label id="message" class="message hidden"></label>
-					</div>
-                </fieldset>
-                <div class="field">
-                        <label class="label_field"></label>
-                         <button class="main_bt" type="submit">Şifre Güncelle</button>
-                </div>
-            </form>
-        </div>
+  :root{
+    --bg1:#070b14;
+    --bg2:#071c2a;
+
+    --card1: rgba(255,255,255,.10);
+    --card2: rgba(255,255,255,.06);
+    --border: rgba(255,255,255,.16);
+
+    --text: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.62);
+
+    --a1:#38bdf8;     /* mavi */
+    --a2:#22c55e;     /* yeşil */
+    --danger:#fb7185;
+
+    --shadow: 0 22px 70px rgba(0,0,0,.55);
+    --radius: 22px;
+    --ring: 0 0 0 5px rgba(56,189,248,.18);
+
+    --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
+  }
+
+  *{ box-sizing:border-box; }
+
+  /* ara_content içinde kendi mini sahnesi */
+  .pwd-wrap{
+  width:min(600px, 100%);
+  margin: 0 auto;
+  padding: 12px 0;
+  font-family: var(--font);
+  color: var(--text);
+
+  /* ÖNEMLİ: ara_content arka planı kullanılsın */
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
+  overflow: visible;
+}
+
+  /* premium noise */
+  .pwd-wrap:before{ display:none; }
+
+  .pwd-panel{
+    position:relative;
+    z-index:1;
+    border:1px solid var(--border);
+    background: linear-gradient(180deg, var(--card1), var(--card2));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(16px);
+    padding: 18px 18px 16px;
+    overflow:hidden;
+  }
+
+  /* neon glow */
+  .pwd-panel:after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    background:
+      radial-gradient(520px 280px at 10% 10%, rgba(56,189,248,.18), transparent 55%),
+      radial-gradient(520px 280px at 90% 20%, rgba(34,197,94,.12), transparent 55%);
+    filter: blur(18px);
+    opacity:.85;
+    pointer-events:none;
+  }
+
+  .pwd-head{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom: 12px;
+  }
+
+  .pwd-title{
+    margin:0;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing:.2px;
+  }
+  .pwd-sub{
+    margin:6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .pwd-badge{
+    position:relative;
+    z-index:2;
+    border:1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.85);
+    border-radius: 999px;
+    padding: 9px 12px;
+    font-size: 12px;
+    font-weight: 900;
+    white-space:nowrap;
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+
+  .pwd-field{ position:relative; z-index:2; margin: 14px 0; }
+
+  /* === input - taşma fix dahil === */
+  .pwd-input{
+    width:100%;
+    height: 56px;
+    padding: 16px 64px 14px 48px;   /* sağ göz için 64 */
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(8,14,26,.38);
+    color: var(--text);
+    outline:none;
+    font-size: 15px;
+    line-height: 1.2;
+    transition: .16s ease;
+  }
+  .pwd-input:focus{
+    border-color: rgba(56,189,248,.65);
+    box-shadow: var(--ring);
+    background: rgba(8,14,26,.55);
+  }
+
+  .pwd-label{
+    position:absolute;
+    left:48px; top:50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,.55);
+    font-size: 14px;
+    pointer-events:none;
+    transition: .16s ease;
+    z-index:2;
+  }
+  .pwd-input:focus + .pwd-label,
+  .pwd-input:not(:placeholder-shown) + .pwd-label{
+    top: 10px;
+    transform:none;
+    font-size: 12px;
+    color: rgba(255,255,255,.72);
+  }
+
+  .pwd-ico{
+    position:absolute;
+    left:16px; top:50%;
+    transform: translateY(-50%);
+    width:18px; height:18px;
+    opacity:.80;
+    pointer-events:none;
+    z-index:2;
+  }
+
+  .pwd-eye{
+    position:absolute;
+    right:14px;
+    top:50%;
+    transform: translateY(-50%);
+    width:40px;
+    height:40px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.90);
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    transition: .14s ease;
+    z-index:3;
+    backdrop-filter: blur(10px);
+    user-select:none;
+  }
+  .pwd-eye:hover{
+    background: rgba(255,255,255,.09);
+    border-color: rgba(56,189,248,.30);
+    transform: translateY(-50%) scale(1.03);
+  }
+
+  .pwd-hint{
+    margin-top: 12px;
+    color: rgba(255,255,255,.60);
+    font-size: 12px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .pwd-pill{
+    border:1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.05);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-weight: 900;
+  }
+
+  .pwd-msg{
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(56,189,248,.25);
+    background: rgba(56,189,248,.08);
+    color: rgba(255,255,255,.92);
+    font-size: 13px;
+    opacity:0;
+    transform: translateY(6px);
+    transition: .18s ease;
+  }
+  .pwd-msg.visible{ opacity:1; transform: translateY(0); }
+  .pwd-msg.success{
+    border-color: rgba(34,197,94,.35);
+    background: rgba(34,197,94,.10);
+  }
+  .pwd-msg.error{
+    border-color: rgba(251,113,133,.35);
+    background: rgba(251,113,133,.10);
+  }
+
+  .pwd-btn{
+    width:100%;
+    border:none;
+    padding: 14px 14px;
+    border-radius: 18px;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing:.2px;
+    color: #062014;
+    background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(34,197,94,.95));
+    cursor:pointer;
+    transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+    box-shadow: 0 14px 34px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top: 16px;
+  }
+  .pwd-btn:hover{
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 22px 50px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  .pwd-btn:active{ transform: translateY(0); }
+  .pwd-btn[disabled]{ opacity:.75; cursor:not-allowed; transform:none !important; }
+
+  .pwd-spin{
+    width:16px; height:16px;
+    border-radius:50%;
+    border: 2px solid rgba(6,32,20,.35);
+    border-top-color: rgba(6,32,20,.95);
+    display:none;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg);} }
+
+  @media (max-width:520px){
+    .pwd-panel{ padding: 16px 14px 14px; }
+    .pwd-title{ font-size: 18px; }
+    .pwd-btn{ font-size: 16px; }
+  }
+</style>
+
+<div class="pwd-wrap">
+  <div class="pwd-panel">
+    <div class="pwd-head">
+      <div>
+        <div class="pwd-title">Şifre Güncelle</div>
+        <div class="pwd-sub">Yeni şifreni belirle ve kaydet.</div>
+      </div>
+
+      <div class="pwd-badge">
+        <span>🔒</span><span>Güvenli</span>
+      </div>
     </div>
+
+    <form id="passwordForm2026" autocomplete="off">
+      <!-- Mevcut Şifre -->
+      <div class="pwd-field">
+        <svg class="pwd-ico" viewBox="0 0 24 24" fill="none">
+          <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="rgba(255,255,255,.78)" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M6.5 11.5h11v8h-11z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+          <path d="M12 15v2" stroke="rgba(255,255,255,.78)" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+
+        <input class="pwd-input" type="password" name="oldPassword" id="oldPassword" placeholder=" " required />
+        <label class="pwd-label">Mevcut Şifre</label>
+
+        <button type="button" class="pwd-eye" data-toggle="oldPassword" title="Göster/Gizle">👁</button>
+      </div>
+
+      <!-- Yeni Şifre -->
+      <div class="pwd-field">
+        <svg class="pwd-ico" viewBox="0 0 24 24" fill="none">
+          <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="rgba(255,255,255,.78)" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M6.5 11.5h11v8h-11z" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+          <path d="M12 15v2" stroke="rgba(255,255,255,.78)" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+
+        <input class="pwd-input" type="password" name="newPassword" id="newPassword" placeholder=" " required />
+        <label class="pwd-label">Yeni Şifre</label>
+
+        <button type="button" class="pwd-eye" data-toggle="newPassword" title="Göster/Gizle">👁</button>
+
+       
+      </div>
+
+      <div id="pwdMessage" class="pwd-msg"></div>
+
+      <button id="pwdSubmitBtn" class="pwd-btn" type="submit">
+        <span id="pwdBtnText">Şifre Güncelle</span>
+        <span id="pwdSpin" class="pwd-spin"></span>
+      </button>
+    </form>
+  </div>
 </div>
+
 <script>
-$(document).ready(function () {
-    $('#passwordForm').on('submit', async function (event) {
-        event.preventDefault();
-        const $submitButton = $(this).find('button[type="submit"]');
-        $submitButton.prop('disabled', true).text('İşleniyor...');
-        try {
-            const formData = new URLSearchParams(new FormData(this));
-            const response = await fetchWithSessionCheck('user/user_pwd_change', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            });
-            const result = response;
-            if (! result.errorMessage === "")  {
-                $('#message')
-                    .removeClass("psuccess hidden")
-                    .addClass("perror pvisible")
-                    .text(result.errorMessage || "Bir hata oluştu.");
-            }
-        } catch (error) {
-            $('#message')
-                .removeClass("psuccess hidden")
-                .addClass("perror pvisible")
-                .text(error.message || "Beklenmeyen bir hata oluştu.");
-        } finally {
-            $submitButton.prop('disabled', false).text('Şifre Güncelle');
-        }
-    });
-});
+  // Dinamik içerikte çalışması için delegation
+  $(document).off("submit", "#passwordForm2026");
+  $(document).on("submit", "#passwordForm2026", async function (event) {
+    event.preventDefault();
+
+    const $btn  = $("#pwdSubmitBtn");
+    const $spin = $("#pwdSpin");
+    const $text = $("#pwdBtnText");
+    const $msg  = $("#pwdMessage");
+
+    $msg.removeClass("success error visible").text("");
+
+    const newPwd = $("#newPassword").val() || "";
+    if (newPwd.length < 8) {
+      showMsg("Yeni şifre en az 8 karakter olmalı.", "error");
+      return;
+    }
+
+    $btn.prop("disabled", true);
+    $spin.show();
+    $text.text("Güncelleniyor...");
+
+    try {
+      const formData = new URLSearchParams(new FormData(this));
+
+      // fetchWithSessionCheck senin projede mevcut
+      const result = await fetchWithSessionCheck("user/user_pwd_change", {
+        method: "POST",
+        body: formData,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+      });
+
+      if (result && result.errorMessage && result.errorMessage.trim() !== "") {
+        showMsg(result.errorMessage, "error");
+      } else if (result && result.message) {
+        showMsg(result.message, "success");
+        $("#oldPassword").val("");
+        $("#newPassword").val("");
+      } else {
+        showMsg("Şifre güncellendi.", "success");
+        $("#oldPassword").val("");
+        $("#newPassword").val("");
+      }
+
+    } catch (error) {
+      showMsg(error?.message || "Beklenmeyen bir hata oluştu.", "error");
+    } finally {
+      $btn.prop("disabled", false);
+      $spin.hide();
+      $text.text("Şifre Güncelle");
+    }
+
+    function showMsg(text, type){
+      $msg.removeClass("success error visible");
+      $msg.addClass(type === "success" ? "success" : "error");
+      $msg.text(text || (type === "success" ? "Başarılı" : "Hata"));
+      void $msg[0].offsetWidth; // animasyon garanti
+      $msg.addClass("visible");
+    }
+  });
+
+  // show/hide password
+  $(document).off("click", ".pwd-eye");
+  $(document).on("click", ".pwd-eye", function(){
+    const id = $(this).data("toggle");
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.type = (el.type === "password") ? "text" : "password";
+    $(this).text(el.type === "password" ? "👁" : "🙈");
+  });
 </script>

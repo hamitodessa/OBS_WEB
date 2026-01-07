@@ -1,82 +1,174 @@
-    <style>
-        .table-hover tbody tr:hover {
-            background-color: #ced4da !important;
-            color: inherit !important;
-        }
+<style>
+/* =========================
+   2026 CAM – BACKUP TAKİP
+   (wrapper YOK)
+   ========================= */
 
-        .table .thead-dark th {
-            color: #fff;
-            background: #214162;
-        }
-        
-        .table-row-height td {
-    		height: 10px;
-    		line-height: 10px;
-  		}
+/* ===== CARD (ÜST BAR) ===== */
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: auto;
-        }
+/* ===== FILTER BAR ===== */
+.filter-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  padding: 6px 8px;
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            white-space: nowrap;
-        }
+.filter-row label{
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(255,255,255,.82);
+  margin: 0;
+}
 
-        .table-container {
-            flex-grow: 1;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            margin-top: 10px;
-            height: 60vh;
-        }
+/* ===== INPUT / SELECT ===== */
+.form-control,
+.form-select{
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+}
 
-        .container {
-            height: 75vh;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
+.form-control:focus,
+.form-select:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65);
+  color: #fff;
+}
 
-        .filter-row {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
+/* ===== BUTTON ===== */
+.btn{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  font-weight: 800;
+  transition: .16s ease;
+}
 
-        #pagination-controls {
-            margin-top: 5px;
-            text-align: right;
-        }
+.btn.btn-primary{
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  border: none;
+  color: #fff;
+}
 
-        #errorDiv {
-            display: none;
-            color: red;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-    </style>
-</head>
-<body>
+.btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
+}
+
+/* ===== CONTAINER ===== */
+.container{
+  height: 60vh;
+  display:flex;
+  flex-direction:column;
+  padding:10px;
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+/* ===== TABLE CONTAINER ===== */
+.table-container{
+  flex-grow: 1;
+  overflow: auto;
+  border: 1px solid rgba(255,255,255,.14);
+  margin-top: 10px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.03);
+}
+
+/* ===== TABLE ===== */
+#ara_content table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+#ara_content th, 
+#ara_content td{
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 6px 10px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* HEADER sticky */
+#ara_content thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,#1f3b5c,#162b44);
+  color: #fff;
+  border: none;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: left;
+}
+
+/* BODY */
+#ara_content tbody td{
+  background: rgba(255,255,255,.04);
+  font-size: 13px;
+  color: rgba(255,255,255,.78);
+  transition: color .12s ease, background .12s ease;
+}
+
+/* HOVER – foreground fix */
+#ara_content .table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #ffffff !important;
+}
+
+/* satır yüksekliği */
+#ara_content .table-row-height td{
+  height: 22px;
+  line-height: 22px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* ===== ERROR ===== */
+#errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+</style>
+
 
 <div class="card p-2">
     <div class="filter-row">
-    	<span style="padding-left: 5px;"></span>
-    	<label for="server">Server</label>
-    	<span style="padding-left: 5px;"></span>
-        <input type="text" id="server" class="form-control" style="width: 200px;">
-        <span style="padding-left: 5px;"></span>
-        <label for="sifre">Sifre</label>
-    	<span style="padding-left: 5px;"></span>
-        <input type="password" id="sifre" class="form-control" style="width: 125px;">
-        <span style="padding-left: 5px;"></span>
-        <button class="btn btn-primary" type="button" onclick="emirliste()" id="emirlisteButton">Yenile</button>
+        <label for="server">Server</label>
+        <input type="text" id="server" class="form-control" style="width:200px;">
+
+        <label for="sifre">Şifre</label>
+        <input type="password" id="sifre" class="form-control" style="width:130px;">
+
+        <button class="btn btn-primary" type="button"
+                onclick="emirliste()" id="emirlisteButton">
+            Yenile
+        </button>
     </div>
 </div>
 
@@ -84,15 +176,15 @@
 
 <div class="container">
     <div class="table-container">
-        <table class="table table-bordered table-hover">
-            <thead class="thead-dark">
+        <table class="table table-bordered table-hover table-row-height">
+            <thead>
                 <tr>
                     <th>EMIR</th>
                     <th>DURUM</th>
                     <th>MESAJ</th>
                     <th>INSTANCE</th>
-                    <th>SON_YUKLEME</th>
-                     <th>GEL_YEDEKLEME</th>
+                    <th>SON_YÜKLEME</th>
+                    <th>GEL_YEDEKLEME</th>
                 </tr>
             </thead>
             <tbody id="tableBody"></tbody>

@@ -20,7 +20,250 @@
 <script src="js/bootstrap.bundle.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+<style>
 
+/* =========================
+   CONTENT – CAM SURFACE
+   ========================= */
+
+#content{
+    background:
+        radial-gradient(1200px 500px at top center,
+            rgba(56,189,248,0.10),
+            transparent 60%),
+        linear-gradient(180deg,
+            #0b1623 0%,
+            #0e1f2f 40%,
+            #0b1a28 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+#content::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:32px;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,.45),
+        transparent
+    );
+    pointer-events:none;
+}
+
+
+
+    #ara_content{
+  padding: 24px;
+  border-radius: 18px;
+
+  /* 2026 modern arkaplan */
+  background:
+    radial-gradient(circle at 20% 15%, rgba(56,189,248,.18), transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(34,197,94,.14), transparent 55%),
+    linear-gradient(180deg, #0b1220 0%, #050914 100%);
+
+  /* hafif çerçeve + gölge */
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.05),
+    0 18px 45px rgba(0,0,0,.55);
+}
+#ara_content > *{
+  animation: araIn .28s ease-out both;
+}
+
+@keyframes araIn{
+  from{ opacity:0; transform: translateY(10px); }
+  to  { opacity:1; transform: translateY(0); }
+}
+
+/* =========================
+   MIDDE_CONT – CAM BACKGROUND
+   ========================= */
+
+.midde_cont{
+    min-height: 100vh;
+    background:
+        radial-gradient(1200px 400px at top center,
+            rgba(56,189,248,0.08),
+            transparent 60%),
+        linear-gradient(180deg,
+            #0b1623 0%,
+            #0e1e2d 35%,
+            #0c1a28 100%);
+
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.midde_cont::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.35),
+        transparent
+    );
+    pointer-events: none;
+}
+
+  
+.page_title{
+    position: relative;
+    margin-bottom: 16px;
+    padding: 14px 20px;
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.04));
+    border: 1px solid rgba(255,255,255,.18);
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.45),
+        inset 0 1px 0 rgba(255,255,255,.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* altına ince neon çizgi */
+.page_title::after{
+    content:"";
+    position:absolute;
+    left:16px;
+    right:16px;
+    bottom:-1px;
+    height:1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(56,189,248,.85),
+        transparent
+    );
+}
+
+/* başlık yazısı */
+.page_title h2{
+    margin:0;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: .3px;
+    color: rgba(255,255,255,.95);
+    text-shadow:
+        0 2px 8px rgba(0,0,0,.55);
+}
+
+/* küçük ekranlarda nefes alsın */
+@media (max-width: 768px){
+    .page_title{
+        padding: 12px 14px;
+    }
+    .page_title h2{
+        font-size: 18px;
+    }
+}
+  
+  .page_title{
+    animation: titleFade .35s ease;
+}
+
+
+#container-fluid{
+    background:
+      linear-gradient(180deg,
+        rgba(255,255,255,.10),
+        rgba(255,255,255,.04));
+
+    border-top: 1px solid rgba(255,255,255,.18);
+    border-radius: 16px 16px 0 0;
+
+    box-shadow:
+      0 -10px 30px rgba(0,0,0,.45),
+      inset 0 1px 0 rgba(255,255,255,.10);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.footer{
+    position: relative;
+    margin-top: 24px;
+    padding: 16px 20px;
+
+    text-align: center;
+
+    background:
+      linear-gradient(180deg,
+        rgba(255,255,255,.10),
+        rgba(255,255,255,.04));
+
+    border-top: 1px solid rgba(255,255,255,.18);
+    border-radius: 16px 16px 0 0;
+
+    box-shadow:
+      0 -10px 30px rgba(0,0,0,.45),
+      inset 0 1px 0 rgba(255,255,255,.10);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* üstte ince neon çizgi */
+.footer::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:20px;
+    right:20px;
+    height:1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(56,189,248,.75),
+      transparent
+    );
+}
+
+/* footer yazıları */
+.footer p{
+    margin:0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,.75);
+}
+
+/* linkler */
+.footer a{
+    color: rgba(56,189,248,.95);
+    font-weight: 700;
+    text-decoration: none;
+    transition: .15s ease;
+}
+
+.footer a:hover{
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* IP bilgisi */
+.footer #ip{
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: rgba(255,255,255,.55);
+}
+
+@keyframes titleFade{
+    from{ opacity:0; transform: translateY(-6px); }
+    to{ opacity:1; transform:none; }
+}  
+</style>
 
 
 </head>
@@ -177,7 +420,7 @@ class="fa fa-bar-chart-o green_color"
 
 			<!-- end sidebar -->
 			<!-- right content -->
-			<div id="content">
+			<div id="content" style="background-color: rgb(255, 0, 0);">
 				<!-- topbar -->
 				<div class="topbar">
 					<nav class="navbar navbar-expand-lg navbar-light">
@@ -218,22 +461,15 @@ class="fa fa-bar-chart-o green_color"
 				<!-- dashboard inner -->
 				<div class="midde_cont">
 					<!-- Baslik  -->
-					<div class="container-fluid">
-						<div class="row column_title">
-							<div class="col-md-12">
-								<div class="page_title">
-								<h2 id="baslik" style="white-space: pre;" ></h2>
-							<!--		<h2 id="baslik" th:text="${baslik}"></h2>   -->
-								</div>
-							</div>
+						<div class="page_title">
+							<h2 id="baslik" style="white-space: pre;" ></h2>
 						</div>
-					</div>
 					<!-- Baslik  son-->
 					<div id="ara_content">
 						<!-- Dinamik içerik buraya yüklenecek -->
 					</div>
 					<!-- footer -->
-					<div class="container-fluid">
+					<div class="container-fluid" id="container-fluid">
 						<div class="footer">
 							<p>
 								Copyright © 2024 Designed by html.design. All rights reserved.

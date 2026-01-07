@@ -1,20 +1,109 @@
 <style>
-.table-row-height td {
-	height: 10px;
-	line-height: 10px;
+/* =========================
+   2026 CAM – TABLE STANDARD
+   (Giden Rapor)
+   ========================= */
+
+#ara_content{
+  color: rgba(255,255,255,.92);
 }
 
-.table-hover tbody tr:hover {
-	background-color: #ced4da !important;
-	color: inherit !important;
+/* card cam */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
-.table .thead-dark th {
+
+/* ===== TABLE ===== */
+#ara_content table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  font-size: 13px;
+}
+
+#ara_content th,
+#ara_content td{
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 6px 10px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* header */
+#ara_content thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 900;
+  text-align: left;
+}
+
+/* body */
+#ara_content tbody td{
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.78);
+  transition: color .12s ease, background .12s ease;
+}
+
+/* hover (foreground fix) */
+#ara_content .table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #ffffff !important;
+}
+
+/* row height */
+#ara_content .table-row-height td{
+  height: 22px;
+  line-height: 22px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* trash button küçük + ikonlu */
+#ara_content .btn.btn-secondary{
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  display: grid;
+  place-items: center;
+  transition: .16s ease;
+}
+
+#ara_content .btn.btn-secondary:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
+}
+
+/* error standard */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
   color: #fff;
-  background: #214162;
+  font-weight: 900;
 }
 </style>
+
 <div class="card p-4">
-		<table class="table table-bordered table-hover">
+		<table class="table table-bordered table-hover table-row-height">
 			<thead class="thead-dark">
 				<tr>
 					<th>ID</th>

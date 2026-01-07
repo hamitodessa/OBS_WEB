@@ -1,104 +1,428 @@
 
 <style>
-.pmessage {
-	opacity: 0;
-	transition: opacity 0.3s ease; /* Yumuşak geçiş için */
-}
+  /* ======= 2026 User Update (ara_content uyumlu) ======= */
+  :root{
+    --text: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.70);
+    --border: rgba(255,255,255,.16);
+    --ring: 0 0 0 5px rgba(56,189,248,.18);
+  }
 
-.psuccess {
-	color: green;
-}
+  *{ box-sizing: border-box; }
 
-.perror {
-	color: red;
-}
+  #ara_content .u2026-wrap{
+    width: min(620px, 100%);
+    margin: 0 auto;
+    padding: 12px 0;
+    color: var(--text);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
+  }
 
-.pvisible {
-	opacity: 1;
-}
+  #ara_content .u2026-card{
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+    border-radius: 18px;
+    box-shadow: 0 18px 55px rgba(0,0,0,.45);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 18px 18px 16px;
+    overflow: hidden;
+  }
+
+  #ara_content .u2026-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom: 10px;
+  }
+  #ara_content .u2026-title{
+    margin:0;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: .2px;
+  }
+  #ara_content .u2026-sub{
+    margin:6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  #ara_content .u2026-badge{
+    border:1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.85);
+    border-radius: 999px;
+    padding: 9px 12px;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  #ara_content .u2026-field{ margin: 14px 0; }
+  #ara_content .u2026-label{
+    display:block;
+    margin: 0 0 8px;
+    font-weight: 900;
+    font-size: 13px;
+    color: rgba(255,255,255,.82);
+  }
+
+  #ara_content .u2026-input{
+    width:100%;
+    height: 54px;
+    padding: 14px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(8,14,26,.38);
+    color: var(--text);
+    outline: none;
+    font-size: 15px;
+    transition: .16s ease;
+  }
+  #ara_content .u2026-input:focus{
+    border-color: rgba(56,189,248,.65);
+    box-shadow: var(--ring);
+    background: rgba(8,14,26,.55);
+  }
+
+  #ara_content .u2026-file{
+    width:100%;
+    height: 54px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(8,14,26,.38);
+    color: rgba(255,255,255,.85);
+    outline: none;
+    transition: .16s ease;
+  }
+  #ara_content .u2026-file:focus{
+    border-color: rgba(56,189,248,.65);
+    box-shadow: var(--ring);
+    background: rgba(8,14,26,.55);
+  }
+
+  /* ===== Preview alanı ===== */
+  #ara_content .u2026-previewRow{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-top: 12px;
+  }
+  #ara_content .u2026-avatar{
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(0,0,0,.18);
+    box-shadow: 0 10px 26px rgba(0,0,0,.35);
+    overflow:hidden;
+    display:grid;
+    place-items:center;
+    flex: 0 0 auto;
+  }
+  #ara_content .u2026-avatar img{
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    display:none;
+  }
+  #ara_content .u2026-avatar .u2026-ph{
+    font-size: 18px;
+    opacity: .85;
+  }
+
+  #ara_content .u2026-fileMeta{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width: 0;
+  }
+  #ara_content .u2026-fileName{
+    font-size: 13px;
+    font-weight: 900;
+    color: rgba(255,255,255,.88);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 360px;
+  }
+  #ara_content .u2026-fileHelp{
+    font-size: 12px;
+    color: rgba(255,255,255,.62);
+    font-weight: 700;
+  }
+
+  #ara_content .u2026-miniBtn{
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.90);
+    border-radius: 14px;
+    padding: 10px 12px;
+    font-weight: 900;
+    cursor:pointer;
+    transition: .14s ease;
+    user-select:none;
+    white-space: nowrap;
+  }
+  #ara_content .u2026-miniBtn:hover{
+    background: rgba(255,255,255,.09);
+    border-color: rgba(56,189,248,.30);
+    transform: translateY(-1px);
+  }
+  #ara_content .u2026-miniBtn:active{ transform: translateY(0); }
+
+  #ara_content .u2026-btn{
+    width:100%;
+    border: none;
+    height: 54px;
+    border-radius: 16px;
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: .2px;
+    color: #062014;
+    background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(34,197,94,.95));
+    cursor: pointer;
+    transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+    box-shadow: 0 14px 34px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top: 14px;
+  }
+  #ara_content .u2026-btn:hover{
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 22px 50px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  #ara_content .u2026-btn:active{ transform: translateY(0); }
+  #ara_content .u2026-btn[disabled]{ opacity:.75; cursor:not-allowed; transform:none !important; }
+
+  #ara_content .u2026-spin{
+    width:16px; height:16px;
+    border-radius:50%;
+    border: 2px solid rgba(6,32,20,.35);
+    border-top-color: rgba(6,32,20,.95);
+    display:none;
+    animation: u2026spin .8s linear infinite;
+  }
+  @keyframes u2026spin{ to{ transform: rotate(360deg);} }
+
+  #ara_content .u2026-msg{
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(56,189,248,.25);
+    background: rgba(56,189,248,.08);
+    color: rgba(255,255,255,.92);
+    font-size: 13px;
+    opacity:0;
+    transform: translateY(6px);
+    transition: .18s ease;
+  }
+  #ara_content .u2026-msg.visible{ opacity:1; transform: translateY(0); }
+  #ara_content .u2026-msg.success{
+    border-color: rgba(34,197,94,.35);
+    background: rgba(34,197,94,.10);
+  }
+  #ara_content .u2026-msg.error{
+    border-color: rgba(251,113,133,.35);
+    background: rgba(251,113,133,.10);
+  }
+
+  #ara_content #error{
+    display:block;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(251,113,133,.35);
+    background: rgba(251,113,133,.10);
+    color: rgba(255,255,255,.92);
+    font-weight: 900;
+  }
+
+  @media (max-width:520px){
+    #ara_content .u2026-card{ padding: 16px 14px 14px; }
+    #ara_content .u2026-title{ font-size: 18px; }
+    #ara_content .u2026-btn{ font-size: 16px; }
+    #ara_content .u2026-fileName{ max-width: 210px; }
+  }
 </style>
-<div class="center verticle_center">
-	<div class="login_section">
-		<div class="login_form">
-			<form id="updateForm" action="/user/user_update" method="post"
-				enctype="multipart/form-data">
-				<fieldset>
-					<div class="field">
-						<label class="label_field">Adi</label> 
-						<input type="text" name="firstName" id="firstName" placeholder="Adi" 
-							th:value="${user.firstName}" required />
-					</div>
-					<div class="field">
-						<label class="label_field">Soyadi</label> 
-						<input type="text" name="lastName" id="lastName" placeholder="Soyadi"
-							th:value="${user.lastName}" required/>
-					</div>
-					<div class="field">
-						<label class="label_field hidden">hidden label</label> 
-						<label id="error" th:if="${error}" class="forgot" th:text="${error}"></label>
-						<span id="message" style="font-weight: bold;"></span>
-					</div>
-					<div class="field">
-						<label class="label_field hidden"></label> 
-						<input type="file" name="image" id="image" accept="image/*" />
-					</div>
-					<div class="field margin_0">
-						<label class="label_field hidden"></label> 
-						<label id="message" class="message hidden"></label>
-					</div>
-				</fieldset>
-				<div class="field">
-						<label class="label_field"></label>
-						<button type="submit" class="main_bt" id="submitBtn">Kaydet</button>
-				</div>
-			</form>
-		</div>
-	</div>
+
+<div class="u2026-wrap">
+  <div class="u2026-card">
+    <div class="u2026-head">
+      <div>
+        <h3 class="u2026-title">Kullanıcı Bilgileri</h3>
+        <div class="u2026-sub">Ad, soyad ve profil görselini güncelle.</div>
+      </div>
+      <div class="u2026-badge">🧊 2026</div>
+    </div>
+
+    <form id="updateForm2026" action="/user/user_update" method="post" enctype="multipart/form-data" autocomplete="off">
+      <div class="u2026-field">
+        <label class="u2026-label" for="firstName">Adı</label>
+        <input class="u2026-input" type="text" name="firstName" id="firstName" placeholder="Adı" th:value="${user.firstName}" required>
+      </div>
+
+      <div class="u2026-field">
+        <label class="u2026-label" for="lastName">Soyadı</label>
+        <input class="u2026-input" type="text" name="lastName" id="lastName" placeholder="Soyadı" th:value="${user.lastName}" required>
+      </div>
+
+      <!-- Thymeleaf'ten hata gelirse -->
+      <label id="error" th:if="${error}" th:text="${error}"></label>
+
+      <div class="u2026-field">
+        <label class="u2026-label" for="image">Profil Görseli</label>
+        <input class="u2026-file" type="file" name="image" id="image" accept="image/*">
+
+        <!-- Preview -->
+        <div class="u2026-previewRow">
+          <div class="u2026-avatar" title="Önizleme">
+            <span class="u2026-ph" id="imgPh">🖼</span>
+            <img id="imgPreview" alt="Preview">
+          </div>
+
+          <div class="u2026-fileMeta">
+            <div class="u2026-fileName" id="fileName">Dosya seçilmedi</div>
+            <div class="u2026-fileHelp">Max 500 KB · JPG/PNG önerilir</div>
+          </div>
+
+          <button type="button" class="u2026-miniBtn" id="clearImgBtn" style="display:none;">Kaldır</button>
+        </div>
+      </div>
+
+      <div id="msgBox" class="u2026-msg"></div>
+
+      <button type="submit" class="u2026-btn" id="submitBtn">
+        <span id="btnText">Kaydet</span>
+        <span id="btnSpin" class="u2026-spin"></span>
+      </button>
+    </form>
+  </div>
 </div>
 
 <script>
+  // ====== Image preview + size kontrol ======
+  const fileInput = document.getElementById("image");
+  const imgPreview = document.getElementById("imgPreview");
+  const imgPh = document.getElementById("imgPh");
+  const fileNameEl = document.getElementById("fileName");
+  const clearBtn = document.getElementById("clearImgBtn");
 
-document.getElementById('image').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    const maxSizeInKB = 500; // Maksimum dosya boyutu (KB cinsinden)
-    const maxSizeInBytes = maxSizeInKB * 1024;  
-    if (file && file.size > maxSizeInBytes) {
-        document.getElementById('message').textContent = 
-            `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-        event.target.value = ''; 
-    } else {
-        document.getElementById('message').textContent = '';
+  let currentObjectUrl = null;
+
+  function resetPreview(){
+    if (currentObjectUrl) {
+      URL.revokeObjectURL(currentObjectUrl);
+      currentObjectUrl = null;
     }
-});
+    imgPreview.style.display = "none";
+    imgPreview.src = "";
+    imgPh.style.display = "block";
+    fileNameEl.textContent = "Dosya seçilmedi";
+    clearBtn.style.display = "none";
+  }
 
-$(document).ready(function() {
-    $('#updateForm').on('submit', async function(event) {
-        event.preventDefault();
-        const $submitButton = $(this).find('button[type="submit"]');
-        $submitButton.prop('disabled', true).text('İşleniyor...');
-        const formData = new FormData(this);
-            try {
-                const response = await fetchWithSessionCheck('user/user_update', {
-                	method: 'POST',
-                    body: formData,
-                });
-                const result = response;
-                if (result.errorMessage === "") {
-                    //window.location.href = "/index";
-                } else {
-                    $('#message')
-                        .removeClass("psuccess hidden")
-                        .addClass("perror pvisible")
-                        .text(result.errorMessage || "Bir hata oluştu.");
-                }
-            } catch (error) {
-                $('#message')
-                    .removeClass("psuccess hidden")
-                    .addClass("perror pvisible")
-                    .text(error.message || "Beklenmeyen bir hata oluştu.");
-            } finally {
-                $submitButton.prop('disabled', false).text('Kaydet');
-            }
-     });
-});
+  fileInput.addEventListener("change", function(e){
+    const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+
+    // boşsa reset
+    if (!file){
+      resetPreview();
+      hideMsg();
+      return;
+    }
+
+    // 500KB kontrol
+    const maxSizeInKB = 500;
+    const maxBytes = maxSizeInKB * 1024;
+    if (file.size > maxBytes){
+      showMsg(`Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`, "error");
+      fileInput.value = "";
+      resetPreview();
+      return;
+    }
+
+    hideMsg();
+
+    // preview
+    fileNameEl.textContent = file.name;
+
+    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+    currentObjectUrl = URL.createObjectURL(file);
+
+    imgPreview.src = currentObjectUrl;
+    imgPreview.style.display = "block";
+    imgPh.style.display = "none";
+    clearBtn.style.display = "inline-block";
+  });
+
+  clearBtn.addEventListener("click", function(){
+    fileInput.value = "";
+    resetPreview();
+    hideMsg();
+  });
+
+  // Dinamik içerikte güvenli: delegation
+  $(document).off("submit", "#updateForm2026");
+  $(document).on("submit", "#updateForm2026", async function (event) {
+    event.preventDefault();
+
+    const $btn  = $("#submitBtn");
+    const $spin = $("#btnSpin");
+    const $text = $("#btnText");
+
+    hideMsg();
+
+    $btn.prop("disabled", true);
+    $spin.show();
+    $text.text("İşleniyor...");
+
+    try {
+      const formData = new FormData(this);
+
+      // fetchWithSessionCheck senin projede var
+      const result = await fetchWithSessionCheck("user/user_update", {
+        method: "POST",
+        body: formData
+      });
+
+      if (result && result.errorMessage && result.errorMessage.trim() !== "") {
+        showMsg(result.errorMessage, "error");
+      } else if (result && result.message && result.message.trim() !== "") {
+        showMsg(result.message, "success");
+      } else {
+        showMsg("Kaydedildi.", "success");
+      }
+
+    } catch (error) {
+      showMsg(error?.message || "Beklenmeyen bir hata oluştu.", "error");
+    } finally {
+      $btn.prop("disabled", false);
+      $spin.hide();
+      $text.text("Kaydet");
+    }
+  });
+
+  function showMsg(text, type){
+    const el = document.getElementById("msgBox");
+    el.classList.remove("success", "error", "visible");
+    el.classList.add(type === "success" ? "success" : "error");
+    el.textContent = text || (type === "success" ? "Başarılı" : "Hata");
+    void el.offsetWidth; // anim garanti
+    el.classList.add("visible");
+  }
+
+  function hideMsg(){
+    const el = document.getElementById("msgBox");
+    el.classList.remove("success", "error", "visible");
+    el.textContent = "";
+  }
+
+  // sayfa ilk açılış (cache vs) temiz başlasın
+  resetPreview();
 </script>

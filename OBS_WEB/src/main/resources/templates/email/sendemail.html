@@ -1,83 +1,157 @@
 <style>
-  .pmessage {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+/* =========================
+   2026 CAM – SEND EMAIL
+   ========================= */
 
-  .psuccess {
-    color: green;
-  }
+#ara_content{
+  color: rgba(255,255,255,.92);
+}
 
-  .perror {
-    color: red;
-  }
+/* mesajlar */
+#ara_content .pmessage{ opacity:0; transition:opacity .3s ease; }
+#ara_content .pvisible{ opacity:1; }
+#ara_content .psuccess{ color: rgba(34,197,94,.95); font-weight:900; }
+#ara_content .perror{ color: rgba(251,113,133,.95); font-weight:900; }
 
-  .pvisible {
-    opacity: 1;
-  }
+/* ana card */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
 
-  .centered-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #ced4da;
-    padding: 10px;
-    border-radius: 5px;
-  }
+/* container marginlarını sadeleştir */
+#ara_content .container.mt-5{ margin-top: 12px !important; }
 
-  .form-container {
-    display: block; /* Elemanları alt alta yerleştirmek için */
-    gap: 10px; /* Satırlar arası boşluk */
-  }
+/* group-box cam */
+#ara_content .group-box{
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.05);
+  padding: 14px;
+  border-radius: 16px;
+  margin-top: 10px;
+  width: 50%;
+}
 
-  .form-container .form-row + .form-row {
-    margin-top: 10px;
-  }
+/* başlık */
+#ara_content .group-box h4{
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: rgba(255,255,255,.90);
+  text-align:center;
+}
 
-  .form-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-  }
+/* row yapısı */
+#ara_content .group-row{
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+#ara_content .form-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+}
+#ara_content .form-row label{
+  width: 80px;
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(255,255,255,.82);
+  margin:0;
+}
 
-  .form-row label {
-    width: 80px;
-  }
+/* uzun-kısa kutular */
+#ara_content .long-box{ flex: 2; }
+#ara_content .short-box{ flex: 1; }
 
-  .aciklama-width {
-    width: 40%;
-  }
+/* input/select/textarea – cam input standardı */
+#ara_content .form-control,
+#ara_content .form-select,
+#ara_content textarea.form-control{
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+}
 
-  .group-box {
-    border: 1px solid #ced4da;
-    padding: 15px;
-    border-radius: 5px;
-    margin-top: 10px;
-    width: 50%;
-  }
+#ara_content textarea.form-control{
+  height: auto;          /* textarea için */
+  min-height: 110px;
+  padding-top: 10px;
+}
 
-  .long-box {
-    flex: 2;
-  }
+#ara_content .form-control:focus,
+#ara_content .form-select:focus,
+#ara_content textarea.form-control:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65);
+  color:#fff;
+}
 
-  .short-box {
-    flex: 1;
-  }
+#ara_content input[type="date"]{ color-scheme: dark; }
 
-  .group-box h4 {
-    margin-top: 0;
-    font-size: 16px;
-    color: #333;
-    text-align: center;
-  }
+/* datalist ok işareti uyum */
+#ara_content .form-row span{
+  color: rgba(255,255,255,.70);
+}
 
-  .group-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
+/* buton standardı */
+#ara_content .btn{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  font-weight: 800;
+  transition: .16s ease;
+}
+
+#ara_content .btn.btn-primary{
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  border: none;
+  color:#fff;
+}
+
+#ara_content .btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
+}
+
+/* select satırı tek başına kalınca hizalama */
+#ara_content .form-row select.form-select{
+  width: 180px;
+}
+
+/* error div standard */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* alttaki message/error alanı */
+#ara_content #message{
+  color: rgba(56,189,248,.95);
+}
+#ara_content #error.forgot{
+  color: rgba(251,113,133,.95);
+  font-weight: 900;
+}
 </style>
+
 <div class="container mt-5">
   <div class="card p-4 mb-4" style="width: 70%">
     <form id="sendEmail" enctype="multipart/form-data">
@@ -99,7 +173,7 @@
           <div class="group-box">
             <h4>Alici</h4>
             <div class="form-row">
-              <label class="form-check-label" for="to">To</label>
+              <label class="form-check-label" for="too">To</label>
               <div style="position: relative;width:100%; ">
                 <input class="form-control" list="aliciOptions" style="width:100%;" type="email" id="too">
                   <datalist id="aliciOptions" >
@@ -109,7 +183,7 @@
               </div>
             </div>
             <div class="form-row" style="padding-top: 5px">
-              <label class="form-check-label" for="cc">Cc</label>
+              <label class="form-check-label" for="ccc">Cc</label>
               <div style="position: relative;width:100%; ">
                 <input class="form-control" list="cccOptions"  style="width:100%;" type="email" id="ccc">
                   <datalist id="cccOptions" >

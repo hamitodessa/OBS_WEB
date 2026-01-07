@@ -1,96 +1,241 @@
 <style>
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 70%;
-	box-sizing: border-box;
+/* =========================
+   2026 CAM – COPY USER
+   ========================= */
+:root{
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.70);
+  --border: rgba(255,255,255,.16);
+  --ring: 0 0 0 5px rgba(56,189,248,.18);
+}
+
+#ara_content{
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
+}
+
+/* cam card */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* group-box artık cam */
+#ara_content .group-box{
+  width: min(760px, 100%);
+  margin: 10px auto;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
+}
+
+/* label */
+#ara_content label{
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(255,255,255,.82);
+}
+
+/* input */
+#ara_content .form-control{
+  height: 50px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: var(--text);
+  outline: none;
+  transition: .16s ease;
+  padding-left: 44px; /* icon için */
+}
+#ara_content .form-control:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: var(--ring);
+  background: rgba(8,14,26,.65);
+  color: #fff;
+}
+
+/* input icon */
+#ara_content .mail-ico{
+  position:absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: .85;
+  pointer-events:none;
+}
+
+/* Kaydet buton (premium) */
+#ara_content .btn-primary{
+  height: 52px;
+  border: none !important;
+  border-radius: 16px;
+  font-weight: 900;
+  letter-spacing: .2px;
+  background: linear-gradient(135deg, rgba(56,189,248,.95), rgba(34,197,94,.95)) !important;
+  color: #062014 !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.35);
+  transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+}
+#ara_content .btn-primary:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 22px 50px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.45);
+}
+#ara_content .btn-primary:active{ transform: translateY(0); }
+#ara_content .btn-primary:disabled{
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* "hazır" efekti: arama başarılı olunca butona glow */
+#ara_content .btn-ready{
+  box-shadow: 0 0 0 5px rgba(34,197,94,.12), 0 18px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.35) !important;
+}
+
+/* error cam */
+#ara_content #errorDiv{
+  width: min(760px, 100%);
+  margin: 10px auto;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* küçük responsive */
+@media (max-width: 680px){
+  #ara_content .group-box > div{
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+  #ara_content label{ width: auto !important; }
+  #ara_content .btn-primary{ width: 100% !important; }
 }
 </style>
+
 <div class="card p-4">
-	<div class="group-box">
-		<div style="display: flex; align-items: center; gap: 10px;">
-			<label for="label5" style="width: 150px;">Yeni Kullanici</label>
-			<div style="position: relative; width: 300px;">
-				<input class="form-control input-width"
-					onkeydown="if(event.key === 'Enter') aramaYap();" type="email"
-					id="hesap" name="hesap">
-			</div>
-		</div>
-	</div>
-	<div id="errorDiv"
-		style="display: none; color: red; font-weight: bold;"></div>
-	<br>
-	<div class="group-box">
-		<button class="btn btn-primary" type="button" id="kaydetButton"
-			style="width: 150px;" disabled onclick="copyUser()">Kaydet</button>
-	</div>
+  <div class="group-box">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <label for="hesap" style="width:150px;">Yeni Kullanıcı</label>
+
+      <div style="position: relative; width: 360px; max-width:100%;">
+        <!-- icon -->
+        <svg class="mail-ico" viewBox="0 0 24 24" fill="none">
+          <path d="M4 6.8l7.3 5.1c.4.3 1 .3 1.4 0L20 6.8" stroke="rgba(255,255,255,.85)" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M5.2 7.2h13.6c.7 0 1.2.5 1.2 1.2v9.2c0 .7-.5 1.2-1.2 1.2H5.2c-.7 0-1.2-.5-1.2-1.2V8.4c0-.7.5-1.2 1.2-1.2z"
+                stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+        </svg>
+
+        <input class="form-control"
+               onkeydown="if(event.key === 'Enter') aramaYap();"
+               type="email" id="hesap" name="hesap"
+               placeholder="ornek@firma.com">
+      </div>
+    </div>
+  </div>
+
+  <div id="errorDiv" style="display:none;"></div>
+
+  <div class="group-box">
+    <button class="btn btn-primary" type="button" id="kaydetButton"
+            style="width:150px;" disabled onclick="copyUser()">
+      Kaydet
+    </button>
+  </div>
 </div>
+
 <script>
-
 async function aramaYap() {
+  const hesap = document.getElementById("hesap").value.trim();
+  const err = document.getElementById("errorDiv");
+  const btn = document.getElementById("kaydetButton");
 
-	const hesap = document.getElementById("hesap").value;
-	document.getElementById("errorDiv").style.display = "none";
-    document.getElementById("errorDiv").innerText = "";
-	document.body.style.cursor = "wait";
-	   try {
-	        const response = await fetchWithSessionCheck("user/checkuser", {
-	        	method: 'POST',
-	        	headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: new URLSearchParams({ hesap: hesap }),
-	        });
-			if (response.errorMessage) {
-				throw new Error(response.errorMessage);
-			}
-			const $kaydetButton = $('#kaydetButton');
-			$kaydetButton.prop('disabled', false).text('Kaydet');
-			document.body.style.cursor = "default";
-	    } catch (error) {
-	        document.getElementById("errorDiv").style.display = "block";
-	        document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	    } finally {
-	    	document.body.style.cursor = "default";
-	     }
-	}
-	
+  err.style.display = "none";
+  err.innerText = "";
+  btn.classList.remove("btn-ready");
+
+  if (!hesap) {
+    err.style.display = "block";
+    err.innerText = "Lütfen e-mail gir.";
+    return;
+  }
+
+  document.body.style.cursor = "wait";
+  try {
+    const response = await fetchWithSessionCheck("user/checkuser", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ hesap })
+    });
+
+    if (response && response.errorMessage) {
+      throw new Error(response.errorMessage);
+    }
+
+    // hazır: kaydet aktif + glow
+    btn.disabled = false;
+    btn.textContent = "Kaydet";
+    btn.classList.add("btn-ready");
+
+  } catch (error) {
+    err.style.display = "block";
+    err.innerText = error?.message || "Beklenmeyen bir hata oluştu.";
+    btn.disabled = true;
+    btn.classList.remove("btn-ready");
+  } finally {
+    document.body.style.cursor = "default";
+  }
+}
+
 async function copyUser() {
+  const hesap = document.getElementById("hesap").value.trim();
+  const err = document.getElementById("errorDiv");
+  const btn = document.getElementById("kaydetButton");
 
-	const hesap = document.getElementById("hesap").value;
-	if (!hesap) {
-	    alert("Lütfen kullanici alanini doldurun.");
-	    return;
-	}
-	const $kaydetButton = $('#kaydetButton');
-	$kaydetButton.prop('disabled', true).text('Islem Yapiliyor...');
+  if (!hesap) {
+    alert("Lütfen kullanıcı alanını doldurun.");
+    return;
+  }
 
-	
-	document.getElementById("errorDiv").style.display = "none";
-    document.getElementById("errorDiv").innerText = "";
-	document.body.style.cursor = "wait";
-	   try {
-	        const response = await fetchWithSessionCheck("user/savecopyuser", {
-	        	method: 'POST',
-	        	headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: new URLSearchParams({ hesap: hesap }),
-	        });
-			if (response.errorMessage) {
-				throw new Error(response.errorMessage);
-			}
-			document.body.style.cursor = "default";
-			setTimeout(() => {
-				alert("Kullanici Olusturuldu :" + response.success);
-			}, 100);
-	    } catch (error) {
-	        document.getElementById("errorDiv").style.display = "block";
-	        document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	    } finally {
-	    	document.body.style.cursor = "default";
-	    	$kaydetButton.prop('disabled', false).text('Kaydet');
-	     }
-	}
+  btn.disabled = true;
+  btn.textContent = "İşlem Yapılıyor...";
+  err.style.display = "none";
+  err.innerText = "";
+  document.body.style.cursor = "wait";
+
+  try {
+    const response = await fetchWithSessionCheck("user/savecopyuser", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ hesap })
+    });
+
+    if (response && response.errorMessage) {
+      throw new Error(response.errorMessage);
+    }
+
+    setTimeout(() => {
+      alert("Kullanıcı Oluşturuldu: " + (response.success || "OK"));
+    }, 100);
+
+  } catch (error) {
+    err.style.display = "block";
+    err.innerText = error?.message || "Beklenmeyen bir hata oluştu.";
+  } finally {
+    document.body.style.cursor = "default";
+    btn.disabled = false;
+    btn.textContent = "Kaydet";
+  }
+}
 </script>
