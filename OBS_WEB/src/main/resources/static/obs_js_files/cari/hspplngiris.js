@@ -39,6 +39,9 @@ function hspclearInputs() {
 	imgElement.src = "";
 	imgElement.style.display = "none";
 	document.getElementById("kodKontrol").innerText = "" ;
+	
+	const fileInput = document.getElementById("resim");
+	    fileInput.value = "";  
 }
 
 async function hsplnKayit() {
@@ -162,6 +165,9 @@ async function hsparamaYap() {
 		document.getElementById("sms").checked = dto.sms;
 
 		const imgElement = document.getElementById("resimGoster");
+		
+		const fileInput = document.getElementById("resim");
+		    fileInput.value = "";  
 		if (dto.base64Resim && dto.base64Resim.trim() !== "") {
 			const base64String = 'data:image/jpeg;base64,' + dto.base64Resim.trim();
 			imgElement.src = base64String;

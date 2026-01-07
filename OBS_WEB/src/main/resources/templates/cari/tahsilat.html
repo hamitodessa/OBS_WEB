@@ -1,273 +1,464 @@
 <link rel="stylesheet" href="style/yenihsppln.css" />
 
 <style>
-.editable-cell {
-	cursor: text;
+/* =========================
+   2026 GLASS THEME - TAHSILAT
+   wrapper: #ara_content (ana sayfada var)
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* ===== CARD / ÜST TAB BAR ===== */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.double-column {
-	text-align: right;
+/* ===== NAV TABS - GLASS ===== */
+#ara_content .nav-tabs{
+  border-bottom: 1px solid rgba(255,255,255,.14);
+  gap: 8px;
 }
-.table .thead-dark th {
- color: #fff;
-  background: #214162;
+#ara_content .nav-tabs .nav-link{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.80) !important;
+  border-radius: 14px 14px 0 0 !important;
+  padding: 10px 14px;
+  font-weight: 900;
+  transition: .16s ease;
 }
-.tah-table th, .tah-table td {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	vertical-align: middle;
-	height: 15px;
+#ara_content .nav-tabs .nav-link:hover{
+  background: rgba(255,255,255,.08) !important;
+  transform: translateY(-2px);
+}
+#ara_content .nav-tabs .nav-link.active{
+  background: rgba(56,189,248,.16) !important;
+  color: #fff !important;
+  border-color: rgba(56,189,248,.35) !important;
+}
+
+/* ===== ANA PANEL (TEK KUTU) ===== */
+#ara_content .child{
+  width: 860px;
+  max-width: 100%;
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  box-sizing: border-box;
+}
+
+/* ===== group-box ARTIK KUTU DEĞİL: SATIR ===== */
+#ara_content .group-box{
+  border: none !important;
+  padding: 6px 4px;
+  margin: 0 0 8px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== FORM ROW ===== */
+#ara_content .form-row{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+/* ===== LABEL ===== */
+#ara_content label{
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(255,255,255,.82);
+  margin: 0;
+}
+
+/* ===== INPUT / SELECT ===== */
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+  box-sizing: border-box;
+}
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65);
+  color: #fff;
+}
+#ara_content input[type="date"]{ color-scheme: dark; }
+
+#ara_content .saga-bold{
+  text-align: right;
+  font-weight: 900;
+}
+
+/* datalist ok'u (▼) -> beyaz */
+#ara_content span[style*="pointer-events: none"]{
+  color: rgba(255,255,255,.85) !important;
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
+}
+
+/* ===== BUTTONS ===== */
+#ara_content .btn.btn-secondary{
+  height: 46px;
+  min-width: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: .16s ease;
+}
+#ara_content .btn.btn-secondary:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
+}
+#ara_content .btn.btn-primary{
+  height: 46px;
+  border-radius: 14px;
+  font-weight: 900;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  transition: .16s ease;
+  padding: 0 16px;
+}
+#ara_content .btn.btn-primary:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+}
+#ara_content #tahsilButton{
+  background: linear-gradient(180deg, rgba(251,113,133,.95), rgba(220,38,38,.95)) !important;
+}
+
+/* ===== “Cari kod / adres kod” label ===== */
+#ara_content #lblcheskod{
+  color: rgba(251,113,133,.95);
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+#ara_content #lbladrheskod{
+  color: rgba(34,197,94,.95);
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+
+/* ===== CHECKBOX ===== */
+#ara_content .form-check-input{
+  transform: scale(1.15);
+  margin: 0;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.45));
+}
+
+/* =========================================================
+   TAB2 TABLE (2026) + YEŞİL / ACTIVE / SUCCESS TAM KİLİT
+   ========================================================= */
+#ara_content #cekTable{
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+#ara_content #cekTable thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,#1f3b5c,#162b44);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* kolon çizgilerini temiz, sadece alt çizgi */
+#ara_content #cekTable th,
+#ara_content #cekTable td{
+  white-space: nowrap;
+  vertical-align: middle;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  padding: 6px 10px;
+  height: 28px;
+}
+
+/* hücre background kilidi (tr hangi renge boyanırsa boyansın görünmesin) */
+#ara_content #cekTable tbody td{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* hover */
+#ara_content #cekTable.table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #fff !important;
+}
+
+/* ✅ ASIL OLAY: Bootstrap state class'larını ve focus-within'i öldür */
+#ara_content #cekTable tbody tr,
+#ara_content #cekTable tbody tr:focus,
+#ara_content #cekTable tbody tr:focus-within{
+  background: transparent !important;
+}
+
+/* table-success / table-active / vs hepsine veto */
+#ara_content #cekTable tbody tr.table-success > *,
+#ara_content #cekTable tbody tr.table-active > *,
+#ara_content #cekTable tbody tr.table-primary > *,
+#ara_content #cekTable tbody tr.table-info > *,
+#ara_content #cekTable tbody tr.table-warning > *,
+#ara_content #cekTable tbody tr.table-danger > *{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* ===== ERROR ===== */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* datalist gizle */
+#ara_content datalist{ display:none; }
+
+/* responsive */
+@media (max-width: 900px){
+  #ara_content .form-row{ flex-wrap: wrap; }
 }
 
 
-
-.saga-bold {
-	text-align: right;
-	font-weight: bold;
-}
-
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 97%;
-	box-sizing: border-box;
-}
-
-.child {
-	width: 700px;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	align-items: center;
-}
-
-.form-row {
-	display: flex;
-	align-items: center;
-	margin-bottom: 5px;
-}
-
-datalist {
-	display: none;
-}
 </style>
+
+
+<!-- ===== TAB BAR ===== -->
 <div class="card p-4">
-	<ul class="nav nav-tabs" id="myTab" role="tablist">
-		<li class="nav-item" role="presentation">
-			<button class="nav-link active" id="tab1-tab"
-				style="font-weight: bold;" data-bs-toggle="tab"
-				data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1"
-				aria-selected="true">Tahsilat Fisi</button>
-		</li>
-		<li class="nav-item" role="presentation">
-			<button class="nav-link" id="tab2-tab" style="font-weight: bold;"
-				disabled data-bs-toggle="tab" data-bs-target="#tab2" type="button"
-				role="tab" aria-controls="tab2" aria-selected="false">Cek
-				Dokum</button>
-		</li>
-	</ul>
-</div>	
-	<div class="tab-content" id="myTabContent">
-		<div class="tab-pane fade show active" id="tab1" role="tabpanel"
-			aria-labelledby="tab1-tab">
-			<div class="child">
-				<div class="group-box">
-					<div class="form-row">
-						<input type="date" id="tahTarih" class="form-control"
-							th:value="${evrakTarih}" style="width: 150px; font-weight: bold;" />
-						<label for="bos" style="width: 45%;"></label>
-						
-						<button type="button" class="btn btn-secondary ml-2" onclick="tahgerifisNo()">
-							<i class="fa fa-backward"></i>
-						</button>
-						<span style="padding-left: 5px;"></span>
-						<button type="button" class="btn btn-secondary ml-2" onclick="tahsonfisNo()">
-							<i class="fa fa-refresh"></i>
-						</button>
-						<span style="padding-left: 5px;"></span>
-						<button type="button" class="btn btn-secondary ml-2" onclick="tahilerifisNo()">
-							<i class="fa fa-forward"></i>
-						</button>
-						<span style="padding-left: 5px;"></span> <input type="text"	id="tahevrakNo" name="tahevrakNo" 
-							onkeydown="tahevrakOkuma(event)"
-							class="form-control saga-bold" style="width: 100px;" /> <span
-							style="padding-left: 5px;"></span>
-						<button type="button" id="btnYeni" class="btn btn-secondary ml-2" onclick="tahyenifis()">
-							<i class="fa fa-plus"></i>
-						</button>
-					</div>
-				</div>
-				
-				<div class="group-box">
-					<div class="form-row">
-						
-						<select class="form-select" style="width: 150px;" id="tah_ted" name="tah_ted">
-							<option value="Tahsilat">Tahsilat</option>
-							<option value="Tediye">Tediye</option>
-						</select> 
-						
-						<span style="padding-left: 8%;"></span> 
-						
-						<select class="form-select" style="width: 150px;" id="tur" name="tur" onchange=turChange()>
-							<option value="Nakit">Nakit</option>
-							<option value="Cek">Cek</option>
-							<option value="Kredi Karti">Kredi Karti</option>
-						</select> 
-						
-						<span style="padding-left: 15%;"></span> 
-						<input type="text" id="tutar" onblur="formatInputBox2(this)"
-							class="form-control saga-bold" value="0.00" style="width: 150px; text-align: right;">
-					</div>
-				</div>
-				<!-- ****************************************************************************************************** -->
-				<div class="group-box">
-					<div style="display: flex; align-items: center; gap: 10px;">
-						<label for="label5" style="width: 75px;">Cari Kodu</label>
-						<div style="position: relative; width: 125px;">
-							<input class="form-control cins_bold" ondblclick="openSecondModal('tcheskod', 'tahsilat')"
-								list="chkoduOptions" maxlength="12" id="tcheskod"
-								oninput="hesapAdiOgren(this.value, 'lblcheskod'); validateAutoSearch('tcheskod', 'chkoduOptions')">
-							<datalist id="chkoduOptions">
-								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option> 
-							</datalist>
-							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-						</div>
-						<span style="padding-left: 80px;"></span>
-						<label for="label5" style="width: 100px;">Adres Kodu</label>
-						<div style="position: relative; width: 125px;">
-							<input class="form-control cins_bold" 
-								oninput="adrhesapAdiOgren('adresheskod','lbladrheskod')"
-								list="adreskoduOptions" maxlength="12" id="adresheskod">
-							<datalist id="adreskoduOptions"></datalist>
-							<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-						</div>
-					</div>
-					<div style="display: flex; align-items: center; gap: 10px;margin-top:7px;">
-						<span style="padding-left: 75px;"></span>	
-						<label id="lblcheskod" for="label4"	style="width: 350px; font-weight: bold;">...</label> 
-						<span style="padding-left: 30px;"></span>	
-						<label id="lbladrheskod" for="label5" style="width: 300px; font-weight: bold;">...</label>
-					</div>
-				</div>
-				<!-- ****************************************************************************************************** -->
-				<div class="group-box">
-					<div class="container mt-3">
-						<!-- İlk Satır: 3 Label -->
-						<div class="row mb-2">
-							<div class="col">
-								<label for="label1" style="width: 100px">Doviz Cinsi</label>
-							</div>
-							<div class="col" id="divcekbilgi" style="display: none;">
-								<label for="label2" style="width: 100px">Cek Sayisi</label>
-							</div>
-							<div class="col" id="divposbilgi" style="display: none;">
-								<label for="label3" style="width: 300px">Pos Banka</label>
-							</div>
-						</div>
-						<!-- İkinci Satır: 3 Input -->
-						<div class="row mb-2">
-							<div class="col">
-								
-									<select class="form-select" style="width: 100px;" id="dvz_cins" name="dvz_cins" >
-										<option value="TL">TL</option>
-										<option value="USD">USD</option>
-										<option value="EUR">EUR</option>
-										<option value="RUB">RUB</option>
-									</select>
-									
-							</div>
-							<div class="col" id="cekbilgidiv" style="display: none;">
-								<label id="ceksayisi" class="form-control" style="width: 100px">0</label>
-							</div>
-							<div class="col" id="posbilgidiv" style="display: none;">
-								<div style="position: relative; width: 300px;">
-									<input class="form-control cins_bold" style="width: 300px;"
-										list="posbankaOptions" id="posBanka">
-									<datalist id="posbankaOptions">
-										<option th:each="kod : ${nameBanks}" th:value="${kod.BANKA}"></option> 
-									</datalist>
-									<span
-										style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- ****************************************************************************************************** -->
-				<div class="group-box">
-					<div class="form-row">
-						<div class="form-check">
-							<input type="checkbox" class="form-check-input" id="fisnoyazdir">
-							<label class="form-check-label" for="calisanmi">Yazicida
-								Fis No Yazdir</label>
-						</div>
-					</div>
-				</div>
-				<div class="group-box">
-					<div class="form-row">
-						<button class="btn btn-primary" type="button" id="tahkaydetButton"
-								onclick="tahfisKayit()">Kaydet</button>
-						<span style="padding-left: 10px;"></span>			
-						<button class="btn btn-primary" type="button" id="tahsilButton" 
-								onclick="tahfisYoket()">Sil</button>
-						<span style="padding-left: 10px;"></span>			
-						<button class="btn btn-primary" type="button" id="indirButton" 
-								onclick="tahsilatdownloadReport()">Indir</button>
-						<span style="padding-left: 10px;"></span>
-						<button class="btn btn-primary" type="button" id="carikaydetButton" 
-								onclick="openFirstModal('tahsilatckaydet')">Cari Kaydet</button>
-					</div>
-				</div>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="tab1-tab"
+              data-bs-toggle="tab" data-bs-target="#tab1"
+              type="button" role="tab" aria-controls="tab1" aria-selected="true">
+        Tahsilat Fisi
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab2-tab" disabled
+              data-bs-toggle="tab" data-bs-target="#tab2"
+              type="button" role="tab" aria-controls="tab2" aria-selected="false">
+        Cek Dokum
+      </button>
+    </li>
+  </ul>
+</div>
 
+<div class="tab-content" id="myTabContent">
+
+  <!-- ================= TAB 1 ================= -->
+  <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+
+    <div class="child">
+
+      <!-- SATIR 1: tarih + nav + evrak + yeni -->
+      <div class="group-box">
+        <div class="form-row">
+          <input type="date" id="tahTarih" class="form-control"
+                 th:value="${evrakTarih}" style="width: 160px; font-weight: 900;" />
+
+          <div style="flex:1 1 auto;"></div>
+
+          <button type="button" class="btn btn-secondary" onclick="tahgerifisNo()"><i class="fa fa-backward"></i></button>
+          <button type="button" class="btn btn-secondary" onclick="tahsonfisNo()"><i class="fa fa-refresh"></i></button>
+          <button type="button" class="btn btn-secondary" onclick="tahilerifisNo()"><i class="fa fa-forward"></i></button>
+
+          <input type="text" id="tahevrakNo" name="tahevrakNo"
+                 onkeydown="tahevrakOkuma(event)"
+                 class="form-control saga-bold"
+                 style="width: 110px;" />
+
+          <button type="button" id="btnYeni" class="btn btn-secondary" onclick="tahyenifis()"><i class="fa fa-plus"></i></button>
+        </div>
+      </div>
+
+      <!-- SATIR 2: tah/ted + tur + tutar -->
+      <div class="group-box">
+        <div class="form-row">
+          <select class="form-select" style="width: 160px;" id="tah_ted" name="tah_ted">
+            <option value="Tahsilat">Tahsilat</option>
+            <option value="Tediye">Tediye</option>
+          </select>
+
+          <select class="form-select" style="width: 160px;" id="tur" name="tur" onchange="turChange()">
+            <option value="Nakit">Nakit</option>
+            <option value="Cek">Cek</option>
+            <option value="Kredi Karti">Kredi Karti</option>
+          </select>
+
+          <div style="flex:1 1 auto;"></div>
+
+          <input type="text" id="tutar" onblur="formatInputBox2(this)"
+                 class="form-control saga-bold" value="0.00"
+                 style="width: 180px;" />
+        </div>
+      </div>
+
+      <!-- SATIR 3: Cari kod + Adres kod -->
+			<div class="group-box">
+				<div class="form-row" style="gap: 14px;">
+					<label style="width: 80px;">Cari Kodu</label>
+					<div style="position: relative; width: 140px;">
+						<input class="form-control cins_bold"
+							ondblclick="openSecondModal('tcheskod', 'tahsilat')"
+							list="chkoduOptions" maxlength="12" id="tcheskod"
+							oninput="hesapAdiOgren(this.value, 'lblcheskod'); validateAutoSearch('tcheskod', 'chkoduOptions')">
+						<datalist id="chkoduOptions">
+							<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+						</datalist>
+						<span
+							style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
+							▼ </span>
+					</div>
+					<div style="flex: 1 1 auto;"></div>
+					<label style="width: 90px;">Adres Kodu</label>
+					<div style="position: relative; width: 140px;">
+						<input class="form-control cins_bold"
+							oninput="adrhesapAdiOgren('adresheskod','lbladrheskod')"
+							list="adreskoduOptions" maxlength="12" id="adresheskod">
+						<datalist id="adreskoduOptions"></datalist>
+						<span
+							style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
+							▼ </span>
+					</div>
+				</div>
+				<div class="form-row" style="margin-top: 6px;">
+					<div style="width: 80px;"></div>
+					<label id="lblcheskod" style="width: 420px; font-weight: 900;">...</label>
+					<div style="flex: 1 1 auto;"></div>
+					<label id="lbladrheskod" style="width: 360px; font-weight: 900;">...</label>
+				</div>
 			</div>
-			<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-		</div>
+			<!-- SATIR 4: Döviz + çek info + pos banka -->
+			<div class="group-box">
+				<div class="form-row">
+					<label style="width: 95px;">Doviz Cinsi</label> <select
+						class="form-select" style="width: 110px;" id="dvz_cins"
+						name="dvz_cins">
+						<option value="TL">TL</option>
+						<option value="USD">USD</option>
+						<option value="EUR">EUR</option>
+						<option value="RUB">RUB</option>
+					</select>
+					<!-- senin JS'in beklediği LABEL div -->
+					<div class="col" id="divcekbilgi" style="display: none;">
+						<label style="width: 100px">Cek Sayisi</label>
+					</div>
+					<!-- senin JS'in beklediği INPUT div -->
+					<div class="col" id="cekbilgidiv" style="display: none;">
+						<label id="ceksayisi" class="form-control"
+							style="width: 110px; height: 46px; display: flex; align-items: center;">0</label>
+					</div>
+					<div style="flex: 1 1 auto;"></div>
+					<!-- senin JS'in beklediği LABEL div -->
+					<div class="col" id="divposbilgi" style="display: none;">
+						<label style="width: 90px">Pos Banka</label>
+					</div>
+					<!-- senin JS'in beklediği INPUT div -->
+					<div class="col" id="posbilgidiv" style="display: none;">
+						<div style="position: relative; width: 320px;">
+							<input class="form-control cins_bold" style="width: 320px;"
+								list="posbankaOptions" id="posBanka">
+							<datalist id="posbankaOptions">
+								<option th:each="kod : ${nameBanks}" th:value="${kod.BANKA}"></option>
+							</datalist>
+							<span
+								style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
+								▼ </span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- SATIR 5: checkbox -->
+			<div class="group-box">
+        <div class="form-row">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="fisnoyazdir">
+            <label class="form-check-label" for="fisnoyazdir">Yazicida Fis No Yazdir</label>
+          </div>
+        </div>
+      </div>
 
-		<!-- Tab 2 Content -->
-		<div class="tab-pane fade" id="tab2" role="tabpanel"
-			aria-labelledby="tab2-tab">
-			<button type="button" class="btn btn-secondary ml-2"
-				onclick="addRow()">
-				<i class="fa fa-plus"></i>
-			</button>
-			<table class="table table-bordered" id="cekTable"
-				style="margin-top: 5px;">
-				<thead class="thead-dark">
-					<tr>
-						<th style="width:25px;"></th>
-						<th>Banka</th>
-						<th style="width:15%;">Sube</th>
-						<th style="width:10%;">Seri No</th>
-						<th style="width:10%;">Hesap</th>
-						<th style="width:15%;">Borclu</th>
-						<th style="width:10%;">Vade</th>
-						<th class="double-column" style="width:10%;">Tutar</th>
-					</tr>
-				</thead>
-				<tbody id="tableBody">
-				</tbody>
-				<tfoot>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td style="font-weight: bold;">Toplam</td>
-						<td id="totalTutar" class="saga-bold">0.00</td>
-					</tr>
-				</tfoot>
-			</table>
-		</div>
-	</div>
-	
+      <!-- SATIR 6: butonlar -->
+      <div class="group-box">
+        <div class="form-row" style="gap:10px;">
+          <button class="btn btn-primary" type="button" id="tahkaydetButton" onclick="tahfisKayit()">Kaydet</button>
+          <button class="btn btn-primary" type="button" id="tahsilButton" onclick="tahfisYoket()">Sil</button>
+          <button class="btn btn-primary" type="button" id="indirButton" onclick="tahsilatdownloadReport()">Indir</button>
+          <button class="btn btn-primary" type="button" id="carikaydetButton" onclick="openFirstModal('tahsilatckaydet')">Cari Kaydet</button>
+        </div>
+      </div>
+
+      <div id="errorDiv"></div>
+
+    </div>
+  </div>
+
+  <!-- ================= TAB 2 ================= -->
+  <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+
+    <button type="button" class="btn btn-secondary" onclick="addRow()">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <div style="margin-top:8px; border-radius:16px; overflow:auto; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.03);">
+      <table class="table table-hover" id="cekTable">
+        <thead class="thead-dark">
+          <tr>
+            <th style="width:25px;"></th>
+            <th>Banka</th>
+            <th style="width:15%;">Sube</th>
+            <th style="width:10%;">Seri No</th>
+            <th style="width:10%;">Hesap</th>
+            <th style="width:15%;">Borclu</th>
+            <th style="width:10%;">Vade</th>
+            <th class="double-column" style="width:10%;">Tutar</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot>
+          <tr>
+            <td></td><td></td><td></td><td></td><td></td><td></td>
+            <td style="font-weight: 900;">Toplam</td>
+            <td id="totalTutar" class="saga-bold">0.00</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+  </div>
+</div>
+
 <input type="hidden" id="tahsilatBilgi">
 
 <div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 
 <script src="/obs_js_files/cari/tahsilat.js"></script>
+

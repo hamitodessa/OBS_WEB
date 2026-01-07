@@ -1,161 +1,295 @@
-	
 <style>
 
-/* Ana div düzeni */
-.container {
-	width: 660px;    /* 65%*/
-	padding: 2px;
-	margin: 0 auto;
-	box-sizing: border-box;
-	/*	border: 1px solid #ccc; */
-	justify-content: center;
-	align-items: center;
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* ===== CARD / SAYFA ===== */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.child {
-	width: 100%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
+/* ===== DIŞ PANEL ===== */
+#ara_content .centered-div{
+  width: 92%;
+  margin: 0 auto;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  box-sizing: border-box;
 }
 
-.buttonBolum {
-	width: 100%;
-	box-sizing: border-box;
-	display: flex;
-	justify-content: flex-start;
-	gap: 10px;
+/* ===== ANA CONTAINER (senin 660px mantığı) ===== */
+#ara_content .container{
+  width: 700px;
+  padding: 6px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-.child:last-child {
-	margin-bottom: 0;
+/* ===== BLOKLAR ===== */
+#ara_content .child{
+  width: 100%;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  border-radius: 16px;
+  padding: 10px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+#ara_content .child:last-child{ margin-bottom: 0; }
+
+#ara_content .group-box,
+#ara_content .fourth-group-box{
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.02);
+  border-radius: 16px;
+  padding: 12px;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 97%;
-	box-sizing: border-box;
+/* ===== BAŞLIKLAR ===== */
+#ara_content h6{
+  margin: 10px 0 6px 0;
+  font-weight: 900;
+  letter-spacing: .2px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-.form-row {
-	display: flex;
-	align-items: center;
-	margin-bottom: 5px;
+/* ===== FORM ROW (YAN YANA SABİT) ===== */
+#ara_content .form-row{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap !important; /* <<< ALT ALTA DÜŞMESİN */
+  margin-bottom: 5px;
 }
 
-.form-row-borc-alacak {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 5px;
-	height: 25px;
+/* borç/alacak üstte isim satırı */
+#ara_content .form-row-borc-alacak{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  height: 25px;
 }
 
-.form-row input, .form-row select {
-	margin-right: 5px;
-	margin-left: 5px;
-	height: 30px;
+/* label */
+#ara_content .form-row label{
+  margin: 0;
+  color: rgba(255,255,255,.82);
+  font-weight: 900;
+  font-size: 13px;
 }
 
-.form-row label {
-	margin-right: 10px;
+/* ===== INPUT/SELECT – CAM STANDARD ===== */
+#ara_content .form-control,
+#ara_content .form-select,
+#ara_content textarea.form-control{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+  box-sizing: border-box;
 }
 
-.fourth-group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 97%;
-	box-sizing: border-box;
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
+#ara_content .form-control:focus,
+#ara_content .form-select:focus,
+#ara_content textarea.form-control:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65);
+  color:#fff;
 }
 
-.text-area {
-	width: 70%;
-	height: 75px;
-	box-sizing: border-box;
-	padding: 5px;
-	font-size: 14px;
-	resize: none;
+#ara_content input[type="date"]{ color-scheme: dark; }
+
+/* disabled okunaklı */
+#ara_content .form-control:disabled,
+#ara_content .form-select:disabled,
+#ara_content textarea.form-control:disabled{
+  opacity: .78;
+  color: rgba(255,255,255,.78);
+  background: rgba(8,14,26,.30);
 }
 
-.right-section {
-	width: 25%;
-	display: flex;
-	flex-direction: column;
+/* ===== GENİŞLİK HELPERS (senin eski classların) ===== */
+#ara_content .width-50{ width: 50px; }
+#ara_content .width-150{ width: 150px; }
+#ara_content .width-250{ width: 250px; }
+
+#ara_content .saga-bold{
+  text-align: right;
+  font-weight: 900;
+}
+#ara_content .cins_bold{
+  font-weight: 900;
+}
+#ara_content .padding-sag{ padding-right: 15px; }
+
+/* isim label renkleri */
+#ara_content .borcluAdi{
+  text-align:left;
+  font-weight: 900;
+  color: rgba(251,113,133,.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 260px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+#ara_content .alacakliAdi{
+  text-align:left;
+  font-weight: 900;
+  color: rgba(34,197,94,.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 260px;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-.label {
-	font-size: 14px;
-	margin-bottom: 10px;
+/* ===== ÖZEL: BORÇ/ALACAK SATIRI YAN YANA KİLİT ===== */
+/* datalistli wrapper div (position:relative) sabit 150px */
+#ara_content .form-row > div[style*="position: relative"]{
+  flex: 0 0 150px !important;
+  width: 150px !important;
 }
 
-.input {
-	width: 100%;
-	height: 30px;
-	box-sizing: border-box;
-	padding: 5px;
-	font-size: 14px;
+/* cins label sabit */
+#ara_content #borcluHesapCins,
+#ara_content #alacakliHesapCins{
+  flex: 0 0 50px !important;
+  width: 50px !important;
 }
 
-.padding-sag {
-	padding-right: 15px;
+/* kur cinsi */
+#ara_content #borcKurCins,
+#ara_content #alacakKurCins{
+  flex: 0 0 110px !important;
+  width: 110px !important;
 }
 
-.cins_bold {
-	font-weight: bold;
+/* kur */
+#ara_content #borcKur,
+#ara_content #alacakKur{
+  flex: 0 0 100px !important;
+  width: 100px !important;
 }
 
-.saga-bold {
-	text-align: right;
-	font-weight: bold;
+/* tutar (geniş) */
+#ara_content #borcTutar,
+#ara_content #alacakTutar{
+  flex: 1 1 160px !important;
+  min-width: 160px !important;
 }
 
-.width-50 {
-	width: 50px;
+/* ===== FOURTH BOX: TEXTAREA + KODU YAN YANA ===== */
+#ara_content .fourth-group-box{
+  display:flex !important;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
-.borcluAdi{
-    text-align: left;
-	font-weight: bold;
-	color: red;
-	white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
+#ara_content .text-area{
+  flex: 1 1 70% !important;
+  width: auto !important;
+  height: 90px !important;
+  resize: none;
+  font-size: 14px;
+  padding: 10px;
 }
 
-.alacakliAdi{
-    text-align: left;
-	font-weight: bold;
-	color: green;
-	white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-}
-.width-150 {
-	width: 150px;
+#ara_content .right-section{
+  flex: 0 0 25% !important;
+  width: auto !important;
+  display:flex;
+  flex-direction: column;
 }
 
-.width-250 {
-	width: 250px;
+/* ===== BUTTONLAR ===== */
+#ara_content .btn.btn-secondary{
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  display: grid;
+  place-items: center;
+  transition: .16s ease;
+}
+#ara_content .btn.btn-secondary:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
 }
 
-.centered-div {
-	width: 90%;
-	margin: 0 auto;
-	padding: 20px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	text-align: center;
+/* alttaki kaydet/sil */
+#ara_content .buttonBolum{
+  width: 100%;
+  display:flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+#ara_content .btn.btn-primary{
+  height: 46px;
+  border-radius: 14px;
+  font-weight: 900;
+  border: none;
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  color: #fff;
+  transition: .16s ease;
+  padding: 0 16px;
+}
+#ara_content .btn.btn-primary:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+}
+
+/* Sil butonu kırmızı gradient */
+#ara_content #deksilButton{
+  background: linear-gradient(180deg, rgba(251,113,133,.95), rgba(220,38,38,.95)) !important;
+}
+
+/* ===== ERROR ===== */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* ===== RESPONSIVE (dar ekranda alt alta düşsün) ===== */
+@media (max-width: 820px){
+  #ara_content .container{ width: 100%; }
+  #ara_content .form-row{ flex-wrap: wrap !important; }
+  #ara_content .fourth-group-box{ flex-wrap: wrap !important; }
+  #ara_content .right-section{ flex: 1 1 100% !important; }
 }
 </style>
+
 <link rel="stylesheet" href="style/yenihsppln.css" />
 
 <div class="card p-4">
