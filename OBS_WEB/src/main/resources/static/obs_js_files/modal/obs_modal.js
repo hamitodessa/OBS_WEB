@@ -102,7 +102,7 @@ async function openSecondModal(inputId, secondnerden) {
 			}
 			return;
 		}
-		tableBody.classList.add("table-row-height");
+	//	tableBody.classList.add("table-row-height");
 		data.forEach((row) => {
 			const tr = document.createElement("tr");
 			tr.innerHTML = `

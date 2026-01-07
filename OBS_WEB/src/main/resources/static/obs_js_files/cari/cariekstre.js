@@ -95,7 +95,7 @@ async function eksfetchTableData(page) {
     let totalBorc = 0, totalAlacak = 0;
     data.data.forEach((item) => {
       const row = document.createElement("tr");
-      row.classList.add("table-row-height");
+    
       row.innerHTML = `
         <td>${formatDate(item.TARIH)}</td>
         <td>${item.EVRAK || ''}</td>

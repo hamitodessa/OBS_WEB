@@ -1,0 +1,151 @@
+/* =========================
+   2026 CAM – FIRST MODAL (CLEAN / NO ÇORBA)
+   ========================= */
+
+/* z-index (2. modal üstte kalacaksa kalsın) */
+.modal{ z-index: 1055; }
+.modal-backdrop{ z-index: 1050; }
+#secondModal.modal{ z-index: 1065 !important; }
+.modal-backdrop.second-backdrop{ z-index: 1060 !important; }
+
+/* =========================
+   FIRST MODAL – container
+   ========================= */
+
+/* EN KRİTİK: modal-content üstündeki blur/transparency hissini bitir */
+#firstModal .modal-dialog .modal-content{
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.96) !important;          /* daha opak */
+  background-image: none !important;
+  color: rgba(255,255,255,.94) !important;
+  box-shadow: 0 22px 65px rgba(0,0,0,.55) !important;
+
+  /* BU ikisi “arka sayfa rengi içeri sızıyor” hissini yapar → kapatıyoruz */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  overflow: hidden; /* header/body/footer kenarları temiz */
+}
+
+/* =========================
+   HEADER – gradient sadece burada
+   ========================= */
+#firstModal .modal-header{
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+
+  background: linear-gradient(180deg,
+    rgba(56,189,248,.20),
+    rgba(31,59,92,.88),
+    rgba(22,43,68,.88)
+  ) !important;
+  background-image: none !important;
+}
+
+#firstModal .modal-header::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:2px;
+  background: linear-gradient(90deg,
+    rgba(56,189,248,0),
+    rgba(56,189,248,.65),
+    rgba(34,197,94,.35),
+    rgba(56,189,248,0)
+  );
+}
+
+#firstModal .modal-title{
+  color: rgba(255,255,255,.95) !important;
+  font-weight: 900;
+}
+
+#firstModal .btn-close{
+  filter: invert(1) grayscale(1);
+  opacity: .9;
+}
+
+
+/* Raporla butonu dev olmasın */
+#firstModal .modal-footer .btn.form-control{
+  width: 240px !important;
+  max-width: 240px !important;
+  margin-left: auto !important;
+}
+
+/* =========================
+   INPUT GROUP / FORM
+   ========================= */
+#firstModal .input-group{ gap: 10px; }
+
+#firstModal .input-group-text{
+  width: 150px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.10);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+}
+
+#firstModal .form-control{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.55);
+  color: rgba(255,255,255,.92);
+}
+
+#firstModal .form-control:focus{
+  border-color: rgba(56,189,248,.70);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.70);
+  color: #fff;
+}
+
+#firstModal input[type="date"]{
+  color-scheme: dark;
+}
+
+
+/* === FIX: First modal içinde şeffaf kalan elemanları kapat === */
+
+/* body/footer sabit kalsın */
+#firstModal .modal-body{
+  background: rgba(8,14,26,.72) !important;
+}
+#firstModal .modal-footer{
+  background: rgba(8,14,26,.66) !important;
+}
+
+/* modal-body içindeki tüm bootstrap arka planlarını koyulaştır */
+#firstModal .modal-body .input-group,
+#firstModal .modal-body .input-group-text,
+#firstModal .modal-body .form-control{
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+  border-color: rgba(255,255,255,.16) !important;
+}
+
+/* input-group-text biraz daha açık “etiket” gibi dursun */
+#firstModal .modal-body .input-group-text{
+  background: rgba(255,255,255,.10) !important;
+  font-weight: 900;
+}
+
+/* focus */
+#firstModal .modal-body .form-control:focus{
+  border-color: rgba(56,189,248,.70) !important;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
+  background: rgba(8,14,26,.70) !important;
+  color: #fff !important;
+}
+
+#firstModal .modal-body{
+  border-bottom: none !important;
+}
+
+#firstModal .modal-footer{
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+

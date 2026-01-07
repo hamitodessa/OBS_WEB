@@ -1,50 +1,46 @@
-<style>
-    .modal-dialog {
-     	height: 500px; /* Modal yüksekliği */
-        margin: 0 auto; /* Modalı ortalar */
-    }
-    .modal-content {
-        overflow-y: auto; /* Fazla içerik için kaydırma */
-    }
-    .modal-backdrop {
-        z-index: 1040 !important; /* Birinci modalın üstüne çıkacak */
-    }
-    #secondModal {
-        z-index: 1050 !important; /* İkinci modal birinciden daha yukarıda */
-    }
-</style>
 
-<!-- Modal -->
- <div class="modal fade" th:fragment="modalekstre" id="firstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" >
+<div class="modal fade"
+     th:fragment="modalekstre"
+     id="firstModal"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="staticBackdropLabel"
+     aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
+
       <div class="modal-header">
         <h6 class="modal-title" id="staticBackdropLabel">Cari Ekstre</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
-         <div class="input-group" style="padding:2px;">
-  			<div class="input-group-prepend">
-    			<span class="input-group-text" style="width:150px;">Hesap Kodu</span>
-  			</div>
-  			<span style="padding-left: 5px;"></span>
-  			<input type="text" id="fhkodu1" style="max-width:150px;" class="form-control" ondblclick="openSecondModal('fhkodu1')">
-		</div>
-		
-        <div class="input-group" style="padding:2px;">
-  			<div class="input-group-prepend">
-    			<span class="input-group-text" style="width:150px;">Ilk Son Tarih</span>
-  			</div>
-  			<span style="padding-left: 5px;"></span>
-  			<input type="date" id="startDate" aria-label="startDate" class="form-control" value="1900-01-01">
-  			<span style="padding-left: 5px;"></span>
-  			<input type="date" id="endDate" aria-label="endDate" class="form-control" value="2100-12-31">
-		</div>
+
+        <div class="input-group gap-2" style="padding:2px;">
+          <span class="input-group-text">Hesap Kodu</span>
+          <input type="text" id="fhkodu1" style="max-width:150px;"
+                 class="form-control"
+                 ondblclick="openSecondModal('fhkodu1')">
+        </div>
+
+        <div class="input-group gap-2" style="padding:2px;">
+          <span class="input-group-text">Ilk Son Tarih</span>
+         
+          <input type="date" id="startDate" aria-label="startDate"
+                 class="form-control" value="1900-01-01">
+         
+          <input type="date" id="endDate" aria-label="endDate"
+                 class="form-control" value="2100-12-31">
+        </div>
+
       </div>
-      
+
       <div class="modal-footer">
         <button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Raporla</button>
       </div>
+
     </div>
   </div>
 </div>
