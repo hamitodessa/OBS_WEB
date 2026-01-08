@@ -1,19 +1,10 @@
 <style>
   .modal-dialog {
-    height: 500px;
+    height: 600px;
     margin: 0 auto;
   }
   
-  .modal-content {
-    overflow-y: auto;
-  }
-  
-  .modal-backdrop {
-    z-index: 1040 !important;
-  }
-  #secondModal {
-    z-index: 1050 !important;
-  }
+ 
 </style>
 <div class="modal fade" th:fragment="modaltahrap" id="firstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -25,11 +16,11 @@
       <div class="modal-body">
         <div class="input-group" style="padding:2px;">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width:150px;">Cins</span>
+            <span class="input-group-text" style="width:100px;">Cins</span>
           </div>
           <span style="padding-left: 5px;"></span>
          
-            <select id="tah_ted" class="form-select" style="width: calc(100% - 155px);padding-left:5px;">
+            <select id="tah_ted" class="form-select" style="padding-left:5px;">
               <option value="" selected>Hepsi</option>
               <option value="tahsilat">Tahsilat</option>
               <option value="tediye">Tediye</option>
@@ -38,11 +29,11 @@
         </div>
         <div class="input-group" style="padding:2px;">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width:150px;">Tur</span>
+            <span class="input-group-text" style="width:100px;">Tur</span>
           </div>
           <span style="padding-left: 5px;"></span>
          
-            <select id="hangi_tur" class="form-select" style=" width: calc(100% - 155px);padding-left:5px;">
+            <select id="hangi_tur" class="form-select" style="padding-left:5px;">
               <option value="" selected>Hepsi</option>
               <option value="nakit">Nakit</option>
               <option value="cek">Cek</option>
@@ -52,11 +43,11 @@
         </div>
         <div class="input-group" style="padding:2px;">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width:150px;">Pos</span>
+            <span class="input-group-text" style="width:100px;">Pos</span>
           </div>
           <span style="padding-left: 5px;"></span>
          
-            <select id="pos" class="form-select" style="width: calc(100% - 155px);padding-left:5px;">
+            <select id="pos" class="form-select" style="padding-left:5px;">
 			</select>
             
         </div>
@@ -89,7 +80,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Raporla</button>
+        <button type="button" class="btn btn-primary" style="width:150px;" onclick="saveToMain()">Raporla</button>
       </div>
     </div>
   </div>

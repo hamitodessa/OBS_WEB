@@ -1,13 +1,136 @@
+<link rel="stylesheet" href="style/yenihsppln.css" />
 <style>
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 70%;
-	box-sizing: border-box;
+/* =========================
+   2026 GLASS THEME
+   wrapper: #ara_content
+   ========================= */
+
+/* ANA CARD */
+#ara_content .card.p-4{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
+/* GROUP BOX → CAM PANEL */
+#ara_content .group-box{
+  width: auto !important;
+  margin: 10px 0 !important;
+  padding: 14px !important;
+
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 14px 40px rgba(0,0,0,.35);
+}
+
+/* FLEX SATIRLAR */
+#ara_content .group-box > div{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* LABEL */
+#ara_content label{
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900;
+  letter-spacing: .2px;
+}
+
+/* HESAP ADI LABEL ( ... olanlar ) */
+#ara_content label[id^="lbl"]{
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(8,14,26,.40);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* INPUT – CAM */
+#ara_content .form-control{
+  height: 44px;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35) !important;
+  color: rgba(255,255,255,.92) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+#ara_content .form-control::placeholder{
+  color: rgba(255,255,255,.55);
+}
+
+#ara_content .form-control:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow:
+    0 0 0 4px rgba(56,189,248,.18),
+    inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+/* PRIMARY BUTTON – 2026 SEXY */
+#ara_content .btn.btn-primary{
+  height: 46px;
+  border-radius: 14px;
+  font-weight: 900;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  box-shadow: 0 12px 28px rgba(0,0,0,.35);
+  transition: .16s ease;
+  padding: 0 18px;
+}
+
+#ara_content .btn.btn-primary:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+}
+
+#ara_content .btn.btn-primary:active{
+  transform: translateY(0);
+  filter: brightness(.98);
+}
+
+/* RESPONSIVE TOPARLAMA */
+@media (max-width: 900px){
+  #ara_content span[style*="padding-left"]{
+    display: none !important;
+  }
+  #ara_content div[style*="width: 125px"]{
+    width: 100% !important;
+  }
+  #ara_content label[id^="lbl"]{
+    width: 100% !important;
+    margin-top: 6px;
+  }
+}
+
+#ara_content #errorDiv{
+  margin-top: 10px;
+  padding: 10px 14px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.12);
+
+  color: rgba(255,255,255,.95) !important;
+  font-weight: 900;
+
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
 }
 </style>
-<link rel="stylesheet" href="style/yenihsppln.css" />
+
 
 <div class="card p-4">
 	<div class="group-box">

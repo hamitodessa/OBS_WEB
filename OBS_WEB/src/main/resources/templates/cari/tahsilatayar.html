@@ -1,37 +1,159 @@
 
 <style>
-.group-box {
-	padding: 1px;
-	width: 73%;
-	box-sizing: border-box;
-	display: flex;
-	align-items: center;
+/* =========================
+   2026 GLASS THEME - FIRMA AYAR (LOGO / KAŞE)
+   wrapper: #ara_content
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* CARD */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 
-.aramagroup-box {
-	width: 73%;
-	box-sizing: border-box;
-	display: flex;
-	align-items: center;
-	border: 1px solid #ccc;
-	height: 50px; /* Yüksekliği sabitledim */
-}
-.centered-div {
-	width: 70%; /* Genişlik %80 */
-	margin: 0 auto; /* Ekran ortasında konumlandırma */
-	box-sizing: border-box;
-	text-align: center; /* İçerikleri ortala (opsiyonel) */
+/* Ana panel genişliği (tahsilat child mantığı) */
+#ara_content .centered-div{
+  width: 860px;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  text-align: left;
 }
 
-.resimgoster {
-    display: flex; /* Flexbox ile hizalama */
-    justify-content: center; /* Yatayda ortala */
-    align-items: center; /* Dikeyde ortala */
-    width: 315px; /* Sabit genişlik */
-    height: 150px; /* Sabit yükseklik */
-    border: 1px solid #ddd; /* İsteğe bağlı çerçeve */
-    overflow: hidden; /* Resmin taşmasını engelle */
-    background-color: #f8f9fa; /* Arka plan rengi */
+/* group-box = satır */
+#ara_content .group-box{
+  width: 100% !important;
+  padding: 6px 4px !important;
+  margin: 0 0 8px 0 !important;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  border: none !important;
+}
+
+/* Kaydet satırı */
+#ara_content .aramagroup-box{
+  width: 100% !important;
+  margin-top: 10px !important;
+  padding: 10px 10px !important;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 16px;
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  height: auto !important; /* eski sabit 50px'i iptal */
+}
+
+/* span.input-group-text = label görünümü */
+#ara_content .input-group-text{
+  min-width: 110px !important;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.85) !important;
+  font-weight: 900 !important;
+  letter-spacing: .2px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* INPUT */
+#ara_content .form-control{
+  height: 46px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.45) !important;
+  color: rgba(255,255,255,.92) !important;
+  box-sizing: border-box;
+}
+#ara_content .form-control::placeholder{ color: rgba(255,255,255,.45); }
+#ara_content .form-control:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
+  background: rgba(8,14,26,.65) !important;
+  color: #fff !important;
+}
+
+/* BUTTONS (secondary) */
+#ara_content .btn.btn-secondary{
+  height: 46px;
+  min-width: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: .16s ease;
+}
+#ara_content .btn.btn-secondary:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
+}
+
+/* Kaydet butonu da secondary ise biraz “primary” gibi parlasın */
+#ara_content #serverButton{
+  border: none !important;
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95)) !important;
+  color: #fff !important;
+  font-weight: 900 !important;
+}
+#ara_content #serverButton:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+}
+
+/* Görsel kutuları (logo/kaşe) */
+#ara_content .resimgoster{
+  width: 315px !important;
+  height: 150px !important;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: contain;   /* resim taşmasın, oran korunsun */
+  padding: 10px;
+}
+
+/* Senin div'lerin borderını da cam yapalım (inline style olsa da dursun) */
+#ara_content .group-box > div[style*="border"]{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 16px;
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  overflow: hidden;
+}
+
+/* Error */
+#ara_content #errorDiv{
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: rgba(255,255,255,.95) !important;
+  font-weight: 900;
 }
 
 

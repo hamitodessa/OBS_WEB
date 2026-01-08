@@ -149,3 +149,19 @@
   border-top: 1px solid rgba(255,255,255,.08) !important;
 }
 
+
+#firstModal .form-select{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.55);
+  color: rgba(255,255,255,.92);
+}
+
+#firstModal .form-select:focus{
+  border-color: rgba(56,189,248,.70);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.70);
+  color: #fff;
+}
+

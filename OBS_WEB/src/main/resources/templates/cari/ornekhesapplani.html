@@ -1,8 +1,77 @@
+<style>
+/* =========================
+   2026 GLASS THEME - KAYIT ADEDİ + BUTTON
+   wrapper: #ara_content
+   ========================= */
+
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
+/* kayitadedi label'ı (label ama form-control verilmiş) */
+#ara_content .card label.form-control{
+  height: auto !important;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;     /* ortala */
+  padding: 10px 14px !important;
+
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.40) !important;
+  color: rgba(255,255,255,.92) !important;
+
+  font-weight: 900 !important;
+  letter-spacing: .2px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* Primary button (2026 sexy gradient) */
+#ara_content .btn.btn-primary{
+  height: 46px;
+  border-radius: 14px;
+  font-weight: 900;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  box-shadow: 0 12px 28px rgba(0,0,0,.35);
+  transition: .16s ease;
+  padding: 0 16px;
+}
+#ara_content .btn.btn-primary:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+}
+#ara_content .btn.btn-primary:active{
+  transform: translateY(0);
+  filter: brightness(.98);
+}
+
+/* errorDiv (cam + kırmızı glow) */
+#ara_content #errorDiv{
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: rgba(255,255,255,.95) !important;
+  font-weight: 900;
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+
+</style>
 <div class="card p-4">
 	<label class="form-control" th:text="${kayitadedi}"  style="font-weight: bold;"></label>
 	<br>
 	<button class="btn btn-primary" type="button" id="hplkayitButton"
-		style="width: 150px;" onclick="hplnkaydet()">Hesap Plani Kaydet</button>
+		style="width: 250px;" onclick="hplnkaydet()">Hesap Plani Kaydet</button>
 </div>
 <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
 

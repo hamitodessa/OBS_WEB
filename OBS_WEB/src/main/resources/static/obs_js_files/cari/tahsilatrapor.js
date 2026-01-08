@@ -24,142 +24,178 @@ async function fetchDetails(evrakNo, cins) {
 }
 
 async function tahrapfetchTableData() {
-	const hiddenFieldValue = $('#tahrapBilgi').val();
-	const parsedValues = hiddenFieldValue.split(","); 
-	const tah_ted = parsedValues[0];
-	const hangi_tur = parsedValues[1];
-	const pos = parsedValues[2];
-	const hkodu1 = parsedValues[3];
-	const hkodu2 = parsedValues[4];
-	const startDate = parsedValues[5];
-	const endDate = parsedValues[6];
-	const evrak1 = parsedValues[7];
-	const evrak2 = parsedValues[8];
+  const errorDiv = document.getElementById("errorDiv");
+  errorDiv.style.display = "none";
+  errorDiv.innerText = "";
 
-	const tahrapDTO = {
-		tah_ted: tah_ted,
-		hangi_tur: hangi_tur,
-		pos: pos,
-		hkodu1: hkodu1,
-		hkodu2: hkodu2,
-		startDate: startDate,
-		endDate: endDate,
-		evrak1: evrak1,
-		evrak2: evrak2
-	}
-	const errorDiv = document.getElementById("errorDiv");
-	document.body.style.cursor = "wait";
-	const $yenileButton = $('#tahrapyenileButton');
-	$yenileButton.prop('disabled', true).text('İşleniyor...');
-	const mainTableBody = document.getElementById("mainTableBody");
-	mainTableBody.innerHTML = "";
-	try {
-		const response = await fetchWithSessionCheck("cari/tahrapdoldur", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(tahrapDTO),
-		});
-		data = response;
-		if (data.success) {
-			data.data.forEach(rowData => {
-				const row = document.createElement('tr');
-				row.classList.add('expandable');
-				row.classList.add("table-row-height");
-				row.innerHTML = `
-					<td class="toggle-button">
-			       		${rowData.TUR === "Cek" ? "+" : ''}
-			   		</td>
-		            <td>${rowData.EVRAK || ''}</td>
-		            <td>${formatDate(rowData.TARIH)}</td>
-		            <td>${rowData.CARI_HESAP || ''}</td>
-		            <td>${rowData.UNVAN || ''}</td>
-		            <td>${rowData.ADRES_HESAP || ''}</td>
-		            <td>${rowData.ADRES_UNVAN || ''}</td>
-		            <td>${rowData.CINS || ''}</td>
-		            <td>${rowData.TUR || ''}</td>
-		            <td>${rowData.POS_BANKA || ''}</td>
-		            <td>${rowData.DVZ_CINS || ''}</td>
-		            <td class="double-column">${formatNumber2(rowData.TUTAR)}</td>
-		        `;
-				mainTableBody.appendChild(row);
-				const detailsRow = document.createElement('tr');
-				detailsRow.classList.add('details-row');
-				detailsRow.innerHTML = `<td colspan="12"></td>`;
-				mainTableBody.appendChild(detailsRow);
-				if (rowData.TUR === "Cek") {
-					row.addEventListener('click', async () => {
-						const toggleButton = row.querySelector('.toggle-button');
-						const isVisible = detailsRow.style.display === 'table-row';
-						detailsRow.style.display = isVisible ? 'none' : 'table-row';
-						toggleButton.textContent = isVisible ? '+' : '-';
-						document.body.style.cursor = "wait";
-						if (!isVisible) {
-							try {
-								const details = await fetchDetails(rowData.EVRAK, rowData.CINS);
-								const data = details.data;
-								let detailsTable = `
-							<div class="table-container" >
-                            <table class="details-table table table-bordered table-hover">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>BANKA</th>
-                                        <th>SUBE</th>
-                                        <th>SERI</th>
-                                        <th>HESAP</th>
-										<th>BORCLU</th>
-										<th>TARIH</th>
-										<th style="text-align: right;">TUTAR</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `;
-								data.forEach(item => {
-									detailsTable += `
-                                <tr>
-                                    <td>${item.BANKA || ''}</td>
-                                    <td>${item.SUBE || ''}</td>
-                                    <td>${item.SERI || ''}</td>
-                                    <td>${item.HESAP || ''}</td>
-									<td>${item.BORCLU || ''}</td>
-									<td>${formatDate(item.TARIH)}</td>
-									<td style="text-align: right;">${formatNumber2(item.TUTAR)}</td>
-                                </tr>
-                            `;
-								});
-								detailsTable += `
-                                </tbody>
-                            </table>
-							</div>
-                        `;
-								detailsRow.children[0].classList.add("table-row-height");
-								detailsRow.children[0].innerHTML = detailsTable;
-								document.body.style.cursor = "default";
-							} catch (error) {
-								detailsRow.children[0].innerHTML = `
-                            <strong>Hata:</strong> Detay bilgileri alınamadı.
-                        `;
-								document.body.style.cursor = "default";
-							}
-						}
-						document.body.style.cursor = "default";
-					});
-				}
-			});
-		} else {
-			errorDiv.style.display = "block";
-			errorDiv.innerText = data.errorMessage || "Bir hata oluştu.";
-		}
-		document.body.style.cursor = "default";
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error;
-	} finally {
-		$yenileButton.prop('disabled', false).text('Yenile');
-		document.body.style.cursor = "default";
-	}
+  const hiddenFieldValue = $('#tahrapBilgi').val() || "";
+  const parsedValues = hiddenFieldValue.split(",");
+
+  const tahrapDTO = {
+    tah_ted:   parsedValues[0] || "",
+    hangi_tur: parsedValues[1] || "",
+    pos:       parsedValues[2] || "",
+    hkodu1:    parsedValues[3] || "",
+    hkodu2:    parsedValues[4] || "",
+    startDate: parsedValues[5] || "",
+    endDate:   parsedValues[6] || "",
+    evrak1:    parsedValues[7] || "",
+    evrak2:    parsedValues[8] || ""
+  };
+
+  document.body.style.cursor = "wait";
+  const $btn = $('#tahrapyenileButton');
+  $btn.prop('disabled', true).text('İşleniyor...');
+
+  const body = document.getElementById("mainTableBody");
+  body.innerHTML = "";
+
+  const thCount = document.querySelectorAll("#main-table thead th").length;
+
+  try {
+    const response = await fetchWithSessionCheck("cari/tahrapdoldur", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(tahrapDTO),
+    });
+
+    const res = response;
+
+    if (!res || !res.success) {
+      errorDiv.style.display = "block";
+      errorDiv.innerText = (res && res.errorMessage) ? res.errorMessage : "Bir hata oluştu.";
+      return;
+    }
+
+    (res.data || []).forEach(rowData => {
+      const hasDetails = (rowData.TUR === "Cek");
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><span class="toggle-button">${hasDetails ? "+" : ""}</span></td>
+        <td>${rowData.EVRAK || ""}</td>
+        <td>${formatDate(rowData.TARIH)}</td>
+        <td>${rowData.CARI_HESAP || ""}</td>
+        <td>${rowData.UNVAN || ""}</td>
+        <td>${rowData.ADRES_HESAP || ""}</td>
+        <td>${rowData.ADRES_UNVAN || ""}</td>
+        <td>${rowData.CINS || ""}</td>
+        <td>${rowData.TUR || ""}</td>
+        <td>${rowData.POS_BANKA || ""}</td>
+        <td>${rowData.DVZ_CINS || ""}</td>
+        <td class="double-column">${formatNumber2(rowData.TUTAR)}</td>
+      `;
+      body.appendChild(tr);
+
+      const detailsTr = document.createElement("tr");
+      detailsTr.className = "details-row";
+      detailsTr.style.display = "none";
+      detailsTr.innerHTML = `<td colspan="${thCount}"></td>`;
+      body.appendChild(detailsTr);
+
+      if (!hasDetails) return;
+
+      const toggle = tr.querySelector(".toggle-button");
+
+      toggle.addEventListener("click", async (e) => {
+        e.stopPropagation();
+
+        const isOpen = (detailsTr.style.display === "table-row");
+
+        // ✅ tek satır açık kalsın + temizle
+        document.querySelectorAll("#main-table tr.details-row").forEach(r => r.style.display = "none");
+        document.querySelectorAll("#main-table tbody tr").forEach(r => r.classList.remove("selected"));
+        document.querySelectorAll("#main-table .toggle-button").forEach(x => {
+          if (x.textContent === "-") x.textContent = "+";
+        });
+
+        if (isOpen) {
+          detailsTr.style.display = "none";
+          toggle.textContent = "+";
+          return;
+        }
+
+        // ✅ seçimi sadece ana satıra uygula
+        tr.classList.add("selected");
+        detailsTr.style.display = "table-row";
+        toggle.textContent = "-";
+
+        // daha önce yüklendiyse tekrar fetch yapma
+        if (detailsTr.dataset.loaded === "1") return;
+
+        document.body.style.cursor = "wait";
+        try {
+          const detResp = await fetchDetails(rowData.EVRAK, rowData.CINS);
+          const det = (detResp && detResp.data) ? detResp.data : [];
+
+          // ✅ KESİN GENİŞLİK: colgroup + fixed layout + min-width
+          let html = `
+            <div class="details-wrap">
+              <table class="t-details" style="table-layout:fixed; width:100%; min-width:1200px;">
+                <colgroup>
+                  <col style="width:150px;">  <!-- BANKA -->
+                  <col style="width:150px;">  <!-- SUBE -->
+                  <col style="width:120px;">  <!-- SERI -->
+                  <col style="width:140px;">  <!-- HESAP -->
+                  <col style="width:150px;">  <!-- BORCLU -->
+                  <col style="width:70px;">  <!-- TARIH -->
+                  <col style="width:100px;">  <!-- TUTAR -->
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>BANKA</th>
+                    <th>SUBE</th>
+                    <th>SERI</th>
+                    <th>HESAP</th>
+                    <th>BORCLU</th>
+                    <th>TARIH</th>
+                    <th class="double-column">TUTAR</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+
+          det.forEach(item => {
+            html += `
+              <tr>
+                <td>${item.BANKA || ""}</td>
+                <td>${item.SUBE || ""}</td>
+                <td>${item.SERI || ""}</td>
+                <td>${item.HESAP || ""}</td>
+                <td>${item.BORCLU || ""}</td>
+                <td>${formatDate(item.TARIH)}</td>
+                <td class="double-column">${formatNumber2(item.TUTAR)}</td>
+              </tr>
+            `;
+          });
+
+          html += `
+                </tbody>
+              </table>
+            </div>
+          `;
+
+          detailsTr.children[0].innerHTML = html;
+          detailsTr.dataset.loaded = "1";
+
+        } catch (err) {
+          detailsTr.children[0].innerHTML =
+            `<div class="details-wrap"><b>Hata:</b> Detaylar alınamadı.</div>`;
+        } finally {
+          document.body.style.cursor = "default";
+        }
+      });
+    });
+
+  } catch (err) {
+    errorDiv.style.display = "block";
+    errorDiv.innerText = err;
+  } finally {
+    $btn.prop('disabled', false).text('Filtre');
+    document.body.style.cursor = "default";
+  }
 }
+
 
 async function opentahrapModal(modal) {
 	$(modal).modal('show');
