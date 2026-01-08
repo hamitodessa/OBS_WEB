@@ -1,9 +1,9 @@
 /* =========================
-   2026 CAM – SECOND MODAL (YENI)
-   HTML'e birebir uyumlu: #modalSearch + .modall-table-container + .modal-table
+   2026 CAM – SECOND MODAL (FINAL)
+   HTML uyumlu: #modalSearch + .modall-table-container + table.modal-table (#modalTable)
    ========================= */
 
-/* 1) Modal cam görünüm (arka plan şeffaf olmasın) */
+/* 1) Modal cam görünüm */
 #secondModal .modal-content{
   background: rgba(8,14,26,.96) !important;
   color: rgba(255,255,255,.94) !important;
@@ -12,14 +12,43 @@
   box-shadow: 0 22px 65px rgba(0,0,0,.55) !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
+  overflow: hidden !important; /* scroll içeride değil container'da */
 }
 
 /* Header (search + close) */
 #secondModal .modal-header{
-  background: rgba(8,14,26,.96) !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  position: relative;
   gap: 10px;
+  align-items: center;
+  padding: 12px 12px !important;
+
+  background: linear-gradient(180deg,
+    rgba(31,59,92,.92),
+    rgba(22,43,68,.92)
+  ) !important;
+
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
 }
+
+#secondModal .modal-header::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:1px;
+  background: linear-gradient(90deg,
+    rgba(56,189,248,0),
+    rgba(56,189,248,.55),
+    rgba(34,197,94,.35),
+    rgba(56,189,248,0)
+  );
+}
+
+/* Close butonu (bootstrap) */
+#secondModal .btn-close{
+  filter: invert(1) grayscale(100%);
+  opacity: .85;
+}
+#secondModal .btn-close:hover{ opacity: 1; }
 
 /* 2) Search input (id=modalSearch) */
 #secondModal #modalSearch{
@@ -39,91 +68,89 @@
   color: #fff !important;
 }
 
-/* 3) Table container */
-#secondModal .modall-table-container{
-  overflow: auto;
-  border-top: 1px solid rgba(255,255,255,.10) !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  background: rgba(255,255,255,.02);
+/* error div (id=hsperrorDiv) */
+#secondModal #hsperrorDiv{
+  padding: 8px 12px;
 }
 
-/* 4) Table */
-#secondModal .modal-table{
+/* 3) Table container: gerçek scroll burada */
+#secondModal .modall-table-container{
+  overflow: auto;
+  height: calc(600px - 70px); /* gerekirse 80 yap */
+
+  border-top: 1px solid rgba(255,255,255,.10) !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  background: rgba(255,255,255,.02) !important;
+}
+
+/* 4) Table (HTML: id="modalTable" class="table modal-table ...") */
+#secondModal table.modal-table{
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   font-size: 13px;
   color: rgba(255,255,255,.86);
+
+  /* Bootstrap tablo renk değişkenlerini modal içinde kontrol et */
+  --bs-table-bg: transparent !important;
+  --bs-table-color: rgba(255,255,255,.86) !important;
+  --bs-table-border-color: rgba(255,255,255,.08) !important;
+  --bs-table-accent-bg: transparent !important;
+  --bs-table-striped-bg: transparent !important;
+  --bs-table-hover-bg: rgba(56,189,248,.14) !important;
+  --bs-table-active-bg: rgba(56,189,248,.18) !important;
 }
 
 /* Cells */
-#secondModal .modal-table th,
-#secondModal .modal-table td{
+#secondModal table.modal-table th,
+#secondModal table.modal-table td{
   text-align: left;
   vertical-align: middle;
   white-space: nowrap;
   padding: 8px 10px;
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.08) !important;
+
+  /* dışarıdan gelen background basmalarını kapat */
+  background-color: transparent !important;
+  background-image: none !important;
 }
 
-/* Header (thead-dark dahil override) */
-#secondModal .modal-table thead th,
-#secondModal .table .thead-dark th{
+/* Header sticky */
+#secondModal table.modal-table thead th{
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
   color: #ffffff !important;
   border-bottom: 1px solid rgba(255,255,255,.12) !important;
   font-weight: 900;
+
   position: sticky;
   top: 0;
   z-index: 2;
 }
 
-
-/* Hover */
-#secondModal .modal-table tbody tr:hover td{
+/* Hover (mavi) */
+#secondModal table.modal-table.table-hover tbody tr:hover td{
   background: rgba(56,189,248,.14) !important;
   color: #ffffff !important;
-  cursor: pointer;
 }
 
-/* Selected row (JS ile tr.selected) */
-#secondModal .modal-table tbody tr.selected td{
-  background: rgba(34,197,94,.18) !important;
+/* Seçili satır (yeşil) — SENİN istediğin kalıcı seçim */
+#secondModal table.modal-table tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
   color: #ffffff !important;
 }
 
-/* Optional: row height (istersen tabloya class="table-row-height" ver) */
-#secondModal .modal-table.table-row-height td{
+/* Bootstrap'in table-active / table-success gibi boyamalarını da kontrol et */
+#secondModal #modalTable tbody tr.table-active > td,
+#secondModal #modalTable tbody tr.active > td,
+#secondModal #modalTable tbody tr.table-success > td{
+  background-color: rgba(56,189,248,.18) !important;
+  color: #fff !important;
+}
+
+/* Optional: row height (HTML’de class="table-row-height" var) */
+#secondModal table.modal-table.table-row-height td{
   height: 22px;
   line-height: 18px;
   padding-top: 4px;
   padding-bottom: 4px;
 }
-
-/* ADIM 1: second modal header 2026 gradient */
-#secondModal .modal-header{
-  position: relative;
-  background: linear-gradient(
-    180deg,
-    rgba(31,59,92,.92),
-    rgba(22,43,68,.92)
-  ) !important;
-}
-
-/* ince 2026 glow çizgisi */
-#secondModal .modal-header::after{
-  content:"";
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  height:1px;
-  background: linear-gradient(
-    90deg,
-    rgba(56,189,248,0),
-    rgba(56,189,248,.55),
-    rgba(34,197,94,.35),
-    rgba(56,189,248,0)
-  );
-}
-

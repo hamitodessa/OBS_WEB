@@ -101,7 +101,7 @@ async function dvzfetchTableData(page) {
         <td>${formatDate(item.TARIH)}</td>
         <td>${item.EVRAK || ''}</td>
         <td>${item.IZAHAT || ''}</td>
-        <td class="double-column" style="color: ${item.CEV_KUR == 1 ? 'red' : 'black'};">
+        <td class="double-column" style="color: ${item.CEV_KUR == 1 ? 'red' : 'white'};">
           ${formatNumber4(item.CEV_KUR)}
         </td>
         <td class="double-column">${formatNumber2(item.DOVIZ_TUTAR)}</td>

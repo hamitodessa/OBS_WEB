@@ -5,17 +5,7 @@
         margin: 0 auto; /* Modalı ortalar */
     }
 
-    .modal-content {
-        overflow-y: auto; /* Fazla içerik için kaydırma */
-    }
-
-    /* Üst üste açılan modallar için */
-    .modal-backdrop {
-        z-index: 1040 !important; /* Birinci modalın üstüne çıkacak */
-    }
-    #secondModal {
-        z-index: 1050 !important; /* İkinci modal birinciden daha yukarıda */
-    }
+   
 </style>
 
 <!-- Modal -->
@@ -83,6 +73,8 @@
 				<option value="sifirolanlar">Bakiyesi 0 Olanlar</option>
 				<option value="sifirolmayanlar">Bakiyesi 0 Olmayanlar</option>
 			</select>
+			<span style=" position: absolute;top: 50%; right: 10px; transform: translateY(-50%);  pointer-events: none;
+  			color: rgba(255,255,255,.9);  text-shadow: 0 0 6px rgba(255,255,255,.35);"> ▼ </span>
  		</div>
  		
       </div>

@@ -3,15 +3,7 @@
      	height: 500px; /* Modal yüksekliği */
         margin: 0 auto; /* Modalı ortalar */
     }
-    .modal-content {
-        overflow-y: auto; /* Fazla içerik için kaydırma */
-    }
-    .modal-backdrop {
-        z-index: 1040 !important; /* Birinci modalın üstüne çıkacak */
-    }
-    #secondModal {
-        z-index: 1050 !important; /* İkinci modal birinciden daha yukarıda */
-    }
+ 
 </style>
 
 <!-- Modal -->
@@ -46,13 +38,16 @@
     			<span class="input-group-text" style="width:150px;">Doviz / Tur</span>
   			</div>
   			<span style="padding-left: 5px;"></span>
-  			
+
   			<select id="dvz_tur" class="form-select"	style="padding-left:5px;" >
 				<option value="USD" selected>USD</option>
 				<option value="EUR">EUR</option>
 			</select>
+			<span style="position:absolute;top:50%;right:10px;transform:translateY(-50%);
+    			pointer-events:none;z-index:2;color:rgba(255,255,255,.9);text-shadow:0 0 6px rgba(255,255,255,.35);">▼</span>
 			
   			<span style="padding-left: 5px;"></span>
+
   			<select id="dvz_cins" class="form-select"	style="padding-left:5px;" >
 				<option value="MA" selected>MA</option>
 				<option value="MS">MS</option>
@@ -61,6 +56,8 @@
 				<option value="BA">BA</option>
 				<option value="BS">BS</option>
 			</select>
+			<span style="position: absolute;top: 50%; right: 10px; transform: translateY(-50%);  pointer-events: none;
+  			color: rgba(255,255,255,.9);  text-shadow: 0 0 6px rgba(255,255,255,.35);"> ▼ </span>
 		</div>
 		
 		
