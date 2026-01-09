@@ -117,17 +117,14 @@
 }
 
 #ara_content #errorDiv{
-  margin-top: 10px;
-  padding: 10px 14px;
-
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
-  background: rgba(251,113,133,.12);
-
-  color: rgba(255,255,255,.95) !important;
+  background: rgba(251,113,133,.10);
+  color: #fff;
   font-weight: 900;
-
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
 }
 </style>
 
@@ -165,7 +162,7 @@
 			style="width: 150px;" onclick="kodDegis()">Kaydet</button>
 	</div>
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<div id="errorDiv"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 <script>
 

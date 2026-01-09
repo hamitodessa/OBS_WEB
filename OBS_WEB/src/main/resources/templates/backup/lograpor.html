@@ -1,15 +1,20 @@
 <style>
+/* =========================
+   2026 CAM – TABLE STANDARD
+   ========================= */
+
 #ara_content{
   color: rgba(255,255,255,.92);
 }
 
 /* ===== CARD (ÜST BAR) ===== */
 #ara_content .card{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-  border: 1px solid rgba(255,255,255,.16);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 /* ===== FILTER ROW ===== */
@@ -21,6 +26,7 @@
   padding: 6px 8px;
 }
 
+/* ===== LABEL ===== */
 #ara_content label{
   font-weight: 900;
   font-size: 13px;
@@ -28,27 +34,70 @@
   margin: 0;
 }
 
-/* ===== INPUT ===== */
-#ara_content .form-control{
-  height: 46px;
+/* ===== INPUT / SELECT ===== */
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 48px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
 }
-#ara_content .form-control:focus{
+
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
   border-color: rgba(56,189,248,.65);
   box-shadow: 0 0 0 5px rgba(56,189,248,.18);
   background: rgba(8,14,26,.65);
+  color: #fff;
 }
 
-/* ===== TABLE CONTAINER ===== */
+#ara_content input[type="date"]{
+  color-scheme: dark;
+}
+
+/* ===== BUTTON ===== */
+#ara_content .btn{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  transition: .16s ease;
+  font-weight: 800;
+}
+
+#ara_content .btn.btn-primary{
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  border: none;
+  color: #fff;
+}
+
+#ara_content .btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
+}
+
+/* ===== CONTAINER ===== */
+#ara_content .container{
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  padding: 0px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== TABLE WRAP ===== */
 #ara_content .table-container{
-  height: 60vh;
+  flex-grow: 1;
   overflow: auto;
+  border: 1px solid rgba(255,255,255,.14);
   margin-top: 10px;
   border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
 }
 
@@ -57,46 +106,72 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  font-size: 13px;
 }
 
 #ara_content th,
 #ara_content td{
+  border: 1px solid rgba(255,255,255,.08);
   padding: 6px 10px;
   white-space: nowrap;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  vertical-align: middle;
 }
 
-/* ===== HEADER ===== */
+/* HEADER sticky */
 #ara_content thead th{
   position: sticky;
   top: 0;
   z-index: 2;
-  background: linear-gradient(180deg,#1f3b5c,#162b44);
-  color: #fff;
-  font-size: 13px;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  border: none !important;
   font-weight: 900;
   text-align: left;
 }
 
-/* ===== BODY ===== */
+/* BODY */
 #ara_content tbody td{
   background: rgba(255,255,255,.04);
   color: rgba(255,255,255,.78);
-  font-size: 13px;
+  transition: color .12s ease, background .12s ease;
 }
 
-/* ===== HOVER (foreground fix) ===== */
+/* HOVER – foreground fix */
 #ara_content .table-hover tbody tr:hover td{
   background: rgba(56,189,248,.14) !important;
   color: #ffffff !important;
 }
 
-/* ===== ROW HEIGHT ===== */
+/* satır yüksekliği */
 #ara_content .table-row-height td{
   height: 22px;
   line-height: 22px;
   padding-top: 2px;
   padding-bottom: 2px;
+}
+
+/* TFOOT aynı tonda */
+#ara_content tfoot td{
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.08);
+}
+
+/* ===== PAGINATION (senin pagination-container) ===== */
+#ara_content .pagination-container{
+  margin-top: 10px !important;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+/* pagination ikonlu butonlar küçük olsun */
+#ara_content .pagination-container .btn{
+  width: 46px;
+  padding: 0;
+  display: grid;
+  place-items: center;
 }
 
 /* ===== ERROR ===== */
@@ -111,51 +186,49 @@
   font-weight: 900;
 }
 </style>
-
-
-
-<div class="card p-2">
-    <div class="filter-row">
-        <input type="date" style="width:120px;" id="startDate" class="form-control" value="1900-01-01">
-        <input type="date" style="width:120px;" id="endDate" class="form-control" value="2100-12-31">
-
-        <span style="width:10px;"></span>
-
-        <label for="server">Server</label>
-        <input type="text" id="server" class="form-control" style="width: 200px;">
-
-        <label for="sifre">Şifre</label>
-        <input type="password" id="sifre" class="form-control" style="width: 125px;">
-
-        <select style="width: 150px;" class="form-select" onchange="logliste()" id="hangi_emir" name="hangi_emir"></select>
-
-        <button class="btn btn-primary" type="button" onclick="emirismidoldur()" id="emirismiButton">
-            Emir İsmi Doldur
-        </button>
-    </div>
+<div id="ara_content">
+	<div class="card p-2">
+		<div class="filter-row">
+			<input type="date" style="width: 120px;" id="startDate"
+				class="form-control" value="1900-01-01"> <input type="date"
+				style="width: 120px;" id="endDate" class="form-control"
+				value="2100-12-31"> <span style="width: 10px;"></span> <label
+				for="server">Server</label> <input type="text" id="server"
+				class="form-control" style="width: 200px;"> <label
+				for="sifre">Şifre</label> <input type="password" id="sifre"
+				class="form-control" style="width: 125px;">
+			<div style="position: relative;  width: 150px;">
+				<select style="width: 150px;" class="form-select"
+					onchange="logliste()" id="hangi_emir" name="hangi_emir"></select> <span
+					style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); pointer-events: none; color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .35); font-weight: 700; line-height: 1;">▼</span>
+			</div>
+			<button class="btn btn-primary" type="button"
+				onclick="emirismidoldur()" id="emirismiButton">Emir İsmi
+				Doldur</button>
+		</div>
+	</div>
+	<div id="errorDiv"></div>
+	<div class="container">
+		<div class="table-container">
+			<table class="table table-bordered table-hover table-row-height">
+				<thead class="thead-dark">
+					<tr>
+						<th>TARİH</th>
+						<th>TIP</th>
+						<th>MESAJ</th>
+						<th>EMIR_ISMI</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody"></tbody>
+			</table>
+		</div>
+		<div id="pagination-controls"
+			style="margin-top: 10px; display: flex; gap: 10px;">
+			<button class="btn btn-secondary" id="prevPage" onclick="geriSayfa()">◀
+				Önceki</button>
+			<button class="btn btn-secondary" id="nextPage"
+				onclick="ileriSayfa()">Sonraki ▶</button>
+		</div>
+	</div>
 </div>
-
-<div id="errorDiv"></div>
-
-<div class="container">
-    <div class="table-container">
-        <table class="table table-bordered table-hover table-row-height">
-            <thead class="thead-dark">
-                <tr>
-                    <th>TARİH</th>
-                    <th>TIP</th>
-                    <th>MESAJ</th>
-                    <th>EMIR_ISMI</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-    </div>
-
-    <div id="pagination-controls">
-        <button class="btn btn-secondary" id="prevPage" onclick="geriSayfa()">◀ Önceki</button>
-        <button class="btn btn-secondary" id="nextPage" onclick="ileriSayfa()">Sonraki ▶</button>
-    </div>
-</div>
-
 <script src="/obs_js_files/backup/lograpor.js"></script>

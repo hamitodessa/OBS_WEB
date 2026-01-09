@@ -73,14 +73,15 @@
 
 /* 3) hata div'i cam içinde daha iyi dursun */
 #errorDiv{
+  display:none;
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
   background: rgba(251,113,133,.10);
-  color: rgba(255,255,255,.92);
+  color: #fff;
+  font-weight: 900;
 }
-
 </style>
 <div class="card p-4">Merhaba , OBS Sisteme hos geldiniz </div>
 <br>
@@ -167,7 +168,7 @@ Java Tabanli Cok teferruatli masaustu versionu
 		</div>
 	</div>
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<div id="errorDiv"></div>
 
 <script src="/obs_js_files/wellcome.js"></script>
 <script>

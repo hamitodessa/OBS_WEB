@@ -56,14 +56,14 @@
 
 /* errorDiv (cam + kırmızı glow) */
 #ara_content #errorDiv{
-  margin-top: 10px;
+  display:none;
+  margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
   background: rgba(251,113,133,.10);
-  color: rgba(255,255,255,.95) !important;
+  color: #fff;
   font-weight: 900;
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
 }
 
 </style>
@@ -73,7 +73,7 @@
 	<button class="btn btn-primary" type="button" id="hplkayitButton"
 		style="width: 250px;" onclick="hplnkaydet()">Hesap Plani Kaydet</button>
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<div id="errorDiv"></div>
 
 <script>
 
