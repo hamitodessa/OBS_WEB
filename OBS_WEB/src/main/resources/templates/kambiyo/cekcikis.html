@@ -1,127 +1,268 @@
 <link rel="stylesheet" href="style/yenihsppln.css" />
 
 <style>
-.editable-cell {
-	cursor: text;
+/* =========================
+   2026 CAM – KAMBİYO / BORDRO
+   wrapper: #ara_content
+   hover: YOK
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* ===== CARD ===== */
+#ara_content .card.p-4{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.double-column {
-	text-align: right;
+/* ===== NAV TABS ===== */
+#ara_content .nav-tabs{
+  border-bottom: 1px solid rgba(255,255,255,.14) !important;
+  gap: 8px;
 }
 
-.tah-table th, .tah-table td {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	vertical-align: middle;
-	height: 15px;
+#ara_content .nav-tabs .nav-link{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-bottom: none !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.80) !important;
+  border-radius: 14px 14px 0 0 !important;
+  font-weight: 900;
+  padding: 10px 14px;
 }
 
-.tah-table th:nth-child(1) {
-	width: 30px;
+#ara_content .nav-tabs .nav-link.active{
+  background: linear-gradient(135deg, rgba(56,189,248,.28), rgba(34,197,94,.18)) !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-.tah-table th:nth-child(2) {
-	width: 9%;
+/* ===== LAYOUT (child / child2) ===== */
+#ara_content .cardd{
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
 }
 
-.tah-table th:nth-child(3) {
-	width: 8%;
+#ara_content .child,
+#ara_content .child2{
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
-.tah-table th:nth-child(5) {
-	width: 15%;
+#ara_content .child{ width: 60%; }
+#ara_content .child2{ width: 40%; }
+
+#ara_content .group-box{
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(8,14,26,.35);
+  border-radius: 16px;
+  padding: 12px;
+  margin: 10px 0;
 }
 
-.tah-table th:nth-child(6) {
-	width: 7%;
+/* ===== LABEL ===== */
+#ara_content label{
+  color: rgba(255,255,255,.84);
+  font-weight: 800;
+  font-size: 13px;
 }
 
-.tah-table th:nth-child(7) {
-	width: 15%;
+/* ===== INPUTS ===== */
+#ara_content .form-control{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+  padding: 10px 14px !important;
+  box-sizing: border-box;
+  outline: none;
 }
 
-.tah-table th:nth-child(8) {
-	width: 8%;
+#ara_content .form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+  font-weight: 600;
 }
 
-.tah-table th:nth-child(9) {
-	width: 3%;
+#ara_content .form-control:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65) !important;
+  color:#fff !important;
 }
 
-.tah-table th:nth-child(10) {
-	width: 10%;
+/* datalist ok işareti (senin span ▼) */
+#ara_content span[style*="pointer-events: none"]{
+  color: rgba(255,255,255,.72) !important;
+  text-shadow: 0 0 10px rgba(56,189,248,.18);
 }
 
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 98%;
-	box-sizing: border-box;
+/* ===== BUTTONS ===== */
+#ara_content .btn.btn-primary{
+  border: none !important;
+  border-radius: 12px;
+  font-weight: 900;
+  color: #fff !important;
+  background: linear-gradient(135deg,#38bdf8,#22c55e) !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
 }
 
-.child {
-	width: 60%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	align-items: center;
+#ara_content .btn.btn-primary:hover{
+  filter: brightness(1.10);
 }
 
-.child2 {
-	width: 40%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	align-items: center;
+#ara_content .btn.btn-secondary{
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.88) !important;
 }
 
-.sagdiv {
-	width: 98%; /* Sabit genişlik */
-	height: 100%; /* Sabit yükseklik */
-	align-items: center; /* Dikey merkezleme */
+#ara_content .btn.btn-secondary:hover{
+  background: rgba(56,189,248,.12) !important;
+  border-color: rgba(56,189,248,.35) !important;
 }
 
-.cardd {
-	display: flex;
-	gap: 10px;
+/* ===== TABLE (gbTable) – hover YOK ===== */
+#ara_content #gbTable{
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-.form-row {
-	display: flex;
-	align-items: center;
-	margin-bottom: 5px;
+/* header sticky + gradient */
+#ara_content #gbTable thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
 }
 
-datalist {
-	display: none;
+/* sadece alt çizgi */
+#ara_content #gbTable th,
+#ara_content #gbTable td{
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  padding: 6px 10px !important;
+  height: 28px;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
-.toggle-button {
-	font-weight: bold;
-	font-size: 16px;
-	cursor: pointer;
-	width: 20px;
-	text-align: center;
+/* td cam */
+#ara_content #gbTable tbody td{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
 }
 
-.toggle-button:hover {
-	color: #007BFF;
+/* Bootstrap state class’larını sustur */
+#ara_content #gbTable tbody tr.table-success > *,
+#ara_content #gbTable tbody tr.table-active > *,
+#ara_content #gbTable tbody tr.table-primary > *,
+#ara_content #gbTable tbody tr.table-info > *,
+#ara_content #gbTable tbody tr.table-warning > *,
+#ara_content #gbTable tbody tr.table-danger > *{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
 }
 
-.saga-bold {
-	text-align: right;
-	font-weight: bold;
+/* hover tamamen kapalı */
+#ara_content #gbTable tbody tr:hover > *{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
 }
 
-.table .thead-dark th {
-	color: #fff;
-	background: #214162;
+/* right align helpers */
+#ara_content .double-column,
+#ara_content .saga-bold{ text-align: right !important; font-weight: 900; }
+
+/* ===== TFOOT (TOPLAM) ===== */
+#ara_content #gbTable tfoot td{
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
 }
+
+#ara_content #gbTable tfoot td:nth-last-child(2){
+  text-align: right;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.90) !important;
+}
+
+#ara_content #totalTutar{
+  font-size: 15px;
+  font-weight: 900;
+  text-align: right;
+  color: #fff !important;
+  text-shadow: 0 2px 10px rgba(56,189,248,.75);
+}
+
+/* error */
+#ara_content #errorDiv,
+#ara_content #errorDiv2{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* =========================
+   2026 CAM – input-group-text
+   (Aciklama 1/2 gibi span'ler)
+   ========================= */
+
+#ara_content .input-group-text{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.45) !important;
+  color: rgba(255,255,255,.88) !important;
+  font-weight: 900;
+  letter-spacing: .2px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+/* input-group içinde yan yana durunca köşeler düzgün olsun */
+#ara_content .input-group .input-group-text{
+  border-top-right-radius: 14px !important;
+  border-bottom-right-radius: 14px !important;
+}
+
+/* Column width ayarların (senin yüzde planın) */
+#ara_content .tah-table th:nth-child(1){ width:30px; }
+#ara_content .tah-table th:nth-child(2){ width:9%; }
+#ara_content .tah-table th:nth-child(3){ width:8%; }
+#ara_content .tah-table th:nth-child(5){ width:15%; }
+#ara_content .tah-table th:nth-child(6){ width:7%; }
+#ara_content .tah-table th:nth-child(7){ width:15%; }
+#ara_content .tah-table th:nth-child(8){ width:8%; }
+#ara_content .tah-table th:nth-child(9){ width:3%; }
+#ara_content .tah-table th:nth-child(10){ width:10%; }
 </style>
+
 <link rel="stylesheet" href="style/yenihsppln.css" />
 <div class="card p-4">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -236,9 +377,9 @@ datalist {
      			</div>
 	  </div>
 		</div>
-		<div id="errorDiv"	style="display: none; color: red; font-weight: bold;"></div>
+		<div id="errorDiv"></div>
 		<div th:with="errorMessage=${errorMessage ?: ''}" id="errorDiv2" th:if="${errorMessage}" 
-     				th:text="${errorMessage}"  style="color: red; font-weight: bold;">
+     				th:text="${errorMessage}">
 	</div>
 </div>
 

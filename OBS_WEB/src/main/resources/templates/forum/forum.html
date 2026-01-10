@@ -1,109 +1,262 @@
 <style>
-  body {
-/*   font-family: Arial, sans-serif;  */
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-  }
-  
-  .container {
-    width: 90%;
-    margin: 10px auto;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-  }
-  
-  .header {
-    text-align: center;
-    padding: 10px;
-    background-color: #214162;
-    color: white;
-    border-radius: 8px 8px 0 0;
-  }
-  
-  .subject {
-    padding: 10px;
-    margin-bottom: 5px;
-    border: 1px solid #ddd;
-  }
-  
-  .subject:hover {
-    background-color: #f9f9f9;
-  }
-  
-  .subject h3 {
-    margin: 0;
-  }
-  
-  .subject button {
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: #214162;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .subject button:hover {
-    background-color: #5300c9;
-  }
-  
-  .commits {
-    margin-top: 10px;
-    padding-left: 20px;
-    border-left: 2px solid #ddd;
-  }
-  
-  .commit {
-    padding: 10px;
-    margin-right: 20px;
-  
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .commit:last-child {
-    border-bottom: none;
-  }
-  
-  .commit h4 {
-    margin: 0;
-    font-size: 14px;
-    color: #214162;
-  }
-  
-  .commit p {
-    margin: 5px 0;
-  }
-  
-  .form {
-    margin-top: 20px;
-  }
-  
-  .form input,
-  .form textarea,
-  .form button {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .form button {
-    background-color: #214162;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .form button:hover {
-    background-color: #5300c9;
-  }
+/* =========================
+   2026 CAM – FORUM (KOMPAKT)
+   wrapper: #ara_content
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* CARD */
+#ara_content .card.p-4{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* CONTAINER */
+#ara_content .container{
+  width: 95%;
+  margin: 10px auto;
+  background: transparent;
+  padding: 10px;
+}
+
+/* HEADER */
+#ara_content .header{
+  text-align: center;
+  padding: 12px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(56,189,248,.35), rgba(34,197,94,.25));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+}
+
+/* FORM BLOĞU (eski sistem: dikey akış) */
+#ara_content .form{ margin-top: 26px; display:block; }
+#ara_content .form h4{
+  color: rgba(255,255,255,.95);
+  font-weight: 900;
+  margin-bottom: 14px;
+  text-shadow: 0 0 12px rgba(56,189,248,.35);
+}
+
+/* INPUT / TEXTAREA (tek yerden kontrol) */
+#ara_content .form-control,
+#ara_content textarea.form-control{
+  width: 100% !important;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+  box-sizing: border-box;
+  padding: 12px 16px !important;
+  outline: none;
+}
+#ara_content .form-control::placeholder,
+#ara_content textarea.form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+  font-weight: 600;
+  text-indent: 0 !important;
+}
+
+/* Textarea ölçü */
+#ara_content #subject-description{
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.4;
+  padding-top: 14px !important;
+}
+
+/* Focus */
+#ara_content .form-control:focus,
+#ara_content textarea.form-control:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65) !important;
+  color:#fff !important;
+}
+
+/* SUBJECT KART */
+#ara_content .subject{
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  background: rgba(8,14,26,.45);
+  border: 1px solid rgba(255,255,255,.12);
+  transition: all .2s ease;
+}
+#ara_content .subject:hover{
+  background: rgba(56,189,248,.12);
+  border-color: rgba(56,189,248,.45);
+  transform: translateY(-1px);
+}
+#ara_content .subject p{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35);
+  color: rgba(255,255,255,.88);
+  border-radius: 14px !important;
+}
+
+/* COMMITS */
+#ara_content .commits{
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-left: 2px solid rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 14px;
+  background: rgba(8,14,26,.30);
+}
+#ara_content .commit{
+  padding: 10px 6px;
+  border-bottom: 1px dashed rgba(255,255,255,.18);
+}
+#ara_content .commit:last-child{ border-bottom:none; }
+#ara_content .commit h4{
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  color: #38bdf8;
+}
+#ara_content .commit p{
+  margin: 6px 0 0 0;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  color: rgba(255,255,255,.86);
+}
+
+/* BUTTON */
+#ara_content .subject button,
+#ara_content .form button{
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(135deg,#38bdf8,#22c55e);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+  transition: filter .2s ease, transform .2s ease;
+}
+#ara_content .subject button:hover,
+#ara_content .form button:hover{
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+
+/* Save full width */
+#ara_content #saveButton{
+  width: 100% !important;
+  height: 50px;
+  font-size: 16px;
+  border-radius: 14px;
+}
+
+/* ERROR */
+#ara_content #errorDiv{
+  color: #f87171 !important;
+  font-weight: 900 !important;
+  margin: 10px 0;
+}
+
+#ara_content .subject h4{
+  color: rgba(255,255,255,.95);
+  text-shadow: 0 0 10px rgba(56,189,248,.25);
+}
+
+/* =========================
+   SUBJECT – HOVER KAPAT
+   ========================= */
+
+#ara_content .subject,
+#ara_content .subject:hover{
+  background: rgba(8,14,26,.45) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+
+/* =========================
+   SUBJECT – HOVER KAPAT (RENKLER KALSIN)
+   ========================= */
+
+
+
+/* Yazılar sabit beyaz kalsın */
+#ara_content .subject h4,
+#ara_content .subject p{
+  color: rgba(255,255,255,.92) !important;
+  text-shadow: none !important;
+}
+
+/* Subject içindeki açıklama kutusu sabit */
+#ara_content .subject p{
+  background: rgba(8,14,26,.35) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 14px !important;
+}
+
+/* Butonlar hover'da da aynı kalsın (istersen hover tamamen sabit) */
+#ara_content .subject button,
+#ara_content .subject button:hover{
+  color: #fff !important;
+  background: linear-gradient(135deg,#38bdf8,#22c55e) !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.35) !important;
+  transform: none !important;
+  filter: none !important;
+}
+/* =========================
+   FINAL: SUBJECT HOVER KAPALI (NET)
+   ========================= */
+
+#ara_content .subject{
+  background: rgba(8,14,26,.45) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+#ara_content .subject:hover{
+  background: rgba(8,14,26,.45) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Yazılar sabit */
+#ara_content .subject h4{
+  color: rgba(255,255,255,.95) !important;
+  text-shadow: 0 0 10px rgba(56,189,248,.25) !important;
+}
+#ara_content .subject p{
+  color: rgba(255,255,255,.88) !important;
+  background: rgba(8,14,26,.35) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 14px !important;
+}
+
+/* Buton hover KAPALI (istersen açarız) */
+#ara_content .subject button:hover{
+  transform: none !important;
+  filter: none !important;
+}
+
+#ara_content .comment-form textarea.form-control{
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.4;
+  padding-top: 14px !important;
+}
+
 </style>
+
 <div class="card p-4">
   <div class="container">
     <div class="header">
@@ -111,21 +264,28 @@
     </div>
 
     <div class="search-container" style="margin-bottom: 10px;margin-top: 20px;">
-      <input type="text" id="search-input" placeholder="Konuları ara..." onkeyup="filterSubjects()" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" />
-    </div>
-    <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-    <!-- Subjects Section -->
-    <div class="subject-section">
-      <!-- Subjects dinamik olarak yüklenecek -->
+      <input type="text" class="form-control" id="search-input"
+             placeholder="Konuları ara..." onkeyup="filterSubjects()" />
     </div>
 
-    <!-- Add a New Subject -->
+    <div id="errorDiv" style="display:none;"></div>
+
+    <div class="subject-section"></div>
+
     <div class="form">
       <h4>Yeni Konu Ekle</h4>
-      <input type="text" id="subject-title" placeholder="Konu Basligi" required maxlength="255" />
-      <textarea id="subject-description" placeholder="Konu Detayi" rows="4" required maxlength="300"></textarea>
+
+      <input type="text" class="form-control"
+             id="subject-title" placeholder="Konu Basligi"
+             maxlength="255" required />
+
+      <textarea class="form-control"
+                id="subject-description" placeholder="Konu Detayi"
+                rows="4" maxlength="300" required style="margin-top:5px;"></textarea>
+
       <button onclick="addSubject()" id="saveButton">Kaydet</button>
     </div>
   </div>
 </div>
+
 <script src="/obs_js_files/forum/forum.js"></script>

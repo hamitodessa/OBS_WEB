@@ -1,52 +1,200 @@
+<link rel="stylesheet" href="/style/ekstremodal.css">
 <link rel="stylesheet" href="style/yenihsppln.css" />
-
 <style>
-  .double-column {
-    text-align: right;
-  }
+/* =========================
+   2026 CAM – TABLE STANDARD (KOMPAKT)
+   Scope: #ara_content
+   ========================= */
 
-  .table-hover tbody tr:hover {
-    background-color: #ced4da !important;
-    color: inherit !important;
-  }
+#ara_content{ color: rgba(255,255,255,.92); }
 
-  .table-row-height td {
-    height: 10px;
-    line-height: 10px;
-  }
-  .table .thead-dark th {
-    color: #fff;
-    background: #214162;
-  }
-  .container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    padding: 0px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+/* CARD */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
-  }
-  th,
-  td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    white-space: nowrap;
-  }
-  .table-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    margin-top: 10px;
-  }
+/* BUTTON / SELECT / INPUT */
+#ara_content .btn{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  font-weight: 800;
+  transition: .16s ease;
+}
+#ara_content .btn.btn-primary{
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  border: none;
+  color: #fff;
+}
+#ara_content .btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
+}
+
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+}
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65);
+  color: #fff;
+}
+#ara_content input[type="date"]{ color-scheme: dark; }
+
+/* LAYOUT */
+#ara_content .container{
+  height: 75vh;
+  display:flex;
+  flex-direction:column;
+  margin-top:10px;
+  padding:0;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+/* TABLE CONTAINER + SCROLLBAR */
+#ara_content .table-container{
+  flex-grow:1;
+  overflow:auto;
+  margin-top:10px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+}
+#ara_content .table-container::-webkit-scrollbar{ width:10px; height:10px; }
+#ara_content .table-container::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 12px;
+}
+#ara_content .table-container::-webkit-scrollbar-thumb{
+  background: linear-gradient(180deg, rgba(56,189,248,.55), rgba(34,197,94,.40));
+  border-radius: 12px;
+  border: 2px solid rgba(8,14,26,.55);
+  box-shadow: 0 0 18px rgba(56,189,248,.18);
+}
+#ara_content .table-container::-webkit-scrollbar-thumb:hover{ filter: brightness(1.12); }
+
+/* TABLE */
+#ara_content table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:16px;
+  overflow:hidden;
+  font-size:13px;
+}
+
+#ara_content th,
+#ara_content td{
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 6px 10px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* STICKY HEADER */
+#ara_content thead th{
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  font-weight: 900;
+  text-align: left;
+  border: none !important;
+}
+
+/* BODY */
+#ara_content tbody td{
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.82);
+  height: 26px;
+  line-height: 18px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  transition: color .12s ease, background .12s ease;
+}
+
+/* HOVER + SELECTED */
+#ara_content .table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #fff !important;
+}
+#ara_content tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color: #fff !important;
+}
+
+/* NUMERIC */
+#ara_content .double-column{
+  text-align:right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* EXTRA COMPACT (opsiyonel class) */
+#ara_content .table-row-height td{
+  height: 18px;
+  line-height: 18px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* STICKY TFOOT */
+#ara_content tfoot td{
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.08);
+  font-weight: 900;
+}
+
+/* PAGINATION */
+#ara_content .pagination-container{
+  margin-top: 10px !important;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+#ara_content .pagination-container .btn{
+  width: 46px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* ERROR */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
 </style>
+
 
 <div class="card p-1">
   <div style="display: flex; align-items: center">
@@ -58,7 +206,7 @@
       onclick="cekrapmailAt()" disabled>Email Gonder</button>
   </div>
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
+<div id="errorDiv"></div>
 <div class="container">
   <div class="table-container">
     <table class="table table-bordered table-hover" id="main-table">

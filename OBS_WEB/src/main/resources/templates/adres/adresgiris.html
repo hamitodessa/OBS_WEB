@@ -111,7 +111,10 @@
   object-fit: cover;
 }
 
-
+#ara_content .datalist-arrow{
+  color: rgba(255,255,255,.75);
+  text-shadow: 0 0 6px rgba(0,0,0,.45);
+}
 </style>
 <!-- Ana Sayfa -->
 
@@ -128,10 +131,13 @@
 				<input class="form-control cins_bold" maxlength="12"
 					list="hesapOptions" id="hesapKodlari"
 					style="width: 100%; padding-right: 30px;">
-				<datalist id="hesapOptions">
+				<datalist  id="hesapOptions">
 					<option th:each="kod : ${hesapKodlari}" th:value="${kod.M_Kodu}"></option>
 				</datalist>
-				<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
+				<span class="datalist-arrow"
+      style="position:absolute; top:50%; right:10px; transform:translateY(-50%); pointer-events:none;">
+  ▼
+</span>
 			</div>
 
 		</div>

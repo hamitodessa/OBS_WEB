@@ -49,7 +49,8 @@ function renderSubjects(subjects) {
                 <h4 style="font-weight: bold;">${subject.subjectTitle}</h4>
                 <p style="border: 1px solid #ddd; padding: 10px; border-radius: 4px;">${subject.subjectDescription}</p>
                 <button onclick="toggleCommentForm(${subject.subjectID})">Yorum Ekle</button>
-                <button onclick="toggleCommits(${subject.subjectID})" style="margin-top: 10px;">Yorumları Göster</button>
+								<button id="btn-commits-${subject.subjectID}" onclick="toggleCommits(${subject.subjectID})" style="margin-top: 10px;">Yorumları Göster</button>
+
                 <div id="commits-${subject.subjectID}" class="commits" style="display: none; margin-top: 10px;border: 1px solid #ddd;">
                     ${commits
 				.map(
@@ -62,7 +63,12 @@ function renderSubjects(subjects) {
 				.join('')}
                 </div>
                 <div id="comment-form-${subject.subjectID}" class="comment-form" style="display: none; margin-top: 10px;">
-                    <textarea id="comment-text-${subject.subjectID}" placeholder="Yorum Yaz..." rows="3" style="width: 100%; padding: 10px;" maxlength="255"></textarea>
+								<textarea class="form-control"
+								          id="comment-text-${subject.subjectID}"
+								          placeholder="Yorum Yaz..."
+								          rows="3"
+								          maxlength="255"></textarea>
+
                     <button onclick="submitComment(${subject.subjectID})" style="margin-top: 5px; padding: 10px; background-color: #6200ea; color: white; border: none; border-radius: 4px;">Yorum Kaydet</button>
                 </div>
             </div>
@@ -90,15 +96,16 @@ function filterSubjects() {
 }
 
 function toggleCommits(subjectId) {
-	const commitsDiv = document.getElementById(`commits-${subjectId}`);
-	if (!commitsDiv) {
-		return;
-	}
-	const isHidden = commitsDiv.style.display === 'none';
-	commitsDiv.style.display = isHidden ? 'block' : 'none';
-	const button = commitsDiv.previousElementSibling;
-	button.textContent = isHidden ? 'Yorumları Gizle' : 'Yorumları Göster';
+  const commitsDiv = document.getElementById(`commits-${subjectId}`);
+  if (!commitsDiv) return;
+
+  const isHidden = (commitsDiv.style.display === 'none' || commitsDiv.style.display === '');
+  commitsDiv.style.display = isHidden ? 'block' : 'none';
+
+  const button = document.getElementById(`btn-commits-${subjectId}`);
+  if (button) button.textContent = isHidden ? 'Yorumları Gizle' : 'Yorumları Göster';
 }
+
 
 function toggleCommentForm(subjectId) {
 	const form = document.getElementById(`comment-form-${subjectId}`);
@@ -230,7 +237,7 @@ async function addSubject() {
 		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
 	} finally {
 		document.body.style.cursor = "default";
-		saveButton.textContent = "Yorum Kaydet";
+		saveButton.textContent = "Kaydet";
 		saveButton.disabled = false;
 	}
 }
