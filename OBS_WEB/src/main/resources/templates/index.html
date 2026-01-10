@@ -266,6 +266,38 @@
     from{ opacity:0; transform: translateY(-6px); }
     to{ opacity:1; transform:none; }
 }  
+
+
+/* 2026 CAM – ERROR PANEL */
+
+#ara_content .cam-error,
+#ara_content .cam-error *{
+  color: rgba(255,255,255,.95) !important;
+}
+
+/* error kutusu */
+#ara_content .cam-error{
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,.12),
+    rgba(255,255,255,.05)
+  );
+  border: 1px solid rgba(248,113,113,.45);
+  border-radius: 18px;
+  padding: 18px 20px;
+  font-weight: 900;
+  font-size: 20px;
+
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  text-shadow:
+    0 0 12px rgba(0,0,0,.45),
+    0 0 18px rgba(248,113,113,.25);
+}
+
+
 </style>
 
 
@@ -493,35 +525,42 @@ class="fa fa-bar-chart-o green_color"
 		sayfaYukle('/wellcome');
     }
 	async function sayfaYukle(url) {
-	    try {
-	        document.body.style.cursor = 'wait';
-	        $.ajax({
-	            url: url,
-	            type: "GET",
-	            success: function(data) {
-	                document.body.style.cursor = 'default';
-	                if (data.includes('<form') && data.includes('name="username"')) {
-	                    window.location.href = "/login";
-	                } else {
-	                    $('#ara_content').html(data);
-	                }
-	            },
-	            error: function(xhr) {
-	                document.body.style.cursor = 'default';
-	                if (xhr.status === 401) {
-	                    window.location.href = "/login";
-	                } else {
-	                    $('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
-	                }
-	            },
-	        });
-	    } catch (error) {
-	        document.body.style.cursor = 'default';
-	        document.getElementById('ara_content').innerHTML =
-	            `<h2>Bir hata oluştu: ${error.message}</h2>`;
-	    }
-	}
-	
+		  try {
+		    document.body.style.cursor = 'wait';
+		    $.ajax({
+		      url: url,
+		      type: "GET",
+		      success: function (data) {
+		        document.body.style.cursor = 'default';
+		        if (data.includes('<form') && data.includes('name="username"')) {
+		          window.location.href = "/login";
+		        } else {
+		          $('#ara_content').html(data);
+		        }
+		      },
+		      error: function (xhr) {
+		        document.body.style.cursor = 'default';
+		        if (xhr.status === 401) {
+		          window.location.href = "/login";
+		          return;
+		        }
+		        const msg = `Serverda Bir hata oluştu: ${xhr.status} - ${xhr.statusText || 'error'}`;
+		        $('#ara_content').html(`
+		        		  <div class="cam-error" style="color:#fff;">
+		        		    ${msg}
+		        		  </div>
+		        		`);
+		      }
+		    });
+		  } catch (error) {
+		    document.body.style.cursor = 'default';
+		    document.getElementById('ara_content').innerHTML = `
+		      <div class="cam-error">
+		        Bir hata oluştu: ${error.message ?? 'Bilinmeyen hata'}
+		      </div>
+		    `;
+		  }
+		}
 	function refreshPage() {
           location.reload(); 
     }

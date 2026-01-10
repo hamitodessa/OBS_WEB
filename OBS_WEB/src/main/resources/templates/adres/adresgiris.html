@@ -1,71 +1,114 @@
 <style>
+/* =========================
+   2026 CAM – FIX (Buzul değil CAM)
+   ========================= */
 
-
-.child {
-	width: 95%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
+#ara_content{
+  color: rgba(255,255,255,.92);
+  /* arka plan olmazsa her şey gri/beyaz görünür */
+  background: radial-gradient(1200px 600px at 15% 10%,
+      rgba(56,189,248,.20), transparent 55%),
+    radial-gradient(900px 500px at 85% 20%,
+      rgba(34,197,94,.14), transparent 55%),
+    radial-gradient(900px 500px at 60% 90%,
+      rgba(251,146,60,.12), transparent 55%),
+    rgba(6,10,18,.65);
+  border-radius: 18px;
 }
 
-.group-box {
-	padding: 1px;
-	width: 97%;
-	box-sizing: border-box;
-	display: flex;
-	align-items: center;
+/* CARD */
+#ara_content .card.p-4{
+  background: linear-gradient(180deg,
+      rgba(255,255,255,.10),
+      rgba(255,255,255,.05)) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.aramagroup-box {
-	width: 97%;
-	box-sizing: border-box;
-	display: flex;
-	align-items: center;
-	border: 1px solid #ccc;
-	height: 50px; /* Yüksekliği sabitledim */
-}
-.centered-div {
-	width: 60%; /* Genişlik %80 */
-	margin: 0 auto; /* Ekran ortasında konumlandırma */
-/*	padding: 4px;
-	border: 1px solid #ccc;  */
-	box-sizing: border-box;
-	/* Padding ve border genişlik içinde hesaplansın */
-	text-align: center; /* İçerikleri ortala (opsiyonel) */
-}
-
-.resimcentered-div {
-	width: 250px; /* Sabit genişlik */
-    height: 330px; /* Sabit yükseklik */
-    
-	margin: 0 auto; /* Ekran ortasında konumlandırma */
-	box-sizing: border-box;
-	
-	display: flex;
-	flex-direction: column; /* Dikey hizalama */
-	align-items: left; /* Elemanları ortala (opsiyonel) */
-	gap: 8px; /* Elemanlar arasında boşluk (opsiyonel) */
-}
-
-.resimgoster {
-    overflow: hidden; /* Resmin taşmasını engelle */
-    display: flex; /* Flexbox ile hizalama */
-    justify-content: center; /* Yatayda ortala */
-    align-items: center; /* Dikeyde ortala */
-    width: 250px; /* Sabit genişlik */
-    height: 300px; /* Sabit yükseklik */
-    border: 1px solid #ddd; /* İsteğe bağlı çerçeve */
-    background-color: #f8f9fa; /* Arka plan rengi */
-}
-
-.resimdiv {
+/* GROUPLAR */
+#ara_content .group-box,
+#ara_content .aramagroup-box{
+  width: 97%;
   display: flex;
-    width: 250px; /* Sabit genişlik */
-    min-height: 300px; /* Sabit yükseklik */
-   border: 1px solid #ddd; /* İsteğe bağlı çerçeve */
-    overflow: hidden; /* Resmin taşmasını engelle */
-    background-color: #f8f9fa; /* Arka plan rengi */
+  align-items: center;
+  gap: 8px;                 /* span padding-left çöplüğünü azaltır */
+  padding: 8px;
+  box-sizing: border-box;
+
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
+}
+#ara_content .aramagroup-box{ height: 50px; }
+
+/* LABEL */
+#ara_content .input-group-text{
+  background: rgba(255,255,255,.10) !important;
+  color: rgba(255,255,255,.90) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  border-radius: 12px;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(0,0,0,.35);
+}
+
+/* INPUT */
+#ara_content .form-control{
+  height: 44px;
+  background: rgba(8,14,26,.42) !important;
+  color: rgba(255,255,255,.95) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+}
+#ara_content .form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+}
+#ara_content .form-control:focus{
+  background: rgba(8,14,26,.60) !important;
+  border-color: rgba(56,189,248,.60) !important;
+  box-shadow: 0 0 0 2px rgba(56,189,248,.20);
+}
+#ara_content .form-control:disabled{
+  background: rgba(8,14,26,.28) !important;
+  color: rgba(255,255,255,.70) !important;
+  opacity: 1;
+}
+
+/* BUTTON */
+#ara_content .btn-secondary{
+  height: 44px;
+  border-radius: 14px;
+  font-weight: 800;
+  color: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
+}
+#ara_content .btn-secondary:hover{
+  background: rgba(56,189,248,.18);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-1px);
+}
+
+/* RESİM */
+#ara_content .resimdiv{
+  width: 250px;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 16px;
+  overflow: hidden;
+}
+#ara_content .resimgoster{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 
@@ -239,7 +282,8 @@
             <span style="padding-left: 5px;"></span>
             <button type="button" id="adryeniButton" class="btn btn-secondary ml-2" onclick="adrenableInputs()" ><i class="fa fa-plus"></i>	</button>
         </div>
-        <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div></div>
+        <div id="errorDiv"></div>
+    </div>
     
     <div class="resimcentered-div">
  		<div class="resimdiv">

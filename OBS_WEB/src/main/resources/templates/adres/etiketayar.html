@@ -1,41 +1,98 @@
 <style>
-.centered-container {
+/* =========================
+   2026 CAM – ETIKET AYAR (FORM)
+   wrapper: #ara_content
+   ========================= */
+#ara_content {
+	color: rgba(255, 255, 255, .92);
+}
+
+/* CARD */
+#ara_content .card.p-4 {
+	background: linear-gradient(180deg, rgba(255, 255, 255, .10),
+		rgba(255, 255, 255, .05)) !important;
+	border: 1px solid rgba(255, 255, 255, .18) !important;
+	border-radius: 18px;
+	box-shadow: 0 18px 55px rgba(0, 0, 0, .45);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+}
+
+/* ORTA KUTU (centered-container) */
+#ara_content .centered-container {
+	width: min(760px, 92%);
+	border: 1px solid rgba(255, 255, 255, .16) !important;
+	background: rgba(255, 255, 255, .035);
+	border-radius: 16px;
+	padding: 16px;
+	box-shadow: inset 0 0 22px rgba(0, 0, 0, .25);
+}
+
+/* FORM SATIRLARI */
+#ara_content .form-container {
+	gap: 12px;
+}
+
+#ara_content .form-row {
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	border: 1px solid #ced4da;
-	padding: 10px;
-	border-radius: 5px;
-	width: 60%;
+	gap: 10px;
+	flex-wrap: wrap; /* dar ekranda taşma olmasın */
 }
 
-.form-container {
-	display: flex;
-	flex-direction: column;
-	gap: 10px; /* Satırlar arası boşluk */
+/* LABEL */
+#ara_content .form-row label, #ara_content .form-check-label {
+	width: 130px;
+	color: rgba(255, 255, 255, .82);
+	font-weight: 800;
 }
 
-.form-container .form-row+.form-row {
+/* INPUT / SELECT */
+#ara_content .form-control, #ara_content .form-select {
+	height: 42px;
+	background: rgba(8, 14, 26, .45) !important;
+	color: #fff !important;
+	border: 1px solid rgba(255, 255, 255, .18) !important;
+	border-radius: 12px;
+}
+
+#ara_content .form-control:focus, #ara_content .form-select:focus {
+	background: rgba(8, 14, 26, .60) !important;
+	border-color: rgba(56, 189, 248, .60) !important;
+	box-shadow: 0 0 0 2px rgba(56, 189, 248, .20);
+}
+
+/* küçük input genişliği */
+#ara_content .input-width {
+	width: 90px; /* 80 biraz dar kalıyordu */
+}
+
+/* KAYDET BUTONU (main_bt ise) */
+#ara_content .main_bt {
+	height: 44px;
+	padding: 0 18px;
+	border-radius: 14px;
+	font-weight: 900;
+	color: rgba(255, 255, 255, .95);
+	background: linear-gradient(180deg, rgba(56, 189, 248, .45),
+		rgba(34, 197, 94, .35));
+	border: 1px solid rgba(255, 255, 255, .22);
+	box-shadow: 0 10px 26px rgba(0, 0, 0, .35);
+}
+
+#ara_content .main_bt:hover {
+	filter: brightness(1.08);
+	transform: translateY(-1px);
+}
+
+/* HATA */
+#ara_content #errorDiv {
 	margin-top: 10px;
-	/* Satırlar arası boşluk miktarını burada ayarlayın */
+	color: #f87171;
+	font-weight: 900;
+	text-shadow: 0 0 8px rgba(248, 113, 113, .45);
 }
-
-.form-row {
-	display: flex;
-	align-items: center;
-	gap: 10px; /* Label ve input arasındaki boşluk */
-}
-
-.form-row label {
-	width: 130px; /* Label genişliği */
-}
-
-.input-width {
-	width: 80px; /* Input genişliği */
-}
-
 </style>
-
 <div class="card p-4 mb-4">
 	<div class="form-container">
 		<div style="display: flex; justify-content: center;">
@@ -45,63 +102,60 @@
 					enctype="multipart/form-data">
 					<fieldset>
 						<div class="form-row">
-							<label class="form-check-label" >Sol Bosluk</label> <input
+							<label class="form-check-label">Sol Bosluk</label> <input
 								class="form-control input-width" type="number" id="solbosluk"
-								name="solbosluk" th:value="${etiket.solbosluk}">
-								
-								<label class="form-check-label" >Sag Bosluk</label> <input
+								name="solbosluk" th:value="${etiket.solbosluk}"> <label
+								class="form-check-label">Sag Bosluk</label> <input
 								class="form-control input-width" type="number" id="sagbosluk"
 								name="sagbosluk" th:value="${etiket.sagbosluk}">
-								
 						</div>
-						
-						
 						<div class="form-row">
-							<label class="form-check-label" >Ust Bosluk</label> <input
+							<label class="form-check-label">Ust Bosluk</label> <input
 								class="form-control input-width" type="number" id="ustbosluk"
-								name="ustbosluk" th:value="${etiket.ustbosluk}">
-								
-								<label class="form-check-label" >Alt Bosluk</label> <input
+								name="ustbosluk" th:value="${etiket.ustbosluk}"> <label
+								class="form-check-label">Alt Bosluk</label> <input
 								class="form-control input-width" type="number" id="altbosluk"
 								name="altbosluk" th:value="${etiket.altbosluk}">
 						</div>
 						<br>
 						<div class="form-row">
-							<label class="form-check-label" >Etiket Yukseklik</label> <input
+							<label class="form-check-label">Etiket Yukseklik</label> <input
 								class="form-control input-width" type="number" id="yukseklik"
-								name="yukseklik" th:value="${etiket.yukseklik}">
-								
-								<label class="form-check-label" >Genislik</label> <input
+								name="yukseklik" th:value="${etiket.yukseklik}"> <label
+								class="form-check-label">Genislik</label> <input
 								class="form-control input-width" type="number" id="genislik"
 								name="genislik" th:value="${etiket.genislik}">
 						</div>
-						
 						<div class="form-row">
-							<label class="form-check-label" >Ara Bosluk Diket</label> <input
-								class="form-control input-width" type="number" id="dikeyarabosluk"
-								name="dikeyarabosluk" th:value="${etiket.dikeyarabosluk}">
-								
-								<label class="form-check-label" >Etiket Yazim</label> 
-							<select class="form-select input-width" th:value="${etiket.yataydikey}"  id="yataydikey" name="yataydikey">
-										<option value="YATAY">YATAY</option>
-										<option value="DIKEY">DIKET</option>
-							</select>
+							<label class="form-check-label">Ara Bosluk Diket</label> <input
+								class="form-control input-width" type="number"
+								id="dikeyarabosluk" name="dikeyarabosluk"
+								th:value="${etiket.dikeyarabosluk}"> <label
+								class="form-check-label">Etiket Yazim</label>
+							<div style="position: relative; width: 95px;">
+								<select class="form-select input-width"
+									th:value="${etiket.yataydikey}" id="yataydikey"
+									name="yataydikey">
+									<option value="YATAY">YATAY</option>
+									<option value="DIKEY">DIKEY</option>
+								</select> <span
+									style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); pointer-events: none; color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .35); font-weight: 700; line-height: 1;">▼</span>
+							</div>
 						</div>
-						
 						<br>
 						<div class="form-row">
-							<label class="form-check-label" ></label>
-							<button type="button" class="main_bt" id="kaydetButton" onclick="ayarKayit()">Kaydet</button>
+							<label class="form-check-label"></label>
+							<button type="button" class="main_bt" id="kaydetButton"
+								onclick="ayarKayit()">Kaydet</button>
 						</div>
 						<input type="hidden" id="id" name="id" th:value="${etiket.id}">
-				</fieldset>
+					</fieldset>
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
-<div id="errorDiv" th:if="${errorMessage}" style="color: red; font-weight: bold;">
-    <span th:text="${errorMessage}"></span>
+<div id="errorDiv" th:if="${errorMessage}">
+	<span th:text="${errorMessage}"></span>
 </div>
-
 <script src="/obs_js_files/adres/etiketayar.js"></script>

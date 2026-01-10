@@ -1,99 +1,178 @@
 <style>
-
-.table-hover tbody tr:hover {
-	background-color: #ced4da !important;
-	color: inherit !important;
+/* =========================
+   2026 CAM – TABLE / LIST (KOMPAKT)
+   wrapper: #ara_content
+   ========================= */
+#ara_content {
+	color: rgba(255, 255, 255, .92);
 }
 
-.table-row-height td {
-	height: 10px;
-	line-height: 10px;
+/* CARD (üst bar) */
+#ara_content .card.p-1 {
+	background: linear-gradient(180deg, rgba(255, 255, 255, .10),
+		rgba(255, 255, 255, .05)) !important;
+	border: 1px solid rgba(255, 255, 255, .18) !important;
+	border-radius: 14px;
+	box-shadow: 0 12px 35px rgba(0, 0, 0, .40);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
 }
 
-.table .thead-dark th {
- color: #fff;
-  background: #214162;
+#ara_content .card.p-1>div {
+	gap: 10px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
-  }
-  th,
-  td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    white-space: nowrap;
-  }
-  .table-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    margin-top: 10px;
-  }
-  .container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    padding: 0px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+/* INPUT + BUTTON */
+#ara_content .form-control {
+	height: 42px;
+	background: rgba(8, 14, 26, .45) !important;
+	color: #fff !important;
+	border: 1px solid rgba(255, 255, 255, .18) !important;
+	border-radius: 12px;
+}
+
+#ara_content .form-control::placeholder {
+	color: rgba(255, 255, 255, .55);
+}
+
+#ara_content .btn-primary {
+	height: 42px;
+	border-radius: 12px;
+	font-weight: 800;
+	background: linear-gradient(180deg, rgba(56, 189, 248, .45),
+		rgba(34, 197, 94, .35));
+	border: 1px solid rgba(255, 255, 255, .25);
+}
+
+#ara_content .btn-primary:hover {
+	filter: brightness(1.1);
+}
+
+/* TABLE CONTAINER */
+#ara_content .table-container {
+	background: rgba(255, 255, 255, .03);
+	border: 1px solid rgba(255, 255, 255, .14);
+	border-radius: 14px;
+	margin-top: 10px;
+	overflow: auto;
+}
+
+/* TABLE */
+#ara_content #myTable {
+	border-collapse: separate;
+	border-spacing: 0;
+	color: rgba(255, 255, 255, .92);
+}
+
+#ara_content #myTable th, #ara_content #myTable td {
+	border: 1px solid rgba(255, 255, 255, .10);
+	padding: 6px 10px; /* kompakt */
+	line-height: 1.05;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+
+/* THEAD (sticky) */
+#ara_content #myTable thead.thead-dark th {
+	background: linear-gradient(180deg, rgba(33, 65, 98, .95),
+		rgba(20, 38, 60, .95)) !important;
+	color: #fff;
+	border-color: rgba(255, 255, 255, .18);
+	position: sticky;
+	top: 0;
+	z-index: 2;
+}
+
+/* TBODY */
+#ara_content #myTable tbody td {
+	background: rgba(255, 255, 255, .03) !important;
+	color: rgba(255, 255, 255, .92) !important;
+}
+
+#ara_content #myTable tbody tr:nth-child(even) td {
+	background: rgba(255, 255, 255, .018) !important;
+}
+
+#ara_content #myTable tbody tr.table-row-height td {
+	height: 36px !important;
+}
+
+/* HOVER */
+#ara_content #myTable.table-hover tbody tr:hover td {
+	background: rgba(56, 189, 248, .14) !important;
+	color: #fff !important;
+}
+
+/* CHECKBOX COL */
+#ara_content #myTable th:first-child, #ara_content #myTable td:first-child
+	{
+	width: 44px !important;
+	text-align: center;
+	padding-left: 8px !important;
+	padding-right: 8px !important;
+}
+
+#ara_content input[type="checkbox"] {
+	accent-color: #38bdf8;
+}
+
+/* TFOOT */
+#ara_content #myTable tfoot td {
+	background: rgba(255, 255, 255, .04);
+	border-top: 1px solid rgba(255, 255, 255, .18);
+}
 </style>
 <div class="card p-1">
 	<div style="display: flex; align-items: center;">
-		<span style="padding-left: 5px;"></span>
-		 <input type="text" oninput="aramaYap()"
-			id="arama" style="width: 200px;" class="form-control"
-			placeholder="Arama" /> 
-		<span style="padding-left: 5px;"></span>
+		<span style="padding-left: 5px;"></span> <input type="text"
+			oninput="aramaYap()" id="arama" style="width: 200px;"
+			class="form-control" placeholder="Arama" /> <span
+			style="padding-left: 5px;"></span>
 		<button class="btn btn-primary" type="button" onclick="etiketyazdir()"
 			id="etiketyazdirButton">Yazdir</button>
 	</div>
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<div id="errorDiv"></div>
 <div class="container">
-  <div class="table-container">
-	<table class="table table-bordered table-hover" id="myTable">
-		<thead class="thead-dark">
-			<tr>
-				<th style="text-align: center;"><input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"></th>
-				<th>Adi</th>
-				<th>Adres_1</th>
-				<th>Adres_2</th>
-				<th>Tel_1</th>
-				<th>Semt</th>
-				<th>Sehir</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="etiket : ${etiketler}" class="table-row-height">
-				<td style="width: 40px;"><input type="checkbox"
-					th:value="${etiket.cbox}" name="selectedEtiket"></td>
-				<td th:text="${etiket.Adi}"></td>
-				<td th:text="${etiket.Adres_1}"></td>
-				<td th:text="${etiket.Adres_2}"></td>
-				<td th:text="${etiket.Tel_1}"></td>
-				<td th:text="${etiket.Semt}"></td>
-				<td th:text="${etiket.Sehir}"></td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tfoot>
-	</table>
-</div>
+	<div class="table-container">
+		<table class="table table-bordered table-hover" id="myTable">
+			<thead class="thead-dark">
+				<tr>
+					<th style="text-align: center;"><input type="checkbox"
+						id="selectAll" onclick="toggleCheckboxes(this)"></th>
+					<th>Adi</th>
+					<th>Adres_1</th>
+					<th>Adres_2</th>
+					<th>Tel_1</th>
+					<th>Semt</th>
+					<th>Sehir</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="etiket : ${etiketler}" class="table-row-height">
+					<td style="width: 40px;"><input type="checkbox"
+						th:value="${etiket.cbox}" name="selectedEtiket"></td>
+					<td th:text="${etiket.Adi}"></td>
+					<td th:text="${etiket.Adres_1}"></td>
+					<td th:text="${etiket.Adres_2}"></td>
+					<td th:text="${etiket.Tel_1}"></td>
+					<td th:text="${etiket.Semt}"></td>
+					<td th:text="${etiket.Sehir}"></td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 </div>
 <input type="hidden" id="etiketBilgi" name="etiketBilgi" value="">
 <script src="/obs_js_files/adres/etiketlistele.js"></script>

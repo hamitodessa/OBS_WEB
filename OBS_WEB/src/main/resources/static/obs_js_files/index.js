@@ -20,7 +20,12 @@ $(document).ready(function () {
 				if (xhr.status === 401) {
 					window.location.href = "/login";
 				} else {
-					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
+					const msg = `Serverda Bir hata oluştu: ${xhr.status} - ${xhr.statusText || 'error'}`;
+					$('#ara_content').html(`
+					    <div class="cam-error" style="color:#fff;">
+					       ${msg}
+					    </div>
+					`);
 				}
 			},
 			complete: function () {
