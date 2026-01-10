@@ -25,7 +25,7 @@ async function detailoku() {
 			clearFormModulsuz();
 			data.data.forEach(item => {
 				const row = document.createElement("tr");
-				row.classList.add("table-row-height");
+		
 				row.innerHTML = `
                     <td style="display: none;">${item.id || ""}</td>
                     <td>${item.user_prog_kodu || ""}</td>

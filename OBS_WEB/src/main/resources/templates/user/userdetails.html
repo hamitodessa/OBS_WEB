@@ -87,40 +87,82 @@
   transform:none;
 }
 
-/* ===== TABLE ===== */
 #ara_content table{
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
-  border-radius: 16px;
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:16px;
+  overflow:hidden;
+  font-size:13px;
 }
 
-#ara_content .thead-dark th{
-  background: linear-gradient(180deg,#1f3b5c,#162b44);
-  color: #fff;
-  border: none;
-  font-size: 13px;
+/* Cells */
+#ara_content th,
+#ara_content td{
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 6px 10px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Header sticky */
+#ara_content thead th{
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  border: none !important;
   font-weight: 900;
-  text-align: center;
+  text-align: left;
 }
 
+/* Body base */
 #ara_content tbody td{
   background: rgba(255,255,255,.04);
-  border-color: rgba(255,255,255,.08);
-  font-size: 13px;
-  text-align: center;
+  color: rgba(255,255,255,.82);
+  transition: color .12s ease, background .12s ease;
 }
 
-#ara_content .table-hover tbody tr:hover{
+
+/* Hover foreground fix */
+#ara_content .table-hover tbody tr:hover td{
   background: rgba(56,189,248,.14) !important;
-  color: #fff !important;
+  color: #ffffff !important;
 }
 
-/* satır yüksekliği */
-#ara_content .table-row-height td{
-  height: 28px;
-  line-height: 28px;
+/* Seçili satır (kalıcı) */
+#ara_content tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color: #ffffff !important;
 }
+
+
+#ara_content tbody td{
+  height: 26px;
+  line-height: 18px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+
+#ara_content .table-row-height td{
+  height: 38px;
+  line-height: 28px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* TFOOT (toplamlar) sticky olsun – çok yakışıyor */
+#ara_content tfoot td{
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.08);
+  font-weight: 900;
+}
+
 
 /* ===== INFO TEXT ===== */
 #createdbMenuLink{
@@ -169,6 +211,7 @@
 			<div class="row">
 				<div class="form-group"  style="width:200px;">
 					<label for="user_modul">User Modul:</label> 
+					<div style="position:relative; flex:1;width:100%;">
 					<select style="margin-top:10px;" class="form-select" id="user_modul" name="user_modul" onchange=detailoku()>
 						<option value="Cari Hesap">Cari Hesap</option>
 						<option value="Fatura">Fatura</option>
@@ -176,17 +219,25 @@
 						<option value="Adres">Adres</option>
 						<option value="Kur">Kur</option>
 						<option value="Kereste">Kereste</option>
-		<!-- <option value="Sms">Sms</option> --> 
-		<!-- <option value="Gunluk">Gunluk</option> --> 
 					</select>
+					<span style=" position:absolute;top:50%;right:12px;
+              transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
+              font-weight:700; line-height:1; ">▼</span>
+          </div>
 				</div>
 				<div class="form-group" style="width:200px;">
 					<label for="user_role">Hangi Sql</label> 
-					<select style="margin-top:10px;" class="form-select"  onchange="sqlchanged()"  id="hangi_sql" name="hangi_sql">
-						<option value="MS SQL">MS SQL</option>
-						<option value="MY SQL">MY SQL</option>
-						<option value="PG SQL">PG SQL</option>
-					</select>
+					
+					<div style="position:relative; flex:1;width:100%;">
+						<select style="margin-top:10px;" class="form-select"  onchange="sqlchanged()"  id="hangi_sql" name="hangi_sql">
+							<option value="MS SQL">MS SQL</option>
+							<option value="MY SQL">MY SQL</option>
+							<option value="PG SQL">PG SQL</option>
+						</select>
+						<span style=" position:absolute;top:50%;right:12px;
+              				transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
+              				font-weight:700; line-height:1; ">▼</span>
+          			</div>
 				</div>
 			</div>
 			<div class="row"  style="padding-top:5px;">
@@ -260,7 +311,7 @@
 	</p>	
 	<p></p>	
 	<input type="hidden" id="hiddenId" name="hiddenId">
-	<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+	<div id="errorDiv"></div>
 	<div id="moduleTable" class="card p-4">
 		<table class="table table-bordered table-hover table-row-height">
 			<thead class="thead-dark">

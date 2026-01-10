@@ -192,7 +192,8 @@
 
 <div class="card p-1">
 		<div class="filter-row">
-			<select style="width:120px;" class="form-select" id="user_modul" name="user_modul">
+		 <div style="position:relative;width:155px;">
+			<select style="width:150px;" class="form-select" id="user_modul" name="user_modul">
 				<option value="Cari Hesap">Cari Hesap</option>
 				<option value="Fatura">Fatura</option>
 				<option value="Kambiyo">Kambiyo</option>
@@ -202,6 +203,10 @@
 				<option value="Sms">Sms</option>
 				<option value="Gunluk">Gunluk</option>
 			</select>
+			<span style=" position:absolute;top:50%;right:12px;
+              				transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
+              				font-weight:700; line-height:1; ">▼</span>
+         </div>
 		  	<span style="padding-left: 5px;"></span>
   			<input type="date" style="width:120px;" id="startDate" class="form-control" value="1900-01-01">
   			<span style="padding-left: 5px;"></span>
@@ -212,7 +217,7 @@
 			<button class="btn btn-primary" type="button" onclick="logdoldur()" id="logyenileButton" style="margin-left: 10px;">Yenile</button>
 	</div>
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<div id="errorDiv"></div>
 <div class="container">
 	<div class="table-container">
 <table class="table table-bordered table-hover table-row-height">

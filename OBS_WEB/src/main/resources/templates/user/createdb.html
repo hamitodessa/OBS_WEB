@@ -165,7 +165,7 @@
             <span style="padding-left: 5px;"></span>
             <span class="input-group-text" style="min-width:120px;">Modul</span>
             <span style="padding-left: 5px;"></span>
-          
+          <div style="position:relative; flex:1;width:100%;">
            <select class="form-select" id="user_modul" name="user_modul">
 				<option value="Cari Hesap">Cari Hesap</option>
 				<option value="Fatura">Fatura</option>
@@ -176,18 +176,25 @@
 		<!-- 	<option value="Sms">Sms</option>  -->
 		<!-- 	<option value="Gunluk">Gunluk</option> -->
 			</select>
-					
+					<span style=" position:absolute;top:50%;right:12px;
+              				transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
+              				font-weight:700; line-height:1; ">▼</span>
+           </div>
          </div>
         <div class="group-box">
             <span style="padding-left: 5px;"></span>
             <span class="input-group-text" style="min-width:120px;">Unvan</span>
             <span style="padding-left: 5px;"></span>
+             <div style="position:relative; flex:1;width:100%;">
             <select class="form-select" id="hangi_sql" name="hangi_sql" onchange=serversuperviserdurum() >
 				<option value="MS SQL">MS SQL</option>
 				<option value="MY SQL">MY SQL</option>
 				<option value="PG SQL">PG SQL</option>
 			</select>
-       
+       <span style=" position:absolute;top:50%;right:12px;
+              				transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
+              				font-weight:700; line-height:1; ">▼</span>
+         </div>
         </div>
         
         <div class="group-box">

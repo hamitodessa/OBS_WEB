@@ -2,13 +2,14 @@
 
 <style>
 /* =========================
-   2026 GLASS THEME - TAHSILAT
+   2026 GLASS THEME - TAHSILAT / CEK
    wrapper: #ara_content
+   (mantık aynı, sadece renk/gradient dili standard)
    ========================= */
 
 #ara_content{ color: rgba(255,255,255,.92); }
 
-/* CARD / ÜST TAB BAR */
+/* ===== CARD / ÜST TAB BAR ===== */
 #ara_content .card{
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
@@ -18,7 +19,7 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* NAV TABS */
+/* ===== NAV TABS ===== */
 #ara_content .nav-tabs{
   border-bottom: 1px solid rgba(255,255,255,.14);
   gap: 8px;
@@ -42,7 +43,7 @@
   border-color: rgba(56,189,248,.35) !important;
 }
 
-/* ANA PANEL (TEK KUTU) */
+/* ===== ANA PANEL (TEK KUTU) ===== */
 #ara_content .child{
   width: 860px;
   max-width: 100%;
@@ -55,16 +56,19 @@
   box-sizing: border-box;
 }
 
-/* group-box artık “satır” */
+/* group-box artık “satır” (mantık aynı) */
 #ara_content .group-box{
   border: none !important;
   padding: 6px 4px;
   margin: 0 0 8px 0;
   width: 100%;
   box-sizing: border-box;
+
+  /* SADECE RENK STANDARD (arka planı bozmaz, cam dili verir) */
+  background: rgba(255,255,255,.02);
 }
 
-/* ROW */
+/* ===== ROW ===== */
 #ara_content .form-row{
   display:flex;
   align-items:center;
@@ -72,7 +76,7 @@
   flex-wrap: nowrap;
 }
 
-/* LABEL */
+/* ===== LABEL ===== */
 #ara_content label{
   font-weight: 900;
   font-size: 13px;
@@ -80,7 +84,7 @@
   margin: 0;
 }
 
-/* INPUT / SELECT */
+/* ===== INPUT / SELECT ===== */
 #ara_content .form-control,
 #ara_content .form-select{
   height: 46px;
@@ -97,6 +101,21 @@
   background: rgba(8,14,26,.65);
   color: #fff;
 }
+
+/* placeholder standard (diğer sayfa dili) */
+#ara_content .form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+  font-weight: 600;
+}
+
+/* disabled standard (renk dili aynı) */
+#ara_content .form-control:disabled,
+#ara_content .form-select:disabled{
+  opacity: .78;
+  color: rgba(255,255,255,.78);
+  background: rgba(8,14,26,.30);
+}
+
 #ara_content input[type="date"]{ color-scheme: dark; }
 
 #ara_content .saga-bold{
@@ -110,7 +129,7 @@
   text-shadow: 0 0 6px rgba(255,255,255,.35);
 }
 
-/* BUTTONS */
+/* ===== BUTTONS ===== */
 #ara_content .btn.btn-secondary{
   height: 46px;
   min-width: 46px;
@@ -143,6 +162,8 @@
   transform: translateY(-2px);
   filter: brightness(1.03);
 }
+
+/* Kırmızı aksiyon (aynı dil) */
 #ara_content #tahsilButton{
   background: linear-gradient(180deg, rgba(251,113,133,.95), rgba(220,38,38,.95)) !important;
 }
@@ -157,7 +178,7 @@
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-/* CHECKBOX */
+/* ===== CHECKBOX ===== */
 #ara_content .form-check-input{
   transform: scale(1.15);
   margin: 0;
@@ -204,7 +225,7 @@
   color: rgba(255,255,255,.78) !important;
 }
 
-/* Bootstrap state class’larını sustur (yeşil vb bir daha çıkmasın) */
+/* Bootstrap state class’larını sustur */
 #ara_content #cekTable tbody tr.table-success > *,
 #ara_content #cekTable tbody tr.table-active > *,
 #ara_content #cekTable tbody tr.table-primary > *,
@@ -216,7 +237,7 @@
 }
 
 /* =========================
-   CEK TABLE - TFOOT (TOPLAM) 🔥
+   CEK TABLE - TFOOT (TOPLAM)
    ========================= */
 #ara_content #cekTable tfoot td{
   background: linear-gradient(
@@ -224,7 +245,6 @@
     rgba(56,189,248,.22),
     rgba(37,99,235,.18)
   ) !important;
-
   color: #fff !important;
   font-weight: 900;
   border-top: 1px solid rgba(56,189,248,.45) !important;
@@ -259,8 +279,7 @@
   ) !important;
 }
 
-
-/* ERROR */
+/* ===== ERROR ===== */
 #ara_content #errorDiv{
   display:none;
   margin-top: 12px;
@@ -272,7 +291,6 @@
   font-weight: 900;
 }
 
-
 /* datalist gizle */
 #ara_content datalist{ display:none; }
 
@@ -280,8 +298,8 @@
 @media (max-width: 900px){
   #ara_content .form-row{ flex-wrap: wrap; }
 }
-
 </style>
+
 
 
 <!-- ===== TAB BAR ===== -->
