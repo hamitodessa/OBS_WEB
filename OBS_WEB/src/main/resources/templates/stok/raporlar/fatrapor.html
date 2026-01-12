@@ -1,82 +1,287 @@
-
+<link rel="stylesheet" href="/style/stok/fatrapormodal.css">
 <link rel="stylesheet" href="style/yenihsppln.css" />
 <style>
-.container {
-	height: 100vh; 
-	display: flex;
-	flex-direction: column; 
-	margin-top: 10px;
-	padding: 0px;
-	width: 100%;
-	max-width: 100%;
-	box-sizing: border-box;
+/* =========================
+   2026 CAM – FATRAP (TAHRAP UYUMLU / İZOLE)
+   Scope: #ara_content .fatrap
+   ========================= */
+
+#ara_content .fatrap{ color: rgba(255,255,255,.92); }
+
+/* CARD */
+#ara_content .fatrap .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 
-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: auto;
-    }
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    white-space: nowrap; 
+/* BUTTON */
+#ara_content .fatrap .btn{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  transition: .16s ease;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+#ara_content .fatrap .btn.btn-primary{
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  border: none;
+  color: #fff;
+}
+#ara_content .fatrap .btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
+}
+#ara_content .fatrap .btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none !important;
 }
 
-.details-row {
-	display: none;
+/* ERROR */
+#ara_content .fatrap #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
 }
 
-.expandable:hover {
-	cursor: pointer;
+/* ÜST BAR */
+#ara_content .fatrap .topbar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap: wrap;
+  padding: 6px;
 }
 
-.toggle-button {
-	font-weight: bold;
-	font-size: 16px;
-	cursor: pointer;
-	width: 20px;
-	text-align: center;
+/* LAYOUT */
+#ara_content .fatrap .container{
+  height: 75vh;
+  display:flex;
+  flex-direction:column;
+  margin-top:10px;
+  padding:0;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+#ara_content .fatrap .table-container{
+  flex-grow:1;
+  overflow:auto;
+  margin-top:10px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
 }
 
-.toggle-button:hover {
-	color: #007BFF;
+/* NUMERIC */
+#ara_content .fatrap .double-column{
+  text-align:right !important;
+  font-variant-numeric: tabular-nums;
 }
 
-.table-container {
-	flex-grow: 1;
-	overflow-y: auto;
-	border: 1px solid #ccc;
-	margin-top: 10px;
+/* ===== MAIN TABLE ===== */
+#ara_content .fatrap table.t-main{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:16px;
+  overflow:hidden;
+  font-size:13px;
+}
+#ara_content .fatrap table.t-main th,
+#ara_content .fatrap table.t-main td{
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 6px 10px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+#ara_content .fatrap table.t-main thead th{
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 900;
+  text-align: left;
+}
+#ara_content .fatrap table.t-main tbody td{
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.82);
+  transition: .12s ease;
+  height: 24px;
+  line-height: 18px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
-.details-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 10px;
-	table-layout: auto;
+/* hover + selected sadece ANA satır */
+#ara_content .fatrap table.t-main tbody tr:not(.details-row):hover td{
+  background: rgba(56,189,248,.14) !important;
+  color:#fff !important;
+}
+#ara_content .fatrap table.t-main tbody tr:not(.details-row).selected td{
+  background: rgba(34,197,94,.14) !important;
+  color:#fff !important;
 }
 
-.details-table th, .details-table td {
-	border: 1px solid #ccc;
-	padding: 6px;
-	white-space: nowrap; 
+/* TOGGLE COL */
+#ara_content .fatrap table.t-main th:first-child,
+#ara_content .fatrap table.t-main td:first-child{
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  text-align: center;
+  padding: 0 !important;
+}
+#ara_content .fatrap table.t-main .toggle-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  min-height: 26px;
+  font-weight: 900;
+  font-size: 18px;
+  color: rgba(255,255,255,.85);
+  user-select:none;
+  cursor:pointer;
+}
+#ara_content .fatrap table.t-main .toggle-button:hover{
+  color: rgba(56,189,248,.95);
+  text-shadow: 0 0 10px rgba(56,189,248,.35);
 }
 
-.double-column {
-	text-align: right;
+/* DETAILS ROW */
+#ara_content .fatrap tr.details-row{ display:none; }
+#ara_content .fatrap tr.details-row > td{
+  padding: 10px !important;
+  border: none !important;
+  background: transparent !important;
 }
 
-.table-row-height td {
-	height: 10px;
-	line-height: 10px;
+/* DETAILS PANEL */
+#ara_content .fatrap .details-wrap{
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  background: rgba(8,14,26,.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  padding: 10px;
+  overflow-x: auto;
 }
 
-.table .thead-dark th {
-	color: #fff;
-	background: #214162;
+/* ===== DETAILS TABLE ===== */
+#ara_content .fatrap table.t-details{
+  width: max-content;     /* kolonlar daralmasın */
+  min-width: 1200px;
+  table-layout: auto;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius: 14px;
+  overflow:hidden;
+  font-size: 13px;
 }
+#ara_content .fatrap table.t-details th,
+#ara_content .fatrap table.t-details td{
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 8px 10px;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+#ara_content .fatrap table.t-details thead th{
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color:#fff !important;
+  border:none !important;
+  font-weight: 900;
+}
+#ara_content .fatrap table.t-details tbody td{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.88) !important;
+  transition: .12s ease;
+}
+#ara_content .fatrap table.t-details tbody tr:hover td{
+  background: rgba(56,189,248,.10) !important;
+  color:#fff !important;
+}
+
+/* PAGINATION BAR */
+#ara_content .fatrap .pagination-container{
+  margin-top: 10px;
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* ===== 2026 CAM SCROLLBAR (DETAILS) ===== */
+#ara_content .fatrap .details-wrap{
+  scrollbar-width: thin;                               /* Firefox */
+  scrollbar-color: rgba(255,255,255,.22) rgba(0,0,0,.12);
+}
+
+/* Chrome / Edge / Safari */
+#ara_content .fatrap .details-wrap::-webkit-scrollbar{
+  height: 10px;   /* yatay scroll */
+  width: 10px;    /* dikey olursa */
+}
+
+#ara_content .fatrap .details-wrap::-webkit-scrollbar-track{
+  background: rgba(0,0,0,.12);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+#ara_content .fatrap .details-wrap::-webkit-scrollbar-thumb{
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,.28),
+    rgba(255,255,255,.16)
+  );
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+
+#ara_content .fatrap .details-wrap::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(
+    180deg,
+    rgba(56,189,248,.38),
+    rgba(255,255,255,.22)
+  );
+  border-color: rgba(56,189,248,.35);
+}
+
+
 </style>
+
+
+
+
+<div class="fatrap">
 	<div class="card p-1">
 		<div style="display: flex; align-items: center;">
 			<button class="btn btn-primary" type="button" id="fatrapyenileButton"
@@ -89,11 +294,10 @@ th, td {
 			 onclick="fatrapmailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>
-	<div id="errorDiv"
-		style="display: none; color: red; font-weight: bold;"></div>
+	<div id="errorDiv"></div>
 	<div class="container">
 		<div class="table-container">
-			<table id="main-table" class="table table-bordered table-hover">
+			<table id="main-table" class="t-main">
 				<thead class="thead-dark">
 				</thead>
 				<tbody id="mainTableBody">
@@ -121,6 +325,8 @@ th, td {
 		<i class="fa fa-forward"></i>
 	</button>
 </div>
+</div>
+
 <input type="hidden" id="fatrapBilgi" name="fatrapBilgi" value="" />
 
 <script src="/obs_js_files/stok/raporlar/fatrapor.js"></script>

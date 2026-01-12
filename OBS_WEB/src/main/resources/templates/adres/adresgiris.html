@@ -1,26 +1,21 @@
 <style>
 /* =========================
-   2026 CAM – FIX (Buzul değil CAM)
+   2026 CAM – KOMPAKT FORM (ADR)
+   Scope: #ara_content
    ========================= */
 
 #ara_content{
   color: rgba(255,255,255,.92);
-  /* arka plan olmazsa her şey gri/beyaz görünür */
-  background: radial-gradient(1200px 600px at 15% 10%,
-      rgba(56,189,248,.20), transparent 55%),
-    radial-gradient(900px 500px at 85% 20%,
-      rgba(34,197,94,.14), transparent 55%),
-    radial-gradient(900px 500px at 60% 90%,
-      rgba(251,146,60,.12), transparent 55%),
-    rgba(6,10,18,.65);
+  background: radial-gradient(1200px 600px at 15% 10%, rgba(56,189,248,.20), transparent 55%),
+              radial-gradient(900px 500px at 85% 20%, rgba(34,197,94,.14), transparent 55%),
+              radial-gradient(900px 500px at 60% 90%, rgba(251,146,60,.12), transparent 55%),
+              rgba(6,10,18,.65);
   border-radius: 18px;
 }
 
-/* CARD */
+/* sayfa kartı */
 #ara_content .card.p-4{
-  background: linear-gradient(180deg,
-      rgba(255,255,255,.10),
-      rgba(255,255,255,.05)) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05)) !important;
   border: 1px solid rgba(255,255,255,.18) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
@@ -28,44 +23,99 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* GROUPLAR */
-#ara_content .group-box,
-#ara_content .aramagroup-box{
-  width: 97%;
-  display: flex;
-  align-items: center;
-  gap: 8px;                 /* span padding-left çöplüğünü azaltır */
-  padding: 8px;
-  box-sizing: border-box;
+/* ======================================================
+   LAYOUT: sol form + sağ resim
+   ====================================================== */
+#ara_content .adr-layout{
+  display: grid;
+  grid-template-columns: 1fr 280px; /* sağ resim sabit */
+  gap: 14px;
+  align-items: start;
+}
 
+/* küçük ekranda resim alta insin */
+@media (max-width: 1200px){
+  #ara_content .adr-layout{ grid-template-columns: 1fr; }
+}
+
+/* ======================================================
+   TOOLBAR (arama + datalist) ve buton barları
+   ====================================================== */
+#ara_content .adr-toolbar{
+  display: grid;
+  grid-template-columns: 110px 1fr 160px;
+  gap: 10px;
+  align-items: center;
+
+  padding: 10px;
+  border-radius: 14px;
   background: rgba(255,255,255,.035);
   border: 1px solid rgba(255,255,255,.14);
+}
+
+#ara_content .adr-actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+
+  padding: 10px;
   border-radius: 14px;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.14);
 }
-#ara_content .aramagroup-box{ height: 50px; }
 
-/* LABEL */
-#ara_content .input-group-text{
-  background: rgba(255,255,255,.10) !important;
-  color: rgba(255,255,255,.90) !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-  border-radius: 12px;
-  font-weight: 800;
+/* ======================================================
+   KOMPAKT FORM GRID
+   ====================================================== */
+#ara_content .adr-form{
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+}
+
+#ara_content .adr-field{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+
+  border-radius: 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+/* label chip */
+#ara_content .adr-label{
+  min-width: 92px;               /* default */
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 10px;
+  border-radius: 10px;
+
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.90);
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: .2px;
   text-shadow: 0 0 10px rgba(0,0,0,.35);
+  white-space: nowrap;
 }
 
-/* INPUT */
+/* input */
 #ara_content .form-control{
-  height: 44px;
+  height: 40px;
   background: rgba(8,14,26,.42) !important;
   color: rgba(255,255,255,.95) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
 }
-#ara_content .form-control::placeholder{
-  color: rgba(255,255,255,.55) !important;
-}
+#ara_content .form-control::placeholder{ color: rgba(255,255,255,.55) !important; }
 #ara_content .form-control:focus{
   background: rgba(8,14,26,.60) !important;
   border-color: rgba(56,189,248,.60) !important;
@@ -77,14 +127,25 @@
   opacity: 1;
 }
 
-/* BUTTON */
+/* checkbox */
+#ara_content .form-check-input{
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: rgba(56,189,248,.9);
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(8,14,26,.50);
+}
+
+/* buton */
 #ara_content .btn-secondary{
-  height: 44px;
-  border-radius: 14px;
-  font-weight: 800;
+  height: 40px;
+  border-radius: 12px;
+  font-weight: 900;
   color: rgba(255,255,255,.92);
   background: rgba(255,255,255,.10);
   border: 1px solid rgba(255,255,255,.18);
+  transition: .15s ease;
 }
 #ara_content .btn-secondary:hover{
   background: rgba(56,189,248,.18);
@@ -92,10 +153,23 @@
   transform: translateY(-1px);
 }
 
-/* RESİM */
+/* datalist ok */
+#ara_content .datalist-arrow{
+  color: rgba(255,255,255,.75);
+  text-shadow: 0 0 6px rgba(0,0,0,.45);
+}
+
+/* ======================================================
+   RESİM PANELİ
+   ====================================================== */
+#ara_content .adr-photo{
+  position: sticky;
+  top: 14px;
+}
+
 #ara_content .resimdiv{
-  width: 250px;
-  min-height: 300px;
+  width: 100%;
+  min-height: 280px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -111,195 +185,216 @@
   object-fit: cover;
 }
 
-#ara_content .datalist-arrow{
-  color: rgba(255,255,255,.75);
-  text-shadow: 0 0 6px rgba(0,0,0,.45);
+/* ======================================================
+   GRID SPAN yardımcıları (12 kolon)
+   ====================================================== */
+#ara_content .c12{ grid-column: span 12; }
+#ara_content .c8 { grid-column: span 8; }
+#ara_content .c6 { grid-column: span 6; }
+#ara_content .c4 { grid-column: span 4; }
+#ara_content .c3 { grid-column: span 3; }
+#ara_content .c2 { grid-column: span 2; }
+
+/* küçük ekranda alanlar genişlesin */
+@media (max-width: 1200px){
+  #ara_content .c3, #ara_content .c2, #ara_content .c4, #ara_content .c6, #ara_content .c8{ grid-column: span 12; }
+  #ara_content .adr-label{ min-width: 100px; }
 }
 </style>
+
 <!-- Ana Sayfa -->
 
-<div class="card p-4 d-flex flex-row gap-3">
-    <div class="centered-div">
-        <div class="aramagroup-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Arama</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="arama"  style="max-width:300px;" class="form-control" oninput="adraramaYap()"  th:value="${hesapKodu}" >
-            <span style="padding-left: 50px;"></span>
+<div class="card p-4">
+  <div class="adr-layout">
 
-			<div style="position: relative; width: 150px;">
-				<input class="form-control cins_bold" maxlength="12"
-					list="hesapOptions" id="hesapKodlari"
-					style="width: 100%; padding-right: 30px;">
-				<datalist  id="hesapOptions">
-					<option th:each="kod : ${hesapKodlari}" th:value="${kod.M_Kodu}"></option>
-				</datalist>
-				<span class="datalist-arrow"
-      style="position:absolute; top:50%; right:10px; transform:translateY(-50%); pointer-events:none;">
-  ▼
-</span>
-			</div>
+    <!-- SOL: FORM -->
+    <div>
 
-		</div>
-        <div class="aramagroup-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="geriButton" class="btn btn-secondary ml-2" onclick="adrGeri()" ><i class="fa fa-backward"></i>	</button>
-            
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="ilkButton" class="btn btn-secondary ml-2" onclick="adrIlk()" ><i class="fa fa-refresh"></i>	</button>
+      <!-- TOOLBAR: Arama + datalist -->
+      <div class="adr-toolbar">
+        <span class="adr-label" style="min-width:110px;">Arama</span>
+        <input type="text" id="arama" class="form-control" oninput="adraramaYap()" th:value="${hesapKodu}">
 
-           
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="ileriButton" class="btn btn-secondary ml-2" onclick="adrIleri()" ><i class="fa fa-forward"></i>	</button>
+        <div style="position: relative;">
+          <input class="form-control cins_bold" maxlength="12"
+                 list="hesapOptions" id="hesapKodlari"
+                 style="width:100%; padding-right:30px;">
+          <datalist id="hesapOptions">
+            <option th:each="kod : ${hesapKodlari}" th:value="${kod.M_Kodu}"></option>
+          </datalist>
+          <span class="datalist-arrow"
+                style="position:absolute; top:50%; right:10px; transform:translateY(-50%); pointer-events:none;">▼</span>
+        </div>
+      </div>
 
+      <!-- NAV BUTON -->
+      <div class="adr-actions" style="margin-top:10px;">
+        <button type="button" id="geriButton" class="btn btn-secondary" onclick="adrGeri()"><i class="fa fa-backward"></i></button>
+        <button type="button" id="ilkButton" class="btn btn-secondary" onclick="adrIlk()"><i class="fa fa-refresh"></i></button>
+        <button type="button" id="ileriButton" class="btn btn-secondary" onclick="adrIleri()"><i class="fa fa-forward"></i></button>
+      </div>
+
+      <!-- FORM GRID -->
+      <div class="adr-form" style="margin-top:10px;">
+
+        <div class="adr-field c6">
+          <span class="adr-label">Hesap Kodu</span>
+          <input type="text" id="kodu" disabled class="form-control" style="max-width:180px;font-weight:bold;"
+                 oninput="adrhesapAdiOgren('kodu','kodKontrol')">
+          <span id="kodKontrol" style="color:red;font-weight:900;"></span>
         </div>
-        <div class="group-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Hesap Kodu</span>
-            <span style="padding-left: 5px;"></span>
-           <input type="text" id="kodu" disabled style="max-width:150px;font-weight: bold;" class="form-control" oninput="adrhesapAdiOgren('kodu','kodKontrol')">
-           <span style="padding-left: 5px;text-align:left; color:red;font-weight: bold;" id="kodKontrol"></span>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Unvan</span>
+          <input type="text" id="unvan" disabled class="form-control">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Unvan</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="unvan"  disabled style="max-width:300px;" class="form-control">
+
+        <div class="adr-field c8">
+          <span class="adr-label">Adres1</span>
+          <input type="text" id="ad1" disabled class="form-control">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Adres1</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="ad1"  disabled class="form-control" style="max-width:300px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Semt</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="semt"  disabled class="form-control" style="max-width:150px;">
+
+        <div class="adr-field c4">
+          <span class="adr-label">Semt</span>
+          <input type="text" id="semt" disabled class="form-control">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Adres2</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="ad2"  disabled class="form-control" style="max-width:300px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Sehir</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="seh"  disabled class="form-control" style="max-width:150px;">
+
+        <div class="adr-field c8">
+          <span class="adr-label">Adres2</span>
+          <input type="text" id="ad2" disabled class="form-control">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Posta Kodu</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="pkodu"  disabled class="form-control" style="max-width:100px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Sms Gonder</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="checkbox" id="smsgon" class="form-check-input" style="max-width:50px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Mail Gonder</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="checkbox" id="mailgon" class="form-check-input" style="max-width:50px;">
+
+        <div class="adr-field c4">
+          <span class="adr-label">Sehir</span>
+          <input type="text" id="seh" disabled class="form-control">
         </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Vergi D.</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="vd"  disabled class="form-control" style="max-width:150px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Vergi No</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="vn"  disabled class="form-control" style="max-width:150px;">
+
+        <div class="adr-field c4">
+          <span class="adr-label">Posta Kodu</span>
+          <input type="text" id="pkodu" disabled class="form-control">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Tel 1</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="t1"  disabled class="form-control" style="max-width:150px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Tel 2</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="t2"  disabled class="form-control" style="max-width:150px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Tel 3</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="t3"  disabled class="form-control" style="max-width:150px;">
+
+        <div class="adr-field c4">
+          <span class="adr-label">Sms</span>
+          <input type="checkbox" id="smsgon" class="form-check-input">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Fax</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="fx"  disabled class="form-control" style="max-width:150px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Ozel Kod1</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="o1"  disabled class="form-control" style="max-width:150px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Ozel Kod2</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="o2"  disabled class="form-control" style="max-width:150px;">
+
+        <div class="adr-field c4">
+          <span class="adr-label">Mail</span>
+          <input type="checkbox" id="mailgon" class="form-check-input">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Web</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="web"  disabled class="form-control" style="max-width:305px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Ozel</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="ozel"  disabled class="form-control" style="max-width:150px;">
+
+        <div class="adr-field c6">
+          <span class="adr-label">Vergi D.</span>
+          <input type="text" id="vd" disabled class="form-control">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Email</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="mail" disabled class="form-control" style="max-width:305px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Aciklama</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="acik" disabled class="form-control" style="max-width:300px;">
+
+        <div class="adr-field c6">
+          <span class="adr-label">Vergi No</span>
+          <input type="text" id="vn" disabled class="form-control">
         </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Not 1</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="not1" disabled class="form-control" style="max-width:305px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Not 2</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="not2" disabled class="form-control" style="max-width:300px;">
+
+        <div class="adr-field c4">
+          <span class="adr-label">Tel 1</span>
+          <input type="text" id="t1" disabled class="form-control">
         </div>
-         <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Not 3</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="not3" disabled class="form-control" style="max-width:305px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Yetkili</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="yetkili" disabled class="form-control" style="max-width:250px;">
+
+        <div class="adr-field c4">
+          <span class="adr-label">Tel 2</span>
+          <input type="text" id="t2" disabled class="form-control">
         </div>
-        <div class="aramagroup-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="adrkaydetButton" class="btn btn-secondary ml-2" onclick="adrKayit()" ><i class="fa fa-save"></i>	</button>
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="adrsilButton" class="btn btn-secondary ml-2" onclick="adrSil()" ><i class="fa fa-trash"></i>	</button>
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="adryeniButton" class="btn btn-secondary ml-2" onclick="adrenableInputs()" ><i class="fa fa-plus"></i>	</button>
+
+        <div class="adr-field c4">
+          <span class="adr-label">Tel 3</span>
+          <input type="text" id="t3" disabled class="form-control">
         </div>
-        <div id="errorDiv"></div>
+
+        <div class="adr-field c4">
+          <span class="adr-label">Fax</span>
+          <input type="text" id="fx" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c4">
+          <span class="adr-label">Ozel1</span>
+          <input type="text" id="o1" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c4">
+          <span class="adr-label">Ozel2</span>
+          <input type="text" id="o2" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Web</span>
+          <input type="text" id="web" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Ozel</span>
+          <input type="text" id="ozel" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Email</span>
+          <input type="text" id="mail" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Aciklama</span>
+          <input type="text" id="acik" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Not 1</span>
+          <input type="text" id="not1" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Not 2</span>
+          <input type="text" id="not2" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Not 3</span>
+          <input type="text" id="not3" disabled class="form-control">
+        </div>
+
+        <div class="adr-field c6">
+          <span class="adr-label">Yetkili</span>
+          <input type="text" id="yetkili" disabled class="form-control">
+        </div>
+
+      </div>
+
+      <!-- KAYDET / SİL / YENİ -->
+      <div class="adr-actions" style="margin-top:10px;">
+        <button type="button" id="adrkaydetButton" class="btn btn-secondary" onclick="adrKayit()"><i class="fa fa-save"></i></button>
+        <button type="button" id="adrsilButton" class="btn btn-secondary" onclick="adrSil()"><i class="fa fa-trash"></i></button>
+        <button type="button" id="adryeniButton" class="btn btn-secondary" onclick="adrenableInputs()"><i class="fa fa-plus"></i></button>
+      </div>
+
+      <div id="errorDiv"></div>
+      <input type="hidden" id="adrid" name="adrid">
+
     </div>
-    
-    <div class="resimcentered-div">
- 		<div class="resimdiv">
- 			<img id="resimGoster" class="resimgoster"  src="" alt="Base64 Resim" style="display: none;" />
-     	</div>
-     	<button type="button" id="resimremove" style="max-width:250px;" class="btn btn-secondary ml-2" onclick="resimSil()" ><i class="fa fa-remove"></i>	</button>
- 		<input type="file" id="resim" name="resim" accept="image/*" disabled class="form-control" style="max-width:400px;">
+
+    <!-- SAĞ: RESİM -->
+    <div class="adr-photo">
+      <div class="resimdiv">
+        <img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim" style="display:none;" />
+      </div>
+
+      <button type="button" id="resimremove" class="btn btn-secondary" style="width:100%; margin-top:10px;" onclick="resimSil()">
+        <i class="fa fa-remove"></i>
+      </button>
+
+      <input type="file" id="resim" name="resim" accept="image/*" disabled
+             class="form-control" style="width:100%; margin-top:10px;">
     </div>
-    <input type="hidden" id="adrid" name="adrid" >
+
+  </div>
 </div>
+
 <script src="/obs_js_files/adres/adresgiris.js"></script>
 <script>
 document.getElementById('resim').addEventListener('change', function (event) {

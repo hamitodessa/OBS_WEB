@@ -1,205 +1,145 @@
-<style>
-    .modal-dialog {
-        height: 500px; 
-        margin: 0 auto; 
-    }
-    
-    .modal-content {
-        overflow-y: auto;
-    }
-    
-    .modal-backdrop {
-        z-index: 1040 !important;
-    }
-    
-    #secondModal {
-        z-index: 1050 !important;
-    }
-    
-    .form-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 5px;
-    }
-    </style>
-    
-    <div class="modal fade" th:fragment="modalkeresteenvanter" id="firstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="min-width: 870px;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kereste Envanter Raporlama</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk Son Tarih</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="date" id="tar1" style="min-width: 140px;max-width: 140px;" class="form-control" value="1900-01-01"> 
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="date" id="tar2" style="min-width: 150px;max-width: 150px;" class="form-control" value="2100-12-31"> 
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ilk Son CTarih</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="date" id="ctar1" style="min-width: 130px;max-width: 130px;" class="form-control" value="1900-01-01"> 
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="date" id="ctar2" style="min-width: 130px;max-width: 130px;" class="form-control" value="2100-12-31"> 
-                    </div>
+<div class="modal fade modal-kerenvrap" th:fragment="modalkeresteenvanter" id="firstModal"
+  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
-                    <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk Son Urun kodu</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="ukod1" style="min-width: 140px;max-width: 140px;" value = "00-000-0000-0000" class="form-control" >
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="ukod2" style="min-width: 150px;max-width: 150px;" value="ZZ-999-9999-9999" class="form-control">
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ilk Son CHes Kodu</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="chkod1" style="min-width: 130px;max-width: 130px;" value = "" class="form-control" ondblclick="openSecondModal('chkod1')">
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="chkod2" style="min-width: 130px;max-width: 130px;" value="ZZZZZZZZZZZZ" class="form-control" ondblclick="openSecondModal('chkod2')">
-                    </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
 
-                    <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk Son Paket</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="pak1" style="min-width: 140px;max-width: 140px;" value = "" class="form-control">
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="pak2" style="min-width: 150px;max-width: 150px;" value="ZZZZZZZZZZ" class="form-control">
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ilk Son CEvrak</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="cevr1" style="min-width: 130px;max-width: 130px;" value = "" class="form-control">
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="cevr2" style="min-width: 130px;max-width: 130px;" value="ZZZZZZZZZZZZ" class="form-control" >
-                    </div>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Kereste Envanter Raporlama</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-                    <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Depo</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"
-                            style="min-width: 140px;max-width: 140px;" id="depo" >
-                        </select> 
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="min-width: 150px;max-width: 150px;">Ozel Kod</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"
-                            style="min-width: 130px;max-width: 140px;" id="ozkod" >
-                        </select> 
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">C Depo</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"
-                            style="min-width: 130px;max-width: 130px;" id="cdepo" >
-                        </select> 
-                        
-                    </div>
+      <div class="modal-body">
 
-                    <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk Son Hesap</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="hes1" style="min-width: 140px;max-width: 140px;" value = "" class="form-control" ondblclick="openSecondModal('hes1')">
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="hes2" style="min-width: 150px;max-width: 150px;" value = "ZZZZZZZZZZZZ" class="form-control" ondblclick="openSecondModal('hes2')">
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">CAna Grup</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"
-                            style="min-width: 130px;max-width: 130px;" id="canagrp" onchange="anagrpChanged(this,'caltgrp')">
-                        </select> 
-                    </div>
+        <!-- 1: Tarih + CTarih -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Tarih</span>
+          <input type="date" id="tar1" class="form-control" value="1900-01-01">
+          <input type="date" id="tar2" class="form-control" value="2100-12-31">
 
-                    <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk Son Evrak</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="evr1" style="min-width: 140px;max-width: 130px;" class="form-control">
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="evr2" style="min-width: 150px;max-width: 150px;" value="ZZZZZZZZZZZZ" class="form-control">
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">CAlt Grup</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                            <select class="form-select cins_bold" style="min-width: 130px;max-width: 130px;" id="caltgrp" disabled>
-                        </select> 
-                    </div>
+          <span class="input-group-text">Ilk Son CTarih</span>
+          <input type="date" id="ctar1" class="form-control" value="1900-01-01">
+          <input type="date" id="ctar2" class="form-control" value="2100-12-31">
+        </div>
 
-                    <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ilk Son kons</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="kons1" style="min-width: 140px;max-width: 140px;" class="form-control">
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="kons2" style="min-width: 150px;max-width: 150px;" value="ZZZZZZZZZZZZZZZ" class="form-control" >
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="min-width: 140px;max-width: 140px;">COzel Kod</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"
-                            style="min-width: 130px;max-width: 130px;" id="cozkod" >
-                        </select> 
-                    </div>
+        <!-- 2: Ürün Kodu + CHes Kodu -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Urun kodu</span>
+          <input type="text" id="ukod1" class="form-control" value="00-000-0000-0000">
+          <input type="text" id="ukod2" class="form-control" value="ZZ-999-9999-9999">
 
-                    <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Ana Grup</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"
-                            style="min-width: 140px;max-width: 140px;" id="anagrp" onchange="anagrpChanged(this,'altgrp')">
-                        </select> 
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="min-width: 150px;max-width: 150px;">Alt Grup</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"
-                            style="min-width: 140px;max-width: 140px;" id="altgrp" >
-                        </select> 
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 130px;">Gruplama</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 130px;max-width: 130px;" id="gruplama" >
-                            <option value="Urun Kodu">Urun Kodu</option>
-                            <option value="Konsimento">Konsimento</option>
-                            <option value="Hesap-Kodu">Hesap-Kodu</option>
-                            <option value="Ana_Grup-Alt_Grup">Ana_Grup-Alt_Grup</option>
-                        </select> 
-                    </div>
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Raporla</button>
-                </div>
-            </div>
-        </div>	
+          <span class="input-group-text">Ilk Son CHes Kodu</span>
+          <input type="text" id="chkod1" class="form-control" ondblclick="openSecondModal('chkod1')">
+          <input type="text" id="chkod2" class="form-control" value="ZZZZZZZZZZZZ" ondblclick="openSecondModal('chkod2')">
+        </div>
+
+        <!-- 3: Paket + CEvrak -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Paket</span>
+          <input type="text" id="pak1" class="form-control">
+          <input type="text" id="pak2" class="form-control" value="ZZZZZZZZZZ">
+
+          <span class="input-group-text">Ilk Son CEvrak</span>
+          <input type="text" id="cevr1" class="form-control">
+          <input type="text" id="cevr2" class="form-control" value="ZZZZZZZZZZZZ">
+        </div>
+
+        <!-- 4: Depo + Ozel Kod + C Depo -->
+        <div class="input-group">
+          <span class="input-group-text">Depo</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="depo"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+
+          <span class="input-group-text">Ozel Kod</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="ozkod"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="cdepo"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+        </div>
+
+        <!-- 5: Hesap + CAna Grup -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Hesap</span>
+          <input type="text" id="hes1" class="form-control" ondblclick="openSecondModal('hes1')">
+          <input type="text" id="hes2" class="form-control" value="ZZZZZZZZZZZZ" ondblclick="openSecondModal('hes2')">
+
+          <span class="input-group-text">CAna Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="canagrp" onchange="anagrpChanged(this,'caltgrp')"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 6: Evrak + CAlt Grup -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Evrak</span>
+          <input type="text" id="evr1" class="form-control">
+          <input type="text" id="evr2" class="form-control" value="ZZZZZZZZZZZZ">
+
+          <span class="input-group-text">CAlt Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="caltgrp" disabled></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 7: Kons + COzel Kod -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son kons</span>
+          <input type="text" id="kons1" class="form-control">
+          <input type="text" id="kons2" class="form-control" value="ZZZZZZZZZZZZZZZ">
+
+          <span class="input-group-text">COzel Kod</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="cozkod"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 8: Ana/Alt Grup + Gruplama -->
+        <div class="input-group">
+          <span class="input-group-text">Ana Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="anagrp" onchange="anagrpChanged(this,'altgrp')"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+
+          <span class="input-group-text">Alt Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="altgrp"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="gruplama">
+              <option value="Urun Kodu">Urun Kodu</option>
+              <option value="Konsimento">Konsimento</option>
+              <option value="Hesap-Kodu">Hesap-Kodu</option>
+              <option value="Ana_Grup-Alt_Grup">Ana_Grup-Alt_Grup</option>
+            </select>
+            <span class="select-arrow">▼</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="saveToMain()">Raporla</button>
+      </div>
+
     </div>
+  </div>
+</div>

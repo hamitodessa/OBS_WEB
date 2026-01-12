@@ -1,140 +1,100 @@
-<style>
-.modal-dialog {
-	height: 500px;
-	margin: 0 auto;
-}
 
-.modal-content {
-	overflow-y: auto; 
-}
+<div class="modal fade modal-imarap" th:fragment="modalimarap" id="firstModal"
+  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
-.modal-backdrop {
-	z-index: 1040 !important;
-}
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
 
-#secondModal {
-	z-index: 1050 !important; 
-}
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Imalat Raporlama</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-</style>
-<div class="modal fade" th:fragment="modalimarap" id="firstModal"
-	data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-	aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered"
-		style="min-width: 790px;">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Imalat Raporlama</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal"
-					aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<div class="input-group" style="padding: 2px;">
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Ilk ve Son Evrak</span>
-					</div>
-					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="evrno1" style="min-width: 120px;max-width: 120px;" class="form-control"> 
-					<span style="padding-left: 5px;"></span>
-					<input type="text" id="evrno2" style="min-width: 120px;max-width: 120px;" value="ZZZZZZZZZZ" class="form-control">
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Urun Ana Grup</span>
-					</div>
-					<span style="padding-left: 5px;"></span>
-					
-						<select class="form-select cins_bold"
-							style="width: 150px;" id="uranagrp" onchange="anagrpChanged(this,'uraltgrp')">
-						</select> 
-						
-				</div>
-				<div class="input-group" style="padding: 2px;">
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Ilk Son Tarih</span>
-					</div>
-					<span style="padding-left: 5px;"></span> 
-					<input type="date" id="tar1" style="min-width: 120px;max-width: 120px;"  class="form-control" value="1900-01-01"> 
-					<span style="padding-left: 5px;"></span> 
-					<input type="date" id="tar2" style="min-width: 120px;max-width: 120px;" class="form-control"
-						value="2100-12-31"> 
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Urun Alt Grup</span>
-					</div>
-					<span style="padding-left: 5px;"></span>
-					<select class="form-select cins_bold" style="width: 150px;" id="uraltgrp" disabled></select> 
-						
-				</div>
-				<div class="input-group" style="padding: 2px;">
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Ilk Son Barkod</span>
-					</div>
-					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="bkod1" style="min-width: 120px;max-width: 120px;" class="form-control">
-					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="bkod2" style="min-width: 120px;max-width: 120px;" value="ZZZZZZZZZZ"
-						class="form-control" > 
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Depo</span>
-					</div>
-					<span style="padding-left: 5px;"></span>
-					
-						<select class="form-select cins_bold" style="width: 150px; " id="depo">
-						</select> 
-						
-				</div>
-				<div class="input-group" style="padding: 2px;">
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Ilk Son Ur.Kodu</span>
-					</div>
-					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="ukod1" style="min-width: 120px;max-width: 120px;" class="form-control">
-					<span style="padding-left: 5px;"></span>
-					<input type="text" id="ukod2" style="min-width: 120px;max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control"> 
-				</div>
-				<div class="input-group" style="padding: 2px;">
-                    <span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Ilk Son Recete</span>
-					</div>
-					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="rec1" style="min-width: 120px;max-width: 120px;" class="form-control" >
-					<span style="padding-left: 5px;"></span> 
-					<input type="text" id="rec2" style="min-width: 120px;max-width: 120px;" value="ZZZZZZZZZZZZ" class="form-control" >
-				</div>
-				<div class="input-group" style="padding: 2px;">
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Ana Grup</span>
-					</div>
-					<span style="padding-left: 5px;"></span>
-					
-						<select class="form-select cins_bold"
-							style="min-width: 175px;max-width: 175px;" id="anagrp" onchange="anagrpChanged(this,'altgrp')">
-						</select> 
-						
-				</div>
-                <div class="input-group" style="padding: 2px;">
-					<span style="padding-left: 5px;"></span>
-					<div class="input-group-prepend">
-						<span class="input-group-text" style="width: 130px;">Alt Grup</span>
-					</div>
-					<span style="padding-left: 5px;"></span>
-					
-						<select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="altgrp" disabled>
-						</select> 
-						
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary form-control"
-					onclick="saveToMain()">Raporla</button>
-			</div>
-		</div>
-	</div>
+      <div class="modal-body">
+
+        <!-- 1 -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk ve Son Evrak</span>
+          <input type="text" id="evrno1" class="form-control">
+          <input type="text" id="evrno2" class="form-control" value="ZZZZZZZZZZ">
+
+          <span class="input-group-text">Urun Ana Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="uranagrp" onchange="anagrpChanged(this,'uraltgrp')"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 2 -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Tarih</span>
+          <input type="date" id="tar1" class="form-control" value="1900-01-01">
+          <input type="date" id="tar2" class="form-control" value="2100-12-31">
+
+          <span class="input-group-text">Urun Alt Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="uraltgrp" disabled></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 3 -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Barkod</span>
+          <input type="text" id="bkod1" class="form-control">
+          <input type="text" id="bkod2" class="form-control" value="ZZZZZZZZZZ">
+
+          <span class="input-group-text">Depo</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="depo"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 4 (tek blok) -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Ur.Kodu</span>
+          <input type="text" id="ukod1" class="form-control">
+          <input type="text" id="ukod2" class="form-control" value="ZZZZZZZZZZZZ">
+        </div>
+
+        <!-- 5 (tek blok) -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Recete</span>
+          <input type="text" id="rec1" class="form-control">
+          <input type="text" id="rec2" class="form-control" value="ZZZZZZZZZZZZ">
+        </div>
+
+        <!-- 6 (tek select) -->
+        <div class="input-group">
+          <span class="input-group-text">Ana Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="anagrp" onchange="anagrpChanged(this,'altgrp')"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 7 (tek select) -->
+        <div class="input-group">
+          <span class="input-group-text">Alt Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="altgrp" disabled></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="saveToMain()">Raporla</button>
+      </div>
+
+    </div>
+  </div>
 </div>

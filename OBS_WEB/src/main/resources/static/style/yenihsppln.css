@@ -154,3 +154,14 @@
   padding-top: 4px;
   padding-bottom: 4px;
 }
+
+#secondModal #hsperrorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}

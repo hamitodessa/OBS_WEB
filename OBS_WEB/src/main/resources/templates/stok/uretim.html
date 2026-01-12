@@ -1,113 +1,261 @@
-<style>
-.editable-cell {
-	cursor: text;
-}
-
-.double-column {
-	text-align: right;
-}
-
-.tah-table th, .tah-table td {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	vertical-align: middle;
-	height: 15px;
-}
-
-
-
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 98%;
-	box-sizing: border-box;
-}
-
-.child {
-	width: 80%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	align-items: center;
-}
-
-.child2 {
-	width: 20%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	align-items: center;
-}
-
-.form-row {
-	display: flex;
-	align-items: center;
-	margin-bottom: 5px;
-}
-
-datalist {
-	display: none;
-}
-
-.toggle-button {
-	font-weight: bold;
-	font-size: 16px;
-	cursor: pointer;
-	width: 20px;
-	text-align: center;
-}
-
-.toggle-button:hover {
-	color: #007BFF;
-}
-
-.saga-bold {
-	text-align: right;
-	font-weight: bold;
-}
-
-.cins-bold {
-	font-weight: bold;
-}
-
-.table .thead-dark th {
-  color: #fff;
-  background: #214162;
-}
-.cardd {
-    display: flex;gap: 10px;
-}
-
-.resimdiv {
-  width: 100%;
-    min-height: 100%;
-    border: 1px solid #ddd; 
-    overflow: hidden;
-    background-color: #f8f9fa; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.resimgoster {
-    max-width: 100%;
-    max-height: 100%;
-     object-fit: contain;
-    background-color: #f8f9fa;
-    
-}
-</style>
 <link rel="stylesheet" href="style/urnkodlari.css" />
+
+<style>
+/* =========================
+   2026 CAM – IMALAT / URETIM
+   wrapper: #ara_content
+   hover: YOK
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* ===== CARD ===== */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ===== LAYOUT (child / child2) ===== */
+#ara_content .cardd{
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+#ara_content .child,
+#ara_content .child2{
+  background: transparent;
+  border: none !important;
+  padding: 0;
+}
+
+#ara_content .child{ width: 90%; }
+#ara_content .child2{ width: 10%; }
+
+/* ===== GROUP-BOX ===== */
+#ara_content .group-box{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35);
+  border-radius: 16px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+/* ===== LABEL ===== */
+#ara_content label{
+  color: rgba(255,255,255,.84);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+/* ===== INPUTS / SELECT ===== */
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+  padding: 10px 14px !important;
+  outline: none;
+}
+
+#ara_content .form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+  font-weight: 600;
+}
+
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65) !important;
+  color:#fff !important;
+}
+
+/* ===== BUTTONS ===== */
+#ara_content .btn.btn-primary{
+  border: none !important;
+  border-radius: 12px;
+  font-weight: 900;
+  color: #fff !important;
+  background: linear-gradient(135deg,#38bdf8,#22c55e) !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+#ara_content .btn.btn-primary:hover{ filter: brightness(1.10); }
+
+#ara_content .btn.btn-secondary{
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.88) !important;
+}
+#ara_content .btn.btn-secondary:hover{
+  background: rgba(56,189,248,.12) !important;
+  border-color: rgba(56,189,248,.35) !important;
+}
+
+/* ===== RESIM (TAM SIĞSIN) ===== */
+#ara_content .resimdiv{
+  width: 100%;
+  height: 100%;              /* child2 yüksekliğine göre */
+  min-height: 330px;         /* istersen 280/350 yap */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+}
+
+/* img tam sığar, taşma yok */
+#ara_content #resimGoster.resimgoster{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;       /* ✅ tam sığdır */
+  object-position: center;
+  background: rgba(0,0,0,.20) !important;
+}
+
+/* =========================
+   TABLE – imaTable (hover YOK)
+   ========================= */
+
+#ara_content #imaTable{
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,.03);
+}
+
+/* header sticky + gradient */
+#ara_content #imaTable thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* sadece alt çizgi */
+#ara_content #imaTable th,
+#ara_content #imaTable td{
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  padding: 6px 10px !important;
+  height: 28px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* td cam */
+#ara_content #imaTable tbody td{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* Bootstrap state class’larını sustur */
+#ara_content #imaTable tbody tr.table-success > *,
+#ara_content #imaTable tbody tr.table-active > *,
+#ara_content #imaTable tbody tr.table-primary > *,
+#ara_content #imaTable tbody tr.table-info > *,
+#ara_content #imaTable tbody tr.table-warning > *,
+#ara_content #imaTable tbody tr.table-danger > *{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* hover tamamen kapalı (NET) */
+#ara_content #imaTable tbody tr:hover > *{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* seçili satır istersen (hover yok ama selected olabilir) */
+#ara_content #imaTable tbody tr.selected > *{
+  background: linear-gradient(135deg, rgba(56,189,248,.18), rgba(34,197,94,.12)) !important;
+  color: #fff !important;
+}
+
+/* right align helpers */
+#ara_content .double-column,
+#ara_content .saga-bold{ text-align: right !important; font-weight: 900; }
+
+/* ===== TFOOT (TOPLAM) ===== */
+#ara_content #imaTable tfoot td{
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
+}
+
+#ara_content #totalTutar{
+  font-size: 15px;
+  font-weight: 900;
+  text-align: right;
+  color: #fff !important;
+  text-shadow: 0 2px 10px rgba(56,189,248,.55);
+}
+
+/* error */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+#ara_content .cam-border-2026{
+  margin-top: 10px;
+  padding: 10px;
+
+  
+
+  border: 1px solid rgba(56,189,248,.35); /* CAM MAVİ */
+  border-radius: 16px;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.06),
+    0 12px 35px rgba(0,0,0,.45);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+#ara_content input[type="date"]{
+  color-scheme: dark;
+}
+
+</style>
+
 <div class="card p-0">
 	<div class="cardd p-4">
 		<div class="child">
 			<!-- ****************************************************************************************************** -->
 			<div class="group-box">
 				<div style="display: flex; align-items: center; ">
-					<label style="width:85px;">Fis No</label>
+					<label style="width:60px;">Fis No</label>
 					<div style="min-width: 120px;max-width: 120px;">
 						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') uretimOku()" ondblclick="yeniFis();">
 					</div>
@@ -120,30 +268,40 @@ datalist {
 							th:value="${tarih}" style="width: 125px; font-weight: bold;" />
 					
 					<span style="padding-left: 10px;"></span> 	
-					<label style="min-width:75px;">Depo</label>	
-					
-						<select class="form-select cins_bold" style="width: 150px; " id="depo" >
+					<label style="min-width:60px;">Depo</label>	
+					 <div style="position:relative; width:125px;">
+						<select class="form-select cins_bold" style="width: 120px; " id="depo" >
     						<option th:each="kod : ${depoKodlari}" th:value="${kod.DEPO}" th:text="${kod.DEPO}"></option>
 						</select>
-						
+					<span style="position:absolute; top:50%; right:12px;
+              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
+              font-weight:700;line-height:1;">▼</span>
+          	</div>	
 					<span style="padding-left: 10px;"></span> 	
 					<label style="min-width:75px;">Ana Grup</label>	
-					
-						<select class="form-select cins_bold" style="width: 150px;" id="anagrp" onchange="anagrpChanged(this)">
+				 <div style="position:relative; width:125px;">	
+						<select class="form-select cins_bold" style="width: 120px;" id="anagrp" onchange="anagrpChanged(this)">
     						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
 						</select>
+					<span style="position:absolute; top:50%; right:12px;
+              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
+              font-weight:700;line-height:1;">▼</span>
+          	</div>		
 						
 					<span style="padding-left: 10px;"></span> 	
 					<label style="min-width:75px;">Alt Grup</label>	
-					
-						<select class="form-select cins_bold" style="width: 150px; " id="altgrp" disabled>
+					 <div style="position:relative; width:125px;">	
+						<select class="form-select cins_bold" style="width: 120px; " id="altgrp" disabled>
     						
 						</select>
-						
+					<span style="position:absolute; top:50%; right:12px;
+              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
+              font-weight:700;line-height:1;">▼</span>
+          	</div>		
 				</div>
 				
 				<!-- 				Uretim Bilgileri -->
-				<div style="border: 1px solid #ccc;margin-top:10px;">
+				<div class="cam-border-2026">
 				<div style="display: flex; align-items: center;margin-top: 10px;margin-bottom: 10px;">
 					<span style="padding-left: 5px;"></span>
 					<label style="min-width: 80px;">Urun Kodu</label>
@@ -155,7 +313,7 @@ datalist {
 					<span style="padding-left: 10px;"></span>
 					<label  style="min-width: 75px;">Recete Kodu</label>
 					<span style="padding-left: 10px;"></span>
-					<input class="form-control cins_bold" maxlength="10" id="recetekod" style="width: 100px;">
+					<input class="form-control cins_bold" maxlength="10" id="recetekod" style="width: 125px;">
 					<span style="padding-left: 10px;"></span>
 					<label  style="min-width: 75px;">Uretim Miktari</label>
 					<span style="padding-left: 10px;"></span>
@@ -164,7 +322,7 @@ datalist {
 					<label id="mikbirim" style="min-width: 75px;"></label>
 					<span style="padding-left: 10px;"></span>
 					<label  style="width: 75px;">Para Cinsi</label>
-					<input class="form-control" id="dvzcins" th:value="${doviz}" style="width: 50px;">
+					<input class="form-control" id="dvzcins" th:value="${doviz}" style="width: 75px;">
 				</div>
 				</div>
 				

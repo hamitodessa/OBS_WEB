@@ -1,0 +1,190 @@
+/* z-index (2. modal üstte kalacaksa kalsın) */
+.modal{ z-index: 1055; }
+.modal-backdrop{ z-index: 1050; }
+#secondModal.modal{ z-index: 1065 !important; }
+.modal-backdrop.second-backdrop{ z-index: 1060 !important; }
+
+
+/* =========================
+   2026 CAM – DVZ ÇEVİRME (KOMPAKT)
+   Scope: #ara_content .modal-dvzcevirme
+   ========================= */
+
+#ara_content .modal-dvzcevirme .modal-dialog{
+  max-width: 450px; /* sen 500 vermişsin, azcık nefes */
+  margin: 0 auto;
+}
+
+/* CAM KABUK */
+#ara_content .modal-dvzcevirme .modal-content{
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.96) !important;
+  color: rgba(255,255,255,.94) !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.55) !important;
+  overflow: hidden !important;
+}
+
+/* HEADER */
+#ara_content .modal-dvzcevirme .modal-header{
+  padding: 10px 14px !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+
+  background: linear-gradient(180deg,
+    rgba(56,189,248,.22),
+    rgba(31,59,92,.88),
+    rgba(22,43,68,.88)
+  ) !important;
+  position: relative;
+}
+
+#ara_content .modal-dvzcevirme .modal-header::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:2px;
+  background: linear-gradient(90deg,
+    rgba(56,189,248,0),
+    rgba(56,189,248,.65),
+    rgba(34,197,94,.35),
+    rgba(56,189,248,0)
+  );
+}
+
+#ara_content .modal-dvzcevirme .modal-title{
+  font-weight: 900 !important;
+  font-size: 15px !important;
+}
+
+#ara_content .modal-dvzcevirme .btn-close{
+  filter: invert(1) grayscale(1);
+  opacity: .85;
+}
+
+/* BODY / FOOTER */
+#ara_content .modal-dvzcevirme .modal-body{
+  padding: 12px 14px !important;
+  background: rgba(8,14,26,.72) !important;
+}
+
+#ara_content .modal-dvzcevirme .modal-footer{
+  padding: 10px 14px !important;
+  background: rgba(8,14,26,.66) !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+
+/* INPUT GROUP */
+#ara_content .modal-dvzcevirme .input-group{
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+/* padding-left span boşluklarını öldür */
+#ara_content .modal-dvzcevirme .input-group > span[style*="padding-left"]{
+  display: none !important;
+}
+
+/* LABEL */
+#ara_content .modal-dvzcevirme .input-group-text{
+  width: 150px !important;
+  height: 38px !important;
+  padding: 6px 10px !important;
+
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(255,255,255,.10) !important;
+
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+  font-size: 12px !important;
+}
+
+/* INPUT */
+#ara_content .modal-dvzcevirme .form-control{
+  height: 38px !important;
+  padding: 6px 10px !important;
+  border-radius: 12px !important;
+
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+#ara_content .modal-dvzcevirme .form-control:focus{
+  border-color: rgba(56,189,248,.70) !important;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
+  background: rgba(8,14,26,.70) !important;
+  color: #fff !important;
+}
+
+/* DATE */
+#ara_content .modal-dvzcevirme input[type="date"]{
+  color-scheme: dark;
+}
+
+/* SELECT (2 tane yan yana) */
+#ara_content .modal-dvzcevirme .form-select{
+  height: 38px !important;
+  padding: 6px 34px 6px 10px !important; /* sağ ok için yer */
+  border-radius: 12px !important;
+
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+
+  font-size: 13px !important;
+  font-weight: 700 !important;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+#ara_content .modal-dvzcevirme .form-select:focus{
+  border-color: rgba(56,189,248,.70) !important;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
+  background: rgba(8,14,26,.70) !important;
+  color: #fff !important;
+}
+
+/* Senin ▼ span'larını hizala (sadece bu modal) */
+#ara_content .modal-dvzcevirme .input-group{
+  position: relative;
+}
+#ara_content .modal-dvzcevirme .input-group span{
+  /* sadece inline ▼ olanlar pointer-events:none zaten, görünümü yumuşat */
+  text-shadow: 0 0 8px rgba(255,255,255,.22) !important;
+  opacity: .95;
+}
+
+/* RAPORLA BUTONU (ekstre ile aynı kilit) */
+#ara_content .modal-dvzcevirme .modal-footer > button.btn.btn-primary{
+  width: 220px !important;
+  height: 44px !important;
+  margin-left: auto !important;
+
+  border-radius: 16px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  letter-spacing: .3px !important;
+
+  color: #fff !important;
+
+  background-color: transparent !important;
+  background-image: linear-gradient(90deg,
+    rgba(56,189,248,.92),
+    rgba(34,197,94,.80)) !important;
+
+  border: 1px solid rgba(255,255,255,.22) !important;
+  box-shadow: 0 14px 35px rgba(0,0,0,.55) !important;
+  background-repeat: no-repeat !important;
+}
+
+#ara_content .modal-dvzcevirme .modal-footer > button.btn.btn-primary:hover{
+  transform: translateY(-1px) !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,.65) !important;
+  filter: saturate(1.06) brightness(1.03) !important;
+}

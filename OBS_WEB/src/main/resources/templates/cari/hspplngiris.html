@@ -1,10 +1,12 @@
 <style>
 /* =========================
-   2026 GLASS THEME - HSP
+   2026 CAM – HSP KOMPAKT (GRID)
    wrapper: #hsp_content
    ========================= */
 
-#hsp_content{ color: rgba(255,255,255,.92); }
+#hsp_content{
+  color: rgba(255,255,255,.92);
+}
 
 /* CARD */
 #hsp_content .card{
@@ -16,12 +18,25 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* SOL PANEL */
-#hsp_content .centered-div{
-  width: 780px;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 18px;
+/* ======================================================
+   LAYOUT: sol form + sağ resim
+   ====================================================== */
+#hsp_content .hsp-layout{
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 14px;
+  align-items: start;
+}
+
+/* küçük ekranda resim alta insin */
+@media (max-width: 1100px){
+  #hsp_content .hsp-layout{ grid-template-columns: 1fr; }
+}
+
+/* SOL alan: tek cam panel */
+#hsp_content .hsp-left{
+  width: 100%;
+  padding: 14px;
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
@@ -29,51 +44,81 @@
   box-sizing: border-box;
 }
 
-/* SATIRLAR (üst kısım) */
-#hsp_content .group-box,
-#hsp_content .aramagroup-box{
-  width: 100%;
-  box-sizing: border-box;
+/* TOOLBAR (arama + datalist) */
+#hsp_content .hsp-toolbar{
+  display: grid;
+  grid-template-columns: 110px 1fr 170px;
+  gap: 10px;
+  align-items: center;
+
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.02);
+}
+
+/* NAV / AKSİYON BAR */
+#hsp_content .hsp-actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+}
+
+/* FORM GRID */
+#hsp_content .hsp-form{
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+}
+
+/* alan kutusu */
+#hsp_content .hsp-field{
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 8px;
+  padding: 8px 10px;
+
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.03);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-  min-height: 50px;
 }
 
-/* arama satırlarına hafif farklı ton */
-#hsp_content .aramagroup-box{ background: rgba(255,255,255,.02); }
+/* label chip */
+#hsp_content .hsp-label{
+  height: 30px;
+  min-width: 96px;
 
-/* LABEL */
-#hsp_content .input-group-text{
-  height: 44px;
-  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 10px;
+  border-radius: 10px;
+
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.06);
   color: rgba(255,255,255,.86);
   font-weight: 900;
-  text-shadow: 0 2px 8px rgba(0,0,0,.45);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 12px;
   white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-/* inline width yazdıklarını biraz toparla */
-#hsp_content .input-group-text[style*="width:100px"]{ width: 110px !important; }
-#hsp_content .input-group-text[style*="width:105px"]{ width: 115px !important; }
-#hsp_content .input-group-text[style*="min-width:100px"]{ min-width: 110px !important; }
-
-/* INPUT */
+/* input/select/textarea */
 #hsp_content .form-control,
 #hsp_content .form-select,
 #hsp_content textarea.form-control{
-  height: 44px;
-  border-radius: 14px;
+  height: 40px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -94,30 +139,35 @@
 #hsp_content .form-control:disabled,
 #hsp_content .form-select:disabled,
 #hsp_content textarea.form-control:disabled{
-  opacity: .80;
+  opacity: .86;
   color: rgba(255,255,255,.78);
   background: rgba(8,14,26,.30);
 }
 
-/* CHECKBOX */
+/* checkbox */
 #hsp_content .form-check-input{
-  transform: scale(1.15);
+  width: 18px;
+  height: 18px;
   margin: 0;
+  transform: none;
+  accent-color: rgba(56,189,248,.9);
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(8,14,26,.50);
   filter: drop-shadow(0 2px 8px rgba(0,0,0,.45));
 }
 
-/* KOD KONTROL */
+/* kod kontrol */
 #hsp_content #kodKontrol{
   color: rgba(251,113,133,.95) !important;
   font-weight: 900;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-/* BUTONLAR */
+/* buton */
 #hsp_content .btn.btn-secondary{
-  height: 44px;
+  height: 40px;
   min-width: 44px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.18);
   background: rgba(255,255,255,.08);
   color: rgba(255,255,255,.92);
@@ -132,15 +182,20 @@
   transform: translateY(-2px);
 }
 
-/* ANA YAPI */
-#hsp_content .card.p-4.d-flex.flex-row.gap-3{
-  align-items: flex-start;
-  flex-wrap: nowrap;
+/* datalist ok */
+#hsp_content .datalist-arrow{
+  color: rgba(255,255,255,.9);
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
 }
 
-/* SAĞ RESİM */
+/* SAĞ FOTO */
+#hsp_content .hsp-photo{
+  position: sticky;
+  top: 14px;
+}
+
 #hsp_content .resimcentered-div{
-  width: 260px;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -148,7 +203,7 @@
 }
 
 #hsp_content .resimdiv{
-  width: 260px;
+  width: 100%;
   height: 320px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.12);
@@ -169,7 +224,7 @@
 /* ERROR */
 #hsp_content #errorDiv{
   display:none;
-  margin-top: 12px;
+  margin-bottom: 10px;
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
@@ -178,276 +233,206 @@
   font-weight: 900;
 }
 
-/* =========================
-   HESAP KODU ALTINI TEK KUTU YAP
-   (içeride kutu kutu olmayacak)
-   ========================= */
-#hsp_content .big-details-box{
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.03);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
-  box-sizing: border-box;
+/* GRID SPAN helpers */
+#hsp_content .c12{ grid-column: span 12; }
+#hsp_content .c8 { grid-column: span 8; }
+#hsp_content .c6 { grid-column: span 6; }
+#hsp_content .c4 { grid-column: span 4; }
 
-  /* yükseklik kontrol */
-  max-height: 520px;
-  overflow: auto;
-  padding-right: 10px;
-}
-
-/* big kutunun içindeki satırlar: ARTIK KUTU DEĞİL */
-#hsp_content .big-details-box .group-box,
-#hsp_content .big-details-box .aramagroup-box{
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  min-height: auto !important;
-  padding: 8px 4px !important;
-  margin: 0 !important;
-}
-
-/* satırlar arası ince çizgi */
-#hsp_content .big-details-box .group-box:not(:last-child),
-#hsp_content .big-details-box .aramagroup-box:not(:last-child){
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
-}
-
-/* buton satırı çizgisiz */
-#hsp_content .big-details-box .aramagroup-box:last-child{
-  border-bottom: none !important;
-  padding-top: 12px !important;
-}
-
-/* scrollbar */
-#hsp_content .big-details-box::-webkit-scrollbar{ width: 10px; }
-#hsp_content .big-details-box::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.18);
-  border-radius: 10px;
-}
-#hsp_content .big-details-box::-webkit-scrollbar-track{
-  background: rgba(0,0,0,.10);
-  border-radius: 10px;
-}
-
-/* RESPONSIVE */
+/* mobilde hepsi tek kolon */
 @media (max-width: 1100px){
-  #hsp_content .card.p-4.d-flex.flex-row.gap-3{ flex-wrap: wrap; }
-  #hsp_content .resimcentered-div{ width: 100%; max-width: 360px; }
-  #hsp_content .big-details-box{ max-height: none; } /* mobilde scroll olmasın */
+  #hsp_content .c4, #hsp_content .c6, #hsp_content .c8{ grid-column: span 12; }
 }
 </style>
+
 
 <div id="hsp_content">
   <div id="errorDiv"></div>
 
-  <div class="card p-4 d-flex flex-row gap-3">
-    <!-- SOL -->
-    <div class="centered-div">
+  <div class="card p-4">
+    <div class="hsp-layout">
 
-      <!-- ARAMA -->
-      <div class="aramagroup-box">
-        <span style="padding-left: 5px;"></span>
-        <span class="input-group-text" style="width:100px;">Arama</span>
-        <span style="padding-left: 5px;"></span>
-        <input type="text" id="arama" style="max-width:300px;" class="form-control"
-               oninput="hsparamaYap()" th:value="${hesapKodu}">
-        <span style="padding-left: 50px;"></span>
+      <!-- SOL -->
+      <div class="hsp-left">
 
-        <div style="position: relative; width: 150px;">
-          <input class="form-control cins_bold" maxlength="12"
-                 list="hesapOptions" id="hesapKodlari"
-                 style="width: 100%; padding-right: 30px;">
-          <datalist id="hesapOptions">
-            <option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
-          </datalist>
-          <span style=" position: absolute;top: 50%; right: 10px; transform: translateY(-50%);  pointer-events: none;
-  			color: rgba(255,255,255,.9);  text-shadow: 0 0 6px rgba(255,255,255,.35);"> ▼ </span>
-        </div>
-      </div>
+        <!-- TOOLBAR -->
+        <div class="hsp-toolbar">
+          <span class="hsp-label" style="min-width:110px;">Arama</span>
 
-      <!-- NAV -->
-      <div class="aramagroup-box" style="margin-top:5px;">
-        <span style="padding-left: 5px;"></span>
-        <button type="button" id="geriButton" class="btn btn-secondary ml-2" onclick="hsplnGeri()"><i class="fa fa-backward"></i></button>
+          <input type="text" id="arama" class="form-control"
+                 oninput="hsparamaYap()" th:value="${hesapKodu}">
 
-        <span style="padding-left: 5px;"></span>
-        <button type="button" id="ilkButton" class="btn btn-secondary ml-2" onclick="hsplnIlk()"><i class="fa fa-refresh"></i></button>
-
-        <span style="padding-left: 5px;"></span>
-        <button type="button" id="ileriButton" class="btn btn-secondary ml-2" onclick="hsplnIleri()"><i class="fa fa-forward"></i></button>
-      </div>
-
-      <!-- HESAP KODU (üstte kalsın) -->
-      <div class="group-box" style="margin-top:5px;">
-        <span style="padding-left: 5px;"></span>
-        <span class="input-group-text" style="width:100px;">Hesap Kodu</span>
-        <span style="padding-left: 5px;"></span>
-        <input type="text" id="kodu" disabled style="max-width:150px;font-weight: bold;"
-               class="form-control" oninput="hesapAdiOgren(this.value, 'kodKontrol')">
-        <span style="padding-left: 5px;text-align:left; color:red;font-weight: bold;" id="kodKontrol"></span>
-      </div>
-
-      <!-- =========================
-           TEK GROUP-BOX GİBİ DETAY ALANI
-           ========================= -->
-      <div class="big-details-box" id="detayKutusu">
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Unvan</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="adi" disabled style="max-width:300px;" class="form-control">
+          <div style="position: relative;">
+            <input class="form-control cins_bold" maxlength="12"
+                   list="hesapOptions" id="hesapKodlari"
+                   style="width:100%; padding-right:30px;">
+            <datalist id="hesapOptions">
+              <option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+            </datalist>
+            <span class="datalist-arrow"
+                  style="position:absolute; top:50%; right:10px; transform:translateY(-50%); pointer-events:none;">▼</span>
+          </div>
         </div>
 
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Karton</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="karton" disabled class="form-control" style="max-width:100px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Cins</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="hcins" disabled class="form-control" style="max-width:100px;">
+        <!-- NAV -->
+        <div class="hsp-actions">
+          <button type="button" id="geriButton" class="btn btn-secondary" onclick="hsplnGeri()"><i class="fa fa-backward"></i></button>
+          <button type="button" id="ilkButton" class="btn btn-secondary" onclick="hsplnIlk()"><i class="fa fa-refresh"></i></button>
+          <button type="button" id="ileriButton" class="btn btn-secondary" onclick="hsplnIleri()"><i class="fa fa-forward"></i></button>
         </div>
 
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Yetkili</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="yetkili" disabled class="form-control" style="max-width:300px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Sms Gonder</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="checkbox" id="sms" class="form-check-input" style="max-width:50px;">
+        <!-- FORM GRID -->
+        <div class="hsp-form">
+
+          <!-- Hesap kodu + kontrol -->
+          <div class="hsp-field c6">
+            <span class="hsp-label">Hesap Kodu</span>
+            <input type="text" id="kodu" disabled class="form-control" style="max-width:180px;font-weight:bold;"
+                   oninput="hesapAdiOgren(this.value, 'kodKontrol')">
+            <span id="kodKontrol"></span>
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Unvan</span>
+            <input type="text" id="adi" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c4">
+            <span class="hsp-label">Karton</span>
+            <input type="text" id="karton" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c4">
+            <span class="hsp-label">Cins</span>
+            <input type="text" id="hcins" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c4">
+            <span class="hsp-label">Sms</span>
+            <input type="checkbox" id="sms" class="form-check-input">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Yetkili</span>
+            <input type="text" id="yetkili" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Email</span>
+            <input type="text" id="mail" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c8">
+            <span class="hsp-label">Adres1</span>
+            <input type="text" id="ad1" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c4">
+            <span class="hsp-label">Semt</span>
+            <input type="text" id="semt" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c8">
+            <span class="hsp-label">Adres2</span>
+            <input type="text" id="ad2" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c4">
+            <span class="hsp-label">Sehir</span>
+            <input type="text" id="seh" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Vergi D.</span>
+            <input type="text" id="vd" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Vergi No</span>
+            <input type="text" id="vn" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Tel 1</span>
+            <input type="text" id="t1" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Tel 2</span>
+            <input type="text" id="t2" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Tel 3</span>
+            <input type="text" id="t3" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Fax</span>
+            <input type="text" id="fx" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c4">
+            <span class="hsp-label">Ozel 1</span>
+            <input type="text" id="o1" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c4">
+            <span class="hsp-label">Ozel 2</span>
+            <input type="text" id="o2" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c4">
+            <span class="hsp-label">Ozel 3</span>
+            <input type="text" id="o3" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Web</span>
+            <input type="text" id="web" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">TC Kimlik</span>
+            <input type="text" id="kim" disabled class="form-control">
+          </div>
+
+          <div class="hsp-field c12">
+            <span class="hsp-label">Aciklama</span>
+            <input type="text" id="acik" disabled class="form-control">
+          </div>
+
         </div>
 
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Adres1</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="ad1" disabled class="form-control" style="max-width:300px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Semt</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="semt" disabled class="form-control" style="max-width:150px;">
-        </div>
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Adres2</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="ad2" disabled class="form-control" style="max-width:300px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Sehir</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="seh" disabled class="form-control" style="max-width:150px;">
-        </div>
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Vergi D.</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="vd" disabled class="form-control" style="max-width:150px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Vergi No</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="vn" disabled class="form-control" style="max-width:150px;">
-        </div>
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Tel 1</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="t1" disabled class="form-control" style="max-width:150px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Tel 2</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="t2" disabled class="form-control" style="max-width:150px;">
-        </div>
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Tel 3</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="t3" disabled class="form-control" style="max-width:150px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Fax</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="fx" disabled class="form-control" style="max-width:150px;">
-        </div>
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="min-width:100px;">Ozel Kod1</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="o1" disabled class="form-control" style="max-width:140px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Ozel Kod2</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="o2" disabled class="form-control" style="max-width:140px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Ozel Kod3</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="o3" disabled class="form-control" style="max-width:140px;">
-        </div>
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Web</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="web" disabled class="form-control" style="max-width:300px;">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:105px;">TC Kimlik</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="kim" disabled class="form-control" style="max-width:150px;">
-        </div>
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Email</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="mail" disabled class="form-control" style="max-width:300px;">
-        </div>
-
-        <div class="group-box">
-          <span style="padding-left: 5px;"></span>
-          <span class="input-group-text" style="width:100px;">Aciklama</span>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="acik" disabled class="form-control" style="max-width:300px;">
-        </div>
-
-        <div class="aramagroup-box" style="margin-top:5px;">
-          <span style="padding-left: 5px;"></span>
-          <button type="button" id="kaydetButton" class="btn btn-secondary ml-2" onclick="hsplnKayit()"><i class="fa fa-save"></i></button>
-
-          <span style="padding-left: 5px;"></span>
-          <button type="button" id="silButton" class="btn btn-secondary ml-2" onclick="hsphesapSil()"><i class="fa fa-trash"></i></button>
-
-          <span style="padding-left: 5px;"></span>
-          <button type="button" id="yeniButton" class="btn btn-secondary ml-2" onclick="hspenableInputs()"><i class="fa fa-plus"></i></button>
+        <!-- KAYDET / SİL / YENİ -->
+        <div class="hsp-actions">
+          <button type="button" id="kaydetButton" class="btn btn-secondary" onclick="hsplnKayit()"><i class="fa fa-save"></i></button>
+          <button type="button" id="silButton" class="btn btn-secondary" onclick="hsphesapSil()"><i class="fa fa-trash"></i></button>
+          <button type="button" id="yeniButton" class="btn btn-secondary" onclick="hspenableInputs()"><i class="fa fa-plus"></i></button>
         </div>
 
       </div>
-      <!-- /big-details-box -->
 
-    </div>
+      <!-- SAĞ FOTO -->
+      <div class="hsp-photo">
+        <div class="resimcentered-div">
+          <div class="resimdiv">
+            <img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim" style="display:none;" />
+          </div>
 
-    <!-- SAĞ -->
-    <div class="resimcentered-div">
-      <div class="resimdiv">
-        <img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim" style="display: none;" />
+          <button type="button" id="resimremove" class="btn btn-secondary" style="width:100%;" onclick="resimSil()">
+            <i class="fa fa-remove"></i>
+          </button>
+
+          <input type="file" id="resim" name="resim" accept="image/*" disabled
+                 class="form-control" style="width:100%;">
+        </div>
       </div>
 
-      <button type="button" id="resimremove" style="max-width:250px;" class="btn btn-secondary ml-2" onclick="resimSil()"><i class="fa fa-remove"></i></button>
-
-      <input type="file" id="resim" name="resim" accept="image/*" disabled class="form-control" style="max-width:400px;">
     </div>
   </div>
 </div>
+
 
 <script src="/obs_js_files/cari/hspplngiris.js"></script>
 

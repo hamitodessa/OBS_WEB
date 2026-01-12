@@ -1,89 +1,298 @@
 <style>
-  .table-hover tbody tr:hover {
-    background-color: #ced4da !important;
-    color: inherit !important;
-  }
+/* =========================
+   2026 CAM – KOD/ACIKLAMA (SCOPE)
+   Scope: #ara_content .deg2026
+   ========================= */
 
-  .table-row-height td {
-    height: 10px;
-    line-height: 10px;
-  }
+/* =========================
+   2026 CAM – DEG PANEL (KOD / ACIKLAMA)
+   Scope: #ara_content
+   ========================= */
 
-  .table .thead-dark th {
-    color: #fff;
-    background: #214162;
-  }
+#ara_content{
+  color: rgba(255,255,255,.92);
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
-  }
-  th,
-  td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    white-space: nowrap;
-  }
-  .table-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    margin-top: 10px;
-  }
-  .container {
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    padding: 0px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+/* ================= CARD ================= */
+#ara_content .card.p-4{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
 
-  .group-box {
-    border: 1px solid #ccc;
-    padding: 7px;
-    margin: 10px;
-    width: 50%;
-    box-sizing: border-box;
-  }
+/* ================= ANA PANEL ================= */
+#ara_content .deg-panel{
+  width: 70%;
+  margin: 0 auto;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  box-sizing: border-box;
+}
+
+/* ================= GRID ================= */
+#ara_content .deg-grid{
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+}
+
+/* ================= SATIR ================= */
+#ara_content .deg-row{
+  grid-column: span 12;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* ================= LABEL ================= */
+#ara_content .deg-label{
+  height: 32px;
+  min-width: 130px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 10px;
+  border-radius: 12px;
+
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.88);
+  font-weight: 900;
+  font-size: 12px;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
+}
+
+/* ================= INPUT / SELECT ================= */
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
+#ara_content .form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+}
+
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65) !important;
+  color: #fff !important;
+}
+
+/* ================= TABLE BOX ================= */
+#ara_content .deg-tablebox{
+  grid-column: span 12;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* scroll */
+#ara_content .deg-table-scroll{
+  height: 320px;
+  overflow: auto;
+  border-radius: 14px;
+}
+
+/* ================= TABLE ================= */
+#ara_content table.table{
+  margin: 0;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: rgba(255,255,255,.92);
+}
+
+/* header */
+#ara_content .table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg, rgba(31,59,92,.92), rgba(22,43,70,.92)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-color: rgba(255,255,255,.14) !important;
+}
+
+/* borders */
+#ara_content .table-bordered > :not(caption) > *{
+  border-color: rgba(255,255,255,.12) !important;
+}
+
+/* body */
+#ara_content .table tbody td{
+  background: rgba(8,14,26,.22) !important;
+  color: rgba(255,255,255,.90) !important;
+}
+
+/* hover */
+#ara_content .table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #fff !important;
+  cursor: pointer;
+}
+
+/* selected */
+#ara_content #modalTable tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color: #fff !important;
+}
+
+/* row height */
+#ara_content .table-row-height td{
+  height: 30px;
+  line-height: 18px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+/* ================= BUTTON BAR ================= */
+#ara_content .deg-actions{
+  grid-column: span 12;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.02);
+}
+
+/* buttons */
+#ara_content .btn{
+  height: 44px;
+  border-radius: 14px;
+  font-weight: 900;
+}
+
+#ara_content .btn-primary{
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
+}
+
+#ara_content .btn-primary:hover{
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
+}
+
+/* ================= ERROR ================= */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 720px){
+  #ara_content .deg-label{ min-width: 105px; }
+  #ara_content .deg-row{ flex-wrap: wrap; }
+}
+
+/* =========================
+   DEG PANEL – TABLE BORDER FIX
+   EKSTRE mantığı (dikey + yatay)
+   ========================= */
+
+/* tablo genel yapı */
+#ara_content .deg-tablebox table{
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+/* hücreler – dikey + yatay border */
+#ara_content .deg-tablebox th,
+#ara_content .deg-tablebox td{
+  border: 1px solid rgba(255,255,255,.08) !important;
+  background-clip: padding-box;
+}
+
+/* header alt çizgisi net olsun */
+#ara_content .deg-tablebox thead th{
+  border-bottom: 1px solid rgba(255,255,255,.22) !important;
+}
+
+/* satırlar arası yatay çizgi */
+#ara_content .deg-tablebox tbody tr td{
+  border-top: none; /* üst üste binmeyi önler */
+}
+
+/* satırlar arası yatay çizgiyi tek çizgi yap */
+#ara_content .deg-tablebox tbody tr + tr td{
+  border-top: 1px solid rgba(255,255,255,.10) !important;
+}
+
+/* kolonlar arası dikey çizgi */
+#ara_content .deg-tablebox tbody td + td,
+#ara_content .deg-tablebox thead th + th{
+  border-left: 1px solid rgba(255,255,255,.10) !important;
+}
+
+
 </style>
-<div class="card p-1">
-  <div class="group-box">
-    <div style="display: flex; align-items: center; gap: 10px">
-      <label style="width: 50px">Kod</label>
-      <input class="form-control" id="kod" style="width: 50px" />
-      <span style="padding-left: 10px"></span>
-      <label style="width: 80px">Aciklama</label>
-      <input class="form-control" id="aciklama" />
-    </div>
-  </div>
-  <div class="group-box">
-    <div class="container">
-      <div class="table-container">
-        <table
-          id="modalTable" class="table modal-table table-bordered table-hover">
-          <thead class="thead-dark">
-            <tr>
-              <th style="width: 50px">Kod</th>
-              <th>Aciklama</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
+
+<div class="card p-4">
+  <div class="deg-panel">
+    <div class="deg-grid">
+      <div class="deg-row">
+        <span class="deg-label" style="min-width: 90px;">Kod</span>
+        <input class="form-control" id="kod" style="width: 90px; max-width: 90px;" />
+        <span class="deg-label" style="min-width: 130px;">Aciklama</span>
+        <input class="form-control" id="aciklama" style="flex:1; min-width: 0;" />
+      </div>
+      
+      <div class="deg-tablebox">
+        <div class="deg-table-scroll">
+          <table id="modalTable" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th style="width: 90px">Kod</th>
+                <th>Aciklama</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody" class="table-row-height"></tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="errorDiv"></div>
+      <div class="deg-actions">
+        <button class="btn btn-primary" type="button" id="kaydetButton"
+          style="width: 110px" onclick="saveKod()">Kaydet</button>
+        <button class="btn btn-primary" type="button" id="deleteButton"
+          style="width: 110px" onclick="deleteKod()">Sil</button>
       </div>
     </div>
   </div>
-  <div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
-  <br />
-  <div class="group-box">
-    <button class="btn btn-primary" type="button" id="kaydetButton"
-      style="width: 100px" onclick="saveKod()">Kaydet</button>
-    <span style="padding-left: 10px"></span>
-    <button class="btn btn-primary" type="button" id="deleteButton"
-      style="width: 100px" onclick="deleteKod()">Sil</button>
-  </div>
 </div>
+
 <script src="/obs_js_files/kereste/kodaciklama.js"></script>

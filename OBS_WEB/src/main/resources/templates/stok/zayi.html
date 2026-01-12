@@ -1,61 +1,267 @@
 <link rel="stylesheet" href="style/urnkodlari.css" />
 
 <style>
-.editable-cell {
-	cursor: text;
+/* =========================
+   2026 CAM – ZAI
+   wrapper: #ara_content
+   hover: YOK
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* CARD */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.double-column {
-	text-align: right;
+/* NAV TABS */
+#ara_content .nav-tabs{
+  border-bottom: 1px solid rgba(255,255,255,.14) !important;
+  gap: 8px;
+}
+#ara_content .nav-tabs .nav-link{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-bottom: none !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.80) !important;
+  border-radius: 14px 14px 0 0 !important;
+  font-weight: 900;
+  padding: 10px 14px;
+}
+#ara_content .nav-tabs .nav-link.active{
+  background: linear-gradient(135deg, rgba(56,189,248,.28), rgba(34,197,94,.18)) !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-.tah-table th, .tah-table td {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	vertical-align: middle;
-	height: 15px;
+/* LAYOUT */
+#ara_content .cardd{ display:flex; gap:12px; align-items:flex-start; }
+#ara_content .child{ width:100% !important; border:none !important; background:transparent !important; padding:0 !important; }
+
+/* LABEL */
+#ara_content label{
+  color: rgba(255,255,255,.84);
+  font-weight: 800;
+  font-size: 13px;
 }
 
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 60%;
-	box-sizing: border-box;
+/* INPUT / SELECT */
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+  padding: 10px 14px !important;
+  outline: none;
+}
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65) !important;
+  color:#fff !important;
+}
+#ara_content input[type="date"]{ color-scheme: dark; }
+
+/* input-group-text */
+#ara_content .input-group-text{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.45) !important;
+  color: rgba(255,255,255,.88) !important;
+  font-weight: 900;
+  letter-spacing: .2px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
 }
 
-.child {
-	width: 100%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	align-items: center;
+/* BUTTONS */
+#ara_content .btn.btn-primary{
+  border: none !important;
+  border-radius: 12px;
+  font-weight: 900;
+  color: #fff !important;
+  background: linear-gradient(135deg,#38bdf8,#22c55e) !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+#ara_content .btn.btn-primary:hover{ filter: brightness(1.10); }
+
+#ara_content .btn.btn-secondary{
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.88) !important;
+}
+#ara_content .btn.btn-secondary:hover{
+  background: rgba(56,189,248,.12) !important;
+  border-color: rgba(56,189,248,.35) !important;
 }
 
-.form-row {
-	display: flex;
-	align-items: center;
-	margin-bottom: 5px;
+/* =========================
+   GROUP-BOX (cam + sexy scroll)
+   ========================= */
+#ara_content .group-box{
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35) !important;
+  border-radius: 16px;
+  padding: 12px;
+  margin: 10px 0;
 }
 
-datalist {
-	display: none;
+/* scrollbar */
+#ara_content .group-box::-webkit-scrollbar{ height: 10px; }
+#ara_content .group-box::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .group-box::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+#ara_content .group-box{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
 
-.saga-bold {
-	text-align: right;
-	font-weight: bold;
+/* =========================
+   TABLE – zaiTable (hover YOK)
+   ========================= */
+#ara_content #zaiTable{
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,.03) !important;
 }
 
-.table .thead-dark th {
+#ara_content #zaiTable thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#ara_content #zaiTable th,
+#ara_content #zaiTable td{
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  padding: 6px 10px !important;
+  height: 28px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+#ara_content #zaiTable tbody td{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* hover kapalı */
+#ara_content #zaiTable tbody tr:hover > *{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* tfoot */
+#ara_content #zaiTable tfoot td{
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
+}
+
+#ara_content .double-column,
+#ara_content .saga-bold{
+  text-align: right !important;
+  font-weight: 900 !important;
+}
+
+/* =========================
+   ALT INFO – zai-info (KOMPAKT)
+   ========================= */
+
+#ara_content .zai-info{ padding: 10px 12px !important; }
+
+#ara_content .zai-info .form-row{
+  display:flex !important;
+  flex-wrap: wrap;
+  align-items:center;
+  gap: 6px 10px !important;
+  margin-bottom: 0 !important;
+}
+
+/* padding-left span hack iptal */
+#ara_content .zai-info .form-row > span{ padding-left: 0 !important; }
+
+/* başlık gibi kullanılan span'ler küçülsün */
+#ara_content .zai-info .form-row > span[style*="width"]{
+  color: rgba(255,255,255,.72) !important;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+/* label’lar kompakt cam badge */
+#ara_content .zai-info .form-row > label{
+  display:inline-flex;
+  align-items:center;
+  justify-content: flex-start;
+
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: 10px !important;
+
+  padding: 4px 8px !important;
+  min-height: 28px !important;
+  font-size: 12px !important;
+
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+}
+
+/* barkod input küçük */
+#ara_content .zai-info .form-control{
+  height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
   color: #fff;
-  background: #214162;
-}
-
-.cardd {
-    display: flex;gap: 10px;
+  font-weight: 900;
 }
 
 </style>
@@ -97,18 +303,24 @@ datalist {
 					<input type="date" id="fisTarih" class="form-control" th:value="${fisTarih}" style="width: 125px; font-weight: bold;" />
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Ana Grup</label>	
-					
+					<div style="position:relative; width:155px;">
 						<select class="form-select cins_bold" style="width: 150px; " id="anagrp" onchange="anagrpChanged(this)">
     						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
 						</select>
-						
+					<span style="position:absolute; top:50%; right:12px;
+              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
+              font-weight:700;line-height:1;">▼</span>
+          	</div>		
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Alt Grup</label>	
-					
+					<div style="position:relative; width:170px;">
 						<select class="form-select cins_bold" style="width: 165px; " id="altgrp" disabled>
     						
 						</select>
-						
+						<span style="position:absolute; top:50%; right:12px;
+              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
+              font-weight:700;line-height:1;">▼</span>
+          	</div>	
 				</div>
 			</div>
 			<div class="group-box">
@@ -122,7 +334,7 @@ datalist {
 			</div>
 		</div>
 		</div>
-		<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+		<div id="errorDiv"></div>
 	</div>
 	<!-- Tab 2 Content -->
 	<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab3-tab">
@@ -150,7 +362,7 @@ datalist {
 </div>
 <button type="button" class="btn btn-secondary ml-2" onclick="satirekle()"><i class="fa fa-plus"></i></button>
 <div class="card p-1" style="margin-top:10px;">
-<div class="group-box" style="width: 90%;">
+
 <table class="table table-bordered" id="zaiTable"
 	style="margin-top: 5px;">
 	<thead class="thead-dark">
@@ -182,17 +394,17 @@ datalist {
 		</tr>
 	</tfoot>
 </table>
-</div>
-<div class="group-box">
+
+<div class="group-box zai-info">
 	<div class="form-row">
 		<span style="padding-left: 10px;width:90px;">Barkod:</span>
 		<input  id="barkod" class="form-control" style="width: 170px; font-weight: bold;" />
 		<span style="padding-left: 20px;"></span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="adil"></label> 
+		<label style="width:150px;text-align: right; font-weight: bold;" id="adil"></label> 
 		<span style="padding-left: 20px;"></span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="anagrpl"></label> 
+		<label style="width:150px;text-align: right; font-weight: bold;" id="anagrpl"></label> 
 		<span style="padding-left: 20px;"></span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="altgrpl"></label> 
+		<label style="width:150px;text-align: right; font-weight: bold;" id="altgrpl"></label> 
 	</div>
 	</div>
 </div>

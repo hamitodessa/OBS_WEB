@@ -117,218 +117,263 @@ function getfatraporDTO() {
 }
 
 async function fatfetchTableData(page) {
-	const fatraporDTO = getfatraporDTO();
-	fatraporDTO.page = page;
-	fatraporDTO.pageSize = pageSize;
-	currentPage = page;
+  const fatraporDTO = getfatraporDTO();
+  fatraporDTO.page = page;
+  fatraporDTO.pageSize = pageSize;
+  currentPage = page;
 
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
+  const errorDiv = document.getElementById("errorDiv");
+  errorDiv.style.display = "none";
+  errorDiv.innerText = "";
 
-	document.body.style.cursor = "wait";
-	const $yenileButton = $('#fatrapyenileButton');
-	$yenileButton.prop('disabled', true).text('İşleniyor...');
-	const mainTableBody = document.getElementById("mainTableBody");
-	mainTableBody.innerHTML = "";
+  document.body.style.cursor = "wait";
+  const $yenileButton = $("#fatrapyenileButton");
+  $yenileButton.prop("disabled", true).text("İşleniyor...");
 
-	clearTfoot();
+  const mainTableBody = document.getElementById("mainTableBody");
+  mainTableBody.innerHTML = "";
+  clearTfoot();
 
-	try {
-		const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(fatraporDTO),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		data = response;
-		let sqlHeaders = "";
-		if (response.raporturu === 'fno') {
-			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "MIKTAR", "TUTAR", "ISK. TUTAR"];
-			updateTableHeadersfno(sqlHeaders);
-		} else if (response.raporturu === 'fkodu') {
-			sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
-			updateTableHeadersfkodu(sqlHeaders);
-		} else if (response.raporturu === 'fnotar') {
-			sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
-			updateTableHeadersfnotar(sqlHeaders);
-		}
-		let totalmiktar = 0;
-		let totaltutar = 0;
-		data.data.forEach(rowData => {
-			const row = document.createElement('tr');
-			row.classList.add('expandable');
-			row.classList.add("table-row-height");
-			if (response.raporturu === 'fno') {
-				row.innerHTML = `
-                    <td class="toggle-button">+</td>
-                    <td>${rowData.Fatura_No || ''}</td>
-                    <td>${rowData.Hareket || ''}</td>
-                    <td>${formatDate(rowData.Tarih)}</td>
-                    <td>${rowData.Cari_Firma || ''}</td>
-                    <td>${rowData.Adres_Firma || ''}</td>
-                    <td>${rowData.Doviz || ''}</td>
-                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
-                `;
-				totalmiktar += rowData.Miktar;
-				totaltutar += rowData.Iskontolu_Tutar;
-			}
-			else if (response.raporturu === 'fkodu') {
-				row.innerHTML = `
-                    
-                    <td>${rowData.Fatura_No || ''}</td>
-                    <td>${rowData.Hareket || ''}</td>
-                    <td>${rowData.Unvan || ''}</td>
-                    <td>${rowData.Vergi_No || ''}</td>
-                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
-                `;
-				totalmiktar += rowData.Miktar;
-				totaltutar += rowData.Toplam_Tutar;
-			} if (response.raporturu === 'fnotar') {
-				row.innerHTML = `
-                    <td class="toggle-button">+</td>
-                    <td>${rowData.Fatura_No || ''}</td>
-                    <td>${rowData.Hareket || ''}</td>
-                    <td>${formatDate(rowData.Tarih)}</td>
-                    <td>${rowData.Unvan || ''}</td>
-                    <td>${rowData.Vergi_No || ''}</td>
-                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
-                `;
-				totalmiktar += rowData.Miktar;
-				totaltutar += rowData.Toplam_Tutar;
-			}
-			mainTableBody.appendChild(row);
-			const detailsRow = document.createElement('tr');
-			detailsRow.classList.add('details-row');
-			detailsRow.innerHTML = `<td colspan="24"></td>`;
-			mainTableBody.appendChild(detailsRow);
-			if (response.raporturu != 'fkodu') {
-				row.addEventListener('click', async () => {
-					const toggleButton = row.querySelector('.toggle-button');
-					const isVisible = detailsRow.style.display === 'table-row';
-					detailsRow.style.display = isVisible ? 'none' : 'table-row';
-					toggleButton.textContent = isVisible ? '+' : '-';
-					document.body.style.cursor = "wait";
-					if (!isVisible) {
-						try {
-							const details = await fetchDetails(rowData.Fatura_No, rowData.Hareket);
-							const data = details.data;
-							let detailsTable = `
-                                <table class="details-table table table-bordered table-hover">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Kodu</th>
-                                            <th>Adi</th>
-                                            <th style="text-align: right;">Miktar</th>
-                                            <th>Birim</th>
-                                            <th style="text-align: right;">Fiat</th>
-                                            <th>Doviz</th>
-                                            <th style="text-align: right;">Tutar</th>
-                                            <th style="text-align: right;">Iskonto</th>
-                                            <th style="text-align: right;">Iskonto_Tutar</th>
-                                            <th style="text-align: right;">Iskontolu_Tutar</th>
-                                            <th style="text-align: right;">Kdv</th>
-                                            <th style="text-align: right;">Kdv Tutar</th>
-                                            <th style="text-align: right;">Tevkifat</th>
-                                            <th style="text-align: right;">Tev Edi.Kdv.</th>
-                                            <th style="text-align: right;">Tev Dah Top. Tut.</th>
-                                            <th style="text-align: right;">Beyan Edilen Kdv</th>
-                                            <th style="text-align: right;">Tev Har TopTutar</th>
-                                            <th>Ana Grup</th>
-                                            <th>Alt Grup</th>
-                                            <th>Depo</th>
-                                            <th>Ozel Kod</th>
-                                            <th>Izahat</th>
-                                            <th>Hareket</th>
-                                            <th>User</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                            `;
-							data.forEach(item => {
-								detailsTable += `
-                                    <tr>
-                                        <td style="min-width:80px;">${item.Kodu || ''}</td>
-                                        <td style="min-width:250px;">${item.Adi || ''}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber3(item.Miktar)}</td>
-                                        <td>${item.Birim || ''}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Fiat)}</td>
-                                        <td>${item.Doviz || ''}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Iskonto)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Iskonto_Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Iskontolu_Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Kdv)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Kdv_Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Tevkifat)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Tev_Edilen_KDV)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Tev_Dah_Top_Tutar)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Beyan_Edilen_KDV)}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Tev_Har_Top_Tutar)}</td>
-                                        <td >${item.Ana_Grup}</td>
-                                        <td >${item.Alt_Grup}</td>
-                                        <td >${item.Depo}</td>
-                                        <td >${item.Ozel_Kod}</td>
-                                        <td >${item.Izahat}</td>
-                                        <td >${item.Hareket}</td>
-                                        <td >${item.USER}</td>
-                                    </tr>
-                                `;
-							});
-							detailsTable += `
-                                    </tbody>
-                                </table>
-                            `;
-							detailsRow.children[0].classList.add("table-row-height");
-							detailsRow.children[0].innerHTML = detailsTable;
-							document.body.style.cursor = "default";
-						} catch (error) {
-							detailsRow.children[0].innerHTML = `
-                                <strong>Hata:</strong> Detay bilgileri alınamadı.
-                            `;
-							document.body.style.cursor = "default";
-						}
-					}
-					document.body.style.cursor = "default";
-				});
-			}
-		});
-		if (response.raporturu === 'fno') {
-			document.getElementById("toplam-7").innerText = formatNumber3(totalmiktar);
-			document.getElementById("toplam-9").innerText = formatNumber2(totaltutar);
+  try {
+    const response = await fetchWithSessionCheck("stok/fatrapdoldur", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(fatraporDTO),
+    });
 
-		}
-		else if (response.raporturu === 'fkodu') {
-			document.getElementById("toplam-4").innerText = formatNumber3(totalmiktar);
-			document.getElementById("toplam-8").innerText = formatNumber2(totaltutar);
-		}
-		else if (response.raporturu === 'fnotar') {
-			document.getElementById("toplam-6").innerText = formatNumber3(totalmiktar);
-			document.getElementById("toplam-10").innerText = formatNumber2(totaltutar);
-		}
-		document.body.style.cursor = "default";
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error;
-	} finally {
-		$yenileButton.prop('disabled', false).text('Yenile');
-		document.body.style.cursor = "default";
-	}
+    if (response && response.errorMessage) throw new Error(response.errorMessage);
+
+    const res = response;
+    const raporturu = res.raporturu;
+
+    // HEADER
+    let sqlHeaders = [];
+    if (raporturu === "fno") {
+      sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "MIKTAR", "TUTAR", "ISK. TUTAR"];
+      updateTableHeadersfno(sqlHeaders);
+    } else if (raporturu === "fkodu") {
+      sqlHeaders = ["FATURA NO", "HAREKET", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
+      updateTableHeadersfkodu(sqlHeaders);
+    } else if (raporturu === "fnotar") {
+      sqlHeaders = ["", "FATURA NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "MIKTAR", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
+      updateTableHeadersfnotar(sqlHeaders);
+    }
+
+    const thCount = document.querySelectorAll("#main-table thead th").length;
+
+    let totalmiktar = 0;
+    let totaltutar = 0;
+
+    (res.data || []).forEach((rowData) => {
+      // ==== MAIN ROW
+      const row = document.createElement("tr");
+      row.classList.add("expandable");
+      row.classList.add("table-row-height"); // ana satır kompakt
+
+      if (raporturu === "fno") {
+        row.innerHTML = `
+          <td><span class="toggle-button">+</span></td>
+          <td>${rowData.Fatura_No || ""}</td>
+          <td>${rowData.Hareket || ""}</td>
+          <td>${formatDate(rowData.Tarih)}</td>
+          <td>${rowData.Cari_Firma || ""}</td>
+          <td>${rowData.Adres_Firma || ""}</td>
+          <td>${rowData.Doviz || ""}</td>
+          <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
+        `;
+        totalmiktar += (rowData.Miktar || 0);
+        totaltutar += (rowData.Iskontolu_Tutar || 0);
+      } else if (raporturu === "fkodu") {
+        row.innerHTML = `
+          <td>${rowData.Fatura_No || ""}</td>
+          <td>${rowData.Hareket || ""}</td>
+          <td>${rowData.Unvan || ""}</td>
+          <td>${rowData.Vergi_No || ""}</td>
+          <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
+        `;
+        totalmiktar += (rowData.Miktar || 0);
+        totaltutar += (rowData.Toplam_Tutar || 0);
+      } else if (raporturu === "fnotar") {
+        row.innerHTML = `
+          <td><span class="toggle-button">+</span></td>
+          <td>${rowData.Fatura_No || ""}</td>
+          <td>${rowData.Hareket || ""}</td>
+          <td>${formatDate(rowData.Tarih)}</td>
+          <td>${rowData.Unvan || ""}</td>
+          <td>${rowData.Vergi_No || ""}</td>
+          <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Iskontolu_Tutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Kdv_Tutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Toplam_Tutar)}</td>
+        `;
+        totalmiktar += (rowData.Miktar || 0);
+        totaltutar += (rowData.Toplam_Tutar || 0);
+      }
+
+      mainTableBody.appendChild(row);
+
+      // ==== DETAILS ROW
+      const detailsRow = document.createElement("tr");
+      detailsRow.classList.add("details-row");
+      detailsRow.style.display = "none";
+      detailsRow.innerHTML = `<td colspan="${thCount}"></td>`;
+      mainTableBody.appendChild(detailsRow);
+
+      // fkodu detaysız
+      if (raporturu === "fkodu") return;
+
+      const toggle = row.querySelector(".toggle-button");
+      if (!toggle) return;
+
+      // (isteğe bağlı) ana satıra tıklayınca sadece selected olsun (detail açmasın)
+      row.addEventListener("click", () => {
+        // details-row hariç tüm selected temizle
+        document.querySelectorAll("#main-table tbody tr.selected").forEach(r => r.classList.remove("selected"));
+        row.classList.add("selected");
+      });
+
+      toggle.addEventListener("click", async (e) => {
+        e.stopPropagation();
+
+        const isOpen = (detailsRow.style.display === "table-row");
+
+        // ✅ tek satır açık kalsın (tahrap mantığı)
+        document.querySelectorAll("#main-table tr.details-row").forEach(r => r.style.display = "none");
+        document.querySelectorAll("#main-table tbody tr").forEach(r => r.classList.remove("selected"));
+        document.querySelectorAll("#main-table .toggle-button").forEach(x => {
+          if (x.textContent === "-") x.textContent = "+";
+        });
+
+        if (isOpen) {
+          detailsRow.style.display = "none";
+          toggle.textContent = "+";
+          return;
+        }
+
+        row.classList.add("selected");
+        detailsRow.style.display = "table-row";
+        toggle.textContent = "-";
+
+        // daha önce yüklendiyse tekrar fetch yapma
+        if (detailsRow.dataset.loaded === "1") return;
+
+        document.body.style.cursor = "wait";
+        try {
+          const detResp = await fetchDetails(rowData.Fatura_No, rowData.Hareket);
+          const det = (detResp && detResp.data) ? detResp.data : [];
+
+          // ✅ Hover'u kesinleştirmek için satırlara "drow" class veriyoruz.
+          let html = `
+            <div class="details-wrap">
+              <table class="t-details">
+                <thead>
+                  <tr>
+                    <th>Kodu</th>
+                    <th>Adi</th>
+                    <th class="double-column">Miktar</th>
+                    <th>Birim</th>
+                    <th class="double-column">Fiat</th>
+                    <th>Doviz</th>
+                    <th class="double-column">Tutar</th>
+                    <th class="double-column">Iskonto</th>
+                    <th class="double-column">Iskonto_Tutar</th>
+                    <th class="double-column">Iskontolu_Tutar</th>
+                    <th class="double-column">Kdv</th>
+                    <th class="double-column">Kdv Tutar</th>
+                    <th class="double-column">Tevkifat</th>
+                    <th class="double-column">Tev Edi.Kdv.</th>
+                    <th class="double-column">Tev Dah Top. Tut.</th>
+                    <th class="double-column">Beyan Edilen Kdv</th>
+                    <th class="double-column">Tev Har TopTutar</th>
+                    <th>Ana Grup</th>
+                    <th>Alt Grup</th>
+                    <th>Depo</th>
+                    <th>Ozel Kod</th>
+                    <th>Izahat</th>
+                    <th>Hareket</th>
+                    <th>User</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+
+          det.forEach(item => {
+            html += `
+              <tr class="drow">
+                <td>${item.Kodu || ""}</td>
+                <td>${item.Adi || ""}</td>
+                <td class="double-column">${formatNumber3(item.Miktar)}</td>
+                <td>${item.Birim || ""}</td>
+                <td class="double-column">${formatNumber2(item.Fiat)}</td>
+                <td>${item.Doviz || ""}</td>
+                <td class="double-column">${formatNumber2(item.Tutar)}</td>
+                <td class="double-column">${formatNumber2(item.Iskonto)}</td>
+                <td class="double-column">${formatNumber2(item.Iskonto_Tutar)}</td>
+                <td class="double-column">${formatNumber2(item.Iskontolu_Tutar)}</td>
+                <td class="double-column">${formatNumber2(item.Kdv)}</td>
+                <td class="double-column">${formatNumber2(item.Kdv_Tutar)}</td>
+                <td class="double-column">${formatNumber2(item.Tevkifat)}</td>
+                <td class="double-column">${formatNumber2(item.Tev_Edilen_KDV)}</td>
+                <td class="double-column">${formatNumber2(item.Tev_Dah_Top_Tutar)}</td>
+                <td class="double-column">${formatNumber2(item.Beyan_Edilen_KDV)}</td>
+                <td class="double-column">${formatNumber2(item.Tev_Har_Top_Tutar)}</td>
+                <td>${item.Ana_Grup || ""}</td>
+                <td>${item.Alt_Grup || ""}</td>
+                <td>${item.Depo || ""}</td>
+                <td>${item.Ozel_Kod || ""}</td>
+                <td>${item.Izahat || ""}</td>
+                <td>${item.Hareket || ""}</td>
+                <td>${item.USER || ""}</td>
+              </tr>
+            `;
+          });
+
+          html += `
+                </tbody>
+              </table>
+            </div>
+          `;
+
+          detailsRow.children[0].innerHTML = html;
+          detailsRow.dataset.loaded = "1";
+
+        } catch (err) {
+          detailsRow.children[0].innerHTML =
+            `<div class="details-wrap"><b>Hata:</b> Detaylar alınamadı.</div>`;
+        } finally {
+          document.body.style.cursor = "default";
+        }
+      });
+    });
+
+    // TOPLAM
+    if (raporturu === "fno") {
+      document.getElementById("toplam-7").innerText = formatNumber3(totalmiktar);
+      document.getElementById("toplam-9").innerText = formatNumber2(totaltutar);
+    } else if (raporturu === "fkodu") {
+      document.getElementById("toplam-4").innerText = formatNumber3(totalmiktar);
+      document.getElementById("toplam-8").innerText = formatNumber2(totaltutar);
+    } else if (raporturu === "fnotar") {
+      document.getElementById("toplam-6").innerText = formatNumber3(totalmiktar);
+      document.getElementById("toplam-10").innerText = formatNumber2(totaltutar);
+    }
+
+  } catch (error) {
+    errorDiv.style.display = "block";
+    errorDiv.innerText = (error && error.message) ? error.message : String(error);
+  } finally {
+    $yenileButton.prop("disabled", false).text("Yenile");
+    document.body.style.cursor = "default";
+  }
 }
+
 
 function clearTfoot() {
 	let table = document.querySelector("#main-table");

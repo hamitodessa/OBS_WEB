@@ -1,0 +1,280 @@
+.modal{ z-index: 1055; }
+.modal-backdrop{ z-index: 1050; }
+#secondModal.modal{ z-index: 1065 !important; }
+.modal-backdrop.second-backdrop{ z-index: 1060 !important; }
+
+/* =========================
+   2026 CAM – TAHRAP (KOMPAKT)
+   Scope: #ara_content .modal-tahrap
+   ========================= */
+
+/* =========================
+   2026 CAM – TAHRAP (TEMİZ)
+   Scope: #ara_content .modal-tahrap
+   ========================= */
+
+#ara_content .modal-tahrap .modal-dialog{
+  min-width: 500px;
+  margin: 0 auto;
+}
+
+/* CAM KABUK */
+#ara_content .modal-tahrap .modal-content{
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.96) !important;
+  color: rgba(255,255,255,.94) !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.55) !important;
+  overflow: hidden !important;
+}
+
+/* HEADER */
+#ara_content .modal-tahrap .modal-header{
+  padding: 10px 14px !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  background: linear-gradient(180deg,
+    rgba(56,189,248,.22),
+    rgba(31,59,92,.88),
+    rgba(22,43,68,.88)
+  ) !important;
+  position: relative;
+}
+
+#ara_content .modal-tahrap .modal-header::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:2px;
+  background: linear-gradient(90deg,
+    rgba(56,189,248,0),
+    rgba(56,189,248,.65),
+    rgba(34,197,94,.35),
+    rgba(56,189,248,0)
+  );
+}
+
+#ara_content .modal-tahrap .modal-title{
+  font-weight: 900 !important;
+  font-size: 15px !important;
+}
+
+#ara_content .modal-tahrap .btn-close{
+  filter: invert(1) grayscale(1);
+  opacity: .85;
+}
+
+/* BODY / FOOTER */
+#ara_content .modal-tahrap .modal-body{
+  padding: 12px 14px !important;
+  background: rgba(8,14,26,.72) !important;
+}
+
+#ara_content .modal-tahrap .modal-footer{
+  padding: 10px 14px !important;
+  background: rgba(8,14,26,.66) !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+
+/* INPUT GROUP */
+#ara_content .modal-tahrap .input-group{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px !important;
+  align-items: center;
+}
+
+/* label width helper */
+#ara_content .modal-tahrap .w-110{ width: 110px !important; }
+#ara_content .modal-tahrap .w-150{ width: 150px !important; }
+
+/* LABEL */
+#ara_content .modal-tahrap .input-group-text{
+  height: 38px !important;
+  padding: 6px 10px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(255,255,255,.10) !important;
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+  font-size: 12px !important;
+  justify-content: flex-start !important;
+}
+
+/* INPUT / DATE */
+#ara_content .modal-tahrap .form-control{
+  height: 38px !important;
+  padding: 6px 10px !important;
+  border-radius: 12px !important;
+
+  width: 100% !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+#ara_content .modal-tahrap .form-control:focus{
+  border-color: rgba(56,189,248,.70) !important;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
+  background: rgba(8,14,26,.70) !important;
+  color: #fff !important;
+}
+
+#ara_content .modal-tahrap input[type="date"]{ color-scheme: dark; }
+
+/* SELECT WRAP + ARROW */
+#ara_content .modal-tahrap .select-wrap{
+  position: relative;
+  flex: 1;
+  width: 100%;
+}
+
+#ara_content .modal-tahrap .form-select{
+  height: 38px !important;
+  padding: 0 34px 0 10px !important; /* üst-alt 0 → text ortada */
+  border-radius: 12px !important;
+
+  width: 100% !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+
+  font-size: 13px !important;
+  font-weight: 700 !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+#ara_content .modal-tahrap .form-select:focus{
+  border-color: rgba(56,189,248,.70) !important;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
+  background: rgba(8,14,26,.70) !important;
+  color: #fff !important;
+}
+
+#ara_content .modal-tahrap .select-arrow{
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(255,255,255,.95);
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
+}
+
+/* RAPORLA BUTONU */
+#ara_content .modal-tahrap .modal-footer > button.btn.btn-primary{
+  width: 220px !important;
+  height: 44px !important;
+  margin-left: auto !important;
+
+  border-radius: 16px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  letter-spacing: .3px !important;
+
+  color: #fff !important;
+  background-image: linear-gradient(90deg,
+    rgba(56,189,248,.92),
+    rgba(34,197,94,.80)) !important;
+
+  border: 1px solid rgba(255,255,255,.22) !important;
+  box-shadow: 0 14px 35px rgba(0,0,0,.55) !important;
+}
+
+#ara_content .modal-tahrap .modal-footer > button.btn.btn-primary:hover{
+  transform: translateY(-1px) !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,.65) !important;
+  filter: saturate(1.06) brightness(1.03) !important;
+}
+
+/* =========================
+   TAHSILAT RAPOR – DÜZEN FIX
+   ========================= */
+
+#ara_content .modal-tahrap .input-group{
+  display: grid !important;
+  grid-template-columns: 150px 1fr;
+  gap: 10px;
+  margin-bottom: 10px !important;
+  align-items: center;
+}
+
+/* Tarih satırı (2 input olanlar) */
+#ara_content .modal-tahrap .input-group:has(input[type="date"]:nth-of-type(2)){
+  grid-template-columns: 150px 1fr 1fr;
+}
+
+/* label */
+#ara_content .modal-tahrap .input-group-text{
+  width: 100% !important;
+  justify-content: flex-start !important;
+}
+
+/* input & select tam dolsun */
+#ara_content .modal-tahrap .form-control,
+#ara_content .modal-tahrap .form-select{
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* select sarmalayıcılar */
+#ara_content .modal-tahrap .select-wrap{
+  grid-column: 2 / -1; /* labeldan sonra tüm alan */
+}
+
+/* mobilde tek kolon */
+@media (max-width: 768px){
+  #ara_content .modal-tahrap .input-group{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =========================
+   TAHSILAT RAPOR – INPUTLAR YAN YANA FIX
+   ========================= */
+
+/* padding-left şişiren span'leri öldür */
+#ara_content .modal-tahrap .input-group > span[style*="padding-left"]{
+  display:none !important;
+}
+
+/* Default: 3 kolon => label + 2 alan */
+#ara_content .modal-tahrap .input-group{
+  display: grid !important;
+  grid-template-columns: 150px 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px !important;
+}
+
+/* Tek kontrol olan satırlarda (select / tek input) kontrol 2 kolon kaplasın */
+#ara_content .modal-tahrap .input-group > .form-control:only-of-type,
+#ara_content .modal-tahrap .input-group > .form-select:only-of-type{
+  grid-column: 2 / -1 !important;
+}
+
+/* Senin select'ler wrapper div içinde: o wrapper 2 kolon kaplasın */
+#ara_content .modal-tahrap .input-group > div[style*="position:relative"]{
+  grid-column: 2 / -1 !important;
+  width: 100% !important;
+}
+
+/* Tarih satırı zaten 2 date: 3 kolonla tam uyumlu, ekstra gerek yok */
+
+/* Kontroller tam genişlik */
+#ara_content .modal-tahrap .form-control,
+#ara_content .modal-tahrap .form-select{
+  width: 100% !important;
+  max-width: none !important;
+}
+

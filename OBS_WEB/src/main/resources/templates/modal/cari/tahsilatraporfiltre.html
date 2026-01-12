@@ -1,87 +1,75 @@
-<style>
-  .modal-dialog {
-    height: 600px;
-    margin: 0 auto;
-  }
-  
- 
-</style>
-<div class="modal fade" th:fragment="modaltahrap" id="firstModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+<div class="modal fade modal-tahrap" th:fragment="modaltahrap" id="firstModal"
+     data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
+
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Tahsilat Rapor</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
-        <div class="input-group" style="padding:2px;">
-          <div class="input-group-prepend">
-            <span class="input-group-text" style="width:100px;">Cins</span>
-          </div>
-          <span style="padding-left: 5px;"></span>
-         
-            <select id="tah_ted" class="form-select" style="padding-left:5px;">
+
+        <div class="input-group">
+          <span class="input-group-text w-110">Cins</span>
+          <div class="select-wrap">
+            <select id="tah_ted" class="form-select">
               <option value="" selected>Hepsi</option>
               <option value="tahsilat">Tahsilat</option>
               <option value="tediye">Tediye</option>
             </select>
-           
-        </div>
-        <div class="input-group" style="padding:2px;">
-          <div class="input-group-prepend">
-            <span class="input-group-text" style="width:100px;">Tur</span>
+            <span class="select-arrow">▼</span>
           </div>
-          <span style="padding-left: 5px;"></span>
-         
-            <select id="hangi_tur" class="form-select" style="padding-left:5px;">
+        </div>
+
+        <div class="input-group">
+          <span class="input-group-text w-110">Tur</span>
+          <div class="select-wrap">
+            <select id="hangi_tur" class="form-select">
               <option value="" selected>Hepsi</option>
               <option value="nakit">Nakit</option>
               <option value="cek">Cek</option>
               <option value="kredikarti">Kredi Karti</option>
             </select>
-            
-        </div>
-        <div class="input-group" style="padding:2px;">
-          <div class="input-group-prepend">
-            <span class="input-group-text" style="width:100px;">Pos</span>
+            <span class="select-arrow">▼</span>
           </div>
-          <span style="padding-left: 5px;"></span>
-         
-            <select id="pos" class="form-select" style="padding-left:5px;">
-			</select>
-            
         </div>
-        <div class="input-group" style="padding:2px;">
-          <div class="input-group-prepend">
-            <span class="input-group-text" style="width:150px;">Ilk Son Tarih</span>
+
+        <div class="input-group">
+          <span class="input-group-text w-110">Pos</span>
+          <div class="select-wrap">
+            <select id="pos" class="form-select"></select>
+            <span class="select-arrow">▼</span>
           </div>
-          <span style="padding-left: 5px;"></span>
-          <input type="date" id="startDate" aria-label="startDate" class="form-control" value="1900-01-01" />
-          <span style="padding-left: 5px;"></span>
-          <input type="date" id="endDate" aria-label="endDate" class="form-control" value="2100-12-31" />
         </div>
-        <div class="input-group" style="padding:2px;">
-          <div class="input-group-prepend">
-            <span class="input-group-text" style="width:150px;">Ilk ve Son Evrak</span>
-          </div>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="fhevrak1" aria-label="Ilk Hesap" class="form-control" ondblclick="openSecondModal('fhkodu1')" />
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="fhevrak2" aria-label="Son Hesap" value="ZZZZZZZZZZZZ" class="form-control" ondblclick="openSecondModal('fhkodu2')" />
+
+        <div class="input-group">
+          <span class="input-group-text w-150">Ilk Son Tarih</span>
+          <input type="date" id="startDate" class="form-control" value="1900-01-01" />
+          <input type="date" id="endDate" class="form-control" value="2100-12-31" />
         </div>
-        <div class="input-group" style="padding:2px;">
-          <div class="input-group-prepend">
-            <span class="input-group-text" style="width:150px;">Ilk ve Son Hesap</span>
-          </div>
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="fhkodu1" aria-label="Ilk Hesap" class="form-control" ondblclick="openSecondModal('fhkodu1')" />
-          <span style="padding-left: 5px;"></span>
-          <input type="text" id="fhkodu2" aria-label="Son Hesap" value="ZZZZZZZZZZZZ" class="form-control" ondblclick="openSecondModal('fhkodu2')" />
+
+        <div class="input-group">
+          <span class="input-group-text w-150">Ilk ve Son Evrak</span>
+          <input type="text" id="fhevrak1" class="form-control" ondblclick="openSecondModal('fhkodu1')" />
+          <input type="text" id="fhevrak2" class="form-control" value="ZZZZZZZZZZZZ" ondblclick="openSecondModal('fhkodu2')" />
         </div>
+
+        <div class="input-group">
+          <span class="input-group-text w-150">Ilk ve Son Hesap</span>
+          <input type="text" id="fhkodu1" class="form-control" ondblclick="openSecondModal('fhkodu1')" />
+          <input type="text" id="fhkodu2" class="form-control" value="ZZZZZZZZZZZZ" ondblclick="openSecondModal('fhkodu2')" />
+        </div>
+
       </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" style="width:150px;" onclick="saveToMain()">Raporla</button>
+        <button type="button" class="btn btn-primary" onclick="saveToMain()">Raporla</button>
       </div>
+
     </div>
   </div>
 </div>

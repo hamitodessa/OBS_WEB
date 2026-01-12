@@ -10,7 +10,7 @@ async function degiskenchange(grpElement) {
 	document.getElementById("arama").value = "";
 
 	if (grup === "altgrp") {
-		altgrpdiv.style.display = "block";
+		altgrpdiv.style.display = "grid";
 		altgrpdoldur()
 	} else {
 		altgrpdiv.style.display = "none";

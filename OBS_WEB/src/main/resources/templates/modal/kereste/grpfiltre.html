@@ -1,203 +1,179 @@
-<style>
-    .modal-dialog {
-        height: 500px; 
-        margin: 0 auto; 
-    }
-    
-    .modal-content {
-        overflow-y: auto;
-    }
-    
-    .modal-backdrop {
-        z-index: 1040 !important;
-    }
-    
-    #secondModal {
-        z-index: 1050 !important;
-    }
-    
-    .form-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 5px;
-    }
-    </style>
-    
-<div class="modal fade" th:fragment="modalgrp" id="firstModal"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="min-width: 790px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Grup Raporlama</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ilk Son Tarih</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="date" id="tar1" style="min-width: 140px;max-width: 140px;" class="form-control" value="1900-01-01"> 
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="date" id="tar2" style="min-width: 140px;max-width: 140px;" class="form-control" value="2100-12-31"> 
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ana Grup</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" id="anagrp" onchange="anagrpChanged(this,'altgrp')">
-                        </select> 
-                </div>
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ilk Son Urun kodu</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="ukod1" style="min-width: 140px;max-width: 140px;" value ="00-000-0000-0000" class="form-control" ondblclick="openurunkodlariModal('ukod1', 'grprapor','ukodukod')">
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="ukod2" style="min-width: 140px;max-width: 140px;" value="ZZ-999-9999-9999" class="form-control" ondblclick="openurunkodlariModal('ukod2', 'grprapor','ukodukod')">
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Alt Grup</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"  id="altgrp" disabled>
-                        </select> 
-                </div>
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ilk ve Son Hesap</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="ckod1" style="min-width: 140px;max-width: 140px;" class="form-control"  ondblclick="openSecondModal('ckod1')"> 
-                        <span style="padding-left: 5px;"></span>
-                        <input type="text" id="ckod2" style="min-width: 140px;max-width: 140px;" value="ZZZZZZZZZZ" class="form-control"  ondblclick="openSecondModal('ckod2')">
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ozel Kod</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"  id="ozkod" >
-                        </select> 
-                </div>
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ilk ve Son Kons.</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="kons1" style="min-width: 140px;max-width: 140px;" class="form-control"> 
-                        <span style="padding-left: 5px;"></span>
-                        <input type="text" id="kons2" style="min-width: 140px;max-width: 140px;" value="ZZZZZZZZZZ" class="form-control">
-                        <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Depo</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" id="depo" >
-                        </select> 
-                </div>
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Ilk ve Son Evrak</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span> 
-                        <input type="text" id="evr1" style="min-width: 140px;max-width: 140px;" class="form-control"> 
-                        <span style="padding-left: 5px;"></span>
-                        <input type="text" id="evr2" style="min-width: 140px;max-width: 140px;" value="ZZZZZZZZZZ" class="form-control">
-                       <span style="padding-left: 5px;"></span>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Turu</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold"  id="turu" >
-                            <option value="CIKAN">CIKAN</option>
-                            <option value="GIREN">GIREN</option>
-                            <option value="STOK">STOK</option>
-                        </select> 
-                    </div>
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Birim</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 140px;max-width: 140px;" id="birim" onchange="birimChanged()">
-                            <option value="m3">m3</option>
-                            <option value="Tutar">Tutar</option>
-                            <option value="Miktar">Miktar</option>
-                            
-                        </select> 
+<div class="modal fade modal-kergrprap" th:fragment="modalgrp" id="firstModal"
+  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
-                        <span style="padding-left: 150px;"></span>
-                        <div class="form-row" style="width: 138px;">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" style="visibility:hidden;" id="dvzcevirchc"  onchange="dvzcevirChanged()">
-                                <label class="form-check-label" style="visibility:hidden;" id="dvzcevirlbl" >Dvz Cevirme</label>
-                            </div>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="visibility:hidden;" id="dvzcins" >
-                            <option value="USD">USD</option>
-                            <option value="EUR">EUR</option>
-                            <option value="RUB">RUB</option>
-                        </select> 
-                </div>
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Gruplama</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="gruplama" >
-                            <option value="Urun Kodu">Urun Kodu</option>
-                            <option value="Sinif">Sinif</option>
-                            <option value="Sinif I Hane">Sinif I Hane</option>
-                            <option value="Sinif II Hane">Sinif II Hane</option>
-                            <option value="Kalinlik">Kalinlik</option>
-                            <option value="Genislik">Genislik</option>
-                            <option value="Boy">Boy</option>
-                            <option value="Sinif-Kal">Sinif-Kal</option>
-                            <option value="Sinif-Gen">Sinif-Gen</option>
-                            <option value="Sinif-Boy">Sinif-Boy</option>
-                            <option value="Sinif-Kal-Boy">Sinif-Kal-Boy</option>
-                            <option value="Sinif-Kal-Gen">Sinif-Kal-Gen</option>
-                            <option value="Urun Kodu-Yil">Urun Kodu-Yil</option>
-                            <option value="Yil">Yil</option>
-                            <option value="Yil-Ay">Yil-Ay</option>
-                            <option value="Paket-Sinif-Kal-Boy">Paket-Sinif-Kal-Boy</option>
-                            <option value="Paket-Sinif-Kal-Gen">Paket-Sinif-Kal-Gen</option>
-                            <option value="Kons-Paket-Sinif-Kal-Gen">Kons-Paket-Sinif-Kal-Gen</option>
-                            <option value="Kons-Paket-Sinif-Kal-Boy">Kons-Paket-Sinif-Kal-Boy</option>
-                            <option value="Paket-Konsimento">Paket-Konsimento</option>
-                            <option value="Hesap-Kodu">Hesap-Kodu</option>
-                            <option value="Hesap-Kodu-Yil">Hesap-Kodu-Yil</option>
-                            <option value="Konsimento">Konsimento</option>
-                        </select> 
-                        <span style="padding-left: 256px;"></span>
-                        <select class="form-select cins_bold" style="visibility:hidden;" id="dvzturu" >
-                            <option value="MA">MA</option>
-                            <option value="MS">MS</option>
-                        </select> 
-                </div>
-                <div class="input-group" style="padding: 2px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="width: 140px;">Stunlar</span>
-                        </div>
-                        <span style="padding-left: 5px;"></span>
-                        <select class="form-select cins_bold" style="min-width: 175px;max-width: 175px;" id="stunlar" >
-                            <option value="Yil">Yil</option>
-                            <option value="Ay">Ay</option>
-                            <option value="Gun">Gun</option>
-                            <option value="Kalinlik">Kalinlik</option>
-                            <option value="Boy">Boy</option>
-                            <option value="Genislik">Genislik</option>
-                            <option value="Sinif">Sinif</option>
-                            <option value="Hesap-Kodu">Hesap-Kodu</option>
-                        </select> 
-                </div>
-            </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary form-control" onclick="saveToMain()">Raporla</button>
-                </div>
-            </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Grup Raporlama</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- 1 -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Tarih</span>
+          <input type="date" id="tar1" class="form-control" value="1900-01-01">
+          <input type="date" id="tar2" class="form-control" value="2100-12-31">
+
+          <span class="input-group-text">Ana Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="anagrp" onchange="anagrpChanged(this,'altgrp')"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 2 -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk Son Urun kodu</span>
+          <input type="text" id="ukod1" class="form-control" value="00-000-0000-0000"
+                 ondblclick="openurunkodlariModal('ukod1', 'grprapor','ukodukod')">
+          <input type="text" id="ukod2" class="form-control" value="ZZ-999-9999-9999"
+                 ondblclick="openurunkodlariModal('ukod2', 'grprapor','ukodukod')">
+
+          <span class="input-group-text">Alt Grup</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="altgrp" disabled></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 3 -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk ve Son Hesap</span>
+          <input type="text" id="ckod1" class="form-control" ondblclick="openSecondModal('ckod1')">
+          <input type="text" id="ckod2" class="form-control" value="ZZZZZZZZZZ" ondblclick="openSecondModal('ckod2')">
+
+          <span class="input-group-text">Ozel Kod</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="ozkod"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 4 -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk ve Son Kons.</span>
+          <input type="text" id="kons1" class="form-control">
+          <input type="text" id="kons2" class="form-control" value="ZZZZZZZZZZ">
+
+          <span class="input-group-text">Depo</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="depo"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 5 -->
+        <div class="input-group">
+          <span class="input-group-text">Ilk ve Son Evrak</span>
+          <input type="text" id="evr1" class="form-control">
+          <input type="text" id="evr2" class="form-control" value="ZZZZZZZZZZ">
+
+          <span class="input-group-text">Turu</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="turu">
+              <option value="CIKAN">CIKAN</option>
+              <option value="GIREN">GIREN</option>
+              <option value="STOK">STOK</option>
+            </select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+        </div>
+
+        <!-- 6 (Birim + dvz gizli alanlar) -->
+        <div class="input-group">
+          <span class="input-group-text">Birim</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="birim" onchange="birimChanged()">
+              <option value="m3">m3</option>
+              <option value="Tutar">Tutar</option>
+              <option value="Miktar">Miktar</option>
+            </select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+
+          <!-- gizli bloklar: hizayı bozmasın diye 3 kolon -->
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <!-- 7 -->
+        <div class="input-group">
+          <span class="input-group-text">Gruplama</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="gruplama">
+              <option value="Urun Kodu">Urun Kodu</option>
+              <option value="Sinif">Sinif</option>
+              <option value="Sinif I Hane">Sinif I Hane</option>
+              <option value="Sinif II Hane">Sinif II Hane</option>
+              <option value="Kalinlik">Kalinlik</option>
+              <option value="Genislik">Genislik</option>
+              <option value="Boy">Boy</option>
+              <option value="Sinif-Kal">Sinif-Kal</option>
+              <option value="Sinif-Gen">Sinif-Gen</option>
+              <option value="Sinif-Boy">Sinif-Boy</option>
+              <option value="Sinif-Kal-Boy">Sinif-Kal-Boy</option>
+              <option value="Sinif-Kal-Gen">Sinif-Kal-Gen</option>
+              <option value="Urun Kodu-Yil">Urun Kodu-Yil</option>
+              <option value="Yil">Yil</option>
+              <option value="Yil-Ay">Yil-Ay</option>
+              <option value="Paket-Sinif-Kal-Boy">Paket-Sinif-Kal-Boy</option>
+              <option value="Paket-Sinif-Kal-Gen">Paket-Sinif-Kal-Gen</option>
+              <option value="Kons-Paket-Sinif-Kal-Gen">Kons-Paket-Sinif-Kal-Gen</option>
+              <option value="Kons-Paket-Sinif-Kal-Boy">Kons-Paket-Sinif-Kal-Boy</option>
+              <option value="Paket-Konsimento">Paket-Konsimento</option>
+              <option value="Hesap-Kodu">Hesap-Kodu</option>
+              <option value="Hesap-Kodu-Yil">Hesap-Kodu-Yil</option>
+              <option value="Konsimento">Konsimento</option>
+            </select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+
+          <!-- dvzturu gizli -->
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <!-- 8 -->
+        <div class="input-group">
+          <span class="input-group-text">Stunlar</span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold" id="stunlar">
+              <option value="Yil">Yil</option>
+              <option value="Ay">Ay</option>
+              <option value="Gun">Gun</option>
+              <option value="Kalinlik">Kalinlik</option>
+              <option value="Boy">Boy</option>
+              <option value="Genislik">Genislik</option>
+              <option value="Sinif">Sinif</option>
+              <option value="Hesap-Kodu">Hesap-Kodu</option>
+            </select>
+            <span class="select-arrow">▼</span>
+          </div>
+          <span></span>
+
+          <span></span><span></span><span></span>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="saveToMain()">Raporla</button>
+      </div>
+
     </div>
-</div>	
+  </div>
+</div>
+
