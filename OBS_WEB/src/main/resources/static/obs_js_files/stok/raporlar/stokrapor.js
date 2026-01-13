@@ -191,9 +191,9 @@ async function stokfetchTableData() {
                     <td>${rowData.Adi || ''}</td>
                     <td>${rowData.Simge || ''}</td>
                     <td class="double-column">${formatNumber3(rowData.Onceki_Bakiye)}</td>
-					<td class="double-column">${formatNumber3(rowData.Periyot_Giris_Agirlik)}</td>
-					<td class="double-column">${formatNumber3(rowData.Periyot_Cikis_Agirlik)}</td>
-					<td class="double-column">${formatNumber3(rowData.Periyot_Stok_Agirlik)}</td>
+					          <td class="double-column">${formatNumber3(rowData.Periyot_Giris_Agirlik)}</td>
+					          <td class="double-column">${formatNumber3(rowData.Periyot_Cikis_Agirlik)}</td>
+					          <td class="double-column">${formatNumber3(rowData.Periyot_Stok_Agirlik)}</td>
                     <td class="double-column">${formatNumber3(rowData.BAKIYE)}</td>
                  `;
                 totalmiktar += rowData.Onceki_Bakiye;
@@ -235,7 +235,7 @@ async function stokfetchTableData() {
             document.getElementById("toplam-6").innerText = formatNumber3(totalcagirlik);
             document.getElementById("toplam-7").innerText = formatNumber3(totalstokmik);
             document.getElementById("toplam-8").innerText = formatNumber3(totalstokagi);
-        } else if (response.raporturu === 'stokkodu') {
+        } else if (response.raporturu === 'stokkoduonceki') {
             document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
             document.getElementById("toplam-4").innerText = formatNumber3(totalgagirlik);
             document.getElementById("toplam-5").innerText = formatNumber3(totalcmiktar);

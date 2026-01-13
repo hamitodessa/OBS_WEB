@@ -1,6 +1,6 @@
 <div class="modal fade modal-kerenvrap" th:fragment="modalkeresteenvanter" id="firstModal"
-  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+     data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
 
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -45,85 +45,84 @@
           <input type="text" id="cevr2" class="form-control" value="ZZZZZZZZZZZZ">
         </div>
 
-        <!-- 4: Depo + Ozel Kod + C Depo -->
-        <div class="input-group">
-          <span class="input-group-text">Depo</span>
-          <div class="select-wrap">
-            <select class="form-select cins_bold" id="depo"></select>
-            <span class="select-arrow">▼</span>
-          </div>
-          <span></span>
-
-          <span class="input-group-text">Ozel Kod</span>
-          <div class="select-wrap">
-            <select class="form-select cins_bold" id="ozkod"></select>
-            <span class="select-arrow">▼</span>
-          </div>
-
-          <div class="select-wrap">
-            <select class="form-select cins_bold" id="cdepo"></select>
-            <span class="select-arrow">▼</span>
-          </div>
-        </div>
-
-        <!-- 5: Hesap + CAna Grup -->
+        <!-- 4: Hesap + CAna Grup -->
         <div class="input-group">
           <span class="input-group-text">Ilk Son Hesap</span>
           <input type="text" id="hes1" class="form-control" ondblclick="openSecondModal('hes1')">
           <input type="text" id="hes2" class="form-control" value="ZZZZZZZZZZZZ" ondblclick="openSecondModal('hes2')">
 
           <span class="input-group-text">CAna Grup</span>
-          <div class="select-wrap">
+          <div class="select-wrap span2R">
             <select class="form-select cins_bold" id="canagrp" onchange="anagrpChanged(this,'caltgrp')"></select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
         </div>
 
-        <!-- 6: Evrak + CAlt Grup -->
+        <!-- 5: Evrak + CAlt Grup -->
         <div class="input-group">
           <span class="input-group-text">Ilk Son Evrak</span>
           <input type="text" id="evr1" class="form-control">
           <input type="text" id="evr2" class="form-control" value="ZZZZZZZZZZZZ">
 
           <span class="input-group-text">CAlt Grup</span>
-          <div class="select-wrap">
+          <div class="select-wrap span2R">
             <select class="form-select cins_bold" id="caltgrp" disabled></select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
         </div>
 
-        <!-- 7: Kons + COzel Kod -->
+        <!-- 6: Kons + COzel Kod -->
         <div class="input-group">
           <span class="input-group-text">Ilk Son kons</span>
           <input type="text" id="kons1" class="form-control">
           <input type="text" id="kons2" class="form-control" value="ZZZZZZZZZZZZZZZ">
 
           <span class="input-group-text">COzel Kod</span>
-          <div class="select-wrap">
+          <div class="select-wrap span2R">
             <select class="form-select cins_bold" id="cozkod"></select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
         </div>
 
-        <!-- 8: Ana/Alt Grup + Gruplama -->
+        <!-- 7: Ozel Kod (sol select 2 kolon) + C.Depo (sağ select 2 kolon) -->
+        <div class="input-group">
+          <span class="input-group-text">Ozel Kod</span>
+          <div class="select-wrap span2L">
+            <select class="form-select cins_bold" id="ozkod"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+
+          <span class="input-group-text">C.Depo</span>
+          <div class="select-wrap span2R">
+            <select class="form-select cins_bold" id="cdepo"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+        </div>
+
+        <!-- 8: Depo (sol select 2 kolon) -->
+        <div class="input-group">
+          <span class="input-group-text">Depo</span>
+          <div class="select-wrap span2L">
+            <select class="form-select cins_bold" id="depo"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+
+          <!-- sağ taraf boş kalsın (bilinçli) -->
+          <span class="input-group-text" style="opacity:.0; pointer-events:none;">.</span>
+          <input type="text" class="form-control" style="opacity:.0; pointer-events:none;">
+          <input type="text" class="form-control" style="opacity:.0; pointer-events:none;">
+        </div>
+
+        <!-- 9A: Ana Grup + Gruplama -->
         <div class="input-group">
           <span class="input-group-text">Ana Grup</span>
-          <div class="select-wrap">
+          <div class="select-wrap span2L">
             <select class="form-select cins_bold" id="anagrp" onchange="anagrpChanged(this,'altgrp')"></select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
 
-          <span class="input-group-text">Alt Grup</span>
-          <div class="select-wrap">
-            <select class="form-select cins_bold" id="altgrp"></select>
-            <span class="select-arrow">▼</span>
-          </div>
-
-          <div class="select-wrap">
+          <span class="input-group-text">Gruplama</span>
+          <div class="select-wrap span2R">
             <select class="form-select cins_bold" id="gruplama">
               <option value="Urun Kodu">Urun Kodu</option>
               <option value="Konsimento">Konsimento</option>
@@ -132,6 +131,20 @@
             </select>
             <span class="select-arrow">▼</span>
           </div>
+        </div>
+
+        <!-- 9B: Alt Grup (Ana Grup'un altına indi) -->
+        <div class="input-group">
+          <span class="input-group-text">Alt Grup</span>
+          <div class="select-wrap span2L">
+            <select class="form-select cins_bold" id="altgrp"></select>
+            <span class="select-arrow">▼</span>
+          </div>
+
+          <!-- sağ taraf boş kalsın (bilinçli) -->
+          <span class="input-group-text" style="opacity:.0; pointer-events:none;">.</span>
+          <input type="text" class="form-control" style="opacity:.0; pointer-events:none;">
+          <input type="text" class="form-control" style="opacity:.0; pointer-events:none;">
         </div>
 
       </div>

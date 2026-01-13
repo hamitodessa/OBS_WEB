@@ -153,7 +153,7 @@ async function imafetchTableData() {
                                     <td>${item.Birim || ''}</td>
                                     <td class="double-column">${formatNumber3(item.Agirlik)}</td>
 									<td>${item.Depo || ''}</td>
-                                    <td>${item.Ana_Grup || ''}</td>
+                  <td>${item.Ana_Grup || ''}</td>
 									<td>${item.Alt_Grup || ''}</td>
 									<td>${item.Barkod || ''}</td>
 									<td>${item.Recete || ''}</td>

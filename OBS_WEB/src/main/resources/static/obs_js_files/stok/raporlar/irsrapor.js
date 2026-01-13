@@ -114,146 +114,184 @@ function getirsraporDTO() {
 }
 
 async function irsfetchTableData(page) {
-	const fatraporDTO = getirsraporDTO();
-	fatraporDTO.page = page;
-	fatraporDTO.pageSize = pageSize;
-	currentPage = page;
+  const dto = getirsraporDTO();
+  dto.page = page;
+  dto.pageSize = pageSize;
+  currentPage = page;
 
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
+  const errorDiv = document.getElementById("errorDiv");
+  errorDiv.style.display = "none";
+  errorDiv.innerText = "";
 
-	document.body.style.cursor = "wait";
-	const $yenileButton = $('#irsrapyenileButton');
-	$yenileButton.prop('disabled', true).text('İşleniyor...');
-	const mainTableBody = document.getElementById("mainTableBody");
-	mainTableBody.innerHTML = "";
+  document.body.style.cursor = "wait";
+  const $yenileButton = $('#irsrapyenileButton');
+  $yenileButton.prop('disabled', true).text('İşleniyor...');
 
-	clearTfoot();
+  const mainTableBody = document.getElementById("mainTableBody");
+  mainTableBody.innerHTML = "";
+  clearTfoot();
 
-	try {
-		const response = await fetchWithSessionCheck("stok/irsrapdoldur", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(fatraporDTO),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		data = response;
-		let sqlHeaders = "";
+  try {
+    const response = await fetchWithSessionCheck("stok/irsrapdoldur", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dto),
+    });
 
-		sqlHeaders = ["", "IRSALIYE NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES", "BIRIM", "MIKTAR", "TUTAR"];
-		updateTableHeadersfno(sqlHeaders);
+    if (response.errorMessage) throw new Error(response.errorMessage);
 
-		let totalmiktar = 0;
-		let totaltutar = 0;
-		data.data.forEach(rowData => {
-			const row = document.createElement('tr');
-			row.classList.add('expandable');
-			row.classList.add("table-row-height");
-			row.innerHTML = `
-                    <td class="toggle-button">+</td>
-                    <td>${rowData.Irsaliye_No || ''}</td>
-                    <td>${rowData.Hareket || ''}</td>
-                    <td>${formatDate(rowData.Tarih)}</td>
-                    <td>${rowData.Cari_Hesap_Kodu || ''}</td>
-										<td>${rowData.Adres_Firma || ''}</td>
-                    <td>${rowData.Birim || ''}</td>
-                    <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
-                    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-                `;
-			totalmiktar += rowData.Miktar;
-			totaltutar += rowData.Tutar;
+    const data = response;
+    const sqlHeaders = ["", "IRSALIYE NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES", "BIRIM", "MIKTAR", "TUTAR"];
+    updateTableHeadersfno(sqlHeaders);
 
-			mainTableBody.appendChild(row);
-			const detailsRow = document.createElement('tr');
-			detailsRow.classList.add('details-row');
-			detailsRow.innerHTML = `<td colspan="24"></td>`;
-			mainTableBody.appendChild(detailsRow);
+    const thCount = document.querySelectorAll("#main-table thead th").length;
 
-			row.addEventListener('click', async () => {
-				const toggleButton = row.querySelector('.toggle-button');
-				const isVisible = detailsRow.style.display === 'table-row';
-				detailsRow.style.display = isVisible ? 'none' : 'table-row';
-				toggleButton.textContent = isVisible ? '+' : '-';
-				document.body.style.cursor = "wait";
-				if (!isVisible) {
-					try {
-						const details = await fetchDetails(rowData.Irsaliye_No, rowData.Hareket);
-						const data = details.data;
-						let detailsTable = `
-                                <table class="details-table table table-bordered table-hover">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Kodu</th>
-                                            <th>Adi</th>
-                                            <th style="text-align: right;">Miktar</th>
-                                            <th>Birim</th>
-                                            <th style="text-align: right;">Fiat</th>
-                                            <th style="text-align: right;">Tutar</th>
-																						<th style="text-align: right;">Kdv</th>
-																						<th>Doviz</th>
-                                            <th style="text-align: right;">Iskonto</th>
-                                            <th>Ana Grup</th>
-                                            <th>Alt Grup</th>
-                                            <th>Ozel Kod</th>
-                                            <th>Fatura No</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                            `;
-						data.forEach(item => {
-							detailsTable += `
-                                    <tr>
-                                        <td style="min-width:80px;">${item.Kodu || ''}</td>
-                                        <td style="min-width:250px;">${item.Adi || ''}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber3(item.Miktar)}</td>
-                                        <td>${item.Birim || ''}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Fiat)}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Tutar)}</td>
-																				<td style="text-align: right;">${formatNumber2(item.Kdv)}</td>
-																				<td>${item.Doviz || ''}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Iskonto)}</td>
-                                        <td >${item.Ana_Grup}</td>
-                                        <td >${item.Alt_Grup}</td>
-                                        <td >${item.Ozel_Kod}</td>
-                                        <td >${item.Fatura_No}</td>
-                                    </tr>
-                                `;
-						});
-						detailsTable += `
-                                    </tbody>
-                                </table>
-                            `;
-						detailsRow.children[0].classList.add("table-row-height");
-						detailsRow.children[0].innerHTML = detailsTable;
-						document.body.style.cursor = "default";
-					} catch (error) {
-						detailsRow.children[0].innerHTML = `
-                                <strong>Hata:</strong> Detay bilgileri alınamadı.
-                            `;
-						document.body.style.cursor = "default";
-					}
-				}
-				document.body.style.cursor = "default";
-			});
+    let totalmiktar = 0;
+    let totaltutar = 0;
 
-		});
+    (data.data || []).forEach(rowData => {
+      const row = document.createElement("tr");
+      row.classList.add("expandable", "table-row-height");
+      row.innerHTML = `
+        <td class="toggle-button">+</td>
+        <td>${rowData.Irsaliye_No || ""}</td>
+        <td>${rowData.Hareket || ""}</td>
+        <td>${formatDate(rowData.Tarih)}</td>
+        <td>${rowData.Cari_Hesap_Kodu || ""}</td>
+        <td>${rowData.Adres_Firma || ""}</td>
+        <td>${rowData.Birim || ""}</td>
+        <td class="double-column">${formatNumber3(rowData.Miktar)}</td>
+        <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+      `;
 
-		document.getElementById("toplam-7").innerText = formatNumber3(totalmiktar);
-		document.getElementById("toplam-8").innerText = formatNumber2(totaltutar);
-		document.body.style.cursor = "default";
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error;
-	} finally {
-		$yenileButton.prop('disabled', false).text('Yenile');
-		document.body.style.cursor = "default";
-	}
+      totalmiktar += (rowData.Miktar || 0);
+      totaltutar += (rowData.Tutar || 0);
+
+      mainTableBody.appendChild(row);
+
+      const detailsRow = document.createElement("tr");
+      detailsRow.className = "details-row";
+      detailsRow.style.display = "none";
+      detailsRow.innerHTML = `<td colspan="${thCount}"></td>`;
+      mainTableBody.appendChild(detailsRow);
+
+      // satıra tıklayınca sadece seçili olsun
+      row.addEventListener("click", () => {
+        document.querySelectorAll("#main-table tbody tr").forEach(r => r.classList.remove("selected"));
+        row.classList.add("selected");
+      });
+
+      const toggle = row.querySelector(".toggle-button");
+      if (!toggle) return;
+
+      // ✅ expand/collapse sadece toggle'a bağlı
+      toggle.addEventListener("click", async (e) => {
+        e.stopPropagation();
+
+        const isOpen = (detailsRow.style.display === "table-row");
+
+        // ✅ tek satır açık kalsın (hepsini kapat)
+        document.querySelectorAll("#main-table tr.details-row").forEach(r => r.style.display = "none");
+        document.querySelectorAll("#main-table tbody tr").forEach(r => r.classList.remove("selected"));
+        document.querySelectorAll("#main-table .toggle-button").forEach(x => {
+          if (x.textContent === "-") x.textContent = "+";
+        });
+
+        if (isOpen) {
+          detailsRow.style.display = "none";
+          toggle.textContent = "+";
+          return;
+        }
+
+        // ✅ sadece ana satırı seç
+        row.classList.add("selected");
+        detailsRow.style.display = "table-row";
+        toggle.textContent = "-";
+
+        // ✅ colspan her seferinde doğru kalsın
+        detailsRow.innerHTML = `<td colspan="${thCount}"></td>`;
+
+        // daha önce yüklendiyse tekrar fetch yapma
+        if (detailsRow.dataset.loaded === "1") return;
+
+        document.body.style.cursor = "wait";
+        try {
+          const detResp = await fetchDetails(rowData.Irsaliye_No, rowData.Hareket);
+          const det = (detResp && detResp.data) ? detResp.data : [];
+
+          let html = `
+            <div class="details-wrap">
+              <table class="t-details">
+                <thead>
+                  <tr>
+                    <th>Kodu</th>
+                    <th>Adi</th>
+                    <th class="double-column">Miktar</th>
+                    <th>Birim</th>
+                    <th class="double-column">Fiat</th>
+                    <th class="double-column">Tutar</th>
+                    <th class="double-column">Kdv</th>
+                    <th>Doviz</th>
+                    <th class="double-column">Iskonto</th>
+                    <th>Ana Grup</th>
+                    <th>Alt Grup</th>
+                    <th>Ozel Kod</th>
+                    <th>Fatura No</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+
+          det.forEach(item => {
+            html += `
+              <tr class="drow">
+                <td>${item.Kodu || ""}</td>
+                <td>${item.Adi || ""}</td>
+                <td class="double-column">${formatNumber3(item.Miktar)}</td>
+                <td>${item.Birim || ""}</td>
+                <td class="double-column">${formatNumber2(item.Fiat)}</td>
+                <td class="double-column">${formatNumber2(item.Tutar)}</td>
+                <td class="double-column">${formatNumber2(item.Kdv)}</td>
+                <td>${item.Doviz || ""}</td>
+                <td class="double-column">${formatNumber2(item.Iskonto)}</td>
+                <td>${item.Ana_Grup || ""}</td>
+                <td>${item.Alt_Grup || ""}</td>
+                <td>${item.Ozel_Kod || ""}</td>
+                <td>${item.Fatura_No || ""}</td>
+              </tr>
+            `;
+          });
+
+          html += `
+                </tbody>
+              </table>
+            </div>
+          `;
+
+          detailsRow.children[0].innerHTML = html;
+          detailsRow.dataset.loaded = "1";
+
+        } catch (err) {
+          detailsRow.children[0].innerHTML =
+            `<div class="details-wrap"><b>Hata:</b> Detaylar alınamadı.</div>`;
+        } finally {
+          document.body.style.cursor = "default";
+        }
+      });
+    });
+
+    document.getElementById("toplam-7").innerText = formatNumber3(totalmiktar);
+    document.getElementById("toplam-8").innerText = formatNumber2(totaltutar);
+
+  } catch (err) {
+    errorDiv.style.display = "block";
+    errorDiv.innerText = err;
+  } finally {
+    $yenileButton.prop('disabled', false).text('Yenile');
+    document.body.style.cursor = "default";
+  }
 }
+
 
 function clearTfoot() {
 	let table = document.querySelector("#main-table");

@@ -1,6 +1,6 @@
 <style>
 /* =========================
-   2026 CAM – HSP KOMPAKT (GRID)
+   2026 CAM – HSP KOMPAKT (GRID) - OUTER BOX REMOVED
    wrapper: #hsp_content
    ========================= */
 
@@ -24,11 +24,9 @@
 #hsp_content .hsp-layout{
   display: grid;
   grid-template-columns: 1fr 280px;
-  gap: 14px;
+  gap: 12px;
   align-items: start;
 }
-
-/* küçük ekranda resim alta insin */
 @media (max-width: 1100px){
   #hsp_content .hsp-layout{ grid-template-columns: 1fr; }
 }
@@ -36,7 +34,7 @@
 /* SOL alan: tek cam panel */
 #hsp_content .hsp-left{
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
@@ -44,11 +42,13 @@
   box-sizing: border-box;
 }
 
-/* TOOLBAR (arama + datalist) */
+/* =======================
+   1) TOOLBAR (AYNI KALSIN)
+   ======================= */
 #hsp_content .hsp-toolbar{
   display: grid;
   grid-template-columns: 110px 1fr 170px;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
 
   padding: 10px;
@@ -57,36 +57,38 @@
   background: rgba(255,255,255,.02);
 }
 
-/* NAV / AKSİYON BAR */
+/* ==========================
+   2) NAV/ACTION (AYNI KALSIN)
+   ========================== */
 #hsp_content .hsp-actions{
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
   align-items: center;
 
-  margin-top: 10px;
+  margin-top: 8px;
   padding: 10px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.03);
 }
 
-/* FORM GRID */
+/* =========================================
+   3) HESAP KODU + UNVAN (AYNI KALSIN)
+   ========================================= */
 #hsp_content .hsp-form{
-  margin-top: 10px;
+  margin-top: 8px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 10px;
+  gap: 8px;
 }
-
-/* alan kutusu */
 #hsp_content .hsp-field{
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
+  padding: 7px 10px;
 
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.03);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
@@ -94,8 +96,8 @@
 
 /* label chip */
 #hsp_content .hsp-label{
-  height: 30px;
-  min-width: 96px;
+  height: 28px;
+  min-width: 84px;
 
   display: inline-flex;
   align-items: center;
@@ -108,7 +110,7 @@
   background: rgba(255,255,255,.06);
   color: rgba(255,255,255,.86);
   font-weight: 900;
-  font-size: 12px;
+  font-size: 11px;
   white-space: nowrap;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
@@ -117,7 +119,7 @@
 #hsp_content .form-control,
 #hsp_content .form-select,
 #hsp_content textarea.form-control{
-  height: 40px;
+  height: 32px; /* daha kompakt */
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
@@ -139,8 +141,8 @@
 #hsp_content .form-control:disabled,
 #hsp_content .form-select:disabled,
 #hsp_content textarea.form-control:disabled{
-  opacity: .86;
-  color: rgba(255,255,255,.78);
+  opacity: .90;
+  color: rgba(255,255,255,.80);
   background: rgba(8,14,26,.30);
 }
 
@@ -165,7 +167,7 @@
 
 /* buton */
 #hsp_content .btn.btn-secondary{
-  height: 40px;
+  height: 34px;
   min-width: 44px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.18);
@@ -188,12 +190,46 @@
   text-shadow: 0 0 6px rgba(255,255,255,.35);
 }
 
+/* =========================================
+   ALT GRID (KOMPAKT) - DIŞ KUTU KALDIRILDI
+   ========================================= */
+#hsp_content .hsp-grid{
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 12px; /* dikey boşluk az */
+}
+@media (max-width: 1100px){
+  #hsp_content .hsp-grid{ grid-template-columns: 1fr; }
+}
+
+/* artık kutu yok, sadece hizalama */
+#hsp_content .hsp-item{
+  display: grid;
+  grid-template-columns: 84px 1fr; /* label daha dar */
+  gap: 6px;
+  align-items: center;
+
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* sms satırı */
+#hsp_content .hsp-item.sms{
+  grid-template-columns: 84px auto;
+  justify-content: start;
+}
+
+/* tam satır alanlar */
+#hsp_content .span2{ grid-column: 1 / -1; }
+
 /* SAĞ FOTO */
 #hsp_content .hsp-photo{
   position: sticky;
   top: 14px;
 }
-
 #hsp_content .resimcentered-div{
   width: 100%;
   box-sizing: border-box;
@@ -201,7 +237,6 @@
   flex-direction: column;
   gap: 10px;
 }
-
 #hsp_content .resimdiv{
   width: 100%;
   height: 320px;
@@ -214,7 +249,6 @@
   align-items: center;
   justify-content: center;
 }
-
 #hsp_content .resimgoster{
   width: 100%;
   height: 100%;
@@ -233,13 +267,49 @@
   font-weight: 900;
 }
 
-/* GRID SPAN helpers */
+/* ===== CHECKBOX – DARK THEME FIX ===== */
+#hsp_content .form-check-input{
+  width: 18px;
+  height: 18px;
+  appearance: none;              /* native görünümü kapat */
+  -webkit-appearance: none;
+  border-radius: 5px;
+  border: 2px solid rgba(255,255,255,.85);
+  background: rgba(8,14,26,.55);
+  cursor: pointer;
+  position: relative;
+}
+
+/* işaret */
+#hsp_content .form-check-input:checked{
+  background: rgba(56,189,248,.25);
+  border-color: #ffffff;
+}
+
+/* beyaz check */
+#hsp_content .form-check-input:checked::after{
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* focus */
+#hsp_content .form-check-input:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.35);
+}
+
+/* SPAN HELPERS (ilk satır için) */
 #hsp_content .c12{ grid-column: span 12; }
 #hsp_content .c8 { grid-column: span 8; }
 #hsp_content .c6 { grid-column: span 6; }
 #hsp_content .c4 { grid-column: span 4; }
-
-/* mobilde hepsi tek kolon */
 @media (max-width: 1100px){
   #hsp_content .c4, #hsp_content .c6, #hsp_content .c8{ grid-column: span 12; }
 }
@@ -255,7 +325,7 @@
       <!-- SOL -->
       <div class="hsp-left">
 
-        <!-- TOOLBAR -->
+        <!-- TOOLBAR (AYNI) -->
         <div class="hsp-toolbar">
           <span class="hsp-label" style="min-width:110px;">Arama</span>
 
@@ -274,17 +344,16 @@
           </div>
         </div>
 
-        <!-- NAV -->
+        <!-- NAV (AYNI) -->
         <div class="hsp-actions">
           <button type="button" id="geriButton" class="btn btn-secondary" onclick="hsplnGeri()"><i class="fa fa-backward"></i></button>
           <button type="button" id="ilkButton" class="btn btn-secondary" onclick="hsplnIlk()"><i class="fa fa-refresh"></i></button>
           <button type="button" id="ileriButton" class="btn btn-secondary" onclick="hsplnIleri()"><i class="fa fa-forward"></i></button>
         </div>
 
-        <!-- FORM GRID -->
+        <!-- HESAP KODU SATIRI (AYNI) -->
         <div class="hsp-form">
 
-          <!-- Hesap kodu + kontrol -->
           <div class="hsp-field c6">
             <span class="hsp-label">Hesap Kodu</span>
             <input type="text" id="kodu" disabled class="form-control" style="max-width:180px;font-weight:bold;"
@@ -297,107 +366,112 @@
             <input type="text" id="adi" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c4">
+        </div>
+
+        <!-- ALT GRID (DIŞ KUTU YOK, SÜPER KOMPAKT) -->
+        <div class="hsp-grid">
+
+          <div class="hsp-item">
             <span class="hsp-label">Karton</span>
             <input type="text" id="karton" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c4">
+          <div class="hsp-item">
             <span class="hsp-label">Cins</span>
             <input type="text" id="hcins" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c4">
+          <div class="hsp-item sms">
             <span class="hsp-label">Sms</span>
             <input type="checkbox" id="sms" class="form-check-input">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Yetkili</span>
             <input type="text" id="yetkili" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Email</span>
             <input type="text" id="mail" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c8">
+          <div class="hsp-item">
             <span class="hsp-label">Adres1</span>
             <input type="text" id="ad1" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c4">
+          <div class="hsp-item">
             <span class="hsp-label">Semt</span>
             <input type="text" id="semt" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c8">
+          <div class="hsp-item">
             <span class="hsp-label">Adres2</span>
             <input type="text" id="ad2" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c4">
+          <div class="hsp-item">
             <span class="hsp-label">Sehir</span>
             <input type="text" id="seh" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Vergi D.</span>
             <input type="text" id="vd" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Vergi No</span>
             <input type="text" id="vn" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Tel 1</span>
             <input type="text" id="t1" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Tel 2</span>
             <input type="text" id="t2" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Tel 3</span>
             <input type="text" id="t3" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Fax</span>
             <input type="text" id="fx" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c4">
+          <div class="hsp-item">
             <span class="hsp-label">Ozel 1</span>
             <input type="text" id="o1" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c4">
+          <div class="hsp-item">
             <span class="hsp-label">Ozel 2</span>
             <input type="text" id="o2" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c4">
+          <div class="hsp-item">
             <span class="hsp-label">Ozel 3</span>
             <input type="text" id="o3" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">Web</span>
             <input type="text" id="web" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c6">
+          <div class="hsp-item">
             <span class="hsp-label">TC Kimlik</span>
             <input type="text" id="kim" disabled class="form-control">
           </div>
 
-          <div class="hsp-field c12">
+          <div class="hsp-item">
             <span class="hsp-label">Aciklama</span>
             <input type="text" id="acik" disabled class="form-control">
           </div>

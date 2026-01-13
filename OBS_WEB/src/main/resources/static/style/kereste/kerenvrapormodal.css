@@ -4,11 +4,18 @@
 .modal-backdrop.second-backdrop{ z-index: 1060 !important; }
 
 
+
+/* =========================
+   2026 CAM – KERESTE ENVANTER (GRID 6 KOLON)
+   Scope: #ara_content .modal-kerenvrap
+   ========================= */
+
 #ara_content .modal-kerenvrap .modal-dialog{
-  max-width: 925px !important;
-  margin: 0 auto;
+  max-width: 900px !important;
+  margin: 0 auto !important;
 }
 
+/* CAM CONTENT */
 #ara_content .modal-kerenvrap .modal-content{
   border-radius: 18px !important;
   border: 1px solid rgba(255,255,255,.14) !important;
@@ -44,6 +51,7 @@
 #ara_content .modal-kerenvrap .modal-title{
   font-weight: 900 !important;
   font-size: 15px !important;
+  letter-spacing: .4px;
 }
 #ara_content .modal-kerenvrap .btn-close{
   filter: invert(1) grayscale(1);
@@ -63,20 +71,15 @@
   border-top: 1px solid rgba(255,255,255,.08) !important;
 }
 
-/* boşluk span öldür (kalsa bile) */
-#ara_content .modal-kerenvrap .input-group > span[style*="padding-left"]{
-  display:none !important;
-}
-
-/* GRID: label(140) + 2 input + label(140) + select + boş */
+/* ============ GRID (ASIL OLAY) ============ */
 #ara_content .modal-kerenvrap .input-group{
-  margin: 0 0 8px 0 !important;
+  margin: 0 0 10px 0 !important;
   padding: 0 !important;
 
   display: grid !important;
   grid-template-columns:
-    140px minmax(145px, 1fr) minmax(145px, 1fr)
-    140px minmax(200px, 1.35fr) minmax(24px, .1fr) !important;
+    125px 135px minmax(135px, 1fr)
+    125px 135px minmax(135px, 1fr) !important;
 
   column-gap: 12px !important;
   row-gap: 8px !important;
@@ -95,6 +98,7 @@
   font-weight: 900 !important;
   font-size: 12px !important;
   justify-content: flex-start !important;
+  white-space: nowrap;
 }
 
 /* INPUT / DATE */
@@ -110,18 +114,23 @@
   font-size: 13px !important;
   font-weight: 650 !important;
 }
+#ara_content .modal-kerenvrap .form-control::placeholder{
+  color: rgba(255,255,255,.55);
+}
 #ara_content .modal-kerenvrap .form-control:focus{
   border-color: rgba(56,189,248,.70) !important;
   box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
   background: rgba(8,14,26,.70) !important;
   color: #fff !important;
 }
-#ara_content .modal-kerenvrap input[type="date"]{ color-scheme: dark; }
+#ara_content .modal-kerenvrap input[type="date"]{
+  color-scheme: dark;
+}
 
 /* SELECT */
 #ara_content .modal-kerenvrap .form-select{
   height: 38px !important;
-  padding: 0 34px 0 10px !important;
+  padding: 0 44px 0 10px !important;   /* ok için yer */
   border-radius: 12px !important;
   width: 100% !important;
   max-width: none !important;
@@ -130,11 +139,15 @@
   color: rgba(255,255,255,.92) !important;
   font-size: 13px !important;
   font-weight: 700 !important;
-  display: flex !important;
-  align-items: center !important;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+
+  background-image: none !important;    /* native oku öldür */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 #ara_content .modal-kerenvrap .form-select:focus{
   border-color: rgba(56,189,248,.70) !important;
@@ -148,6 +161,8 @@
   position: relative !important;
   width: 100% !important;
   min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
 }
 #ara_content .modal-kerenvrap .select-arrow{
   position: absolute !important;
@@ -160,6 +175,24 @@
   line-height: 1;
   color: rgba(255,255,255,.95);
   text-shadow: 0 0 6px rgba(255,255,255,.35);
+  z-index: 2 !important;
+}
+
+/* ===== span2 FIX: net kolon ===== */
+/* sol tarafta: col2+col3 */
+#ara_content .modal-kerenvrap .select-wrap.span2L{
+  grid-column: 2 / span 2 !important;
+}
+/* sağ tarafta: col5+col6 */
+#ara_content .modal-kerenvrap .select-wrap.span2R{
+  grid-column: 5 / span 2 !important;
+}
+
+/* Disabled */
+#ara_content .modal-kerenvrap .form-select:disabled,
+#ara_content .modal-kerenvrap .form-control:disabled{
+  opacity: .60 !important;
+  cursor: not-allowed !important;
 }
 
 /* RAPORLA */
@@ -182,10 +215,14 @@
   filter: saturate(1.06) brightness(1.03) !important;
 }
 
-/* Mobil */
+/* Mobil / dar ekran */
 @media (max-width: 992px){
   #ara_content .modal-kerenvrap .modal-dialog{ max-width: 96vw !important; }
   #ara_content .modal-kerenvrap .input-group{
-    grid-template-columns: 140px 1fr 1fr !important;
+    grid-template-columns: 130px 1fr 1fr !important;
+  }
+  #ara_content .modal-kerenvrap .select-wrap.span2L,
+  #ara_content .modal-kerenvrap .select-wrap.span2R{
+    grid-column: auto !important;
   }
 }

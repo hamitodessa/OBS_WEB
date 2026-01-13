@@ -4,12 +4,17 @@
 .modal-backdrop.second-backdrop{ z-index: 1060 !important; }
 
 
+
+/* =========================
+   2026 CAM – MODAL STOK RAP
+   Scope: #ara_content
+   ========================= */
+
 #ara_content .modal-stokrap .modal-dialog{
-  max-width: 925px !important;
-  margin: 0 auto;
+  max-width: 850px !important;
 }
 
-
+/* MODAL CONTENT */
 #ara_content .modal-stokrap .modal-content{
   border-radius: 18px !important;
   border: 1px solid rgba(255,255,255,.14) !important;
@@ -30,7 +35,6 @@
   ) !important;
   position: relative;
 }
-
 #ara_content .modal-stokrap .modal-header::after{
   content:"";
   position:absolute;
@@ -43,12 +47,10 @@
     rgba(56,189,248,0)
   );
 }
-
 #ara_content .modal-stokrap .modal-title{
   font-weight: 900 !important;
   font-size: 15px !important;
 }
-
 #ara_content .modal-stokrap .btn-close{
   filter: invert(1) grayscale(1);
   opacity: .85;
@@ -61,31 +63,46 @@
   max-height: 70vh;
   overflow: auto;
 }
-
 #ara_content .modal-stokrap .modal-footer{
   padding: 10px 14px !important;
   background: rgba(8,14,26,.66) !important;
   border-top: 1px solid rgba(255,255,255,.08) !important;
 }
 
-/* GRID */
+/* GRID (TARİH KOLONLARI KÜÇÜK!)
+   şema:
+   [Label] [Input1] [Input2] [Label] [Select] [filler]
+*/
 #ara_content .modal-stokrap .input-group{
-  margin: 0 0 8px 0 !important;
+  margin: 0 0 10px 0 !important;
   padding: 0 !important;
 
   display: grid !important;
+
+  /* 1-2 kolon daraltıldı */
   grid-template-columns:
-    130px minmax(160px, 1fr) minmax(160px, 1fr)
-    130px minmax(260px, 1.6fr) minmax(260px, 1.6fr) !important;
+    140px
+    minmax(130px, 140px)
+    minmax(130px, 140px)
+    140px
+    minmax(235px, 1.35fr)
+    24px !important;
 
   column-gap: 12px !important;
   row-gap: 8px !important;
   align-items: center !important;
 }
 
-/* Tek label olan satır 3 kolon */
-#ara_content .modal-stokrap .input-group:not(:has(.input-group-text ~ .input-group-text)){
-  grid-template-columns: 130px minmax(240px, 1fr) minmax(240px, 1fr) !important;
+/* tek kolon (checkbox satırları) */
+#ara_content .modal-stokrap .input-group.one-col{
+  grid-template-columns: 1fr !important;
+}
+
+/* filler hücre */
+#ara_content .modal-stokrap .filler{
+  display:block !important;
+  height: 1px;
+  opacity: 0;
 }
 
 /* LABEL */
@@ -115,15 +132,18 @@
   font-size: 13px !important;
   font-weight: 650 !important;
 }
-
+#ara_content .modal-stokrap .form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+}
 #ara_content .modal-stokrap .form-control:focus{
   border-color: rgba(56,189,248,.70) !important;
   box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
   background: rgba(8,14,26,.70) !important;
   color: #fff !important;
 }
-
-#ara_content .modal-stokrap input[type="date"]{ color-scheme: dark; }
+#ara_content .modal-stokrap input[type="date"]{
+  color-scheme: dark;
+}
 
 /* SELECT */
 #ara_content .modal-stokrap .form-select{
@@ -139,16 +159,27 @@
   font-weight: 700 !important;
   display: flex !important;
   align-items: center !important;
+
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+#ara_content .modal-stokrap .form-select:focus{
+  border-color: rgba(56,189,248,.70) !important;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
+  background: rgba(8,14,26,.70) !important;
+  color: #fff !important;
+}
+#ara_content .modal-stokrap .form-select:disabled{
+  opacity: .55;
+  cursor: not-allowed;
 }
 
 /* SELECT WRAP + ARROW */
 #ara_content .modal-stokrap .select-wrap{
   position: relative !important;
   width: 100% !important;
-  min-width: 260px !important;
+  min-width: 0 !important;
 }
 #ara_content .modal-stokrap .select-arrow{
   position: absolute !important;
@@ -163,60 +194,41 @@
   text-shadow: 0 0 6px rgba(255,255,255,.35);
 }
 
-/* depo satırındaki küçük checkbox */
-#ara_content .modal-stokrap .compact-check{
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
+/* CHECKBOX LOOK */
+#ara_content .modal-stokrap .check-wrap{
+  display:flex;
+  align-items:center;
   height: 38px;
-  padding: 6px 10px;
+  padding: 0 10px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.06);
 }
-#ara_content .modal-stokrap .compact-check .form-check-input{
-  width: 18px;
-  height: 18px;
-  margin: 0;
-}
-#ara_content .modal-stokrap .compact-check .form-check-label{
-  color: rgba(255,255,255,.90);
-  font-weight: 800;
-  font-size: 13px;
-}
-
-/* alt checkboxlar */
-#ara_content .modal-stokrap .stok-checks{
-  margin-top: 6px;
-  padding: 6px 10px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.06);
-  border-radius: 14px;
-
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-#ara_content .modal-stokrap .stok-checks .form-check{
-  display: inline-flex;
+#ara_content .modal-stokrap .form-check{
+  display:flex;
+  align-items:center;
   gap: 10px;
-  align-items: center;
-  margin: 0;
+  margin: 0 !important;
 }
-#ara_content .modal-stokrap .stok-checks .form-check-input{
+#ara_content .modal-stokrap .form-check-input{
   width: 18px;
   height: 18px;
-  margin: 0;
+  margin: 0 !important;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.22);
+  background-color: rgba(8,14,26,.55);
 }
-#ara_content .modal-stokrap .stok-checks .form-check-label{
+#ara_content .modal-stokrap .form-check-input:checked{
+  background-color: rgba(34,197,94,.85);
+  border-color: rgba(34,197,94,.90);
+}
+#ara_content .modal-stokrap .form-check-label{
   color: rgba(255,255,255,.90);
   font-weight: 800;
   font-size: 13px;
 }
 
-/* RAPORLA */
+/* RAPORLA BUTTON */
 #ara_content .modal-stokrap .modal-footer > button.btn.btn-primary{
   width: 240px !important;
   height: 44px !important;
@@ -226,9 +238,7 @@
   font-size: 15px !important;
   letter-spacing: .3px !important;
   color: #fff !important;
-  background-image: linear-gradient(90deg,
-    rgba(56,189,248,.92),
-    rgba(34,197,94,.80)) !important;
+  background-image: linear-gradient(90deg, rgba(56,189,248,.92), rgba(34,197,94,.80)) !important;
   border: 1px solid rgba(255,255,255,.22) !important;
   box-shadow: 0 14px 35px rgba(0,0,0,.55) !important;
 }
@@ -238,10 +248,14 @@
   filter: saturate(1.06) brightness(1.03) !important;
 }
 
-/* Mobil */
+/* MOBIL */
 @media (max-width: 992px){
-  #ara_content .modal-stokrap .modal-dialog{ min-width: auto; max-width: 96vw !important; }
-  #ara_content .modal-stokrap .input-group{ grid-template-columns: 130px 1fr 1fr !important; }
-  #ara_content .modal-stokrap .select-wrap{ min-width: 0 !important; }
-}
+  #ara_content .modal-stokrap .modal-dialog{ max-width: 96vw !important; }
 
+  #ara_content .modal-stokrap .input-group{
+    grid-template-columns: 120px 1fr 1fr !important;
+  }
+  #ara_content .modal-stokrap .filler{
+    display:none !important;
+  }
+}

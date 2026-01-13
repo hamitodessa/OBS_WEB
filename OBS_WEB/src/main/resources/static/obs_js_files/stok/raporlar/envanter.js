@@ -97,6 +97,23 @@ async function openenvModal(modal) {
 	}
 }
 
+function setSecondTableVisible(isVisible){
+  const container = document.querySelector("#ara_content .container");
+  const secondWrap = document.getElementById("second-table-container");
+
+  if(isVisible){
+    console.info("Showing second table");
+    container.classList.add("two-tables");
+    secondWrap.style.display = "block";
+  }else{
+    console.info("Hiding second table");
+    container.classList.remove("two-tables");
+    secondWrap.style.display = "none";
+    document.getElementById("secondTableBody").innerHTML = "";
+  }
+}
+
+
 async function envfetchTableData() {
 	const hiddenFieldValue = $('#envanterBilgi').val();
 	const parsedValues = hiddenFieldValue.split(",");
@@ -158,8 +175,9 @@ async function envfetchTableData() {
 		let totaltutar = 0;
 		let totalstok = 0;
 		let totalctutar = 0;
+		console.info("Rapor Turu: " + response.raporturu);
 		if (response.raporturu === 'normal') {
-			document.getElementById("second-table-container").style.visibility = "hidden";
+			setSecondTableVisible(false);
 			data.data.forEach(rowData => {
 				const row = document.createElement('tr');
 				row.classList.add('expandable');
@@ -187,7 +205,7 @@ async function envfetchTableData() {
 			});
 		}
 		else if (response.raporturu === 'fifo') {
-			document.getElementById("second-table-container").style.visibility = "visible";
+			setSecondTableVisible(true);
 			data.fifo.forEach(rowData => {
 				const row = document.createElement('tr');
 				row.classList.add('expandable');
@@ -196,12 +214,12 @@ async function envfetchTableData() {
                     <td>${rowData.Urun_Kodu || ''}</td>
                     <td>${rowData.Adi || ''}</td>
                     <td>${rowData.Simge || ''}</td>
-                    <td class="double-column">${rowData.Giris_Miktari}</td>
+                    <td class="double-column">${formatNumber3(rowData.Giris_Miktari)}</td>
 					<td class="double-column">${formatNumber2(rowData.Giris_Tutar)}</td>
-					<td class="double-column">${rowData.Cikis_Miktari}</td>
+					<td class="double-column">${formatNumber3(rowData.Cikis_Miktari)}</td>
 					<td class="double-column">${formatNumber2(rowData.Cikis_Tutar)}</td>
 					<td class="double-column">${formatNumber2(rowData.Cikis_Maliyet)}</td>
-                    <td class="double-column">${rowData.Stok_Miktari}</td>
+                    <td class="double-column">${formatNumber3(rowData.Stok_Miktari)}</td>
                     <td class="double-column">${formatNumber2(rowData.Maliyet)}</td>
                     <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
                 `;
@@ -209,33 +227,42 @@ async function envfetchTableData() {
 			});
 			/// 2 Tablo Doldur///////////////////////////////////////////////////////////////////////
 			data.fifo2.forEach(rowData => {
-				const row = document.createElement('tr');
-				row.classList.add('expandable', 'table-row-height');
-				const miktarCell = document.createElement('td');
-				miktarCell.classList.add('double-column');
-				miktarCell.textContent = rowData.Miktar;
-				if (rowData.Miktar < 0) {
-					miktarCell.style.backgroundColor = 'red';
-					miktarCell.style.color = 'white';
-				}
-				row.innerHTML = `
-        			<td>${rowData.Urun_Kodu || ''}</td>
-        			<td>${rowData.Evrak_No || ''}</td>
-        			<td>${rowData.Hes_Kodu || ''}</td> 
-        			<td>${rowData.Evrak_Cins || ''}</td> 
-        			<td>${formatDate(rowData.Tarih)}</td>
-        			<td class="double-column">${formatNumber2(rowData.Fiat)}</td>
-        			<td>${rowData.Birim || ''}</td> 
-        			<td class="double-column">${formatNumber3(rowData.Miktar_Bakiye)}</td>
-        			<td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-        			<td>${rowData.Doviz || ''}</td> 
-        			<td class="double-column">${formatNumber2(findTutarField(rowData) || 0)}</td>
-       				 <td class="double-column">${formatNumber2(rowData.Tutar_Bakiye)}</td>
-        			<td>${rowData.USER || ''}</td> 
-    			`;
-				row.insertBefore(miktarCell, row.children[6]); // 6. index'te Miktar var, yerine koyuyoruz.
-				secondTableBody.appendChild(row);
+			  const row = document.createElement('tr');
+			  row.classList.add('expandable', 'table-row-height');
+
+			  // önce normal kolonları bas
+			  row.innerHTML = `
+			    <td>${rowData.Urun_Kodu || ''}</td>
+			    <td>${rowData.Evrak_No || ''}</td>
+			    <td>${rowData.Hes_Kodu || ''}</td> 
+			    <td>${rowData.Evrak_Cins || ''}</td> 
+			    <td>${formatDate(rowData.Tarih)}</td>
+			    <td class="double-column">${formatNumber2(rowData.Fiat)}</td>
+			    <td>${rowData.Birim || ''}</td> 
+			    <td class="double-column">${formatNumber3(rowData.Miktar_Bakiye)}</td>
+			    <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+			    <td>${rowData.Doviz || ''}</td> 
+			    <td class="double-column">${formatNumber2(findTutarField(rowData) || 0)}</td>
+			    <td class="double-column">${formatNumber2(rowData.Tutar_Bakiye)}</td>
+			    <td>${rowData.USER || ''}</td> 
+			  `;
+
+			  // sonra MIKTAR hücresini doğru yere ekle (TARIH'ten sonra, FIAT'tan önce)
+			  const miktarCell = document.createElement('td');
+			  miktarCell.classList.add('double-column');
+			  miktarCell.textContent = formatNumber3(rowData.Miktar);
+
+			  if (rowData.Miktar < 0) {
+			    miktarCell.style.backgroundColor = 'red';
+			    miktarCell.style.color = 'white';
+			  }
+
+			  const fiatTd = row.querySelector("td:nth-child(6)"); // FIAT (1-based)
+			  row.insertBefore(miktarCell, fiatTd);
+
+			  secondTableBody.appendChild(row);
 			});
+
 		}
 		if (response.raporturu === 'normal') {
 			document.getElementById("toplam-3").innerText = formatNumber3(totalmiktar);
@@ -265,125 +292,150 @@ function findTutarField(rowData) {
 }
 
 function clearTfoot() {
-	let table = document.querySelector("#main-table");
-	let tfoot = table.querySelector("tfoot");
-	if (tfoot) {
-		let cells = tfoot.querySelectorAll("th");
-		for (let i = 0; i < cells.length; i++) {
-			cells[i].textContent = "";
-		}
-	}
+  const table = document.querySelector("#main-table");
+  const tfoot = table.querySelector("tfoot");
+  if (!tfoot) return;
+
+  tfoot.querySelectorAll("td").forEach(td => td.textContent = "");
 }
 
+
 function updateTableHeadersnormal(headers) {
-	let thead = document.querySelector("#main-table thead");
-	let table = document.querySelector("#main-table");
-	let tfoot = table.querySelector("tfoot");
-	if (!tfoot) {
-		tfoot = document.createElement("tfoot");
-		table.appendChild(tfoot);
-	}
-	thead.innerHTML = "";
-	let trHead = document.createElement("tr");
-	trHead.classList.add("thead-dark");
-	headers.forEach((header, index) => {
-		let th = document.createElement("th");
-		th.textContent = header;
-		if (index >= headers.length - 8) {
-			th.classList.add("double-column");
-		}
-		trHead.appendChild(th);
-	});
-	thead.appendChild(trHead);
-	tfoot.innerHTML = "";
-	let trFoot = document.createElement("tr");
-	headers.forEach((_, index) => {
-		let th = document.createElement("th");
-		if (index === 3) {
-			th.textContent = "0.000";
-			th.id = "toplam-" + index;
-			th.classList.add("double-column");
-		} else if (index === 4) {
-			th.textContent = "0.00";
-			th.id = "toplam-" + index;
-			th.classList.add("double-column");
-		} else if (index === 5) {
-			th.textContent = "0.000";
-			th.id = "toplam-" + index;
-			th.classList.add("double-column");
-		} else if (index === 6) {
-			th.textContent = "0.00";
-			th.id = "toplam-" + index;
-			th.classList.add("double-column");
-		} else if (index === 8) {
-			th.textContent = "0.000";
-			th.id = "toplam-" + index;
-			th.classList.add("double-column");
-		} else if (index === 10) {
-			th.textContent = "0.00";
-			th.id = "toplam-" + index;
-			th.classList.add("double-column");
-		} else {
-			th.textContent = "";
-		}
-		trFoot.appendChild(th);
-	});
-	tfoot.appendChild(trFoot);
+  const table = document.querySelector("#main-table");
+  const thead = table.querySelector("thead");
+  let tfoot = table.querySelector("tfoot");
+
+  if (!tfoot) {
+    tfoot = document.createElement("tfoot");
+    table.appendChild(tfoot);
+  }
+
+  // ===== THEAD =====
+  thead.innerHTML = "";
+  const trHead = document.createElement("tr");
+  headers.forEach((header, index) => {
+    const th = document.createElement("th");
+    th.textContent = header;
+    if (index >= headers.length - 8) th.classList.add("double-column");
+    trHead.appendChild(th);
+  });
+  thead.appendChild(trHead);
+
+  // ===== TFOOT =====
+  tfoot.innerHTML = "";
+  const trFoot = document.createElement("tr");
+
+  headers.forEach((_, index) => {
+    const td = document.createElement("td"); // <-- TH DEĞİL, TD!
+
+    td.id = "toplam-" + index;
+
+    // numeric kolonlar
+    if ([3, 5, 8].includes(index)) {
+      td.textContent = "0.000";
+      td.classList.add("double-column");
+    } else if ([4, 6, 10].includes(index)) {
+      td.textContent = "0.00";
+      td.classList.add("double-column");
+    } else {
+      td.textContent = "";
+    }
+
+    trFoot.appendChild(td);
+  });
+
+  tfoot.appendChild(trFoot);
 }
+
 
 function updateTableHeadersfifofirst(headers) {
 
-	let thead = document.querySelector("#main-table thead");
-	let table = document.querySelector("#main-table");
-	let tfoot = table.querySelector("tfoot");
-	if (!tfoot) {
-		tfoot = document.createElement("tfoot");
-		table.appendChild(tfoot);
-	}
-	thead.innerHTML = "";
-	let trHead = document.createElement("tr");
-	trHead.classList.add("thead-dark");
-	headers.forEach((header, index) => {
-		let th = document.createElement("th");
-		th.textContent = header;
+  const table = document.querySelector("#main-table");
+  const thead = table.querySelector("thead");
+  let tfoot = table.querySelector("tfoot");
 
-		if (index >= headers.length - 8) {
-			th.classList.add("double-column");
-		}
-		trHead.appendChild(th);
-	});
-	thead.appendChild(trHead);
-	tfoot.innerHTML = "";
-	let trFoot = document.createElement("tr");
-	headers.forEach((_, index) => {
-		let th = document.createElement("th");
-		th.textContent = "";
-		trFoot.appendChild(th);
-	});
-	tfoot.appendChild(trFoot);
+  if (!tfoot) {
+    tfoot = document.createElement("tfoot");
+    table.appendChild(tfoot);
+  }
+
+  // ===== THEAD =====
+  thead.innerHTML = "";
+  const trHead = document.createElement("tr");
+  headers.forEach((header, index) => {
+    const th = document.createElement("th");
+    th.textContent = header;
+
+    if (index >= headers.length - 8) th.classList.add("double-column");
+    trHead.appendChild(th);
+  });
+  thead.appendChild(trHead);
+
+  // ===== TFOOT =====
+  tfoot.innerHTML = "";
+  const trFoot = document.createElement("tr");
+
+  headers.forEach((_, index) => {
+    const td = document.createElement("td"); // <-- TD
+
+    td.textContent = "";
+    td.id = "toplam-" + index; // istersen kalsın (sonra doldurursun)
+    trFoot.appendChild(td);
+  });
+
+  tfoot.appendChild(trFoot);
 }
+
 function updateTableHeadersfifo(headers) {
 
-	let thead = document.querySelector("#second-table thead");
-	let table = document.querySelector("#second-table");
-	let tfoot = table.querySelector("tfoot");
-	if (!tfoot) {
-		tfoot = document.createElement("tfoot");
-		table.appendChild(tfoot);
-	}
-	thead.innerHTML = "";
-	let trHead = document.createElement("tr");
-	trHead.classList.add("thead-dark");
-	headers.forEach((header, index) => {
-		let th = document.createElement("th");
-		th.textContent = header;
-		if (index == 5 || index == 7 || index == 8 || index == 9 || index == 11 || index == 12) {
-			th.classList.add("double-column");
-		}
-		trHead.appendChild(th);
-	});
-	thead.appendChild(trHead);
+  const table = document.querySelector("#second-table");
+  const thead = table.querySelector("thead");
+  let tfoot = table.querySelector("tfoot");
+
+  if (!tfoot) {
+    tfoot = document.createElement("tfoot");
+    table.appendChild(tfoot);
+  }
+
+  // ===== THEAD =====
+  thead.innerHTML = "";
+  const trHead = document.createElement("tr");
+
+  headers.forEach((header, index) => {
+    const th = document.createElement("th");
+    th.textContent = header;
+
+    if (index === 5 || index === 7 || index === 8 || 
+        index === 9 || index === 11 || index === 12) {
+      th.classList.add("double-column");
+    }
+
+    trHead.appendChild(th);
+  });
+
+  thead.appendChild(trHead);
+
+  // ===== TFOOT =====
+  tfoot.innerHTML = "";
+  const trFoot = document.createElement("tr");
+
+  headers.forEach((_, index) => {
+    const td = document.createElement("td"); // <-- TD kullanıyoruz
+
+    td.id = "second-toplam-" + index;
+    td.textContent = "";
+
+    if (index === 5 || index === 7 || index === 8 ||
+        index === 9 || index === 11 || index === 12) {
+      td.classList.add("double-column");
+    }
+
+    trFoot.appendChild(td);
+  });
+
+  tfoot.appendChild(trFoot);
 }
+
 
 async function envdownloadReport() {
 	const errorDiv = document.getElementById("errorDiv");
@@ -438,41 +490,42 @@ async function envmailAt() {
 }
 
 function extractTableData(tableId) {
-	let table = document.querySelector(`#${tableId}`);
-	let headers = [];
-	let rows = [];
-	table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
-	table.querySelectorAll("tbody tr").forEach(tr => {
-		let rowData = {};
-		let nonEmptyCount = 0;
-		tr.querySelectorAll("td").forEach((td, index) => {
-			let value = td.innerText.trim();
-			if (value !== "") {
-				nonEmptyCount++;
-			}
-			rowData[headers[index]] = value;
-		});
-		if (nonEmptyCount > 0) {
-			rows.push(rowData);
-		}
-	});
-	let tfoot = table.querySelector("tfoot");
-	if (tfoot) {
-		let tfootRowData = {};
-		let nonEmptyCount = 0;
-		tfoot.querySelectorAll("th").forEach((th, index) => {
-			let value = th.innerText.trim();
-			if (value !== "") {
-				nonEmptyCount++;
-			}
-			tfootRowData[headers[index]] = value;
-		});
-		if (nonEmptyCount > 0) {
-			rows.push(tfootRowData);
-		}
-	}
-	return rows;
+  const table = document.querySelector(`#${tableId}`);
+  const headers = [];
+  const rows = [];
+
+  table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
+
+  table.querySelectorAll("tbody tr").forEach(tr => {
+    const rowData = {};
+    let nonEmptyCount = 0;
+
+    tr.querySelectorAll("td").forEach((td, index) => {
+      const value = td.innerText.trim();
+      if (value !== "") nonEmptyCount++;
+      rowData[headers[index]] = value;
+    });
+
+    if (nonEmptyCount > 0) rows.push(rowData);
+  });
+
+  const tfoot = table.querySelector("tfoot");
+  if (tfoot) {
+    const tfootRowData = {};
+    let nonEmptyCount = 0;
+
+    tfoot.querySelectorAll("td").forEach((td, index) => {   // <-- TD!
+      const value = td.innerText.trim();
+      if (value !== "") nonEmptyCount++;
+      tfootRowData[headers[index]] = value;
+    });
+
+    if (nonEmptyCount > 0) rows.push(tfootRowData);
+  }
+
+  return rows;
 }
+
 
 function fiatlamaChanged() {
 	const fiatlama = document.getElementById("fiatlama").value;

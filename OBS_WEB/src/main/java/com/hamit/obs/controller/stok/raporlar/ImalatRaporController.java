@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.mail.util.ByteArrayDataSource;import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +21,8 @@ import com.hamit.obs.dto.stok.raporlar.imaraporDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.reports.RaporOlustur;
 import com.hamit.obs.service.fatura.FaturaService;
+
+import jakarta.mail.util.ByteArrayDataSource;
 
 @Controller
 public class ImalatRaporController {
@@ -41,7 +43,7 @@ public class ImalatRaporController {
 	public Map<String, Object> imarapordoldur(@RequestBody imaraporDTO imaraporDTO) {
 		Map<String, Object> response = new HashMap<>();
 		try {
-			String turuString[] =  grup_cevir(imaraporDTO.getAnagrp(),imaraporDTO.getAltgrp(),imaraporDTO.getDepo(),imaraporDTO.getUranagrp(),imaraporDTO.getUraltgrp());
+			String turuString[] = grup_cevir(imaraporDTO.getAnagrp(),imaraporDTO.getAltgrp(),imaraporDTO.getDepo(),imaraporDTO.getUranagrp(),imaraporDTO.getUraltgrp());
 			imaraporDTO.setAnagrp(turuString[0]);
 			imaraporDTO.setAltgrp(turuString[1]);
 			imaraporDTO.setDepo(turuString[2]);

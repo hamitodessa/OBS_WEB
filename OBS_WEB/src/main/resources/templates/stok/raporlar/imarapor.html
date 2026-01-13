@@ -1,51 +1,211 @@
 <link rel="stylesheet" href="/style/stok/imarapormodal.css">
 
 <style>
-.container {
-	height: 100vh; 
-	display: flex; 
-	flex-direction: column;
-	margin-top: 10px;
-	padding: 0px; 
-	width: 100%;
-	max-width: 100%;
-	box-sizing: border-box;
+/* =========================
+   2026 CAM – TABLE STANDARD (EKSTRE)
+   Scope: #ara_content
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* ===== CARD ===== */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: auto;
-    }
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    white-space: nowrap; 
+/* ===== BUTTON / SELECT / INPUT ===== */
+#ara_content .btn{
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  transition: .16s ease;
+  font-weight: 800;
+}
+#ara_content .btn.btn-primary{
+  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
+  border: none;
+  color: #fff;
+}
+#ara_content .btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-2px);
 }
 
-.table-container {
-	flex-grow: 1;
-	overflow-y: auto;
-	border: 1px solid #ccc;
-	margin-top: 10px;
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+}
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65);
+  color: #fff;
+}
+#ara_content input[type="date"]{ color-scheme: dark; }
+
+
+#ara_content .container{
+  height: 75vh;
+  display:flex;
+  flex-direction:column;
+  margin-top:10px;
+  padding:0;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+#ara_content .table-container{
+  flex-grow:1;
+  overflow:auto;
+  margin-top:10px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
 }
 
-.double-column {
-	text-align: right;
-	text-align: right;
+/* Scrollbar (Chrome/Edge) */
+#ara_content .table-container::-webkit-scrollbar{ width:10px; height:10px; }
+#ara_content .table-container::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border:2px solid rgba(0,0,0,.20);
+  border-radius:999px;
+}
+#ara_content .table-container::-webkit-scrollbar-track{
+  background: rgba(0,0,0,.18);
+  border-radius:999px;
 }
 
-.table-row-height td {
-	height: 10px;
-	line-height: 10px;
+/* ===== TABLE ===== */
+#ara_content table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:16px;
+  overflow:hidden;
+  font-size:13px;
 }
 
-.table .thead-dark th {
-	color: #fff;
-	background: #214162;
+/* Cells */
+#ara_content th,
+#ara_content td{
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 6px 10px;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
+/* Header sticky */
+#ara_content thead th{
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 900;
+  text-align: left;
+}
+
+/* Body base */
+#ara_content tbody td{
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.82);
+  transition: color .12s ease, background .12s ease;
+}
+
+
+/* Hover foreground fix */
+#ara_content .table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #ffffff !important;
+}
+
+/* Seçili satır (kalıcı) */
+#ara_content tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color: #ffffff !important;
+}
+
+/* Satır yüksekliği (ekstre için ideal) */
+#ara_content tbody td{
+  height: 26px;
+  line-height: 18px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+/* Numeric kolonlar */
+#ara_content .double-column{
+  text-align:right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ara_content .table-row-height td{
+  height: 18px;
+  line-height: 18px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+#ara_content #main-table tfoot td{
+  position: sticky;
+  bottom: 0;
+  z-index: 6;
+  background: linear-gradient(180deg, rgba(31,59,92,.85), rgba(22,43,68,.95)) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,.12) !important;
+  font-weight: 900;
+}
+
+
+/* ===== PAGINATION ===== */
+#ara_content .pagination-container{
+  margin-top: 10px !important;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+#ara_content .pagination-container .btn{
+  width: 46px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* ===== ERROR ===== */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+#ara_content td.double-column,
+#ara_content th.double-column{
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
 </style>
+
+
+
 	<div class="card p-1">
 		<div style="display: flex; align-items: center;">
 			<button class="btn btn-primary" type="button" id="imarapyenileButton"
@@ -58,10 +218,10 @@ th, td {
 			 		onclick="imarapmailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>
-	<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+	<div id="errorDiv"></div>
 	<div class="container">
 		<div class="table-container">
-			<table id="main-table" class="table table-bordered table-hover">
+			<table id="main-table" class="table table-bordered table-hover table-row-height">
 				<thead class="thead-dark">
 					<tr>
 						<th>EVRAK NO</th>

@@ -1432,12 +1432,12 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		.append("  (SELECT DEPO FROM DEPO_DEGISKEN WHERE DPID_Y = STOK.Depo) AS Depo, ")
 		.append("  (SELECT ANA_GRUP FROM ANA_GRUP_DEGISKEN WHERE AGID_Y = STOK.Ana_Grup) AS Ana_Grup, ")
 		.append("  (SELECT ALT_GRUP FROM ALT_GRUP_DEGISKEN WHERE ALID_Y = STOK.Alt_Grup) AS Alt_Grup, ")
-		.append("  STOK.Barkod, ")
-		.append("  STOK.Recete, ")
+		.append("  Barkod, ")
+		.append("  Recete, ")
 		.append("  STOK.[USER] ")
-		.append("FROM STOK WITH (INDEX (IX_STOK)) ")
-		.append("JOIN MAL  WITH (INDEX (IX_MAL)) ON STOK.Urun_Kodu = MAL.Kodu ")
-		.append("WHERE STOK.Evrak_Cins = 'URE' ")
+		.append("  FROM STOK WITH (INDEX (IX_STOK)) ")
+		.append("  JOIN MAL  WITH (INDEX (IX_MAL)) ON STOK.Urun_Kodu = MAL.Kodu ")
+		.append("  WHERE STOK.Evrak_Cins = 'URE' ")
 		.append("  AND MAL.Ana_Grup ").append(imaraporDTO.getUranagrp())
 		.append("  AND MAL.Alt_Grup ").append(imaraporDTO.getUraltgrp())
 		.append("  AND STOK.Hareket = 'G' ")
@@ -1447,17 +1447,16 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		.append("  AND STOK.Tarih <  ? ")
 		.append("  AND STOK.Urun_Kodu >= ? ")
 		.append("  AND STOK.Urun_Kodu <= ? ")
-		.append("  AND STOK.Recete >= ? ")
-		.append("  AND STOK.Recete <= ? ")
-		.append("  AND STOK.Barkod >= ? ")
-		.append("  AND STOK.Barkod <= ? ")
+		.append("  AND Recete >= ? ")
+		.append("  AND Recete <= ? ")
+		.append("  AND Barkod >= ? ")
+		.append("  AND Barkod <= ? ")
 		.append("  AND STOK.Ana_Grup ").append(imaraporDTO.getAnagrp())
 		.append("  AND STOK.Alt_Grup ").append(imaraporDTO.getAltgrp())
 		.append("  AND STOK.Depo ").append(imaraporDTO.getDepo())
 		.append("ORDER BY STOK.Evrak_No");
 
 		List<Map<String, Object>> resultList = new ArrayList<>();
-
 		try (Connection connection = DriverManager.getConnection(
 				faturaConnDetails.getJdbcUrl(),
 				faturaConnDetails.getUsername(),
@@ -2009,7 +2008,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		.append("  ISNULL(s.periyot_cikis_ag, 0) AS Periyot_Cikis_Agirlik, ")
 		.append("  ISNULL(s.periyot_giris_ag - s.periyot_cikis_ag, 0) AS Periyot_Stok_Agirlik, ")
 		.append("  ISNULL(s.onceki_giris_ag - s.onceki_cikis_ag ")
-		.append("       + s.periyot_giris_ag - s.periyot_cikis_ag, 0) AS Bakiye ")
+		.append("       + s.periyot_giris_ag - s.periyot_cikis_ag, 0) AS BAKIYE ")
 		.append("FROM ( ")
 		.append("    SELECT ")
 		.append("      d.Urun_Kodu, ")
@@ -3478,8 +3477,8 @@ public class FaturaMsSQL implements IFaturaDatabase {
 		// Parametreli alanlar
 		.append("  AND STOK.Evrak_No >= ? AND STOK.Evrak_No <= ? ")
 		.append("  AND STOK.Tarih >= ? AND STOK.Tarih < ? ")
-		.append("  AND STOK.Urun_Kodu >= N? AND STOK.Urun_Kodu <= N? ")
-		.append("  AND STOK.Hesap_Kodu >= N? AND STOK.Hesap_Kodu <= N? ")
+		.append("  AND STOK.Urun_Kodu >= ? AND STOK.Urun_Kodu <= ? ")
+		.append("  AND STOK.Hesap_Kodu >= ? AND STOK.Hesap_Kodu <= ? ")
 		.append("  AND ").append(kjk)
 		.append("  AND ").append(ure1)
 		.append("  AND STOK.Hareket LIKE ? ")
