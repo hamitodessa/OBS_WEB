@@ -329,6 +329,207 @@
   font-weight: 900 !important;
 }
 
+/* =========================
+   2026 CAM – IRS TABLE (SATIR INPUTLARI KOMPAKT)
+   Scope: #ara_content #irsTable
+   ========================= */
+
+/* Hücre padding ve yüksekliği sıkı */
+#ara_content #irsTable th,
+#ara_content #irsTable td{
+  padding: 4px 8px !important;
+  height: 26px !important;
+  vertical-align: middle !important;
+}
+
+/* Satır içi input/select/label -> KOMPAKT */
+#ara_content #irsTable tbody .form-control,
+#ara_content #irsTable tbody .form-select{
+  height: 30px !important;          /* ✅ kompakt */
+  min-height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.95) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+
+/* label.form-control (readonly gibi kullandıkların) */
+#ara_content #irsTable tbody label.form-control{
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+#ara_content #irsTable tbody label.form-control span{
+  display: inline-block;
+  width: 100%;
+  line-height: 1;
+}
+
+/* Focus daha ince */
+#ara_content #irsTable tbody .form-control:focus,
+#ara_content #irsTable tbody .form-select:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
+  background: rgba(8,14,26,.65) !important;
+}
+
+/* İçteki ok (▼) daha küçük + hizalı */
+#ara_content #irsTable tbody td > div[style*="position: relative"] > span{
+  right: 8px !important;
+  font-size: 12px !important;
+  color: rgba(255,255,255,.78) !important;
+  text-shadow: 0 0 10px rgba(0,0,0,.55);
+}
+
+/* datalist/select için sağ padding (okla çakışmasın) */
+#ara_content #irsTable tbody td > div[style*="position: relative"] input.form-control,
+#ara_content #irsTable tbody td > div[style*="position: relative"] select.form-control{
+  padding-right: 26px !important;
+}
+
+/* trash butonu da kompakt */
+#ara_content #irsTable tbody .btn.btn-secondary{
+  height: 30px !important;
+  width: 34px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.88) !important;
+}
+#ara_content #irsTable tbody .btn.btn-secondary:hover{
+  background: rgba(56,189,248,.12) !important;
+  border-color: rgba(56,189,248,.35) !important;
+}
+
+/* tablo satırı içinde ml-2 falan taşırmasın */
+#ara_content #irsTable tbody .ml-2{ margin-left: 0 !important; }
+
+#ara_content .irs-rel{
+  position: relative;
+  width: 100%;
+}
+#ara_content .irs-arrow{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* =========================
+   TAB1 – ULTRA KOMPAKT
+   ========================= */
+
+#ara_content #tab1 .group-box{
+  padding: 8px 10px !important;
+}
+
+#ara_content #tab1 label{
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+#ara_content #tab1 .form-control,
+#ara_content #tab1 .form-select{
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 5px 10px !important;
+  font-size: 12px !important;
+  border-radius: 12px !important;
+}
+
+/* date input biraz daha ince */
+#ara_content #tab1 input[type="date"]{
+  padding: 4px 8px !important;
+}
+
+/* butonlar mini */
+#ara_content #tab1 .btn{
+  height: 34px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  border-radius: 12px !important;
+  font-weight: 900 !important;
+}
+
+/* ikonlu refresh / plus */
+#ara_content #tab1 .btn.btn-secondary{
+  width: 38px !important;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* padding-left ile şişen boşlukları bastır */
+#ara_content #tab1 span[style*="padding-left"]{
+  padding-left: 10px !important;
+}
+/* =========================
+   TAB2 – ORTA KOMPAKT
+   ========================= */
+
+#ara_content #tab2 .form-control{
+  height: 36px !important;
+  padding: 6px 12px !important;
+  font-size: 13px !important;
+  border-radius: 12px !important;
+}
+
+#ara_content #tab2 .input-group-text{
+  height: 36px !important;
+  font-size: 12px !important;
+  font-weight: 900;
+}
+
+#ara_content #tab2 .form-row{
+  margin-bottom: 6px !important;
+}
+
+/* =========================
+   TAB3 – SADE & TEMİZ
+   ========================= */
+
+#ara_content #tab3 .form-control{
+  height: 36px !important;
+  padding: 6px 12px !important;
+  font-size: 13px !important;
+  border-radius: 12px !important;
+}
+
+#ara_content #tab3 .input-group-text{
+  height: 36px !important;
+  font-size: 12px !important;
+  font-weight: 900;
+}
+
+/* =========================
+   TAB4 – SADE & TEMİZ
+   ========================= */
+
+#ara_content #tab4 .form-control{
+  height: 36px !important;
+  padding: 6px 12px !important;
+  font-size: 13px !important;
+  border-radius: 12px !important;
+}
+
+#ara_content #tab4 .input-group-text{
+  height: 36px !important;
+  font-size: 12px !important;
+  font-weight: 900;
+}
+
 </style>
 
 <div class="card p-4">

@@ -56,85 +56,133 @@ function initializeRows() {
 	}
 }
 function satirekle() {
-	const table = document.getElementById("kerTable").getElementsByTagName("tbody")[0];
-	const rowCount = table.rows.length;
-	if (rowCount == 250) {
-		alert("En fazla 250 satır ekleyebilirsiniz.");
-		return
-	}
-	const newRow = table.insertRow();
-	incrementRowCounter();
+  const tbody = document.getElementById("kerTable").getElementsByTagName("tbody")[0];
+  const rowCount = tbody.rows.length;
 
-	newRow.innerHTML = `
-		<td >
-			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
-		</td>
-   		<td>
-		    <input class="form-control" maxlength="20" id="barkod_${rowCounter}" 
-		        onkeydown="focusNextCell(event, this)" onchange="updateRowValues(this)">
-		</td>
-		<td>
-		    <input class="form-control" maxlength="16" id="ukodu_${rowCounter}"  style="font-weight:bold;"
-		        onkeydown="focusNextCell(event, this)" placeholder="XX-XXX-XXXX-XXXX" onchange="updateValues(this)">
-		</td>
-		<td>
-		    <input class="form-control" maxlength="16" id="pakno_${rowCounter}" 
-		        onkeydown="if(event.key === 'Enter') paketkontrol(event,this)"  >
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur0(this)" 
-			  onkeydown="focusNextCell(event, this)" value="${formatNumber0(0)}" style="text-align:right;">
-		</td>
-        <td>
-		    <label class="form-control" style="display: block;width:100%;height:100%;text-align:right;font-weight:bold;"><span>&nbsp;</span></label>
-		</td>
-        <td>
-			<label class="form-control" style="display: block;width:100%;height:100%;text-align:right;font-weight:bold; color:darkgreen;"><span>&nbsp;</span></label>
-		</td>
-		<td>
-			<input class="form-control" onfocus="selectAllContent(this)" onkeydown="focusNextCell(event, this)">
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;font-weight:bold;">
-		</td>
-        <td>
-			<input class="form-control" onfocus="selectAllContent(this)" onkeydown="focusNextRow(event, this)">
-		</td>
-		<td style="display: none;"></td>
-		<td style="display: none;">1900-01-01 00:00:00.000</td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;">0</td>
-		<td style="display: none;">0</td>
-		<td style="display: none;">0</td>
-		<td style="display: none;">0</td>
-		<td style="display: none;"></td>
-		<td style="display: none;">0</td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-	    `;
-	applyMask(); // Yeni eklenen inputa maskeyi uygula
+  if (rowCount === 250) {
+    alert("En fazla 250 satır ekleyebilirsiniz.");
+    return;
+  }
+
+  const newRow = tbody.insertRow();
+  incrementRowCounter(); // rowCounter burada artıyor varsayıyorum
+
+  newRow.innerHTML = `
+    <td>
+      <button id="bsatir_${rowCounter}" type="button"
+        class="btn btn-secondary ml-2 ker-rowbtn"
+        onclick="satirsil(this)">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+
+    <td>
+      <input class="form-control ker-cell" maxlength="20" id="barkod_${rowCounter}"
+        onkeydown="focusNextCell(event, this)"
+        onchange="updateRowValues(this)">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell" maxlength="16" id="ukodu_${rowCounter}"
+        placeholder="XX-XXX-XXXX-XXXX"
+        onkeydown="focusNextCell(event, this)"
+        onchange="updateValues(this)">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell" maxlength="16" id="pakno_${rowCounter}"
+        onkeydown="if(event.key === 'Enter') paketkontrol(event,this)">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-right"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur0(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber0(0)}">
+    </td>
+
+    <td>
+      <label class="form-control ker-cell ker-label ker-right">
+        <span>&nbsp;</span>
+      </label>
+    </td>
+
+    <td>
+      <label class="form-control ker-cell ker-label ker-right" style="color:darkgreen;">
+        <span>&nbsp;</span>
+      </label>
+    </td>
+
+    <td>
+      <input class="form-control ker-cell"
+        onfocus="selectAllContent(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-right"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber2(0)}">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-right"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber2(0)}">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-right"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber2(0)}">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-right"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber2(0)}">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell"
+        onfocus="selectAllContent(this)"
+        onkeydown="focusNextRow(event, this)">
+    </td>
+
+    <!-- gizli kolonlar (senin mevcut yapın birebir) -->
+    <td style="display:none;"></td>
+    <td style="display:none;">1900-01-01 00:00:00.000</td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;">0</td>
+    <td style="display:none;">0</td>
+    <td style="display:none;">0</td>
+    <td style="display:none;">0</td>
+    <td style="display:none;"></td>
+    <td style="display:none;">0</td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+  `;
+
+  applyMask(); // Yeni eklenen inputlara maskeyi uygula (senin fonksiyon)
 }
+
 
 
 function satirsil(button) {
@@ -373,8 +421,7 @@ function focusNextCell(event, element) {
 
 function clearInputs() {
 
-	document.getElementById("urunadi").innerText = '';
-	document.getElementById("anaalt").innerText = '';
+
 	document.getElementById("iskonto").innerText = "0.00";
 	document.getElementById("bakiye").innerText = "0.00";
 	document.getElementById("kdv").innerText = "0.00";

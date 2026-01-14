@@ -34,68 +34,98 @@ function initializeRows() {
 }
 
 function satirekle() {
-	const table = document.getElementById("kerTable").getElementsByTagName("tbody")[0];
-	const rowCount = table.rows.length;
-	if (rowCount == 250) {
-		alert("En fazla 250 satir ekleyebilirsiniz.");
-		return
-	}
-	const newRow = table.insertRow();
-	incrementRowCounter();
+  const table = document.getElementById("kerTable").getElementsByTagName("tbody")[0];
+  const rowCount = table.rows.length;
+  if (rowCount === 250) {
+    alert("En fazla 250 satir ekleyebilirsiniz.");
+    return;
+  }
 
-	let paknooptionsHTML = urnkodlar.map(kod => `<option value="${kod.Paket_No}">${kod.Paket_No}</option>`).join("");
+  const newRow = table.insertRow();
+  incrementRowCounter();
 
-	newRow.innerHTML = `
-		<td >
-			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
-		</td>
-        <td>
-	        <div style="position: relative; width: 100%;">
-	            <input class="form-control cins_bold" list="pakOptions_${rowCounter}"  id="pakno_${rowCounter}" onkeydown="if(event.key === 'Enter') paketkontrol(event,this)">
-				<datalist id="pakOptions_${rowCounter}">${paknooptionsHTML}</datalist>
-		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-	        </div>
-	    </td>
-   		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-		<td><label class="form-control"style="display: block;width:100%;height:100%;text-align:right;"><span>&nbsp;</span></label></td>
-        <td><label class="form-control" style="display: block;width:100%;height:100%;text-align:right;font-weight:bold;"><span>&nbsp;</span></label></td>
-        <td><label class="form-control" style="display: block;width:100%;height:100%;text-align:right;font-weight:bold; color:darkgreen;"><span>&nbsp;</span></label></td>
-		<td>
-			<div style="position: relative; width: 100%;">
-			    <select class="form-control" id="depo_${rowCounter}" onkeydown="focusNextCell(event, this)">
-		    	    ${depolar.map(kod => `
-		        	    <option value="${kod.DEPO}" >
-		        	        ${kod.DEPO}
-		        	    </option>
-		        	`).join('')}
-		    	</select>
-		    	<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-			</div>
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;font-weight:bold;">
-		</td>
-        <td>
-			<input class="form-control" onfocus="selectAllContent(this)" onkeydown="focusNextRow(event, this)">
-		</td>
-		<td style="display: none;"></td>
-	    `;
-	return newRow;
+  const paknooptionsHTML = (urnkodlar || [])
+    .map(kod => `<option value="${kod.Paket_No}">${kod.Paket_No}</option>`)
+    .join("");
+
+  newRow.innerHTML = `
+    <td>
+      <button id="bsatir_${rowCounter}" type="button"
+        class="btn btn-secondary ker-rowbtn" onclick="satirsil(this)">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+
+    <td>
+      <div class="ker-dd">
+        <input class="form-control cins_bold ker-cell"
+          list="pakOptions_${rowCounter}"
+          id="pakno_${rowCounter}"
+          onkeydown="if(event.key === 'Enter') paketkontrol(event,this)">
+        <datalist id="pakOptions_${rowCounter}">${paknooptionsHTML}</datalist>
+        <span class="ker-dd-arrow">▼</span>
+      </div>
+    </td>
+
+    <td><label class="form-control ker-chip"><span>&nbsp;</span></label></td>
+    <td><label class="form-control ker-chip"><span>&nbsp;</span></label></td>
+    <td><label class="form-control ker-chip ker-chip--num"><span>&nbsp;</span></label></td>
+
+    <td><label class="form-control ker-chip ker-chip--num ker-chip--bold"><span>&nbsp;</span></label></td>
+
+    <td><label class="form-control ker-chip ker-chip--num ker-chip--bold ker-chip--green"><span>&nbsp;</span></label></td>
+
+    <td>
+      <div class="ker-dd">
+        <select class="form-select ker-cell" id="depo_${rowCounter}"
+          onkeydown="focusNextCell(event, this)">
+          ${(depolar || []).map(kod => `
+            <option value="${kod.DEPO}">${kod.DEPO}</option>
+          `).join("")}
+        </select>
+        <span class="ker-dd-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-cell--num"
+        onfocus="selectAllContent(this)" onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber2(0)}">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-cell--num"
+        onfocus="selectAllContent(this)" onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber2(0)}">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-cell--num"
+        onfocus="selectAllContent(this)" onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber2(0)}">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell ker-cell--num ker-cell--bold"
+        onfocus="selectAllContent(this)" onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)"
+        value="${formatNumber2(0)}">
+    </td>
+
+    <td>
+      <input class="form-control ker-cell"
+        onfocus="selectAllContent(this)" onkeydown="focusNextRow(event, this)">
+    </td>
+
+    <td style="display:none;"></td>
+  `;
+
+  return newRow;
 }
+
 
 function handleBlur(input) {
 
@@ -179,7 +209,7 @@ async function paketkontrol(event, input) {
 }
 
 function updateColumnTotal() {
-	const rows = document.querySelectorAll('table tr');
+const rows = document.querySelectorAll('#kerTable tbody tr');
 	const totalSatirCell = document.getElementById("totalSatir");
 	const totalTutarCell = document.getElementById("totalTutar");
 	const totalMiktarCell = document.getElementById("totalMiktar");
@@ -711,7 +741,7 @@ function getTableData() {
 		if (firstColumnValue.trim()) {
 			const rowData = {
 				paketno: cells[1]?.querySelector('input')?.value || "",
-				cdepostring: cells[7]?.querySelector('input')?.value || "",
+				cdepostring: cells[7]?.querySelector('select')?.value || "",
 				cfiat: parseLocaleNumber(cells[8]?.querySelector('input')?.value || 0),
 				ciskonto: parseLocaleNumber(cells[9]?.querySelector('input')?.value || 0),
 				ckdv: parseLocaleNumber(cells[10]?.querySelector('input')?.value || 0),

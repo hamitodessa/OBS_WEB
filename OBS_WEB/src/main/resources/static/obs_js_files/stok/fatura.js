@@ -52,76 +52,137 @@ function initializeRows() {
 	}
 }
 function satirekle() {
-	const table = document.getElementById("fatTable").getElementsByTagName("tbody")[0];
-	const newRow = table.insertRow();
-	incrementRowCounter();
+  const tbody = document.getElementById("fatTable")?.getElementsByTagName("tbody")?.[0];
+  if (!tbody) {
+    console.error("fatTable tbody bulunamadı!");
+    return;
+  }
 
-	let ukoduoptionsHTML = urnkodlar.map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`).join("");
-	newRow.innerHTML = `
-		<td >
-			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
-		</td>
-   		<td>
-		    <div style="position: relative; width: 100%;">
-		        <input class="form-control cins_bold" list="barkodOptions_${rowCounter}" maxlength="20" id="barkod_${rowCounter}" 
-		            onkeydown="focusNextCell(event, this)" ondblclick="openurunkodlariModal('barkod_${rowCounter}', 'fatsatir','barkodkod')" onchange="updateRowValues(this)">
-		        <datalist id="barkodOptions_${rowCounter}"></datalist>
-		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		    </div>
-		</td>
+  const newRow = tbody.insertRow();
+  incrementRowCounter();
 
-		<td>
-		    <div style="position: relative; width: 100%;">
-		        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}" maxlength="12" id="ukodu_${rowCounter}" 
-		            onkeydown="focusNextCell(event, this)" ondblclick="openurunkodlariModal('ukodu_${rowCounter}', 'imalatsatir','ukodukod')" onchange="updateRowValues(this)">
-		        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
-		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		    </div>
-		</td>
-		<td>
-		<div style="position: relative; width: 100%;">
-		    <select class="form-control" id="depo_${rowCounter}">
-		        ${depolar.map(kod => `
-		            <option value="${kod.DEPO}" >
-		                ${kod.DEPO}
-		            </option>
-		        `).join('')}
-		    </select>
-		    <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		</div>
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)" 
-			  onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"
-			  onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur3(this)"
-			  onkeydown="focusNextCell(event, this)" value="${formatNumber3(0)}" style="text-align:right;">
-		</td>
-		<td>
-			<label class="form-control" style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label>
-		</td>
-		<td>
-			<input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)" 
-			onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;" >
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-        <td>
-		     <input class="form-control" onfocus="selectAllContent(this)" 
-		     onkeydown="focusNextRow(event, this)" value="" style="text-align:right;">
-		</td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-		<td style="display: none;"></td>
-	    `;
+  // Ürün kodu seçenekleri (datalist)
+  const ukoduoptionsHTML = (urnkodlar || [])
+    .map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`)
+    .join("");
+
+  // Depo seçenekleri (select)
+  const depoOptionsHTML = (depolar || [])
+    .map(kod => `<option value="${kod.DEPO}">${kod.DEPO}</option>`)
+    .join("");
+
+  // NOT: burada inline style yok -> hepsi class ile kontrol
+  newRow.innerHTML = `
+    <td>
+      <button id="bsatir_${rowCounter}" type="button"
+        class="btn btn-secondary"
+        onclick="satirsil(this)">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+
+    <td>
+      <div class="fat-rel">
+        <input class="form-control cins_bold"
+          list="barkodOptions_${rowCounter}"
+          maxlength="20"
+          id="barkod_${rowCounter}"
+          onkeydown="focusNextCell(event, this)"
+          ondblclick="openurunkodlariModal('barkod_${rowCounter}', 'fatsatir','barkodkod')"
+          onchange="updateRowValues(this)">
+        <datalist id="barkodOptions_${rowCounter}"></datalist>
+        <span class="fat-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <div class="fat-rel">
+        <input class="form-control cins_bold"
+          list="ukoduOptions_${rowCounter}"
+          maxlength="12"
+          id="ukodu_${rowCounter}"
+          onkeydown="focusNextCell(event, this)"
+          ondblclick="openurunkodlariModal('ukodu_${rowCounter}', 'imalatsatir','ukodukod')"
+          onchange="updateRowValues(this)">
+        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
+        <span class="fat-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <div class="fat-rel">
+        <select class="form-control" id="depo_${rowCounter}">
+          ${depoOptionsHTML}
+        </select>
+        <span class="fat-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber2(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber2(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber3(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur3(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <label class="form-control"><span>&nbsp;</span></label>
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber2(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber2(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <input class="form-control"
+        value=""
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onkeydown="focusNextRow(event, this)">
+    </td>
+
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+    <td style="display:none;"></td>
+  `;
+
+  return newRow;
 }
+
 
 function satirsil(button) {
 	const row = button.parentElement.parentElement;

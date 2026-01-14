@@ -250,61 +250,110 @@ function initializeRows() {
 	}
 }
 function satirekle() {
-	const table = document.getElementById("imaTable").getElementsByTagName("tbody")[0];
-	const newRow = table.insertRow();
-	incrementRowCounter();
+  const tbody = document
+    .getElementById("imaTable")
+    ?.getElementsByTagName("tbody")?.[0];
 
-	let ukoduoptionsHTML = urnkodlar.map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`).join("");
-	newRow.innerHTML = `
-		<td >
-			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
-		</td>
-		<td>
-			<label class="form-control" >CIKAN</label>
-		</td>
-		<td>
-		    <div style="position: relative; width: 100%;">
-		        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}" maxlength="12" id="ukodu_${rowCounter}" 
-		            onkeydown="focusNextCell(event, this)" ondblclick="openurunkodlariModal('ukodu_${rowCounter}', 'imalatsatir','ukodukod')" onchange="updateRowValues(this)">
-		        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
-		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		    </div>
-		</td>
-		<td>
-			<label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label>
-		</td>
-		<td>
-		      <input class="form-control"  onkeydown="focusNextCell(event, this)" onfocus="selectAllContent(this)"  >
-		</td>
-		<td>
-		<div style="position: relative; width: 100%;">
-		    <select class="form-control" id="depo_${rowCounter}">
-		        ${depolar.map(kod => `
-		            <option value="${kod.DEPO}" >
-		                ${kod.DEPO}
-		            </option>
-		        `).join('')}
-		    </select>
-		    <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		</div>
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur3(this)" 
-			  onkeydown="focusNextCell(event, this)" value="${formatNumber3(0)}" style="text-align:right;">
-		</td>
-		<td>
-				<label class="form-control" style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label>
-		</td>
-		<td>
-			<input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)" 
-			onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;" >
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextRow(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-	    `;
+  if (!tbody) {
+    console.error("imaTable tbody bulunamadı!");
+    return;
+  }
+
+  const newRow = tbody.insertRow();
+  incrementRowCounter();
+
+  const ukoduoptionsHTML = (urnkodlar || [])
+    .map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`)
+    .join("");
+
+  const depoOptionsHTML = (depolar || [])
+    .map(kod => `<option value="${kod.DEPO}">${kod.DEPO}</option>`)
+    .join("");
+
+  newRow.innerHTML = `
+    <td>
+      <button id="bsatir_${rowCounter}"
+        type="button"
+        class="btn btn-secondary"
+        onclick="satirsil(this)">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+
+    <td>
+      <label class="form-control">CIKAN</label>
+    </td>
+
+    <td>
+      <div class="ima-rel">
+        <input class="form-control cins_bold"
+          list="ukoduOptions_${rowCounter}"
+          maxlength="12"
+          id="ukodu_${rowCounter}"
+          onkeydown="focusNextCell(event, this)"
+          ondblclick="openurunkodlariModal('ukodu_${rowCounter}','imalatsatir','ukodukod')"
+          onchange="updateRowValues(this)">
+        <datalist id="ukoduOptions_${rowCounter}">
+          ${ukoduoptionsHTML}
+        </datalist>
+        <span class="ima-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <label class="form-control"><span>&nbsp;</span></label>
+    </td>
+
+    <td>
+      <input class="form-control"
+        onkeydown="focusNextCell(event, this)"
+        onfocus="selectAllContent(this)">
+    </td>
+
+    <td>
+      <div class="ima-rel">
+        <select class="form-control" id="depo_${rowCounter}">
+          ${depoOptionsHTML}
+        </select>
+        <span class="ima-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber3(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur3(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <label class="form-control"><span>&nbsp;</span></label>
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber2(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber2(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextRow(event, this)">
+    </td>
+  `;
+
+  return newRow;
 }
+
 
 function handleBlur3(input) {
 	input.value = formatNumber3(parseLocaleNumber(input.value));

@@ -2,60 +2,584 @@
 <link rel="stylesheet" href="style/adrkodlari.css" />
 
 <style>
-.editable-cell {
-	cursor: text;
+/* =========================
+   2026 CAM – KERESTE (TEMIZ)
+   wrapper: #ara_content
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); }
+
+/* ===== CARD (genel) ===== */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.double-column {
-	text-align: right;
+/* ===== NAV TABS ===== */
+#ara_content .nav-tabs{
+  border-bottom: 1px solid rgba(255,255,255,.14) !important;
+  gap: 8px;
+}
+#ara_content .nav-tabs .nav-link{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-bottom: none !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.80) !important;
+  border-radius: 14px 14px 0 0 !important;
+  font-weight: 900;
+  padding: 10px 14px;
+}
+#ara_content .nav-tabs .nav-link.active{
+  background: linear-gradient(135deg, rgba(56,189,248,.28), rgba(34,197,94,.18)) !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-.tah-table th, .tah-table td {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	vertical-align: middle;
-	height: 15px;
+/* ===== GROUP BOX ===== */
+#ara_content .group-box{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35) !important;
+  border-radius: 16px;
+  padding: 12px;
+  margin: 10px 0;
 }
 
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: 98%;
-	box-sizing: border-box;
-	overflow-x: auto; /* Yatay kaydırma ekler */
+/* ===== LABEL ===== */
+#ara_content label{
+  color: rgba(255,255,255,.84);
+  font-weight: 800;
+  font-size: 13px;
+  margin: 0 !important;
+  white-space: nowrap;
 }
 
-.child {
-	width: 100%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	align-items: center;
+/* ===== INPUT / SELECT (base) ===== */
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+  padding: 10px 14px !important;
+  outline: none;
+}
+#ara_content .form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+  font-weight: 600;
+}
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65) !important;
+  color:#fff !important;
+}
+#ara_content input[type="date"]{ color-scheme: dark; }
+
+/* ===== SELECT ARROW (BEYAZ) ===== */
+#ara_content .form-select{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 44px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 18px 18px !important;
+}
+#ara_content .form-select::-ms-expand{ display: none; }
+
+/* ===== BUTTONS ===== */
+#ara_content .btn.btn-primary{
+  border: none !important;
+  border-radius: 12px;
+  font-weight: 900;
+  color: #fff !important;
+  background: linear-gradient(135deg,#38bdf8,#22c55e) !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+#ara_content .btn.btn-primary:hover{ filter: brightness(1.10); }
+
+#ara_content .btn.btn-secondary{
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.88) !important;
+}
+#ara_content .btn.btn-secondary:hover{
+  background: rgba(56,189,248,.12) !important;
+  border-color: rgba(56,189,248,.35) !important;
 }
 
+/* =========================
+   KER - GIRIS BILGILERI (KOMPAKT)
+   sadece #tab1 .ker-compact
+   ========================= */
 
-.form-row {
-	display: flex;
-	align-items: center;
-	margin-bottom: 5px;
+#ara_content #tab1 .ker-compact{
+  padding: 10px 12px !important;
 }
 
-.saga-bold {
-	text-align: right;
-	font-weight: bold;
+/* eskiden span ile boşluk veriyordun, kompakt modda kapat */
+#ara_content #tab1 .ker-compact span[style*="padding-left"]{ display:none !important; }
+
+/* satırlar grid */
+#ara_content #tab1 .ker-compact .ker-row{
+  display: grid !important;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 8px;
+
+  /* ✅ satırlar arası 5px boşluk */
+  margin: 0 0 5px 0 !important;
+}
+#ara_content #tab1 .ker-compact .ker-row:last-child{ margin-bottom: 0 !important; }
+
+/* input/select kompakt */
+#ara_content #tab1 .ker-compact .form-control,
+#ara_content #tab1 .ker-compact .form-select{
+  height: 38px !important;
+  padding: 8px 10px !important;
+  border-radius: 12px !important;
+  font-weight: 800;
 }
 
-.table .thead-dark th {
+/* refresh butonu */
+#ara_content #tab1 .ker-compact .btn.btn-secondary{
+  height: 38px !important;
+  width: 44px;
+  padding: 0 !important;
+  border-radius: 12px !important;
+}
+
+/* 1. satır */
+#ara_content #tab1 .ker-compact .ker-row.row-1{
+  grid-template-columns:
+    72px 120px 44px
+    125px
+    72px 150px
+    72px 150px
+    62px 150px
+    55px 60px;
+}
+
+/* 2. satır (senin istediğin hizaya göre: Nakliyeci Ozel Kod altı) */
+#ara_content #tab1 .ker-compact .ker-row.row-2{
+  grid-template-columns:
+    72px 120px 44px 125px     /* solda boş */
+    72px 150px                /* Nakliyeci */
+    72px 150px                /* Mensei */
+    62px 150px                /* Depo */
+    55px 80px                 /* Kur */
+  !important;
+}
+#ara_content #tab1 .ker-compact .ker-row.row-2 > :first-child{
+  grid-column: 5 !important;
+}
+
+/* 3. satır */
+#ara_content #tab1 .ker-compact .ker-row.row-3{
+  grid-template-columns:
+    72px 1fr
+    72px 1fr;
+}
+
+/* isim label'ları */
+#ara_content #tab1 .ker-compact .ker-wide{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+/* responsive */
+@media (max-width: 1200px){
+  #ara_content #tab1 .ker-compact .ker-row.row-1,
+  #ara_content #tab1 .ker-compact .ker-row.row-2,
+  #ara_content #tab1 .ker-compact .ker-row.row-3{
+    grid-template-columns: 110px 1fr !important;
+  }
+  #ara_content #tab1 .ker-compact .btn.btn-secondary{ width: 100%; }
+}
+
+/* =========================
+   TABLE – kerTable
+   ========================= */
+#ara_content #kerTable{
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,.03) !important;
+}
+#ara_content #kerTable thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+}
+#ara_content #kerTable th,
+#ara_content #kerTable td{
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  padding: 6px 10px !important;
+  height: 28px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+#ara_content #kerTable tbody td{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+}
+#ara_content #kerTable tbody tr.selected > *{
+  background: linear-gradient(135deg, rgba(56,189,248,.18), rgba(34,197,94,.12)) !important;
+  color: #fff !important;
+}
+#ara_content .double-column,
+#ara_content .saga-bold{
+  text-align: right !important;
+  font-weight: 900;
+}
+#ara_content #kerTable tfoot td{
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
+}
+#ara_content #totalTutar{
+  font-size: 15px;
+  font-weight: 900;
+  text-align: right;
+  color: #fff !important;
+  text-shadow: 0 2px 10px rgba(56,189,248,.55);
+}
+
+/* error */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
   color: #fff;
-  background: #214162;
+  font-weight: 900;
+}
+
+/* =========================
+   ker-info (alt toplamlar alanı)
+   ========================= */
+#ara_content .ker-info{
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)) !important;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 20px;
+  box-shadow: 0 20px 55px rgba(0,0,0,.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 10px 12px !important;
+}
+#ara_content .ker-info .form-row{
+  display:flex !important;
+  flex-wrap:wrap;
+  align-items:center;
+  gap: 6px 10px !important;
+  margin-bottom: 6px !important;
+}
+#ara_content .ker-info .form-row > span{
+  color: rgba(255,255,255,.72) !important;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1.1;
+  text-shadow: 0 1px 8px rgba(0,0,0,.35);
+}
+#ara_content .ker-info .form-row > label{
+  display:inline-flex;
+  align-items:center;
+
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: 10px !important;
+
+  padding: 4px 8px !important;
+  min-height: 28px !important;
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,.45);
+
+  /* default solda */
+  justify-content: flex-start;
+  text-align: left !important;
+}
+/* sadece sağa hizalılar */
+#ara_content .ker-info .form-row > label[style*="text-align: right"]{
+  justify-content: flex-end;
+  text-align: right !important;
+}
+#ara_content .ker-info .form-control{
+  height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+/* =========================
+   2026 CAM – child SCROLL (SEKSI)
+   ========================= */
+#ara_content .group-box{
+  /* kart gibi dursun */
+  background: rgba(8,14,26,.18);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  padding: 10px;
+
+  /* ✅ scroll */
+  max-height: calc(100vh - 220px);  /* header/tablar payı */
+  overflow-y: auto;
+  overflow-x: auto;
+
+  /* cam hissi */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* WebKit scrollbar (Chrome/Edge) */
+#ara_content .group-box::-webkit-scrollbar{
+  width: 10px;
+  height: 10px;
+}
+#ara_content .group-box::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .group-box::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg,
+    rgba(56,189,248,.65),
+    rgba(34,197,94,.55)
+  );
+  border-radius: 10px;
+  box-shadow:
+    0 0 12px rgba(56,189,248,.25),
+    inset 0 0 0 1px rgba(255,255,255,.20);
+}
+#ara_content .group-box::-webkit-scrollbar-thumb:active{
+  background: linear-gradient(135deg,
+    rgba(56,189,248,.85),
+    rgba(34,197,94,.70)
+  );
+}
+
+/* Firefox */
+#ara_content .group-box{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+
+
+/* =========================
+   2026 CAM – TABLE CELL COMPACT
+   sadece #kerTable icinde
+   ========================= */
+
+#ara_content #kerTable td{ padding: 4px 8px !important; } /* satırlar yapışmasın */
+#ara_content #kerTable tbody tr{ height: 36px; }          /* row yüksekliği */
+
+/* satır içi input/label kompakt */
+#ara_content #kerTable .ker-cell{
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 4px 8px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+
+  background: rgba(8,14,26,.55) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: rgba(255,255,255,.92) !important;
+
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+
+/* focus */
+#ara_content #kerTable .ker-cell:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
+  background: rgba(8,14,26,.65) !important;
+  color: #fff !important;
+}
+
+/* label gibi duran (readonly) hücreler */
+#ara_content #kerTable .ker-cell.ker-label{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important; /* default sağ */
+  pointer-events: none;                 /* tıklanmasın */
+  user-select: none;
+}
+
+/* sağ-sol yardımcıları */
+#ara_content #kerTable .ker-right{ text-align:right !important; }
+#ara_content #kerTable .ker-left{ text-align:left !important; }
+
+/* satır içi buton (çöp kutusu) kompakt */
+#ara_content #kerTable .ker-rowbtn{
+  height: 32px !important;
+  width: 38px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+}
+/* =========================
+   2026 CAM – TAB2 / TAB3 (FATURA MANTIĞI)
+   Scope: #ara_content #tab2 / #tab3
+   ========================= */
+
+#ara_content #tab2 .card,
+#ara_content #tab3 .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+
+  /* KOMPAKT */
+  padding: 10px 12px !important;
+}
+
+/* satırlar kompakt */
+#ara_content #tab2 .form-row,
+#ara_content #tab3 .form-row{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px 14px !important;
+  margin: 0 0 8px 0 !important;
+  flex-wrap: wrap;
+}
+
+/* input-group cam */
+#ara_content #tab2 .input-group,
+#ara_content #tab3 .input-group{
+  margin: 0 !important;
+}
+
+#ara_content #tab2 .input-group-text,
+#ara_content #tab3 .input-group-text{
+  height: 44px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.45) !important;
+  color: rgba(255,255,255,.88) !important;
+  font-weight: 900 !important;
+  letter-spacing: .2px !important;
+  padding: 10px 14px !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+
+/* tab2-tab3 input cam */
+#ara_content #tab2 .form-control,
+#ara_content #tab3 .form-control{
+  height: 44px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+  padding: 10px 14px !important;
+  outline: none !important;
+}
+
+#ara_content #tab2 .form-control::placeholder,
+#ara_content #tab3 .form-control::placeholder{
+  color: rgba(255,255,255,.55) !important;
+  font-weight: 600 !important;
+}
+
+#ara_content #tab2 .form-control:focus,
+#ara_content #tab3 .form-control:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
+  background: rgba(8,14,26,.65) !important;
+  color:#fff !important;
+}
+
+/* TAB2 checkbox - cam chip */
+#ara_content #tab2 .form-check{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+
+  padding: 10px 12px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+
+  margin: 0 !important;
+}
+
+#ara_content #tab2 .form-check-input{
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  background-color: rgba(255,255,255,.08) !important;
+}
+
+#ara_content #tab2 .form-check-input:checked{
+  background-color: rgba(34,197,94,.85) !important;
+  border-color: rgba(34,197,94,.85) !important;
+}
+
+#ara_content #tab2 .form-check-label{
+  margin: 0 !important;
+  color: rgba(255,255,255,.86) !important;
+  font-weight: 900 !important;
+  font-size: 13px !important;
+  letter-spacing: .15px !important;
+}
+
+/* responsive: max-width inline'ları taşırmasın */
+@media (max-width: 1100px){
+  #ara_content #tab2 .input-group,
+  #ara_content #tab3 .input-group{
+    width: 100% !important;
+  }
+  #ara_content #tab2 .form-control[style*="max-width"],
+  #ara_content #tab3 .form-control[style*="max-width"]{
+    max-width: none !important;
+    width: 100% !important;
+  }
+  #ara_content #tab2 .form-check{
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
 }
 
 
 </style>
-
 <div class="card p-2">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
 		<li class="nav-item" role="presentation">
@@ -79,242 +603,230 @@
 <!-- Tab Content -->
 <div class="tab-content" id="myTabContent">
 	<!-- Tab 1 Content -->
-	<div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-	
+	<div class="tab-pane fade show active" id="tab1" role="tabpanel"
+		aria-labelledby="tab1-tab">
 		<div class="child">
 			<!-- ****************************************************************************************************** -->
-			<div class="group-box">
-				<div style="display: flex; align-items: center; ">
-					<label style="min-width:85px;">Fis No</label>
-					<div style="min-width: 120px;max-width: 120px;">
-						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') kerOku()" ondblclick="yeniFis();">
+			<div class="group-box ker-compact">
+				<!-- SATIR 1 -->
+				<div class="ker-row row-1">
+					<label>Fis No</label>
+					<div style="min-width: 120px; max-width: 120px;">
+						<input class="form-control" maxlength="10" id="fisno"
+							onkeydown="if(event.key === 'Enter') kerOku()"
+							ondblclick="yeniFis();">
 					</div>
-					<span style="padding-left: 5px;"></span>
-					<button type="button" class="btn btn-secondary ml-2" onclick="sonfis()">
-							<i class="fa fa-refresh"></i>
+					<button type="button" class="btn btn-secondary" onclick="sonfis()">
+						<i class="fa fa-refresh"></i>
 					</button>
-					<span style="padding-left: 10px;"></span> 
-					<input type="date" id="fisTarih" class="form-control" th:value="${fisTarih}" style="width: 125px; font-weight: bold;" />
-					<span style="padding-left: 10px;"></span> 
-					<label style="width:75px;">Ozel Kod</label>	
-					<select class="form-select" style=" width: 150px; " id="ozelkod" >
-   						<option th:each="kod : ${oz1Kodlari}" th:value="${kod.OZEL_KOD_1}" th:text="${kod.OZEL_KOD_1}"></option>
-					</select>
-					<span style="padding-left: 10px;"></span> 	
-					<label style="width:75px;">Ana Grup</label>	
-					<select class="form-select cins_bold" style="width: 150px; " id="anagrp" onchange="anagrpChanged(this)">
-   						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
-					</select>
-					<span style="padding-left: 10px;"></span> 	
-					<label style="min-width:65px;">Alt Grup</label>	
-					<select class="form-select cins_bold" style="width: 150px; " id="altgrp" disabled>
-    				</select>
-					<span style="padding-left: 10px;"></span> 	
-					<label style="width:65px;">Doviz</label>	
-					<input id="dovizcins" class="form-control" style="width: 50px;" th:value="${doviz}"/>	
+					<input type="date" id="fisTarih" class="form-control"
+						th:value="${fisTarih}" /> <label>Ozel Kod</label> <select
+						class="form-select" id="ozelkod">
+						<option th:each="kod : ${oz1Kodlari}" th:value="${kod.OZEL_KOD_1}"
+							th:text="${kod.OZEL_KOD_1}"></option>
+					</select> <label>Ana Grup</label> <select class="form-select cins_bold"
+						id="anagrp" onchange="anagrpChanged(this)">
+						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}"
+							th:text="${kod.ANA_GRUP}"></option>
+					</select> <label>Alt Grup</label> <select class="form-select cins_bold"
+						id="altgrp" disabled></select>
+						
+					<label>Doviz</label>
+					<input id="dovizcins" class="form-control" th:value="${doviz}" />
 				</div>
-			<!-- 2 SATIR  -->
-			<div style="display: flex; align-items: center;margin-top:10px; ">
-					<label style="min-width:85px;">Cari Kod</label>
-					<div style="min-width: 120px;max-width: 120px;">
-						<input class="form-control" style="font-weight: bold;" id="carikod"
-						  ondblclick="openSecondModal('carikod', 'fatura')" maxlength="12" oninput="hesapAdiOgren(this.value, 'cariadilbl')">
+				<!-- SATIR 2 -->
+				<div class="ker-row row-2">
+					<label>Nakliyeci</label> <select class="form-select cins_bold"
+						id="nakliyeci">
+						<option th:each="kod : ${nakKodlari}" th:value="${kod.UNVAN}"
+							th:text="${kod.UNVAN}"></option>
+					</select> <label>Mensei</label> <select class="form-select cins_bold"
+						id="mensei">
+						<option th:each="kod : ${menseiKodlari}" th:value="${kod.MENSEI}"
+							th:text="${kod.MENSEI}"></option>
+					</select> <label>Depo</label> <select class="form-select cins_bold"
+						id="depo">
+						<option th:each="kod : ${depoKodlari}" th:value="${kod.DEPO}"
+							th:text="${kod.DEPO}"></option>
+					</select> <label>Kur</label> 
+					<input id="kur" class="form-control"
+						style="text-align: right;" value="0.0000" /> 
+						
+					
+				</div>
+				<!-- ******************************* 3 -->
+				<div class="ker-row row-3">
+					<label>Cari Kod</label>
+					<div style="min-width: 120px; max-width: 120px;">
+						<input class="form-control" id="carikod"
+							ondblclick="openSecondModal('carikod', 'fatura')" maxlength="12"
+							oninput="hesapAdiOgren(this.value, 'cariadilbl')">
 					</div>
-					<span style="padding-left: 187px;"></span> 
-					<label style="width:70px;">Adres Kod</label>
-					<span style="padding-left: 5px;"></span> 
-					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')" ondblclick="openadrkodlariModal('adreskod', 'fatura')"  style="width: 120px; font-weight: bold;" />
-					<span style="padding-left: 40px;"></span> 	
-					<label style="width:74px;">Nakliyeci</label>	
-					<select class="form-select cins_bold" style="width: 150px; " id="nakliyeci" >
-						<option th:each="kod : ${nakKodlari}" th:value="${kod.UNVAN}" th:text="${kod.UNVAN}"></option>
-					</select>
-                    <span style="padding-left: 10px;"></span> 	
-                    <label style="width:64px;">Mensei</label>	
-                    <select class="form-select cins_bold" style="width: 150px; " id="mensei" >
-						<option th:each="kod : ${menseiKodlari}" th:value="${kod.MENSEI}" th:text="${kod.MENSEI}"></option>
-                    </select>
-					<span style="padding-left: 13px;"></span> 	
-					<label style="width:40px;">Kur</label>	
-					<input  id="kur" class="form-control" style="width: 70px;text-align: right;" value="0.0000" />
+					<label>Adres Kod</label>
+					<div style="min-width: 120px; max-width: 120px;">
+						<input id="adreskod" class="form-control"
+							oninput="adrhesapAdiOgren('adreskod','adresadilbl')"
+							ondblclick="openadrkodlariModal('adreskod', 'fatura')" />
+					</div>
 				</div>
-			<!-- 2 SATIR  SONU -->
-			<!-- 4 SATIR  -->
-			<div style="display: flex; align-items: center;margin-top:10px; ">
-					<span style="padding-left: 85px;"></span> 
-					<label style="width:350px;" id="cariadilbl">....</label>
-					<span style="padding-left: 30px;"></span> 
-					<label style="min-width:300px;" id="adresadilbl">....</label>	
-                    <span style="padding-left: 99px;"></span> 	
-                    <label style="width:63px;">Depo</label>	
-                    <select class="form-select cins_bold" style="width: 150px; " id="depo" >
-						<option th:each="kod : ${depoKodlari}" th:value="${kod.DEPO}" th:text="${kod.DEPO}"></option>
-                    </select>
-			</div>
-			<!-- 4 SATIR  SONU -->
-			</div>
-			<div class="group-box">
-				<div class="form-row">
-					<button class="btn btn-primary" type="button" id="kerkaydetButton"
-						onclick="kerKayit()">Kaydet</button>
-					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="kersilButton"	onclick="kerYoket()">Sil</button>
-					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="carkayitButton" onclick="openFirstModal('kerestegiris')">Cari Kaydet</button>
-					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="girisdownloadButton" onclick="downloadgiris()">Yazdir</button>
-					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="mailButton" onclick="girismailAt()">Mail At</button>
+				<div class="ker-row row-3">
+					<label>Cari</label> <label class="ker-wide" id="cariadilbl">....</label>
+					<label>Adres</label> <label class="ker-wide" id="adresadilbl">....</label>
+				</div>
+				<div class="group-box">
+					<div class="form-row">
+						<button class="btn btn-primary" type="button" id="kerkaydetButton"
+							onclick="kerKayit()">Kaydet</button>
+						<span style="padding-left: 5px;"></span>
+						<button class="btn btn-primary" type="button" id="kersilButton"
+							onclick="kerYoket()">Sil</button>
+						<span style="padding-left: 5px;"></span>
+						<button class="btn btn-primary" type="button" id="carkayitButton"
+							onclick="openFirstModal('kerestegiris')">Cari Kaydet</button>
+						<span style="padding-left: 5px;"></span>
+						<button class="btn btn-primary" type="button"
+							id="girisdownloadButton" onclick="downloadgiris()">Yazdir</button>
+						<span style="padding-left: 5px;"></span>
+						<button class="btn btn-primary" type="button" id="mailButton"
+							onclick="girismailAt()">Mail At</button>
+					</div>
 				</div>
 			</div>
 		</div>
-</div>
-    <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-	<!-- Tab 2 Content -->
+		<div id="errorDiv"></div>
+		<!-- Tab 2 Content -->
+	</div>
 	<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
 		<div class="card p-4">
-		<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">Not 1</span>
-				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="not1" class="form-control" style="max-width: 300px;">
-			</div>
-			<div class="form-check" style="width: 350px;">
-				<input type="checkbox" class="form-check-input" id="fatmikyazdir">
-				<label class="form-check-label" for="izinlimi" >Faturada Toplam miktar Yazdir</label>
-			</div>
-		</div>
 			<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">Not 2</span>
+				<div class="input-group" style="padding: 2px;">
+					<span class="input-group-text" style="width: 150px;">Not 1</span> <span
+						style="padding-left: 5px;"></span> <input type="text" id="not1"
+						class="form-control" style="max-width: 300px;">
 				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="not2" class="form-control" style="max-width: 300px;">
-			</div>
+				<div class="form-check" style="width: 350px;">
+					<input type="checkbox" class="form-check-input" id="fatmikyazdir">
+					<label class="form-check-label" for="izinlimi">Faturada
+						Toplam miktar Yazdir</label>
+				</div>
 			</div>
 			<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">Not 3</span>
+				<div class="input-group" style="padding: 2px;">
+					<span class="input-group-text" style="width: 150px;">Not 2</span> <span
+						style="padding-left: 5px;"></span> <input type="text" id="not2"
+						class="form-control" style="max-width: 300px;">
 				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="not3" class="form-control" style="max-width: 300px;">
 			</div>
+			<div class="form-row">
+				<div class="input-group" style="padding: 2px;">
+					<span class="input-group-text" style="width: 150px;">Not 3</span> <span
+						style="padding-left: 5px;"></span> <input type="text" id="not3"
+						class="form-control" style="max-width: 300px;">
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
-		
-	<div class="card p-4">
-		<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">1 -</span>
-				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="a1" class="form-control" style="max-width: 300px;">
-			</div>
-		</div>
+	<div class="tab-pane fade" id="tab3" role="tabpanel"
+		aria-labelledby="tab3-tab">
+		<div class="card p-4">
 			<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">2 -</span>
+				<div class="input-group" style="padding: 2px;">
+					<span class="input-group-text" style="width: 150px;">1 -</span> <span
+						style="padding-left: 5px;"></span> <input type="text" id="a1"
+						class="form-control" style="max-width: 300px;">
 				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="a2" class="form-control" style="max-width: 300px;">
 			</div>
+			<div class="form-row">
+				<div class="input-group" style="padding: 2px;">
+					<span class="input-group-text" style="width: 150px;">2 -</span> <span
+						style="padding-left: 5px;"></span> <input type="text" id="a2"
+						class="form-control" style="max-width: 300px;">
+				</div>
 			</div>
 		</div>
-	</div>	
-</div>
-
-<button type="button" class="btn btn-secondary ml-2" onclick="satirekle()"><i class="fa fa-plus"></i></button>
-
-<table class="table table-bordered" id="kerTable"
-	style="margin-top: 5px;">
-	<thead class="thead-dark">
-		<tr class="data-row">
-			<th style="width:25px;"></th>
-			<th style="width:10%">BARKOD</th>
-			<th style="width:12%">URUN KODU</th>
-			<th style="width:8%">PAKET_NO</th>
-			<th style="width:5%" class="double-column">MIKTAR</th>
-			<th style="width:5%" class="double-column">M3</th>
-			<th style="width:6%;" class="double-column">PAK._M3</th>
-			<th style="width:6%">KONS.</th>
-			<th style="width:7%" class="double-column">FIAT</th>
-			<th style="width:5%" class="double-column">ISK.</th>
-			<th style="width:5%" class="double-column">KDV</th>
-			<th style="width:10%" class="double-column">TUTAR</th>
-			<th>IZAHAT</th>
-		</tr>
-	</thead>
-	<tbody id="tbody">
-	</tbody>
-	<tfoot>
-		<tr>
-			<td></td>
-			<td id="totalSatir">0</td>
-			<td></td>
-			<td></td>
-			<td id="totalMiktar" class="saga-bold">0</td>
-			<td id="totalM3" class="saga-bold">0.000</td>
-			<td id="totalPaketM3" class="saga-bold" style="color:darkgreen;">0.000</td>
-			<td id="totalPakadet">0</td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td id="totalTutar" class="saga-bold">0.00</td>
-			<td></td>
-		</tr>
-	</tfoot>
-</table>
-<div class="card p-2">
-	<div class="form-row">
-		<span style="padding-left: 280px;"></span>
-		<span style="width:80px;">Iskonto:</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="iskonto">0.00</label> 
-		<span style="padding-left: 20px;width:120px;">K.D.V.:</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="kdv">0.00</label> 
-		<span style="padding-left: 20px;width:150px;">Tev.Edi.K.D.V.:</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="tevedkdv">0.00</label> 
-		<span style="padding-left: 20px;width:120px;">Beyan.Edi.K.D.V.:</span>
-		<span style="padding-left: 10px;"></span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="beyedikdv">0.00</label> 
-	</div>
-	<div class="form-row">
-		<span style="padding-left: 10px;width:90px;"></span>
-		<label style="width:170px; font-weight: bold;" id="urunadi"></label> 
-		<span style="padding-left: 20px;width:100px;">Bakiye :</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="bakiye">0.00</label> 
-		<span style="padding-left: 20px;width:120px;">Tevkifat Oran :</span>
-		<input  id="tevoran" class="form-control" style="width: 50px; font-weight: bold;" oninput="updateColumnTotal()"  value="0.00"/>
-		<span style="padding-left: 70px;width:200px;">Tev.Dah.Top.Tut.:</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="tevdahtoptut">0.00</label> 
-		<span style="padding-left: 20px;width:120px;">Tev.Har.Top.Tut. :</span>
-		<span style="padding-left: 10px;"></span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="tevhartoptut">0.00</label> 
-	</div>
-	<div class="form-row">
-		<span style="padding-left: 10px;width:90px;"></span>
-		<label style="width:170px; font-weight: bold;" id="anaalt"></label> 
-		
 	</div>
 </div>
-
-
-
-<input type="hidden" id="kerBilgi">
-<input type="hidden" id="defaultdvzcinsi" th:value="${doviz}">
-
-<div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
-<div th:replace="~{modal/yenihsppln :: secondModal}"></div>
-
-<div th:replace="~{modal/adres/adrhplnmodal :: adrsecondModal}"></div>
-
-
-
-<script src="/obs_js_files/kereste/giris.js"></script>
+<button type="button" class="btn btn-secondary ml-2"
+		onclick="satirekle()">
+		<i class="fa fa-plus"></i>
+	</button>
+	<table class="table table-bordered" id="kerTable"
+		style="margin-top: 5px;">
+		<thead class="thead-dark">
+			<tr class="data-row">
+				<th style="width: 25px;"></th>
+				<th style="width: 10%">BARKOD</th>
+				<th style="width: 12%">URUN KODU</th>
+				<th style="width: 8%">PAKET_NO</th>
+				<th style="width: 5%" class="double-column">MIKTAR</th>
+				<th style="width: 5%" class="double-column">M3</th>
+				<th style="width: 6%;" class="double-column">PAK._M3</th>
+				<th style="width: 6%">KONS.</th>
+				<th style="width: 7%" class="double-column">FIAT</th>
+				<th style="width: 5%" class="double-column">ISK.</th>
+				<th style="width: 5%" class="double-column">KDV</th>
+				<th style="width: 10%" class="double-column">TUTAR</th>
+				<th>IZAHAT</th>
+			</tr>
+		</thead>
+		<tbody id="tbody">
+		</tbody>
+		<tfoot>
+			<tr>
+				<td></td>
+				<td id="totalSatir">0</td>
+				<td></td>
+				<td></td>
+				<td id="totalMiktar" class="saga-bold">0</td>
+				<td id="totalM3" class="saga-bold">0.000</td>
+				<td id="totalPaketM3" class="saga-bold" style="color: darkgreen;">0.000</td>
+				<td id="totalPakadet">0</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td id="totalTutar" class="saga-bold">0.00</td>
+				<td></td>
+			</tr>
+		</tfoot>
+	</table>
+	<div class="card p-4 ker-info">
+		<div class="form-row">
+			<span style="padding-left: 10px; width: 70px;"></span> 
+			 <span style="width: 80px;">Iskonto:</span>
+			<label style="width: 100px; text-align: right; font-weight: bold;"
+				id="iskonto">0.00</label> <span
+				style="padding-left: 20px; width: 120px;">K.D.V.:</span> <label
+				style="width: 100px; text-align: right; font-weight: bold;" id="kdv">0.00</label>
+			<span style="padding-left: 20px; width: 150px;">Tev.Edi.K.D.V.:</span>
+			<label style="width: 100px; text-align: right; font-weight: bold;"
+				id="tevedkdv">0.00</label> <span
+				style="padding-left: 20px; width: 120px;">Beyan.Edi.K.D.V.:</span> <span
+				style="padding-left: 10px;"></span> <label
+				style="width: 100px; text-align: right; font-weight: bold;"
+				id="beyedikdv">0.00</label>
+		</div>
+		<div class="form-row">
+			<span style="padding-left: 10px; width: 70px;"></span> 
+				<span style="width: 80px;">Bakiye :</span> 
+				<label	style="width: 100px; text-align: right; font-weight: bold;"
+				id="bakiye">0.00</label> <span
+				style="padding-left: 20px; width: 120px;">Tevkifat Oran :</span> <input
+				id="tevoran" class="form-control"
+				style="width: 50px; font-weight: bold;"
+				oninput="updateColumnTotal()" value="0.00" /> <span
+				style="padding-left: 70px; width: 200px;">Tev.Dah.Top.Tut.:</span> <label
+				style="width: 100px; text-align: right; font-weight: bold;"
+				id="tevdahtoptut">0.00</label> <span
+				style="padding-left: 20px; width: 130px;">Tev.Har.Top.Tut. :</span>
+			<span style="padding-left: 10px;"></span> <label
+				style="width: 100px; text-align: right; font-weight: bold;"
+				id="tevhartoptut">0.00</label>
+		</div>
+		
+	</div>
+	<input type="hidden" id="kerBilgi"> <input type="hidden"
+		id="defaultdvzcinsi" th:value="${doviz}">
+	<div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
+	<div th:replace="~{modal/yenihsppln :: secondModal}"></div>
+	<div th:replace="~{modal/adres/adrhplnmodal :: adrsecondModal}"></div>
+	<script src="/obs_js_files/kereste/giris.js"></script>

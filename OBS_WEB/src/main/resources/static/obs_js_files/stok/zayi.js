@@ -69,62 +69,116 @@ function initializeRows() {
 	}
 }
 function satirekle() {
-	const table = document.getElementById("zaiTable").getElementsByTagName("tbody")[0];
-	const newRow = table.insertRow();
-	incrementRowCounter();
+  const tbody = document
+    .getElementById("zaiTable")
+    ?.getElementsByTagName("tbody")?.[0];
 
-	let ukoduoptionsHTML = urnkodlar.map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`).join("");
-	newRow.innerHTML = `
-		<td >
-			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="satirsil(this)"><i class="fa fa-trash"></i></button>
-		</td>
-		<td>
-		<div style="position: relative; width: 100%;">
-		       <input class="form-control cins_bold" list="barkodOptions_${rowCounter}" maxlength="20" id="barkod_${rowCounter}" 
-		        onkeydown="focusNextCell(event, this)" ondblclick="openurunkodlariModal('barkod_${rowCounter}', 'fatsatir','barkodkod')" onchange="updateRowValues(this,'Barkod')">
-		       <datalist id="barkodOptions_${rowCounter}"></datalist>
-		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		</div>
-		</td>
-		<td>
-		    <div style="position: relative; width: 100%;">
-		        <input class="form-control cins_bold" list="ukoduOptions_${rowCounter}" maxlength="12" id="ukodu_${rowCounter}" 
-		            onkeydown="focusNextCell(event, this)" ondblclick="openurunkodlariModal('ukodu_${rowCounter}', 'recetesatir','ukodukod')" onchange="updateRowValues(this,'Kodu')">
-		        <datalist id="ukoduOptions_${rowCounter}">${ukoduoptionsHTML}</datalist>
-		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		    </div>
-		</td>
-		<td>
-		<div style="position: relative; width: 100%;">
-		    <select class="form-control" id="depo_${rowCounter}">
-		        ${depolar.map(kod => `
-		            <option value="${kod.DEPO}" >
-		                ${kod.DEPO}
-		            </option>
-		        `).join('')}
-		    </select>
-		    <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-		</div>
-		</td>
-		<td>
-			<input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)" 
-			onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;" >
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur3(this)" 
-			  onkeydown="focusNextCell(event, this)" value="${formatNumber3(0)}" style="text-align:right;">
-		</td>		
-		<td>
-			<label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label>
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onblur="handleBlur(this)"  
-		     onkeydown="focusNextCell(event, this)" value="${formatNumber2(0)}" style="text-align:right;">
-		</td>
-		<td>
-		     <input class="form-control" onfocus="selectAllContent(this)" onkeydown="focusNextRow(event, this)" >
-		</td>
-	    `;
+  if (!tbody) {
+    console.error("zaiTable tbody bulunamadı!");
+    return;
+  }
+
+  const newRow = tbody.insertRow();
+  incrementRowCounter();
+
+  const ukoduoptionsHTML = (urnkodlar || [])
+    .map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`)
+    .join("");
+
+  const depoOptionsHTML = (depolar || [])
+    .map(kod => `<option value="${kod.DEPO}">${kod.DEPO}</option>`)
+    .join("");
+
+  newRow.innerHTML = `
+    <td>
+      <button id="bsatir_${rowCounter}"
+        type="button"
+        class="btn btn-secondary"
+        onclick="satirsil(this)">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+
+    <td>
+      <div class="zai-rel">
+        <input class="form-control cins_bold"
+          list="barkodOptions_${rowCounter}"
+          maxlength="20"
+          id="barkod_${rowCounter}"
+          onkeydown="focusNextCell(event, this)"
+          ondblclick="openurunkodlariModal('barkod_${rowCounter}','fatsatir','barkodkod')"
+          onchange="updateRowValues(this,'Barkod')">
+        <datalist id="barkodOptions_${rowCounter}"></datalist>
+        <span class="zai-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <div class="zai-rel">
+        <input class="form-control cins_bold"
+          list="ukoduOptions_${rowCounter}"
+          maxlength="12"
+          id="ukodu_${rowCounter}"
+          onkeydown="focusNextCell(event, this)"
+          ondblclick="openurunkodlariModal('ukodu_${rowCounter}','recetesatir','ukodukod')"
+          onchange="updateRowValues(this,'Kodu')">
+        <datalist id="ukoduOptions_${rowCounter}">
+          ${ukoduoptionsHTML}
+        </datalist>
+        <span class="zai-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <div class="zai-rel">
+        <select class="form-control" id="depo_${rowCounter}">
+          ${depoOptionsHTML}
+        </select>
+        <span class="zai-arrow">▼</span>
+      </div>
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber2(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber3(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur3(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <label class="form-control">
+        <span>&nbsp;</span>
+      </label>
+    </td>
+
+    <td>
+      <input class="form-control"
+        value="${formatNumber2(0)}"
+        style="text-align:right;"
+        onfocus="selectAllContent(this)"
+        onblur="handleBlur(this)"
+        onkeydown="focusNextCell(event, this)">
+    </td>
+
+    <td>
+      <input class="form-control"
+        onfocus="selectAllContent(this)"
+        onkeydown="focusNextRow(event, this)">
+    </td>
+  `;
+
+  return newRow;
 }
 
 function handleBlur3(input) {

@@ -1,206 +1,387 @@
 <style>
-  .double-column {
-    text-align: right;
-  }
+/* =========================================================
+   2026 CAM – KOMPAKT (KOD/KONS + TABLO)
+   Scope: #ara_content
+   Hover + Selected: VAR
+   Header sticky + Footer sticky: VAR
+   ========================================================= */
 
-  .tah-table th,
-  .tah-table td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    height: 15px;
-  }
+#ara_content{
+  color: rgba(255,255,255,.92);
+}
 
-  .group-box {
-    padding: 7px;
-    margin: 10px;
-    width: 98%;
-    box-sizing: border-box;
-  }
+/* =======================
+   CARD / ÜST PANEL
+   ======================= */
+#ara_content .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
 
-  .child {
-    width: 40%;
-    padding: 2px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    align-items: center;
-  }
+#ara_content .cardd{
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 10px !important;
+}
 
-  .child2 {
-    width: 40%;
-    padding: 2px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    align-items: center;
-  }
+#ara_content .child,
+#ara_content .child2{
+  width: calc(50% - 5px);
+  min-width: 420px;
+  padding: 8px;
+  margin: 0;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
 
-  .form-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-
-  .saga-bold {
-    text-align: right;
-    font-weight: bold;
-  }
-
-  .cins-bold {
-    font-weight: bold;
-  }
-
-  .table .thead-dark th {
-    color: #fff;
-    background: #214162;
-  }
-  .cardd {
-    display: flex;
-    gap: 10px;
-  }
-
-  .resimdiv {
+@media (max-width: 1100px){
+  #ara_content .child,
+  #ara_content .child2{
     width: 100%;
-    min-height: 100%;
-    border: 1px solid #ddd;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    min-width: 0;
   }
+}
 
-  .table-container {
-    flex-grow: 1;
-    overflow-y: auto;
+#ara_content .group-box{
+  width: 100%;
+  padding: 8px;
+  margin: 0;
+  box-sizing: border-box;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+}
 
-    border: 1px solid #ccc;
-    margin-top: 10px;
-  }
+/* Label */
+#ara_content label{
+  font-weight: 900;
+  font-size: 12px;
+  color: rgba(255,255,255,.82);
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
-  }
+/* Inputs / Select */
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 40px !important;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+  padding: 6px 10px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
 
-  .table-hover tbody tr:hover {
-    background-color: #ced4da !important;
-    color: inherit !important;
-  }
- 
-  .container {
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    padding: 0px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+#ara_content .form-control::placeholder{
+  color: rgba(255,255,255,.55);
+}
 
-  .table-row-height td {
-    height: 10px;
-    line-height: 10px;
-  }
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.22);
+  border-color: rgba(56,189,248,.55);
+}
+
+/* Buttons */
+#ara_content .btn{
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  transition: .16s ease;
+  padding: 0 12px;
+}
+
+#ara_content .btn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.12);
+}
+
+#ara_content .ml-2{ margin-left: 8px !important; }
+
+/* Error */
+#ara_content #errorDiv{
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255,0,0,.10);
+  border: 1px solid rgba(255,0,0,.25);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  display: none; /* JS ile aç */
+}
+
+/* =======================
+   TABLO ALANI
+   ======================= */
+#ara_content .container{
+  height: 55vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#ara_content .table-container{
+  flex-grow: 1;
+  overflow: auto;
+  position: relative; /* sticky için */
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px;
+  background: rgba(255,255,255,.03);
+}
+
+/* Table base (Bootstrap beyazını ez) */
+#ara_content #urunTable{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: transparent !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
+/* Cells */
+#ara_content #urunTable th,
+#ara_content #urunTable td{
+  border: 1px solid rgba(255,255,255,.08) !important;
+  white-space: nowrap;
+  vertical-align: middle;
+  padding: 4px 8px !important;
+  height: 26px !important;          /* KOMPAKT satır */
+  line-height: 18px;
+  font-size: 12px;
+}
+
+/* THEAD sticky */
+#ara_content #urunTable thead th{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: linear-gradient(180deg, #1f3b5c, #162b44) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,.12) !important;
+  font-weight: 900;
+  text-align: left;
+}
+
+/* TBODY cam */
+#ara_content #urunTable tbody td{
+  background: rgba(8,14,26,.35) !important;
+  color: rgba(255,255,255,.88) !important;
+  transition: background .12s ease, color .12s ease;
+}
+
+/* Hover + Selected (diğer sayfa mantığı) */
+#ara_content #urunTable.table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #fff !important;
+}
+
+#ara_content #urunTable tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color: #fff !important;
+}
+
+/* Numeric columns */
+#ara_content .double-column{
+  text-align: right !important;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Checkbox */
+#ara_content #selectAll{
+  width: 16px;
+  height: 16px;
+  accent-color: rgba(56,189,248,.95);
+}
+
+/* TFOOT sticky (DOĞRU SELECTOR) */
+#ara_content #urunTable tfoot td{
+  position: sticky;
+  bottom: 0;
+  z-index: 6;
+  background: linear-gradient(180deg, rgba(31,59,92,.85), rgba(22,43,68,.95)) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,.12) !important;
+  font-weight: 900;
+}
+
+/* Footer üstüne denk gelmesin diye küçük boşluk */
+#ara_content #urunTable tbody::after{
+  content: "";
+  display: block;
+  height: 30px; /* footer yüksekliği kadar */
+}
+
+/* =========================================================
+   2026 CAM – SEKSI SCROLL (SADECE TABLO)
+   ========================================================= */
+
+/* Firefox */
+#ara_content .table-container{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.55) rgba(255,255,255,.06);
+}
+
+/* Chrome / Edge / Safari */
+#ara_content .table-container::-webkit-scrollbar{
+  width: 10px;
+  height: 10px;
+}
+
+#ara_content .table-container::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+
+#ara_content .table-container::-webkit-scrollbar-thumb{
+  background: linear-gradient(
+    180deg,
+    rgba(56,189,248,.85),
+    rgba(34,197,94,.75)
+  );
+  border-radius: 10px;
+  border: 2px solid rgba(8,14,26,.85); /* cam hissi */
+}
+
+#ara_content .table-container::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(
+    180deg,
+    rgba(56,189,248,1),
+    rgba(34,197,94,.95)
+  );
+}
+
+/* köşe (yatay + dikey kesişimi) */
+#ara_content .table-container::-webkit-scrollbar-corner{
+  background: rgba(8,14,26,.85);
+}
+
 </style>
-<div class="card p-0">
-  <div class="cardd p-4">
-    <div class="child">
-      <div class="group-box">
-        <div style="display: flex; align-items: center">
-          <label style="min-width: 120px; max-width: 120px">Konsimento</label>
-          <input class="form-control" style="font-weight: bold; min-width: 100px; max-width: 120px"
-                    maxlength="15" id="kons" onkeydown="if(event.key === 'Enter') fetchTable()" />
-          <span style="padding-left: 10px"></span>
-          <label style="min-width: 75px">Kodu</label>
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 7px">
-          <label style="min-width: 120px; max-width: 120px">Paket No</label>
-          <input class="form-control" style="font-weight: bold; min-width: 100px; max-width: 120px"
-            maxlength="10" id="pakno" onkeydown="if(event.key === 'Enter') fetchTable()" />
-          <span style="padding-left: 10px"></span>
-          <input
-            class="form-control" style="font-weight: bold; min-width: 150px; max-width: 150px"
-            value="00-000-0000-0000" maxlength="16" id="kodu" onkeydown="if(event.key === 'Enter') fetchTable()" />
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 7px">
-          <label style="min-width: 120px; max-width: 120px">Giris Evrak</label>
-          <input class="form-control" maxlength="10" id="gevrak" style="min-width: 120px; max-width: 100px"
-            onkeydown="if(event.key === 'Enter') fetchTable()" />
-        </div>
-      </div>
-    </div>
-    <div class="child2">
-      <div style="display: flex; align-items: center; margin-top: 7px">
-        <span style="padding-left: 10px"></span>
-        <label>Yeni Kod</label>
-      </div>
-      <div style="display: flex; align-items: center">
-        <span style="padding-left: 10px"></span>
-        <input type="text" id="ykod" class="form-control" maxlength="2" style="min-width: 100px; max-width: 100px" onkeydown="if(event.key === 'Enter') kodadi()" />
-        <span style="padding-left: 10px"></span>
-        <label style="min-width: 250px; max-width: 250px;font-weight: bold;" id="kodadi"></label>
-        <button type="button" class="btn btn-secondary ml-2" onclick="kodKaydet()" ><i class="fa fa-save"></i></button>
-      </div>
-      <br />
-      <div style="display: flex; align-items: center">
-        <span style="padding-left: 10px"></span>
-        <label>Yeni Konsimento</label>
-      </div>
-      <div style="display: flex; align-items: center">
-        <span style="padding-left: 10px"></span>
-        <input type="text" id="ykons" class="form-control" style="min-width: 100px; max-width: 100px" onkeydown="if(event.key === 'Enter') konsadi()" />
-        <span style="padding-left: 10px"></span>
-        <label style="min-width: 250px; max-width: 250px;font-weight: bold;" id="konsadi"></label>
-        <button type="button" class="btn btn-secondary ml-2" onclick="ykonsKaydet()"><i class="fa fa-save"></i></button>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold"></div>
 
-<div class="container">
-  <div class="table-container">
-    <table class="table table-bordered table-hover" id="urunTable" style="margin-top: 5px">
-      <thead class="thead-dark">
-        <tr>
-          <th style="text-align: center">
-            <input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"/>
-          </th>
-          <th>Evrak_No</th>
-          <th>Barkod</th>
-          <th style="min-width: 150px">Kodu</th>
-          <th>Paket_No</th>
-          <th>Konsimento</th>
-          <th class="double-column">Miktar</th>
-          <th class="double-column">m3</th>
-          <th>Tarih</th>
-          <th class="double-column">Kdv</th>
-          <th>Doviz</th>
-          <th class="double-column">Fiat</th>
-          <th class="double-column">Tutar</th>
-          <th class="double-column">Kur</th>
-          <th>Cari_Firma</th>
-          <th>Adres_Firma</th>
-          <th class="double-column">Iskonto</th>
-          <th class="double-column">Tevkifat</th>
-          <th>Ana_Grup</th>
-          <th>Alt_Grup</th>
-          <th>Mensei</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-      <tfoot>
-        <tr>
-          <td></td>
-          <td>Satir</td>
-          <td id="totalSatir">0</td>
-          <td colspan="18"></td>
-        </tr>
-      </tfoot>
-    </table>
+
+<div id="ara_content">
+
+  <div class="card p-0">
+    <div class="cardd">
+
+      <div class="child">
+       
+          <div style="display:flex; align-items:center; gap:10px;">
+            <label style="width:120px;">Konsimento</label>
+            <input class="form-control" style="font-weight:900; width:120px;"
+              maxlength="15" id="kons" onkeydown="if(event.key === 'Enter') fetchTable()" />
+            <label style="width:60px;">Kodu</label>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+            <label style="width:120px;">Paket No</label>
+            <input class="form-control" style="font-weight:900; width:120px;"
+              maxlength="10" id="pakno" onkeydown="if(event.key === 'Enter') fetchTable()" />
+            <input class="form-control" style="font-weight:900; width:150px;"
+              value="00-000-0000-0000" maxlength="16" id="kodu"
+              onkeydown="if(event.key === 'Enter') fetchTable()" />
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+            <label style="width:120px;">Giris Evrak</label>
+            <input class="form-control" maxlength="10" id="gevrak" style="width:120px;"
+              onkeydown="if(event.key === 'Enter') fetchTable()" />
+          </div>
+        
+      </div>
+
+      <div class="child2">
+        <div style="display:flex; align-items:center; gap:10px; margin-top:2px;">
+          <label style="width:120px;">Yeni Kod</label>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <input type="text" id="ykod" class="form-control" maxlength="2" style="width:100px;"
+            onkeydown="if(event.key === 'Enter') kodadi()" />
+          <label style="width:250px; font-weight:900;" id="kodadi"></label>
+          <button type="button" class="btn btn-secondary ml-2" onclick="kodKaydet()">
+            <i class="fa fa-save"></i>
+          </button>
+        </div>
+
+        <div style="height:8px;"></div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <label style="width:120px;">Yeni Konsimento</label>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <input type="text" id="ykons" class="form-control" style="width:100px;"
+            onkeydown="if(event.key === 'Enter') konsadi()" />
+          <label style="width:250px; font-weight:900;" id="konsadi"></label>
+          <button type="button" class="btn btn-secondary ml-2" onclick="ykonsKaydet()">
+            <i class="fa fa-save"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
   </div>
+
+  <div id="errorDiv"></div>
+
+  <div class="container">
+    <div class="table-container">
+      <table class="table table-bordered table-hover" id="urunTable" style="margin-top: 0;">
+        <thead class="thead-dark">
+          <tr>
+            <th style="text-align:center;">
+              <input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"/>
+            </th>
+            <th>Evrak_No</th>
+            <th>Barkod</th>
+            <th style="min-width:150px">Kodu</th>
+            <th>Paket_No</th>
+            <th>Konsimento</th>
+            <th class="double-column">Miktar</th>
+            <th class="double-column">m3</th>
+            <th>Tarih</th>
+            <th class="double-column">Kdv</th>
+            <th>Doviz</th>
+            <th class="double-column">Fiat</th>
+            <th class="double-column">Tutar</th>
+            <th class="double-column">Kur</th>
+            <th>Cari_Firma</th>
+            <th>Adres_Firma</th>
+            <th class="double-column">Iskonto</th>
+            <th class="double-column">Tevkifat</th>
+            <th>Ana_Grup</th>
+            <th>Alt_Grup</th>
+            <th>Mensei</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td>Satir</td>
+            <td id="totalSatir">0</td>
+            <td colspan="18"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
 </div>
+
 <script src="/obs_js_files/kereste/koddegis.js"></script>
