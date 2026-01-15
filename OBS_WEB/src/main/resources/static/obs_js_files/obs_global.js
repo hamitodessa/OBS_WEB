@@ -12,6 +12,9 @@ currentPage = 0 ;
 pageSize = 0;
 totalPages = 1;
 
+
+
+
 incrementRowCounter = function () {
 	rowCounter++;
 };

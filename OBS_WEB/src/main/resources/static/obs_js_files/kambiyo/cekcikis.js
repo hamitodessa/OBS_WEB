@@ -1,3 +1,5 @@
+
+
 async function fetchcekno() {
 	const errorDiv = document.getElementById("errorDiv");
 	errorDiv.innerText = "";
@@ -27,31 +29,63 @@ function initializeRows() {
 		cekcikaddRow();
 	}
 }
-function cekcikaddRow() {
-	const table = document.getElementById("gbTable").getElementsByTagName("tbody")[0];
-	const newRow = table.insertRow();
-	incrementRowCounter();
-	let optionsHTML = bankaIsimleri.map(kod => `<option value="${kod.Cek_No}">${kod.Cek_No}</option>`).join("");
-	newRow.innerHTML = `
-		<td >
-			<button id="bsatir_${rowCounter}" type="button" class="btn btn-secondary ml-2" onclick="cekcikremoveRow(this)"><i class="fa fa-trash"></i></button>
-		</td>
-		<td>
-	        <div style="position: relative; width: 100%;">
-	            <input class="form-control cins_bold" list="cekOptions_${rowCounter}" maxlength="10" id="cekno_${rowCounter}" onchange="cekkontrol(this)">
-				<datalist id="cekOptions_${rowCounter}">${optionsHTML}</datalist>
-		        <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-	        </div>
-	    </td>
-		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-        <td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-        <td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-		<td><label class="form-control"style="display: block;width:100%;height:100%;"><span>&nbsp;</span></label></td>
-        <td><label class="form-control"style="display: block;width:100%;height:100%;text-align:right;"><span>0.00</span></label></td>
-    `;
+
+
+function incrementRowCounter(){
+  rowCounter++;
+}
+
+/* boş hücre üretici */
+function emptyCell(textAlignRight=false, value=""){
+  return `
+    <td>
+      <label class="form-control">
+        <span class="${textAlignRight ? 'cell-right' : 'cell-left'}">
+          ${value || "&nbsp;"}
+        </span>
+      </label>
+    </td>`;
+}
+function cekcikaddRow(){
+  const tbody = document.querySelector("#gbTable tbody");
+  const row = tbody.insertRow();
+  incrementRowCounter();
+
+  const optionsHTML = bankaIsimleri
+    .map(k => `<option value="${k.Cek_No}">${k.Cek_No}</option>`)
+    .join("");
+
+  row.innerHTML = `
+    <td>
+      <button class="btn btn-secondary"
+        onclick="cekcikremoveRow(this)">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+
+    <td>
+      <div style="position:relative;">
+        <input class="form-control cins_bold"
+          id="cekno_${rowCounter}"
+          list="cekOptions_${rowCounter}"
+          maxlength="10"
+          onchange="cekkontrol(this)">
+        <datalist id="cekOptions_${rowCounter}">
+          ${optionsHTML}
+        </datalist>
+        <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;">▼</span>
+      </div>
+    </td>
+
+    ${emptyCell()}
+    ${emptyCell()}
+    ${emptyCell()}
+    ${emptyCell()}
+    ${emptyCell()}
+    ${emptyCell()}
+    ${emptyCell()}
+    ${emptyCell(true,"0.00")}
+  `;
 }
 
 function cekcikremoveRow(button) {

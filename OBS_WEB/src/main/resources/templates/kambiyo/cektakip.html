@@ -1,6 +1,6 @@
 <style>
 /* =========================
-   2026 CAM – CEK DURUM (DÜZENLİ)
+   2026 CAM – CEK DURUM (KOMPAKT)
    wrapper: #ara_content
    ========================= */
 
@@ -8,6 +8,7 @@
 
 /* CARD */
 #ara_content .card.p-4{
+  padding: 12px !important;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
@@ -18,36 +19,44 @@
 
 /* ORTA PANEL */
 #ara_content .centered-div{
-  width: 70%;
+  width: 72%;
   margin: 0 auto;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 16px;
-  background: rgba(8,14,26,.35);
+  background: rgba(8,14,26,.30);
   box-sizing: border-box;
 }
 
-/* ESKİ BOŞLUK span'lerini yok et (padding-left ile boşluk veriyordun) */
+/* ESKİ BOŞLUK span'lerini yok et */
 #ara_content .group-box > span[style*="padding-left"]{
   display: none !important;
 }
 
-/* GROUP BOX -> 2 kolon form satırı */
+/* GRID: 2 label + 2 value */
 #ara_content .group-box{
   width: 100%;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 130px 1fr 130px 1fr; /* label, value, label, value */
-  gap: 10px 12px;
+  grid-template-columns: 120px 1fr 120px 1fr;
+  gap: 8px 10px;
   align-items: center;
-  padding: 8px 6px;
+  padding: 6px 4px;
 }
 
-/* input-group-text (label gibi) */
+/* tek satırlık arama satırı */
+#ara_content .group-box.gb-search{
+  grid-template-columns: 120px 1fr auto;
+}
+#ara_content .group-box.gb-search .btn{
+  min-width: 120px;
+}
+
+/* label */
 #ara_content .input-group-text,
 #ara_content label.form-control{
-  height: 44px;
-  min-width: 130px;
+  height: 40px;
+  min-width: 120px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.45) !important;
@@ -55,16 +64,16 @@
   font-weight: 900;
   display: flex;
   align-items: center;
-  justify-content: center; /* senin screenshot’taki gibi ortalı kalsın */
+  justify-content: center;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
 }
 
-/* VALUE span'leri (id=cekno, banka...) */
+/* value span */
 #ara_content .group-box span[id]{
-  min-height: 44px;
+  height: 40px;
   display: flex !important;
   align-items: center;
-  padding: 0 14px;
+  padding: 0 12px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.04);
@@ -73,10 +82,9 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  text-align: left !important;
 }
 
-/* özel: tutar daha belirgin */
+/* tutar */
 #ara_content #tutar{
   font-weight: 900 !important;
   color: #fff !important;
@@ -86,12 +94,12 @@
 /* INPUT / SELECT */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 44px;
+  height: 40px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
-  padding: 10px 14px !important;
+  padding: 8px 12px !important;
   box-sizing: border-box;
   outline: none;
 }
@@ -104,14 +112,35 @@
 #ara_content .form-control:focus,
 #ara_content .form-select:focus{
   border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  box-shadow: 0 0 0 4px rgba(56,189,248,.18);
   background: rgba(8,14,26,.65) !important;
   color: #fff !important;
 }
 
+/* SELECT ok */
+#ara_content .select-wrap{
+  position: relative;
+  width: 100%;
+}
+#ara_content .select-wrap .form-select{
+  padding-right: 34px !important;
+}
+#ara_content .select-wrap::after{
+  content: "▼";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(255,255,255,.90);
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
+  font-weight: 800;
+  line-height: 1;
+}
+
 /* BUTTON */
 #ara_content .btn.btn-primary{
-  height: 44px;
+  height: 40px;
   border: none !important;
   border-radius: 14px;
   font-weight: 900;
@@ -125,165 +154,131 @@
 #ara_content #errorDiv{
   color: #f87171 !important;
   font-weight: 900 !important;
-  margin-top: 12px;
+  margin-top: 10px;
   text-align: center;
 }
 
-/* Responsive: dar ekranda 2 kolon -> tek kolon */
+/* Responsive */
 @media (max-width: 1100px){
   #ara_content .centered-div{ width: 95%; }
-  #ara_content .group-box{
-    grid-template-columns: 130px 1fr;
-  }
+  #ara_content .group-box{ grid-template-columns: 120px 1fr; }
+  #ara_content .group-box.gb-search{ grid-template-columns: 120px 1fr; }
+  #ara_content .group-box.gb-search .btn{ width: 100%; }
 }
 
 #ara_content input[type="date"]{ color-scheme: dark; }
 </style>
 
+<!-- 1) ARAMA / KAYDET -->
 <div class="card p-4">
-	<div class="centered-div">
-		<div class="group-box" style="padding-top:10px;padding-bottom:10px;">
-			<span style="padding-left: 5px;"></span> <label class="form-control"
-				style="width: 130px;">Cek No</label> <span
-				style="padding-left: 5px;"></span>
-				<input type="text"  onkeydown="if(event.key === 'Enter') aramaYap();" id="arama" style="width: 100px;" class="form-control" />
-			<span style="padding-left: 100px;"></span>
-            <button class="btn btn-primary" type="button" id="cekdurumButton"
-					onclick="cekdurumKayit()">Kaydet</button>
-		</div>
-	</div>
+  <div class="centered-div">
+    <div class="group-box gb-search">
+      <label class="form-control">Cek No</label>
+
+      <input
+        type="text"
+        id="arama"
+        class="form-control"
+        placeholder="Cek no..."
+        onkeydown="if(event.key === 'Enter') aramaYap();"
+      />
+
+      <button class="btn btn-primary" type="button" id="cekdurumButton" onclick="cekdurumKayit()">
+        Kaydet
+      </button>
+    </div>
+  </div>
 </div>
+
 <div id="errorDiv"></div>
 <br>
 
+<!-- 2) DETAYLAR -->
 <div class="card p-4">
-	<div class="centered-div">
-	
-		<div class="group-box" style="padding-top:10px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Cek No</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="cekno" style="min-width:200px;text-align: left; display: inline-block;"></span>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Banka</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="banka" style="min-width: 200px; text-align: left; display: inline-block;"></span>
-        </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Cikis Bordro</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="cikisbordro"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Cikis Hesap.Kod</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="cikishesapkod"  style="min-width:200px; text-align: left; display: inline-block;"></span>
-        </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Cikis Tarihi</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="cikistarihi"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Vade</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="vade"  style="min-width:200px;; text-align: left; display: inline-block;"></span>
-        </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Giris Bordro</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="girisbordro"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Giris Hesap.Kod</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="girishesapkod"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-        </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Giris Tarihi</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="giristarihi"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Sube</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="sube"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-        </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Seri No</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="serino"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Ilk Borclu</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="ilkborclu"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-        </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Cek Hesap No</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="cekhesapno"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Tutar</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="tutar"  style="font-weight:bold;min-width:200px;text-align: left; display: inline-block;"></span>
-        </div>
-        
-        <div class="group-box" style="padding-bottom:10px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Giris Oz. Kod</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="gozelkod"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Cikis Oz. Kod</span>
-            <span style="padding-left: 5px;"></span>
-            <span id="cozelkod"  style="min-width:200px;text-align: left; display: inline-block;"></span>
-        </div>
-        
-	</div>
+  <div class="centered-div">
+
+    <div class="group-box">
+      <span class="input-group-text">Cek No</span>
+      <span id="cekno"></span>
+      <span class="input-group-text">Banka</span>
+      <span id="banka"></span>
+    </div>
+
+    <div class="group-box">
+      <span class="input-group-text">Cikis Bordro</span>
+      <span id="cikisbordro"></span>
+      <span class="input-group-text">Cikis Hesap.Kod</span>
+      <span id="cikishesapkod"></span>
+    </div>
+
+    <div class="group-box">
+      <span class="input-group-text">Cikis Tarihi</span>
+      <span id="cikistarihi"></span>
+      <span class="input-group-text">Vade</span>
+      <span id="vade"></span>
+    </div>
+
+    <div class="group-box">
+      <span class="input-group-text">Giris Bordro</span>
+      <span id="girisbordro"></span>
+      <span class="input-group-text">Giris Hesap.Kod</span>
+      <span id="girishesapkod"></span>
+    </div>
+
+    <div class="group-box">
+      <span class="input-group-text">Giris Tarihi</span>
+      <span id="giristarihi"></span>
+      <span class="input-group-text">Sube</span>
+      <span id="sube"></span>
+    </div>
+
+    <div class="group-box">
+      <span class="input-group-text">Seri No</span>
+      <span id="serino"></span>
+      <span class="input-group-text">Ilk Borclu</span>
+      <span id="ilkborclu"></span>
+    </div>
+
+    <div class="group-box">
+      <span class="input-group-text">Cek Hesap No</span>
+      <span id="cekhesapno"></span>
+      <span class="input-group-text">Tutar</span>
+      <span id="tutar"></span>
+    </div>
+
+    <div class="group-box">
+      <span class="input-group-text">Giris Oz. Kod</span>
+      <span id="gozelkod"></span>
+      <span class="input-group-text">Cikis Oz. Kod</span>
+      <span id="cozelkod"></span>
+    </div>
+
+  </div>
 </div>
+
 <br>
+
+<!-- 3) ISLEM / TARIH -->
 <div class="card p-4">
-	<div class="centered-div">
-		<div class="group-box" style="padding-bottom:10px;padding-top:10px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Islem</span>
-            <span style="padding-left: 5px;"></span>
-            
-            <div style="position:relative; width:205px;">
-            <select class="form-select"  style="max-width:200px;" id="islem" name="islem">
-					<option value=""></option>
-					<option value="iade">Iade</option>
-					<option value="protesto">Protesto</option>
-					<option value="tahsil">Tahsil</option>
-			</select>
-			<span style="
-              position:absolute;
-              top:50%;
-              right:12px;
-              transform:translateY(-50%);
-              pointer-events:none;
-              color:#fff;
-              text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;
-              line-height:1;
-            ">▼</span>
-          </div>
-			
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:130px;">Tarih</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="date" id="ttarih" class="form-control"
-							th:value="${gunlukTarih}" style="width: 140px; font-weight: bold;" />
-        </div>
-	
-	</div>
+  <div class="centered-div">
+    <div class="group-box">
+
+      <span class="input-group-text">Islem</span>
+      <div class="select-wrap">
+        <select class="form-select" id="islem" name="islem">
+          <option value=""></option>
+          <option value="iade">Iade</option>
+          <option value="protesto">Protesto</option>
+          <option value="tahsil">Tahsil</option>
+        </select>
+      </div>
+
+      <span class="input-group-text">Tarih</span>
+      <input type="date" id="ttarih" class="form-control" th:value="${gunlukTarih}" />
+
+    </div>
+  </div>
 </div>
+
 
 <script src="/obs_js_files/kambiyo/cekkontrol.js"></script>
