@@ -57,29 +57,18 @@
     inset 0 1px 0 rgba(255,255,255,.08) !important;
 }
 
-/* BUTTON – 2026 SEXY */
-#ara_content .btn.btn-primary{
-  height: 46px;
-  border-radius: 14px;
-  font-weight: 900;
-  border: none;
-  color: #fff;
-  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
-  box-shadow: 0 12px 28px rgba(0,0,0,.35);
-  transition: .16s ease;
-  padding: 0 18px;
+#ara_content .btn-primary {
+	height: 42px;
+	border-radius: 12px;
+	font-weight: 800;
+	background: linear-gradient(180deg, rgba(56, 189, 248, .45),
+		rgba(34, 197, 94, .35));
+	border: 1px solid rgba(255, 255, 255, .25);
 }
 
-#ara_content .btn.btn-primary:hover{
-  transform: translateY(-2px);
-  filter: brightness(1.04);
+#ara_content .btn-primary:hover {
+	filter: brightness(1.1);
 }
-
-#ara_content .btn.btn-primary:active{
-  transform: translateY(0);
-  filter: brightness(.98);
-}
-
 
 /* ERROR DIV – CAM + KIRMIZI GLOW */
 #ara_content #errorDiv{
@@ -122,5 +111,5 @@
 	</div>
 	<input type="hidden" id="modul" name="modul"  >
 </div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
+<div id="errorDiv"></div>
 <script src="/obs_js_files/ortak/firmaismi.js"></script>

@@ -4,11 +4,17 @@
 .modal-backdrop.second-backdrop{ z-index: 1060 !important; }
 
 
+/* ===== MODAL KABUK ===== */
+/* =========================================================
+   2026 CAM – GRUP RAPORLAMA (TEK PARÇA)
+   Scope: #ara_content .modal-gruprap
+   ========================================================= */
+
+/* ===== MODAL KABUK ===== */
 #ara_content .modal-gruprap .modal-dialog{
   max-width: 925px !important;
-  margin: 0 auto;
+  margin: 0 auto !important;
 }
-
 
 #ara_content .modal-gruprap .modal-content{
   border-radius: 18px !important;
@@ -19,7 +25,7 @@
   overflow: hidden !important;
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 #ara_content .modal-gruprap .modal-header{
   padding: 10px 14px !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
@@ -54,7 +60,7 @@
   opacity: .85;
 }
 
-/* BODY / FOOTER */
+/* ===== BODY / FOOTER ===== */
 #ara_content .modal-gruprap .modal-body{
   padding: 12px 14px !important;
   background: rgba(8,14,26,.72) !important;
@@ -68,12 +74,12 @@
   border-top: 1px solid rgba(255,255,255,.08) !important;
 }
 
-/* GRID */
+/* ===== GRID 6 KOLON ===== */
 #ara_content .modal-gruprap .input-group{
   margin: 0 0 8px 0 !important;
   padding: 0 !important;
-
   display: grid !important;
+
   grid-template-columns:
     130px minmax(160px, 1fr) minmax(160px, 1fr)
     130px minmax(260px, 1.6fr) minmax(260px, 1.6fr) !important;
@@ -83,14 +89,8 @@
   align-items: center !important;
 }
 
-/* Tek blok */
-#ara_content .modal-gruprap .input-group:not(:has(.input-group-text ~ .input-group-text)){
-  grid-template-columns: 130px minmax(240px, 1fr) minmax(240px, 1fr) !important;
-}
-
-/* LABEL */
+/* ===== LABEL ===== */
 #ara_content .modal-gruprap .input-group-text{
-  width: auto !important;
   height: 38px !important;
   padding: 6px 10px !important;
   border-radius: 12px !important;
@@ -99,10 +99,12 @@
   color: rgba(255,255,255,.92) !important;
   font-weight: 900 !important;
   font-size: 12px !important;
+  display: flex !important;
+  align-items: center !important;
   justify-content: flex-start !important;
 }
 
-/* INPUT / DATE */
+/* ===== INPUT / DATE ===== */
 #ara_content .modal-gruprap .form-control{
   height: 38px !important;
   padding: 6px 10px !important;
@@ -125,7 +127,7 @@
 
 #ara_content .modal-gruprap input[type="date"]{ color-scheme: dark; }
 
-/* SELECT */
+/* ===== SELECT ===== */
 #ara_content .modal-gruprap .form-select{
   height: 38px !important;
   padding: 0 34px 0 10px !important;
@@ -148,8 +150,9 @@
 #ara_content .modal-gruprap .select-wrap{
   position: relative !important;
   width: 100% !important;
-  min-width: 260px !important;
+  min-width: 0 !important; /* şişirmesin */
 }
+
 #ara_content .modal-gruprap .select-arrow{
   position: absolute !important;
   right: 12px !important;
@@ -163,35 +166,74 @@
   text-shadow: 0 0 6px rgba(255,255,255,.35);
 }
 
-/* checkbox compact */
+/* ===== CHECKBOX COMPACT ===== */
 #ara_content .modal-gruprap .compact-check{
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-  height: 38px;
-  padding: 6px 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-}
-#ara_content .modal-gruprap .compact-check .form-check-input{
-  width: 18px;
-  height: 18px;
-  margin: 0;
-}
-#ara_content .modal-gruprap .compact-check .form-check-label{
-  color: rgba(255,255,255,.90);
-  font-weight: 800;
-  font-size: 13px;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  height: 38px !important;
+  padding: 6px 10px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  background: rgba(255,255,255,.06) !important;
+  white-space: nowrap !important;
 }
 
-/* gizli alanlar */
+#ara_content .modal-gruprap .compact-check .form-check-input{
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+}
+
+#ara_content .modal-gruprap .compact-check .form-check-label{
+  color: rgba(255,255,255,.90) !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+}
+
+/* ===== GIZLI: YER KALSIN, GORUNMESIN ===== */
 #ara_content .modal-gruprap .is-hidden{
   visibility: hidden !important;
 }
 
-/* RAPORLA */
+/* =========================================================
+   SAG PAKET: kolon 4'ten başlar (Urun Oz.Kod LABEL hizası)
+   BOSLUK YOK: inline-grid + fit-content
+   ========================================================= */
+#ara_content .modal-gruprap .right-pack{
+  grid-column: 4 / 7 !important;
+  display: inline-grid !important;
+  grid-auto-flow: column !important;
+  align-items: center !important;
+  column-gap: 12px !important;
+
+  width: fit-content !important;
+  justify-self: start !important;
+  min-width: 0 !important;
+}
+
+/* IstenenAy küçük kutu sabit */
+#ara_content .modal-gruprap #istenenay{
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+}
+
+/* DvzCins sabit genişlik */
+#ara_content .modal-gruprap .right-pack #dvzcins{
+  width: 220px !important;
+  min-width: 220px !important;
+  max-width: 220px !important;
+}
+
+/* right-pack içindeki select-wrap şişmesin */
+#ara_content .modal-gruprap .right-pack .select-wrap{
+  width: 220px !important;
+  min-width: 220px !important;
+}
+
+/* ===== RAPORLA BUTON ===== */
 #ara_content .modal-gruprap .modal-footer > button.btn.btn-primary{
   width: 240px !important;
   height: 44px !important;
@@ -207,15 +249,116 @@
   border: 1px solid rgba(255,255,255,.22) !important;
   box-shadow: 0 14px 35px rgba(0,0,0,.55) !important;
 }
+
 #ara_content .modal-gruprap .modal-footer > button.btn.btn-primary:hover{
   transform: translateY(-1px) !important;
   box-shadow: 0 18px 45px rgba(0,0,0,.65) !important;
   filter: saturate(1.06) brightness(1.03) !important;
 }
 
-/* Mobil */
+/* ===== MOBIL ===== */
 @media (max-width: 992px){
-  #ara_content .modal-gruprap .modal-dialog{ min-width: auto; max-width: 96vw !important; }
+  #ara_content .modal-gruprap .modal-dialog{ max-width: 96vw !important; }
   #ara_content .modal-gruprap .input-group{ grid-template-columns: 130px 1fr 1fr !important; }
-  #ara_content .modal-gruprap .select-wrap{ min-width: 0 !important; }
+  #ara_content .modal-gruprap .right-pack{ grid-column: 2 / 4 !important; }
+  #ara_content .modal-gruprap .right-pack .select-wrap{ width: 180px !important; min-width: 180px !important; }
+  #ara_content .modal-gruprap .right-pack #dvzcins{ width: 180px !important; min-width: 180px !important; }
 }
+
+/* RIGHT-PACK: sadece kolon 4-5 (sağda boşluk yok) */
+#ara_content .modal-gruprap .right-pack{
+  grid-column: 4 / 6 !important;                 /* 4 ve 5 kolon */
+  display: grid !important;
+  grid-template-columns: 130px minmax(0, 1fr) !important; /* 4=checkbox, 5=kontrol */
+  align-items: center !important;
+  column-gap: 12px !important;
+
+  width: auto !important;                        /* <<< boşluk yapma */
+  justify-self: start !important;
+  min-width: 0 !important;
+}
+
+/* kontrol kısmı taşmasın */
+#ara_content .modal-gruprap .right-pack > .form-control,
+#ara_content .modal-gruprap .right-pack > .select-wrap{
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* istenen ay küçük kutu */
+#ara_content .modal-gruprap #istenenay{
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+}
+
+#ara_content .modal-gruprap .right-pack > .select-wrap{
+  width: 100% !important;
+}
+
+#ara_content .modal-gruprap .right-pack #dvzcins{
+  width: 100% !important;
+}
+
+
+/* gizli: yer kalsın ama görünmesin */
+#ara_content .modal-gruprap .is-hidden{
+  visibility: hidden !important;
+}
+
+/* right-pack içindeki select-wrap şişmesin */
+#ara_content .modal-gruprap .right-pack .select-wrap{
+  min-width: 0 !important;
+  width: auto !important;
+}
+
+
+/* =========================================================
+   RIGHT-PACK (TEK KURAL)
+   - Başlangıç: kolon 4 (Urun Oz.Kod LABEL hizası)
+   - 2 kolon: checkbox + kontrol (kontrol %100 dolsun)
+   - Gizliyken yer kalsın (visibility)
+   ========================================================= */
+#ara_content .modal-gruprap .right-pack{
+  grid-column: 4 / 6 !important;                 /* kolon 4-5 */
+  display: grid !important;
+  grid-template-columns: 130px minmax(0, 1fr) !important; /* checkbox + kontrol */
+  align-items: center !important;
+  column-gap: 12px !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  justify-self: stretch !important;
+}
+
+/* sağdaki kontrol (input veya select-wrap) kolonun tamamını doldursun */
+#ara_content .modal-gruprap .right-pack > .form-control,
+#ara_content .modal-gruprap .right-pack > .select-wrap{
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+/* dvzcins select %100 dolsun */
+#ara_content .modal-gruprap .right-pack #dvzcins{
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+/* right-pack içindeki select-wrap şişmesin */
+#ara_content .modal-gruprap .right-pack .select-wrap{
+  min-width: 0 !important;
+}
+
+/* gizli: yer kalsın ama görünmesin */
+#ara_content .modal-gruprap .is-hidden{
+  visibility: hidden !important;
+}
+
+/* istenen ay küçük kutu sabit */
+#ara_content .modal-gruprap #istenenay{
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+}
+

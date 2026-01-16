@@ -86,24 +86,19 @@ async function openenvModal(modal) {
 }
 
 function istenenayChanged() {
-	const istenenay = document.getElementById("istenenaychc").checked;
-	if (istenenay) {
-		document.getElementById("istenenay").style.visibility = "visible";
-	} else {
-		document.getElementById("istenenay").style.visibility = "hidden";
-	}
+  const checked = document.getElementById("istenenaychc").checked;
+  document.getElementById("istenenay").classList.toggle("is-hidden", !checked);
 }
 
 function dvzcevirChanged() {
-	const dvzcevir = document.getElementById("dvzcevirchc").checked;
-	if (dvzcevir) {
-		document.getElementById("dvzcins").style.visibility = "visible";
-		document.getElementById("dvzturu").style.visibility = "visible";
-	} else {
-		document.getElementById("dvzcins").style.visibility = "hidden";
-		document.getElementById("dvzturu").style.visibility = "hidden";
-	}
+  const checked = document.getElementById("dvzcevirchc").checked;
+  document.getElementById("dvzcins").classList.toggle("is-hidden", !checked);
+	document.getElementById("dvzturu").classList.toggle("is-hidden", !checked);
+	document.getElementById("dvzcinsspan").classList.toggle("is-hidden", !checked);
+	 document.getElementById("dvzturuspan").classList.toggle("is-hidden", !checked);
 }
+
+
 
 async function grpfetchTableData() {
 	const hiddenFieldValue = $('#grpBilgi').val();

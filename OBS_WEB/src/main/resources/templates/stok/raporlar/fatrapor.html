@@ -275,6 +275,74 @@
   border-color: rgba(56,189,248,.35);
 }
 
+/* =========================
+   2026 CAM SCROLLBAR (SEKSI)
+   Scope: #ara_content .fatrap
+   - table-container (ana tablo scroll)
+   - details-wrap    (detay tablo scroll)
+   ========================= */
+
+/* ortak: hem ana tablo hem detay */
+#ara_content .fatrap .table-container,
+#ara_content .fatrap .details-wrap{
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.55) rgba(255,255,255,.08);
+}
+
+/* Chrome / Edge / Safari */
+#ara_content .fatrap .table-container::-webkit-scrollbar,
+#ara_content .fatrap .details-wrap::-webkit-scrollbar{
+  width: 10px;   /* dikey */
+  height: 10px;  /* yatay */
+}
+
+#ara_content .fatrap .table-container::-webkit-scrollbar-track,
+#ara_content .fatrap .details-wrap::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 999px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.06),
+    inset 0 6px 16px rgba(0,0,0,.25);
+}
+
+#ara_content .fatrap .table-container::-webkit-scrollbar-thumb,
+#ara_content .fatrap .details-wrap::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg,
+    rgba(56,189,248,.70),
+    rgba(34,197,94,.55)
+  );
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow:
+    0 10px 28px rgba(0,0,0,.35),
+    0 0 14px rgba(56,189,248,.18),
+    inset 0 0 0 1px rgba(255,255,255,.16);
+}
+
+#ara_content .fatrap .table-container::-webkit-scrollbar-thumb:hover,
+#ara_content .fatrap .details-wrap::-webkit-scrollbar-thumb:hover{
+  background: linear-gradient(135deg,
+    rgba(56,189,248,.90),
+    rgba(34,197,94,.70)
+  );
+  border-color: rgba(56,189,248,.45);
+}
+
+#ara_content .fatrap .table-container::-webkit-scrollbar-thumb:active,
+#ara_content .fatrap .details-wrap::-webkit-scrollbar-thumb:active{
+  background: linear-gradient(135deg,
+    rgba(56,189,248,1),
+    rgba(34,197,94,.85)
+  );
+}
+
+/* köşedeki birleşim (sağ alt corner) */
+#ara_content .fatrap .table-container::-webkit-scrollbar-corner,
+#ara_content .fatrap .details-wrap::-webkit-scrollbar-corner{
+  background: rgba(255,255,255,.06);
+  border-radius: 12px;
+}
+
 
 </style>
 

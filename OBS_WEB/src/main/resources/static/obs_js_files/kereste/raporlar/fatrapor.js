@@ -161,6 +161,8 @@ async function kerfetchTableData(page) {
 			sqlHeaders = ["", "EVRAK NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"];
 			updateTableHeadersfnotar(sqlHeaders);
 		}
+		const thCount = document.querySelectorAll("#main-table thead th").length;
+		
 		let totalmiktar = 0;
 		let totaltutar = 0;
 		data.data.forEach(rowData => {
@@ -217,99 +219,137 @@ async function kerfetchTableData(page) {
 				totaltutar += rowData.Toplam_Tutar;
 			}
 			mainTableBody.appendChild(row);
-			const detailsRow = document.createElement('tr');
-			detailsRow.classList.add('details-row');
-			detailsRow.innerHTML = `<td colspan="24"></td>`;
-			mainTableBody.appendChild(detailsRow);
-			if (response.raporturu != 'fkodu') {
-				row.addEventListener('click', async () => {
-					const toggleButton = row.querySelector('.toggle-button');
-					const isVisible = detailsRow.style.display === 'table-row';
-					detailsRow.style.display = isVisible ? 'none' : 'table-row';
-					toggleButton.textContent = isVisible ? '+' : '-';
-					document.body.style.cursor = "wait";
-					if (!isVisible) {
-						try {
-							const details = await fetchDetails(rowData.Fatura_No, rowData.Hareket);
-							const data = details.data;
-							let detailsTable = `
-                                <table class="details-table table table-bordered table-hover">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Fatura_No</th>
-                                            <th>Barkod</th>
-											<th>Kodu</th>
-											<th>Paket_No</th>
-                                            <th style="text-align: right;">Miktar</th>
-											<th style="text-align: right;">m3</th>
-                                            <th style="text-align: right;">Kdv</th>
-											<th>Doviz</th>
-                                            <th style="text-align: right;">Fiat</th>
-                                            <th style="text-align: right;">Tutar</th>
-											<th style="text-align: right;">Kur</th>
-											<th>Cari_Firma</th>
-											<th>Adres_Firma</th>
-                                            <th style="text-align: right;">Iskonto</th>
-											<th style="text-align: right;">Tevkifat</th>
-                                            <th>Ana Grup</th>
-                                            <th>Alt Grup</th>
-											<th>Mensei</th>
-                                            <th>Depo</th>
-                                            <th>Ozel Kod</th>
-                                            <th>Izahat</th>
-                                            <th>Nakliyeci</th>
-                                            <th>User</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                            `;
-							data.forEach(item => {
-								detailsTable += `
-                                    <tr>
-                                        <td style="min-width:80px;">${item.Fatura_No || ''}</td>
-                                        <td >${item.Barkod || ''}</td>
-										<td >${item.Kodu || ''}</td>
-										<td >${item.Paket_No || ''}</td>
-										<td style="text-align: right;min-width:80px;">${formatNumber0(item.Miktar)}</td>
-										<td style="text-align: right;min-width:80px;">${formatNumber3(item.m3)}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Kdv)}</td>
-                                        <td>${item.Doviz || ''}</td>
-										<td style="text-align: right;min-width:80px;">${formatNumber2(item.Fiat)}</td>
-                                        <td style="text-align: right;min-width:80px;">${formatNumber2(item.Tutar)}</td>
-										<td style="text-align: right;min-width:80px;">${formatNumber2(item.Kur)}</td>
-										<td>${item.Cari_Firma || ''}</td>
-										<td>${item.Adres_Firma || ''}</td>
-                                        <td style="text-align: right;">${formatNumber2(item.Iskonto)}</td>
-										<td style="text-align: right;">${formatNumber2(item.Tevkifat)}</td>
-										<td >${item.Ana_Grup}</td>
-                                        <td >${item.Alt_Grup}</td>
-										<td >${item.Mensei}</td>
-										<td >${item.Depo}</td>
-                                        <td >${item.Ozel_Kod}</td>
-										<td >${item.Izahat}</td>
-										<td >${item.Nakliyeci}</td>
-                                        <td >${item.USER}</td>
-                                    </tr>
-                                `;
-							});
-							detailsTable += `
-                                    </tbody>
-                                </table>
-                            `;
-							detailsRow.children[0].classList.add("table-row-height");
-							detailsRow.children[0].innerHTML = detailsTable;
-							document.body.style.cursor = "default";
-						} catch (error) {
-							detailsRow.children[0].innerHTML = `
-                                <strong>Hata:</strong> Detay bilgileri alınamadı.
-                            `;
-							document.body.style.cursor = "default";
-						}
-					}
-					document.body.style.cursor = "default";
-				});
-			}
-		});
+			
+			
+			// ==== DETAILS ROW
+			      const detailsRow = document.createElement("tr");
+			      detailsRow.classList.add("details-row");
+			      detailsRow.style.display = "none";
+			      detailsRow.innerHTML = `<td colspan="${thCount}"></td>`;
+			      mainTableBody.appendChild(detailsRow);
+
+			      // fkodu detay yok
+			      if (response.raporturu === "fkodu") return;
+
+			      const toggle = row.querySelector(".toggle-button");
+			      if (!toggle) return;
+
+			      // satıra tıklayınca sadece selected
+			      row.addEventListener("click", () => {
+			        document.querySelectorAll("#main-table tbody tr.selected")
+			          .forEach(r => r.classList.remove("selected"));
+			        row.classList.add("selected");
+			      });
+
+			      // toggle click
+			      toggle.addEventListener("click", async (e) => {
+			        e.stopPropagation();
+
+			        const isOpen = (detailsRow.style.display === "table-row");
+
+			        // ✅ tek satır açık kalsın
+			        document.querySelectorAll("#main-table tr.details-row").forEach(r => r.style.display = "none");
+			        document.querySelectorAll("#main-table tbody tr").forEach(r => r.classList.remove("selected"));
+			        document.querySelectorAll("#main-table .toggle-button").forEach(x => { if (x.textContent === "-") x.textContent = "+"; });
+
+			        if (isOpen) {
+			          detailsRow.style.display = "none";
+			          toggle.textContent = "+";
+			          return;
+			        }
+
+			        row.classList.add("selected");
+			        detailsRow.style.display = "table-row";
+			        toggle.textContent = "-";
+
+			        // daha önce yüklendiyse tekrar fetch yok
+			        if (detailsRow.dataset.loaded === "1") return;
+
+			        document.body.style.cursor = "wait";
+			        try {
+			          const detResp = await fetchDetails(rowData.Fatura_No, rowData.Hareket);
+			          const det = (detResp && detResp.data) ? detResp.data : [];
+
+			          let html = `
+			            <div class="details-wrap">
+			              <table class="t-details">
+			                <thead>
+			                  <tr>
+			                    <th>Fatura_No</th>
+			                    <th>Barkod</th>
+			                    <th>Kodu</th>
+			                    <th>Paket_No</th>
+			                    <th class="double-column">Miktar</th>
+			                    <th class="double-column">m3</th>
+			                    <th class="double-column">Kdv</th>
+			                    <th>Doviz</th>
+			                    <th class="double-column">Fiat</th>
+			                    <th class="double-column">Tutar</th>
+			                    <th class="double-column">Kur</th>
+			                    <th>Cari_Firma</th>
+			                    <th>Adres_Firma</th>
+			                    <th class="double-column">Iskonto</th>
+			                    <th class="double-column">Tevkifat</th>
+			                    <th>Ana Grup</th>
+			                    <th>Alt Grup</th>
+			                    <th>Mensei</th>
+			                    <th>Depo</th>
+			                    <th>Ozel Kod</th>
+			                    <th>Izahat</th>
+			                    <th>Nakliyeci</th>
+			                    <th>User</th>
+			                  </tr>
+			                </thead>
+			                <tbody>
+			          `;
+
+			          det.forEach(item => {
+			            html += `
+			              <tr class="drow">
+			                <td style="min-width:80px;">${item.Fatura_No || ""}</td>
+			                <td>${item.Barkod || ""}</td>
+			                <td>${item.Kodu || ""}</td>
+			                <td>${item.Paket_No || ""}</td>
+			                <td class="double-column">${formatNumber0(item.Miktar)}</td>
+			                <td class="double-column">${formatNumber3(item.m3)}</td>
+			                <td class="double-column">${formatNumber2(item.Kdv)}</td>
+			                <td>${item.Doviz || ""}</td>
+			                <td class="double-column">${formatNumber2(item.Fiat)}</td>
+			                <td class="double-column">${formatNumber2(item.Tutar)}</td>
+			                <td class="double-column">${formatNumber2(item.Kur)}</td>
+			                <td>${item.Cari_Firma || ""}</td>
+			                <td>${item.Adres_Firma || ""}</td>
+			                <td class="double-column">${formatNumber2(item.Iskonto)}</td>
+			                <td class="double-column">${formatNumber2(item.Tevkifat)}</td>
+			                <td>${item.Ana_Grup || ""}</td>
+			                <td>${item.Alt_Grup || ""}</td>
+			                <td>${item.Mensei || ""}</td>
+			                <td>${item.Depo || ""}</td>
+			                <td>${item.Ozel_Kod || ""}</td>
+			                <td>${item.Izahat || ""}</td>
+			                <td>${item.Nakliyeci || ""}</td>
+			                <td>${item.USER || ""}</td>
+			              </tr>
+			            `;
+			          });
+
+			          html += `
+			                </tbody>
+			              </table>
+			            </div>
+			          `;
+
+			          detailsRow.children[0].innerHTML = html;
+			          detailsRow.dataset.loaded = "1";
+
+			        } catch (err) {
+			          detailsRow.children[0].innerHTML =
+			            `<div class="details-wrap"><b>Hata:</b> Detaylar alınamadı.</div>`;
+			        } finally {
+			          document.body.style.cursor = "default";
+			        }
+			      });
+			    });
 		if (response.raporturu === 'fno') {
 			document.getElementById("toplam-7").innerText = formatNumber3(totalmiktar);
 			document.getElementById("toplam-11").innerText = formatNumber2(totaltutar);

@@ -46,7 +46,8 @@
         <div class="input-group">
           <span class="input-group-text">Ilk ve Son Hesap</span>
           <input type="text" id="ckod1" class="form-control" ondblclick="openSecondModal('ckod1')">
-          <input type="text" id="ckod2" class="form-control" value="ZZZZZZZZZZZZ" ondblclick="openSecondModal('ckod2')">
+          <input type="text" id="ckod2" class="form-control" value="ZZZZZZZZZZZZ"
+                 ondblclick="openSecondModal('ckod2')">
 
           <span class="input-group-text">Urun Oz.Kod</span>
           <div class="select-wrap">
@@ -56,14 +57,15 @@
           <span></span>
         </div>
 
-        <!-- 4 (tek blok) -->
+        <!-- 4 -->
         <div class="input-group">
           <span class="input-group-text">Ilk ve Son Sinif</span>
           <input type="text" id="sinif1" class="form-control">
           <input type="text" id="sinif2" class="form-control" value="ZZZZZZZZZZ">
+          <span></span><span></span><span></span>
         </div>
 
-        <!-- 5 (Birim + Istenen Ay) -->
+        <!-- 5  (Birim + Istenen Ay) -->
         <div class="input-group">
           <span class="input-group-text">Birim</span>
           <div class="select-wrap">
@@ -76,13 +78,17 @@
           </div>
           <span></span>
 
-          <span class="input-group-text">Istenen Ay</span>
-          <label class="form-check compact-check">
-            <input type="checkbox" class="form-check-input" id="istenenaychc" onchange="istenenayChanged()">
-            <span class="form-check-label">Aktif</span>
-          </label>
+          <!-- SAĞ BLOK: kolon 4'ten başlar (Urun Oz.Kod label hizası) -->
+          <div class="right-pack">
+            <label class="form-check compact-check">
+              <input type="checkbox" class="form-check-input" id="istenenaychc" onchange="istenenayChanged()">
+              <span class="form-check-label">Istenen Ay</span>
+            </label>
 
-          <input type="text" id="istenenay" class="form-control is-hidden" style="max-width:110px;">
+            <!-- gizliyken yer kaplasın -->
+           <input type="text" id="istenenay" class="form-control is-hidden" style="max-width:50px; width:50px;">
+          
+          </div>
         </div>
 
         <!-- 6 (Gruplama + Dvz Cevirme) -->
@@ -103,23 +109,26 @@
           </div>
           <span></span>
 
-          <span class="input-group-text">Dvz Cevirme</span>
-          <label class="form-check compact-check">
-            <input type="checkbox" class="form-check-input" id="dvzcevirchc" onchange="dvzcevirChanged()">
-            <span class="form-check-label">Aktif</span>
-          </label>
+          <!-- SAĞ BLOK: kolon 4'ten başlar (Urun Oz.Kod label hizası) -->
+          <div class="right-pack">
+            <label class="form-check compact-check">
+              <input type="checkbox" class="form-check-input" id="dvzcevirchc" onchange="dvzcevirChanged()">
+              <span class="form-check-label">Dvz Cevir</span>
+            </label>
 
-          <div class="select-wrap">
-            <select class="form-select cins_bold is-hidden" id="dvzcins">
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="RUB">RUB</option>
-            </select>
-            <span class="select-arrow">▼</span>
+            <!-- gizliyken yer kaplasın -->
+            <div class="select-wrap">
+              <select class="form-select cins_bold is-hidden" id="dvzcins" >
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="RUB">RUB</option>
+              </select>
+              <span id="dvzcinsspan" class="select-arrow is-hidden">▼</span>
+            </div>
           </div>
         </div>
 
-        <!-- 7 (Stunlar + DvzTuru) -->
+        <!-- 7 -->
         <div class="input-group">
           <span class="input-group-text">Stunlar</span>
           <div class="select-wrap">
@@ -135,18 +144,20 @@
           </div>
           <span></span>
 
-          <span class="input-group-text">Dvz Turu</span>
+          <span></span>
+          
+          
           <div class="select-wrap">
             <select class="form-select cins_bold is-hidden" id="dvzturu">
               <option value="MA">MA</option>
               <option value="MS">MS</option>
             </select>
-            <span class="select-arrow">▼</span>
+            <span id="dvzturuspan" class="select-arrow is-hidden">▼</span>
           </div>
-          <span></span>
+          
         </div>
 
-        <!-- 8 (tek select) -->
+        <!-- 8 -->
         <div class="input-group">
           <span class="input-group-text">Turu</span>
           <div class="select-wrap">
@@ -157,6 +168,7 @@
             <span class="select-arrow">▼</span>
           </div>
           <span></span>
+          <span></span><span></span><span></span>
         </div>
 
       </div>
@@ -168,4 +180,3 @@
     </div>
   </div>
 </div>
-
