@@ -103,35 +103,32 @@ async function openenvModal(modal) {
     }
 }
 
-function istenenayChanged() {
-    const istenenay = document.getElementById("istenenaychc").checked;
-    if (istenenay) {
-        document.getElementById("istenenay").style.visibility = "visible";
-    } else {
-        document.getElementById("istenenay").style.visibility = "hidden";
-    }
-}
+
 
 function dvzcevirChanged() {
-    const dvzcevir = document.getElementById("dvzcevirchc").checked;
-    if (dvzcevir) {
-        document.getElementById("dvzcins").style.visibility = "visible";
-        document.getElementById("dvzturu").style.visibility = "visible";
-    } else {
-        document.getElementById("dvzcins").style.visibility = "hidden";
-        document.getElementById("dvzturu").style.visibility = "hidden";
-    }
+    const checked = document.getElementById("dvzcevirchc").checked;
+    document.getElementById("dvzcins").classList.toggle("is-hidden", !checked);
+    document.getElementById("dvzturu").classList.toggle("is-hidden", !checked);
+		document.getElementById("dvzcinsspan").classList.toggle("is-hidden", !checked);
+		document.getElementById("dvzturuspan").classList.toggle("is-hidden", !checked);
 }
 function birimChanged() {
     const birim = document.getElementById("birim").value;
+	
     if (birim === "Tutar") {
-        document.getElementById("dvzcevirchc").style.visibility = "visible";
-        document.getElementById("dvzcevirlbl").style.visibility = "visible";
+        document.getElementById("dvzcevirchc").classList.toggle("is-hidden", false);
+        document.getElementById("dvzcvrspn").classList.toggle("is-hidden", false);
+				
     } else {
-        document.getElementById("dvzcevirchc").style.visibility = "hidden";
-        document.getElementById("dvzcevirlbl").style.visibility = "hidden";
-        document.getElementById("dvzcins").style.visibility = "hidden";
-        document.getElementById("dvzturu").style.visibility = "hidden";
+			  document.getElementById("dvzcevirchc").checked = false;
+        document.getElementById("dvzcevirchc").classList.toggle("is-hidden", true);
+        document.getElementById("dvzcvrspn").classList.toggle("is-hidden", true);
+        
+				document.getElementById("dvzcins").classList.toggle("is-hidden", true);
+				document.getElementById("dvzcinsspan").classList.toggle("is-hidden", true);
+			
+				document.getElementById("dvzturuspan").classList.toggle("is-hidden", true);
+        document.getElementById("dvzturu").classList.toggle("is-hidden", true);
     }
    
 }

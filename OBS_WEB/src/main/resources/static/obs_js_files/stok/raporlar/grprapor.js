@@ -1,3 +1,5 @@
+
+
 async function anagrpChanged(anagrpElement, altgrpElement) {
 	const anagrup = anagrpElement.value;
 	const errorDiv = document.getElementById("errorDiv");
@@ -76,6 +78,8 @@ async function openenvModal(modal) {
 
 		uranaSelect.insertBefore(newOption, uranaSelect.options[1]);
 		ozSelect.insertBefore(newOption1, ozSelect.options[1]);
+		
+		birimChanged();
 	} catch (error) {
 		const modalError = document.getElementById("errorDiv");
 		modalError.style.display = "block";
@@ -85,9 +89,26 @@ async function openenvModal(modal) {
 	}
 }
 
-function istenenayChanged() {
-  const checked = document.getElementById("istenenaychc").checked;
-  document.getElementById("istenenay").classList.toggle("is-hidden", !checked);
+function birimChanged() {
+    const birim = document.getElementById("birim").value;
+    
+    if (birim === "Tutar") {
+        document.getElementById("dvzcevirchc").classList.toggle("is-hidden", false);
+        document.getElementById("dvzcvrspn").classList.toggle("is-hidden", false);
+				document.getElementById("dvzcevlbl").classList.toggle("is-hidden", false);
+        
+    } else {
+        document.getElementById("dvzcevirchc").checked = false;
+				document.getElementById("dvzcevlbl").classList.toggle("is-hidden", true);
+        document.getElementById("dvzcevirchc").classList.toggle("is-hidden", true);
+        document.getElementById("dvzcvrspn").classList.toggle("is-hidden", true);
+				
+				document.getElementById("dvzcins").classList.toggle("is-hidden", true);
+				  document.getElementById("dvzturu").classList.toggle("is-hidden", true);
+				  document.getElementById("dvzcinsspan").classList.toggle("is-hidden", true);
+				  document.getElementById("dvzturuspan").classList.toggle("is-hidden", true);
+				
+    }
 }
 
 function dvzcevirChanged() {
@@ -95,10 +116,13 @@ function dvzcevirChanged() {
   document.getElementById("dvzcins").classList.toggle("is-hidden", !checked);
 	document.getElementById("dvzturu").classList.toggle("is-hidden", !checked);
 	document.getElementById("dvzcinsspan").classList.toggle("is-hidden", !checked);
-	 document.getElementById("dvzturuspan").classList.toggle("is-hidden", !checked);
+	document.getElementById("dvzturuspan").classList.toggle("is-hidden", !checked);
 }
 
-
+function istenenayChanged() {
+  const checked = document.getElementById("istenenaychc").checked;
+  document.getElementById("istenenay").classList.toggle("is-hidden", !checked);
+}
 
 async function grpfetchTableData() {
 	const hiddenFieldValue = $('#grpBilgi').val();

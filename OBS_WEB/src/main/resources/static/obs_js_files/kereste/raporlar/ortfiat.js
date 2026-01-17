@@ -88,14 +88,11 @@ async function openenvModal(modal) {
 }
 
 function dvzcevirChanged() {
-    const dvzcevir = document.getElementById("dvzcevirchc").checked;
-    if (dvzcevir) {
-        document.getElementById("dvzcins").style.visibility = "visible";
-        document.getElementById("dvzturu").style.visibility = "visible";
-    } else {
-        document.getElementById("dvzcins").style.visibility = "hidden";
-        document.getElementById("dvzturu").style.visibility = "hidden";
-    }
+    const checked = document.getElementById("dvzcevirchc").checked;
+   
+        document.getElementById("dvzcinsWrap").classList.toggle("is-hidden", !checked);
+        document.getElementById("dvzturuWrap").classList.toggle("is-hidden", !checked);
+    
 }
 function getkergrupraporDTO() {
     const hiddenFieldValue = $('#ortfiatBilgi').val();

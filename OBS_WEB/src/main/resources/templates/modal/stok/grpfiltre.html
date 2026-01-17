@@ -69,7 +69,7 @@
         <div class="input-group">
           <span class="input-group-text">Birim</span>
           <div class="select-wrap">
-            <select class="form-select cins_bold" id="birim">
+            <select class="form-select cins_bold" id="birim" onchange="birimChanged()">
               <option value="Tutar">Tutar</option>
               <option value="Miktar">Miktar</option>
               <option value="Agirlik">Agirlik</option>
@@ -111,9 +111,9 @@
 
           <!-- SAĞ BLOK: kolon 4'ten başlar (Urun Oz.Kod label hizası) -->
           <div class="right-pack">
-            <label class="form-check compact-check">
-              <input type="checkbox" class="form-check-input" id="dvzcevirchc" onchange="dvzcevirChanged()">
-              <span class="form-check-label">Dvz Cevir</span>
+            <label class="form-check compact-check is-hidden" id="dvzcevlbl">
+              <input type="checkbox" class="form-check-input is-hidden" id="dvzcevirchc" onchange="dvzcevirChanged()">
+              <span class="form-check-label is-hidden" id="dvzcvrspn">Dvz Cevir</span>
             </label>
 
             <!-- gizliyken yer kaplasın -->

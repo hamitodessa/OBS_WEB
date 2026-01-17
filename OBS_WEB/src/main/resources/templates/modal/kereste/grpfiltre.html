@@ -23,7 +23,7 @@
             <select class="form-select cins_bold" id="anagrp" onchange="anagrpChanged(this,'altgrp')"></select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
+          
         </div>
 
         <!-- 2 -->
@@ -39,7 +39,7 @@
             <select class="form-select cins_bold" id="altgrp" disabled></select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
+          
         </div>
 
         <!-- 3 -->
@@ -53,7 +53,7 @@
             <select class="form-select cins_bold" id="ozkod"></select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
+          
         </div>
 
         <!-- 4 -->
@@ -67,7 +67,7 @@
             <select class="form-select cins_bold" id="depo"></select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
+          
         </div>
 
         <!-- 5 -->
@@ -85,7 +85,7 @@
             </select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
+          
         </div>
 
         <!-- 6 (Birim + dvz gizli alanlar) -->
@@ -99,12 +99,24 @@
             </select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
+          
 
           <!-- gizli bloklar: hizayı bozmasın diye 3 kolon -->
           <span></span>
-          <span></span>
-          <span></span>
+          <div class="select-wrap">
+            <input type="checkbox" class="form-check-input is-hidden" id="dvzcevirchc" onchange="dvzcevirChanged()">
+            <span class="form-check-label is-hidden" id="dvzcvrspn">Dvz Cevir</span>
+          </div>
+          
+         <div class="select-wrap">
+              <select class="form-select cins_bold is-hidden" id="dvzcins" >
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="RUB">RUB</option>
+              </select>
+              <span id="dvzcinsspan" class="select-arrow is-hidden">▼</span>
+            </div>
+          
         </div>
 
         <!-- 7 -->
@@ -138,12 +150,18 @@
             </select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
+         
 
           <!-- dvzturu gizli -->
           <span></span>
           <span></span>
-          <span></span>
+          <div class="select-wrap">
+            <select class="form-select cins_bold is-hidden" id="dvzturu">
+              <option value="MA">MA</option>
+              <option value="MS">MS</option>
+            </select>
+            <span id="dvzturuspan" class="select-arrow is-hidden">▼</span>
+          </div>
         </div>
 
         <!-- 8 -->
@@ -162,7 +180,7 @@
             </select>
             <span class="select-arrow">▼</span>
           </div>
-          <span></span>
+         
 
           <span></span><span></span><span></span>
         </div>
