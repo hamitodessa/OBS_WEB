@@ -37,44 +37,53 @@ async function loadSubjects() {
 };
 
 function renderSubjects(subjects) {
-	if (!subjects || !Array.isArray(subjects)) {
-		return;
-	}
-	const subjectSection = document.querySelector('.subject-section');
-	subjectSection.innerHTML = '';
-	subjects.forEach((subject) => {
-		const commits = subject.commits || [];
-		const subjectElement = `
-            <div class="subject">
-                <h4 style="font-weight: bold;">${subject.subjectTitle}</h4>
-                <p style="border: 1px solid #ddd; padding: 10px; border-radius: 4px;">${subject.subjectDescription}</p>
-                <button onclick="toggleCommentForm(${subject.subjectID})">Yorum Ekle</button>
-								<button id="btn-commits-${subject.subjectID}" onclick="toggleCommits(${subject.subjectID})" style="margin-top: 10px;">Yorumları Göster</button>
+  if (!subjects || !Array.isArray(subjects)) return;
 
-                <div id="commits-${subject.subjectID}" class="commits" style="display: none; margin-top: 10px;border: 1px solid #ddd;">
-                    ${commits
-				.map(
-					(commit) => `
-                        <div class="commit">
-                            <h4>By: ${commit.createdBy}</h4>
-                            <p>${commit.commitText}</p>
-                        </div>`
-				)
-				.join('')}
-                </div>
-                <div id="comment-form-${subject.subjectID}" class="comment-form" style="display: none; margin-top: 10px;">
-								<textarea class="form-control"
-								          id="comment-text-${subject.subjectID}"
-								          placeholder="Yorum Yaz..."
-								          rows="3"
-								          maxlength="255"></textarea>
+  const subjectSection = document.querySelector('.subject-section');
+  subjectSection.innerHTML = '';
 
-                    <button onclick="submitComment(${subject.subjectID})" style="margin-top: 5px; padding: 10px; background-color: #6200ea; color: white; border: none; border-radius: 4px;">Yorum Kaydet</button>
-                </div>
+  subjects.forEach((subject) => {
+    const commits = Array.isArray(subject.commits) ? subject.commits : [];
+
+    const subjectElement = `
+      <div class="subject">
+        <h4>${subject.subjectTitle ?? ''}</h4>
+
+        <p>${subject.subjectDescription ?? ''}</p>
+
+        <button type="button" onclick="toggleCommentForm(${subject.subjectID})">
+          Yorum Ekle
+        </button>
+
+        <button type="button" id="btn-commits-${subject.subjectID}" onclick="toggleCommits(${subject.subjectID})">
+          Yorumları Göster
+        </button>
+
+        <div id="commits-${subject.subjectID}" class="commits" style="display:none;">
+          ${commits.map((commit) => `
+            <div class="commit">
+              <h4>By: ${commit.createdBy ?? ''}</h4>
+              <p>${commit.commitText ?? ''}</p>
             </div>
-        `;
-		subjectSection.innerHTML += subjectElement;
-	});
+          `).join('')}
+        </div>
+
+        <div id="comment-form-${subject.subjectID}" class="comment-form" style="display:none; margin-top:10px;">
+          <textarea class="form-control"
+                    id="comment-text-${subject.subjectID}"
+                    placeholder="Yorum Yaz..."
+                    rows="3"
+                    maxlength="255"></textarea>
+
+          <button type="button" onclick="submitComment(${subject.subjectID})">
+            Yorum Kaydet
+          </button>
+        </div>
+      </div>
+    `;
+
+    subjectSection.insertAdjacentHTML('beforeend', subjectElement);
+  });
 }
 
 function filterSubjects() {

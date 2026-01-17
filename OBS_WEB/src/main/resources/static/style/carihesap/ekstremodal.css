@@ -106,72 +106,6 @@
   color-scheme: dark;
 }
 
-/* RAPORLA BUTONU */
-#ara_content .modal-ekstre .modal-footer button.btn{
-  width: 200px !important;
-  height: 40px !important;
-  margin-left: auto !important;
-
-  border-radius: 14px;
-  font-weight: 900;
-  font-size: 14px;
-
-  color: rgba(255,255,255,.95);
-  border: 1px solid rgba(255,255,255,.20);
-
-  background: linear-gradient(90deg,
-    rgba(56,189,248,.85),
-    rgba(34,197,94,.75));
-
-  box-shadow: 0 12px 30px rgba(0,0,0,.45);
-}
-
-#ara_content .modal-ekstre .modal-footer button.btn:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 16px 40px rgba(0,0,0,.55);
-}
-
-#ara_content .modal-ekstre .modal-footer .btn-primary{
-  background-image: none !important;
-}
-
-/* === EKSTRE RAPORLA BUTONU (KESİN KİLİT) === */
-#ara_content .modal-ekstre .modal-footer .btn.btn-primary.form-control{
-  width: 220px !important;
-  height: 44px !important;
-  margin-left: auto !important;
-
-  border-radius: 16px !important;
-  font-weight: 900 !important;
-  font-size: 15px !important;
-  letter-spacing: .3px !important;
-
-  color: rgba(255,255,255,.96) !important;
-
-  background: linear-gradient(90deg,
-    rgba(56,189,248,.90),
-    rgba(34,197,94,.78)) !important;
-
-  border: 1px solid rgba(255,255,255,.22) !important;
-  box-shadow: 0 14px 35px rgba(0,0,0,.50) !important;
-
-  /* bootstrap highlightları sustur */
-  background-image: none !important;
-}
-
-/* hover */
-#ara_content .modal-ekstre .modal-footer .btn.btn-primary.form-control:hover{
-  transform: translateY(-1px) !important;
-  box-shadow: 0 18px 45px rgba(0,0,0,.60) !important;
-  filter: saturate(1.06) brightness(1.03) !important;
-}
-
-/* active */
-#ara_content .modal-ekstre .modal-footer .btn.btn-primary.form-control:active{
-  transform: translateY(0) !important;
-  box-shadow: 0 10px 26px rgba(0,0,0,.45) !important;
-}
-
 /* === EKSTRE RAPORLA BUTONU – SON NOKTA === */
 #ara_content .modal-ekstre .modal-footer > button.btn.btn-primary{
   width: 220px !important;
@@ -183,20 +117,14 @@
   font-size: 15px !important;
   letter-spacing: .3px !important;
 
-  color: #ffffff !important;
-
-  /* 👇 EN KRİTİK SATIRLAR */
-  background-color: transparent !important;
-  background-image: linear-gradient(90deg,
-    rgba(56,189,248,.92),
-    rgba(34,197,94,.80)) !important;
-
-  border: 1px solid rgba(255,255,255,.25) !important;
-  box-shadow: 0 14px 35px rgba(0,0,0,.55) !important;
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
 }
 
 /* hover */
-#ara_content .modal-ekstre .modal-footer > button.btn.btn-primary:hover{
-  transform: translateY(-1px) !important;
-  box-shadow: 0 18px 45px rgba(0,0,0,.65) !important;
+#ara_content .modal-ekstre .btn.btn-primary:hover{
+ background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
 }

@@ -137,14 +137,15 @@
   border: none;
   cursor: pointer;
   font-weight: 900;
-  color: #fff;
-  background: linear-gradient(135deg,#38bdf8,#22c55e);
-  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
   transition: filter .2s ease, transform .2s ease;
 }
 #ara_content .subject button:hover,
 #ara_content .form button:hover{
-  filter: brightness(1.12);
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
 
@@ -214,21 +215,32 @@
    FINAL: SUBJECT HOVER KAPALI (NET)
    ========================= */
 
-#ara_content .subject{
-  background: rgba(8,14,26,.45) !important;
-  border: 1px solid rgba(255,255,255,.12) !important;
-  box-shadow: none !important;
-  transform: none !important;
+/* === SUBJECT & FORM BUTTON – SAVE BUTTON STILI === */
+#ara_content .subject button,
+#ara_content .form button{
+  margin-top: 10px;
+  padding: 10px 16px;
+  height: 44px;
+  border-radius: 14px;
+  font-weight: 900;
+  cursor: pointer;
+
+   background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
+
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
   transition: none !important;
 }
 
-#ara_content .subject:hover{
-  background: rgba(8,14,26,.45) !important;
-  border: 1px solid rgba(255,255,255,.12) !important;
-  box-shadow: none !important;
-  transform: none !important;
-  filter: none !important;
+/* hover tamamen KAPALI (senin isteğin) */
+#ara_content .subject button:hover,
+#ara_content .form button:hover{
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
 }
+
 
 /* Yazılar sabit */
 #ara_content .subject h4{
@@ -242,11 +254,7 @@
   border-radius: 14px !important;
 }
 
-/* Buton hover KAPALI (istersen açarız) */
-#ara_content .subject button:hover{
-  transform: none !important;
-  filter: none !important;
-}
+
 
 #ara_content .comment-form textarea.form-control{
   min-height: 90px;
