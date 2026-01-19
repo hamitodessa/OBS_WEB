@@ -1,168 +1,186 @@
+window.OBS = window.OBS || {};
+OBS.OZMIZAN = OBS.OZMIZAN || {};
 
-async function ozmizfetchTableData() {
-	const hiddenFieldValue = $('#mizanBilgi').val();
-	const parsedValues = hiddenFieldValue.split(","); 
-	const hkodu1 = parsedValues[0];
-	const hkodu2 = parsedValues[1];
-	const startDate = parsedValues[2];
-	const endDate = parsedValues[3];
-	const cins1 = parsedValues[4];
-	const cins2 = parsedValues[5];
-	const karton1 = parsedValues[6];
-	const karton2 = parsedValues[7];
-	const hangi_tur = parsedValues[8];
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	const Mizan_Request = {
-		hkodu1: hkodu1,
-		hkodu2: hkodu2,
-		startDate: startDate,
-		endDate: endDate,
-		cins1: cins1,
-		cins2: cins2,
-		karton1: karton1,
-		karton2: karton2,
-		hangi_tur: hangi_tur
-	};
-	const tableBody = document.getElementById("tableBody");
-	tableBody.innerHTML = "";
-	document.getElementById("totalOncekiBakiye").textContent = "";
-	document.getElementById("totalBorc").textContent = "";
-	document.getElementById("totalAlacak").textContent = "";
-	document.getElementById("totalBakKvartal").textContent = "";
-	document.getElementById("totalBakiye").textContent = "";
+/* =========================
+   HELPERS (OZ MIZAN)
+   ========================= */
+OBS.OZMIZAN._el = function (id) { return document.getElementById(id); };
 
-	document.body.style.cursor = "wait";
-	const $yenileButton = $('#yenileButton');
-	$yenileButton.prop('disabled', true).text('İşleniyor...');
-	try {
-		const data = await fetchWithSessionCheck("cari/ozelmizan", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(Mizan_Request),
-		});
+OBS.OZMIZAN._setBtn = function (btnId, disabled, text) {
+  const b = OBS.OZMIZAN._el(btnId);
+  if (!b) return;
+  b.disabled = !!disabled;
+  if (text !== undefined) b.innerText = text;
+};
 
-		if (data.success) {
-			let totalOncekiBakiye = 0;
-			let totalBorc = 0;
-			let totalAlacak = 0;
-			let totalBakKvartal = 0;
-			let totalBakiye = 0;
-			data.data.forEach(item => {
-				const row = document.createElement("tr");
-				row.classList.add("table-row-height");
-				row.innerHTML = `
-                	<td>${item.HESAP || ''}</td>
-                    <td>${item.UNVAN || ''}</td>
-                    <td>${item.H_CINSI || ''}</td>   
-					<td class="double-column">${formatNumber2(item.ONCEKI_BAKIYE)}</td>
-                    <td class="double-column">${formatNumber2(item.BORC)}</td>
-                    <td class="double-column">${formatNumber2(item.ALACAK)}</td>
-					<td class="double-column">${formatNumber2(item.BAK_KVARTAL)}</td>
-                    <td class="double-column">${formatNumber2(item.BAKIYE)}</td>
-                `;
-				tableBody.appendChild(row);
-				totalOncekiBakiye += item.ONCEKI_BAKIYE || 0;
-				totalBorc += item.BORC || 0;
-				totalAlacak += item.ALACAK || 0;
-				totalBakKvartal += item.BAK_KVARTAL || 0;
-				totalBakiye += item.BAKIYE || 0;
-			});
-			document.getElementById("totalOncekiBakiye").textContent = formatNumber2(totalOncekiBakiye);
-			document.getElementById("totalBorc").textContent = formatNumber2(totalBorc);
-			document.getElementById("totalAlacak").textContent = formatNumber2(totalAlacak);
-			document.getElementById("totalBakKvartal").textContent = formatNumber2(totalBakKvartal);
-			document.getElementById("totalBakiye").textContent = formatNumber2(totalBakiye);
-		} else {
-			errorDiv.style.display = "block";
-			errorDiv.innerText = data.errorMessage || "Bir hata oluştu.";
-		}
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.";
-	} finally {
-		$yenileButton.prop('disabled', false).text('Yenile');
-		document.body.style.cursor = "default";
-	}
-}
+OBS.OZMIZAN._clearError = function () {
+  const err = OBS.OZMIZAN._el("errorDiv");
+  if (!err) return;
+  err.style.display = "none";
+  err.innerText = "";
+};
 
-async function ozmizdownloadReport(format) {
-    const hiddenFieldValue = $('#mizanBilgi').val(); // Hidden alanın değerini al
-    const parsedValues = hiddenFieldValue.split(","); // Virgüle göre ayır
-    const Mizan_Request = {
-        format: format,
-        hkodu1: parsedValues[0] || "",
-        hkodu2: parsedValues[1] || "",
-        startDate: parsedValues[2] || "",
-        endDate: parsedValues[3] || "",
-        cins1: parsedValues[4] || "",
-        cins2: parsedValues[5] || "",
-        karton1: parsedValues[6] || "",
-        karton2: parsedValues[7] || "",
-        hangi_tur: parsedValues[8] || "",
-    };
-    const errorDiv = document.getElementById("errorDiv"); // Hata mesajını göstermek için
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
+OBS.OZMIZAN._showError = function (msg) {
+  const err = OBS.OZMIZAN._el("errorDiv");
+  if (!err) return;
+  err.style.display = "block";
+  err.innerText = msg || "Bir hata oluştu.";
+};
 
-    document.body.style.cursor = "wait";
-    const $indirButton = $('#ozmizindirButton');
-    $indirButton.prop('disabled', true).text('İşleniyor...');
-    const $yenileButton = $('#ozmizyenileButton');
-    $yenileButton.prop('disabled', true);
-    try {
-        const response = await fetchWithSessionCheckForDownload('cari/ozelmizan_download', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(Mizan_Request),
-        });
-		if (response.blob) {
-		    const disposition = response.headers.get('Content-Disposition');
-		    const fileName = disposition.match(/filename="(.+)"/)[1];
-		    const url = window.URL.createObjectURL(response.blob);
-		    const a = document.createElement("a");
-		    a.href = url;
-		    a.download = fileName;
-		    document.body.appendChild(a);
-		    a.click();
-		    a.remove();
-		    window.URL.revokeObjectURL(url);
-		}else {
-			throw new Error("Dosya indirilemedi.");
-		}
+OBS.OZMIZAN._parseMizanBilgi = function () {
+  const raw = OBS.OZMIZAN._el("mizanBilgi")?.value ?? "";
+  const p = raw.split(",");
+  return {
+    hkodu1: p[0] || "",
+    hkodu2: p[1] || "",
+    startDate: p[2] || "",
+    endDate: p[3] || "",
+    cins1: p[4] || "",
+    cins2: p[5] || "",
+    karton1: p[6] || "",
+    karton2: p[7] || "",
+    hangi_tur: p[8] || ""
+  };
+};
 
-    } catch (error) {
-        errorDiv.style.display = "block";
-        errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
-    } finally {
-        $indirButton.prop('disabled', false).text('Rapor İndir');
-        $yenileButton.prop('disabled', false);
-        document.body.style.cursor = "default";
+/* =========================
+   TABLE FETCH
+   ========================= */
+OBS.OZMIZAN.ozmizfetchTableData = async function () {
+  const req = OBS.OZMIZAN._parseMizanBilgi();
+
+  OBS.OZMIZAN._clearError();
+
+  const tableBody = OBS.OZMIZAN._el("tableBody");
+  if (tableBody) tableBody.innerHTML = "";
+
+  const tOnceki = OBS.OZMIZAN._el("totalOncekiBakiye");
+  const tBorc = OBS.OZMIZAN._el("totalBorc");
+  const tAlacak = OBS.OZMIZAN._el("totalAlacak");
+  const tKv = OBS.OZMIZAN._el("totalBakKvartal");
+  const tBakiye = OBS.OZMIZAN._el("totalBakiye");
+  if (tOnceki) tOnceki.textContent = "";
+  if (tBorc) tBorc.textContent = "";
+  if (tAlacak) tAlacak.textContent = "";
+  if (tKv) tKv.textContent = "";
+  if (tBakiye) tBakiye.textContent = "";
+
+  document.body.style.cursor = "wait";
+  // senin kodda yenileButton idi
+  OBS.OZMIZAN._setBtn("yenileButton", true, "İşleniyor...");
+
+  try {
+    const data = await fetchWithSessionCheck("cari/ozelmizan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req),
+    });
+
+    if (!data?.success) {
+      OBS.OZMIZAN._showError(data?.errorMessage || "Bir hata oluştu.");
+      return;
     }
-}
 
-function ozmizmailAt() {
-	localStorage.removeItem("tableData");
-	localStorage.removeItem("grprapor");
-	localStorage.removeItem("tablobaslik");
-	const hiddenFieldValue = $('#mizanBilgi').val();
-	const parsedValues = hiddenFieldValue.split(",");
-	const hkodu1 = parsedValues[0];
-	const hkodu2 = parsedValues[1];
-	const startDate = parsedValues[2];
-	const endDate = parsedValues[3];
-	const cins1 = parsedValues[4];
-	const cins2 = parsedValues[5];
-	const karton1 = parsedValues[6];
-	const karton2 = parsedValues[7];
-	const hangi_tur = parsedValues[8];
+    let totalOncekiBakiye = 0;
+    let totalBorc = 0;
+    let totalAlacak = 0;
+    let totalBakKvartal = 0;
+    let totalBakiye = 0;
 
-	const degerler = hkodu1 + "," + hkodu2 + "," + startDate + "," + endDate + "," + cins1 + "," + cins2 + "," + karton1 + "," + karton2 + "," + hangi_tur + ",cariozelmizan";
-	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
-	mailsayfasiYukle(url);
-}
+    (data.data || []).forEach(item => {
+      const row = document.createElement("tr");
+      row.classList.add("table-row-height");
+      row.innerHTML = `
+        <td>${item.HESAP || ""}</td>
+        <td>${item.UNVAN || ""}</td>
+        <td>${item.H_CINSI || ""}</td>
+        <td class="double-column">${formatNumber2(item.ONCEKI_BAKIYE)}</td>
+        <td class="double-column">${formatNumber2(item.BORC)}</td>
+        <td class="double-column">${formatNumber2(item.ALACAK)}</td>
+        <td class="double-column">${formatNumber2(item.BAK_KVARTAL)}</td>
+        <td class="double-column">${formatNumber2(item.BAKIYE)}</td>
+      `;
+      tableBody?.appendChild(row);
+
+      totalOncekiBakiye += (item.ONCEKI_BAKIYE || 0);
+      totalBorc += (item.BORC || 0);
+      totalAlacak += (item.ALACAK || 0);
+      totalBakKvartal += (item.BAK_KVARTAL || 0);
+      totalBakiye += (item.BAKIYE || 0);
+    });
+
+    if (tOnceki) tOnceki.textContent = formatNumber2(totalOncekiBakiye);
+    if (tBorc) tBorc.textContent = formatNumber2(totalBorc);
+    if (tAlacak) tAlacak.textContent = formatNumber2(totalAlacak);
+    if (tKv) tKv.textContent = formatNumber2(totalBakKvartal);
+    if (tBakiye) tBakiye.textContent = formatNumber2(totalBakiye);
+
+  } catch (e) {
+    OBS.OZMIZAN._showError(e?.message || "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.");
+  } finally {
+    OBS.OZMIZAN._setBtn("yenileButton", false, "Yenile");
+    document.body.style.cursor = "default";
+  }
+};
+
+/* =========================
+   DOWNLOAD
+   ========================= */
+OBS.OZMIZAN.ozmizdownloadReport = async function (format) {
+  const req = OBS.OZMIZAN._parseMizanBilgi();
+  req.format = format;
+
+  OBS.OZMIZAN._clearError();
+
+  document.body.style.cursor = "wait";
+  // senin id’ler:
+  OBS.OZMIZAN._setBtn("ozmizindirButton", true, "İşleniyor...");
+  OBS.OZMIZAN._setBtn("ozmizyenileButton", true); // sadece disable
+
+  try {
+    const response = await fetchWithSessionCheckForDownload("cari/ozelmizan_download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req),
+    });
+
+    if (!response?.blob) throw new Error("Dosya indirilemedi.");
+
+    const disposition = response.headers.get("Content-Disposition") || "";
+    const m = disposition.match(/filename="(.+)"/);
+    const fileName = m ? m[1] : "ozel_mizan_rapor.bin";
+
+    const url = window.URL.createObjectURL(response.blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+  } catch (e) {
+    OBS.OZMIZAN._showError(e?.message || "Bilinmeyen bir hata oluştu.");
+  } finally {
+    OBS.OZMIZAN._setBtn("ozmizindirButton", false, "Rapor İndir");
+    OBS.OZMIZAN._setBtn("ozmizyenileButton", false);
+    document.body.style.cursor = "default";
+  }
+};
+
+/* =========================
+   MAIL
+   ========================= */
+OBS.OZMIZAN.ozmizmailAt = function () {
+  localStorage.removeItem("tableData");
+  localStorage.removeItem("grprapor");
+  localStorage.removeItem("tablobaslik");
+
+  const req = OBS.OZMIZAN._parseMizanBilgi();
+  const degerler =
+    `${req.hkodu1},${req.hkodu2},${req.startDate},${req.endDate},` +
+    `${req.cins1},${req.cins2},${req.karton1},${req.karton2},${req.hangi_tur},cariozelmizan`;
+
+  const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+  mailsayfasiYukle(url);
+};

@@ -103,8 +103,8 @@
 
 /* error cam */
 #ara_content #errorDiv{
-  width: min(760px, 100%);
-  margin: 10px auto;
+ display:none; 
+  margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
@@ -145,7 +145,7 @@
     </div>
   </div>
 
-  <div id="errorDiv" style="display:none;"></div>
+  <div id="errorDiv"></div>
 
   <div class="group-box">
     <button class="btn btn-primary" type="button" id="kaydetButton"
@@ -155,87 +155,4 @@
   </div>
 </div>
 
-<script>
-async function aramaYap() {
-  const hesap = document.getElementById("hesap").value.trim();
-  const err = document.getElementById("errorDiv");
-  const btn = document.getElementById("kaydetButton");
 
-  err.style.display = "none";
-  err.innerText = "";
-  btn.classList.remove("btn-ready");
-
-  if (!hesap) {
-    err.style.display = "block";
-    err.innerText = "Lütfen e-mail gir.";
-    return;
-  }
-
-  document.body.style.cursor = "wait";
-  try {
-    const response = await fetchWithSessionCheck("user/checkuser", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ hesap })
-    });
-
-    if (response && response.errorMessage) {
-      throw new Error(response.errorMessage);
-    }
-
-    // hazır: kaydet aktif + glow
-    btn.disabled = false;
-    btn.textContent = "Kaydet";
-    btn.classList.add("btn-ready");
-
-  } catch (error) {
-    err.style.display = "block";
-    err.innerText = error?.message || "Beklenmeyen bir hata oluştu.";
-    btn.disabled = true;
-    btn.classList.remove("btn-ready");
-  } finally {
-    document.body.style.cursor = "default";
-  }
-}
-
-async function copyUser() {
-  const hesap = document.getElementById("hesap").value.trim();
-  const err = document.getElementById("errorDiv");
-  const btn = document.getElementById("kaydetButton");
-
-  if (!hesap) {
-    alert("Lütfen kullanıcı alanını doldurun.");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "İşlem Yapılıyor...";
-  err.style.display = "none";
-  err.innerText = "";
-  document.body.style.cursor = "wait";
-
-  try {
-    const response = await fetchWithSessionCheck("user/savecopyuser", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ hesap })
-    });
-
-    if (response && response.errorMessage) {
-      throw new Error(response.errorMessage);
-    }
-
-    setTimeout(() => {
-      alert("Kullanıcı Oluşturuldu: " + (response.success || "OK"));
-    }, 100);
-
-  } catch (error) {
-    err.style.display = "block";
-    err.innerText = error?.message || "Beklenmeyen bir hata oluştu.";
-  } finally {
-    document.body.style.cursor = "default";
-    btn.disabled = false;
-    btn.textContent = "Kaydet";
-  }
-}
-</script>

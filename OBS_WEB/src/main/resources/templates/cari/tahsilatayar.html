@@ -224,12 +224,12 @@
         </div>
         <div class="group-box" style="margin-top:5px;">
             <span style="padding-left: 5px;"></span>
-            <button type="button" id="logoremove" class="btn btn-secondary ml-2" onclick="logoSil()" ><i class="fa fa-remove"></i>	</button>
+            <button type="button" id="logoremove" class="btn btn-secondary ml-2" onclick="OBS.TAHAYAR.logoSil()" ><i class="fa fa-remove"></i>	</button>
             <span style="padding-left: 5px;"></span>
             <input type="file" style="min-width:325px;" name="image" id="imageLogo" accept="image/*" />
       		
       		
-      		<button type="button" id="kaseremove" class="btn btn-secondary ml-2" onclick="kaseSil()" ><i class="fa fa-remove"></i>	</button>
+      		<button type="button" id="kaseremove" class="btn btn-secondary ml-2" onclick="OBS.TAHAYAR.kaseSil()" ><i class="fa fa-remove"></i>	</button>
             <span style="padding-left: 5px;"></span>
             <input type="file" style="max-width:250px;" name="image" id="imageKase" accept="image/*" />
        
@@ -238,32 +238,9 @@
         
         <div class="aramagroup-box" style="margin-top:5px;">
             <span style="padding-left: 5px;"></span>
-            <button type="button" id="serverButton" class="btn btn-primary" onclick="ayarKayit()" >Kaydet</button>
+            <button type="button" id="serverButton" class="btn btn-primary" onclick="OBS.TAHAYAR.ayarKayit()" >Kaydet</button>
         </div>
         <div id="errorDiv"></div>
        </div>
     
 </div>
-
-<script src="/obs_js_files/cari/tahsilatayar.js"></script>
-
-<script>
-function handleFileChange(event) {
-    const file = event.target.files[0];
-    const maxSizeInKB = 500; // Maksimum dosya boyutu (KB cinsinden)
-    const maxSizeInBytes = maxSizeInKB * 1024; // Bayta çeviriyoruz
-    const errorDiv = document.getElementById("errorDiv");
-    
-    if (file && file.size > maxSizeInBytes) {
-        errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-        errorDiv.style.display = "block";
-        event.target.value = ''; // Dosya seçimini sıfırlıyoruz
-    } else {
-        errorDiv.style.display = "none";
-        errorDiv.innerText = "";
-    }
-}
-document.getElementById('imageLogo').addEventListener('change', handleFileChange);
-document.getElementById('imageKase').addEventListener('change', handleFileChange);
-</script>
-

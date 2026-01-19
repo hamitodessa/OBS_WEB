@@ -147,8 +147,8 @@
 }
 
 /* Thymeleaf #error */
-#ara_content #error{
-  display:block;
+#ara_content #errorDiv{
+ display:none;
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
@@ -184,59 +184,59 @@
         <div class="email2026-title">E-Mail Ayarları</div>
         <div class="email2026-sub">SMTP bilgilerini gir, kaydet ve test et.</div>
 
-        <form id="updateForm2026" action="/user/emailsettings" method="post" enctype="multipart/form-data" autocomplete="off">
+        <div id="errorDiv"></div>
+
+        <form id="updateForm2026" autocomplete="off" onsubmit="return false;">
           <fieldset>
+            <input type="hidden" id="id" name="id" value="">
+
             <div class="form-row">
               <label class="form-check-label" for="hesap">Mail</label>
-              <input class="form-control input-width" type="email" id="hesap" name="hesap" th:value="${user.hesap}">
+              <input class="form-control input-width" type="email" id="hesap" name="hesap" value="">
             </div>
 
             <div class="form-row">
               <label class="form-check-label" for="host">Host</label>
-              <input class="form-control input-width" type="text" id="host" name="host" th:value="${user.host}">
+              <input class="form-control input-width" type="text" id="host" name="host" value="">
             </div>
 
             <div class="form-row">
               <label class="form-check-label" for="port">Port</label>
-              <input class="form-control port-width" type="text" id="port" name="port" th:value="${user.port}">
+              <input class="form-control port-width" type="text" id="port" name="port" value="">
             </div>
 
             <div class="form-row">
               <label class="form-check-label" for="sifre">Şifre</label>
-              <input class="form-control input-width" type="password" id="sifre" name="sifre" th:value="${user.sifre}">
+              <input class="form-control input-width" type="password" id="sifre" name="sifre" value="">
             </div>
 
             <div style="height:14px;"></div>
 
             <div class="form-row">
               <label class="form-check-label" for="gon_mail">Hesap</label>
-              <input class="form-control input-width" type="email" id="gon_mail" name="gon_mail" th:value="${user.gon_mail}">
+              <input class="form-control input-width" type="email" id="gon_mail" name="gon_mail" value="">
             </div>
 
             <div class="form-row">
               <label class="form-check-label" for="gon_isim">İsim</label>
-              <input class="form-control input-width" type="text" id="gon_isim" name="gon_isim" th:value="${user.gon_isim}">
+              <input class="form-control input-width" type="text" id="gon_isim" name="gon_isim" value="">
             </div>
 
             <div class="form-row">
               <label class="form-check-label"></label>
               <div class="email2026-checks">
                 <label class="form-check-label" style="width:auto;">SSL</label>
-                <input type="checkbox" id="bssl" name="bssl" th:checked="${user.bssl}">
+                <input type="checkbox" id="bssl" name="bssl" value="true">
+
                 <label class="form-check-label" style="width:auto;">TSL</label>
-                <input type="checkbox" id="btsl" name="btsl" th:checked="${user.btsl}">
+                <input type="checkbox" id="btsl" name="btsl" value="true">
               </div>
             </div>
 
             <div class="form-row">
               <label class="form-check-label"></label>
-              <button type="submit" class="main_bt" id="submitBtn">Kaydet</button>
+             <button type="button" class="main_bt" id="submitBtn" onclick="emailSettingsSave()">Kaydet</button>
             </div>
-
-            <label id="error" th:if="${error}" th:text="${error}"></label>
-            <span id="message"></span>
-
-            <input type="hidden" id="Id" name="id" th:value="${user.Id}">
           </fieldset>
         </form>
 
@@ -245,39 +245,3 @@
   </div>
 </div>
 
-<script>
-  // Delegation: dinamik içerikte garanti
-  $(document).off("submit", "#updateForm2026");
-  $(document).on("submit", "#updateForm2026", async function (event) {
-    event.preventDefault();
-
-    const $btn = $("#submitBtn");
-    const $msg = $("#message");
-
-    $msg.removeClass("psuccess perror pvisible").text("");
-
-    $btn.prop("disabled", true).text("İşleniyor...");
-
-    try {
-      const formData = new FormData(this);
-
-      const result = await fetchWithSessionCheck("user/emailsettings_save", {
-        method: "POST",
-        body: formData
-      });
-
-      // ✅ doğru kontrol
-      if (result && result.errorMessage && result.errorMessage.trim() !== "") {
-        $msg.removeClass("psuccess").addClass("perror pvisible").text(result.errorMessage);
-      } else {
-        $msg.removeClass("perror").addClass("psuccess pvisible").text(result?.message || "Kaydedildi.");
-      }
-
-    } catch (error) {
-      $msg.removeClass("psuccess").addClass("perror pvisible")
-          .text(error?.message || "Bir hata oluştu.");
-    } finally {
-      $btn.prop("disabled", false).text("Kaydet");
-    }
-  });
-</script>

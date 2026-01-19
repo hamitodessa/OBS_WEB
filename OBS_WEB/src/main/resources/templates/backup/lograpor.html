@@ -199,11 +199,11 @@
 				class="form-control" style="width: 125px;">
 			<div style="position: relative;  width: 150px;">
 				<select style="width: 150px;" class="form-select"
-					onchange="logliste()" id="hangi_emir" name="hangi_emir"></select> <span
+					onchange="OBS.BACKUPLOG.logListe(0)" id="hangi_emir" name="hangi_emir"></select> <span
 					style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); pointer-events: none; color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .35); font-weight: 700; line-height: 1;">▼</span>
 			</div>
 			<button class="btn btn-primary" type="button"
-				onclick="emirismidoldur()" id="emirismiButton">Emir İsmi
+				onclick="OBS.BACKUPLOG.emirIsmiDoldur()" id="emirismiButton">Emir İsmi
 				Doldur</button>
 		</div>
 	</div>
@@ -224,11 +224,11 @@
 		</div>
 		<div id="pagination-controls"
 			style="margin-top: 10px; display: flex; gap: 10px;">
-			<button class="btn btn-secondary" id="prevPage" onclick="geriSayfa()">◀
+			<button class="btn btn-secondary" id="prevPage" onclick="OBS.BACKUPLOG.geriSayfa()">◀
 				Önceki</button>
 			<button class="btn btn-secondary" id="nextPage"
-				onclick="ileriSayfa()">Sonraki ▶</button>
+				onclick="OBS.BACKUPLOG.ileriSayfa()">Sonraki ▶</button>
 		</div>
 	</div>
 </div>
-<script src="/obs_js_files/backup/lograpor.js"></script>
+

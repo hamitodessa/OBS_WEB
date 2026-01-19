@@ -1,141 +1,168 @@
-tabloyukle();
-function tabloyukle() {
-	document.body.style.cursor = "wait"
-	document.getElementById("extraValue").value = '';
-	let storedData = localStorage.getItem("tableData");
-	let data = localStorage.getItem("grprapor");
-	let tablobaslik = localStorage.getItem("tablobaslik");
-	if (storedData) {
-		let parsedData = JSON.parse(storedData);
-		document.getElementById("extraValue").value = JSON.stringify(parsedData.rows);
-		document.getElementById("format").value = "xlsx";
-		document.getElementById("format").disabled = true;
-	}
-	if (data) {
-		document.getElementById("grprapor").value = data;
-		document.getElementById("tablobaslik").value = tablobaslik;
-		document.getElementById("format").value = "xlsx";
-		document.getElementById("format").disabled = true;
-	}
-	if (document.getElementById("degerler").value === "kercikis" || document.getElementById("degerler").value === "kergiris"
-		|| document.getElementById("degerler").value === "") {
-		document.getElementById("format").value = "xlsx";
-		document.getElementById("format").disabled = true;
-	}
-	document.body.style.cursor = "default"
+window.OBS = window.OBS || {};
+OBS.REPORTMAIL = OBS.REPORTMAIL || {};
+
+OBS.REPORTMAIL.byId = (id) => document.getElementById(id);
+
+OBS.REPORTMAIL.init = function () {
+  OBS.REPORTMAIL.tabloyukle();
 };
 
-function getRaporEmailDegiskenler() {
-	const v = id => (document.getElementById(id)?.value ?? "").trim();
-	return {
-		hesap: v("hesap"),
-		isim: v("isim"),
-		too: v("too"),
-		ccc: v("ccc"),
-		konu: v("konu"),
-		aciklama: v("aciklama"),
-		nerden: v("nerden"),
-		degerler: v("degerler"),
-		baslik: v("tablobaslik"),
-		format: document.getElementById("format") ? v("format") : ""
-	};
-}
+OBS.REPORTMAIL.tabloyukle = function () {
+  document.body.style.cursor = "wait";
 
-function validateRaporFields(model, errorDivId = "errorDiv") {
-	const errorDiv = document.getElementById(errorDivId);
-	const required = [
-		["hesap", "Hesap"],
-		["isim", "İsim"],
-		["too", "Alıcı (To)"],
-		["konu", "Konu"],
-		["aciklama", "Açıklama"]
-	];
+  const extra   = OBS.REPORTMAIL.byId("extraValue");
+  const format  = OBS.REPORTMAIL.byId("format");
+  const degerler= OBS.REPORTMAIL.byId("degerler");
 
-	for (const [key, label] of required) {
-		if (!model[key]) {
-			if (errorDiv) {
-				errorDiv.style.display = "block";
-				errorDiv.innerText = `${label} alanı boş olamaz!`;
-			}
-			const el = document.getElementById(key);
-			el?.focus();
-			return false;
-		}
-	}
-	if (model.too && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(model.too)) {
-		if (errorDiv) {
-			errorDiv.style.display = "block";
-			errorDiv.innerText = `Alıcı (To) geçerli bir e-posta değil.`;
-		}
-		document.getElementById("too")?.focus();
-		return false;
-	}
+  if (extra) extra.value = "";
 
-	if (errorDiv) {
-		errorDiv.style.display = "none";
-		errorDiv.innerText = "";
-	}
-	return true;
-}
+  const tableData = localStorage.getItem("tableData");
+  const grprapor  = localStorage.getItem("grprapor");
+  const baslik    = localStorage.getItem("tablobaslik");
 
-async function sendmailAt() {
-	const RaporEmailDegiskenler = getRaporEmailDegiskenler();
+  if (tableData && extra && format) {
+    const parsed = JSON.parse(tableData);
+    extra.value = JSON.stringify(parsed.rows);
+    format.value = "xlsx";
+    format.disabled = true;
+  }
 
-	if (document.getElementById("degerler").value === "kercikis" || document.getElementById("degerler").value === "kergiris") {
-		const keresteyazdirDTO = localStorage.getItem("keresteyazdirDTO");
-		RaporEmailDegiskenler.keresteyazdirDTO = JSON.parse(keresteyazdirDTO);
-	}
+  if (grprapor) {
+    const g = OBS.REPORTMAIL.byId("grprapor");
+    const t = OBS.REPORTMAIL.byId("tablobaslik");
+    if (g) g.value = grprapor;
+    if (t) t.value = baslik || "";
+    if (format) {
+      format.value = "xlsx";
+      format.disabled = true;
+    }
+  }
 
-	if (document.getElementById("extraValue").value != "") {
-		let extraValue = document.getElementById("extraValue").value;
-		RaporEmailDegiskenler.exceList = JSON.parse(extraValue);
-	}
-	if (document.getElementById("grprapor").value != "") {
-		let extraValue = document.getElementById("grprapor").value;
-		RaporEmailDegiskenler.tableString = extraValue;
-	}
+  if (!degerler || ["kercikis", "kergiris", ""].includes(degerler.value)) {
+    if (format) {
+      format.value = "xlsx";
+      format.disabled = true;
+    }
+  }
 
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
+  document.body.style.cursor = "default";
+};
 
+OBS.REPORTMAIL.getModel = function () {
+  const v = (id) => (OBS.REPORTMAIL.byId(id)?.value || "").trim();
+  return {
+    hesap: v("hesap"),
+    isim: v("isim"),
+    too: v("too"),
+    ccc: v("ccc"),
+    konu: v("konu"),
+    aciklama: v("aciklama"),
+    nerden: v("nerden"),
+    degerler: v("degerler"),
+    baslik: v("tablobaslik"),
+    format: v("format")
+  };
+};
 
-	if (!validateRaporFields(RaporEmailDegiskenler)) return;
+OBS.REPORTMAIL.validate = function (m) {
+  const err = OBS.REPORTMAIL.byId("errorDiv");
+  const required = {
+    hesap: "Hesap",
+    isim: "İsim",
+    too: "Alıcı (To)",
+    konu: "Konu",
+    aciklama: "Açıklama"
+  };
 
-	const $mailButton = $('#mailButton');
-	document.body.style.cursor = "wait";
-	$mailButton.prop('disabled', true).text('Gönderiliyor...');
-	try {
-		const response = await fetchWithSessionCheck('send_email_gonder', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(RaporEmailDegiskenler)
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const data = response;
-		if (data.success) {
-			errorDiv.style.display = "block";
-			errorDiv.style.color = "green";
-			errorDiv.innerText = data.success;
-		} else {
-			errorDiv.style.display = "block";
-			errorDiv.style.color = "red";
-			errorDiv.innerText = data.error;
-		}
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.style.color = "red";
-		errorDiv.innerText = error.message || "Bir hata oluştu.";
-	} finally {
-		localStorage.removeItem("tableData");
-		localStorage.removeItem("grprapor");
-		localStorage.removeItem("tablobaslik");
-		localStorage.removeItem("keresteyazdirDTO");
-		document.body.style.cursor = "default";
-		$mailButton.prop('disabled', false).text('Gönder');
-	}
-}
+  for (const k in required) {
+    if (!m[k]) {
+      if (err) {
+        err.style.display = "block";
+        err.style.color = "red";
+        err.innerText = `${required[k]} alanı boş olamaz!`;
+      }
+      OBS.REPORTMAIL.byId(k)?.focus();
+      return false;
+    }
+  }
+
+  if (m.too && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.too)) {
+    if (err) {
+      err.style.display = "block";
+      err.style.color = "red";
+      err.innerText = "Alıcı (To) geçerli bir e-posta değil.";
+    }
+    OBS.REPORTMAIL.byId("too")?.focus();
+    return false;
+  }
+
+  if (err) {
+    err.style.display = "none";
+    err.innerText = "";
+  }
+  return true;
+};
+
+OBS.REPORTMAIL.send = async function () {
+  const model = OBS.REPORTMAIL.getModel();
+  const err = OBS.REPORTMAIL.byId("errorDiv");
+  const btn = OBS.REPORTMAIL.byId("mailButton");
+
+  if (!OBS.REPORTMAIL.validate(model)) return;
+
+  if (["kercikis", "kergiris"].includes(model.degerler)) {
+    model.keresteyazdirDTO = JSON.parse(localStorage.getItem("keresteyazdirDTO") || "null");
+  }
+
+  const extraVal = OBS.REPORTMAIL.byId("extraValue")?.value;
+  if (extraVal) model.exceList = JSON.parse(extraVal);
+
+  const grpVal = OBS.REPORTMAIL.byId("grprapor")?.value;
+  if (grpVal) model.tableString = grpVal;
+
+  document.body.style.cursor = "wait";
+  if (btn) { btn.disabled = true; btn.innerText = "Gönderiliyor..."; }
+
+  try {
+    const res = await fetchWithSessionCheck("send_email_gonder", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(model)
+    });
+
+    if (res?.errorMessage) throw new Error(res.errorMessage);
+
+    if (err) {
+      err.style.display = "block";
+      err.style.color = "lime";
+      err.innerText = res.success || "Mail gönderildi.";
+    }
+
+  } catch (e) {
+    if (err) {
+      err.style.display = "block";
+      err.style.color = "red";
+      err.innerText = e?.message || "Bir hata oluştu.";
+    }
+  } finally {
+    ["tableData", "grprapor", "tablobaslik", "keresteyazdirDTO"]
+      .forEach(k => localStorage.removeItem(k));
+
+    document.body.style.cursor = "default";
+    if (btn) { btn.disabled = false; btn.innerText = "Gönder"; }
+  }
+};
+
+/* =========================
+   GLOBAL KÖPRÜLER (HTML ve pageModules için)
+   ========================= */
+
+// HTML: onclick="sendmailAt()" aynen kalsın
+window.sendmailAt = function () {
+  return OBS.REPORTMAIL.send();
+};
+
+// pageModules init: DOM basıldıktan sonra çağır
+window.sendEmailInit = function () {
+  OBS.REPORTMAIL.init();
+};

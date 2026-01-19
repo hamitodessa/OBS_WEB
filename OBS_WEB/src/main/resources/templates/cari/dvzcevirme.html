@@ -209,7 +209,7 @@
 		<div style="position: relative; width: 150px; margin-left: 10px;">
 			<select id="reportFormat" class="form-select"
 				style="width: 150px; margin-left: 10px"
-				onchange="dvzdownloadReport(this.value)" disabled>
+				onchange="OBS.DVZ.dvzdownloadReport(this.value)" disabled>
 				<option value="" disabled selected>Rapor Indir</option>
 				<option value="pdf">PDF</option>
 				<option value="xlsx">Excel (XLSX)</option>
@@ -219,7 +219,7 @@
 				style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
 		</div>
 		<button class="btn btn-primary" style="margin-left: 10px"
-			type="button" id="mailButton" onclick="dvzmailAt()" disabled>Email
+			type="button" id="mailButton" onclick="OBS.DVZ.dvzmailAt()" disabled>Email
 			Gonder</button>
 		<label id="hesapAdi"
 			style="width: 300px; font-weight: bold; margin-left: 40px">.....</label>
@@ -267,26 +267,25 @@
 </div>
 <div class='pagination-container' style="margin-top: 5px">
 	<button type="button" class="btn btn-secondary ml-2" id="ilksayfa"
-		onclick="ilksayfa()">
+		onclick="OBS.DVZ.ilksayfa()">
 		<i class="fa fa-backward"></i>
 	</button>
 	<span style="padding-left: 5px;"></span>
 	<button type="button" class="btn btn-secondary ml-2" id="oncekisayfa"
-		onclick="oncekisayfa()">
+		onclick="OBS.DVZ.oncekisayfa()">
 		<i class="fa fa-angle-left"></i>
 	</button>
 	<span style="padding-left: 5px;"></span>
 	<button type="button" class="btn btn-secondary ml-2" id="sonrakisayfa"
-		onclick="sonrakisayfa()">
+		onclick="OBS.DVZ.sonrakisayfa()">
 		<i class="fa fa-angle-right"></i>
 	</button>
 	<span style="padding-left: 5px;"></span>
 	<button type="button" class="btn btn-secondary ml-2" id="sonsayfa"
-		onclick="sonsayfa()">
+		onclick="OBS.DVZ.sonsayfa()">
 		<i class="fa fa-forward"></i>
 	</button>
 </div>
 <input  type="hidden"  id="dvzcevirmeBilgi"  name="dvzcevirmeBilgi"  value="initialValue"/>
 <div th:replace="~{modal/cari/dvzcevirmefiltre :: modaldvzcevirmefiltre}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
-<script src="/obs_js_files/cari/dvzcevirme.js"></script>

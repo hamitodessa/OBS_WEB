@@ -1,225 +1,189 @@
-function serversuperviserdurum() {
-	const drm = document.getElementById("hangi_sql").value;
-	const superviserDiv = document.getElementById("superviserdiv");
-	if (drm === "PG SQL") {
-		superviserDiv.style.visibility = "visible";
-		superviserDiv.style.opacity = "1";
-		superviserDiv.style.height = "auto";
-		document.getElementById("superviser").value = "";
-	} else {
-		superviserDiv.style.visibility = "hidden";
-		superviserDiv.style.opacity = "0";
-		superviserDiv.style.height = "0";
-	}
-}
+window.OBS = window.OBS || {};
+OBS.SERVER = OBS.SERVER || {};
 
-async function serverKontrol() {
-	const serverBilgiDTO = {
-		user_modul: document.getElementById("user_modul").value,
-		hangi_sql: document.getElementById("hangi_sql").value,
-		user_prog_kodu: document.getElementById("user_prog_kodu").value,
-		user_server: document.getElementById("user_server").value,
-		user_pwd_server: document.getElementById("user_pwd_server").value,
-		user_ip: document.getElementById("user_ip").value,
-		superviser: document.getElementById("superviser").value,
-	};
-	const errorDiv = document.getElementById("errorDiv");
-	const dbButton = document.getElementById("dbKontrolButton");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	if (
-		!serverBilgiDTO.user_prog_kodu ||
-		!serverBilgiDTO.user_server ||
-		!serverBilgiDTO.user_pwd_server ||
-		!serverBilgiDTO.user_ip
-	) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = "Lütfen tüm gerekli alanları doldurunuz.";
-		return;
-	}
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("server/serverkontrol", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(serverBilgiDTO),
-		});
-		const data = response;
-		setTimeout(() => {
-			if (data.serverDurum === "true") {
-				setTimeout(() => {
-					alert("Server Bağlantısı Sağlandı");
-				}, 100);
-				if (dbButton) dbButton.disabled = false;
-			} else {
-				setTimeout(() => {
-					alert("Server Bağlantısı Sağlanamadı!");
-				}, 100);
-				if (dbButton) dbButton.disabled = true;
-			}
-		}, 100);
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+OBS.SERVER.byId = (id) => document.getElementById(id);
 
-async function databaseKontrol() {
-	const serverBilgiDTO = {
-		user_modul: document.getElementById("user_modul").value,
-		hangi_sql: document.getElementById("hangi_sql").value,
-		user_prog_kodu: document.getElementById("user_prog_kodu").value,
-		user_server: document.getElementById("user_server").value,
-		user_pwd_server: document.getElementById("user_pwd_server").value,
-		user_ip: document.getElementById("user_ip").value,
-		superviser: document.getElementById("superviser").value,
-	};
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	if (
-		!serverBilgiDTO.user_prog_kodu ||
-		!serverBilgiDTO.user_server ||
-		!serverBilgiDTO.user_pwd_server ||
-		!serverBilgiDTO.user_ip
-	) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = "Lütfen tüm gerekli alanları doldurunuz.";
-		return;
-	}
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("server/dosyakontrol", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(serverBilgiDTO),
-		});
-		const data = response;
-		if (data.dosyaDurum === "true") {
-			document.body.style.cursor = "default";
-			setTimeout(() => {
-				alert("Dosya Veritabanında Mevcut");
-			}, 100);
-		} else {
+OBS.SERVER.showError = function (msg) {
+  const e = OBS.SERVER.byId("errorDiv");
+  if (!e) return;
+  e.style.display = "block";
+  e.innerText = msg || "Bilinmeyen bir hata oluştu.";
+};
 
-			setTimeout(() => {
-				document.body.style.cursor = "default";
-			}, 100);
-			const confirmCreate = confirm("Dosya Veritabanında Mevcut Değil. Oluşturulsun mu?");
-			if (!confirmCreate) {
-				return;
-			} else {
-				await createnewDB();
-			}
-		}
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+OBS.SERVER.clearError = function () {
+  const e = OBS.SERVER.byId("errorDiv");
+  if (!e) return;
+  e.style.display = "none";
+  e.innerText = "";
+};
 
-async function createnewDB() {
-	setTimeout(() => {
-		document.body.style.cursor = "default";
-	}, 100);
-	let firmaadi = "";
-	if (document.getElementById("user_modul").value != "Kur") {
-		firmaadi = prompt("Firma Ismi Giriniz :");
-		if (firmaadi === null) {
-			firmaadi = "";
-		}
-	}
-	setTimeout(() => {
-		document.body.style.cursor = "wait";
-	}, 100);
-	const serverBilgiDTO = {
-		user_modul: document.getElementById("user_modul").value,
-		hangi_sql: document.getElementById("hangi_sql").value,
-		user_prog_kodu: document.getElementById("user_prog_kodu").value,
-		user_server: document.getElementById("user_server").value,
-		user_pwd_server: document.getElementById("user_pwd_server").value,
-		user_ip: document.getElementById("user_ip").value,
-		firma_adi: firmaadi,
-		superviser: document.getElementById("superviser").value
-	};
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("server/dosyaolustur", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(serverBilgiDTO),
-		});
-		const data = response;
-		await saveTo();
-		if (data.olustuDurum === "true") {
-			setTimeout(() => {
-				alert("Dosya Oluşturuldu");
-			}, 100);
+OBS.SERVER.collectDTO = function (extra = {}) {
+  return {
+    user_modul: OBS.SERVER.byId("user_modul")?.value || "",
+    hangi_sql: OBS.SERVER.byId("hangi_sql")?.value || "",
+    user_prog_kodu: OBS.SERVER.byId("user_prog_kodu")?.value || "",
+    user_server: OBS.SERVER.byId("user_server")?.value || "",
+    user_pwd_server: OBS.SERVER.byId("user_pwd_server")?.value || "",
+    user_ip: OBS.SERVER.byId("user_ip")?.value || "",
+    superviser: OBS.SERVER.byId("superviser")?.value || "",
+    ...extra
+  };
+};
 
-			if (data.indexolustuDurum === "true") {
-				setTimeout(() => {
-					alert("Indexleme Oluşturuldu");
-				}, 100);
-			}
-			else {
-				setTimeout(() => {
-					alert("Indexleme Oluştururken hata olustu");
-				}, 100);
-			}
-		} else {
-			errorDiv.style.display = "block";
-			errorDiv.innerText = data.errorMessage || "Dosya oluşturulamadı.";
-		}
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+OBS.SERVER.validateRequired = function (dto) {
+  if (!dto.user_prog_kodu || !dto.user_server || !dto.user_pwd_server || !dto.user_ip) {
+    OBS.SERVER.showError("Lütfen tüm gerekli alanları doldurunuz.");
+    return false;
+  }
+  return true;
+};
 
-async function saveTo() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	try {
-		const userDetails = {
-			user_prog_kodu: document.getElementById("user_prog_kodu").value,
-			user_server: document.getElementById("user_server").value,
-			user_pwd_server: document.getElementById("user_pwd_server").value,
-			user_ip: document.getElementById("user_ip").value,
-			user_modul: document.getElementById("user_modul").value,
-			hangi_sql: document.getElementById("hangi_sql").value,
-			izinlimi: true,
-			calisanmi: true,
-			log: false,
-			superviser: document.getElementById("superviser").value,
-		};
-		const response = await fetchWithSessionCheck("user/user_details_save", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(userDetails),
-		});
-		if (response.errorMessage) {
-			throw new Error(errorMessage);
-		}
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+OBS.SERVER.setBusy = function (yes) {
+  document.body.style.cursor = yes ? "wait" : "default";
+};
+
+OBS.SERVER.postJSON = async function (url, dto) {
+  return await fetchWithSessionCheck(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dto),
+  });
+};
+
+// ===== UI =====
+window.serversuperviserdurum = function () {
+  const drm = OBS.SERVER.byId("hangi_sql")?.value;
+  const div = OBS.SERVER.byId("superviserdiv");
+  const inp = OBS.SERVER.byId("superviser");
+  if (!div) return;
+
+  const show = (drm === "PG SQL");
+  div.style.visibility = show ? "visible" : "hidden";
+  div.style.opacity = show ? "1" : "0";
+  div.style.height = show ? "auto" : "0";
+  if (show && inp) inp.value = "";
+};
+
+// ===== actions =====
+window.serverKontrol = async function () {
+  OBS.SERVER.clearError();
+
+  const dto = OBS.SERVER.collectDTO();
+  if (!OBS.SERVER.validateRequired(dto)) return;
+
+  const dbButton = OBS.SERVER.byId("dbKontrolButton");
+  OBS.SERVER.setBusy(true);
+
+  try {
+    const data = await OBS.SERVER.postJSON("server/serverkontrol", dto);
+
+    if (data?.serverDurum === "true") {
+      alert("Server Bağlantısı Sağlandı");
+      if (dbButton) dbButton.disabled = false;
+    } else {
+      alert("Server Bağlantısı Sağlanamadı!");
+      if (dbButton) dbButton.disabled = true;
+    }
+  } catch (err) {
+    OBS.SERVER.showError(err?.message);
+  } finally {
+    OBS.SERVER.setBusy(false);
+  }
+};
+
+window.databaseKontrol = async function () {
+  OBS.SERVER.clearError();
+
+  const dto = OBS.SERVER.collectDTO();
+  if (!OBS.SERVER.validateRequired(dto)) return;
+
+  OBS.SERVER.setBusy(true);
+  try {
+    const data = await OBS.SERVER.postJSON("server/dosyakontrol", dto);
+
+    if (data?.dosyaDurum === "true") {
+      alert("Dosya Veritabanında Mevcut");
+      return;
+    }
+
+    OBS.SERVER.setBusy(false);
+    const ok = confirm("Dosya Veritabanında Mevcut Değil. Oluşturulsun mu?");
+    if (!ok) return;
+
+    await window.createnewDB();
+  } catch (err) {
+    OBS.SERVER.showError(err?.message);
+  } finally {
+    OBS.SERVER.setBusy(false);
+  }
+};
+
+window.createnewDB = async function () {
+  OBS.SERVER.clearError();
+
+  let firmaadi = "";
+  if (OBS.SERVER.byId("user_modul")?.value !== "Kur") {
+    firmaadi = prompt("Firma Ismi Giriniz :") || "";
+  }
+
+  const dto = OBS.SERVER.collectDTO({ firma_adi: firmaadi });
+
+  OBS.SERVER.setBusy(true);
+  try {
+    const data = await OBS.SERVER.postJSON("server/dosyaolustur", dto);
+
+    await window.saveTo(); // kullanıcı detayını kaydet
+
+    if (data?.olustuDurum === "true") {
+      alert("Dosya Oluşturuldu");
+      if (data?.indexolustuDurum === "true") alert("Indexleme Oluşturuldu");
+      else alert("Indexleme Oluştururken hata oluştu");
+    } else {
+      OBS.SERVER.showError(data?.errorMessage || "Dosya oluşturulamadı.");
+    }
+  } catch (err) {
+    OBS.SERVER.showError(err?.message);
+  } finally {
+    OBS.SERVER.setBusy(false);
+  }
+};
+
+window.saveTo = async function () {
+  OBS.SERVER.clearError();
+
+  const dto = OBS.SERVER.collectDTO({
+    izinlimi: true,
+    calisanmi: true,
+    log: false
+  });
+
+  if (!OBS.SERVER.validateRequired(dto)) return;
+
+  OBS.SERVER.setBusy(true);
+  try {
+    const res = await OBS.SERVER.postJSON("user/user_details_save", dto);
+    if (res?.errorMessage && res.errorMessage.trim() !== "") {
+      throw new Error(res.errorMessage);
+    }
+  } catch (err) {
+    OBS.SERVER.showError(err?.message || "Bir hata oluştu.");
+  } finally {
+    OBS.SERVER.setBusy(false);
+  }
+};
+
+// ✅ sayfa init (butonları bağla + superviser durumunu ayarla)
+window.createDbInit = function () {
+  const serverBtn = OBS.SERVER.byId("serverButton");
+  const dbBtn     = OBS.SERVER.byId("dbKontrolButton");
+  const hangiSql  = OBS.SERVER.byId("hangi_sql");
+
+  if (serverBtn) serverBtn.onclick = window.serverKontrol;
+  if (dbBtn) dbBtn.onclick = window.databaseKontrol;
+
+  // select değişince superviser div güncelle
+  if (hangiSql) hangiSql.onchange = window.serversuperviserdurum;
+
+  // sayfa ilk açılışta da uygula
+  window.serversuperviserdurum();
+};

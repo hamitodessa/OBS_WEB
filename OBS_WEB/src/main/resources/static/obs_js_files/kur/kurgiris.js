@@ -1,256 +1,287 @@
-async function kuroku() {
-	const tarih = document.getElementById("tarih").value;
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	if (!tarih) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = "Lütfen tüm alanları doldurun.";
-		return;
-	}
-	const tableBody = document.getElementById("tableBody");
-	tableBody.innerHTML = "";
-	document.body.style.cursor = "wait";
-	try {
-		const data = await fetchWithSessionCheck("kur/kurgunluk", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ tarih }),
-		});
-		if (data.errorMessage) {
-			throw new Error(data.errorMessage);
-		}
-		if (data.success) {
-			if (Array.isArray(data.data) && data.data.length > 0) {
-				data.data.forEach(item => {
-					const row = document.createElement("tr");
-					row.classList.add("table-row-height");
-					row.innerHTML = `
-						<td>${item.Kur || ''}</td>
-						<td class="double-column">${formatNumber4(item.MA)}</td>
-						<td class="double-column">${formatNumber4(item.MS)}</td>
-						<td class="double-column">${formatNumber4(item.SA)}</td>
-						<td class="double-column">${formatNumber4(item.SS)}</td>
-						<td class="double-column">${formatNumber4(item.BA)}</td>
-						<td class="double-column">${formatNumber4(item.BS)}</td>
-					`;
-					row.addEventListener("click", function () {
-						setFormValues(row);
-					});
-					tableBody.appendChild(row);
-				});
-				const firstRow = tableBody.rows[0];
-				const cells = firstRow.cells;
-				document.getElementById("doviz_tur").value = cells[0].textContent.trim();
-				document.getElementById("ma").value = cells[1].textContent.trim();
-				document.getElementById("ms").value = cells[2].textContent.trim();
-				document.getElementById("sa").value = cells[3].textContent.trim();
-				document.getElementById("ss").value = cells[4].textContent.trim();
-				document.getElementById("ba").value = cells[5].textContent.trim();
-				document.getElementById("bs").value = cells[6].textContent.trim();
-			} else {
-				["ma", "ms", "sa", "ss", "ba", "bs"].forEach(id => {
-					document.getElementById(id).value = "0.0000";
-				});
-			}
-		} else {
-			errorDiv.style.display = "block";
-			errorDiv.innerText = "İşlem başarısız. Lütfen tekrar deneyin.";
-		}
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = `Beklenmeyen bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+window.OBS = window.OBS || {};
+OBS.KUR = OBS.KUR || {};
 
-function tarihGeri() {
-	const tarih = document.getElementById("tarih").value;
-	const date = new Date(tarih);
-	date.setDate(date.getDate() - 1);
-	const formattedDate = date.toISOString().split('T')[0];
-	document.getElementById("tarih").value = formattedDate;
-	kuroku();
-}
+OBS.KUR.byId = (id) => document.getElementById(id);
 
-function tarihIleri() {
-	const tarih = document.getElementById("tarih").value;
-	const date = new Date(tarih);
-	date.setDate(date.getDate() + 1);
-	const formattedDate = date.toISOString().split('T')[0];
-	document.getElementById("tarih").value = formattedDate;
-	kuroku();
-}
+OBS.KUR.showError = function (msg) {
+  const e = OBS.KUR.byId("errorDiv");
+  if (!e) return;
+  e.style.display = "block";
+  e.innerText = msg || "Beklenmeyen bir hata oluştu.";
+};
 
-function checkEnter(event) {
-	if (event.key === "Enter" || event.keyCode === 13) {
-		kuroku();
-	}
-}
+OBS.KUR.clearError = function () {
+  const e = OBS.KUR.byId("errorDiv");
+  if (!e) return;
+  e.style.display = "none";
+  e.innerText = "";
+};
 
-function setFormValues(row) {
-	const cells = row.cells;
-	document.getElementById("doviz_tur").value = cells[0].textContent.trim();
-	document.getElementById("ma").value = cells[1].textContent.trim();
-	document.getElementById("ms").value = cells[2].textContent.trim();
-	document.getElementById("sa").value = cells[3].textContent.trim();
-	document.getElementById("ss").value = cells[4].textContent.trim();
-	document.getElementById("ba").value = cells[5].textContent.trim();
-	document.getElementById("bs").value = cells[6].textContent.trim();
-}
+OBS.KUR.setBusy = function (yes) {
+  document.body.style.cursor = yes ? "wait" : "default";
+};
 
-function kurSatirOku() {
-	let kur_turu = document.getElementById("doviz_tur").value;
-	const tableBody = document.getElementById("tableBody");
-	let matchedRow = null;
-	for (let i = 0; i < tableBody.rows.length; i++) {
-		const row = tableBody.rows[i];
-		const firstColumnValue = row.cells[0].textContent.trim();
-		if (firstColumnValue === kur_turu) {
-			matchedRow = row;
-			break;
-		}
-	}
-	if (matchedRow) {
-		document.getElementById("ma").value = matchedRow.cells[1].textContent.trim();
-		document.getElementById("ms").value = matchedRow.cells[2].textContent.trim();
-		document.getElementById("sa").value = matchedRow.cells[3].textContent.trim();
-		document.getElementById("ss").value = matchedRow.cells[4].textContent.trim();
-		document.getElementById("ba").value = matchedRow.cells[5].textContent.trim();
-		document.getElementById("bs").value = matchedRow.cells[6].textContent.trim();
-	} else {
-		document.getElementById("ma").value = formatNumber4(0);
-		    document.getElementById("ms").value = formatNumber4(0);
-		    document.getElementById("sa").value = formatNumber4(0);
-		    document.getElementById("ss").value = formatNumber4(0);
-		    document.getElementById("ba").value = formatNumber4(0);
-		    document.getElementById("bs").value = formatNumber4(0);
-	}
-}
-function formatNumber4(value) {
-	if (value == null) return '';
-	return parseFloat(value).toLocaleString(undefined, {
-		minimumFractionDigits: 4,
-		maximumFractionDigits: 4
-	});
-}
+OBS.KUR.parseLocaleNumber = function (val) {
+	if (val == null) return 0;
 
-async function kurKayit() {
-	const kurgirisDTO = {
-		dvz_turu: document.getElementById("doviz_tur").value,
-		tar: document.getElementById("tarih").value,
-		ma: parseLocaleNumber(document.getElementById("ma").value),
-		ms: parseLocaleNumber(document.getElementById("ms").value),
-		sa: parseLocaleNumber(document.getElementById("sa").value),
-		ss: parseLocaleNumber(document.getElementById("ss").value),
-		ba: parseLocaleNumber(document.getElementById("ba").value),
-		bs: parseLocaleNumber(document.getElementById("bs").value)
-	};
-	const errorDiv = document.getElementById("errorDiv");
-	document.body.style.cursor = "wait";
-	const $kaydetButton = $('#kaydetButton');
-	$kaydetButton.prop('disabled', true).text('İşleniyor...');
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("kur/kurkayit", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(kurgirisDTO)
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		sayfaYukle()
-	} catch (error) {
-		document.body.style.cursor = "default";
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message;
-	}
-	finally {
-		document.body.style.cursor = "default";
-		$kaydetButton.prop('disabled', false).text('Kaydet');
-	}
-}
-async function sayfaYukle() {
-	const url = "kur/kurgiris";
-	try {
-		document.body.style.cursor = "wait";
-		const response = await fetch(url, { method: "GET" });
-		if (!response.ok) {
-			throw new Error(`Bir hata oluştu: ${response.statusText}`);
-		}
-		const data = await response.text();
-		if (data.includes('<form') && data.includes('name="username"')) {
-			window.location.href = "/login";
-		} else {
-			document.getElementById('ara_content').innerHTML = data;
-			kuroku();
-		}
-	} catch (error) {
-		document.getElementById('ara_content').innerHTML = `<h2>${error.message}</h2>`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+	  let s = String(val).trim();
+	  if (!s) return 0;
 
-async function kurYoket() {
-	const kurgirisDTO = {
-		dvz_turu: document.getElementById("doviz_tur").value,
-		tar: document.getElementById("tarih").value
-	};
-	const confirmDelete = confirm("Bu kuru silmek istediğinize emin misiniz?");
-	if (!confirmDelete) {
-		return;
-	}
-	document.body.style.cursor = "wait";
-	const $silButton = $('#silButton');
-	$silButton.prop('disabled', true).text('Siliniyor...');
-	try {
-		const response = await fetchWithSessionCheck("kur/kurSil", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(kurgirisDTO)
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		sayfaYukle()
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-		$silButton.prop('disabled', false).text('Sil');
-	}
-}
+	  const hasDot = s.includes(".");
+	  const hasComma = s.includes(",");
 
-async function merkezOku() {
-	const datePicker = document.getElementById("tarih").value;
-	const currency = document.getElementById("doviz_tur").value;
-	document.body.style.cursor = "wait";
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("kur/merkezoku", {
-			method: "POST",
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: new URLSearchParams({ tarih: datePicker, kurcins: currency }),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		document.getElementById("ma").value = formatNumber4(response.ma || 0);
-		document.getElementById("ms").value = formatNumber4(response.ms || 0);
+	  if (hasDot && hasComma) {
+	    if (s.lastIndexOf(",") > s.lastIndexOf(".")) {
+	      s = s.replace(/\./g, "").replace(",", ".");
+	    } else {
+	      s = s.replace(/,/g, "");
+	    }
+	  } else if (hasComma) {
+	    s = s.replace(",", ".");
+	  }
+	  const n = Number(s);
+	  return Number.isFinite(n) ? n : 0;
+};
 
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+OBS.KUR.formatNumber4 = function (value) {
+  if (value == null || value === "") return "";
+  const n = typeof value === "number" ? value : OBS.KUR.parseLocaleNumber(value);
+  return n.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+};
+
+OBS.KUR.setFormValuesFromCells = function (cells) {
+  OBS.KUR.byId("doviz_tur").value = (cells[0]?.textContent || "").trim();
+  OBS.KUR.byId("ma").value = (cells[1]?.textContent || "").trim();
+  OBS.KUR.byId("ms").value = (cells[2]?.textContent || "").trim();
+  OBS.KUR.byId("sa").value = (cells[3]?.textContent || "").trim();
+  OBS.KUR.byId("ss").value = (cells[4]?.textContent || "").trim();
+  OBS.KUR.byId("ba").value = (cells[5]?.textContent || "").trim();
+  OBS.KUR.byId("bs").value = (cells[6]?.textContent || "").trim();
+};
+
+OBS.KUR.setZeros = function () {
+  ["ma", "ms", "sa", "ss", "ba", "bs"].forEach(id => {
+    const el = OBS.KUR.byId(id);
+    if (el) el.value = OBS.KUR.formatNumber4(0);
+  });
+};
+
+OBS.KUR.kuroku = async function () {
+  const tarih = OBS.KUR.byId("tarih")?.value;
+  OBS.KUR.clearError();
+
+  if (!tarih) {
+    OBS.KUR.showError("Lütfen tüm alanları doldurun.");
+    return;
+  }
+
+  const tableBody = OBS.KUR.byId("tableBody");
+  if (tableBody) tableBody.innerHTML = "";
+
+  OBS.KUR.setBusy(true);
+  try {
+    const data = await fetchWithSessionCheck("kur/kurgunluk", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tarih }),
+    });
+
+    if (data?.errorMessage) throw new Error(data.errorMessage);
+
+    if (!data?.success) {
+      OBS.KUR.showError("İşlem başarısız. Lütfen tekrar deneyin.");
+      return;
+    }
+
+    if (!Array.isArray(data.data) || data.data.length === 0) {
+      OBS.KUR.setZeros();
+      return;
+    }
+
+    data.data.forEach(item => {
+      const row = document.createElement("tr");
+      row.classList.add("table-row-height");
+      row.innerHTML = `
+        <td>${item.Kur || ""}</td>
+        <td class="double-column">${OBS.KUR.formatNumber4(item.MA)}</td>
+        <td class="double-column">${OBS.KUR.formatNumber4(item.MS)}</td>
+        <td class="double-column">${OBS.KUR.formatNumber4(item.SA)}</td>
+        <td class="double-column">${OBS.KUR.formatNumber4(item.SS)}</td>
+        <td class="double-column">${OBS.KUR.formatNumber4(item.BA)}</td>
+        <td class="double-column">${OBS.KUR.formatNumber4(item.BS)}</td>
+      `;
+      row.addEventListener("click", () => OBS.KUR.setFormValuesFromCells(row.cells));
+      tableBody.appendChild(row);
+    });
+
+    // ilk satırı forma bas
+    const firstRow = tableBody.rows[0];
+    if (firstRow) OBS.KUR.setFormValuesFromCells(firstRow.cells);
+
+  } catch (e) {
+    OBS.KUR.showError(`Beklenmeyen bir hata oluştu: ${e?.message || e}`);
+  } finally {
+    OBS.KUR.setBusy(false);
+  }
+};
+
+OBS.KUR.tarihGeri = function () {
+  const el = OBS.KUR.byId("tarih");
+  if (!el?.value) return;
+  const d = new Date(el.value);
+  d.setDate(d.getDate() - 1);
+  el.value = d.toISOString().split("T")[0];
+  OBS.KUR.kuroku();
+};
+
+OBS.KUR.tarihIleri = function () {
+  const el = OBS.KUR.byId("tarih");
+  if (!el?.value) return;
+  const d = new Date(el.value);
+  d.setDate(d.getDate() + 1);
+  el.value = d.toISOString().split("T")[0];
+  OBS.KUR.kuroku();
+};
+
+OBS.KUR.kurSatirOku = function () {
+  const kur_turu = (OBS.KUR.byId("doviz_tur")?.value || "").trim();
+  const tableBody = OBS.KUR.byId("tableBody");
+  if (!tableBody) return;
+
+  let matchedRow = null;
+  for (let i = 0; i < tableBody.rows.length; i++) {
+    const row = tableBody.rows[i];
+    const first = (row.cells[0]?.textContent || "").trim();
+    if (first === kur_turu) { matchedRow = row; break; }
+  }
+
+  if (matchedRow) OBS.KUR.setFormValuesFromCells(matchedRow.cells);
+  else OBS.KUR.setZeros();
+};
+
+OBS.KUR.kurKayit = async function () {
+  OBS.KUR.clearError();
+
+	console.info(OBS.KUR.byId("ma").value);
+	console.info(OBS.KUR.parseLocaleNumber(OBS.KUR.byId("ma")?.value));
+  const dto = {
+    dvz_turu: OBS.KUR.byId("doviz_tur")?.value || "",
+    tar: OBS.KUR.byId("tarih")?.value || "",
+    ma: OBS.KUR.parseLocaleNumber(OBS.KUR.byId("ma")?.value),
+    ms: OBS.KUR.parseLocaleNumber(OBS.KUR.byId("ms")?.value),
+    sa: OBS.KUR.parseLocaleNumber(OBS.KUR.byId("sa")?.value),
+    ss: OBS.KUR.parseLocaleNumber(OBS.KUR.byId("ss")?.value),
+    ba: OBS.KUR.parseLocaleNumber(OBS.KUR.byId("ba")?.value),
+    bs: OBS.KUR.parseLocaleNumber(OBS.KUR.byId("bs")?.value)
+  };
+
+  const btn = OBS.KUR.byId("kaydetButton");
+  OBS.KUR.setBusy(true);
+  if (btn) { btn.disabled = true; btn.textContent = "İşleniyor..."; }
+
+  try {
+    const res = await fetchWithSessionCheck("kur/kurkayit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dto)
+    });
+    if (res?.errorMessage) throw new Error(res.errorMessage);
+
+    // ✅ ANA SİSTEM SAYFA YÜKLEYİCİ
+    if (typeof window.sayfaYukle === "function") {
+      window.sayfaYukle("/kur/kurgiris");
+    } else {
+      // fallback
+      OBS.KUR.kuroku();
+    }
+
+  } catch (e) {
+    OBS.KUR.showError(e?.message || "Bir hata oluştu.");
+  } finally {
+    OBS.KUR.setBusy(false);
+    if (btn) { btn.disabled = false; btn.textContent = "Kaydet"; }
+  }
+};
+
+OBS.KUR.kurYoket = async function () {
+  OBS.KUR.clearError();
+
+  const dto = {
+    dvz_turu: OBS.KUR.byId("doviz_tur")?.value || "",
+    tar: OBS.KUR.byId("tarih")?.value || ""
+  };
+
+  const ok = confirm("Bu kuru silmek istediğinize emin misiniz?");
+  if (!ok) return;
+
+  const btn = OBS.KUR.byId("silButton");
+  OBS.KUR.setBusy(true);
+  if (btn) { btn.disabled = true; btn.textContent = "Siliniyor..."; }
+
+  try {
+    const res = await fetchWithSessionCheck("kur/kurSil", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dto)
+    });
+    if (res?.errorMessage) throw new Error(res.errorMessage);
+
+    if (typeof window.sayfaYukle === "function") {
+      window.sayfaYukle("/kur/kurgiris");
+    } else {
+      OBS.KUR.kuroku();
+    }
+
+  } catch (e) {
+    OBS.KUR.showError(e?.message || "Beklenmeyen bir hata oluştu.");
+  } finally {
+    OBS.KUR.setBusy(false);
+    if (btn) { btn.disabled = false; btn.textContent = "Sil"; }
+  }
+};
+
+OBS.KUR.merkezOku = async function () {
+  OBS.KUR.clearError();
+
+  const tarih = OBS.KUR.byId("tarih")?.value || "";
+  const kurcins = OBS.KUR.byId("doviz_tur")?.value || "";
+
+  OBS.KUR.setBusy(true);
+  try {
+    const res = await fetchWithSessionCheck("kur/merkezoku", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ tarih, kurcins }),
+    });
+
+    if (res?.errorMessage) throw new Error(res.errorMessage);
+
+    const ma = OBS.KUR.byId("ma");
+    const ms = OBS.KUR.byId("ms");
+    if (ma) ma.value = OBS.KUR.formatNumber4(res.ma || 0);
+    if (ms) ms.value = OBS.KUR.formatNumber4(res.ms || 0);
+
+  } catch (e) {
+    OBS.KUR.showError(e?.message || "Beklenmeyen bir hata oluştu.");
+  } finally {
+    OBS.KUR.setBusy(false);
+  }
+};
+
+// ✅ Sayfa DOM'a basıldıktan sonra bağlanacak init
+OBS.KUR.init = function () {
+  // (İstersen burada butonlara onclick yerine event bağlarız.)
+  // Şimdilik mevcut onclick’ler varsa sorun değil.
+
+  // Sayfa açılınca otomatik oku istiyorsan:
+  OBS.KUR.kuroku();
+};
+
+// Global köprüler (HTML onclick’ler bozulmasın diye)
+window.kuroku = () => OBS.KUR.kuroku();
+window.tarihGeri = () => OBS.KUR.tarihGeri();
+window.tarihIleri = () => OBS.KUR.tarihIleri();
+window.kurSatirOku = () => OBS.KUR.kurSatirOku();
+window.kurKayit = () => OBS.KUR.kurKayit();
+window.kurYoket = () => OBS.KUR.kurYoket();
+window.merkezOku = () => OBS.KUR.merkezOku();

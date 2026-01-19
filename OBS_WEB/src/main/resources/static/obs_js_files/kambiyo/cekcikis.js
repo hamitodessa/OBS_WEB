@@ -122,6 +122,7 @@ function updateColumnTotal() {
 		maximumFractionDigits: 0
 	});
 
+
 	totalTutarCell.textContent = total.toLocaleString(undefined, {
 		minimumFractionDigits: 2,
 		maximumFractionDigits: 2

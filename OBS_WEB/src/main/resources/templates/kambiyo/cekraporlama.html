@@ -18,25 +18,25 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* BUTTON / SELECT / INPUT */
 #ara_content .btn{
   height: 46px;
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.08);
-  color: rgba(255,255,255,.92);
-  font-weight: 800;
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
   transition: .16s ease;
+  font-weight: 800;
 }
 #ara_content .btn.btn-primary{
-  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
-  border: none;
-  color: #fff;
+ background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
 }
-#ara_content .btn:hover{
-  background: rgba(255,255,255,.12);
-  border-color: rgba(56,189,248,.35);
-  transform: translateY(-2px);
+
+#ara_content .btn.btn-primary:hover{
+ background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
 }
 
 #ara_content .form-control,
@@ -199,7 +199,7 @@
 <div class="card p-1">
   <div style="display: flex; align-items: center">
     <button class="btn btn-primary" type="button" id="cekrapyenileButton" style="margin-left: 10px"
-      onclick="openFirstModal('cekrapor')">Yenile</button>
+      onclick="openFirstModal('cekrapor')">Filtre</button>
     <button class="btn btn-primary" style="margin-left: 10px" type="button" id="cekrapreportFormat"
       onclick="cekrapdownloadReport()" disabled>Excel Indir</button>
     <button class="btn btn-primary" style="margin-left: 10px" type="button" id="cekrapmailButton"

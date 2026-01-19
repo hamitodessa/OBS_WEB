@@ -209,7 +209,7 @@
 		<div style="position: relative; width: 150px; margin-left: 10px;">
 			<select id="reportFormat" class="form-select"
 				style="width: 150px; margin-left: 10px"
-				onchange="mizdownloadReport(this.value)" disabled>
+				onchange="OBS.MIZAN.mizdownloadReport(this.value)" disabled>
 				<option value="" disabled selected>Rapor Indir</option>
 				<option value="pdf">PDF</option>
 				<option value="xlsx">Excel (XLSX)</option>
@@ -219,7 +219,7 @@
 				style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
 		</div>
 		<button class="btn btn-primary" style="margin-left: 10px"
-			type="button" id="mailButton" onclick="mizmailAt()" disabled>
+			type="button" id="mailButton" onclick="OBS.MIZAN.mizmailAt()" disabled>
 			Email Gonder</button>
 	</div>
 </div>
@@ -253,6 +253,6 @@
 </div>
 <input type="hidden" id="mizanBilgi" name="mizanBilgi"
 	value="initialValue" />
-<script src="/obs_js_files/cari/mizan.js"></script>
+
 <div th:replace="~{modal/cari/mizanfiltre :: modalmizan}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>

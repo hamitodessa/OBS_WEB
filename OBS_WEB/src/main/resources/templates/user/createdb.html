@@ -132,6 +132,7 @@
 
 /* hata kutusu */
 #ara_content #errorDiv{
+display:none; 
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
@@ -233,12 +234,12 @@
         
         <div class="aramagroup-box" style="margin-top:5px;">
             <span style="padding-left: 5px;"></span>
-            <button type="button" id="serverButton" class="btn btn-secondary ml-2" onclick="serverKontrol()" ><i class="fa fa-server"></i>	</button>
+            <button type="button" id="serverButton" class="btn btn-secondary ml-2"  ><i class="fa fa-server"></i>	</button>
             <span style="padding-left: 5px;"></span>
-            <button type="button" id="dbKontrolButton" class="btn btn-secondary ml-2" disabled onclick="databaseKontrol()" ><i class="fa fa-database"></i>	</button>
+            <button type="button" id="dbKontrolButton" class="btn btn-secondary ml-2" disabled  ><i class="fa fa-database"></i>	</button>
         </div>
-        <div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div></div>
+        <div id="errorDiv"></div>
+     </div>
     
 </div>
 
-<script src="/obs_js_files/server/createdb.js"></script>

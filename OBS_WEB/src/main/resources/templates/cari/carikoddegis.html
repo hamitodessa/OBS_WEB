@@ -152,54 +152,8 @@
 	<br>
 	<div class="group-box">
 		<button class="btn btn-primary" type="button" id="koddegisButton"
-			style="width: 150px;" onclick="kodDegis()">Kaydet</button>
+			style="width: 150px;" onclick="OBS.KODDEGIS.kodDegis()">Kaydet</button>
 	</div>
 </div>
 <div id="errorDiv"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
-<script>
-
-async function kodDegis() {
-
-	const eskiKod = document.getElementById("tcheskodeski").value;
-	const yeniKod = document.getElementById("tcheskodyeni").value;
-	
-	if (!eskiKod || !yeniKod) {
-	    alert("Lütfen her iki alanı da doldurun.");
-	    return;
-	}
-	if (eskiKod === yeniKod) {
-	    alert("Eski kod ile yeni kod aynı olamaz.");
-	    return;
-	}
-    document.getElementById("errorDiv").style.display = "none";
-    document.getElementById("errorDiv").innerText = "";
-    
-    document.body.style.cursor = "wait";
-	const $kaydetButton = $('#koddegisButton');
-	$kaydetButton.prop('disabled', true).text('Islem Yapiliyor...');
-
-	   try {
-	        const response = await fetchWithSessionCheck("cari/koddegiskaydet", {
-	        	method: 'POST',
-	        	headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: new URLSearchParams({ eskiKod: eskiKod , yeniKod:yeniKod }),
-	        });
-			if (response.errorMessage) {
-				throw new Error(response.errorMessage);
-			}
-			document.body.style.cursor = "default";
-			setTimeout(() => {
-				 alert("Islem Basari ile gerceklestirildi");
-			}, 100);
-	    } catch (error) {
-	        document.getElementById("errorDiv").style.display = "block";
-	        document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	    } finally {
-	    	document.body.style.cursor = "default";
-			$kaydetButton.prop('disabled', false).text('Kaydet');
-	     }
-	}
-</script>

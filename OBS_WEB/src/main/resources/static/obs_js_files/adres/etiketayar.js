@@ -1,64 +1,113 @@
-async function ayarKayit() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	const etiketayarDTO = {
-		id: document.getElementById("id").value,
-		altbosluk: document.getElementById("altbosluk").value,
-		ustbosluk: document.getElementById("ustbosluk").value,
-		sagbosluk: document.getElementById("sagbosluk").value,
-		solbosluk: document.getElementById("solbosluk").value,
-		dikeyarabosluk: document.getElementById("dikeyarabosluk").value,
-		genislik: document.getElementById("genislik").value,
-		yataydikey: document.getElementById("yataydikey").value,
-		yukseklik: document.getElementById("yukseklik").value,
-	};
-	const submitButton = document.getElementById("kaydetButton");
-	submitButton.disabled = true;
-	submitButton.textContent = 'İşleniyor...';
+/* =========================================================
+   ADR – ETIKET AYAR
+   Namespace: OBS.ADR
+   Scope: #ara_content
+   ========================================================= */
+window.OBS ||= {};
+OBS.ADR ||= {};
 
-	try {
-		const response = await fetchWithSessionCheck("adres/etiketsettings_save", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(etiketayarDTO),
-			});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		await etsayfaYukle();
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error;
-	} finally {
-		submitButton.disabled = false;
-		submitButton.textContent = 'Kaydet';
-		document.body.style.cursor = "default";
-	}
-}
+/* ---------- helpers ---------- */
+OBS.ADR._root = () =>
+  document.getElementById("adr_content") ||
+  document.getElementById("ara_content") ||
+  document;
 
-async function etsayfaYukle() {
-	const url = "adres/etiketayar";
-	try {
-		document.body.style.cursor = "wait";
-		const response = await fetch(url, { method: "GET" });
-		if (!response.ok) {
-			throw new Error(`Bir hata oluştu: ${response.statusText}`);
-		}
-		const data = await response.text();
-		if (data.includes('<form') && data.includes('name="username"')) {
-			window.location.href = "/login";
-		} else {
-			document.getElementById('ara_content').innerHTML = data;
-		}
-	} catch (error) {
-		const errorDiv = document.getElementById("errorDiv");
-		errorDiv.innerText = error;
-		document.getElementById('ara_content').innerHTML = `<h2>${error.message}</h2>`;
-	} finally {
-		document.body.style.cursor = "default"; 
-	}
-}
+OBS.ADR.byId = (id) => OBS.ADR._root().querySelector("#" + id);
+
+OBS.ADR._setErr = (msg) => {
+  const e = OBS.ADR.byId("errorDiv");
+  if (!e) return;
+  if (msg) {
+    e.style.display = "block";
+    e.innerText = msg;
+  } else {
+    e.style.display = "none";
+    e.innerText = "";
+  }
+};
+
+OBS.ADR._cursor = (wait) => {
+  document.body.style.cursor = wait ? "wait" : "default";
+};
+
+/* ---------- ETIKET AYAR KAYDET ---------- */
+OBS.ADR.ayarKayit = async function () {
+  OBS.ADR._setErr("");
+  OBS.ADR._cursor(true);
+
+  const dto = {
+    id: OBS.ADR.byId("id")?.value,
+    altbosluk: OBS.ADR.byId("altbosluk")?.value,
+    ustbosluk: OBS.ADR.byId("ustbosluk")?.value,
+    sagbosluk: OBS.ADR.byId("sagbosluk")?.value,
+    solbosluk: OBS.ADR.byId("solbosluk")?.value,
+    dikeyarabosluk: OBS.ADR.byId("dikeyarabosluk")?.value,
+    genislik: OBS.ADR.byId("genislik")?.value,
+    yataydikey: OBS.ADR.byId("yataydikey")?.value,
+    yukseklik: OBS.ADR.byId("yukseklik")?.value
+  };
+
+  const btn = OBS.ADR.byId("kaydetButton");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "İşleniyor...";
+  }
+
+  try {
+    const response = await fetchWithSessionCheck(
+      "adres/etiketsettings_save",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+      }
+    );
+
+    if (response?.errorMessage) {
+      throw new Error(response.errorMessage);
+    }
+
+    await OBS.ADR.sayfaYukle();
+  } catch (err) {
+    OBS.ADR._setErr(err?.message || "Beklenmeyen bir hata oluştu.");
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "Kaydet";
+    }
+    OBS.ADR._cursor(false);
+  }
+};
+
+/* ---------- SAYFA YUKLE ---------- */
+OBS.ADR.sayfaYukle = async function () {
+  try {
+    OBS.ADR._cursor(true);
+
+    const response = await fetch("adres/etiketayar", { method: "GET" });
+    if (!response.ok) {
+      throw new Error(`Bir hata oluştu: ${response.statusText}`);
+    }
+
+    const html = await response.text();
+
+    if (html.includes("<form") && html.includes('name="username"')) {
+      window.location.href = "/login";
+      return;
+    }
+
+    const ara = document.getElementById("ara_content");
+    if (ara) ara.innerHTML = html;
+
+  } catch (err) {
+    const ara = document.getElementById("ara_content");
+    if (ara) ara.innerHTML = `<h2>${err.message}</h2>`;
+  } finally {
+    OBS.ADR._cursor(false);
+  }
+};
+
+/* ---------- INIT ---------- */
+OBS.ADR.init = function () {
+  // Şimdilik özel init yok, ileride eklenir
+};

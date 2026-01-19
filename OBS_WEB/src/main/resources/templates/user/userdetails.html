@@ -222,7 +222,7 @@
 					<label for="user_role">Hangi Sql</label> 
 					
 					<div style="position:relative; flex:1;width:100%;">
-						<select style="margin-top:10px;" class="form-select"  onchange="sqlchanged()"  id="hangi_sql" name="hangi_sql">
+						<select style="margin-top:10px;" class="form-select"  onchange="OBS.USERDETAIL.sqlchanged()"  id="hangi_sql" name="hangi_sql">
 							<option value="MS SQL">MS SQL</option>
 							<option value="MY SQL">MY SQL</option>
 							<option value="PG SQL">PG SQL</option>
@@ -281,19 +281,19 @@
 			</div>
 		<div class="aramagroup-box" style="margin-top: 5px;">
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="checkFile()" id="checkfilebutton">
+			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERDETAIL.checkFile()" id="checkfilebutton">
 				<i class="fa fa-retweet"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" disabled class="btn btn-secondary ml-2" onclick="saveUserDetails()" id="savebutton">
+			<button type="button" disabled class="btn btn-secondary ml-2" onclick="OBS.USERDETAIL.saveUserDetails()" id="savebutton">
 				<i class="fa fa-save"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="clearFormModulsuz()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERDETAIL.clearForm(true)">
 				<i class="fa fa-plus"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="confirmDeleteus()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERDETAIL.confirmDeleteus()">
 				<i class="fa fa-trash"></i>
 			</button>
 		</div>
@@ -326,4 +326,3 @@
 			</tbody>
 		</table>
 	</div>
-<script src="/obs_js_files/user/userDetails.js"></script>

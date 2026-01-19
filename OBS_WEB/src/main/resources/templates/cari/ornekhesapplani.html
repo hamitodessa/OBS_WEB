@@ -17,6 +17,7 @@
 /* kayitadedi label'ı (label ama form-control verilmiş) */
 #ara_content .card label.form-control{
   height: auto !important;
+  width:300px;
   min-height: 46px;
   display: flex;
   align-items: center;
@@ -35,24 +36,25 @@
 
 /* Primary button (2026 sexy gradient) */
 #ara_content .btn.btn-primary{
-  height: 46px;
-  border-radius: 14px;
-  font-weight: 900;
-  border: none;
-  color: #fff;
-  background: linear-gradient(180deg, rgba(56,189,248,.95), rgba(37,99,235,.95));
-  box-shadow: 0 12px 28px rgba(0,0,0,.35);
-  transition: .16s ease;
-  padding: 0 16px;
+  width: 300px !important;
+  height: 44px !important;
+ 
+
+  border-radius: 14px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  letter-spacing: .3px !important;
+
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
 }
 #ara_content .btn.btn-primary:hover{
-  transform: translateY(-2px);
-  filter: brightness(1.04);
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
 }
-#ara_content .btn.btn-primary:active{
-  transform: translateY(0);
-  filter: brightness(.98);
-}
+
 
 /* errorDiv (cam + kırmızı glow) */
 #ara_content #errorDiv{
@@ -71,40 +73,8 @@
 	<label class="form-control" th:text="${kayitadedi}"  style="font-weight: bold;"></label>
 	<br>
 	<button class="btn btn-primary" type="button" id="hplkayitButton"
-		style="width: 250px;" onclick="hplnkaydet()">Hesap Plani Kaydet</button>
+		style="width: 250px;" onclick="OBS.HPLAN.hplnkaydet()">Hesap Plani Kaydet</button>
 </div>
 <div id="errorDiv"></div>
 
-<script>
 
-async function hplnkaydet() {
-	const confirmDelete = confirm("Ornek Hesap Plani Kayit Islemi Baslayacak ?");
-	if (!confirmDelete) {
-		return;
-	}
-	document.body.style.cursor = "wait";
-	const $kaydetButton = $('#hplkayitButton');
-	$kaydetButton.prop('disabled', true).text('İşleniyor...');
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("cari/ornekhesapplanikayit", {
-			method: 'GET',
-			headers: {
-				   'Content-Type': 'application/json',
-			},
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		alert("Ornek Hesap Plani Olusturuldu");
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		$kaydetButton.prop('disabled', false).text('Hesap Plani Kaydet');
-		document.body.style.cursor = "default";
-	}
-}
-</script>

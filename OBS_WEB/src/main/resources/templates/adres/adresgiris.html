@@ -234,6 +234,16 @@
   height: 100%;
   object-fit: cover;
 }
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
 
 /* GRID SPAN yardımcıları (12 kolon - ilk satır için) */
 #ara_content .c12{ grid-column: span 12; }
@@ -260,7 +270,7 @@
       <!-- TOOLBAR: AYNI -->
       <div class="adr-toolbar">
         <span class="adr-label" style="min-width:110px;">Arama</span>
-        <input type="text" id="arama" class="form-control" oninput="adraramaYap()" th:value="${hesapKodu}">
+        <input type="text" id="arama" class="form-control" oninput="OBS.ADR.aramaYap()" th:value="${hesapKodu}">
 
         <div style="position: relative;">
           <input class="form-control cins_bold" maxlength="12"
@@ -276,9 +286,9 @@
 
       <!-- NAV: AYNI -->
       <div class="adr-actions" style="margin-top:10px;">
-        <button type="button" id="geriButton" class="btn btn-secondary" onclick="adrGeri()"><i class="fa fa-backward"></i></button>
-        <button type="button" id="ilkButton" class="btn btn-secondary" onclick="adrIlk()"><i class="fa fa-refresh"></i></button>
-        <button type="button" id="ileriButton" class="btn btn-secondary" onclick="adrIleri()"><i class="fa fa-forward"></i></button>
+        <button type="button" id="geriButton" class="btn btn-secondary" onclick="OBS.ADR.geri()"><i class="fa fa-backward"></i></button>
+        <button type="button" id="ilkButton" class="btn btn-secondary" onclick="OBS.ADR.ilk()"><i class="fa fa-refresh"></i></button>
+        <button type="button" id="ileriButton" class="btn btn-secondary" onclick="OBS.ADR.ileri()"><i class="fa fa-forward"></i></button>
       </div>
 
       <!-- HESAP KODU + UNVAN: AYNI -->
@@ -418,9 +428,9 @@
 
       <!-- KAYDET / SİL / YENİ -->
       <div class="adr-actions" style="margin-top:10px;">
-        <button type="button" id="adrkaydetButton" class="btn btn-secondary" onclick="adrKayit()"><i class="fa fa-save"></i></button>
-        <button type="button" id="adrsilButton" class="btn btn-secondary" onclick="adrSil()"><i class="fa fa-trash"></i></button>
-        <button type="button" id="adryeniButton" class="btn btn-secondary" onclick="adrenableInputs()"><i class="fa fa-plus"></i></button>
+        <button type="button" id="adrkaydetButton" class="btn btn-secondary" onclick="OBS.ADR.kayit()"><i class="fa fa-save"></i></button>
+        <button type="button" id="adrsilButton" class="btn btn-secondary" onclick="OBS.ADR.sil()"><i class="fa fa-trash"></i></button>
+        <button type="button" id="adryeniButton" class="btn btn-secondary" onclick="OBS.ADR.enableInputs()"><i class="fa fa-plus"></i></button>
       </div>
 
       <div id="errorDiv"></div>
@@ -434,7 +444,7 @@
         <img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim" style="display:none;" />
       </div>
 
-      <button type="button" id="resimremove" class="btn btn-secondary" style="width:100%; margin-top:10px;" onclick="resimSil()">
+      <button type="button" id="resimremove" class="btn btn-secondary" style="width:100%; margin-top:10px;" onclick="OBS.ADR.resimSil()">
         <i class="fa fa-remove"></i>
       </button>
 
@@ -445,22 +455,4 @@
   </div>
 </div>
 
-
-<script src="/obs_js_files/adres/adresgiris.js"></script>
-<script>
-document.getElementById('resim').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    const maxSizeInKB = 500; // Maksimum dosya boyutu (KB cinsinden)
-    const maxSizeInBytes = maxSizeInKB * 1024; // Bayta çeviriyoruz
-	const errorDiv = document.getElementById("errorDiv");
-    if (file && file.size > maxSizeInBytes) {
-        errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-		errorDiv.style.display = "block";
-        event.target.value = ''; 
-    } else {
-		errorDiv.style.display = "none";
-		errorDiv.innerText = "";
-    }
-});
-</script>
 

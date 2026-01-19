@@ -85,10 +85,14 @@
 
 /* HATA */
 #ara_content #errorDiv {
-	margin-top: 10px;
-	color: #f87171;
-	font-weight: 900;
-	text-shadow: 0 0 8px rgba(248, 113, 113, .45);
+ display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
 }
 </style>
 <div class="card p-4 mb-4">
@@ -144,7 +148,7 @@
 						<div class="form-row">
 							<label class="form-check-label"></label>
 							<button type="button" class="main_bt" id="kaydetButton"
-								onclick="ayarKayit()">Kaydet</button>
+								onclick="OBS.ADR.ayarKayit()">Kaydet</button>
 						</div>
 						<input type="hidden" id="id" name="id" th:value="${etiket.id}">
 					</fieldset>
@@ -156,4 +160,4 @@
 <div id="errorDiv" th:if="${errorMessage}">
 	<span th:text="${errorMessage}"></span>
 </div>
-<script src="/obs_js_files/adres/etiketayar.js"></script>
+

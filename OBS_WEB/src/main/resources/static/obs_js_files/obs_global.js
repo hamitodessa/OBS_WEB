@@ -15,6 +15,7 @@ totalPages = 1;
 
 
 
+
 incrementRowCounter = function () {
 	rowCounter++;
 };
@@ -206,90 +207,10 @@ async function mailsayfasiYukle(url) {
 	}
 }
 
-async function firmaismiKaydet() {
-	const errorDiv = document.getElementById('errorDiv');
-	const fismi = document.getElementById("firmaismi").value;
-	const modul = document.getElementById("modul").value
-	document.body.style.cursor = 'wait';
-	try {
-		const response = await fetchWithSessionCheck('obs/firmaismiKayit', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams({ fismi: fismi, modul: modul }),
-		});
-		if (response.errorMessage.trim() !== "") {
-			throw new Error(response.errorMessage);
-		}
-		document.getElementById("errorDiv").innerText = "";
-		errorDiv.style.display = 'none';
-	} catch (error) {
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-		errorDiv.style.display = 'block';
-	} finally {
-		document.body.style.cursor = 'default';
-	}
-}
 
-async function firmaIsmi(modul, event) {
-	event.preventDefault();
-	document.body.style.cursor = "wait";
-	document.getElementById("baslik").innerText = "";
-	try {
-		const response = await fetch("obs/firmaismi", { method: "GET" });
-		if (response.status === 401) {
-			window.location.href = "/login";
-			return;
-		}
-		const data = await response.text();
-		if (data.includes('<form') && data.includes('name="username"')) {
-			window.location.href = "/login";
-		} else {
-			document.getElementById("ara_content").innerHTML = data;
-			document.getElementById("modul").value = "";
-			await firmaismiOkuma(modul);
-			document.getElementById("modul").value = modul;
 
-			const lblfismi = document.getElementById("lblfismi");
-			if (modul === "cari") {
-				lblfismi.innerText = "Cari Firma Adi";
-			} else if (modul === "adres") {
-				lblfismi.innerText = "Adres Firma Adi";
-			} else if (modul === "kambiyo") {
-				lblfismi.innerText = "Kambiyo Firma Adi";
-			} else if (modul === "fatura") {
-				lblfismi.innerText = "Stok Firma Adi";
-			} else if (modul === "kereste") {
-				lblfismi.innerText = "Kereste Firma Adi";
-			}
-		}
-	} catch (error) {
-		document.getElementById("ara_content").innerHTML =
-			`<h2>Bir hata oluştu: ${error.message}</h2>`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
 
-async function firmaismiOkuma(modul) {
-	try {
-		const response = await fetchWithSessionCheck("obs/firmaismioku", {
-			method: 'POST',
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(modul),
-		});
-		const responseData = response;
-		if (responseData.errorMessage) {
-			throw new Error(responseData.errorMessage);
-		}
-		document.getElementById("firmaismi").value = responseData.firmaismi || "";
-	} catch (error) {
-		const errorDiv = document.getElementById("errorDiv");
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bir hata oluştu.";
-	}
-}
+
 
 async function cariBaslik() {
 	try {

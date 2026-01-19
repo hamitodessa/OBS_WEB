@@ -45,7 +45,7 @@ public class KurGirisController {
 		return model;
 	}
 
-	@PostMapping("/kur/kurgunluk")
+	@PostMapping("kur/kurgunluk")
 	@ResponseBody
 	public Map<String, Object> sorgula(@RequestBody Map<String, String> params) {
 		Map<String, Object> response = new HashMap<>();

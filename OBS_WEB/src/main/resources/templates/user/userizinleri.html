@@ -145,7 +145,8 @@
 
 /* hata mesajı */
 #errorDiv{
-  margin-top: 0px;
+ display:none; 
+  margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
@@ -180,7 +181,7 @@
 					<label for="user_role">Hangi Sql</label> 
 					<div style="position:relative; flex:1;width:100%;">
 					<select style="margin-top:10px;"  
-						class="form-select" id="hangi_sql" onchange="sqlchanged()" name="hangi_sql">
+						class="form-select" id="hangi_sql" onchange="OBS.USERIZIN.sqlchanged()" name="hangi_sql">
 						<option value="MS SQL">MS SQL</option>
 						<option value="MY SQL">MY SQL</option>
 						<option value="PG SQL">PG SQL</option>
@@ -193,7 +194,7 @@
 				<div class="form-group" style="width:250px;">
 					<label for="user_role">Admin Hesaba Bagli Kullanici</label> 
 					<div style="position:relative; flex:1;width:100%;">
-					<select style="margin-top:10px;" class="form-select" id="kullanici" name="kullanici" onchange=detailoku() >
+					<select style="margin-top:10px;" class="form-select" id="kullanici" name="kullanici" onchange=OBS.USERIZIN.detailoku() >
 					</select>
 					<span style=" position:absolute;top:50%;right:12px;
               				transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
@@ -247,15 +248,15 @@
 			</div>
 			<div class="aramagroup-box" style="margin-top: 10px;margin-bottom: 10px;">
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="saveUserDetailsiz()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.save()">
 				<i class="fa fa-save"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="clearFormModulsuz()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.clearForm(true)">
 				<i class="fa fa-plus"></i>
 			</button>
 			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="confirmDeleteiz()">
+			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.confirmDelete()">
 				<i class="fa fa-trash"></i>
 			</button>
 			</div>
@@ -285,4 +286,3 @@
 		</table>
 	<input type="hidden" id="hiddenId" name="hiddenId">
 </div>
-<script src="/obs_js_files/user/userizinleri.js"></script>

@@ -52,10 +52,13 @@ async function fetchHesapKodlariOnce() {
 }
 
 function initializeRows() {
-	for (let i = 0; i < 10; i++) {
-		addRow();
-	}
+  const tbody = document.querySelector("#cekTable tbody");
+  if (tbody) tbody.innerHTML = "";   // <- ekle
+  rowCounter = 0;                    // <- ekle (global zaten)
+  for (let i = 0; i < 10; i++) addRow();
+  updateColumnTotal();
 }
+
 
 function addRow() {
 	const table = document.getElementById("cekTable").getElementsByTagName("tbody")[0];
@@ -116,12 +119,8 @@ function handleBlur(input) {
 	updateColumnTotal();
 }
 
-function selectAllContent(element) {
-	const range = document.createRange();
-	const selection = window.getSelection();
-	range.selectNodeContents(element);
-	selection.removeAllRanges();
-	selection.addRange(range);
+function selectAllContent(el) {
+  if (el && typeof el.select === "function") el.select();
 }
 
 function updateColumnTotal() {
@@ -540,107 +539,104 @@ async function tahfisKayit() {
 }
 
 async function tahfisYoket() {
-	const evrakNo = document.getElementById("tahevrakNo").value;
-	let tah_ted;
-	if (document.getElementById("tah_ted").value === "Tahsilat") {
-		tah_ted = 0;
-	} else {
-		tah_ted = 1;
-	}
-	if (!evrakNo || evrakNo === "0") {
-		alert("Geçerli bir evrak numarası giriniz.");
-		return;
-	}
-	const confirmDelete = confirm("Bu evrak numarasını silmek istediğinize emin misiniz?");
-	if (!confirmDelete) {
-		return;
-	}
-	document.body.style.cursor = "wait";
-	const $silButton = $('#tahsilButton');
-	$silButton.prop('disabled', true).text('Siliniyor...');
-	try {
-		const response = await fetchWithSessionCheck("/cari/tahfisYoket", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams({ evrakNo: evrakNo, tah_ted: tah_ted }),
-		});
-		if (response.errorMessage.trim() !== "") {
-			throw new Error(response.errorMessage);
-		}
-		tahclearInputs();
-		tah_ted_cins_clear();
-		turChange();
-		document.getElementById("tahevrakNo").value = "0";
-		document.getElementById("errorDiv").style.display = "none";
-		document.getElementById("errorDiv").innerText = "";
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-		$silButton.prop('disabled', false).text('Sil');
-	}
+  const evrakNo = document.getElementById("tahevrakNo")?.value;
+  const errorDiv = document.getElementById("errorDiv");
+  const silBtn = document.getElementById("tahsilButton");
+
+  let tah_ted = (document.getElementById("tah_ted")?.value === "Tahsilat") ? 0 : 1;
+
+  if (!evrakNo || evrakNo === "0") {
+    alert("Geçerli bir evrak numarası giriniz.");
+    return;
+  }
+  if (!confirm("Bu evrak numarasını silmek istediğinize emin misiniz?")) return;
+
+  document.body.style.cursor = "wait";
+  if (silBtn) { silBtn.disabled = true; silBtn.innerText = "Siliniyor..."; }
+
+  try {
+    const dto = await fetchWithSessionCheck("/cari/tahfisYoket", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ evrakNo, tah_ted }),
+    });
+
+    if (dto?.errorMessage && dto.errorMessage.trim() !== "") throw new Error(dto.errorMessage);
+
+    tahclearInputs();
+    tah_ted_cins_clear();
+    turChange();
+    document.getElementById("tahevrakNo").value = "0";
+
+    if (errorDiv) { errorDiv.style.display = "none"; errorDiv.innerText = ""; }
+  } catch (e) {
+    if (errorDiv) { errorDiv.style.display = "block"; errorDiv.innerText = e.message || "Beklenmeyen bir hata oluştu."; }
+  } finally {
+    document.body.style.cursor = "default";
+    if (silBtn) { silBtn.disabled = false; silBtn.innerText = "Sil"; }
+  }
 }
+
 
 async function tahsilatdownloadReport() {
-	const tahsilatKayitDTO = prepareRequestPayload();
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	const $indirButton = $('#indirButton');
-	$indirButton.prop('disabled', true).text('İşleniyor...');
-	try {
-		const response = await fetchWithSessionCheckForDownload('cari/tahsilat_download', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(tahsilatKayitDTO),
-		});
-		if (response.blob) {
-			const disposition = response.headers.get('Content-Disposition');
-			const fileName = disposition.match(/filename="(.+)"/)[1];
-			const url = window.URL.createObjectURL(response.blob);
-			const a = document.createElement("a");
-			a.href = url;
-			a.download = fileName;
-			document.body.appendChild(a);
-			a.click();
-			a.remove();
-			window.URL.revokeObjectURL(url);
-		} else {
-			throw new Error("Dosya indirilemedi.");
-		}
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
-	} finally {
-		$indirButton.prop('disabled', false).text('Rapor İndir');
-		document.body.style.cursor = "default";
-	}
+  const tahsilatKayitDTO = prepareRequestPayload();
+  const errorDiv = document.getElementById("errorDiv");
+  const indirBtn = document.getElementById("indirButton");
+
+  if (errorDiv) { errorDiv.style.display = "none"; errorDiv.innerText = ""; }
+  document.body.style.cursor = "wait";
+  if (indirBtn) { indirBtn.disabled = true; indirBtn.innerText = "İşleniyor..."; }
+
+  try {
+    const response = await fetchWithSessionCheckForDownload("cari/tahsilat_download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(tahsilatKayitDTO),
+    });
+
+    if (response?.blob) {
+      const disposition = response.headers.get("Content-Disposition") || "";
+      const m = disposition.match(/filename="(.+)"/);
+      const fileName = m ? m[1] : "rapor.bin";
+
+      const url = window.URL.createObjectURL(response.blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } else {
+      throw new Error("Dosya indirilemedi.");
+    }
+  } catch (e) {
+    if (errorDiv) { errorDiv.style.display = "block"; errorDiv.innerText = e.message || "Bilinmeyen bir hata oluştu."; }
+  } finally {
+    if (indirBtn) { indirBtn.disabled = false; indirBtn.innerText = "Rapor İndir"; }
+    document.body.style.cursor = "default";
+  }
 }
 
+
 async function tahcariIsle() {
-	const hesapKodu = $('#tahsilatBilgi').val();
-	const tahsilatKayitDTO = prepareRequestPayload();
-	tahsilatKayitDTO.tahsilatDTO.borc_alacak = hesapKodu;
-	const errorDiv = document.getElementById('errorDiv');
-	try {
-		const response = await fetchWithSessionCheck('cari/tahsilatCariKayit', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(tahsilatKayitDTO),
-		});
-		if (response.errorMessage.trim() !== "") {
-			throw new Error(response.errorMessage);
-		}
-		document.getElementById("errorDiv").innerText = "";
-		errorDiv.style.display = 'none';
-	} catch (error) {
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-		errorDiv.style.display = 'block';
-	}
+  const hesapKodu = document.getElementById("tahsilatBilgi")?.value ?? "";
+  const tahsilatKayitDTO = prepareRequestPayload();
+  const errorDiv = document.getElementById("errorDiv");
+
+  tahsilatKayitDTO.tahsilatDTO.borc_alacak = hesapKodu;
+
+  try {
+    const dto = await fetchWithSessionCheck("cari/tahsilatCariKayit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(tahsilatKayitDTO),
+    });
+
+    if (dto?.errorMessage && dto.errorMessage.trim() !== "") throw new Error(dto.errorMessage);
+
+    if (errorDiv) { errorDiv.innerText = ""; errorDiv.style.display = "none"; }
+  } catch (e) {
+    if (errorDiv) { errorDiv.innerText = e.message || "Beklenmeyen bir hata oluştu."; errorDiv.style.display = "block"; }
+  }
 }

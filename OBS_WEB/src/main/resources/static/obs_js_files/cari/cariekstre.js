@@ -1,202 +1,265 @@
-currentPage = 0;
-totalPages = 0;
-pageSize = 500;
+/* =========================
+   EKSTRE (NO JQUERY) - NAMESPACE SAFE
+   ========================= */
 
-function setDisabled(el, yes) { el.disabled = !!yes; }
-function updatePaginationUI(disableAllWhileLoading = false) {
-  const first = document.getElementById("ilksayfa");
-  const prev  = document.getElementById("oncekisayfa");
-  const next  = document.getElementById("sonrakisayfa");
-  const last  = document.getElementById("sonsayfa");
+// tek namespace: çakışma yok
+window.OBS = window.OBS || {};
+OBS.EKSTRE = OBS.EKSTRE || {};
+
+OBS.EKSTRE.currentPage = 0;
+OBS.EKSTRE.totalPages = 0;
+OBS.EKSTRE.pageSize = 500;
+
+/* ---------- helpers (çakışmasız) ---------- */
+OBS.EKSTRE.byId = (id) => document.getElementById(id);
+
+OBS.EKSTRE.setDisabled = (el, yes) => { if (el) el.disabled = !!yes; };
+
+OBS.EKSTRE.setBtnLoading = (btnId, yes, loadingText, normalText) => {
+  const btn = OBS.EKSTRE.byId(btnId);
+  if (!btn) return;
+  btn.disabled = !!yes;
+  if (yes && loadingText != null) btn.textContent = loadingText;
+  if (!yes && normalText != null) btn.textContent = normalText;
+};
+
+OBS.EKSTRE.showError = (msg) => {
+  const errorDiv = OBS.EKSTRE.byId("errorDiv");
+  if (!errorDiv) return;
+  errorDiv.style.display = "block";
+  errorDiv.innerText = msg || "Beklenmeyen hata.";
+};
+
+OBS.EKSTRE.clearError = () => {
+  const errorDiv = OBS.EKSTRE.byId("errorDiv");
+  if (!errorDiv) return;
+  errorDiv.style.display = "none";
+  errorDiv.innerText = "";
+};
+
+OBS.EKSTRE.getEkstreParams = () => {
+  const hidden =
+    document.querySelector("#ara_content #ekstreBilgi") ||
+    document.getElementById("ekstreBilgi");
+
+  const hiddenFieldValue = (hidden?.value ?? "").trim();
+  const [hesapKodu = "", startDate = "", endDate = ""] = hiddenFieldValue.split(",");
+  return { hesapKodu, startDate, endDate };
+};
+
+/* ---------- pagination UI ---------- */
+OBS.EKSTRE.updatePaginationUI = (disableAllWhileLoading = false) => {
+  const first = OBS.EKSTRE.byId("ilksayfa");
+  const prev  = OBS.EKSTRE.byId("oncekisayfa");
+  const next  = OBS.EKSTRE.byId("sonrakisayfa");
+  const last  = OBS.EKSTRE.byId("sonsayfa");
 
   if (disableAllWhileLoading) {
-    setDisabled(first, true); setDisabled(prev, true);
-    setDisabled(next, true);  setDisabled(last, true);
+    OBS.EKSTRE.setDisabled(first, true); OBS.EKSTRE.setDisabled(prev, true);
+    OBS.EKSTRE.setDisabled(next, true);  OBS.EKSTRE.setDisabled(last, true);
     return;
   }
 
-  const noData = totalPages === 0;
-  setDisabled(first, noData || currentPage <= 0);
-  setDisabled(prev,  noData || currentPage <= 0);
-  setDisabled(next,  noData || currentPage >= totalPages - 1);
-  setDisabled(last,  noData || currentPage >= totalPages - 1);
-}
+  const noData = OBS.EKSTRE.totalPages === 0;
+  const cp = OBS.EKSTRE.currentPage;
+  const tp = OBS.EKSTRE.totalPages;
 
-// Buton clickleri aynı kalsın, sadece guard'lar:
-function ilksayfa()     { if (currentPage > 0)            eksfetchTableData(0); }
-function oncekisayfa()  { if (currentPage > 0)            eksfetchTableData(currentPage - 1); }
-function sonrakisayfa() { if (currentPage < totalPages-1) eksfetchTableData(currentPage + 1); }
-function sonsayfa()     { if (totalPages > 0)             eksfetchTableData(totalPages - 1); }
+  OBS.EKSTRE.setDisabled(first, noData || cp <= 0);
+  OBS.EKSTRE.setDisabled(prev,  noData || cp <= 0);
+  OBS.EKSTRE.setDisabled(next,  noData || cp >= tp - 1);
+  OBS.EKSTRE.setDisabled(last,  noData || cp >= tp - 1);
+};
 
-async function toplampagesize() {
-  const errorDiv = document.getElementById("errorDiv");
+/* ---------- global button functions (HTML onclick aynı kalsın) ---------- */
+window.ilksayfa = function () {
+  if (OBS.EKSTRE.currentPage > 0) OBS.EKSTRE.eksfetchTableData(0);
+};
+window.oncekisayfa = function () {
+  if (OBS.EKSTRE.currentPage > 0) OBS.EKSTRE.eksfetchTableData(OBS.EKSTRE.currentPage - 1);
+};
+window.sonrakisayfa = function () {
+  if (OBS.EKSTRE.currentPage < OBS.EKSTRE.totalPages - 1) OBS.EKSTRE.eksfetchTableData(OBS.EKSTRE.currentPage + 1);
+};
+window.sonsayfa = function () {
+  if (OBS.EKSTRE.totalPages > 0) OBS.EKSTRE.eksfetchTableData(OBS.EKSTRE.totalPages - 1);
+};
+
+/* =========================
+   total page size
+   ========================= */
+OBS.EKSTRE.toplampagesize = async function () {
   try {
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
+    OBS.EKSTRE.clearError();
 
-    const hiddenFieldValue = $('#ekstreBilgi').val() || "";
-    const [hesapKodu, startDate, endDate] = hiddenFieldValue.split(",");
+    const { hesapKodu, startDate, endDate } = OBS.EKSTRE.getEkstreParams();
 
     const response = await fetchWithSessionCheck("cari/ekssize", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ hesapKodu, startDate, endDate }),
     });
-		
+
     const totalRecords = response?.totalRecords ?? 0;
-    totalPages = Math.max(0, Math.ceil(totalRecords / pageSize));
+    OBS.EKSTRE.totalPages = Math.max(0, Math.ceil(totalRecords / OBS.EKSTRE.pageSize));
   } catch (error) {
-    errorDiv.style.display = "block";
-    errorDiv.innerText = error?.message || error || "Beklenmeyen hata.";
-    totalPages = 0;
+    OBS.EKSTRE.totalPages = 0;
+    OBS.EKSTRE.showError(error?.message || error || "Beklenmeyen hata.");
   } finally {
-    updatePaginationUI();
+    OBS.EKSTRE.updatePaginationUI();
   }
-}
+};
 
-async function eksdoldur() {
+/* =========================
+   main load
+   ========================= */
+OBS.EKSTRE.eksdoldur = async function () {
   document.body.style.cursor = "wait";
-  updatePaginationUI(true);           // yükleme sırasında tümünü kilitle
-  await toplampagesize();             // <-- ÖNEMLİ: bekle
-  await eksfetchTableData(0);
+  OBS.EKSTRE.updatePaginationUI(true);
+
+  await OBS.EKSTRE.toplampagesize();
+  await OBS.EKSTRE.eksfetchTableData(0);
+
   document.body.style.cursor = "default";
-}
+};
 
-async function eksfetchTableData(page) {
-  const hiddenFieldValue = $('#ekstreBilgi').val() || "";
-  const [hesapKodu, startDate, endDate] = hiddenFieldValue.split(",");
-  currentPage = page;
+/* =========================
+   fetch table data
+   ========================= */
+OBS.EKSTRE.eksfetchTableData = async function (page) {
+  const { hesapKodu, startDate, endDate } = OBS.EKSTRE.getEkstreParams();
+  OBS.EKSTRE.currentPage = page;
 
-  const errorDiv = document.getElementById("errorDiv");
-  errorDiv.style.display = "none";
-  errorDiv.innerText = "";
+  OBS.EKSTRE.clearError();
 
-  const tableBody = document.getElementById("tableBody");
-  tableBody.innerHTML = "";
-  document.getElementById("totalBorc").textContent = "";
-  document.getElementById("totalAlacak").textContent = "";
+  const tableBody = OBS.EKSTRE.byId("tableBody");
+  if (tableBody) tableBody.innerHTML = "";
+
+  const totalBorcEl = OBS.EKSTRE.byId("totalBorc");
+  const totalAlacakEl = OBS.EKSTRE.byId("totalAlacak");
+  if (totalBorcEl) totalBorcEl.textContent = "";
+  if (totalAlacakEl) totalAlacakEl.textContent = "";
 
   document.body.style.cursor = "wait";
-  updatePaginationUI(true);           // istek sırasında tıklamayı kapat
-  const $yenileButton = $('#eksyenileButton');
-  $yenileButton.prop('disabled', true).text('İşleniyor...');
+  OBS.EKSTRE.updatePaginationUI(true);
+  OBS.EKSTRE.setBtnLoading("eksyenileButton", true, "İşleniyor...", "Yenile");
 
   try {
     const data = await fetchWithSessionCheck("cari/ekstre", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ hesapKodu, startDate, endDate, page, pageSize }),
+      body: JSON.stringify({
+        hesapKodu,
+        startDate,
+        endDate,
+        page,
+        pageSize: OBS.EKSTRE.pageSize
+      }),
     });
 
-    if (!data.success) {
-      throw new Error(data.errorMessage || "Bir hata oluştu.");
-    }
+    if (!data?.success) throw new Error(data?.errorMessage || "Bir hata oluştu.");
 
-    let totalBorc = 0, totalAlacak = 0;
-    data.data.forEach((item) => {
+    (data.data || []).forEach((item) => {
       const row = document.createElement("tr");
-    
       row.innerHTML = `
         <td>${formatDate(item.TARIH)}</td>
-        <td>${item.EVRAK || ''}</td>
-        <td>${item.IZAHAT || ''}</td>
-        <td>${item.KOD || ''}</td>
+        <td>${item.EVRAK || ""}</td>
+        <td>${item.IZAHAT || ""}</td>
+        <td>${item.KOD || ""}</td>
         <td class="double-column">${formatNumber4(item.KUR)}</td>
         <td class="double-column">${formatNumber2(item.BORC)}</td>
         <td class="double-column">${formatNumber2(item.ALACAK)}</td>
         <td class="double-column">${formatNumber2(item.BAKIYE)}</td>
-        <td>${item.USER || ''}</td>
+        <td>${item.USER || ""}</td>
       `;
-      tableBody.appendChild(row);
-      totalBorc   += item.BORC   || 0;
-      totalAlacak += item.ALACAK || 0;
+      tableBody && tableBody.appendChild(row);
     });
 
-    // Toplamları şimdilik boş bırakıyorsun, bıraktım.
-    // document.getElementById("totalBorc").textContent = formatNumber2(totalBorc);
-    // document.getElementById("totalAlacak").textContent = formatNumber2(totalAlacak);
-
-    hesapAdiOgren(hesapKodu, 'hesapAdi');
+    if (typeof hesapAdiOgren === "function") {
+      hesapAdiOgren(hesapKodu, "hesapAdi");
+    }
   } catch (error) {
-    errorDiv.style.display = "block";
-    errorDiv.innerText = error?.message || "Beklenmeyen bir hata oluştu.";
+    OBS.EKSTRE.showError(error?.message || "Beklenmeyen bir hata oluştu.");
   } finally {
-    $yenileButton.prop('disabled', false).text('Yenile');
+    OBS.EKSTRE.setBtnLoading("eksyenileButton", false, "İşleniyor...", "Yenile");
     document.body.style.cursor = "default";
-    updatePaginationUI();            // her yüklemeden sonra duruma göre aç/kapat
+    OBS.EKSTRE.updatePaginationUI();
   }
-}
+};
 
-async function ekstredownloadReport(format) {
-	const hiddenFieldValue = $('#ekstreBilgi').val();
-	const parsedValues = hiddenFieldValue.split(",");
-	const hesapKodu = parsedValues[0] || "";
-	const startDateField = parsedValues[1] || "";
-	const endDateField = parsedValues[2] || "";
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	if (!hesapKodu || !startDateField || !endDateField || !format) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = "Lütfen tüm alanları doldurun.";
-		return;
-	}
-	document.body.style.cursor = "wait";
-	const $indirButton = $('#indirButton');
-	$indirButton.prop('disabled', true).text('İşleniyor...');
-	const $yenileButton = $('#yenileButton');
-	$yenileButton.prop('disabled', true);
-	try {
-		const response = await fetchWithSessionCheckForDownload('cari/ekstre_download', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				format: format,
-				kodu: hesapKodu,
-				startDate: startDateField,
-				endDate: endDateField,
-			}),
-		});
-		if (response.blob) {
-			const disposition = response.headers.get('Content-Disposition');
-			const fileName = disposition.match(/filename="(.+)"/)[1];
-			const url = window.URL.createObjectURL(response.blob);
-			const a = document.createElement("a");
-			a.href = url;
-			a.download = fileName;
-			document.body.appendChild(a);
-			a.click();
-			a.remove();
-			window.URL.revokeObjectURL(url);
-		} else {
-			throw new Error("Dosya indirilemedi.");
-		}
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
-	} finally {
-		$indirButton.prop('disabled', false).text('Rapor İndir');
-		$yenileButton.prop('disabled', false);
-		document.body.style.cursor = "default";
-	}
-}
+/* =========================
+   download report
+   ========================= */
+OBS.EKSTRE.ekstredownloadReport = async function (format) {
+  const { hesapKodu, startDate: startDateField, endDate: endDateField } = OBS.EKSTRE.getEkstreParams();
 
-async function ekstremailAt() {
-	localStorage.removeItem("tableData");
-	localStorage.removeItem("grprapor");
-	localStorage.removeItem("tablobaslik");
-	const hiddenFieldValue = $('#ekstreBilgi').val();
-	const parsedValues = hiddenFieldValue.split(",");
-	const hesapKodu = parsedValues[0];
-	const startDateField = parsedValues[1];
-	const endDateField = parsedValues[2];
-	if (!hesapKodu) {
-		alert("Lütfen geçerli bir hesap kodu girin!");
-		return;
-	}
-	const degerler = hesapKodu + "," + startDateField + "," + endDateField + ",cariekstre";
-	const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
-	mailsayfasiYukle(url);
-}
+  OBS.EKSTRE.clearError();
+
+  if (!hesapKodu || !startDateField || !endDateField || !format) {
+    OBS.EKSTRE.showError("Lütfen tüm alanları doldurun.");
+    return;
+  }
+
+  document.body.style.cursor = "wait";
+  OBS.EKSTRE.setBtnLoading("indirButton", true, "İşleniyor...", "Rapor İndir");
+  OBS.EKSTRE.setDisabled(OBS.EKSTRE.byId("yenileButton"), true);
+
+  try {
+    const response = await fetchWithSessionCheckForDownload("cari/ekstre_download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        format,
+        kodu: hesapKodu,
+        startDate: startDateField,
+        endDate: endDateField,
+      }),
+    });
+
+    if (!response?.blob) throw new Error("Dosya indirilemedi.");
+
+    const disposition = response.headers.get("Content-Disposition") || "";
+    const m = disposition.match(/filename="(.+)"/);
+    const fileName = (m && m[1]) ? m[1] : `ekstre.${format}`;
+
+    const url = window.URL.createObjectURL(response.blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+  } catch (error) {
+    OBS.EKSTRE.showError(error?.message || "Bilinmeyen bir hata oluştu.");
+  } finally {
+    OBS.EKSTRE.setBtnLoading("indirButton", false, "İşleniyor...", "Rapor İndir");
+    OBS.EKSTRE.setDisabled(OBS.EKSTRE.byId("yenileButton"), false);
+    document.body.style.cursor = "default";
+  }
+};
+
+/* =========================
+   mail
+   ========================= */
+OBS.EKSTRE.ekstremailAt = async function () {
+  localStorage.removeItem("tableData");
+  localStorage.removeItem("grprapor");
+  localStorage.removeItem("tablobaslik");
+
+  const { hesapKodu, startDate: startDateField, endDate: endDateField } = OBS.EKSTRE.getEkstreParams();
+
+  if (!hesapKodu) {
+    alert("Lütfen geçerli bir hesap kodu girin!");
+    return;
+  }
+
+  const degerler = `${hesapKodu},${startDateField},${endDateField},cariekstre`;
+  const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+
+  if (typeof mailsayfasiYukle === "function") {
+    mailsayfasiYukle(url);
+  } else {
+    window.location.href = url;
+  }
+};

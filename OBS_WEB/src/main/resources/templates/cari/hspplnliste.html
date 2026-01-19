@@ -226,24 +226,3 @@ td img{
     </div>
   </div>
 </div>
-<script>
-  function aramaYap() {
-    const input = document.getElementById("arama");
-    const filter = input.value.toLowerCase();
-    const table = document.getElementById("myTable");
-    const rows = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < rows.length; i++) {
-      const cells = rows[i].getElementsByTagName("td");
-      let shouldDisplay = false;
-      if (cells.length > 1) {
-        const col1 = cells[0].textContent.toLowerCase();
-        const col2 = cells[1].textContent.toLowerCase();
-        if (col1.includes(filter) || col2.includes(filter)) {
-          shouldDisplay = true;
-        }
-      }
-      rows[i].style.display = shouldDisplay ? "" : "none";
-    }
-  }
-</script>

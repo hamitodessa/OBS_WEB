@@ -109,6 +109,7 @@
 
 /* message box */
 #ara_content #errorDiv{
+ display:none; 
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
@@ -116,7 +117,6 @@
   background: rgba(251,113,133,.10);
   color: #fff;
   font-weight: 900;
-  display:none;
 }
 
 /* ===== FOREGROUND FIX (SİYAH YAZILAR) ===== */
@@ -156,24 +156,45 @@
 
   <div class="acc-user">
     <span>👤</span>
-    <span sec:authorize="isAuthenticated()" sec:authentication="name" style="font-weight:900;"></span>
+    <span sec:authorize="isAuthenticated()"
+          sec:authentication="name"
+          style="font-weight:900;"></span>
   </div>
 
   <div style="height:14px;"></div>
 
-  <button class="btn btn-danger-2026" type="button" id="hesapyoketButton" onclick="openConfirm()">
+  <!-- 🔴 onclick YOK -->
+  <button class="btn btn-danger-2026"
+          type="button"
+          id="hesapyoketButton">
     🧨 Hesap Sil
   </button>
 
   <!-- 2. adım onay -->
-  <div id="confirmBox" class="confirm-box">
-    <div style="font-weight:900; margin-bottom:8px;">Onay için <span style="color:#fb7185;">SIL</span> yaz</div>
+  <div id="confirmBox" class="confirm-box" style="display:none;">
+    <div style="font-weight:900; margin-bottom:8px;">
+      Onay için <span style="color:#fb7185;">SIL</span> yaz
+    </div>
+
     <div class="confirm-row">
-      <input id="confirmText" class="confirm-input" type="text" placeholder="SIL yaz ve onayla">
-      <button class="btn btn-danger-2026" type="button" id="confirmDeleteBtn" onclick="deleteAccount()" disabled>
+      <input id="confirmText"
+             class="confirm-input"
+             type="text"
+             placeholder="SIL yaz ve onayla">
+
+      <!-- 🔴 onclick YOK -->
+      <button class="btn btn-danger-2026"
+              type="button"
+              id="confirmDeleteBtn"
+              disabled>
         Evet, Sil
       </button>
-      <button class="btn btn-secondary" type="button" style="height:46px;border-radius:14px;" onclick="closeConfirm()">
+
+      <!-- 🔴 onclick YOK -->
+      <button class="btn btn-secondary"
+              type="button"
+              id="confirmCloseBtn"
+              style="height:46px;border-radius:14px;">
         Vazgeç
       </button>
     </div>
@@ -182,54 +203,4 @@
   <div id="errorDiv"></div>
 </div>
 
-<script>
-function openConfirm(){
-  $("#errorDiv").hide().text("");
-  $("#confirmBox").slideDown(150);
-  $("#confirmText").val("").focus();
-  $("#confirmDeleteBtn").prop("disabled", true);
-}
 
-function closeConfirm(){
-  $("#confirmBox").slideUp(150);
-  $("#confirmText").val("");
-  $("#confirmDeleteBtn").prop("disabled", true);
-}
-
-$(document).off("input", "#confirmText");
-$(document).on("input", "#confirmText", function(){
-  const ok = ($(this).val() || "").trim().toUpperCase() === "SIL";
-  $("#confirmDeleteBtn").prop("disabled", !ok);
-});
-
-async function deleteAccount() {
-  const $btnMain = $("#hesapyoketButton");
-  const $btnConf = $("#confirmDeleteBtn");
-  const $err = $("#errorDiv");
-
-  $err.hide().text("");
-  document.body.style.cursor = "wait";
-  $btnMain.prop("disabled", true);
-  $btnConf.prop("disabled", true).text("Siliniyor...");
-
-  try {
-    const response = await fetchWithSessionCheck("user/accountdelete", {
-      method: "GET",
-      headers: { "Content-Type": "text/html" }
-    });
-
-    if (response && response.errorMessage) {
-      throw new Error(response.errorMessage);
-    }
-
-    window.location.href = "/logout";
-
-  } catch (error) {
-    $err.show().text(error?.message || "Beklenmeyen bir hata oluştu.");
-    $btnMain.prop("disabled", false);
-    $btnConf.text("Evet, Sil").prop("disabled", false);
-  } finally {
-    document.body.style.cursor = "default";
-  }
-}
-</script>

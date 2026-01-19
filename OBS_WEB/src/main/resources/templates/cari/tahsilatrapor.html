@@ -231,10 +231,10 @@
               onclick="openFirstModal('tahsilatrapor')">Filtre</button>
 
       <button class="btn btn-primary" type="button" id="tahrapreportFormat"
-              onclick="tahrapdownloadReport()" disabled>Excel Indir</button>
+              onclick="OBS.TAHRAP.tahrapdownloadReport()" disabled>Excel Indir</button>
 
       <button class="btn btn-primary" type="button" id="tahrapmailButton"
-              onclick="tahrapmailAt()" disabled>Email Gonder</button>
+              onclick="OBS.TAHRAP.tahrapmailAt()" disabled>Email Gonder</button>
     </div>
   </div>
 
@@ -267,7 +267,7 @@
 </div>
 <input type="hidden" id="tahrapBilgi" name="tahrapBilgi" value="initialValue" />
 
-<script src="/obs_js_files/cari/tahsilatrapor.js"></script>
+
 <div th:replace="~{modal/cari/tahsilatraporfiltre :: modaltahrap}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>

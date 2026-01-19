@@ -121,14 +121,27 @@
 	background: rgba(255, 255, 255, .04);
 	border-top: 1px solid rgba(255, 255, 255, .18);
 }
+
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+
 </style>
 <div class="card p-1">
 	<div style="display: flex; align-items: center;">
 		<span style="padding-left: 5px;"></span> <input type="text"
-			oninput="aramaYap()" id="arama" style="width: 200px;"
+			oninput="OBS.ADR.aramaYapTable()" id="arama" style="width: 200px;"
 			class="form-control" placeholder="Arama" /> <span
 			style="padding-left: 5px;"></span>
-		<button class="btn btn-primary" type="button" onclick="etiketyazdir()"
+		<button class="btn btn-primary" type="button" onclick="OBS.ADR.etiketyazdir()"
 			id="etiketyazdirButton">Yazdir</button>
 	</div>
 </div>
@@ -139,7 +152,7 @@
 			<thead class="thead-dark">
 				<tr>
 					<th style="text-align: center;"><input type="checkbox"
-						id="selectAll" onclick="toggleCheckboxes(this)"></th>
+						id="selectAll" onclick="OBS.ADR.toggleCheckboxes(this)"></th>
 					<th>Adi</th>
 					<th>Adres_1</th>
 					<th>Adres_2</th>
@@ -175,4 +188,4 @@
 	</div>
 </div>
 <input type="hidden" id="etiketBilgi" name="etiketBilgi" value="">
-<script src="/obs_js_files/adres/etiketlistele.js"></script>
+

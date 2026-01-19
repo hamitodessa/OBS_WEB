@@ -1,3 +1,5 @@
+
+
 async function getWellcomeData() {
 	try {
 		document.body.style.cursor = "wait";

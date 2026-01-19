@@ -330,7 +330,7 @@
           <span class="hsp-label" style="min-width:110px;">Arama</span>
 
           <input type="text" id="arama" class="form-control"
-                 oninput="hsparamaYap()" th:value="${hesapKodu}">
+                 oninput="OBS.HSPPLN.aramaYap()" th:value="${hesapKodu}">
 
           <div style="position: relative;">
             <input class="form-control cins_bold" maxlength="12"
@@ -346,9 +346,9 @@
 
         <!-- NAV (AYNI) -->
         <div class="hsp-actions">
-          <button type="button" id="geriButton" class="btn btn-secondary" onclick="hsplnGeri()"><i class="fa fa-backward"></i></button>
-          <button type="button" id="ilkButton" class="btn btn-secondary" onclick="hsplnIlk()"><i class="fa fa-refresh"></i></button>
-          <button type="button" id="ileriButton" class="btn btn-secondary" onclick="hsplnIleri()"><i class="fa fa-forward"></i></button>
+          <button type="button" id="geriButton" class="btn btn-secondary" onclick="OBS.HSPPLN.geri()"><i class="fa fa-backward"></i></button>
+          <button type="button" id="ilkButton" class="btn btn-secondary" onclick="OBS.HSPPLN.ilk()"><i class="fa fa-refresh"></i></button>
+          <button type="button" id="ileriButton" class="btn btn-secondary" onclick="OBS.HSPPLN.ileri()"><i class="fa fa-forward"></i></button>
         </div>
 
         <!-- HESAP KODU SATIRI (AYNI) -->
@@ -480,9 +480,9 @@
 
         <!-- KAYDET / SİL / YENİ -->
         <div class="hsp-actions">
-          <button type="button" id="kaydetButton" class="btn btn-secondary" onclick="hsplnKayit()"><i class="fa fa-save"></i></button>
-          <button type="button" id="silButton" class="btn btn-secondary" onclick="hsphesapSil()"><i class="fa fa-trash"></i></button>
-          <button type="button" id="yeniButton" class="btn btn-secondary" onclick="hspenableInputs()"><i class="fa fa-plus"></i></button>
+          <button type="button" id="kaydetButton" class="btn btn-secondary" onclick="OBS.HSPPLN.kayit()"><i class="fa fa-save"></i></button>
+          <button type="button" id="silButton" class="btn btn-secondary" onclick="OBS.HSPPLN.hesapSil()"><i class="fa fa-trash"></i></button>
+          <button type="button" id="yeniButton" class="btn btn-secondary" onclick="OBS.HSPPLN.enableInputs()"><i class="fa fa-plus"></i></button>
         </div>
 
       </div>
@@ -494,7 +494,7 @@
             <img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim" style="display:none;" />
           </div>
 
-          <button type="button" id="resimremove" class="btn btn-secondary" style="width:100%;" onclick="resimSil()">
+          <button type="button" id="resimremove" class="btn btn-secondary" style="width:100%;" onclick="OBS.HSPPLN.resimSil()">
             <i class="fa fa-remove"></i>
           </button>
 
@@ -508,22 +508,6 @@
 </div>
 
 
-<script src="/obs_js_files/cari/hspplngiris.js"></script>
 
-<script>
-document.getElementById('resim').addEventListener('change', function (event) {
-  const file = event.target.files[0];
-  const maxSizeInKB = 500;
-  const maxSizeInBytes = maxSizeInKB * 1024;
-  const errorDiv = document.getElementById("errorDiv");
 
-  if (file && file.size > maxSizeInBytes) {
-    errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-    errorDiv.style.display = "block";
-    event.target.value = '';
-  } else {
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
-  }
-});
-</script>
+

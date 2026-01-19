@@ -1,105 +1,139 @@
-currentPage = 0;
-totalPages = 0;
-pageSize = 500;
+window.OBS = window.OBS || {};
+OBS.LOG = OBS.LOG || {};
 
-function setDisabled(el, yes) { el.disabled = !!yes; }
+OBS.LOG.currentPage = 0;
+OBS.LOG.totalPages  = 0;
+OBS.LOG.pageSize    = 500;
 
-function updatePaginationUI() {
-  const first = document.getElementById("ilksayfa");
-  const prev  = document.getElementById("oncekisayfa");
-  const next  = document.getElementById("sonrakisayfa");
-  const last  = document.getElementById("sonsayfa");
+OBS.LOG.byId = (id) => document.getElementById(id);
+OBS.LOG.setDisabled = (el, yes) => { if (el) el.disabled = !!yes; };
 
-  const noData = totalPages === 0;
+OBS.LOG.updatePaginationUI = function () {
+  const first = OBS.LOG.byId("ilksayfa");
+  const prev  = OBS.LOG.byId("oncekisayfa");
+  const next  = OBS.LOG.byId("sonrakisayfa");
+  const last  = OBS.LOG.byId("sonsayfa");
 
-  setDisabled(first, noData || currentPage <= 0);
-  setDisabled(prev,  noData || currentPage <= 0);
+  const noData = OBS.LOG.totalPages === 0;
 
-  // Sonraki/Son: son sayfadaysa ya da hiç veri yoksa kapat
-  setDisabled(next, noData || currentPage >= totalPages - 1);
-  setDisabled(last, noData || currentPage >= totalPages - 1);
-}
+  OBS.LOG.setDisabled(first, noData || OBS.LOG.currentPage <= 0);
+  OBS.LOG.setDisabled(prev,  noData || OBS.LOG.currentPage <= 0);
+  OBS.LOG.setDisabled(next,  noData || OBS.LOG.currentPage >= OBS.LOG.totalPages - 1);
+  OBS.LOG.setDisabled(last,  noData || OBS.LOG.currentPage >= OBS.LOG.totalPages - 1);
+};
 
-function ilksayfa()      { if (currentPage > 0)           lograpor(0); }
-function oncekisayfa()   { if (currentPage > 0)           lograpor(currentPage - 1); }
-function sonrakisayfa()  { if (currentPage < totalPages-1) lograpor(currentPage + 1); }
-function sonsayfa()      { if (totalPages > 0)            lograpor(totalPages - 1); }
+OBS.LOG.getFilters = function () {
+  return {
+    modul: OBS.LOG.byId("user_modul")?.value || "",
+    startDate: OBS.LOG.byId("startDate")?.value || "",
+    endDate: OBS.LOG.byId("endDate")?.value || "",
+    aciklama: OBS.LOG.byId("aciklama")?.value || ""
+  };
+};
 
-async function toplampagesize() {
-  const errorDiv = document.getElementById("errorDiv");
+OBS.LOG.clearError = function () {
+  const e = OBS.LOG.byId("errorDiv");
+  if (!e) return;
+  e.style.display = "none";
+  e.innerText = "";
+};
+
+OBS.LOG.showError = function (msg) {
+  const e = OBS.LOG.byId("errorDiv");
+  if (!e) return;
+  e.style.display = "block";
+  e.innerText = msg || "Beklenmeyen hata.";
+};
+
+OBS.LOG.toplamPageSize = async function () {
+  OBS.LOG.clearError();
+
   try {
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
+    const f = OBS.LOG.getFilters();
 
-    const modul = document.getElementById("user_modul").value;
-    const startDate = document.getElementById("startDate").value;
-    const endDate = document.getElementById("endDate").value;
-	const aciklama = document.getElementById("aciklama").value;
     const resp = await fetchWithSessionCheck("user/logsize", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ modul, startDate, endDate ,aciklama})
+      body: JSON.stringify({ ...f })
     });
 
-    const totalRecords = resp.totalRecords ?? 0;
-    totalPages = Math.ceil(totalRecords / pageSize);
-    if (totalPages < 0) totalPages = 0;
+    const totalRecords = Number(resp?.totalRecords || 0);
+    OBS.LOG.totalPages = Math.max(0, Math.ceil(totalRecords / OBS.LOG.pageSize));
+
   } catch (err) {
-    errorDiv.style.display = "block";
-    errorDiv.innerText = err?.message || err || "Beklenmeyen hata.";
-    totalPages = 0;
+    OBS.LOG.showError(err?.message || "Beklenmeyen hata.");
+    OBS.LOG.totalPages = 0;
   } finally {
-    updatePaginationUI();
+    OBS.LOG.updatePaginationUI();
   }
-}
+};
 
-async function logdoldur() {
+OBS.LOG.logdoldur = async function () {
   document.body.style.cursor = "wait";
-  await toplampagesize();       // <-- ÖNEMLİ: bekle
-  await lograpor(0);
-  document.body.style.cursor = "default";
-}
+  try {
+    await OBS.LOG.toplamPageSize();
+    await OBS.LOG.lograpor(0);
+  } finally {
+    document.body.style.cursor = "default";
+  }
+};
 
-async function lograpor(page) {
-  const modul = document.getElementById("user_modul").value;
-  const startDate = document.getElementById("startDate").value;
-  const endDate = document.getElementById("endDate").value;
-  const aciklama = document.getElementById("aciklama").value;
+OBS.LOG.lograpor = async function (page) {
+  OBS.LOG.clearError();
 
-  const errorDiv = document.getElementById("errorDiv");
-  errorDiv.style.display = "none";
+  // sayfa sınırı
+  if (OBS.LOG.totalPages > 0) {
+    page = Math.max(0, Math.min(page, OBS.LOG.totalPages - 1));
+  } else {
+    page = 0;
+  }
 
-  currentPage = page;
+  const f = OBS.LOG.getFilters();
 
   try {
     const response = await fetchWithSessionCheck("user/loglistele", {
-      method: 'POST',
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ modul, startDate, endDate, aciklama, page, pageSize })
+      body: JSON.stringify({ ...f, page, pageSize: OBS.LOG.pageSize })
     });
 
-    if (response.errorMessage) throw new Error(response.errorMessage);
+    if (response?.errorMessage) throw new Error(response.errorMessage);
 
-    const tableBody = document.getElementById("tableBody");
-    tableBody.innerHTML = "";
+    // ✅ ancak başarılıysa currentPage güncelle
+    OBS.LOG.currentPage = page;
 
-    if (response.success) {
-      response.data.forEach(item => {
-        const row = document.createElement("tr");
-        row.classList.add("table-row-height");
-        row.innerHTML = `
-          <td>${item.TARIH || ''}</td>
-          <td>${item.MESAJ || ''}</td>
-          <td>${item.EVRAK || ''}</td>
-          <td>${item.USER_NAME || ''}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
-  } catch (error) {
-    errorDiv.style.display = "block";
-    errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
+    const tableBody = OBS.LOG.byId("tableBody");
+    if (tableBody) tableBody.innerHTML = "";
+
+    const rows = Array.isArray(response?.data) ? response.data : [];
+    rows.forEach(item => {
+      const tr = document.createElement("tr");
+      tr.classList.add("table-row-height");
+      tr.innerHTML = `
+        <td>${item?.TARIH ?? ""}</td>
+        <td>${item?.MESAJ ?? ""}</td>
+        <td>${item?.EVRAK ?? ""}</td>
+        <td>${item?.USER_NAME ?? ""}</td>
+      `;
+      tableBody?.appendChild(tr);
+    });
+
+  } catch (err) {
+    OBS.LOG.showError(err?.message || "Beklenmeyen hata oluştu.");
   } finally {
-    updatePaginationUI(); // <-- her yüklemeden sonra güncelle
+    OBS.LOG.updatePaginationUI();
   }
-}
+};
+
+// === dışarıdan çağırdığın isimleri koruyalım ===
+window.ilksayfa     = () => { if (OBS.LOG.currentPage > 0) OBS.LOG.lograpor(0); };
+window.oncekisayfa  = () => { if (OBS.LOG.currentPage > 0) OBS.LOG.lograpor(OBS.LOG.currentPage - 1); };
+window.sonrakisayfa = () => { if (OBS.LOG.currentPage < OBS.LOG.totalPages - 1) OBS.LOG.lograpor(OBS.LOG.currentPage + 1); };
+window.sonsayfa     = () => { if (OBS.LOG.totalPages > 0) OBS.LOG.lograpor(OBS.LOG.totalPages - 1); };
+
+window.toplampagesize = () => OBS.LOG.toplamPageSize();
+window.logdoldur      = () => OBS.LOG.logdoldur();
+window.lograpor       = (p) => OBS.LOG.lograpor(p);
+
+
+updatePaginationUI();
