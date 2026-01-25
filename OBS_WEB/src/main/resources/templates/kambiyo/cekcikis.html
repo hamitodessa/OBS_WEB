@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="style/yenihsppln.css" />
-
+<link rel="stylesheet" href="/style/carihesap/borcalacak.css">
 <style>
 /* =====================================================
    2026 CAM – KAMBİYO / BORDRO (EXTRA KOMPAKT – 38px)
@@ -365,9 +365,9 @@ border-radius: 14px;
 					<div class="gb-top">
 						<label>Bordro No</label> <input class="form-control"
 							style="font-weight: bold;" maxlength="12" id="bordrono"
-							onkeydown="bordroOkuma(event);" ondblclick="yeniBordro();">
+							onkeydown="OBS.CEKCIK.bordroOku()" ondblclick="OBS.CEKCIK.yeniBordro()">
 						<button type="button" class="btn btn-secondary"
-							onclick="soncikisBordro()">
+							onclick="OBS.CEKCIK.soncikisBordro()">
 							<i class="fa fa-refresh"></i>
 						</button>
 						<input type="date" id="bordroTarih" class="form-control"
@@ -412,15 +412,15 @@ border-radius: 14px;
 				<div class="group-box">
 					<div class="gb-actions">
 						<button class="btn btn-primary" type="button" id="gbkaydetButton"
-							onclick="gbKayit()">Kaydet</button>
+							onclick="OBS.CEKCIK.cbKayit()">Kaydet</button>
 						<button class="btn btn-primary" type="button" id="gbsilButton"
-							onclick="cbYoket()">Sil</button>
+							onclick="OBS.CEKCIK.cbYoket()">Sil</button>
 						<button class="btn btn-primary" type="button" id="gbcariButton"
 							onclick="openFirstModal('cekcik')">Cari Kayit</button>
 						<button class="btn btn-primary" type="button" id="indirButton"
-							onclick="cbDownload()">Indir</button>
+							onclick="OBS.CEKCIK.cbDownload()">Indir</button>
 						<button class="btn btn-primary" type="button" id="mailButton"
-							onclick="cbmailAt()">Email Gonder</button>
+							onclick="OBS.CEKCIK.cbmailAt()">Email Gonder</button>
 					</div>
 				</div>
 			</div>
@@ -464,7 +464,7 @@ border-radius: 14px;
 	</div>
 </div>
 <button type="button" class="btn btn-secondary ml-2"
-	onclick="cekcikaddRow()">
+	onclick="OBS.CEKCIK.cekcikaddRow()">
 	<i class="fa fa-plus"></i>
 </button>
 <table class="table table-bordered tah-table" id="gbTable"

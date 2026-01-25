@@ -304,7 +304,6 @@ OBS.USERDETAIL.checkFile = async function () {
 
 /* ---------- menu link ---------- */
 OBS.USERDETAIL.gotoCreateDb = function () {
-  console.info("burda");
   if (window.sayfaYukle) window.sayfaYukle("/user/createdb");
   // veya:
   // OBS.NAV.go("/user/createdb");

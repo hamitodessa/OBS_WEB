@@ -1,0 +1,148 @@
+.modal{ z-index: 1055; }
+.modal-backdrop{ z-index: 1050; }
+#secondModal.modal{ z-index: 1065 !important; }
+.modal-backdrop.second-backdrop{ z-index: 1060 !important; }
+
+
+/* =========================
+   2026 CAM – EKSTRE (KOMPAKT)
+   Scope: #ara_content .modal-ekstre
+   ========================= */
+/* =========================
+   2026 CAM – BORÇ/ALACAK MODAL (TEMİZ / SOL HİZALI)
+   Scope: #ara_content .modal-borcalacak
+   ========================= */
+
+/* DIALOG */
+#ara_content .modal-borcalacak .modal-dialog{
+  max-width: 450px !important;
+  margin: 0 auto !important;
+}
+
+/* CAM KABUK */
+#ara_content .modal-borcalacak .modal-content{
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.96) !important;
+  color: rgba(255,255,255,.94) !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.55) !important;
+  overflow: hidden !important;
+}
+
+/* HEADER */
+#ara_content .modal-borcalacak .modal-header{
+  padding: 10px 14px !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  background: linear-gradient(180deg,
+    rgba(56,189,248,.22),
+    rgba(31,59,92,.88),
+    rgba(22,43,68,.88)
+  ) !important;
+}
+
+#ara_content .modal-borcalacak .modal-title{
+  font-weight: 900 !important;
+  font-size: 15px !important;
+}
+
+#ara_content .modal-borcalacak .btn-close{
+  filter: invert(1) grayscale(1) !important;
+  opacity: .85 !important;
+}
+
+/* BODY */
+#ara_content .modal-borcalacak .modal-body{
+  padding: 12px 14px !important;
+  background: rgba(8,14,26,.72) !important;
+}
+
+/* FOOTER */
+#ara_content .modal-borcalacak .modal-footer{
+  padding: 10px 14px !important;
+  background: rgba(8,14,26,.66) !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+
+/* INPUT GROUP – KOMPAT */
+#ara_content .modal-borcalacak .input-group{
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+/* LABEL (input-group-text) */
+#ara_content .modal-borcalacak .input-group-text{
+  width: 130px !important;
+  height: 38px !important;
+  padding: 6px 10px !important;
+
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(255,255,255,.10) !important;
+  color: rgba(255,255,255,.92) !important;
+
+  font-weight: 900 !important;
+  font-size: 12px !important;
+
+  /* >>> SOL HİZALAMA (flex yüzünden şart) <<< */
+  text-align: left !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+}
+
+/* INPUT / LABEL(form-control) */
+#ara_content .modal-borcalacak .form-control{
+  height: 38px !important;
+  padding: 6px 10px !important;
+
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+
+  font-size: 13px !important;
+
+  /* >>> SOL HİZALAMA <<< */
+  text-align: left !important;
+}
+
+/* LABEL gibi kullanılan form-control için minik premium dokunuş */
+#ara_content .modal-borcalacak label.form-control{
+  padding-left: 12px !important;
+  font-weight: 800 !important;
+  cursor: default !important;
+   display: block !important;          /* flex’i öldür */
+}
+
+/* FOCUS */
+#ara_content .modal-borcalacak .form-control:focus{
+  border-color: rgba(56,189,248,.70) !important;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
+  background: rgba(8,14,26,.70) !important;
+  color: #fff !important;
+}
+
+/* FOOTER BUTTON */
+#ara_content .modal-borcalacak .modal-footer > button.btn.btn-primary{
+  width: 220px !important;
+  height: 44px !important;
+  margin-left: auto !important;
+
+  border-radius: 16px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  letter-spacing: .3px !important;
+
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
+
+  transition: .16s ease !important;
+}
+
+/* HOVER */
+#ara_content .modal-borcalacak .btn.btn-primary:hover{
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px) !important;
+}
+   

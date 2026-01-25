@@ -38,7 +38,7 @@
   width: 100%;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 135px 1fr 135px 1fr;
+  grid-template-columns: 150px 1fr 150px 1fr;
   gap: 8px 10px;
   align-items: center;
   padding: 6px 4px;
@@ -46,10 +46,10 @@
 
 /* tek satırlık arama satırı */
 #ara_content .group-box.gb-search{
-  grid-template-columns: 120px 1fr auto;
+  grid-template-columns: 150px 1fr auto;
 }
 #ara_content .group-box.gb-search .btn{
-  min-width: 120px;
+  min-width: 150px;
 }
 
 /* label */
@@ -189,10 +189,10 @@
         id="arama"
         class="form-control"
         placeholder="Cek no..."
-        onkeydown="if(event.key === 'Enter') aramaYap();"
+        onkeydown="if(event.key === 'Enter') OBS.CEKTAKIP.aramaYap()"
       />
 
-      <button class="btn btn-primary" type="button" id="cekdurumButton" onclick="cekdurumKayit()">
+      <button class="btn btn-primary" type="button" id="cekdurumButton" onclick="OBS.CEKTAKIP.cekdurumKayit()">
         Kaydet
       </button>
     </div>
@@ -288,6 +288,3 @@
     </div>
   </div>
 </div>
-
-
-<script src="/obs_js_files/kambiyo/cekkontrol.js"></script>

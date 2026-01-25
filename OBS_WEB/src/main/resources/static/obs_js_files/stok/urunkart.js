@@ -1,394 +1,430 @@
-function urnenableInputs() {
-	urnclearInputs();
-	const inputs = document.querySelectorAll('.form-control');
-	inputs.forEach(input => {
-		input.disabled = false;
-	});
+/* =========================
+   STOK – URUN KART (çakışmasız)
+   Namespace: OBS.URUNKART
+   File: /obs_js_files/stok/urunkart.js
+   ========================= */
+window.OBS ||= {};
+OBS.URUNKART ||= {};
 
-}
+/* ---------- helpers ---------- */
+OBS.URUNKART._root = () =>
+  document.getElementById("hsp_content") ||
+  document.getElementById("ara_content") ||
+  document;
 
-function urnenableDuzeltmeInputs() {
-	const inputs = document.querySelectorAll('.form-control');
-	inputs.forEach(input => {
-		if (input.id !== "kodu") {
-			input.disabled = false;
-		}
+OBS.URUNKART._el = (id) => document.getElementById(id);
 
-	});
-}
+OBS.URUNKART._error = () => OBS.URUNKART._el("errorDiv");
 
-function urndisableInputs() {
-	const inputs = document.querySelectorAll('.form-control');
-	inputs.forEach(input => {
-		if (input.id !== "arama") {
-			input.disabled = true;
-		}
+OBS.URUNKART._showError = (msg) => {
+  const e = OBS.URUNKART._error();
+  if (!e) return;
+  e.style.display = "block";
+  e.innerText = msg || "Beklenmeyen bir hata oluştu.";
+};
 
-	});
-}
+OBS.URUNKART._hideError = () => {
+  const e = OBS.URUNKART._error();
+  if (!e) return;
+  e.style.display = "none";
+  e.innerText = "";
+};
 
-function urnclearInputs() {
-	const inputs = document.querySelectorAll('.form-control');
-	inputs.forEach(input => {
-		if (input.type === 'file') {
-			input.value = '';
-		} else if (input.name !== 'arama') {
-			input.value = '';
-		}
-	});
-	const imgElement = document.getElementById("resimGoster");
-	imgElement.src = "";
-	imgElement.style.display = "none";
-	document.getElementById("kodKontrol").innerText = "";
-}
+OBS.URUNKART._setCursor = (wait) => {
+  document.body.style.cursor = wait ? "wait" : "default";
+};
 
-async function urnKayit() {
-	const koduInput = document.getElementById('kodu');
-	if (["0", ""].includes(koduInput.value)) {
-		return;
-	}
-	const urunDTO = geturnDTO();
-	const formData = new FormData();
+OBS.URUNKART._setImg = (base64) => {
+  const img = OBS.URUNKART._el("resimGoster");
+  if (!img) return;
 
-	for (const key in urunDTO) {
-		formData.append(key, urunDTO[key]);
-	}
-	const fileInput = document.getElementById("resim");
-	const file = fileInput.files[0];
-	if (file) {
-		formData.append("resim", file);
-	}
+  if (base64 && String(base64).trim() !== "") {
+    img.src = "data:image/jpeg;base64," + String(base64).trim();
+    img.style.display = "block";
+  } else {
+    img.src = "";
+    img.style.display = "none";
+  }
+};
 
-	const imgElement = document.getElementById("resimGoster");
-	let base64Data = imgElement.src.startsWith("data:image")
-		? imgElement.src.split(",")[1]
-		: null;
+OBS.URUNKART._getBase64BlobFromImg = () => {
+  const img = OBS.URUNKART._el("resimGoster");
+  if (!img) return null;
 
-	if (base64Data) {
-		const byteCharacters = atob(base64Data); // Base64'ü çöz
-		const byteNumbers = new Array(byteCharacters.length);
-		for (let i = 0; i < byteCharacters.length; i++) {
-			byteNumbers[i] = byteCharacters.charCodeAt(i);
-		}
-		const byteArray = new Uint8Array(byteNumbers);
-		const blob = new Blob([byteArray], { type: "image/jpeg" });
-		formData.append("resimGoster", blob, "base64Resim.jpg"); // Blob olarak ekle
-	}
+  if (!img.src || !img.src.startsWith("data:image")) return null;
 
-	const errorDiv = document.getElementById("errorDiv");
-	document.body.style.cursor = "wait";
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("stok/urnkayit", {
-			method: "POST",
-			body: formData
-		});
+  const base64Data = img.src.split(",")[1];
+  if (!base64Data) return null;
 
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		sayfaYukle();
-		document.body.style.cursor = "default";
-	} catch (error) {
-		document.body.style.cursor = "default";
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message;
-	}
-}
+  const byteCharacters = atob(base64Data);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  return new Blob([byteArray], { type: "image/jpeg" });
+};
 
-function geturnDTO() {
-	return {
-		kodu: document.getElementById("kodu").value,
-		adi: document.getElementById("adi").value,
-		birim: document.getElementById("birim").value,
-		kusurat: parseInt(document.getElementById("kusurat").value) || 0,
-		sinif: document.getElementById("sinif").value,
-		anagrup: document.getElementById("anagrup").value,
-		altgrup: document.getElementById("altgrup").value,
-		aciklama1: document.getElementById("aciklama1").value,
-		aciklama2: document.getElementById("aciklama2").value,
-		ozelkod1: document.getElementById("ozelkod1").value,
-		ozelkod2: document.getElementById("ozelkod2").value,
-		barkod: document.getElementById("barkod").value,
-		mensei: document.getElementById("mensei").value,
-		agirlik: parseFloat(document.getElementById("agirlik").value) || 0.0,
-		fiat1: parseFloat(document.getElementById("fiat1").value) || 0.0,
-		fiat2: parseFloat(document.getElementById("fiat2").value) || 0.0,
-		fiat3: parseFloat(document.getElementById("fiat3").value) || 0.0,
-		recete: document.getElementById("recete").value
-	};
-}
+/* ---------- enable/disable/clear ---------- */
+OBS.URUNKART.clearInputs = () => {
+  const root = OBS.URUNKART._root();
 
-async function urnaramaYap(kodbarkod) {
+  // input + select + textarea
+  root.querySelectorAll("input, select, textarea").forEach((el) => {
+    const id = el.id || "";
+    if (id === "arama") return;
 
-	document.getElementById("kodKontrol").innerText = "";
-	const aramaInput = document.getElementById("arama").value;
-	if (!aramaInput || aramaInput === "") {
-		return;
-	}
-	document.body.style.cursor = "wait";
-	document.getElementById("errorDiv").style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("stok/urnbilgiArama", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded"
-			},
-			body: new URLSearchParams({ deger: aramaInput, kodbarkod: kodbarkod })
-		});
-		if (response.errorMessage === "Bu Numarada Kayıtlı Hesap Yok") {
-			throw new Error(response.errorMessage);
-		}
-		const dto = response.urun;
-		document.getElementById("kodu").value = dto.kodu;
-		document.getElementById("adi").value = dto.adi;
-		document.getElementById("birim").value = dto.birim;
-		document.getElementById("kusurat").value = dto.kusurat;
-		document.getElementById("sinif").value = dto.sinif;
-		document.getElementById("anagrup").value = dto.anagrup;
-		document.getElementById("altgrup").value = dto.altgrup;
-		document.getElementById("aciklama1").value = dto.aciklama1;
-		document.getElementById("aciklama2").value = dto.aciklama2;
-		document.getElementById("ozelkod1").value = dto.ozelkod1;
-		document.getElementById("ozelkod2").value = dto.ozelkod2;
-		document.getElementById("barkod").value = dto.barkod;
-		document.getElementById("mensei").value = dto.mensei;
-		document.getElementById("agirlik").value = dto.agirlik;
-		document.getElementById("fiat1").value = dto.fiat1;
-		document.getElementById("fiat2").value = dto.fiat2;
-		document.getElementById("fiat3").value = dto.fiat3;
-		document.getElementById("recete").value = dto.recete;
-		const imgElement = document.getElementById("resimGoster");
-		if (dto.base64Resim && dto.base64Resim.trim() !== "") {
-			const base64String = 'data:image/jpeg;base64,' + dto.base64Resim.trim();
-			imgElement.src = base64String;
-			imgElement.style.display = "block";
-		} else {
-			imgElement.src = "";
-			imgElement.style.display = "none";
-		}
-		urndisableInputs();
-		urnenableDuzeltmeInputs();
-		document.getElementById("errorDiv").style.display = "none";
-		document.getElementById("errorDiv").innerText = "";
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+    if (el.type === "file") el.value = "";
+    else el.value = "";
+  });
 
-function urnGeri() {
-	const arama = document.getElementById("kodu").value;
-	const datalist = document.getElementById("urnOptions");
-	const options = datalist.getElementsByTagName("option");
-	if (options.length === 0) {
-		return null;
-	}
-	let index = -1;
-	for (let i = 0; i < options.length; i++) {
-		if (options[i].value === arama) {
-			index = i;
-			break;
-		}
-	}
-	if (index !== -1) {
-		if (index > 0) {
-			const previousValue = options[index - 1].value;
-			document.getElementById("arama").value = previousValue;
-			urnaramaYap("Kodu");
-			document.getElementById("arama").value = "";
-		} else {
-			return null;
-		}
-	} else {
-		return null;
-	}
-}
+  OBS.URUNKART._setImg("");
+  const kk = OBS.URUNKART._el("kodKontrol");
+  if (kk) kk.innerText = "";
+};
 
-function urnIleri() {
-	const arama = document.getElementById("kodu").value;
-	const datalist = document.getElementById("urnOptions");
-	const options = datalist.getElementsByTagName("option");
-	if (options.length === 0) {
-		return null;
-	}
-	let index = -1;
-	for (let i = 0; i < options.length; i++) {
-		if (options[i].value === arama) {
-			index = i;
-			break;
-		}
-	}
+OBS.URUNKART.enableInputs = () => {
+  OBS.URUNKART.clearInputs();
+  const root = OBS.URUNKART._root();
 
-	if (index !== -1) {
-		if (index < options.length - 1) {
-			const nextValue = options[index + 1].value;
-			document.getElementById("arama").value = nextValue;
-			urnaramaYap("Kodu");
-			document.getElementById("arama").value = "";
-		} else {
-			return null;
-		}
-	} else {
-		return null;
-	}
-}
+  root.querySelectorAll(".form-control, .form-select, textarea.form-control").forEach((el) => {
+    // arama inputu zaten açık olabilir ama sorun değil
+    el.disabled = false;
+  });
+};
 
-function urnIlk() {
-	const datalist = document.getElementById("urnOptions");
-	const options = datalist.getElementsByTagName("option");
+OBS.URUNKART.enableDuzeltmeInputs = () => {
+  const root = OBS.URUNKART._root();
 
-	if (options.length === 0) {
-		urnclearInputs();
-		urndisableInputs();
-		return null;
-	}
-	const firstValue = options[0].value;
-	document.getElementById("arama").value = firstValue;
-	urnaramaYap("Kodu");
-	document.getElementById("arama").value = "";
-}
+  root.querySelectorAll(".form-control, .form-select, textarea.form-control").forEach((el) => {
+    if (el.id !== "kodu") el.disabled = false;
+  });
+};
 
-//************************evrak sil ***********************************************
-async function urnSil() {
-	const urnKodu = document.getElementById('kodu').value;
-	if (["0", ""].includes(urnKodu.value)) {
-		return;
-	}
-	const message = "Kayit Dosyadan Silinecek ..?";
-	const confirmDelete = confirm(message);
-	if (!confirmDelete) {
-		return;
-	}
-	document.getElementById("errorDiv").style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("stok/urnSil", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams({ urnkodu: urnKodu }),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		sayfaYukle();
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+OBS.URUNKART.disableInputs = () => {
+  const root = OBS.URUNKART._root();
 
-async function sayfaYukle() {
-	const url = "stok/urunkart";
-	try {
-		document.body.style.cursor = "wait";
-		const response = await fetch(url, { method: "GET" });
+  root.querySelectorAll(".form-control, .form-select, textarea.form-control").forEach((el) => {
+    if (el.id !== "arama") el.disabled = true;
+  });
+};
 
-		if (!response.ok) {
-			throw new Error(`Bir hata oluştu: ${response.statusText}`);
-		}
-		const data = await response.text();
-		if (data.includes('<form') && data.includes('name="username"')) {
-			window.location.href = "/login";
-		} else {
-			document.getElementById('ara_content').innerHTML = data;
-			stokBaslik();
-			urnaramaYap("Kodu");
-			document.getElementById("arama").value = "";
-		}
-	} catch (error) {
-		document.getElementById('ara_content').innerHTML = `<h2>${error.message}</h2>`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+/* ---------- DTO ---------- */
+OBS.URUNKART.getDTO = () => ({
+  kodu: OBS.URUNKART._el("kodu")?.value || "",
+  adi: OBS.URUNKART._el("adi")?.value || "",
+  birim: OBS.URUNKART._el("birim")?.value || "",
+  kusurat: parseInt(OBS.URUNKART._el("kusurat")?.value, 10) || 0,
+  sinif: OBS.URUNKART._el("sinif")?.value || "",
+  anagrup: OBS.URUNKART._el("anagrup")?.value || "",
+  altgrup: OBS.URUNKART._el("altgrup")?.value || "",
+  aciklama1: OBS.URUNKART._el("aciklama1")?.value || "",
+  aciklama2: OBS.URUNKART._el("aciklama2")?.value || "",
+  ozelkod1: OBS.URUNKART._el("ozelkod1")?.value || "",
+  ozelkod2: OBS.URUNKART._el("ozelkod2")?.value || "",
+  barkod: OBS.URUNKART._el("barkod")?.value || "",
+  mensei: OBS.URUNKART._el("mensei")?.value || "",
+  agirlik: parseFloat(OBS.URUNKART._el("agirlik")?.value) || 0.0,
+  fiat1: parseFloat(OBS.URUNKART._el("fiat1")?.value) || 0.0,
+  fiat2: parseFloat(OBS.URUNKART._el("fiat2")?.value) || 0.0,
+  fiat3: parseFloat(OBS.URUNKART._el("fiat3")?.value) || 0.0,
+  recete: OBS.URUNKART._el("recete")?.value || ""
+});
 
-function resimSil() {
-	const imgElementLogo = document.getElementById("resimGoster");
-	imgElementLogo.src = "";
-	imgElementLogo.style.display = "none";
-}
+/* ---------- kayit ---------- */
+OBS.URUNKART.kayit = async () => {
+  const koduVal = OBS.URUNKART._el("kodu")?.value || "";
+  if (koduVal === "" || koduVal === "0") return;
 
-async function anaChanged(selectElement) {
-	const selectedValue = selectElement.value;
-	document.body.style.cursor = "wait";
-	document.getElementById("errorDiv").style.display = "none";
-	errorDiv.innerText = "";
+  const dto = OBS.URUNKART.getDTO();
+  const formData = new FormData();
 
-	const selectaltElement = document.getElementById("altgrup");
-	selectaltElement.innerHTML = '';
+  Object.keys(dto).forEach((k) => formData.append(k, dto[k]));
 
-	if (anagrup === "") {
-		selectaltElement.disabled = true;
-		return;
-	}
-	try {
-		const response = await fetchWithSessionCheck("stok/altgrup", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams({ anagrup: selectedValue }),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		response.altKodlari.forEach(kod => {
-			const option = document.createElement("option");
-			option.value = kod.ALT_GRUP;
-			option.textContent = kod.ALT_GRUP;
-			selectaltElement.appendChild(option);
-		});
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+  // file
+  const fileInput = OBS.URUNKART._el("resim");
+  const file = fileInput?.files?.[0];
+  if (file) formData.append("resim", file);
 
-function birimtipChanged(selectElement) {
-	const selectedValue = selectElement.value;
-	const imgElementLogo = document.getElementById("birim");
-	imgElementLogo.value = selectedValue;
+  // mevcut base64 img -> blob
+  const blob = OBS.URUNKART._getBase64BlobFromImg();
+  if (blob) formData.append("resimGoster", blob, "base64Resim.jpg");
 
-}
+  OBS.URUNKART._hideError();
+  OBS.URUNKART._setCursor(true);
 
-async function urnAdiOgren(inputElement, targetId) {
-	const inputValue = inputElement.value;
-	document.body.style.cursor = "wait";
-	if (!inputValue) {
-		document.getElementById(targetId).value = "";
-		document.body.style.cursor = "default";
-		return;
-	}
-	document.getElementById("errorDiv").style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("stok/urnadi", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams({ urnkodu: inputValue }),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		document.getElementById(targetId).value = response.urnAdi;
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+  try {
+    const response = await fetchWithSessionCheck("stok/urnkayit", {
+      method: "POST",
+      body: formData
+    });
+    if (response?.errorMessage) throw new Error(response.errorMessage);
+
+    await OBS.URUNKART.sayfaYukle(); // sayfayı yenile (senin akışın)
+    OBS.URUNKART._setCursor(false);
+  } catch (err) {
+    OBS.URUNKART._setCursor(false);
+    OBS.URUNKART._showError(err?.message);
+  }
+};
+
+/* ---------- arama ---------- */
+OBS.URUNKART.aramaYap = async (kodbarkod = "Kodu") => {
+  const kk = OBS.URUNKART._el("kodKontrol");
+  if (kk) kk.innerText = "";
+
+  const aramaVal = OBS.URUNKART._el("arama")?.value || "";
+  if (!aramaVal) return;
+
+  OBS.URUNKART._hideError();
+  OBS.URUNKART._setCursor(true);
+
+  try {
+    const response = await fetchWithSessionCheck("stok/urnbilgiArama", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ deger: aramaVal, kodbarkod })
+    });
+
+    if (response?.errorMessage === "Bu Numarada Kayıtlı Hesap Yok") {
+      throw new Error(response.errorMessage);
+    }
+    if (response?.errorMessage) throw new Error(response.errorMessage);
+
+    const dto = response.urun || {};
+
+    OBS.URUNKART._el("kodu").value = dto.kodu ?? "";
+    OBS.URUNKART._el("adi").value = dto.adi ?? "";
+    OBS.URUNKART._el("birim").value = dto.birim ?? "";
+    OBS.URUNKART._el("kusurat").value = dto.kusurat ?? "";
+    OBS.URUNKART._el("sinif").value = dto.sinif ?? "";
+    OBS.URUNKART._el("anagrup").value = dto.anagrup ?? "";
+    OBS.URUNKART._el("altgrup").value = dto.altgrup ?? "";
+    OBS.URUNKART._el("aciklama1").value = dto.aciklama1 ?? "";
+    OBS.URUNKART._el("aciklama2").value = dto.aciklama2 ?? "";
+    OBS.URUNKART._el("ozelkod1").value = dto.ozelkod1 ?? "";
+    OBS.URUNKART._el("ozelkod2").value = dto.ozelkod2 ?? "";
+    OBS.URUNKART._el("barkod").value = dto.barkod ?? "";
+    OBS.URUNKART._el("mensei").value = dto.mensei ?? "";
+    OBS.URUNKART._el("agirlik").value = dto.agirlik ?? "";
+    OBS.URUNKART._el("fiat1").value = dto.fiat1 ?? "";
+    OBS.URUNKART._el("fiat2").value = dto.fiat2 ?? "";
+    OBS.URUNKART._el("fiat3").value = dto.fiat3 ?? "";
+    OBS.URUNKART._el("recete").value = dto.recete ?? "";
+
+    OBS.URUNKART._setImg(dto.base64Resim);
+
+    // senin akış: disable -> sonra düzeltme enable
+    OBS.URUNKART.disableInputs();
+    OBS.URUNKART.enableDuzeltmeInputs();
+    OBS.URUNKART._hideError();
+  } catch (err) {
+    OBS.URUNKART._showError(err?.message);
+  } finally {
+    OBS.URUNKART._setCursor(false);
+  }
+};
+
+/* ---------- datalist gez ---------- */
+OBS.URUNKART._getOptions = () => {
+  const datalist = OBS.URUNKART._el("urnOptions");
+  if (!datalist) return [];
+  return Array.from(datalist.querySelectorAll("option")).map(o => o.value);
+};
+
+OBS.URUNKART.geri = () => {
+  const current = OBS.URUNKART._el("kodu")?.value || "";
+  const opts = OBS.URUNKART._getOptions();
+  if (!opts.length) return;
+
+  const idx = opts.indexOf(current);
+  if (idx > 0) {
+    const prev = opts[idx - 1];
+    OBS.URUNKART._el("arama").value = prev;
+    OBS.URUNKART.aramaYap("Kodu");
+    OBS.URUNKART._el("arama").value = "";
+  }
+};
+
+OBS.URUNKART.ileri = () => {
+  const current = OBS.URUNKART._el("kodu")?.value || "";
+  const opts = OBS.URUNKART._getOptions();
+  if (!opts.length) return;
+
+  const idx = opts.indexOf(current);
+  if (idx !== -1 && idx < opts.length - 1) {
+    const next = opts[idx + 1];
+    OBS.URUNKART._el("arama").value = next;
+    OBS.URUNKART.aramaYap("Kodu");
+    OBS.URUNKART._el("arama").value = "";
+  }
+};
+
+OBS.URUNKART.ilk = () => {
+  const opts = OBS.URUNKART._getOptions();
+  if (!opts.length) {
+    OBS.URUNKART.clearInputs();
+    OBS.URUNKART.disableInputs();
+    return;
+  }
+  OBS.URUNKART._el("arama").value = opts[0];
+  OBS.URUNKART.aramaYap("Kodu");
+  OBS.URUNKART._el("arama").value = "";
+};
+
+/* ---------- sil ---------- */
+OBS.URUNKART.sil = async () => {
+  const kod = OBS.URUNKART._el("kodu")?.value || "";
+  if (kod === "" || kod === "0") return;
+
+  if (!confirm("Kayit Dosyadan Silinecek ..?")) return;
+
+  OBS.URUNKART._hideError();
+  OBS.URUNKART._setCursor(true);
+
+  try {
+    const response = await fetchWithSessionCheck("stok/urnSil", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ urnkodu: kod })
+    });
+    if (response?.errorMessage) throw new Error(response.errorMessage);
+
+    await OBS.URUNKART.sayfaYukle();
+  } catch (err) {
+    OBS.URUNKART._showError(err?.message);
+  } finally {
+    OBS.URUNKART._setCursor(false);
+  }
+};
+
+/* ---------- sayfa yenile (senin mevcut düzenin) ---------- */
+OBS.URUNKART.sayfaYukle = async () => {
+  const url = "stok/urunkart";
+  try {
+    OBS.URUNKART._setCursor(true);
+    const r = await fetch(url, { method: "GET" });
+    if (!r.ok) throw new Error(`Bir hata oluştu: ${r.statusText}`);
+
+    const html = await r.text();
+
+    if (html.includes('<form') && html.includes('name="username"')) {
+      window.location.href = "/login";
+      return;
+    }
+
+    const host = document.getElementById("ara_content");
+    if (host) host.innerHTML = html;
+
+    if (typeof stokBaslik === "function") stokBaslik();
+
+    // ilk yüklemede otomatik getir
+    await OBS.URUNKART.aramaYap("Kodu");
+    const arama = OBS.URUNKART._el("arama");
+    if (arama) arama.value = "";
+  } catch (err) {
+    const host = document.getElementById("ara_content");
+    if (host) host.innerHTML = `<h2>${err.message}</h2>`;
+  } finally {
+    OBS.URUNKART._setCursor(false);
+  }
+};
+
+/* ---------- misc ---------- */
+OBS.URUNKART.resimSil = () => OBS.URUNKART._setImg("");
+
+OBS.URUNKART.anaChanged = async (selectEl) => {
+  const selectedValue = selectEl?.value || "";
+
+  OBS.URUNKART._hideError();
+  OBS.URUNKART._setCursor(true);
+
+  const alt = OBS.URUNKART._el("altgrup");
+  if (!alt) { OBS.URUNKART._setCursor(false); return; }
+  alt.innerHTML = "";
+
+  if (selectedValue === "") {
+    alt.disabled = true;
+    OBS.URUNKART._setCursor(false);
+    return;
+  }
+
+  try {
+    const response = await fetchWithSessionCheck("stok/altgrup", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ anagrup: selectedValue })
+    });
+    if (response?.errorMessage) throw new Error(response.errorMessage);
+
+    (response.altKodlari || []).forEach((kod) => {
+      const opt = document.createElement("option");
+      opt.value = kod.ALT_GRUP;
+      opt.textContent = kod.ALT_GRUP;
+      alt.appendChild(opt);
+    });
+
+    alt.disabled = false;
+  } catch (err) {
+    OBS.URUNKART._showError(err?.message);
+  } finally {
+    OBS.URUNKART._setCursor(false);
+  }
+};
+
+OBS.URUNKART.birimtipChanged = (selectEl) => {
+  const val = selectEl?.value || "";
+  const birim = OBS.URUNKART._el("birim");
+  if (birim) birim.value = val;
+};
+
+OBS.URUNKART.urnAdiOgren = async (inputEl, targetId) => {
+  const val = inputEl?.value || "";
+  const target = OBS.URUNKART._el(targetId);
+
+  OBS.URUNKART._setCursor(true);
+  OBS.URUNKART._hideError();
+
+  if (!val) {
+    if (target) target.value = "";
+    OBS.URUNKART._setCursor(false);
+    return;
+  }
+
+  try {
+    const response = await fetchWithSessionCheck("stok/urnadi", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ urnkodu: val })
+    });
+    if (response?.errorMessage) throw new Error(response.errorMessage);
+
+    if (target) target.value = response.urnAdi || "";
+  } catch (err) {
+    OBS.URUNKART._showError(err?.message);
+  } finally {
+    OBS.URUNKART._setCursor(false);
+  }
+};
+
+/* ---------- init (event binding) ---------- */
+OBS.URUNKART.init = () => {
+  // file size kontrol + event
+  const file = OBS.URUNKART._el("resim");
+  if (file && !file.dataset.bound) {
+    file.addEventListener("change", (event) => {
+      const maxKB = 500;
+      const maxBytes = maxKB * 1024;
+      const f = event.target.files?.[0];
+
+      if (f && f.size > maxBytes) {
+        OBS.URUNKART._showError(`Dosya boyutu ${maxKB} KB'ı geçemez!`);
+        event.target.value = "";
+      } else {
+        OBS.URUNKART._hideError();
+      }
+    });
+
+    file.dataset.bound = "1";
+  }
+};

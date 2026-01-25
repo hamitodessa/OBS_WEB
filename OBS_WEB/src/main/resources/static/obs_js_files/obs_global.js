@@ -175,6 +175,8 @@ adrhesapAdiOgren = async function (inputId, targetLabelId1) {
 }
 
 async function mailsayfasiYukle(url) {
+	if (window.sayfaYukle) window.sayfaYukle(url);
+	/*
 	try {
 		$('html, body').css('cursor', 'wait');
 		$.ajax({
@@ -205,6 +207,7 @@ async function mailsayfasiYukle(url) {
 	} finally {
 		//$('body').css('cursor', 'default');
 	}
+	*/
 }
 
 

@@ -861,7 +861,54 @@
         if (typeof OBS?.ADR?.init === "function") OBS.ADR.init();
       }
     },
+    "/kambiyo/cekgiris": {
+        js: "/obs_js_files/kambiyo/cekgiris.js",
+        init: () => {
+          if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
+          if (typeof OBS?.CEKGIR?.init === "function") OBS.CEKGIR.init();
+        }
+    },
+    "/kambiyo/cekcikis": {js: "/obs_js_files/kambiyo/cekcikis.js",
+        init: () => {
+          if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
+          if (typeof OBS?.CEKCIK?.init === "function") OBS.CEKCIK.init();
+        }
+    },
+        
+    "/kambiyo/cektakip": {js: "/obs_js_files/kambiyo/cekkontrol.js",
+        init: () => {
+           if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
+        }
+    },
+    "/kambiyo/cekrapor": {js: "/obs_js_files/kambiyo/cekrapor.js",
+        init: () => {
+          if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
+          if (typeof OBS?.CEKRAP?.init === "function") OBS.CEKRAP.init();
+        }
+    },          
 
+    "/stok/urunkart": {js: "/obs_js_files/stok/urunkart.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+            if (typeof OBS?.URUNKART?.init === "function") OBS.URUNKART.init();
+            if (typeof OBS?.URUNKART?.aramaYap === "function") OBS.URUNKART.aramaYap("Kodu");
+            const arama = document.getElementById("arama");
+            if (arama) arama.value = "";
+        }
+    },   
+    "/stok/uretim": {js: "/obs_js_files/stok/uretim.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+            if (typeof OBS?.URETIM?.init === "function") OBS.URETIM.init();
+        }
+    },       
+    "/stok/fatura": {js: "/obs_js_files/stok/fatura.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+            if (typeof OBS?.FATURA?.init === "function") OBS.FATURA.init();
+        }
+    }, 
+    
     "/user/mailgonderme": {
       js: "/obs_js_files/sendemail/sendemail.js",
       init: () => { if (window.sendEmailInit) window.sendEmailInit(); }

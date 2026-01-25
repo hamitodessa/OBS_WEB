@@ -562,13 +562,16 @@ function saveToMain() {
     byId("reportFormat") && (byId("reportFormat").disabled = false);
   }
   else if (nerden === "cekrapor") {
-    cekfetchTableData();
+    OBS.CEKRAP.fetchTableData();
     byId("cekrapreportFormat") && (byId("cekrapreportFormat").disabled = false);
     byId("cekrapmailButton") && (byId("cekrapmailButton").disabled = false);
   }
-  else if (nerden === "cekgir" || nerden === "cekcik") {
-    cekcariIsle();
+  else if (nerden === "cekcik") {
+    OBS.CEKCIK.cekcariIsle();
   }
+	else if (nerden === "cekgir") {
+	    OBS.CEKGIR.cekcariIsle();
+	}
   else if (nerden === "kurrapor") {
     kurrapfetchTableData();
   }

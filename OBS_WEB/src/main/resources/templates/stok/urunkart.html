@@ -1,6 +1,6 @@
 <style>
 /* =========================
-   2026 GLASS THEME - HSP
+   2026 CAM – URUN (GRID + KOMPAKT)
    wrapper: #hsp_content
    ========================= */
 
@@ -16,12 +16,23 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* SOL PANEL */
-#hsp_content .centered-div{
-  width: 780px;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 18px;
+/* ======================================================
+   LAYOUT: sol form + sağ resim
+   ====================================================== */
+#hsp_content .hsp-layout{
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 1100px){
+  #hsp_content .hsp-layout{ grid-template-columns: 1fr; }
+}
+
+/* SOL alan: tek cam panel */
+#hsp_content .hsp-left{
+  width: 100%;
+  padding: 12px;
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
@@ -29,51 +40,85 @@
   box-sizing: border-box;
 }
 
-/* SATIRLAR (üst kısım) */
-#hsp_content .group-box,
-#hsp_content .aramagroup-box{
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
+/* =======================
+   1) TOOLBAR (arama + datalist)
+   ======================= */
+#hsp_content .hsp-toolbar{
+  display: grid;
+  grid-template-columns: 110px 1fr 170px;
+  gap: 8px;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.02);
+}
+
+/* ==========================
+   2) NAV/ACTION (geri/ilk/ileri)
+   ========================== */
+#hsp_content .hsp-actions{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+
+  margin-top: 8px;
+  padding: 10px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.03);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-  min-height: 50px;
 }
 
-/* arama satırlarına hafif farklı ton */
-#hsp_content .aramagroup-box{ background: rgba(255,255,255,.02); }
+/* =========================================
+   3) ÜST FORM (Urun Kodu + Adi)
+   ========================================= */
+#hsp_content .hsp-form{
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 8px;
+}
 
-/* LABEL */
-#hsp_content .input-group-text{
-  height: 44px;
+/* satır kutusu */
+#hsp_content .hsp-field{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+
   border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* label chip */
+#hsp_content .hsp-label{
+  height: 28px;
+  min-width: 84px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  border-radius: 10px;
+
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.06);
   color: rgba(255,255,255,.86);
   font-weight: 900;
-  text-shadow: 0 2px 8px rgba(0,0,0,.45);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 11px;
   white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-/* inline width yazdıklarını biraz toparla */
-#hsp_content .input-group-text[style*="width:100px"]{ width: 110px !important; }
-#hsp_content .input-group-text[style*="width:105px"]{ width: 115px !important; }
-#hsp_content .input-group-text[style*="min-width:100px"]{ min-width: 110px !important; }
-
-/* INPUT */
+/* input/select/textarea */
 #hsp_content .form-control,
 #hsp_content .form-select,
 #hsp_content textarea.form-control{
-  height: 44px;
-  border-radius: 14px;
+  height: 32px;               /* kompakt */
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -89,35 +134,28 @@
   color:#fff;
 }
 
-#hsp_content input[type="date"]{ color-scheme: dark; }
-
 #hsp_content .form-control:disabled,
 #hsp_content .form-select:disabled,
 #hsp_content textarea.form-control:disabled{
-  opacity: .80;
-  color: rgba(255,255,255,.78);
+  opacity: .90;
+  color: rgba(255,255,255,.80);
   background: rgba(8,14,26,.30);
 }
 
-/* CHECKBOX */
-#hsp_content .form-check-input{
-  transform: scale(1.15);
-  margin: 0;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,.45));
-}
+#hsp_content input[type="date"]{ color-scheme: dark; }
 
-/* KOD KONTROL */
+/* kod kontrol */
 #hsp_content #kodKontrol{
   color: rgba(251,113,133,.95) !important;
   font-weight: 900;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
-/* BUTONLAR */
+/* buton */
 #hsp_content .btn.btn-secondary{
-  height: 44px;
+  height: 34px;
   min-width: 44px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.18);
   background: rgba(255,255,255,.08);
   color: rgba(255,255,255,.92);
@@ -132,23 +170,74 @@
   transform: translateY(-2px);
 }
 
-/* ANA YAPI */
-#hsp_content .card.p-4.d-flex.flex-row.gap-3{
-  align-items: flex-start;
-  flex-wrap: nowrap;
+/* datalist ok */
+#hsp_content .datalist-arrow{
+  color: rgba(255,255,255,.9);
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
 }
 
-/* SAĞ RESİM */
+/* =========================================
+   ALT GRID (KOMPAKT) - 2 kolon
+   ========================================= */
+#hsp_content .hsp-grid{
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 12px; /* dikey boşluk az */
+}
+@media (max-width: 1100px){
+  #hsp_content .hsp-grid{ grid-template-columns: 1fr; }
+}
+
+/* her item: label + kontrol */
+#hsp_content .hsp-item{
+  display: grid;
+  grid-template-columns: 84px 1fr; /* label dar */
+  gap: 6px;
+  align-items: center;
+}
+
+/* bazıları iki kontrol yan yana (ör: birim + birimtip) */
+#hsp_content .hsp-item.two{
+  grid-template-columns: 84px 1fr 1fr;
+}
+
+/* küçük dar alanlar (kusurat vb.) */
+#hsp_content .w50{ max-width: 60px !important; }
+#hsp_content .w80{ max-width: 90px !important; }
+#hsp_content .w100{ max-width: 110px !important; }
+#hsp_content .w150{ max-width: 160px !important; }
+#hsp_content .w300{ max-width: 320px !important; }
+
+/* tam satır alanlar */
+#hsp_content .span2{ grid-column: 1 / -1; }
+
+/* ERROR */
+#hsp_content #errorDiv{
+  display:none;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* SAĞ FOTO */
+#hsp_content .hsp-photo{
+  position: sticky;
+  top: 14px;
+}
 #hsp_content .resimcentered-div{
-  width: 260px;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
 #hsp_content .resimdiv{
-  width: 260px;
+  width: 100%;
   height: 320px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.12);
@@ -159,281 +248,244 @@
   align-items: center;
   justify-content: center;
 }
-
 #hsp_content .resimgoster{
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-/* ERROR */
-#hsp_content #errorDiv{
-  display:none;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(251,113,133,.35);
-  background: rgba(251,113,133,.10);
-  color: #fff;
-  font-weight: 900;
-}
-
 /* =========================
-   HESAP KODU ALTINI TEK KUTU YAP
-   (içeride kutu kutu olmayacak)
+   CAM SELECT ARROW
    ========================= */
-#hsp_content .big-details-box{
+#hsp_content .select-wrap{
+  position: relative;
   width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.03);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
-  box-sizing: border-box;
-
-  /* yükseklik kontrol */
-  max-height: 520px;
-  overflow: auto;
-  padding-right: 10px;
+  max-width: 110px; /* w100 ile uyumlu */
 }
 
-/* big kutunun içindeki satırlar: ARTIK KUTU DEĞİL */
-#hsp_content .big-details-box .group-box,
-#hsp_content .big-details-box .aramagroup-box{
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  min-height: auto !important;
-  padding: 8px 4px !important;
-  margin: 0 !important;
+#hsp_content .select-wrap select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 28px; /* oka yer aç */
 }
 
-/* satırlar arası ince çizgi */
-#hsp_content .big-details-box .group-box:not(:last-child),
-#hsp_content .big-details-box .aramagroup-box:not(:last-child){
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+/* arrow */
+#hsp_content .select-arrow{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(255,255,255,.85);
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
 }
 
-/* buton satırı çizgisiz */
-#hsp_content .big-details-box .aramagroup-box:last-child{
-  border-bottom: none !important;
-  padding-top: 12px !important;
+/* disabled görünüm */
+#hsp_content .select-wrap select:disabled + .select-arrow{
+  opacity: .45;
 }
 
-/* scrollbar */
-#hsp_content .big-details-box::-webkit-scrollbar{ width: 10px; }
-#hsp_content .big-details-box::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.18);
-  border-radius: 10px;
-}
-#hsp_content .big-details-box::-webkit-scrollbar-track{
-  background: rgba(0,0,0,.10);
-  border-radius: 10px;
-}
 
-/* RESPONSIVE */
+/* grid span helpers */
+#hsp_content .c12{ grid-column: span 12; }
+#hsp_content .c8 { grid-column: span 8; }
+#hsp_content .c6 { grid-column: span 6; }
+#hsp_content .c4 { grid-column: span 4; }
 @media (max-width: 1100px){
-  #hsp_content .card.p-4.d-flex.flex-row.gap-3{ flex-wrap: wrap; }
-  #hsp_content .resimcentered-div{ width: 100%; max-width: 360px; }
-  #hsp_content .big-details-box{ max-height: none; } /* mobilde scroll olmasın */
+  #hsp_content .c4, #hsp_content .c6, #hsp_content .c8{ grid-column: span 12; }
 }
 </style>
+
 <div id="hsp_content">
-<div id="errorDiv"></div>
+  <div id="errorDiv"></div>
 
-<div class="card p-4 d-flex flex-row gap-3">
-    <div class="centered-div">
-        <div class="aramagroup-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Arama</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="arama"  style="max-width:300px;" class="form-control" oninput="urnaramaYap('Kodu')"  th:value="${urunKodu}" >
-            <span style="padding-left: 50px;"></span>
+  <div class="card p-4">
+    <div class="hsp-layout">
 
-			<div style="position: relative; width: 150px;">
-				<input class="form-control cins_bold" maxlength="12"
-					list="urnOptions" id="urunKodlari"
-					style="width: 100%; padding-right: 30px;">
-				<datalist id="urnOptions">
-					<option th:each="kod : ${urunKodlari}" th:value="${kod.Kodu}"></option>
-				</datalist>
-				<span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;"> ▼ </span>
-			</div>
+      <!-- SOL -->
+      <div class="hsp-left">
 
-		</div>
-        <div class="aramagroup-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="geriButton" class="btn btn-secondary ml-2" onclick="urnGeri()" ><i class="fa fa-backward"></i></button>
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="ilkButton" class="btn btn-secondary ml-2" onclick="urnIlk()" ><i class="fa fa-refresh"></i></button>
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="ileriButton" class="btn btn-secondary ml-2" onclick="urnIleri()" ><i class="fa fa-forward"></i></button>
+        <!-- TOOLBAR (arama + datalist) -->
+        <div class="hsp-toolbar">
+          <span class="hsp-label" style="min-width:110px;">Arama</span>
+
+          <input type="text" id="arama" class="form-control w300"
+                 oninput="OBS.URUNKART.aramaYap('Kodu')" th:value="${urunKodu}">
+
+          <div style="position: relative;">
+            <input class="form-control cins_bold" maxlength="12"
+                   list="urnOptions" id="urunKodlari"
+                   style="width:100%; padding-right:30px;">
+            <datalist id="urnOptions">
+              <option th:each="kod : ${urunKodlari}" th:value="${kod.Kodu}"></option>
+            </datalist>
+            <span class="datalist-arrow"
+                  style="position:absolute; top:50%; right:10px; transform:translateY(-50%); pointer-events:none;">▼</span>
+          </div>
         </div>
-        <div class="group-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Urun Kodu</span>
-            <span style="padding-left: 5px;"></span>
-           <input type="text" id="kodu" disabled style="max-width:150px;font-weight: bold;" class="form-control" oninput="urnAdiOgren(this, 'adi')">
-           <span style="padding-left: 5px;text-align:left; color:red;font-weight: bold;" id="kodKontrol"></span>
+
+        <!-- NAV -->
+        <div class="hsp-actions">
+          <button type="button" id="geriButton" class="btn btn-secondary" onclick="OBS.URUNKART.geri"><i class="fa fa-backward"></i></button>
+          <button type="button" id="ilkButton" class="btn btn-secondary" onclick="OBS.URUNKART.ilk()"><i class="fa fa-refresh"></i></button>
+          <button type="button" id="ileriButton" class="btn btn-secondary" onclick="OBS.URUNKART.ileri()"><i class="fa fa-forward"></i></button>
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Adi</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="adi"  disabled style="max-width:300px;" class="form-control">
+
+        <!-- ÜST FORM: ÜRÜN KODU + ADI -->
+        <div class="hsp-form">
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Urun Kodu</span>
+            <input type="text" id="kodu" disabled class="form-control w150" style="font-weight:bold;"
+                   oninput="OBS.URUNKART.urnAdiOgren(this,'adi')">
+            <span id="kodKontrol"></span>
+          </div>
+
+          <div class="hsp-field c6">
+            <span class="hsp-label">Adi</span>
+            <input type="text" id="adi" disabled class="form-control">
+          </div>
+
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Birim</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="birim"  disabled class="form-control" style="max-width:100px;">
-            <span style="padding-left: 5px;"></span>
+
+        <!-- ALT GRID: TÜM DETAYLAR -->
+        <div class="hsp-grid">
+
+          <!-- Birim + Birimtip -->
+          <div class="hsp-item two">
+  <span class="hsp-label">Birim</span>
+
+  <input type="text" id="birim" disabled class="form-control w100">
+
+  <div class="select-wrap">
+    <select class="form-select cins_bold w100"
+            id="birimtip"
+            onchange="OBS.URUNKART.birimtipChanged(this)"
+            disabled>
+      <option value="Adet" selected>Adet</option>
+      <option value="Kg">Kg</option>
+      <option value="Ton">Ton</option>
+      <option value="m3">m3</option>
+      <option value="m2">m2</option>
+      <option value="m/Tul">m/Tul</option>
+    </select>
+    <span class="select-arrow">▼</span>
+  </div>
+</div>
+
+          <!-- Ağırlık + Kusurat -->
+          <div class="hsp-item two">
+            <span class="hsp-label">Agirlik</span>
+            <input type="text" id="agirlik" disabled class="form-control w100">
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="hsp-label" style="min-width:72px;">Kusurat</span>
+              <input type="text" id="kusurat" disabled class="form-control w50">
+            </div>
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Sinif</span>
+            <input type="text" id="sinif" disabled class="form-control w100">
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Mensei</span>
+            <select class="form-select cins_bold w150" id="mensei" disabled>
+              <option th:each="kod : ${menseiKodlari}" th:value="${kod.MENSEI}" th:text="${kod.MENSEI}"></option>
+            </select>
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Ana Grup</span>
+            <select class="form-select cins_bold w150" id="anagrup" disabled onchange="OBS.URUNKART.anaChanged(this)">
+              <option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
+            </select>
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Alt Grup</span>
+            <select class="form-select cins_bold w150" id="altgrup" disabled>
+              <option th:each="kod : ${altKodlari}" th:value="${kod.ALT_GRUP}" th:text="${kod.ALT_GRUP}"></option>
+            </select>
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Aciklama 1</span>
+            <input type="text" id="aciklama1" disabled class="form-control w300">
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Aciklama 2</span>
+            <input type="text" id="aciklama2" disabled class="form-control w300">
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Ozel 1</span>
+            <select class="form-select cins_bold w150" id="ozelkod1" disabled>
+              <option th:each="kod : ${oz1Kodlari}" th:value="${kod.OZEL_KOD_1}" th:text="${kod.OZEL_KOD_1}"></option>
+            </select>
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Ozel 2</span>
+            <select class="form-select cins_bold w150" id="ozelkod2" disabled>
+              <option th:each="kod : ${oz2Kodlari}" th:value="${kod.OZEL_KOD_2}" th:text="${kod.OZEL_KOD_2}"></option>
+            </select>
+          </div>
+
+          <!-- Fiyatlar (span2 tam satır) -->
+          <div class="hsp-item span2" style="grid-template-columns:84px repeat(6, minmax(0,1fr)); gap:6px; align-items:center;">
             
-           	<select class="form-select" id="birimtip" style="max-width:100px;" onchange="birimtipChanged(this)">
-					<option value="Adet" selected >Adet</option>
-					<option value="Kg">Kg</option>
-					<option value="Ton">Ton</option>
-					<option value="m3">m3</option>
-					<option value="m2">m2</option>
-					<option value="m/Tul">m/Tul</option>
-			</select>
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Agirlik</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="agirlik"  disabled class="form-control" style="max-width:100px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:80px;">Kusurat</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="kusurat"  disabled class="form-control" style="max-width:50px;">
-        </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Sinif</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="sinif"  disabled class="form-control" style="max-width:100px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Mensei</span>
-            <span style="padding-left: 5px;"></span>
-           
-				<select class="form-select cins_bold" style="width: 150px;" id="mensei" disabled>
-    					<option th:each="kod : ${menseiKodlari}" th:value="${kod.MENSEI}" th:text="${kod.MENSEI}"></option>
-				</select>
-				
+            <span class="hsp-label" style="min-width:60px;">Fiat 1</span>
+            <input type="text" id="fiat1" disabled class="form-control w100">
+            <span class="hsp-label" style="min-width:60px;">Fiat 2</span>
+            <input type="text" id="fiat2" disabled class="form-control w100">
+            <span class="hsp-label" style="min-width:60px;">Fiat 3</span>
+            <input type="text" id="fiat3" disabled class="form-control w100">
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Barkod</span>
+            <input type="text" id="barkod" disabled class="form-control w150">
+          </div>
+
+          <div class="hsp-item">
+            <span class="hsp-label">Recete</span>
+            <input type="text" id="recete" disabled class="form-control w100">
+          </div>
 
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Ana Grup</span>
-            <span style="padding-left: 5px;"></span>
-           
-				<select class="form-select cins_bold" style="width: 150px; " id="anagrup" disabled onchange="anaChanged(this)">
-    				<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
-				</select>
-				
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Alt Grup</span>
-            <span style="padding-left: 5px;"></span>
-            
-				<select class="form-select cins_bold" style="width: 150px;" id="altgrup" disabled>
-    				<option th:each="kod : ${altKodlari}" th:value="${kod.ALT_GRUP}" th:text="${kod.ALT_GRUP}"></option>
-				</select>
-				
 
+        <!-- KAYDET / SİL / YENİ -->
+        <div class="hsp-actions">
+          <button type="button" id="kaydetButton" class="btn btn-secondary" onclick="OBS.URUNKART.kayit()"><i class="fa fa-save"></i></button>
+          <button type="button" id="silButton" class="btn btn-secondary" onclick="OBS.URUNKART.sil()"><i class="fa fa-trash"></i></button>
+          <button type="button" id="yeniButton" class="btn btn-secondary" onclick="OBS.URUNKART.enableInputs()"><i class="fa fa-plus"></i></button>
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Aciklama 1</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="aciklama1"  disabled class="form-control" style="max-width:300px;">
-        </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Aciklama 2</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="aciklama2"  disabled class="form-control" style="max-width:300px;">
-        </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Ozel Kod 1</span>
-            <span style="padding-left: 5px;"></span>
-            
-				<select class="form-select cins_bold" style="width: 150px; " id="ozelkod1" disabled>
-    				<option th:each="kod : ${oz1Kodlari}" th:value="${kod.OZEL_KOD_1}" th:text="${kod.OZEL_KOD_1}"></option>
-				</select>
-				
 
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Ozel Kod 2</span>
-            <span style="padding-left: 5px;"></span>
-            
-				<select class="form-select cins_bold" style="width: 150px; " id="ozelkod2" disabled>
-    				<option th:each="kod : ${oz2Kodlari}" th:value="${kod.OZEL_KOD_2}" th:text="${kod.OZEL_KOD_2}"></option>
-				</select>
-				
+      </div>
 
+      <!-- SAĞ FOTO -->
+      <div class="hsp-photo">
+        <div class="resimcentered-div">
+          <div class="resimdiv">
+            <img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim" style="display:none;" />
+          </div>
+
+          <button type="button" id="resimremove" class="btn btn-secondary" style="width:100%;" onclick="OBS.URUNKART.resimSil()">
+            <i class="fa fa-remove"></i>
+          </button>
+
+          <input type="file" id="resim" name="resim" accept="image/*" disabled
+                 class="form-control" style="width:100%;">
         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Fiat 1</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="fiat1"  disabled class="form-control" style="max-width:100px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Fiat 2</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="fiat2"  disabled class="form-control" style="max-width:100px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Fiat 3</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="fiat3"  disabled class="form-control" style="max-width:100px;">
-        </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Barkod</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="barkod"  disabled class="form-control" style="max-width:150px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="width:100px;">Recete</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" id="recete"  disabled class="form-control" style="max-width:100px;">
-        </div>
-        <div class="aramagroup-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="kaydetButton" class="btn btn-secondary ml-2" onclick="urnKayit()" ><i class="fa fa-save"></i></button>
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="silButton" class="btn btn-secondary ml-2" onclick="urnSil()" ><i class="fa fa-trash"></i></button>
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="yeniButton" class="btn btn-secondary ml-2" onclick="urnenableInputs()" ><i class="fa fa-plus"></i></button>
-        </div>
-  </div>  
-    <div class="resimcentered-div">
-    	<div class="resimdiv">
- 			<img id="resimGoster" class="resimgoster"  src="" alt="Base64 Resim" style="display: none;" />
-     	</div>
-     	<button type="button" id="resimremove" style="max-width:250px;" class="btn btn-secondary ml-2" onclick="resimSil()" ><i class="fa fa-remove"></i>	</button>
-        <input type="file" id="resim" name="resim" accept="image/*" disabled class="form-control" style="max-width:400px;">
+      </div>
+
     </div>
-    
+  </div>
 </div>
-</div>
-<script src="/obs_js_files/stok/urunkart.js"></script>
-
-<script>
-document.getElementById('resim').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    const maxSizeInKB = 500;
-    const maxSizeInBytes = maxSizeInKB * 1024;
-	const errorDiv = document.getElementById("errorDiv");
-    if (file && file.size > maxSizeInBytes) {
-        errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-		errorDiv.style.display = "block";
-        event.target.value = ''; 
-    } else {
-		errorDiv.style.display = "none";
-		errorDiv.innerText = "";
-    }
-});
-</script>
 
