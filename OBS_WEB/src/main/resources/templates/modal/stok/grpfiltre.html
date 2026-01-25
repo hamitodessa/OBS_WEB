@@ -20,7 +20,7 @@
 
           <span class="input-group-text">Urun Ana Grup</span>
           <div class="select-wrap">
-            <select class="form-select cins_bold" id="uranagrp" onchange="anagrpChanged(this,'uraltgrp')"></select>
+            <select class="form-select cins_bold" id="uranagrp" onchange="OBS.GRPRAP.anagrpChanged(this,'uraltgrp')"></select>
             <span class="select-arrow">▼</span>
           </div>
           <span></span>
@@ -69,7 +69,7 @@
         <div class="input-group">
           <span class="input-group-text">Birim</span>
           <div class="select-wrap">
-            <select class="form-select cins_bold" id="birim" onchange="birimChanged()">
+            <select class="form-select cins_bold" id="birim" onchange="OBS.GRPRAP.birimChanged()">
               <option value="Tutar">Tutar</option>
               <option value="Miktar">Miktar</option>
               <option value="Agirlik">Agirlik</option>
@@ -81,7 +81,7 @@
           <!-- SAĞ BLOK: kolon 4'ten başlar (Urun Oz.Kod label hizası) -->
           <div class="right-pack">
             <label class="form-check compact-check">
-              <input type="checkbox" class="form-check-input" id="istenenaychc" onchange="istenenayChanged()">
+              <input type="checkbox" class="form-check-input" id="istenenaychc" onchange="OBS.GRPRAP.istenenayChanged()">
               <span class="form-check-label">Istenen Ay</span>
             </label>
 
@@ -112,7 +112,7 @@
           <!-- SAĞ BLOK: kolon 4'ten başlar (Urun Oz.Kod label hizası) -->
           <div class="right-pack">
             <label class="form-check compact-check is-hidden" id="dvzcevlbl">
-              <input type="checkbox" class="form-check-input is-hidden" id="dvzcevirchc" onchange="dvzcevirChanged()">
+              <input type="checkbox" class="form-check-input is-hidden" id="dvzcevirchc" onchange="OBS.GRPRAP.dvzcevirChanged()">
               <span class="form-check-label is-hidden" id="dvzcvrspn">Dvz Cevir</span>
             </label>
 

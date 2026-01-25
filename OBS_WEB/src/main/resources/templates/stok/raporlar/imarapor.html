@@ -213,10 +213,10 @@
 				style="margin-left: 10px;" onclick="openFirstModal('imarapor')">Filtre</button>
 			
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="imarapdownloadButton"
-			 		onclick="imarapdownloadReport()" disabled>Excel Indir</button>
+			 		onclick="OBS.IMARAPOR.imarapdownloadReport()" disabled>Excel Indir</button>
 
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="imarapmailButton"
-			 		onclick="imarapmailAt()" disabled>Email Gonder</button>
+			 		onclick="OBS.IMARAPOR.imarapmailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>
 	<div id="errorDiv"></div>
@@ -264,7 +264,7 @@
 	</div>
 <input type="hidden" id="imarapBilgi" name="imarapBilgi" value="" />
 
-<script src="/obs_js_files/stok/raporlar/imarapor.js"></script>
+
 <div th:replace="~{modal/stok/imaraporfiltre :: modalimarap}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>
 

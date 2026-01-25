@@ -209,10 +209,10 @@
                     style="margin-left: 10px;" onclick="openFirstModal('stokdetayrapor')">Filtre</button>
                 
                 <button class="btn btn-primary" style="margin-left: 10px;" type="button" id="stokdetayreportDownload"
-                 onclick="stokdetaydownloadReport()" disabled>Excel Indir</button>
+                 onclick=" OBS.STKDETAY.stokdetaydownloadReport()" disabled>Excel Indir</button>
     
                 <button class="btn btn-primary" style="margin-left: 10px;" type="button" id="stokdetaymailButton"
-                 onclick="stokdetaymailAt()" disabled>Email Gonder</button>
+                 onclick=" OBS.STKDETAY.stokdetaymailAt()" disabled>Email Gonder</button>
             </div>
         </div>
         <div id="errorDiv"></div>
@@ -251,6 +251,6 @@
         </div>
     <input type="hidden" id="stokdetayBilgi" name="stokdetayBilgi" value="" />
     
-    <script src="/obs_js_files/stok/raporlar/stokdetay.js"></script>
+
     <div th:replace="~{modal/stok/stokdetayfiltre :: modalstokdetay}"></div>
     <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

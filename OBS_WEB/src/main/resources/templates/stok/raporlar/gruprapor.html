@@ -231,10 +231,10 @@
 		<button class="btn btn-primary" type="button" id="grpyenileButton"
 			style="margin-left: 10px;" onclick="openFirstModal('grprapor')">Filtre</button>
 		<button class="btn btn-primary" style="margin-left: 10px;"
-			type="button" id="grprapreportDownload" onclick="grpdownloadReport()"
+			type="button" id="grprapreportDownload" onclick="OBS.GRPRAP.grpdownloadReport()"
 			disabled>Excel Indir</button>
 		<button class="btn btn-primary" style="margin-left: 10px;"
-			type="button" id="grprapmailButton" onclick="grpmailAt()" disabled>Email
+			type="button" id="grprapmailButton" onclick="OBS.GRPRAP.grpmailAt()" disabled>Email
 			Gonder</button>
 	</div>
 </div>
@@ -253,6 +253,6 @@
 	</div>
 </div>
 <input type="hidden" id="grpBilgi" name="grpBilgi" value="" />
-<script src="/obs_js_files/stok/raporlar/grprapor.js"></script>
+
 <div th:replace="~{modal/stok/grpfiltre :: modalgrp}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

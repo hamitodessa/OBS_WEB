@@ -908,6 +908,71 @@
             if (typeof OBS?.FATURA?.init === "function") OBS.FATURA.init();
         }
     }, 
+    "/stok/irsaliye": {js: "/obs_js_files/stok/irsaliye.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+            if (typeof OBS?.IRSALIYE?.init === "function") OBS.IRSALIYE.init();
+        }
+    }, 
+    "/stok/zayi": {js: "/obs_js_files/stok/zayi.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+            if (typeof OBS?.ZAI?.fetchkod === "function") OBS.ZAI.fetchkod();
+        }
+    }, 
+    "/stok/recete": {js: "/obs_js_files/stok/recete.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+            if (typeof OBS?.RECETE?.fetchkod === "function") OBS.RECETE.fetchkod();
+        }
+    }, 
+    "/stok/fatrapor": {js: "/obs_js_files/stok/raporlar/fatrapor.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        }
+    },   
+    "/stok/irsrapor": {js: "/obs_js_files/stok/raporlar/irsrapor.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        }
+    },      
+    "/stok/envanter": {js: "/obs_js_files/stok/raporlar/envanter.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        }
+    },      
+    "/stok/imarapor": {js: "/obs_js_files/stok/raporlar/imarapor.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        }
+    }, 
+    "/stok/imagrprapor": {js: "/obs_js_files/stok/raporlar/imagrprapor.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        }
+    }, 
+    "/stok/stokrapor": {js: "/obs_js_files/stok/raporlar/stokrapor.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        }
+    }, 
+    "/stok/grprapor": {js: "/obs_js_files/stok/raporlar/grprapor.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        }
+    }, 
+    "/stok/stokdetay": {js: "/obs_js_files/stok/raporlar/stokdetay.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        }
+    },
+    "/stok/degiskenler": {js: "/obs_js_files/stok/degiskenler.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.stokBaslik();
+        	if (typeof OBS?.DEGISKENLER?.init === "function") OBS.DEGISKENLER.init();
+        }
+    },
+    
     
     "/user/mailgonderme": {
       js: "/obs_js_files/sendemail/sendemail.js",

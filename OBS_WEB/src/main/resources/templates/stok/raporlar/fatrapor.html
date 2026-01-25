@@ -352,10 +352,10 @@
 				style="margin-left: 10px;" onclick="openFirstModal('fatrapor')">Filtre</button>
 			
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="fatrapreportFormat"
-			 onclick="fatrapdownloadReport()" disabled>Excel Indir</button>
+			 onclick="OBS.FATRAPOR.fatrapdownloadReport()" disabled>Excel Indir</button>
 
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="fatrapmailButton"
-			 onclick="fatrapmailAt()" disabled>Email Gonder</button>
+			 onclick="OBS.FATRAPOR.fatrapmailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>
 	<div id="errorDiv"></div>
@@ -373,19 +373,19 @@
 	</div>
 <!--		Start Pagination -->
 <div class='pagination-container' style="margin-top: 5px">
-	<button type="button" class="btn btn-secondary ml-2" onclick="ilksayfa()">
+	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.FATRAPOR.ilksayfa()">
         <i class="fa fa-backward"></i>
     </button>
     <span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" onclick="oncekisayfa()">
+	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.FATRAPOR.oncekisayfa()">
 		<i class="fa fa-angle-left"></i>
 	</button>
     <span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" onclick="sonrakisayfa()">
+	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.FATRAPOR.sonrakisayfa()">
 		<i class="fa fa-angle-right"></i>
 	</button>
 	<span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" onclick="sonsayfa()">
+	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.FATRAPOR.sonsayfa()">
 		<i class="fa fa-forward"></i>
 	</button>
 </div>
@@ -393,7 +393,7 @@
 
 <input type="hidden" id="fatrapBilgi" name="fatrapBilgi" value="" />
 
-<script src="/obs_js_files/stok/raporlar/fatrapor.js"></script>
+
 <div th:replace="~{modal/stok/fatraporfiltre :: modalfatrap}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

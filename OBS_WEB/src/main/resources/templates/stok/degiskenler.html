@@ -244,7 +244,7 @@
 				<div style="position: relative; width: 100%;">
 					<select class="form-select" id="degiskenler"
 						style="font-weight: bold; width: 100%;"
-						onchange="degiskenchange(this)">
+						onchange="OBS.DEGISKENLER.degiskenchange(this)">
 						<option value="anagrp">Ana Grup</option>
 						<option value="altgrp">Alt Grup</option>
 						<option value="mensei">Mensei</option>
@@ -260,7 +260,7 @@
 				<span class="deg-label">Ana Grup</span>
 				<div class="deg-select-wrap">
 					<select class="form-select" id="altgrpAna"
-						style="font-weight: bold; width: 100%;" onchange="altgrpdoldur()">
+						style="font-weight: bold; width: 100%;" onchange="OBS.DEGISKENLER.altgrpdoldur()">
 						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}"
 							th:text="${kod.ANA_GRUP}"></option>
 					</select> <span class="deg-select-arrow">▼</span>
@@ -268,7 +268,7 @@
 			</div>
 			<div class="deg-row">
 				<span class="deg-label">Arama</span> <input type="text" id="arama"
-					class="form-control" oninput="filterTable()" placeholder="Ara...">
+					class="form-control" oninput="OBS.DEGISKENLER.filterTable()" placeholder="Ara...">
 			</div>
 			<div class="deg-row">
 				<span class="deg-label">Aciklama</span> <input type="text"
@@ -290,13 +290,13 @@
 			</div>
 			<div class="deg-actions">
 				<button class="btn btn-primary" type="button" id="degkaydetButton"
-					onclick="degKayit()">Kaydet</button>
+					onclick="OBS.DEGISKENLER.degKayit()">Kaydet</button>
 				<button class="btn btn-primary" type="button" id="degsilButton"
-					onclick="degYoket()">Sil</button>
+					onclick="OBS.DEGISKENLER.degYoket()">Sil</button>
 				<button type="button" id="btnYeni" class="btn btn-primary"
-					onclick="degyeni()">+</button>
+					onclick="OBS.DEGISKENLER.degyeni()">+</button>
 			</div>
 		</div>
 	</div>
 </div>
-<script src="/obs_js_files/stok/degiskenler.js"></script>
+

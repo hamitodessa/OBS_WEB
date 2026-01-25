@@ -1,578 +1,643 @@
-async function fetchkod() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.innerText = "";
-	errorDiv.style.display = "none";
-	rowCounter = 0;
-	depolar = "";
-	urnkodlar = "";
-	try {
-		const response = await fetchWithSessionCheck("stok/stkgeturndepo", {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		urnkodlar = response.urnkodlar || [];
-		depolar = response.depolar || [];
-		initializeRows();
-	} catch (error) {
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-		errorDiv.style.display = "block";
-	}
-}
+/* =========================
+   OBS Namespace (çakışmasız)
+   ========================= */
+window.OBS = window.OBS || {};
+OBS.ZAI = OBS.ZAI || {};
 
-async function anagrpChanged(anagrpElement) {
-	const anagrup = anagrpElement.value;
-	const selectElement = document.getElementById("altgrp");
-	const errorDiv = document.getElementById("errorDiv");
-	selectElement.innerHTML = '';
-	if (anagrup === "") {
-		selectElement.disabled = true;
-		return;
-	}
-	document.body.style.cursor = "wait";
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("stok/altgrup", {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: new URLSearchParams({ anagrup: anagrup }),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		response.altKodlari.forEach(kod => {
-			const option = document.createElement("option");
-			option.value = kod.ALT_GRUP;
-			option.textContent = kod.ALT_GRUP;
-			selectElement.appendChild(option);
-		});
-		selectElement.disabled = selectElement.options.length === 0;
-	} catch (error) {
-		selectElement.disabled = true;
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+(() => {
+  const Z = OBS.ZAI;
 
-function initializeRows() {
+  /* ---------- state ---------- */
+  Z.rowCounter = 0;
+  Z.depolar = [];
+  Z.urnkodlar = [];
+  Z.tableData = [];
 
-	rowCounter = 0;
-	for (let i = 0; i < 5; i++) {
-		satirekle();
-	}
-}
-function satirekle() {
-  const tbody = document
-    .getElementById("zaiTable")
-    ?.getElementsByTagName("tbody")?.[0];
+  /* ---------- helpers ---------- */
+  Z.byId = (id) => document.getElementById(id);
 
-  if (!tbody) {
-    console.error("zaiTable tbody bulunamadı!");
-    return;
-  }
+  Z.errClear = () => {
+    const e = Z.byId("errorDiv");
+    if (!e) return;
+    e.innerText = "";
+    e.style.display = "none";
+  };
 
-  const newRow = tbody.insertRow();
-  incrementRowCounter();
+  Z.errShow = (msg) => {
+    const e = Z.byId("errorDiv");
+    if (!e) return;
+    e.innerText = msg || "Beklenmeyen bir hata oluştu.";
+    e.style.display = "block";
+  };
 
-  const ukoduoptionsHTML = (urnkodlar || [])
-    .map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`)
-    .join("");
+  Z.cursor = (mode) => { document.body.style.cursor = mode || "default"; };
 
-  const depoOptionsHTML = (depolar || [])
-    .map(kod => `<option value="${kod.DEPO}">${kod.DEPO}</option>`)
-    .join("");
+  Z.incrementRowCounter = () => { Z.rowCounter++; };
 
-  newRow.innerHTML = `
-    <td>
-      <button id="bsatir_${rowCounter}"
-        type="button"
-        class="btn btn-secondary"
-        onclick="satirsil(this)">
-        <i class="fa fa-trash"></i>
-      </button>
-    </td>
+  Z.setLabelContent = (cell, content) => {
+    const span = cell?.querySelector("label span");
+    if (span) span.textContent = content ? content : "\u00A0";
+  };
 
-    <td>
-      <div class="zai-rel">
-        <input class="form-control cins_bold"
-          list="barkodOptions_${rowCounter}"
-          maxlength="20"
-          id="barkod_${rowCounter}"
-          onkeydown="focusNextCell(event, this)"
-          ondblclick="openurunkodlariModal('barkod_${rowCounter}','fatsatir','barkodkod')"
-          onchange="updateRowValues(this,'Barkod')">
-        <datalist id="barkodOptions_${rowCounter}"></datalist>
-        <span class="zai-arrow">▼</span>
-      </div>
-    </td>
+  Z.disableBtn = (id, yes, textYes, textNo) => {
+    const b = Z.byId(id);
+    if (!b) return;
+    b.disabled = !!yes;
+    if (yes && textYes != null) b.innerText = textYes;
+    if (!yes && textNo != null) b.innerText = textNo;
+  };
 
-    <td>
-      <div class="zai-rel">
-        <input class="form-control cins_bold"
-          list="ukoduOptions_${rowCounter}"
-          maxlength="12"
-          id="ukodu_${rowCounter}"
-          onkeydown="focusNextCell(event, this)"
-          ondblclick="openurunkodlariModal('ukodu_${rowCounter}','recetesatir','ukodukod')"
-          onchange="updateRowValues(this,'Kodu')">
-        <datalist id="ukoduOptions_${rowCounter}">
-          ${ukoduoptionsHTML}
-        </datalist>
-        <span class="zai-arrow">▼</span>
-      </div>
-    </td>
+  /* =========================
+     FETCH / INIT
+     ========================= */
 
-    <td>
-      <div class="zai-rel">
-        <select class="form-control" id="depo_${rowCounter}">
-          ${depoOptionsHTML}
-        </select>
-        <span class="zai-arrow">▼</span>
-      </div>
-    </td>
+  Z.fetchkod = async function () {
+    Z.errClear();
+    Z.rowCounter = 0;
+    Z.depolar = [];
+    Z.urnkodlar = [];
 
-    <td>
-      <input class="form-control"
-        value="${formatNumber2(0)}"
-        style="text-align:right;"
-        onfocus="selectAllContent(this)"
-        onblur="handleBlur(this)"
-        onkeydown="focusNextCell(event, this)">
-    </td>
+    try {
+      const response = await fetchWithSessionCheck("stok/stkgeturndepo", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
-    <td>
-      <input class="form-control"
-        value="${formatNumber3(0)}"
-        style="text-align:right;"
-        onfocus="selectAllContent(this)"
-        onblur="handleBlur3(this)"
-        onkeydown="focusNextCell(event, this)">
-    </td>
+      if (response?.errorMessage) throw new Error(response.errorMessage);
 
-    <td>
-      <label class="form-control">
-        <span>&nbsp;</span>
-      </label>
-    </td>
+      Z.urnkodlar = response.urnkodlar || [];
+      Z.depolar  = response.depolar  || [];
+      Z.initializeRows();
+    } catch (error) {
+      Z.errShow(error?.message);
+    }
+  };
 
-    <td>
-      <input class="form-control"
-        value="${formatNumber2(0)}"
-        style="text-align:right;"
-        onfocus="selectAllContent(this)"
-        onblur="handleBlur(this)"
-        onkeydown="focusNextCell(event, this)">
-    </td>
+  Z.anagrpChanged = async function (anagrpElement) {
+    const anagrup = anagrpElement?.value || "";
+    const selectElement = Z.byId("altgrp");
+    if (!selectElement) return;
 
-    <td>
-      <input class="form-control"
-        onfocus="selectAllContent(this)"
-        onkeydown="focusNextRow(event, this)">
-    </td>
-  `;
+    selectElement.innerHTML = "";
 
-  return newRow;
-}
+    if (anagrup === "") {
+      selectElement.disabled = true;
+      return;
+    }
 
-function handleBlur3(input) {
-	input.value = formatNumber3(input.value);
-	updateColumnTotal();
-}
+    Z.cursor("wait");
+    Z.errClear();
 
-function handleBlur(input) {
-	input.value = formatNumber2(input.value);
-	updateColumnTotal();
-}
+    try {
+      const response = await fetchWithSessionCheck("stok/altgrup", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ anagrup }),
+      });
 
-function selectAllContent(element) {
-	if (element && element.select) {
-		element.select();
-	}
-}
+      if (response?.errorMessage) throw new Error(response.errorMessage);
 
+      (response.altKodlari || []).forEach((kod) => {
+        const option = document.createElement("option");
+        option.value = kod.ALT_GRUP;
+        option.textContent = kod.ALT_GRUP;
+        selectElement.appendChild(option);
+      });
 
-function satirsil(button) {
-	const row = button.parentElement.parentElement;
-	row.remove();
-	updateColumnTotal();
-}
+      selectElement.disabled = selectElement.options.length === 0;
+    } catch (error) {
+      selectElement.disabled = true;
+      Z.errShow(error?.message);
+    } finally {
+      Z.cursor("default");
+    }
+  };
 
-function setLabelContent(cell, content) {
-	const span = cell.querySelector('label span');
-	if (span) {
-		span.textContent = content ? content : '\u00A0';
-	}
-}
+  /* =========================
+     TABLE
+     ========================= */
 
-function focusNextRow(event, element) {
-	if (event.key === "Enter") {
-		event.preventDefault();
-		const currentRow = element.closest('tr');
-		const nextRow = currentRow.nextElementSibling;
-		if (nextRow) {
-			const secondInput = nextRow.querySelector("td:nth-child(3) input");
-			if (secondInput) {
-				secondInput.focus();
-				secondInput.select();
-			}
-		} else {
-			satirekle();
-			const table = currentRow.parentElement;
-			const newRow = table.lastElementChild;
-			const secondInput = newRow.querySelector("td:nth-child(3) input");
-			if (secondInput) {
-				secondInput.focus();
-				secondInput.select();
-			}
-		}
-	}
-}
+  Z.initializeRows = function () {
+    Z.rowCounter = 0;
+    const tbody = Z.byId("zaiTable")?.querySelector("tbody");
+    if (tbody) tbody.innerHTML = "";
+    for (let i = 0; i < 5; i++) Z.satirekle();
+  };
 
-function focusNextCell(event, element) {
-	if (event.key === "Enter") {
-		event.preventDefault();
-		let currentCell = element.closest('td');
-		let nextCell = currentCell.nextElementSibling;
-		while (nextCell) {
-			const focusableElement = nextCell.querySelector('input');
-			if (focusableElement) {
-				focusableElement.focus();
-				if (focusableElement.select) {
-					focusableElement.select();
-				}
-				break;
-			} else {
-				nextCell = nextCell.nextElementSibling;
-			}
-		}
-	}
-}
+  Z.satirekle = function () {
+    const tbody = Z.byId("zaiTable")?.querySelector("tbody");
+    if (!tbody) {
+      console.error("zaiTable tbody bulunamadı!");
+      return null;
+    }
 
-async function updateRowValues(inputElement, kodbarkod) {
-	const selectedValue = inputElement.value;
-	document.body.style.cursor = "wait";
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	try {
-		const response = await fetchWithSessionCheck("stok/urnbilgiArama", {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: new URLSearchParams({ deger: selectedValue, kodbarkod: kodbarkod }),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const row = inputElement.closest('tr');
-		const cells = row.querySelectorAll('td');
+    const newRow = tbody.insertRow();
+    Z.incrementRowCounter();
 
+    const ukoduoptionsHTML = (Z.urnkodlar || [])
+      .map(kod => `<option value="${kod.Kodu}">${kod.Kodu}</option>`)
+      .join("");
 
-		const birimCell = cells[6];
-		setLabelContent(birimCell, response.urun.birim);
-		document.getElementById("adil").innerText = response.urun.adi || '';
-		document.getElementById("anagrpl").innerText = response.urun.anagrup || '';
-		document.getElementById("altgrpl").innerText = response.urun.altgrup || '';
+    const depoOptionsHTML = (Z.depolar || [])
+      .map(kod => `<option value="${kod.DEPO}">${kod.DEPO}</option>`)
+      .join("");
 
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+    newRow.innerHTML = `
+      <td>
+        <button id="bsatir_${Z.rowCounter}"
+          type="button"
+          class="btn btn-secondary"
+          onclick="OBS.ZAI.satirsil(this)">
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
 
-function updateColumnTotal() {
-	const rows = document.querySelectorAll('table tr');
-	const totalTutarCell = document.getElementById("totalTutar");
-	let total = 0;
-	let totalmiktar = 0;
-	totalTutarCell.textContent = "0.00";
-	rows.forEach(row => {
-		const input5 = row.querySelector('td:nth-child(5) input');
-		const input6 = row.querySelector('td:nth-child(6) input');
-		const input8 = row.querySelector('td:nth-child(8) input');
-		if (input5 && input6) {
-			const value5 = parseLocaleNumber(input5.value) || 0;
-			const value6 = parseLocaleNumber(input6.value) || 0;
-			const result = value5 * value6;
-			input8.value = result.toLocaleString(undefined, {
-				minimumFractionDigits: 2, maximumFractionDigits: 2
-			});
-			if (result > 0) {
-				total += result;
-			}
-			totalmiktar += value6;
-		}
-	});
-	totalTutarCell.textContent = total.toLocaleString(undefined, {
-		minimumFractionDigits: 2, maximumFractionDigits: 2
-	});
-	document.getElementById("totalMiktar").textContent = totalmiktar.toLocaleString(undefined, {
-		minimumFractionDigits: 3, maximumFractionDigits: 3
-	});
-}
+      <td>
+        <div class="zai-rel">
+          <input class="form-control cins_bold"
+            list="barkodOptions_${Z.rowCounter}"
+            maxlength="20"
+            id="barkod_${Z.rowCounter}"
+            onkeydown="OBS.ZAI.focusNextCell(event, this)"
+            ondblclick="openurunkodlariModal('barkod_${Z.rowCounter}','fatsatir','barkodkod')"
+            onchange="OBS.ZAI.updateRowValues(this,'Barkod')">
+          <datalist id="barkodOptions_${Z.rowCounter}"></datalist>
+          <span class="zai-arrow">▼</span>
+        </div>
+      </td>
 
-function clearInputs() {
+      <td>
+        <div class="zai-rel">
+          <input class="form-control cins_bold"
+            list="ukoduOptions_${Z.rowCounter}"
+            maxlength="12"
+            id="ukodu_${Z.rowCounter}"
+            onkeydown="OBS.ZAI.focusNextCell(event, this)"
+            ondblclick="openurunkodlariModal('ukodu_${Z.rowCounter}','recetesatir','ukodukod')"
+            onchange="OBS.ZAI.updateRowValues(this,'Kodu')">
+          <datalist id="ukoduOptions_${Z.rowCounter}">
+            ${ukoduoptionsHTML}
+          </datalist>
+          <span class="zai-arrow">▼</span>
+        </div>
+      </td>
 
-	document.getElementById("anagrp").value = '';
-	document.getElementById("altgrp").innerHTML = '';
-	document.getElementById("altgrp").disabled = true;
+      <td>
+        <div class="zai-rel">
+          <select class="form-control" id="depo_${Z.rowCounter}">
+            ${depoOptionsHTML}
+          </select>
+          <span class="zai-arrow">▼</span>
+        </div>
+      </td>
 
-	document.getElementById("a1").value = '';
-	document.getElementById("a2").value = '';
+      <td>
+        <input class="form-control ta-right"
+          value="${formatNumber2(0)}"
+          onfocus="OBS.ZAI.selectAllContent(this)"
+          onblur="OBS.ZAI.handleBlur(this)"
+          onkeydown="OBS.ZAI.focusNextCell(event, this)">
+      </td>
 
-	document.getElementById("adil").innerText = '';
-	document.getElementById("anagrpl").innerText = '';
-	document.getElementById("altgrpl").innerText = '';
+      <td>
+        <input class="form-control ta-right"
+          value="${formatNumber3(0)}"
+          onfocus="OBS.ZAI.selectAllContent(this)"
+          onblur="OBS.ZAI.handleBlur3(this)"
+          onkeydown="OBS.ZAI.focusNextCell(event, this)">
+      </td>
 
-	document.getElementById("totalMiktar").textContent = "0.000";
-	document.getElementById("totalTutar").textContent = "0.00";
+      <td>
+        <label class="form-control"><span>&nbsp;</span></label>
+      </td>
 
-	const tableBody = document.getElementById("tbody");
-	tableBody.innerHTML = "";
-	rowCounter = 0;
-	initializeRows();
-}
+      <td>
+        <input class="form-control ta-right"
+          value="${formatNumber2(0)}"
+          onfocus="OBS.ZAI.selectAllContent(this)"
+          onblur="OBS.ZAI.handleBlur(this)"
+          onkeydown="OBS.ZAI.focusNextCell(event, this)">
+      </td>
 
-async function sonfis() {
-	document.getElementById("errorDiv").style.display = "none";
-	document.getElementById("errorDiv").innerText = '';
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck('stok/zaisonfis', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const data = response;
-		const fisNoInput = document.getElementById('fisno');
-		const errorDiv = document.getElementById('errorDiv');
+      <td>
+        <input class="form-control"
+          onfocus="OBS.ZAI.selectAllContent(this)"
+          onkeydown="OBS.ZAI.focusNextRow(event, this)">
+      </td>
+    `;
 
-		fisNoInput.value = data.fisno;
-		if (data.fisNo === 0) {
-			alert('Hata: Evrak numarası bulunamadı.');
-			errorDiv.innerText = data.errorMessage;
-			return;
-		}
-		zaiOku();
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+    return newRow;
+  };
 
-async function yeniFis() {
-	document.body.style.cursor = "wait";
-	const errorDiv = document.getElementById('errorDiv');
-	errorDiv.innerText = "";
-	clearInputs();
-	try {
-		const response = await fetchWithSessionCheck('stok/zaiyenifis', {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const fisNoInput = document.getElementById('fisno');
-		fisNoInput.value = response.fisno;
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		errorDiv.style.display = 'none';
-		document.body.style.cursor = "default";
-	}
-}
+  /* ---------- format / blur ---------- */
+  Z.handleBlur3 = function (input) {
+    input.value = formatNumber3(input.value);
+    Z.updateColumnTotal();
+  };
 
-async function zaiOku() {
-	const fisno = document.getElementById("fisno").value;
-	if (!fisno) {
-		return;
-	}
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = '';
+  Z.handleBlur = function (input) {
+    input.value = formatNumber2(input.value);
+    Z.updateColumnTotal();
+  };
 
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("stok/zaiOku", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams({ fisno: fisno }),
-		});
-		const data = response;
-		clearInputs();
+  Z.selectAllContent = function (el) { el?.select?.(); };
 
-		const table = document.getElementById('zaiTable');
-		const rowss = table.querySelectorAll('tbody tr');
-		if (data.data.length > rowss.length) {
-			const additionalRows = data.data.length - rowss.length;
-			for (let i = 0; i < additionalRows; i++) {
-				satirekle();
-			}
-		}
-		const rows = table.querySelectorAll('tbody tr');
-		data.data.forEach((item, index) => {
-			const cells = rows[index].cells;
-			const barkodInput = cells[1]?.querySelector('input');
-			if (barkodInput) barkodInput.value = item.Barkod || "";
-			const urunKoduInput = cells[2]?.querySelector('input');
-			if (urunKoduInput) urunKoduInput.value = item.Urun_Kodu || "";
-			const depoSelect = cells[3]?.querySelector('select');
-			if (depoSelect) depoSelect.value = item.Depo || "";
-			const fiatInput = cells[4]?.querySelector('input');
-			if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
-			const miktarInput = cells[5]?.querySelector('input');
-			if (miktarInput) miktarInput.value = formatNumber3(item.Miktar * -1);
-			setLabelContent(cells[6], item.Birim || '');
-			const tutarInput = cells[7]?.querySelector('input');
-			if (tutarInput) tutarInput.value = formatNumber2(item.Tutar * -1);
-			const izahatInput = cells[8]?.querySelector('input');
-			if (izahatInput) izahatInput.value = item.Izahat || "";
-		});
-		for (let i = 0; i < data.data.length; i++) {
-			const item = data.data[i];
-			document.getElementById("fisTarih").value = formatdateSaatsiz(item.Tarih);
-			document.getElementById("anagrp").value = item.Ana_Grup || '';
-			await anagrpChanged(document.getElementById("anagrp"));
-			document.getElementById("altgrp").value = item.Alt_Grup || ''
-			break;
-		}
-		document.getElementById("a1").value = data.aciklama1;
-		document.getElementById("a2").value = data.aciklama2;
+  /* ---------- delete row ---------- */
+  Z.satirsil = function (button) {
+    const row = button?.closest("tr");
+    if (row) row.remove();
+    Z.updateColumnTotal();
+  };
 
-		updateColumnTotal();
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+  /* ---------- navigation ---------- */
+  Z.focusNextRow = function (event, element) {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
 
-function prepareureKayit() {
-	const zaiDTO = {
-		fisno: document.getElementById("fisno").value || "",
-		tarih: document.getElementById("fisTarih").value || "",
-		anagrup: document.getElementById("anagrp").value || "",
-		altgrup: document.getElementById("altgrp").value || "",
-		acik1: document.getElementById("a1").value || "",
-		acik2: document.getElementById("a2").value || "",
-	};
-	tableData = getTableData();
-	return { zaiDTO, tableData, };
-}
+    const currentRow = element.closest("tr");
+    const nextRow = currentRow?.nextElementSibling;
 
-function getTableData() {
-	const table = document.getElementById('zaiTable');
-	const rows = table.querySelectorAll('tbody tr');
-	const data = [];
-	rows.forEach((row) => {
-		const cells = row.querySelectorAll('td');
-		const firstColumnValue = cells[2]?.querySelector('input')?.value || "";
-		if (firstColumnValue.trim()) {
-			const rowData = {
-				ukodu: firstColumnValue,
-				depo: cells[3]?.querySelector('select')?.value || "",
-				fiat: parseLocaleNumber(cells[4]?.querySelector('input')?.value),
-				miktar: parseLocaleNumber(cells[5]?.querySelector('input')?.value),
-				tutar: parseLocaleNumber(cells[7]?.querySelector('input')?.value),
-				izahat: cells[8]?.querySelector('input')?.value || "",
-			};
-			data.push(rowData);
-		}
-	});
-	return data;
-}
+    if (nextRow) {
+      const secondInput = nextRow.querySelector("td:nth-child(3) input");
+      if (secondInput) { secondInput.focus(); secondInput.select?.(); }
+      return;
+    }
 
-async function zaiKayit() {
-	const fisno = document.getElementById("fisno").value;
+    Z.satirekle();
+    const tbody = currentRow?.parentElement;
+    const newRow = tbody?.lastElementChild;
+    const secondInput = newRow?.querySelector("td:nth-child(3) input");
+    if (secondInput) { secondInput.focus(); secondInput.select?.(); }
+  };
 
-	const table = document.getElementById('zaiTable');
-	const rows = table.rows;
-	if (!fisno || fisno === "0" || rows.length === 0) {
-		alert("Geçerli bir evrak numarası giriniz.");
-		return;
-	}
-	const zaikayitDTO = prepareureKayit();
-	const errorDiv = document.getElementById('errorDiv');
-	const $kaydetButton = $('#zaikaydetButton');
-	$kaydetButton.prop('disabled', true).text('İşleniyor...');
+  Z.focusNextCell = function (event, element) {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
 
-	document.body.style.cursor = 'wait';
-	try {
-		const response = await fetchWithSessionCheck('stok/zaiKayit', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(zaikayitDTO),
-		});
-		if (response.errorMessage.trim() !== "") {
-			throw new Error(response.errorMessage);
-		}
-		clearInputs();
-		document.getElementById("fisno").value = "";
-		document.getElementById("errorDiv").innerText = "";
-		errorDiv.style.display = 'none';
-	} catch (error) {
-		errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-		errorDiv.style.display = 'block';
-	} finally {
-		document.body.style.cursor = 'default';
-		$kaydetButton.prop('disabled', false).text('Kaydet');
-	}
-}
+    let currentCell = element.closest("td");
+    let nextCell = currentCell?.nextElementSibling;
 
-async function zaiYoket() {
-	const fisNoInput = document.getElementById('fisno');
-	if (["0", ""].includes(fisNoInput.value)) {
-		return;
-	}
-	const confirmDelete = confirm("Bu Uretim fisi silinecek ?");
-	if (!confirmDelete) {
-		return;
-	}
-	document.body.style.cursor = "wait";
-	const $silButton = $('#zaisilButton');
-	$silButton.prop('disabled', true).text('Siliniyor...');
-	try {
-		const response = await fetchWithSessionCheck("stok/zaiYoket", {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams({ fisno: fisNoInput.value }),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		clearInputs();
-		document.getElementById("fisno").value = "";
-		document.getElementById("errorDiv").style.display = "none";
-		document.getElementById("errorDiv").innerText = "";
-	} catch (error) {
-		document.getElementById("errorDiv").style.display = "block";
-		document.getElementById("errorDiv").innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	} finally {
-		document.body.style.cursor = "default";
-		$silButton.prop('disabled', false).text('Sil');
-	}
-}
+    while (nextCell) {
+      const focusable = nextCell.querySelector("input, select");
+      if (focusable) {
+        focusable.focus();
+        focusable.select?.();
+        break;
+      }
+      nextCell = nextCell.nextElementSibling;
+    }
+  };
+
+  /* ---------- row info fetch ---------- */
+  Z.updateRowValues = async function (inputElement, kodbarkod) {
+    const selectedValue = inputElement?.value || "";
+
+    Z.cursor("wait");
+    Z.errClear();
+
+    try {
+      const response = await fetchWithSessionCheck("stok/urnbilgiArama", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ deger: selectedValue, kodbarkod }),
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const row = inputElement.closest("tr");
+      const cells = row.querySelectorAll("td");
+
+      Z.setLabelContent(cells[6], response?.urun?.birim);
+
+      Z.byId("adil").innerText    = response?.urun?.adi     || "";
+      Z.byId("anagrpl").innerText = response?.urun?.anagrup || "";
+      Z.byId("altgrpl").innerText = response?.urun?.altgrup || "";
+    } catch (error) {
+      Z.errShow(error?.message);
+    } finally {
+      Z.cursor("default");
+    }
+  };
+
+  /* ---------- totals ---------- */
+  Z.updateColumnTotal = function () {
+    const rows = document.querySelectorAll("table tr");
+    const totalTutarCell = Z.byId("totalTutar");
+    let total = 0;
+    let totalmiktar = 0;
+
+    if (totalTutarCell) totalTutarCell.textContent = "0.00";
+
+    rows.forEach((row) => {
+      const input5 = row.querySelector("td:nth-child(5) input");
+      const input6 = row.querySelector("td:nth-child(6) input");
+      const input8 = row.querySelector("td:nth-child(8) input");
+
+      if (input5 && input6 && input8) {
+        const value5 = parseLocaleNumber(input5.value) || 0;
+        const value6 = parseLocaleNumber(input6.value) || 0;
+        const result = value5 * value6;
+
+        input8.value = result.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+
+        if (result > 0) total += result;
+        totalmiktar += value6;
+      }
+    });
+
+    if (totalTutarCell) {
+      totalTutarCell.textContent = total.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }
+
+    const tm = Z.byId("totalMiktar");
+    if (tm) {
+      tm.textContent = totalmiktar.toLocaleString(undefined, {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3,
+      });
+    }
+  };
+
+  /* =========================
+     CLEAR / RESET
+     ========================= */
+
+  Z.clearInputs = function () {
+    const anagrp = Z.byId("anagrp");
+    const altgrp = Z.byId("altgrp");
+
+    if (anagrp) anagrp.value = "";
+    if (altgrp) {
+      altgrp.innerHTML = "";
+      altgrp.disabled = true;
+    }
+
+    const a1 = Z.byId("a1");
+    const a2 = Z.byId("a2");
+    if (a1) a1.value = "";
+    if (a2) a2.value = "";
+
+    if (Z.byId("adil"))    Z.byId("adil").innerText = "";
+    if (Z.byId("anagrpl")) Z.byId("anagrpl").innerText = "";
+    if (Z.byId("altgrpl")) Z.byId("altgrpl").innerText = "";
+
+    if (Z.byId("totalMiktar")) Z.byId("totalMiktar").textContent = "0.000";
+    if (Z.byId("totalTutar"))  Z.byId("totalTutar").textContent = "0.00";
+
+    Z.initializeRows();
+  };
+
+  /* =========================
+     SON FİŞ / YENİ FİŞ
+     ========================= */
+
+  Z.sonfis = async function () {
+    Z.errClear();
+    Z.cursor("wait");
+
+    try {
+      const response = await fetchWithSessionCheck("stok/zaisonfis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const fisNoInput = Z.byId("fisno");
+      if (fisNoInput) fisNoInput.value = response.fisno;
+
+      if (response.fisNo === 0) { // senin eski kod mantığı
+        Z.errShow(response.errorMessage || "Evrak numarası bulunamadı.");
+        return;
+      }
+
+      await Z.zaiOku();
+    } catch (error) {
+      Z.errShow(error?.message);
+    } finally {
+      Z.cursor("default");
+    }
+  };
+
+  Z.yeniFis = async function () {
+    Z.cursor("wait");
+    Z.errClear();
+    Z.clearInputs();
+
+    try {
+      const response = await fetchWithSessionCheck("stok/zaiyenifis", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const fisNoInput = Z.byId("fisno");
+      if (fisNoInput) fisNoInput.value = response.fisno;
+    } catch (error) {
+      Z.errShow(error?.message);
+    } finally {
+      Z.cursor("default");
+    }
+  };
+
+  /* =========================
+     OKU
+     ========================= */
+
+  Z.zaiOku = async function () {
+    const fisno = Z.byId("fisno")?.value;
+    if (!fisno) return;
+
+    Z.errClear();
+    Z.cursor("wait");
+
+    try {
+      const response = await fetchWithSessionCheck("stok/zaiOku", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ fisno }),
+      });
+
+      const data = response;
+      Z.clearInputs();
+
+      const table = Z.byId("zaiTable");
+      const rowss = table?.querySelectorAll("tbody tr") || [];
+      if ((data?.data?.length || 0) > rowss.length) {
+        const additional = data.data.length - rowss.length;
+        for (let i = 0; i < additional; i++) Z.satirekle();
+      }
+
+      const rows = table.querySelectorAll("tbody tr");
+      (data.data || []).forEach((item, index) => {
+        const cells = rows[index].cells;
+
+        const barkodInput = cells[1]?.querySelector("input");
+        if (barkodInput) barkodInput.value = item.Barkod || "";
+
+        const urunKoduInput = cells[2]?.querySelector("input");
+        if (urunKoduInput) urunKoduInput.value = item.Urun_Kodu || "";
+
+        const depoSelect = cells[3]?.querySelector("select");
+        if (depoSelect) depoSelect.value = item.Depo || "";
+
+        const fiatInput = cells[4]?.querySelector("input");
+        if (fiatInput) fiatInput.value = formatNumber2(item.Fiat);
+
+        const miktarInput = cells[5]?.querySelector("input");
+        if (miktarInput) miktarInput.value = formatNumber3(item.Miktar * -1);
+
+        Z.setLabelContent(cells[6], item.Birim || "");
+
+        const tutarInput = cells[7]?.querySelector("input");
+        if (tutarInput) tutarInput.value = formatNumber2(item.Tutar * -1);
+
+        const izahatInput = cells[8]?.querySelector("input");
+        if (izahatInput) izahatInput.value = item.Izahat || "";
+      });
+
+      // üst alanlar
+      if (data?.data?.length) {
+        const first = data.data[0];
+        if (Z.byId("fisTarih")) Z.byId("fisTarih").value = formatdateSaatsiz(first.Tarih);
+        if (Z.byId("anagrp"))   Z.byId("anagrp").value = first.Ana_Grup || "";
+
+        await Z.anagrpChanged(Z.byId("anagrp"));
+
+        if (Z.byId("altgrp")) Z.byId("altgrp").value = first.Alt_Grup || "";
+      }
+
+      if (Z.byId("a1")) Z.byId("a1").value = data.aciklama1 || "";
+      if (Z.byId("a2")) Z.byId("a2").value = data.aciklama2 || "";
+
+      Z.updateColumnTotal();
+    } catch (error) {
+      Z.errShow(error?.message);
+    } finally {
+      Z.cursor("default");
+    }
+  };
+
+  /* =========================
+     KAYIT
+     ========================= */
+
+  Z.prepareureKayit = function () {
+    const zaiDTO = {
+      fisno:  Z.byId("fisno")?.value || "",
+      tarih:  Z.byId("fisTarih")?.value || "",
+      anagrup: Z.byId("anagrp")?.value || "",
+      altgrup: Z.byId("altgrp")?.value || "",
+      acik1:  Z.byId("a1")?.value || "",
+      acik2:  Z.byId("a2")?.value || "",
+    };
+
+    const tableData = Z.getTableData();
+    return { zaiDTO, tableData };
+  };
+
+  Z.getTableData = function () {
+    const table = Z.byId("zaiTable");
+    const rows = table?.querySelectorAll("tbody tr") || [];
+    const data = [];
+
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
+      const ukodu = cells[2]?.querySelector("input")?.value || "";
+
+      if (ukodu.trim()) {
+        data.push({
+          ukodu,
+          depo:   cells[3]?.querySelector("select")?.value || "",
+          fiat:   parseLocaleNumber(cells[4]?.querySelector("input")?.value),
+          miktar: parseLocaleNumber(cells[5]?.querySelector("input")?.value),
+          tutar:  parseLocaleNumber(cells[7]?.querySelector("input")?.value),
+          izahat: cells[8]?.querySelector("input")?.value || "",
+        });
+      }
+    });
+
+    return data;
+  };
+
+  Z.zaiKayit = async function () {
+    const fisno = Z.byId("fisno")?.value || "";
+    const rowsCount = Z.byId("zaiTable")?.rows?.length || 0;
+
+    if (!fisno || fisno === "0" || rowsCount === 0) {
+      alert("Geçerli bir evrak numarası giriniz.");
+      return;
+    }
+
+    const dto = Z.prepareureKayit();
+
+    Z.disableBtn("zaikaydetButton", true, "İşleniyor...", "Kaydet");
+    Z.cursor("wait");
+    Z.errClear();
+
+    try {
+      const response = await fetchWithSessionCheck("stok/zaiKayit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto),
+      });
+
+      // senin eski kod: response.errorMessage.trim() !== ""
+      if ((response?.errorMessage || "").trim() !== "") {
+        throw new Error(response.errorMessage);
+      }
+
+      Z.clearInputs();
+      if (Z.byId("fisno")) Z.byId("fisno").value = "";
+      Z.errClear();
+    } catch (error) {
+      Z.errShow(error?.message);
+    } finally {
+      Z.cursor("default");
+      Z.disableBtn("zaikaydetButton", false, "İşleniyor...", "Kaydet");
+    }
+  };
+
+  /* =========================
+     YOKET
+     ========================= */
+
+  Z.zaiYoket = async function () {
+    const fisNoInput = Z.byId("fisno");
+    if (!fisNoInput || ["0", ""].includes(fisNoInput.value)) return;
+
+    const ok = confirm("Bu Uretim fisi silinecek ?");
+    if (!ok) return;
+
+    Z.disableBtn("zaisilButton", true, "Siliniyor...", "Sil");
+    Z.cursor("wait");
+    Z.errClear();
+
+    try {
+      const response = await fetchWithSessionCheck("stok/zaiYoket", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ fisno: fisNoInput.value }),
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      Z.clearInputs();
+      fisNoInput.value = "";
+      Z.errClear();
+    } catch (error) {
+      Z.errShow(error?.message);
+    } finally {
+      Z.cursor("default");
+      Z.disableBtn("zaisilButton", false, "Siliniyor...", "Sil");
+    }
+  };
+
+})();

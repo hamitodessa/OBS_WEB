@@ -281,9 +281,9 @@
 			<button class="btn btn-primary" type="button" id="irsrapyenileButton"
 				style="margin-left: 10px;" onclick="openFirstModal('irsrapor')">Filtre</button>
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="irsrapreportFormat"
-			 onclick="irsrapdownloadReport()" disabled>Excel Indir</button>
+			 onclick="OBS.IRSRAPOR.irsrapdownloadReport()" disabled>Excel Indir</button>
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="irsrapmailButton"
-			 onclick="irsrapmailAt()" disabled>Email Gonder</button>
+			 onclick="OBS.IRSRAPOR.irsrapmailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>
 	<div id="errorDiv"></div>
@@ -301,26 +301,26 @@
 	</div>
 <!--		Start Pagination -->
 <div class='pagination-container' style="margin-top: 5px">
-	<button type="button" class="btn btn-secondary ml-2" onclick="ilksayfa()">
+	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.IRSRAPOR.ilksayfa()">
         <i class="fa fa-backward"></i>
     </button>
     <span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" onclick="oncekisayfa()">
+	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.IRSRAPOR.oncekisayfa()">
 		<i class="fa fa-angle-left"></i>
 	</button>
     <span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" onclick="sonrakisayfa()">
+	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.IRSRAPOR.sonrakisayfa()">
 		<i class="fa fa-angle-right"></i>
 	</button>
 	<span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" onclick="sonsayfa()">
+	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.IRSRAPOR.sonsayfa()">
 		<i class="fa fa-forward"></i>
 	</button>
 </div>
 </div>
 <input type="hidden" id="irsrapBilgi" name="irsrapBilgi" value="" />
 
-<script src="/obs_js_files/stok/raporlar/irsrapor.js"></script>
+
 <div th:replace="~{modal/stok/irsraporfiltre :: modalirsrap}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

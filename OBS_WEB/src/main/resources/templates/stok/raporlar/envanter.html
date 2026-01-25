@@ -223,10 +223,10 @@
       onclick="openFirstModal('envanter')">Filtre</button>
 
     <button class="btn btn-primary" style="margin-left: 10px" type="button" id="envDownloadButton"
-      onclick="envdownloadReport()" disabled>Excel Indir</button>
+      onclick="OBS.ENVANTER.envdownloadReport()" disabled>Excel Indir</button>
 
     <button class="btn btn-primary" style="margin-left: 10px" type="button" id="envmailButton"
-      onclick="envmailAt()" disabled>Email Gonder</button>
+      onclick="OBS.ENVANTER.envmailAt()" disabled>Email Gonder</button>
   </div>
 </div>
 <div id="errorDiv"></div>
@@ -265,7 +265,7 @@
 
 <input type="hidden" id="envanterBilgi" name="envanterBilgi" value="" />
 
-<script src="/obs_js_files/stok/raporlar/envanter.js"></script>
+
 <div th:replace="~{modal/stok/envfiltre :: modalenv}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

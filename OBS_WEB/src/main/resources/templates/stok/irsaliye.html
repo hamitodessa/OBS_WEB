@@ -533,6 +533,15 @@ border-radius: 14px;
   font-size: 12px !important;
   font-weight: 900;
 }
+/* FATURA – sağa hizalama helper */
+#ara_content .ta-right{
+  text-align: right !important;
+}
+
+/* istersen numeriklerde daha net dursun */
+#ara_content input.ta-right{
+  font-variant-numeric: tabular-nums;
+}
 
 </style>
 
@@ -574,7 +583,7 @@ border-radius: 14px;
 						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') irsOku()" ondblclick="yeniFis();">
 					</div>
 					<span style="padding-left: 5px;"></span>
-					<button type="button" class="btn btn-secondary ml-2" onclick="sonfis()">
+					<button type="button" class="btn btn-secondary ml-2" onclick="OBS.IRSALIYE.sonfis()">
 							<i class="fa fa-refresh"></i>
 					</button>
 					<span style="padding-left: 10px;"></span> 
@@ -592,7 +601,7 @@ border-radius: 14px;
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Ana Grup</label>	
 					<div style="position:relative; width:125px;">
-						<select class="form-select cins_bold" style="width: 120px; " id="anagrp" onchange="anagrpChanged(this)">
+						<select class="form-select cins_bold" style="width: 120px; " id="anagrp" onchange="OBS.IRSALIYE.anagrpChanged(this)">
     						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
 						</select>
 						<span style="position:absolute; top:50%; right:12px;
@@ -660,9 +669,9 @@ border-radius: 14px;
 			<div class="group-box">
 				<div class="form-row">
 					<button class="btn btn-primary" type="button" id="irskaydetButton"
-						onclick="irsKayit()">Kaydet</button>
+						onclick="OBS.IRSALIYE.irsKayit()">Kaydet</button>
 					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="irssilButton"	onclick="irsYoket()">Sil</button>
+					<button class="btn btn-primary" type="button" id="irssilButton"	onclick="OBS.IRSALIYE.irsYoket()">Sil</button>
 					<span style="padding-left: 5px;"></span>
 					<button class="btn btn-primary" type="button" id="carkayitButton"	onclick="openFirstModal('irsaliye')">Cari Kaydet</button>
 					<span style="padding-left: 25%;"></span>
@@ -759,7 +768,7 @@ border-radius: 14px;
 		</div>	
 	</div>	
 </div>
-<button type="button" class="btn btn-secondary ml-2" onclick="satirekle()"><i class="fa fa-plus"></i></button>
+<button type="button" class="btn btn-secondary ml-2" onclick="OBS.IRSALIYE.satirekle()"><i class="fa fa-plus"></i></button>
 
 <table class="table table-bordered" id="irsTable"
 	style="margin-top: 5px;">
@@ -836,7 +845,3 @@ border-radius: 14px;
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>
 <div th:replace="~{modal/adres/adrhplnmodal :: adrsecondModal}"></div>
-
-
-
-<script src="/obs_js_files/stok/irsaliye.js"></script>

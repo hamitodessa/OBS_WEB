@@ -211,9 +211,9 @@
 			style="margin-left: 10px" onclick="openFirstModal('stokrapor')">Filtre</button>
 		<button class="btn btn-primary" style="margin-left: 10px"
 			type="button" id="stokrapreportDownload"
-			onclick="stokdownloadReport()" disabled>Excel Indir</button>
+			onclick="OBS.STKRAP.stokdownloadReport()" disabled>Excel Indir</button>
 		<button class="btn btn-primary" style="margin-left: 10px"
-			type="button" id="stokrapmailButton" onclick="stokmailAt()" disabled>Email
+			type="button" id="stokrapmailButton" onclick="OBS.STKRAP.stokmailAt()" disabled>Email
 			Gonder</button>
 	</div>
 </div>
@@ -228,6 +228,6 @@
 	</div>
 </div>
 <input type="hidden" id="stokBilgi" name="stokBilgi" value="" />
-<script src="/obs_js_files/stok/raporlar/stokrapor.js"></script>
+
 <div th:replace="~{modal/stok/stokfiltre :: modalstok}"></div>
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

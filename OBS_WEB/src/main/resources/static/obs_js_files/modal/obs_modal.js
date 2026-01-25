@@ -60,17 +60,24 @@ function openFirstModal(nerdenGeldi) {
   if (nerden === "tahsilatrapor") {
     OBS.TAHRAP.opentahrapModal(modal);
   } else if (nerden === "fatrapor") {
-    openfatrapModal(modal);
+    OBS.FATRAPOR.openfatrapModal(modal);
   } else if (nerden === "irsrapor") {
-    openirsrapModal(modal);
+    OBS.IRSRAPOR.openirsrapModal(modal);
+	} else if (nerden === "envanter") {
+		OBS.ENVANTER.openenvanterModal(modal);
   } else if (nerden === "imarapor") {
-    openimarapModal(modal);
+    OBS.IMARAPOR.openimarapModal(modal);
+	} else if (nerden === "imagrprapor") {
+	  OBS.IMAGRUP.openimagrpModal(modal);
+	} else if (nerden === "stokrapor") {
+	  OBS.STKRAP.openstkModal(modal);
+	} else if (nerden === "grprapor") {
+	  OBS.GRPRAP.opengrpModal(modal);
+	} else if (nerden === "stokdetayrapor") {
+	  OBS.STKDETAY.openstkdtyModal(modal);
   } else if (
-    nerden === "envanter" ||
-    nerden === "stokrapor" ||
-    nerden === "grprapor" ||
-    nerden === "imagrprapor" ||
-    nerden === "stokdetayrapor" ||
+		
+		
     nerden === "kerestedetayrapor" ||
     nerden === "kergrprapor" ||
     nerden === "kerfatrapor" ||
@@ -534,8 +541,7 @@ function saveToMain() {
   // --- 2) modal kapat ---
   modalHide("firstModal");
 
-  // --- 3) Nereden’e göre tablo doldur / butonları aç ---
-  // (senin eski fonksiyon isimlerini aynen kullandım)
+  
   if (nerden === "mizan") {
     OBS.MIZAN.mizfetchTableData();
     byId("mailButton") && (byId("mailButton").disabled = false);
@@ -570,7 +576,7 @@ function saveToMain() {
     OBS.CEKCIK.cekcariIsle();
   }
 	else if (nerden === "cekgir") {
-	    OBS.CEKGIR.cekcariIsle();
+	  OBS.CEKGIR.cekcariIsle();
 	}
   else if (nerden === "kurrapor") {
     kurrapfetchTableData();
@@ -579,7 +585,7 @@ function saveToMain() {
     tahcariIsle();
   }
   else if (nerden === "fatura") {
-    fatcariIsle();
+    OBS.FATURA.fatcariIsle();
   }
   else if (nerden === "irsaliye") {
     irscariIsle();
@@ -588,42 +594,42 @@ function saveToMain() {
     kercariIsle();
   }
   else if (nerden === "fatrapor") {
-    fatdoldur();
+    OBS.FATRAPOR.fatdoldur();
     byId("fatrapmailButton") && (byId("fatrapmailButton").disabled = false);
     byId("fatrapreportFormat") && (byId("fatrapreportFormat").disabled = false);
   }
   else if (nerden === "irsrapor") {
-    irsdoldur();
+    OBS.IRSRAPOR.irsdoldur();
     byId("irsrapmailButton") && (byId("irsrapmailButton").disabled = false);
     byId("irsrapreportFormat") && (byId("irsrapreportFormat").disabled = false);
   }
   else if (nerden === "imarapor") {
-    imafetchTableData();
+    OBS.IMARAPOR.imafetchTableData();
     byId("imarapmailButton") && (byId("imarapmailButton").disabled = false);
     byId("imarapdownloadButton") && (byId("imarapdownloadButton").disabled = false);
   }
   else if (nerden === "envanter") {
-    envfetchTableData();
+    OBS.ENVANTER.envfetchTableData();
     byId("envmailButton") && (byId("envmailButton").disabled = false);
     byId("envDownloadButton") && (byId("envDownloadButton").disabled = false);
   }
   else if (nerden === "stokrapor") {
-    stokfetchTableData();
+    OBS.STKRAP.stokfetchTableData();
     byId("stokrapmailButton") && (byId("stokrapmailButton").disabled = false);
     byId("stokrapreportDownload") && (byId("stokrapreportDownload").disabled = false);
   }
   else if (nerden === "grprapor") {
-    grpfetchTableData();
+    OBS.GRPRAP.grpfetchTableData();
     byId("grprapmailButton") && (byId("grprapmailButton").disabled = false);
     byId("grprapreportDownload") && (byId("grprapreportDownload").disabled = false);
   }
   else if (nerden === "imagrprapor") {
-    imagrpfetchTableData();
+    OBS.IMAGRUP.imagrpfetchTableData();
     byId("imagrprapmailButton") && (byId("imagrprapmailButton").disabled = false);
     byId("imagrprapreportDownload") && (byId("imagrprapreportDownload").disabled = false);
   }
   else if (nerden === "stokdetayrapor") {
-    stokdetayfetchTableData();
+    OBS.STKDETAY.stokdetayfetchTableData();
     byId("stokdetaymailButton") && (byId("stokdetaymailButton").disabled = false);
     byId("stokdetayreportDownload") && (byId("stokdetayreportDownload").disabled = false);
   }
