@@ -718,7 +718,6 @@
       </div>
 
       <div class="hdr-spacer"></div>
-
       <a href="" data-url="/forum" class="btn-icon changeLink" data-toggle="tooltip" data-placement="top" title="Forum">
         <i class="fa fa-comments-o"></i>
         <span class="badge" id="mesajadet" th:text="${mesajadet}"></span>
@@ -973,6 +972,13 @@
         }
     },
     
+    "/kereste/giris": {js: "/obs_js_files/kereste/giris.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.keresteBaslik();
+            if (typeof OBS?.KERGIRIS?.init === "function") OBS.KERGIRIS.init();
+        }
+    },     
+    
     
     "/user/mailgonderme": {
       js: "/obs_js_files/sendemail/sendemail.js",
@@ -1019,9 +1025,19 @@
     "/user/deleteaccount": {
       js: "/obs_js_files/user/deleteuser.js",
       init: () => { if (window.accountDeleteInit) window.accountDeleteInit(); }
-    }
+    },
+    "/forum": {
+        js: "/obs_js_files/forum/forum.js",
+        init: () => {
+        	OBS?.FORUM?.init?.();
+        }
+      }
   };
 
+  
+  
+  
+  
   /* -------------------------
      Module runner (query destekli)
      ------------------------- */

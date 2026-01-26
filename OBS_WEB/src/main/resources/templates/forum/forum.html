@@ -273,7 +273,7 @@
 
     <div class="search-container" style="margin-bottom: 10px;margin-top: 20px;">
       <input type="text" class="form-control" id="search-input"
-             placeholder="Konuları ara..." onkeyup="filterSubjects()" />
+             placeholder="Konuları ara..." onkeyup="OBS.FORUM.filterSubjects()" />
     </div>
 
     <div id="errorDiv" style="display:none;"></div>
@@ -291,9 +291,6 @@
                 id="subject-description" placeholder="Konu Detayi"
                 rows="4" maxlength="300" required style="margin-top:5px;"></textarea>
 
-      <button onclick="addSubject()" id="saveButton">Kaydet</button>
+      <button onclick="OBS.FORUM.addSubject()" id="saveButton">Kaydet</button>
     </div>
   </div>
-
-
-<script src="/obs_js_files/forum/forum.js"></script>
