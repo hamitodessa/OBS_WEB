@@ -632,7 +632,7 @@ border-radius: 14px;
 						<option th:each="kod : ${oz1Kodlari}" th:value="${kod.OZEL_KOD_1}"
 							th:text="${kod.OZEL_KOD_1}"></option>
 					</select> <label>Ana Grup</label> <select class="form-select cins_bold"
-						id="anagrp" onchange="anagrpChanged(this)">
+						id="anagrp" onchange="OBS.KERGIRIS.anagrpChanged(this)">
 						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}"
 							th:text="${kod.ANA_GRUP}"></option>
 					</select> <label>Alt Grup</label> <select class="form-select cins_bold"
@@ -753,10 +753,9 @@ border-radius: 14px;
 		</div>
 	</div>
 </div>
-<button type="button" class="btn btn-secondary ml-2"
-		onclick="OBS.KERGIRIS.satirekle()">
-		<i class="fa fa-plus"></i>
-	</button>
+<button type="button" class="btn btn-secondary ml-2" onclick="OBS.KERGIRIS.satirekle()">
+		<i class="fa fa-plus"></i></button>
+		
 	<table class="table table-bordered" id="kerTable"
 		style="margin-top: 5px;">
 		<thead class="thead-dark">

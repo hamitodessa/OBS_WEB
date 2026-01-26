@@ -978,7 +978,12 @@
             if (typeof OBS?.KERGIRIS?.init === "function") OBS.KERGIRIS.init();
         }
     },     
-    
+    "/kereste/cikis": {js: "/obs_js_files/kereste/cikis.js",
+        init: () => {
+        	if (typeof window.stokBaslik === "function") window.keresteBaslik();
+        	if (typeof OBS?.KERCIKIS?.init === "function") OBS.KERCIKIS.init();
+        }
+    },        
     
     "/user/mailgonderme": {
       js: "/obs_js_files/sendemail/sendemail.js",

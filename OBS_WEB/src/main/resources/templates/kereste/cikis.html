@@ -162,12 +162,14 @@ padding: 0px !important;
   transform: translateY(-1px);
 }
 
-#ara_content #tab1 .btn.btn-secondary{
+
+#ara_content .btn.btn-secondary{
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(255,255,255,.06) !important;
   color: rgba(255,255,255,.88) !important;
 }
-#ara_content #tab1 .btn.btn-secondary:hover{
+#ara_content .btn.btn-secondary:hover{
   background: rgba(56,189,248,.12) !important;
   border-color: rgba(56,189,248,.35) !important;
 }
@@ -605,10 +607,10 @@ padding: 0px !important;
           <label>Fis No</label>
           <div style="min-width:120px;max-width:120px;">
             <input class="form-control" style="font-weight:bold;" maxlength="10" id="fisno"
-              onkeydown="if(event.key === 'Enter') kerOku()"
-              ondblclick="yeniFis();">
+              onkeydown="if(event.key === 'Enter') OBS.KERCIKIS.kerOku()"
+              ondblclick="OBS.KERCIKIS.yeniFis();">
           </div>
-          <button type="button" class="btn btn-secondary" onclick="sonfis()">
+          <button type="button" class="btn btn-secondary" onclick="OBS.KERCIKIS.sonfis()">
             <i class="fa fa-refresh"></i>
           </button>
           <input type="date" id="fisTarih" class="form-control"
@@ -618,7 +620,7 @@ padding: 0px !important;
             <option th:each="kod : ${oz1Kodlari}" th:value="${kod.OZEL_KOD_1}" th:text="${kod.OZEL_KOD_1}"></option>
           </select>
           <label>Ana Grup</label>
-          <select class="form-select cins_bold" style="width:150px;" id="anagrp" onchange="anagrpChanged(this)">
+          <select class="form-select cins_bold" style="width:150px;" id="anagrp" onchange="OBS.KERCIKIS.anagrpChanged(this)">
             <option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
           </select>
 
@@ -666,11 +668,11 @@ padding: 0px !important;
       </div>
       <div class="group-box">
         <div class="form-row" style="gap:8px;margin:0;">
-          <button class="btn btn-primary" type="button" id="kerkaydetButton" onclick="kerKayit()">Kaydet</button>
-          <button class="btn btn-primary" type="button" id="kersilButton" onclick="kerYoket()">Sil</button>
+          <button class="btn btn-primary" type="button" id="kerkaydetButton" onclick="OBS.KERCIKIS.kerKayit()">Kaydet</button>
+          <button class="btn btn-primary" type="button" id="kersilButton" onclick="OBS.KERCIKIS.kerYoket()">Sil</button>
           <button class="btn btn-primary" type="button" id="kerkayitButton" onclick="openFirstModal('kerestegiris')">Cari Kaydet</button>
-          <button class="btn btn-primary" type="button" id="cikisdownloadButton" onclick="downloadcikis()">Yazdir</button>
-          <button class="btn btn-primary" type="button" id="mailButton" onclick="cikismailAt()">Mail At</button>
+          <button class="btn btn-primary" type="button" id="cikisdownloadButton" onclick="OBS.KERCIKIS.downloadcikis()">Yazdir</button>
+          <button class="btn btn-primary" type="button" id="mailButton" onclick="OBS.KERCIKIS.cikismailAt()">Mail At</button>
         </div>
       </div>
 
@@ -746,7 +748,7 @@ padding: 0px !important;
 <!-- =======================
    TABLO + BUTON
 ======================= -->
-<button type="button" class="btn btn-secondary ml-2" onclick="satirekle()">
+<button type="button" class="btn btn-secondary ml-2" onclick="OBS.KERCIKIS.satirekle()">
   <i class="fa fa-plus"></i>
 </button>
 
@@ -830,5 +832,4 @@ padding: 0px !important;
 <div th:replace="~{modal/adres/adrhplnmodal :: adrsecondModal}"></div>
 
 
-<script src="/obs_js_files/kereste/cikis.js"></script>
 
