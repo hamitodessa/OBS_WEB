@@ -64,8 +64,8 @@ function openFirstModal(nerdenGeldi) {
   } else if (nerden === "irsrapor") {
     OBS.IRSRAPOR.openirsrapModal(modal);
 	} else if (nerden === "envanter") {
-		OBS.ENVANTER.openenvanterModal(modal);
-  } else if (nerden === "imarapor") {
+	OBS.ENVANTER.openenvanterModal(modal);
+    } else if (nerden === "imarapor") {
     OBS.IMARAPOR.openimarapModal(modal);
 	} else if (nerden === "imagrprapor") {
 	  OBS.IMAGRUP.openimagrpModal(modal);
@@ -75,20 +75,17 @@ function openFirstModal(nerdenGeldi) {
 	  OBS.GRPRAP.opengrpModal(modal);
 	} else if (nerden === "stokdetayrapor") {
 	  OBS.STKDETAY.openstkdtyModal(modal);
-  } else if (
-		
-		
-    nerden === "kerestedetayrapor" ||
-    nerden === "kergrprapor" ||
-    nerden === "kerfatrapor" ||
-    nerden === "kerenvanter" ||
-    nerden === "kerortfiat"
-  ) {
-    openenvModal(modal);
-  } else {
-    // default: modal göster
-    modalShowByEl(modal);
-  }
+	} else if (nerden === "kerfatrapor") {
+	  OBS.KERFATRAPOR.openkfatrapModal(modal);
+  } else if (nerden === "kerestedetayrapor") {
+  	  OBS.KERDETAY.openkdetayModal(modal);	  
+	} else if (nerden === "kergrprapor") {
+   	  OBS.KERGRPRAPOR.openkgrpModal(modal);	
+	  } else if (nerden === "kerenvanter") {
+	  OBS.KERENVANTER.openkenvModal(modal);	 
+	  } else if (nerden === "kerortfiat") {
+	  OBS.KERORTFIAT.openkortModal(modal);	  
+  } 
 }
 
 /* =========================
@@ -634,27 +631,27 @@ function saveToMain() {
     byId("stokdetayreportDownload") && (byId("stokdetayreportDownload").disabled = false);
   }
   else if (nerden === "kerestedetayrapor") {
-    kerestedetaydoldur();
+    OBS.KERDETAY.kerestedetaydoldur();
     byId("kerestedetaymailButton") && (byId("kerestedetaymailButton").disabled = false);
     byId("kerestedetayreportDownload") && (byId("kerestedetayreportDownload").disabled = false);
   }
   else if (nerden === "kergrprapor") {
-    grpfetchTableData();
+    OBS.KERGRPRAPOR.grpfetchTableData();
     byId("grprapmailButton") && (byId("grprapmailButton").disabled = false);
     byId("grprapreportDownload") && (byId("grprapreportDownload").disabled = false);
   }
   else if (nerden === "kerfatrapor") {
-    kerfatdoldur();
+    OBS.KERFATRAPOR.kerfatdoldur();
     byId("fatrapmailButton") && (byId("fatrapmailButton").disabled = false);
     byId("fatrapreportFormat") && (byId("fatrapreportFormat").disabled = false);
   }
   else if (nerden === "kerenvanter") {
-    kerenvanterdoldur();
+    OBS.KERENVANTER.kerenvanterdoldur();
     byId("envantermailButton") && (byId("envantermailButton").disabled = false);
     byId("envanterDownload") && (byId("envanterDownload").disabled = false);
   }
   else if (nerden === "kerortfiat") {
-    kerortfiatdoldur();
+    OBS.KERORTFIAT.kerortfiatdoldur();
     byId("ortfiatmailButton") && (byId("ortfiatmailButton").disabled = false);
     byId("ortfiatDownload") && (byId("ortfiatDownload").disabled = false);
   }

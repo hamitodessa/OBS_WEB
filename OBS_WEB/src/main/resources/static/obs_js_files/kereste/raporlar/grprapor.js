@@ -1,369 +1,487 @@
-async function anagrpChanged(anagrpElement, altgrpElement) {
-    const anagrup = anagrpElement.value;
-    const errorDiv = document.getElementById("errorDiv");
-    const selectElement = document.getElementById(altgrpElement);
-    selectElement.innerHTML = '';
-    if (anagrup === "") {
-        selectElement.disabled = true;
-        return;
-    }
-    document.body.style.cursor = "wait";
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
-    try {
-        const response = await fetchWithSessionCheck("kereste/altgrup", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ anagrup: anagrup }),
-        });
-        if (response.errorMessage) {
-            throw new Error(response.errorMessage);
-        }
-        response.altKodlari.forEach(kod => {
-            const option = document.createElement("option");
-            option.value = kod.ALT_GRUP;
-            option.textContent = kod.ALT_GRUP;
-            selectElement.appendChild(option);
-        });
-        selectElement.disabled = selectElement.options.length === 0;
-    } catch (error) {
-        selectElement.disabled = true;
-        errorDiv.style.display = "block";
-        errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-    } finally {
-        document.body.style.cursor = "default";
-    }
-}
+/* =========================================================
+   KERGRPRAPOR (jQuery YOK) - OBS Namespace
+   window.OBS = window.OBS || {};
+   OBS.KERGRPRAPOR = ...
+   ========================================================= */
 
-async function openenvModal(modal) {
-    $(modal).modal('show');
-    document.body.style.cursor = "wait";
-    try {
-        const response = await fetchWithSessionCheck("kereste/anadepo", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (response.errorMessage) {
-            throw new Error(response.errorMessage);
-        }
-        const ana = response.anaKodlari;
-        const oz1 = response.oz1Kodlari;
-        const dpo = response.depoKodlari;
+window.OBS = window.OBS || {};
+OBS.KERGRPRAPOR = OBS.KERGRPRAPOR || {};
 
-        const dpoSelect = document.getElementById("depo");
-        dpoSelect.innerHTML = "";
-        const uranaSelect = document.getElementById("anagrp");
-        uranaSelect.innerHTML = "";
-        const ozSelect = document.getElementById("ozkod");
-        ozSelect.innerHTML = "";
+(() => {
+  const M = OBS.KERGRPRAPOR;
 
-        ana.forEach(item => {
-            const optionUrana = document.createElement("option");
-            optionUrana.value = item.ANA_GRUP;
-            optionUrana.textContent = item.ANA_GRUP;
-            uranaSelect.appendChild(optionUrana);
-        });
-        oz1.forEach(item => {
-            const optionOz1 = document.createElement("option");
-            optionOz1.value = item.OZEL_KOD_1;
-            optionOz1.textContent = item.OZEL_KOD_1;
-            ozSelect.appendChild(optionOz1);
-        });
+  /* ---------------- state ---------------- */
+  M.data = null;
+  M.tablobaslik = "";   // ✅ STRING
+  M.rowCounter = 0;
 
-        dpo.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item.DEPO;
-            option.textContent = item.DEPO;
-            dpoSelect.appendChild(option);
-        });
+  /* ---------------- helpers ---------------- */
+  M.el = (id) => document.getElementById(id);
+  M.setCursor = (wait) => { document.body.style.cursor = wait ? "wait" : "default"; };
 
-        const newOption = document.createElement("option");
-        newOption.value = "Bos Olanlar";
-        newOption.textContent = "Bos Olanlar";
+  M.clearError = () => {
+    const e = M.el("errorDiv");
+    if (!e) return;
+    e.style.display = "none";
+    e.innerText = "";
+  };
 
-        const newOption1 = document.createElement("option");
-        newOption1.value = "Bos Olanlar";
-        newOption1.textContent = "Bos Olanlar";
+  M.showError = (msg) => {
+    const e = M.el("errorDiv");
+    if (!e) return;
+    e.style.display = "block";
+    e.innerText = msg || "Beklenmeyen bir hata oluştu.";
+  };
 
-        const newOption2 = document.createElement("option");
-        newOption2.value = "Bos Olanlar";
-        newOption2.textContent = "Bos Olanlar";
+  M.setBtn = (id, disabled, text) => {
+    const b = M.el(id);
+    if (!b) return;
+    b.disabled = !!disabled;
+    if (typeof text === "string") b.textContent = text;
+  };
 
-        dpoSelect.insertBefore(newOption2, dpoSelect.options[1]);
-        uranaSelect.insertBefore(newOption, uranaSelect.options[1]);
-        ozSelect.insertBefore(newOption1, ozSelect.options[1]);
-    } catch (error) {
-        const modalError = document.getElementById("errorDiv");
-        modalError.style.display = "block";
-        modalError.innerText = `Bir hata oluştu: ${error.message}`;
-    } finally {
-        document.body.style.cursor = "default";
-    }
-}
+  /* ---------------- UI toggles ---------------- */
+  M.dvzcevirChanged = () => {
+    const checked = !!M.el("dvzcevirchc")?.checked;
+    M.el("dvzcins")?.classList.toggle("is-hidden", !checked);
+    M.el("dvzturu")?.classList.toggle("is-hidden", !checked);
+    M.el("dvzcinsspan")?.classList.toggle("is-hidden", !checked);
+    M.el("dvzturuspan")?.classList.toggle("is-hidden", !checked);
+  };
 
+  M.birimChanged = () => {
+    const birim = M.el("birim")?.value || "";
+    const ch = M.el("dvzcevirchc");
+    const sp = M.el("dvzcvrspn");
 
-
-function dvzcevirChanged() {
-    const checked = document.getElementById("dvzcevirchc").checked;
-    document.getElementById("dvzcins").classList.toggle("is-hidden", !checked);
-    document.getElementById("dvzturu").classList.toggle("is-hidden", !checked);
-		document.getElementById("dvzcinsspan").classList.toggle("is-hidden", !checked);
-		document.getElementById("dvzturuspan").classList.toggle("is-hidden", !checked);
-}
-function birimChanged() {
-    const birim = document.getElementById("birim").value;
-	
     if (birim === "Tutar") {
-        document.getElementById("dvzcevirchc").classList.toggle("is-hidden", false);
-        document.getElementById("dvzcvrspn").classList.toggle("is-hidden", false);
-				
+      ch?.classList.toggle("is-hidden", false);
+      sp?.classList.toggle("is-hidden", false);
     } else {
-			  document.getElementById("dvzcevirchc").checked = false;
-        document.getElementById("dvzcevirchc").classList.toggle("is-hidden", true);
-        document.getElementById("dvzcvrspn").classList.toggle("is-hidden", true);
-        
-				document.getElementById("dvzcins").classList.toggle("is-hidden", true);
-				document.getElementById("dvzcinsspan").classList.toggle("is-hidden", true);
-			
-				document.getElementById("dvzturuspan").classList.toggle("is-hidden", true);
-        document.getElementById("dvzturu").classList.toggle("is-hidden", true);
-    }
-   
-}
+      if (ch) ch.checked = false;
 
-async function grpfetchTableData() {
-    const hiddenFieldValue = $('#grpBilgi').val();
-    const parsedValues = hiddenFieldValue.split(",");
-    const kergrupraporDTO = {
-        tar1: parsedValues[0],
-        tar2: parsedValues[1],
-        anagrp: parsedValues[2],
-        ukod1: parsedValues[3],
-        ukod2: parsedValues[4],
-        altgrp: parsedValues[5],
-        ckod1: parsedValues[6],
-        ckod2: parsedValues[7],
-        ozkod: parsedValues[8],
-        kons1: parsedValues[9],
-        kons2: parsedValues[10],
-        depo: parsedValues[11],
-        evr1: parsedValues[12],
-        evr2: parsedValues[13],
-        birim: parsedValues[14],
-        gruplama: parsedValues[15],
-        stunlar: parsedValues[16],
-        turu: parsedValues[17],
-        dvzcevirchc: parsedValues[18],
-        doviz: parsedValues[19],
-        dvzturu: parsedValues[20]
+      ch?.classList.toggle("is-hidden", true);
+      sp?.classList.toggle("is-hidden", true);
+
+      M.el("dvzcins")?.classList.toggle("is-hidden", true);
+      M.el("dvzcinsspan")?.classList.toggle("is-hidden", true);
+
+      M.el("dvzturuspan")?.classList.toggle("is-hidden", true);
+      M.el("dvzturu")?.classList.toggle("is-hidden", true);
+    }
+  };
+
+  /* ---------------- anagrp -> altgrp ---------------- */
+  M.anagrpChanged = async (anagrpElement, altgrpElementId) => {
+    const anagrup = anagrpElement.value;
+    const selectElement = M.el(altgrpElementId);
+    if (!selectElement) return;
+
+    selectElement.innerHTML = "";
+    if (anagrup === "") {
+      selectElement.disabled = true;
+      return;
+    }
+
+    M.setCursor(true);
+    M.clearError();
+
+    try {
+      const response = await fetchWithSessionCheck("kereste/altgrup", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ anagrup })
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      (response?.altKodlari || []).forEach((kod) => {
+        const option = document.createElement("option");
+        option.value = kod.ALT_GRUP;
+        option.textContent = kod.ALT_GRUP;
+        selectElement.appendChild(option);
+      });
+
+      selectElement.disabled = selectElement.options.length === 0;
+    } catch (err) {
+      selectElement.disabled = true;
+      M.showError(err?.message);
+    } finally {
+      M.setCursor(false);
+    }
+  };
+
+  /* ---------------- modal open (Bootstrap 5 jQuery yok) ---------------- */
+  M.openkgrpModal = async (modalSelectorOrEl) => {
+    M.setCursor(true);
+    M.clearError();
+
+    try {
+      const modalEl = (typeof modalSelectorOrEl === "string")
+        ? document.querySelector(modalSelectorOrEl)
+        : modalSelectorOrEl;
+
+      if (modalEl && window.bootstrap?.Modal) {
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
+      }
+
+      const response = await fetchWithSessionCheck("kereste/anadepo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const ana = response.anaKodlari || [];
+      const oz1 = response.oz1Kodlari || [];
+      const dpo = response.depoKodlari || [];
+
+      const dpoSelect = M.el("depo");
+      const uranaSelect = M.el("anagrp");
+      const ozSelect = M.el("ozkod");
+
+      if (dpoSelect) dpoSelect.innerHTML = "";
+      if (uranaSelect) uranaSelect.innerHTML = "";
+      if (ozSelect) ozSelect.innerHTML = "";
+
+      ana.forEach((item) => {
+        if (!uranaSelect) return;
+        const opt = document.createElement("option");
+        opt.value = item.ANA_GRUP;
+        opt.textContent = item.ANA_GRUP;
+        uranaSelect.appendChild(opt);
+      });
+
+      oz1.forEach((item) => {
+        if (!ozSelect) return;
+        const opt = document.createElement("option");
+        opt.value = item.OZEL_KOD_1;
+        opt.textContent = item.OZEL_KOD_1;
+        ozSelect.appendChild(opt);
+      });
+
+      dpo.forEach((item) => {
+        if (!dpoSelect) return;
+        const opt = document.createElement("option");
+        opt.value = item.DEPO;
+        opt.textContent = item.DEPO;
+        dpoSelect.appendChild(opt);
+      });
+
+      const insertBos = (sel) => {
+        if (!sel) return;
+        const o = document.createElement("option");
+        o.value = "Bos Olanlar";
+        o.textContent = "Bos Olanlar";
+        sel.insertBefore(o, sel.options[1] || null);
+      };
+
+      insertBos(dpoSelect);
+      insertBos(uranaSelect);
+      insertBos(ozSelect);
+
+    } catch (err) {
+      M.showError(`Bir hata oluştu: ${err?.message || String(err)}`);
+    } finally {
+      M.setCursor(false);
+    }
+  };
+
+  /* ---------------- DTO (jQuery yok) ---------------- */
+  M.getKerGrupRaporDTO = () => {
+    const hidden = M.el("grpBilgi");
+    const raw = hidden ? (hidden.value || "") : "";
+    const p = raw.split(",");
+
+    return {
+      tar1: p[0],
+      tar2: p[1],
+      anagrp: p[2],
+      ukod1: p[3],
+      ukod2: p[4],
+      altgrp: p[5],
+      ckod1: p[6],
+      ckod2: p[7],
+      ozkod: p[8],
+      kons1: p[9],
+      kons2: p[10],
+      depo: p[11],
+      evr1: p[12],
+      evr2: p[13],
+      birim: p[14],
+      gruplama: p[15],
+      stunlar: p[16],
+      turu: p[17],
+      dvzcevirchc: p[18],
+      doviz: p[19],
+      dvzturu: p[20]
     };
-    const errorDiv = document.getElementById("errorDiv");
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
-    document.body.style.cursor = "wait";
-    const $yenileButton = $('#grpyenileButton');
-    $yenileButton.prop('disabled', true).text('İşleniyor...');
-    const mainTableBody = document.getElementById("mainTableBody");
-    mainTableBody.innerHTML = "";
-    clearTfoot();
-    try {
-        const response = await fetchWithSessionCheck("kereste/grpdoldur", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(kergrupraporDTO),
-        });
-        if (response.errorMessage) {
-            throw new Error(response.errorMessage);
-        }
-        data = response;
-        updateTableHeaders(data.baslik, data.sabitkolonsayisi);
-        let headers = data.baslik
-            .split(',')
-            .map(header => header.trim().replace(/\[|\]/g, ""));
-        tablobaslik = headers;
-        rowCounter = data.sabitkolonsayisi;
-        updateTable(data.data, headers, data.format, data.sabitkolonsayisi);
-        document.body.style.cursor = "default";
-    } catch (error) {
-        errorDiv.style.display = "block";
-        errorDiv.innerText = error;
-    } finally {
-        $yenileButton.prop('disabled', false).text('Yenile');
-        document.body.style.cursor = "default";
-    }
-}
+  };
 
-function updateTable(data, headers, format, kolonbaslangic) {
-    let table = document.querySelector("#main-table tbody");
-    let tfoot = document.querySelector("#main-table tfoot");
-    table.innerHTML = "";
-    if (!tfoot) {
-        tfoot = document.createElement("tfoot");
-        document.querySelector("#main-table").appendChild(tfoot);
-    }
-    tfoot.innerHTML = "";
-    let kolonToplamlari = new Array(headers.length).fill(0);
-    data.forEach(rowData => {
-        let row = document.createElement("tr");
-        row.classList.add("table-row-height");
-        headers.forEach((header, index) => {
-            let td = document.createElement("td");
-            let cellValue = rowData[header] !== null ? rowData[header] : "";
-            if (index >= kolonbaslangic) {
-                let numericValue = parseFloat(cellValue);
-                if (!isNaN(numericValue)) {
-                    if(format == 2){
-                        td.textContent = formatNumber2(numericValue);
-                    } else if(format == 3){
-                        td.textContent = formatNumber3(numericValue);   
-                    } else if (format == 0) {
-                        td.textContent = formatNumber0(numericValue);   
-                    }
-                    td.classList.add("double-column");
-                    kolonToplamlari[index] += numericValue;
-                } else {
-                    td.textContent = cellValue;
-                }
-            } else {
-                td.textContent = cellValue;
-            }
-            row.appendChild(td);
-        });
-        table.appendChild(row);
-    });
+  /* ---------------- table helpers ---------------- */
+  M.clearTfoot = () => {
+    const table = document.querySelector("#main-table");
+    if (!table) return;
+    const tfoot = table.querySelector("tfoot");
+    if (!tfoot) return;
+    tfoot.querySelectorAll("th").forEach((th) => (th.textContent = ""));
+  };
 
-    let footerRow = document.createElement("tr");
-    footerRow.classList.add("table-footer");
-    headers.forEach((header, index) => {
-        let th = document.createElement("th");
-        if (index >= kolonbaslangic) {
-            if(format == 2){
-                th.textContent = formatNumber2(kolonToplamlari[index]);
-            } else if(format == 3){
-                th.textContent = formatNumber3(kolonToplamlari[index]);   
-            } else if (format == 0) {
-                th.textContent = formatNumber0(kolonToplamlari[index]);   
-            }
-            th.classList.add("double-column");
-        } else {
-            th.textContent = "";
-        }
-        footerRow.appendChild(th);
-    });
-    tfoot.appendChild(footerRow);
-}
+  M.updateTableHeaders = (baslikString, kolonbaslangic) => {
+    const thead = document.querySelector("#main-table thead");
+    if (!thead) return;
 
-function updateTableHeaders(baslikString, kolonbaslangic) {
-    let thead = document.querySelector("#main-table thead");
     thead.innerHTML = "";
-    let trHead = document.createElement("tr");
-    trHead.classList.add("thead-dark");
-    let headers = baslikString
-        .split(',')
-        .map(header => header.trim().replace(/\[|\]/g, ""));
+
+    const tr = document.createElement("tr");
+    tr.classList.add("thead-dark");
+
+    const headers = (baslikString || "")
+      .split(",")
+      .map(h => h.trim().replace(/\[|\]/g, ""));
+
     headers.forEach((header, index) => {
-        let th = document.createElement("th");
-        th.textContent = header;
-        if (index >= kolonbaslangic) {
-            th.classList.add("double-column");
-        }
-        trHead.appendChild(th);
+      const th = document.createElement("th");
+      th.textContent = header;
+      if (index >= kolonbaslangic) th.classList.add("double-column");
+      tr.appendChild(th);
     });
-    thead.appendChild(trHead);
-}
 
-async function grpdownloadReport() {
-    const errorDiv = document.getElementById("errorDiv");
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
-    document.body.style.cursor = "wait";
-    const $indirButton = $('#grpDownloadButton');
-    $indirButton.prop('disabled', true).text('İşleniyor...');
-    const $yenileButton = $('#grpyenileButton');
-    $yenileButton.prop('disabled', true);
-    let tableString = extractTableData(tablobaslik);
-    try {
-        const response = await fetchWithSessionCheckForDownload('kereste/grp_download', {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ headers: tablobaslik, data: tableString, sabitkolon: rowCounter }),
-        });
-        if (response.blob) {
-            const disposition = response.headers.get('Content-Disposition');
-            const fileName = disposition.match(/filename="(.+)"/)[1];
-            const url = window.URL.createObjectURL(response.blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-        } else {
-            throw new Error("Dosya indirilemedi.");
-        }
-    } catch (error) {
-        errorDiv.style.display = "block";
-        errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
-    } finally {
-        $indirButton.prop('disabled', false).text('Rapor İndir');
-        $yenileButton.prop('disabled', false);
-        document.body.style.cursor = "default";
+    thead.appendChild(tr);
+  };
+
+  M.updateTable = (data, headers, format, kolonbaslangic) => {
+    const tbody = document.querySelector("#main-table tbody");
+    if (!tbody) return;
+
+    let tfoot = document.querySelector("#main-table tfoot");
+    if (!tfoot) {
+      tfoot = document.createElement("tfoot");
+      document.querySelector("#main-table").appendChild(tfoot);
     }
-}
 
-async function grpmailAt() {
+    tbody.innerHTML = "";
+    tfoot.innerHTML = "";
+
+    const kolonToplamlari = new Array(headers.length).fill(0);
+
+    data.forEach((rowData) => {
+      const tr = document.createElement("tr");
+      tr.classList.add("table-row-height");
+
+      headers.forEach((header, index) => {
+        const td = document.createElement("td");
+        const cellValue = (rowData?.[header] != null) ? rowData[header] : "";
+
+        if (index >= kolonbaslangic) {
+          const n = parseFloat(cellValue);
+          if (!Number.isNaN(n)) {
+            if (format == 2) td.textContent = formatNumber2(n);
+            else if (format == 3) td.textContent = formatNumber3(n);
+            else if (format == 0) td.textContent = formatNumber0(n);
+            else td.textContent = String(n);
+
+            td.classList.add("double-column");
+            kolonToplamlari[index] += n;
+          } else {
+            td.textContent = cellValue;
+          }
+        } else {
+          td.textContent = cellValue;
+        }
+
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+
+    const footerRow = document.createElement("tr");
+    footerRow.classList.add("table-footer");
+
+    headers.forEach((_, index) => {
+      const th = document.createElement("th");
+
+      if (index >= kolonbaslangic) {
+        const sum = kolonToplamlari[index];
+        if (format == 2) th.textContent = formatNumber2(sum);
+        else if (format == 3) th.textContent = formatNumber3(sum);
+        else if (format == 0) th.textContent = formatNumber0(sum);
+        else th.textContent = String(sum);
+
+        th.classList.add("double-column");
+      } else {
+        th.textContent = "";
+      }
+
+      footerRow.appendChild(th);
+    });
+
+    tfoot.appendChild(footerRow);
+  };
+
+  /* ---------------- fetch + render ---------------- */
+  M.grpfetchTableData = async () => {
+    M.clearError();
+    M.setCursor(true);
+
+    M.setBtn("grpyenileButton", true, "İşleniyor...");
+
+    const mainTableBody = M.el("mainTableBody");
+    if (mainTableBody) mainTableBody.innerHTML = "";
+
+    M.clearTfoot();
+
+    try {
+      const dto = M.getKerGrupRaporDTO();
+
+      const response = await fetchWithSessionCheck("kereste/grpdoldur", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      M.data = response;
+
+      M.updateTableHeaders(M.data.baslik, M.data.sabitkolonsayisi);
+
+      const headersArr = (M.data.baslik || "")
+        .split(",")
+        .map(h => h.trim().replace(/\[|\]/g, ""));
+
+      // ✅ STRING: "A,B,C"
+      M.tablobaslik = headersArr.join(",");
+
+      M.rowCounter = Number(M.data.sabitkolonsayisi || 0);
+
+      M.updateTable(M.data.data || [], headersArr, M.data.format, M.rowCounter);
+
+    } catch (err) {
+      M.showError(err?.message || String(err));
+    } finally {
+      M.setBtn("grpyenileButton", false, "Yenile");
+      M.setCursor(false);
+    }
+  };
+
+  /* ---------------- export helpers ---------------- */
+  M.extractTableData = (headersString) => {
+    const headers = (headersString || "").split(",").map(s => s.trim()).filter(Boolean);
+
+    let rowsString = "";
+    const tbody = document.querySelector("#main-table tbody");
+    if (!tbody) return rowsString;
+
+    const tbodyRows = tbody.querySelectorAll("tr");
+    tbodyRows.forEach((tr) => {
+      let rowString = "";
+      const tds = Array.from(tr.querySelectorAll("td"));
+
+      headers.forEach((_, index) => {
+        const td = tds[index];
+        const cellValue = td ? td.innerText.trim() : "";
+        rowString += cellValue + "||";
+      });
+
+      rowsString += rowString.slice(0, -2) + "\n";
+    });
+
+    const footer = document.querySelector("#main-table tfoot");
+    if (footer) {
+      let footerString = "";
+      const ths = Array.from(footer.querySelectorAll("th"));
+
+      headers.forEach((_, index) => {
+        const th = ths[index];
+        const footerValue = th ? th.innerText.trim() : "";
+        footerString += footerValue + "||";
+      });
+
+      rowsString += footerString.slice(0, -2) + "\n";
+    }
+
+    return rowsString;
+  };
+
+  /* ---------------- download (jQuery yok) ---------------- */
+  M.grpdownloadReport = async () => {
+    M.clearError();
+    M.setCursor(true);
+
+    M.setBtn("grpDownloadButton", true, "İşleniyor...");
+    M.setBtn("grpyenileButton", true);
+
+    try {
+      const tableString = M.extractTableData(M.tablobaslik);
+
+      const response = await fetchWithSessionCheckForDownload("kereste/grp_download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          headers: M.tablobaslik,        // ✅ STRING
+          data: tableString,
+          sabitkolon: M.rowCounter
+        })
+      });
+
+      if (response?.blob) {
+        const disposition = response.headers.get("Content-Disposition") || "";
+        const m = disposition.match(/filename="(.+)"/);
+        const fileName = m ? m[1] : "kergruprapor.xlsx";
+
+        const url = window.URL.createObjectURL(response.blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      } else {
+        throw new Error("Dosya indirilemedi.");
+      }
+    } catch (err) {
+      M.showError(err?.message || "Bilinmeyen bir hata oluştu.");
+    } finally {
+      M.setBtn("grpDownloadButton", false, "Rapor İndir");
+      M.setBtn("grpyenileButton", false);
+      M.setCursor(false);
+    }
+  };
+
+  /* ---------------- mail (jQuery yok) ---------------- */
+  M.grpmailAt = () => {
     localStorage.removeItem("tableData");
     localStorage.removeItem("grprapor");
     localStorage.removeItem("tablobaslik");
-    document.body.style.cursor = "wait";
-    let rows = extractTableData(tablobaslik);
-    localStorage.setItem("grprapor", rows);
-    localStorage.setItem("tablobaslik", tablobaslik);
-    const degerler = rowCounter + "," + "kergruprapor";
-    const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
-    mailsayfasiYukle(url);
-}
 
-function extractTableData(headers) {
-    let rowsString = "";
-    let table = document.querySelector("#main-table tbody");
-    let tbodyRows = table.querySelectorAll("tr");
-    tbodyRows.forEach(tr => {
-        let rowString = "";
-        let tds = Array.from(tr.querySelectorAll("td"));
-        headers.forEach((header, index) => {
-            let td = tds[index];
-            let cellValue = td ? td.innerText.trim() : "";
-            rowString += cellValue + "||";
-        });
-        rowsString += rowString.slice(0, -2) + "\n";
-    });
-    let footer = document.querySelector("#main-table tfoot");
-    if (footer) {
-        let footerString = "";
-        let ths = Array.from(footer.querySelectorAll("th"));
-        headers.forEach((header, index) => {
-            let th = ths[index];
-            let footerValue = th ? th.innerText.trim() : "";
-            footerString += footerValue + "||";
-        });
-        rowsString += footerString.slice(0, -2) + "\n";
-    }
-    return rowsString;
-}
+    M.setCursor(true);
 
-function clearTfoot() {
-    let table = document.querySelector("#main-table");
-    let tfoot = table.querySelector("tfoot");
-    if (tfoot) {
-        let cells = tfoot.querySelectorAll("th");
-        for (let i = 0; i < cells.length; i++) {
-            cells[i].textContent = "";
-        }
+    try {
+      const rows = M.extractTableData(M.tablobaslik);
+
+      localStorage.setItem("grprapor", rows);
+      localStorage.setItem("tablobaslik", M.tablobaslik); // ✅ STRING
+
+      const degerler = M.rowCounter + "," + "kergruprapor";
+      const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
+      mailsayfasiYukle(url);
+    } finally {
+      M.setCursor(false);
     }
-}
+  };
+
+  /* ---------------- expose (HTML onclick için) ---------------- */
+  window.dvzcevirChanged = M.dvzcevirChanged;
+  window.birimChanged = M.birimChanged;
+
+  window.anagrpChanged = M.anagrpChanged;
+  window.openenvModal = M.openenvModal;
+
+  window.grpfetchTableData = M.grpfetchTableData;
+  window.grpdownloadReport = M.grpdownloadReport;
+  window.grpmailAt = M.grpmailAt;
+
+})();

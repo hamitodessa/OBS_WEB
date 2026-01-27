@@ -4,7 +4,7 @@
    - init() ile başlar
    - event handler'lar OBS.KERGIRIS.xxx şeklinde çağrılır
    ========================================================== */
-
+ 
 (function (window, document) {
   window.OBS = window.OBS || {};
   const OBS = window.OBS;
@@ -58,46 +58,57 @@
   K.incrementRowCounter = () => { K.rowCounter++; };
 
   /* ========================= mask ========================= */
-  K.	applyMask = function () {
-	  const inputs = document.querySelectorAll("input[id^='ukodu_']");
+  K.  applyMask = function () {
+    const inputs = document.querySelectorAll("input[id^='ukodu_']");
 
-	  inputs.forEach((inp) => {
-	    inp.maxLength = 16;
-	    inp.placeholder = "AA-999-9999-9999";
+    inputs.forEach((inp) => {
+      // aynı input'a iki kez bağlanma
+      if (inp.dataset.maskBound === "1") return;
+      inp.dataset.maskBound = "1";
 
-	    // aynı input'a iki kez bağlanma
-	    if (inp.dataset.maskBound === "1") return;
-	    inp.dataset.maskBound = "1";
+      // Inputmask tanımı
+      Inputmask({
+        mask: "AA-999-9999-9999",
+        placeholder: "_",
+        clearIncomplete: false,
+        showMaskOnHover: false,
+        showMaskOnFocus: true,
+        definitions: {
+          "A": {
+            validator: "[A-Za-z0-9]",
+            casing: "upper"
+          }
+        },
+        // paste / manuel girişte format garanti
+        onBeforeWrite: function (event, buffer, caretPos, opts) {
+          const raw = buffer.join("").replace(/[^A-Z0-9]/gi, "");
+          const formatted = OBS.KERGIRIS._formatUkodu(raw);
+          return {
+            refreshFromBuffer: true,
+            buffer: formatted.split(""),
+            caret: formatted.length
+          };
+        }
+      }).mask(inp);
+    });
+  };
+	OBS.KERGIRIS.  _formatUkodu = function (val) {
+    const raw = (val || "")
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "");
 
-	    inp.addEventListener("input", () => {
-	      inp.value = OBS.KERGIRIS._formatUkodu(inp.value);
-	    });
+    const a = raw.slice(0, 2);
+    const b = raw.slice(2, 5);
+    const c = raw.slice(5, 9);
+    const d = raw.slice(9, 13);
 
-	    inp.addEventListener("blur", () => {
-	      inp.value = OBS.KERGIRIS._formatUkodu(inp.value);
-	    });
-	  });
-	};
+    let out = a;
+    if (b.length) out += "-" + b;
+    if (c.length) out += "-" + c;
+    if (d.length) out += "-" + d;
 
-	OBS.KERGIRIS._formatUkodu = function (val) {
-	  // sadece harf + rakam al
-	  const raw = (val || "")
-	    .toUpperCase()
-	    .replace(/[^A-Z0-9]/g, "");
-
-	  // 2 harf + 3 + 4 + 4
-	  const a = raw.slice(0, 2);
-	  const b = raw.slice(2, 5);
-	  const c = raw.slice(5, 9);
-	  const d = raw.slice(9, 13);
-
-	  let out = a;
-	  if (b.length) out += "-" + b;
-	  if (c.length) out += "-" + c;
-	  if (d.length) out += "-" + d;
-
-	  return out;
-	};
+    return out;
+  };
 
   /* ========================= paket m3 ========================= */
   K.updatePaketM3 = () => {
@@ -1083,10 +1094,5 @@
     K.initializeRows();
   };
 
-  // Eğer sayfa klasik şekilde açılıyorsa:
-  document.addEventListener("DOMContentLoaded", () => {
-    // senin sistemde loader init çağırıyorsa burayı kapatabilirsin
-    if (K.autoInit !== false) K.init();
-  });
-
+  
 })(window, document);

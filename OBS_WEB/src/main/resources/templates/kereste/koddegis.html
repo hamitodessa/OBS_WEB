@@ -1,3 +1,4 @@
+ 
 <style>
 /* =========================================================
    2026 CAM – KOMPAKT (KOD/KONS + TABLO)
@@ -279,21 +280,21 @@
           <div style="display:flex; align-items:center; gap:10px;">
             <label style="width:120px;">Konsimento</label>
             <input class="form-control" style="font-weight:900; width:120px;"
-              maxlength="15" id="kons" onkeydown="if(event.key === 'Enter') fetchTable()" />
+              maxlength="15" id="kons" onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
             <label style="width:60px;">Kodu</label>
           </div>
           <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
             <label style="width:120px;">Paket No</label>
             <input class="form-control" style="font-weight:900; width:120px;"
-              maxlength="10" id="pakno" onkeydown="if(event.key === 'Enter') fetchTable()" />
-            <input class="form-control" style="font-weight:900; width:150px;"
+              maxlength="10" id="pakno" onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
+            <input class="form-control" style="font-weight:900; width:175px;"
               value="00-000-0000-0000" maxlength="16" id="kodu"
-              onkeydown="if(event.key === 'Enter') fetchTable()" />
+              onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
           </div>
           <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
             <label style="width:120px;">Giris Evrak</label>
             <input class="form-control" maxlength="10" id="gevrak" style="width:120px;"
-              onkeydown="if(event.key === 'Enter') fetchTable()" />
+              onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
           </div>
         
       </div>
@@ -305,9 +306,9 @@
 
         <div style="display:flex; align-items:center; gap:10px;">
           <input type="text" id="ykod" class="form-control" maxlength="2" style="width:100px;"
-            onkeydown="if(event.key === 'Enter') kodadi()" />
+            onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.kodadi()" />
           <label style="width:250px; font-weight:900;" id="kodadi"></label>
-          <button type="button" class="btn btn-secondary ml-2" onclick="kodKaydet()">
+          <button type="button" class="btn btn-secondary ml-2" onclick="OBS.KODDEGIS.kodKaydet()">
             <i class="fa fa-save"></i>
           </button>
         </div>
@@ -320,9 +321,9 @@
 
         <div style="display:flex; align-items:center; gap:10px;">
           <input type="text" id="ykons" class="form-control" style="width:100px;"
-            onkeydown="if(event.key === 'Enter') konsadi()" />
+            onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.konsadi()" />
           <label style="width:250px; font-weight:900;" id="konsadi"></label>
-          <button type="button" class="btn btn-secondary ml-2" onclick="ykonsKaydet()">
+          <button type="button" class="btn btn-secondary ml-2" onclick="OBS.KODDEGIS.ykonsKaydet()">
             <i class="fa fa-save"></i>
           </button>
         </div>
@@ -339,7 +340,7 @@
         <thead class="thead-dark">
           <tr>
             <th style="text-align:center;">
-              <input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"/>
+              <input type="checkbox" id="selectAll" onclick="OBS.KODDEGIS.toggleCheckboxes(this)"/>
             </th>
             <th>Evrak_No</th>
             <th>Barkod</th>
@@ -376,6 +377,3 @@
     </div>
   </div>
 
-
-
-<script src="/obs_js_files/kereste/koddegis.js"></script>

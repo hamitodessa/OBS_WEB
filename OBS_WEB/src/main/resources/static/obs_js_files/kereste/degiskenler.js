@@ -1,403 +1,354 @@
-document.getElementById("arama").value = "";
-anagrpdoldur();
+/* =========================================================
+   KERDEGISKENLER (jQuery TEMİZ) - OBS Namespace + init
+   window.OBS = window.OBS || {};
+   OBS.KERDEGISKENLER = ...
+   ========================================================= */
 
-async function degiskenchange(grpElement) {
-	document.getElementById("aciklama").value = "";
-	document.getElementById("arama").value = "";
-	document.getElementById("idacik").value = "";
-	const grup = grpElement.value;
-	const altgrpdiv = document.getElementById("altgrpdiv");
-	document.getElementById("arama").value = "";
+window.OBS = window.OBS || {};
+OBS.KERDEGISKENLER = OBS.KERDEGISKENLER || {};
 
-	if (grup === "altgrp") {
-		altgrpdiv.style.display = "grid";
-		altgrpdoldur()
-	} else {
-		altgrpdiv.style.display = "none";
-	}
-	if (grup === "anagrp") {
-		anagrpdoldur();
-	}
-	else if (grup === "mensei") {
-		menseidoldur();
-	}
-	else if (grup === "depo") {
-		depodoldur();
-	}
-	else if (grup === "oz1") {
-		oz1doldur();
-	}
-	else if (grup === "nak") {
-		nakdoldur();
-	}
-}
+(() => {
+  const M = OBS.KERDEGISKENLER;
 
-async function anagrpdoldur() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("kereste/anagrpOku");
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const data = response.anagrp;
-		const tableBody = document.getElementById("degiskenTableBody");
-		tableBody.innerHTML = "";
-		tableBody.classList.add("table-row-height");
-		data.forEach((row) => {
-			const tr = document.createElement("tr");
-			tr.innerHTML = `
-				<td style="display: none;">${row.KOD || ""}</td>
-                <td>${row.ANA_GRUP || ""}</td>
-               `;
-			tr.onclick = () => selectValue(row.ANA_GRUP, row.KOD);
-			tableBody.appendChild(tr);
-		});
+  /* ---------------- helpers ---------------- */
+  M.el = (id) => document.getElementById(id);
 
-		const firstRow = tableBody.rows[0];
-		if (firstRow) {
-			const cells = firstRow.cells;
-			selectValue(cells[1].textContent.trim(), cells[0].textContent.trim());
-		}
+  M.setCursor = (wait) => { document.body.style.cursor = wait ? "wait" : "default"; };
 
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+  M.clearError = () => {
+    const e = M.el("errorDiv");
+    if (!e) return;
+    e.style.display = "none";
+    e.innerText = "";
+  };
 
-async function menseidoldur() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("kereste/menseiOku");
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const data = response.mensei;
-		const tableBody = document.getElementById("degiskenTableBody");
-		tableBody.innerHTML = "";
-		if (data.length === 0) {
-			return;
-		}
-		tableBody.classList.add("table-row-height");
-		data.forEach((row) => {
-			const tr = document.createElement("tr");
-			tr.innerHTML = `
-				<td style="display: none;">${row.KOD || ""}</td>
-                <td>${row.MENSEI || ""}</td>
-               `;
-			tr.onclick = () => selectValue(row.MENSEI, row.KOD);
-			tableBody.appendChild(tr);
-		});
-		const firstRow = tableBody.rows[0];
-		if (firstRow) {
-			const cells = firstRow.cells;
-			selectValue(cells[1].textContent.trim(), cells[0].textContent.trim());
-		}
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+  M.showError = (msg) => {
+    const e = M.el("errorDiv");
+    if (!e) return;
+    e.style.display = "block";
+    e.innerText = msg || "Bir hata oluştu.";
+  };
 
-async function depodoldur() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("kereste/depoOku");
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const data = response.depo;
-		const tableBody = document.getElementById("degiskenTableBody");
-		tableBody.innerHTML = "";
-		if (data.length === 0) {
-			return;
-		}
-		tableBody.classList.add("table-row-height");
-		data.forEach((row) => {
-			const tr = document.createElement("tr");
-			tr.innerHTML = `
-				<td style="display: none;">${row.KOD || ""}</td>
-                <td>${row.DEPO || ""}</td>
-               `;
-			tr.onclick = () => selectValue(row.DEPO, row.KOD);
-			tableBody.appendChild(tr);
-		});
-		const firstRow = tableBody.rows[0];
-		if (firstRow) {
-			const cells = firstRow.cells;
-			selectValue(cells[1].textContent.trim(), cells[0].textContent.trim());
-		}
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+  M.clearSearchAndForm = () => {
+    const acik = M.el("aciklama");
+    const arama = M.el("arama");
+    const idacik = M.el("idacik");
+    if (acik) acik.value = "";
+    if (arama) arama.value = "";
+    if (idacik) idacik.value = "";
+  };
 
-async function oz1doldur() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("kereste/oz1Oku");
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
+  M.selectValue = (selectedaciklama, selectedid) => {
+    const inputElement = M.el("aciklama");
+    const idacik = M.el("idacik");
+    if (inputElement) inputElement.value = selectedaciklama || "";
+    if (idacik) idacik.value = selectedid || "";
+  };
 
-		const data = response.oz1;
-		const tableBody = document.getElementById("degiskenTableBody");
-		tableBody.innerHTML = "";
-		if (data.length === 0) {
-			return;
-		}
-		tableBody.classList.add("table-row-height");
-		data.forEach((row) => {
-			const tr = document.createElement("tr");
-			tr.innerHTML = `
-				<td style="display: none;">${row.KOD || ""}</td>
-                <td>${row.OZEL_KOD_1 || ""}</td>
-               `;
-			tr.onclick = () => selectValue(row.OZEL_KOD_1, row.KOD);
-			tableBody.appendChild(tr);
-		});
-		const firstRow = tableBody.rows[0];
-		if (firstRow) {
-			const cells = firstRow.cells;
-			selectValue(cells[1].textContent.trim(), cells[0].textContent.trim());
-		}
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+  M._fillTableTwoCols = (rows, valueKey, idKey, onClickValueKey, onClickIdKey) => {
+    const tableBody = M.el("degiskenTableBody");
+    if (!tableBody) return;
 
-async function nakdoldur() {
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("kereste/nakOku");
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const data = response.nak;
-		const tableBody = document.getElementById("degiskenTableBody");
-		tableBody.innerHTML = "";
-		if (data.length === 0) {
-			return;
-		}
-		tableBody.classList.add("table-row-height");
-		data.forEach((row) => {
-			const tr = document.createElement("tr");
-			tr.innerHTML = `
-				<td style="display: none;">${row.KOD || ""}</td>
-                <td>${row.UNVAN || ""}</td>
-               `;
-			tr.onclick = () => selectValue(row.UNVAN, row.KOD);
-			tableBody.appendChild(tr);
-		});
-		const firstRow = tableBody.rows[0];
-		if (firstRow) {
-			const cells = firstRow.cells;
-			selectValue(cells[1].textContent.trim(), cells[0].textContent.trim());
-		}
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+    tableBody.innerHTML = "";
+    tableBody.classList.add("table-row-height");
 
-function filterTable() {
-	const searchValue = document.getElementById("arama").value.toLowerCase();
-	const rows = document.querySelectorAll("#degiskenTable tbody tr");
-	rows.forEach((row) => {
-		const rowText = Array.from(row.cells)
-			.map((cell) => cell.textContent.toLowerCase())
-			.join(" ");
-		row.style.display = rowText.includes(searchValue) ? "" : "none";
-	});
-}
+    rows.forEach((row) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="display:none;">${row[idKey] ?? ""}</td>
+        <td>${row[valueKey] ?? ""}</td>
+      `;
+      tr.onclick = () => M.selectValue(row[onClickValueKey] ?? "", row[onClickIdKey] ?? "");
+      tableBody.appendChild(tr);
+    });
 
-async function altgrpdoldur() {
-	document.getElementById("arama").value = "";
+    const firstRow = tableBody.rows[0];
+    if (firstRow) {
+      const cells = firstRow.cells;
+      M.selectValue(cells[1]?.textContent?.trim() || "", cells[0]?.textContent?.trim() || "");
+    }
+  };
 
-	const anagrup = document.getElementById("altgrpAna").value;
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck("kereste/altgrupdeg", {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: new URLSearchParams({ anagrup: anagrup }),
-		});
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const data = response.altKodlari
+  /* ---------------- main change ---------------- */
+  M.degiskenchange = async (grpElement) => {
+    M.clearSearchAndForm();
 
-		const tableBody = document.getElementById("degiskenTableBody");
-		tableBody.innerHTML = "";
-		if (data.length === 0) {
-			return;
-		}
-		tableBody.classList.add("table-row-height");
-		data.forEach((row) => {
-			if (row.ALT_GRUP != "") {
-				const tr = document.createElement("tr");
-				tr.innerHTML = `
-				<td style="display: none;">${row.ALID_Y || ""}</td>
-                <td>${row.ALT_GRUP || ""}</td>
-               `;
-				tr.onclick = () => selectValue(row.ALT_GRUP, row.ALID_Y);
-				tableBody.appendChild(tr);
-			}
-		});
-		const firstRow = tableBody.rows[0];
-		if (firstRow) {
-			const cells = firstRow.cells;
-			selectValue(cells[1].textContent.trim(), cells[0].textContent.trim());
-		}
-	} catch (error) {
-		const modalError = document.getElementById("errorDiv");
-		modalError.style.display = "block";
-		modalError.innerText = `Bir hata oluştu: ${error.message}`;
-	} finally {
-		document.body.style.cursor = "default";
-	}
-}
+    const grup = grpElement?.value || "";
+    const altgrpdiv = M.el("altgrpdiv");
 
-function selectValue(selectedaciklama, selectedid) {
-	const inputElement = document.getElementById("aciklama");
-	const idacik = document.getElementById("idacik");
-	inputElement.value = selectedaciklama;
-	idacik.value = selectedid;
-}
+    if (altgrpdiv) {
+      if (grup === "altgrp") {
+        altgrpdiv.style.display = "grid";
+        await M.altgrpdoldur();
+      } else {
+        altgrpdiv.style.display = "none";
+      }
+    }
 
-function degyeni() {
-	document.getElementById("aciklama").value = "";
-	document.getElementById("idacik").value = "";
-}
+    if (grup === "anagrp")      await M.anagrpdoldur();
+    else if (grup === "mensei") await M.menseidoldur();
+    else if (grup === "depo")   await M.depodoldur();
+    else if (grup === "oz1")    await M.oz1doldur();
+    else if (grup === "nak")    await M.nakdoldur();
+  };
 
-async function degKayit() {
-	const aciklama = document.getElementById("aciklama").value;
-	const idacik = document.getElementById("idacik").value || "";
-	const degisken = document.getElementById("degiskenler").value;
-	const altgrpAna = document.getElementById("altgrpAna").value;
+  /* ---------------- loaders ---------------- */
+  M.anagrpdoldur = async () => {
+    M.clearError();
+    M.setCursor(true);
+    try {
+      const response = await fetchWithSessionCheck("kereste/anagrpOku");
+      if (response?.errorMessage) throw new Error(response.errorMessage);
 
-	if (!aciklama) {
-		alert('Lütfen  açıklama alanlarını doldurun.');
-		return;
-	}
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
+      const data = response?.anagrp || [];
+      M._fillTableTwoCols(data, "ANA_GRUP", "KOD", "ANA_GRUP", "KOD");
+    } catch (err) {
+      M.showError(`Bir hata oluştu: ${err?.message || err}`);
+    } finally {
+      M.setCursor(false);
+    }
+  };
 
-	const saveButton = document.getElementById('degkaydetButton');
-	saveButton.textContent = "İşlem yapılıyor...";
-	saveButton.disabled = true;
-	document.body.style.cursor = "wait";
+  M.menseidoldur = async () => {
+    M.clearError();
+    M.setCursor(true);
+    try {
+      const response = await fetchWithSessionCheck("kereste/menseiOku");
+      if (response?.errorMessage) throw new Error(response.errorMessage);
 
-	try {
-		const response = await fetchWithSessionCheck('kereste/degkayit', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ aciklama, idacik, degisken, altgrpAna }),
-		});
-		if (!response) {
-			return;
-		}
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const inputElement = document.getElementById("degiskenler");
-		degiskenchange(inputElement);
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
-	} finally {
-		document.body.style.cursor = "default";
-		saveButton.textContent = "Kaydet";
-		saveButton.disabled = false;
-	}
-}
+      const data = response?.mensei || [];
+      if (data.length === 0) return;
 
-async function degYoket() {
-	const confirmDelete = confirm(
-		"Alt Grup Degisken Silinecek ..?\n" +
-		"Silme operasyonu butun dosyayi etkileyecek...\n" +
-		"Ilk once Degisken Yenileme Bolumunden degistirip sonra siliniz...."
-	);
-	if (!confirmDelete) {
-		return;
-	}
-	const aciklama = document.getElementById("aciklama").value;
-	const idacik = document.getElementById("idacik").value || "";
-	const degisken = document.getElementById("degiskenler").value;
-	const altgrpAna = document.getElementById("altgrpAna").value;
+      M._fillTableTwoCols(data, "MENSEI", "KOD", "MENSEI", "KOD");
+    } catch (err) {
+      M.showError(`Bir hata oluştu: ${err?.message || err}`);
+    } finally {
+      M.setCursor(false);
+    }
+  };
 
-	if (!idacik) {
-		alert('Lütfen  açıklama alanlarını doldurun.');
-		return;
-	}
-	const errorDiv = document.getElementById("errorDiv");
-	errorDiv.style.display = "none";
-	errorDiv.innerText = "";
+  M.depodoldur = async () => {
+    M.clearError();
+    M.setCursor(true);
+    try {
+      const response = await fetchWithSessionCheck("kereste/depoOku");
+      if (response?.errorMessage) throw new Error(response.errorMessage);
 
-	const saveButton = document.getElementById('degsilButton');
-	saveButton.textContent = "İşlem yapılıyor...";
-	saveButton.disabled = true;
-	document.body.style.cursor = "wait";
-	try {
-		const response = await fetchWithSessionCheck('kereste/degsil', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ aciklama, idacik, degisken, altgrpAna }),
-		});
-		if (!response) {
-			return;
-		}
-		if (response.errorMessage) {
-			throw new Error(response.errorMessage);
-		}
-		const inputElement = document.getElementById("degiskenler");
-		degiskenchange(inputElement);
-	} catch (error) {
-		errorDiv.style.display = "block";
-		errorDiv.innerText = error.message || "Bir hata oluştu. Daha sonra tekrar deneyin.";
-	} finally {
-		document.body.style.cursor = "default";
-		saveButton.textContent = "Sil";
-		saveButton.disabled = false;
-	}
-}
+      const data = response?.depo || [];
+      if (data.length === 0) return;
+
+      M._fillTableTwoCols(data, "DEPO", "KOD", "DEPO", "KOD");
+    } catch (err) {
+      M.showError(`Bir hata oluştu: ${err?.message || err}`);
+    } finally {
+      M.setCursor(false);
+    }
+  };
+
+  M.oz1doldur = async () => {
+    M.clearError();
+    M.setCursor(true);
+    try {
+      const response = await fetchWithSessionCheck("kereste/oz1Oku");
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const data = response?.oz1 || [];
+      if (data.length === 0) return;
+
+      M._fillTableTwoCols(data, "OZEL_KOD_1", "KOD", "OZEL_KOD_1", "KOD");
+    } catch (err) {
+      M.showError(`Bir hata oluştu: ${err?.message || err}`);
+    } finally {
+      M.setCursor(false);
+    }
+  };
+
+  M.nakdoldur = async () => {
+    M.clearError();
+    M.setCursor(true);
+    try {
+      const response = await fetchWithSessionCheck("kereste/nakOku");
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const data = response?.nak || [];
+      if (data.length === 0) return;
+
+      M._fillTableTwoCols(data, "UNVAN", "KOD", "UNVAN", "KOD");
+    } catch (err) {
+      M.showError(`Bir hata oluştu: ${err?.message || err}`);
+    } finally {
+      M.setCursor(false);
+    }
+  };
+
+  M.altgrpdoldur = async () => {
+    const arama = M.el("arama");
+    if (arama) arama.value = "";
+
+    const anagrup = (M.el("altgrpAna")?.value || "").trim();
+
+    M.clearError();
+    M.setCursor(true);
+
+    try {
+      const response = await fetchWithSessionCheck("kereste/altgrupdeg", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ anagrup }),
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const data = response?.altKodlari || [];
+      const temiz = data.filter(r => (r?.ALT_GRUP || "") !== "");
+
+      // burada ID alanın ALID_Y, görünen ALT_GRUP
+      const tableBody = M.el("degiskenTableBody");
+      if (!tableBody) return;
+
+      tableBody.innerHTML = "";
+      tableBody.classList.add("table-row-height");
+
+      temiz.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="display:none;">${row.ALID_Y ?? ""}</td>
+          <td>${row.ALT_GRUP ?? ""}</td>
+        `;
+        tr.onclick = () => M.selectValue(row.ALT_GRUP ?? "", row.ALID_Y ?? "");
+        tableBody.appendChild(tr);
+      });
+
+      const firstRow = tableBody.rows[0];
+      if (firstRow) {
+        const cells = firstRow.cells;
+        M.selectValue(cells[1]?.textContent?.trim() || "", cells[0]?.textContent?.trim() || "");
+      }
+    } catch (err) {
+      M.showError(`Bir hata oluştu: ${err?.message || err}`);
+    } finally {
+      M.setCursor(false);
+    }
+  };
+
+  /* ---------------- filter ---------------- */
+  M.filterTable = () => {
+    const searchValue = (M.el("arama")?.value || "").toLowerCase();
+    const rows = document.querySelectorAll("#degiskenTable tbody tr");
+    rows.forEach((row) => {
+      const rowText = Array.from(row.cells).map(c => (c.textContent || "").toLowerCase()).join(" ");
+      row.style.display = rowText.includes(searchValue) ? "" : "none";
+    });
+  };
+
+  /* ---------------- buttons ---------------- */
+  M.degyeni = () => {
+    const acik = M.el("aciklama");
+    const idacik = M.el("idacik");
+    if (acik) acik.value = "";
+    if (idacik) idacik.value = "";
+  };
+
+  M.degKayit = async () => {
+    const aciklama = (M.el("aciklama")?.value || "").trim();
+    const idacik = (M.el("idacik")?.value || "").trim();
+    const degisken = (M.el("degiskenler")?.value || "").trim();
+    const altgrpAna = (M.el("altgrpAna")?.value || "").trim();
+
+    if (!aciklama) { alert("Lütfen  açıklama alanlarını doldurun."); return; }
+
+    M.clearError();
+
+    const saveButton = M.el("degkaydetButton");
+    if (saveButton) { saveButton.textContent = "İşlem yapılıyor..."; saveButton.disabled = true; }
+    M.setCursor(true);
+
+    try {
+      const response = await fetchWithSessionCheck("kereste/degkayit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ aciklama, idacik: idacik || "", degisken, altgrpAna }),
+      });
+
+      if (!response) return;
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const inputElement = M.el("degiskenler");
+      await M.degiskenchange(inputElement);
+    } catch (err) {
+      M.showError(err?.message || "Bir hata oluştu. Daha sonra tekrar deneyin.");
+    } finally {
+      M.setCursor(false);
+      if (saveButton) { saveButton.textContent = "Kaydet"; saveButton.disabled = false; }
+    }
+  };
+
+  M.degYoket = async () => {
+    const ok = confirm(
+      "Alt Grup Degisken Silinecek ..?\n" +
+      "Silme operasyonu butun dosyayi etkileyecek...\n" +
+      "Ilk once Degisken Yenileme Bolumunden degistirip sonra siliniz...."
+    );
+    if (!ok) return;
+
+    const aciklama = (M.el("aciklama")?.value || "").trim();
+    const idacik = (M.el("idacik")?.value || "").trim();
+    const degisken = (M.el("degiskenler")?.value || "").trim();
+    const altgrpAna = (M.el("altgrpAna")?.value || "").trim();
+
+    if (!idacik) { alert("Lütfen  açıklama alanlarını doldurun."); return; }
+
+    M.clearError();
+
+    const delButton = M.el("degsilButton");
+    if (delButton) { delButton.textContent = "İşlem yapılıyor..."; delButton.disabled = true; }
+    M.setCursor(true);
+
+    try {
+      const response = await fetchWithSessionCheck("kereste/degsil", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ aciklama, idacik, degisken, altgrpAna }),
+      });
+
+      if (!response) return;
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const inputElement = M.el("degiskenler");
+      await M.degiskenchange(inputElement);
+    } catch (err) {
+      M.showError(err?.message || "Bir hata oluştu. Daha sonra tekrar deneyin.");
+    } finally {
+      M.setCursor(false);
+      if (delButton) { delButton.textContent = "Sil"; delButton.disabled = false; }
+    }
+  };
+
+  /* ---------------- init ---------------- */
+  M.init = async () => {
+    // ilk açılış
+    const arama = M.el("arama");
+    if (arama) arama.value = "";
+
+    await M.anagrpdoldur();
+  };
+
+  /* ---------------- expose (HTML onclick vs.) ---------------- */
+  window.degiskenchange = M.degiskenchange;
+  window.anagrpdoldur = M.anagrpdoldur;
+  window.menseidoldur = M.menseidoldur;
+  window.depodoldur = M.depodoldur;
+  window.oz1doldur = M.oz1doldur;
+  window.nakdoldur = M.nakdoldur;
+  window.altgrpdoldur = M.altgrpdoldur;
+
+  window.filterTable = M.filterTable;
+  window.selectValue = M.selectValue;
+
+  window.degyeni = M.degyeni;
+  window.degKayit = M.degKayit;
+  window.degYoket = M.degYoket;
+
+  window.kerderegiskenlerInit = M.init;
+
+})();

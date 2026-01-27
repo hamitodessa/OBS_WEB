@@ -217,10 +217,10 @@
 			onclick="openFirstModal('kerestedetayrapor')">Filtre</button>
 		<button class="btn btn-primary" style="margin-left: 10px;"
 			type="button" id="kerestedetayreportDownload"
-			onclick="kerestedetaydownloadReport()" disabled>Excel Indir</button>
+			onclick="OBS.KERDETAY.kerestedetaydownloadReport()" disabled>Excel Indir</button>
 		<button class="btn btn-primary" style="margin-left: 10px;"
 			type="button" id="kerestedetaymailButton"
-			onclick="kerestedetaymailAt()" disabled>Email Gonder</button>
+			onclick="OBS.KERDETAY.kerestedetaymailAt()" disabled>Email Gonder</button>
 	</div>
 </div>
 <div id="errorDiv"></div>
@@ -282,26 +282,26 @@
 <!--		Start Pagination -->
 <div class='pagination-container' style="margin-top: 5px">
 	<button type="button" class="btn btn-secondary ml-2" id="ilksayfa"
-		onclick="ilksayfa()">
+		onclick="OBS.KERDETAY.ilksayfa()">
 		<i class="fa fa-backward"></i>
 	</button>
 	<span style="padding-left: 5px;"></span>
 	<button type="button" class="btn btn-secondary ml-2" id="oncekisayfa"
-		onclick="oncekisayfa()">
+		onclick="OBS.KERDETAY.oncekisayfa()">
 		<i class="fa fa-angle-left"></i>
 	</button>
 	<span style="padding-left: 5px;"></span>
 	<button type="button" class="btn btn-secondary ml-2" id="sonrakisayfa"
-		onclick="sonrakisayfa()">
+		onclick="OBS.KERDETAY.sonrakisayfa()">
 		<i class="fa fa-angle-right"></i>
 	</button>
 	<span style="padding-left: 5px;"></span>
 	<button type="button" class="btn btn-secondary ml-2" id="sonsayfa"
-		onclick="sonsayfa()">
+		onclick="OBS.KERDETAY.sonsayfa()">
 		<i class="fa fa-forward"></i>
 	</button>
 </div>
 <input type="hidden" id="kerestedetayBilgi" />
-<script src="/obs_js_files/kereste/raporlar/kerdetay.js"></script>
+
 <div th:replace="~{modal/kereste/kerestedetayfiltre :: modalkerestedetay}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>

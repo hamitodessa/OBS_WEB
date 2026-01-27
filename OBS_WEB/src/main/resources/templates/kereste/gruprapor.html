@@ -234,10 +234,10 @@
                     style="margin-left: 10px;" onclick="openFirstModal('kergrprapor')">Filtre</button>
                 
                 <button class="btn btn-primary" style="margin-left: 10px;" type="button" id="grprapreportDownload"
-                 onclick="grpdownloadReport()" disabled>Excel Indir</button>
+                 onclick="OBS.KERGRPRAPOR.grpdownloadReport()" disabled>Excel Indir</button>
     
                 <button class="btn btn-primary" style="margin-left: 10px;" type="button" id="grprapmailButton"
-                 onclick="grpmailAt()" disabled>Email Gonder</button>
+                 onclick="OBS.KERGRPRAPOR.grpmailAt()" disabled>Email Gonder</button>
             </div>
         </div>
         <div id="errorDiv"></div>
@@ -255,6 +255,6 @@
         </div>
     <input type="hidden" id="grpBilgi" name="grpBilgi" value="" />
     
-    <script src="/obs_js_files/kereste/raporlar/grprapor.js"></script>
+
     <div th:replace="~{modal/kereste/grpfiltre :: modalgrp}"></div>
   

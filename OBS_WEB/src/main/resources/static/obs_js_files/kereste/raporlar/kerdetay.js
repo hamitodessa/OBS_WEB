@@ -1,398 +1,483 @@
-currentPage = 0;
-totalPages = 0;
-pageSize = 250;
+/* =========================================================
+   KERDETAY (jQuery YOK) - OBS Namespace
+   window.OBS = window.OBS || {};
+   OBS.KERDETAY = ...
+   ========================================================= */
 
-function setDisabled(el, yes) { el.disabled = !!yes; }
-function updatePaginationUI(disableAllWhileLoading = false) {
-  const first = document.getElementById("ilksayfa");
-  const prev  = document.getElementById("oncekisayfa");
-  const next  = document.getElementById("sonrakisayfa");
-  const last  = document.getElementById("sonsayfa");
+window.OBS = window.OBS || {};
+OBS.KERDETAY = OBS.KERDETAY || {};
 
-  if (disableAllWhileLoading) {
-    setDisabled(first, true); setDisabled(prev, true);
-    setDisabled(next, true);  setDisabled(last, true);
-    return;
-  }
-  const noData = totalPages === 0;
-  setDisabled(first, noData || currentPage <= 0);
-  setDisabled(prev,  noData || currentPage <= 0);
-  setDisabled(next,  noData || currentPage >= totalPages - 1);
-  setDisabled(last,  noData || currentPage >= totalPages - 1);
-}
+(() => {
+  const M = OBS.KERDETAY;
 
-// Buton clickleri (guard'lı)
-function ilksayfa()     { if (currentPage > 0)            kerestedetayfetchTableData(0); }
-function oncekisayfa()  { if (currentPage > 0)            kerestedetayfetchTableData(currentPage - 1); }
-function sonrakisayfa() { if (currentPage < totalPages-1) kerestedetayfetchTableData(currentPage + 1); }
-function sonsayfa()     { if (totalPages > 0)             kerestedetayfetchTableData(totalPages - 1); }
+  /* ---------------- state ---------------- */
+  M.currentPage = 0;
+  M.totalPages = 0;
+  M.pageSize = 250;
 
-async function toplampagesize() { 
-  const errorDiv = document.getElementById("errorDiv");
-  try {
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
+  /* ---------------- helpers ---------------- */
+  M.el = (id) => document.getElementById(id);
 
-    const dto = getKeresteDetayRaporDTO();
-    const response = await fetchWithSessionCheck("kereste/kerestedetaydoldursize", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dto),
-    });
+  M.setCursor = (wait) => {
+    document.body.style.cursor = wait ? "wait" : "default";
+  };
 
-    const totalRecords = response?.totalRecords ?? 0;
-    totalPages = Math.max(0, Math.ceil(totalRecords / pageSize));
-  } catch (err) {
-    totalPages = 0;
-    errorDiv.style.display = "block";
-    errorDiv.innerText = err?.message || err || "Beklenmeyen bir hata oluştu.";
-  } finally {
-    updatePaginationUI();
-  }
-}
+  M.setDisabled = (el, yes) => { if (el) el.disabled = !!yes; };
 
-async function kerestedetaydoldur() {
-  document.body.style.cursor = "wait";
-  updatePaginationUI(true);                 // yükleme sırasında kilitle
-  await toplampagesize();                   // <-- ÖNEMLİ: bekle
-  await kerestedetayfetchTableData(0);
-  document.body.style.cursor = "default";
-}
+  M.clearError = () => {
+    const e = M.el("errorDiv");
+    if (!e) return;
+    e.style.display = "none";
+    e.innerText = "";
+  };
 
-async function kerestedetayfetchTableData(page) {
-  const kerestedetayraporDTO = { ...getKeresteDetayRaporDTO(), page, pageSize };
+  M.showError = (msg) => {
+    const e = M.el("errorDiv");
+    if (!e) return;
+    e.style.display = "block";
+    e.innerText = msg || "Beklenmeyen bir hata oluştu.";
+  };
 
-  const errorDiv = document.getElementById("errorDiv");
-  errorDiv.style.display = "none";
-  errorDiv.innerText = "";
+  M.setBtn = (id, disabled, text) => {
+    const b = M.el(id);
+    if (!b) return;
+    b.disabled = !!disabled;
+    if (typeof text === "string") b.textContent = text;
+  };
 
-  document.body.style.cursor = "wait";
-  updatePaginationUI(true);                 // istek sırasında butonları kapat
+  M.updatePaginationUI = (disableAllWhileLoading = false) => {
+    const first = M.el("ilksayfa");
+    const prev  = M.el("oncekisayfa");
+    const next  = M.el("sonrakisayfa");
+    const last  = M.el("sonsayfa");
 
-  const $yenileButton = $('#kerestedetayyenileButton');
-  $yenileButton.prop('disabled', true).text('İşleniyor...');
-
-  const mainTableBody = document.getElementById("tbody");
-  mainTableBody.innerHTML = "";
-
-  currentPage = page;
-
-  try {
-    const response = await fetchWithSessionCheck("kereste/kerestedetaydoldur", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(kerestedetayraporDTO),
-    });
-
-    if (response.errorMessage) throw new Error(response.errorMessage);
-
-    const data = response.data || [];
-    data.forEach(rowData => {
-      const row = document.createElement('tr');
-      row.classList.add("table-row-height");
-      row.innerHTML = `
-        <td>${rowData.Evrak_No}</td>
-        <td>${rowData.Barkod}</td>
-        <td>${rowData.Kodu}</td>
-        <td>${rowData.Paket_No}</td>
-        <td>${rowData.Konsimento}</td>
-        <td class="double-column">${formatNumber0(rowData.Miktar)}</td>
-        <td class="double-column">${formatNumber3(rowData.m3)}</td>
-        <td>${formatDate(rowData.Tarih)}</td>
-        <td class="double-column">${formatNumber2(rowData.Kdv)}</td>
-        <td>${rowData.Doviz}</td>
-        <td class="double-column">${formatNumber2(rowData.Fiat)}</td>
-        <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
-        <td class="double-column">${formatNumber2(rowData.Kur)}</td>
-        <td>${rowData.Cari_Firma}</td>
-        <td>${rowData.Adres_Firma}</td>
-        <td class="double-column">${formatNumber2(rowData.Iskonto)}</td>
-        <td class="double-column">${formatNumber2(rowData.Tevkifat)}</td>
-        <td>${rowData.Ana_Grup}</td>
-        <td>${rowData.Alt_Grup}</td>
-        <td>${rowData.Mensei}</td>
-        <td>${rowData.Depo}</td>
-        <td>${rowData.Ozel_Kod}</td>
-        <td>${rowData.Izahat}</td>
-        <td>${rowData.Nakliyeci}</td>
-        <td>${rowData.USER}</td>
-        <td>${rowData.Cikis_Evrak}</td>
-        <td>${rowData.CTarih}</td>
-        <td class="double-column">${formatNumber2(rowData.CKdv)}</td>
-        <td>${rowData.CDoviz}</td>
-        <td class="double-column">${formatNumber2(rowData.CFiat)}</td>
-        <td class="double-column">${formatNumber2(rowData.CTutar)}</td>
-        <td class="double-column">${formatNumber2(rowData.CKur)}</td>
-        <td>${rowData.CCari_Firma}</td>
-        <td>${rowData.CAdres_Firma}</td>
-        <td class="double-column">${formatNumber2(rowData.CIskonto)}</td>
-        <td class="double-column">${formatNumber2(rowData.CTevkifat)}</td>
-        <td>${rowData.C_Ana_Grup}</td>
-        <td>${rowData.C_Alt_Grup}</td>
-        <td>${rowData.C_Depo}</td>
-        <td>${rowData.COzel_Kod}</td>
-        <td>${rowData.CIzahat}</td>
-        <td>${rowData.C_Nakliyeci}</td>
-        <td>${rowData.CUSER}</td>
-      `;
-      mainTableBody.appendChild(row);
-    });
-  } catch (error) {
-    errorDiv.style.display = "block";
-    errorDiv.innerText = error?.message || "Beklenmeyen bir hata oluştu.";
-  } finally {
-    $yenileButton.prop('disabled', false).text('Yenile');
-    document.body.style.cursor = "default";
-    updatePaginationUI();                  // sayfa sınırlarına göre aç/kapat
-  }
-}
-function getKeresteDetayRaporDTO() {
-    const hiddenFieldValue = $('#kerestedetayBilgi').val();
-    const parsedValues = hiddenFieldValue.split(",");
-    return {
-        gtar1: parsedValues[0],
-        gtar2: parsedValues[1],
-        ctar1: parsedValues[2],
-        ctar2: parsedValues[3],
-        ukodu1: parsedValues[4],
-        ukodu2: parsedValues[5],
-        cfirma1: parsedValues[6],
-        cfirma2: parsedValues[7],
-        pak1: parsedValues[8],
-        pak2: parsedValues[9],
-        cevr1: parsedValues[10],
-        cevr2: parsedValues[11],
-        gfirma1: parsedValues[12],
-        gfirma2: parsedValues[13],
-        cana: parsedValues[14],
-        evr1: parsedValues[15],
-        evr2: parsedValues[16],
-        calt: parsedValues[17],
-        gana: parsedValues[18],
-        galt: parsedValues[19],
-        gdepo: parsedValues[20],
-        gozkod: parsedValues[21],
-        kons1: parsedValues[22],
-        kons2: parsedValues[23],
-        cozkod: parsedValues[24],
-        cdepo: parsedValues[25]
-    };
-}
-
-
-async function kerestedetaydownloadReport() {
-    const errorDiv = document.getElementById("errorDiv");
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
-
-    document.body.style.cursor = "wait";
-    const $indirButton = $('#kerestedetayreportDownload');
-    $indirButton.prop('disabled', true).text('İşleniyor...');
-    const $yenileButton = $('#keresteyenileButton');
-    $yenileButton.prop('disabled', true);
-
-    let table = document.querySelector("#main-table");
-    let headers = [];
-    let rows = [];
-    table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
-    table.querySelectorAll("tbody tr").forEach(tr => {
-        let rowData = {};
-        let isEmpty = true;
-        tr.querySelectorAll("td").forEach((td, index) => {
-            let value = td.innerText.trim();
-            if (value !== "") {
-                isEmpty = false;
-            }
-            rowData[headers[index]] = value;
-        });
-        if (!isEmpty) {
-            rows.push(rowData);
-        }
-    });
-    try {
-        const response = await fetchWithSessionCheckForDownload('kereste/kerdetay_download', {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(rows)
-        });
-        if (response.blob) {
-            const disposition = response.headers.get('Content-Disposition');
-            const fileName = disposition.match(/filename="(.+)"/)[1];
-            const url = window.URL.createObjectURL(response.blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-        } else {
-            throw new Error("Dosya indirilemedi.");
-        }
-    } catch (error) {
-        errorDiv.style.display = "block";
-        errorDiv.innerText = error.message || "Bilinmeyen bir hata oluştu.";
-    } finally {
-        $indirButton.prop('disabled', false).text('Rapor İndir');
-        $yenileButton.prop('disabled', false);
-        document.body.style.cursor = "default";
+    if (disableAllWhileLoading) {
+      M.setDisabled(first, true); M.setDisabled(prev, true);
+      M.setDisabled(next, true);  M.setDisabled(last, true);
+      return;
     }
-}
 
-async function kerestedetaymailAt() {
+    const noData = M.totalPages === 0;
+    M.setDisabled(first, noData || M.currentPage <= 0);
+    M.setDisabled(prev,  noData || M.currentPage <= 0);
+    M.setDisabled(next,  noData || M.currentPage >= M.totalPages - 1);
+    M.setDisabled(last,  noData || M.currentPage >= M.totalPages - 1);
+  };
+
+  /* ---------------- DTO ---------------- */
+  M.getKeresteDetayRaporDTO = () => {
+    const hidden = M.el("kerestedetayBilgi");
+    const raw = hidden ? (hidden.value || "") : "";
+    const p = raw.split(",");
+
+    return {
+      gtar1: p[0],
+      gtar2: p[1],
+      ctar1: p[2],
+      ctar2: p[3],
+      ukodu1: p[4],
+      ukodu2: p[5],
+      cfirma1: p[6],
+      cfirma2: p[7],
+      pak1: p[8],
+      pak2: p[9],
+      cevr1: p[10],
+      cevr2: p[11],
+      gfirma1: p[12],
+      gfirma2: p[13],
+      cana: p[14],
+      evr1: p[15],
+      evr2: p[16],
+      calt: p[17],
+      gana: p[18],
+      galt: p[19],
+      gdepo: p[20],
+      gozkod: p[21],
+      kons1: p[22],
+      kons2: p[23],
+      cozkod: p[24],
+      cdepo: p[25]
+    };
+  };
+
+  /* ---------------- pagination buttons ---------------- */
+  M.ilksayfa = () => { if (M.currentPage > 0) M.kerestedetayfetchTableData(0); };
+  M.oncekisayfa = () => { if (M.currentPage > 0) M.kerestedetayfetchTableData(M.currentPage - 1); };
+  M.sonrakisayfa = () => { if (M.currentPage < M.totalPages - 1) M.kerestedetayfetchTableData(M.currentPage + 1); };
+  M.sonsayfa = () => { if (M.totalPages > 0) M.kerestedetayfetchTableData(M.totalPages - 1); };
+
+  /* ---------------- page count ---------------- */
+  M.toplampagesize = async () => {
+    try {
+      M.clearError();
+
+      const dto = M.getKeresteDetayRaporDTO();
+      const response = await fetchWithSessionCheck("kereste/kerestedetaydoldursize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const totalRecords = response?.totalRecords ?? 0;
+      M.totalPages = Math.max(0, Math.ceil(Number(totalRecords) / M.pageSize));
+    } catch (err) {
+      M.totalPages = 0;
+      M.showError(err?.message || String(err));
+    } finally {
+      M.updatePaginationUI();
+    }
+  };
+
+  M.kerestedetaydoldur = async () => {
+    M.setCursor(true);
+    M.updatePaginationUI(true);      // yükleme sırasında kilitle
+    try {
+      await M.toplampagesize();      // ✅ bekle
+      await M.kerestedetayfetchTableData(0);
+    } finally {
+      M.setCursor(false);
+    }
+  };
+
+  /* ---------------- fetch table ---------------- */
+  M.kerestedetayfetchTableData = async (page) => {
+    const dto = { ...M.getKeresteDetayRaporDTO(), page, pageSize: M.pageSize };
+
+    M.clearError();
+    M.setCursor(true);
+    M.updatePaginationUI(true);
+
+    // jQuery yok: direkt buton
+    M.setBtn("kerestedetayyenileButton", true, "İşleniyor...");
+
+    const mainTableBody = M.el("tbody");
+    if (mainTableBody) mainTableBody.innerHTML = "";
+
+    M.currentPage = page;
+
+    try {
+      const response = await fetchWithSessionCheck("kereste/kerestedetaydoldur", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const data = response?.data || [];
+      data.forEach((rowData) => {
+        const row = document.createElement("tr");
+        row.classList.add("table-row-height");
+        row.innerHTML = `
+          <td>${rowData.Evrak_No ?? ""}</td>
+          <td>${rowData.Barkod ?? ""}</td>
+          <td>${rowData.Kodu ?? ""}</td>
+          <td>${rowData.Paket_No ?? ""}</td>
+          <td>${rowData.Konsimento ?? ""}</td>
+          <td class="double-column">${formatNumber0(rowData.Miktar)}</td>
+          <td class="double-column">${formatNumber3(rowData.m3)}</td>
+          <td>${formatDate(rowData.Tarih)}</td>
+          <td class="double-column">${formatNumber2(rowData.Kdv)}</td>
+          <td>${rowData.Doviz ?? ""}</td>
+          <td class="double-column">${formatNumber2(rowData.Fiat)}</td>
+          <td class="double-column">${formatNumber2(rowData.Tutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.Kur)}</td>
+          <td>${rowData.Cari_Firma ?? ""}</td>
+          <td>${rowData.Adres_Firma ?? ""}</td>
+          <td class="double-column">${formatNumber2(rowData.Iskonto)}</td>
+          <td class="double-column">${formatNumber2(rowData.Tevkifat)}</td>
+          <td>${rowData.Ana_Grup ?? ""}</td>
+          <td>${rowData.Alt_Grup ?? ""}</td>
+          <td>${rowData.Mensei ?? ""}</td>
+          <td>${rowData.Depo ?? ""}</td>
+          <td>${rowData.Ozel_Kod ?? ""}</td>
+          <td>${rowData.Izahat ?? ""}</td>
+          <td>${rowData.Nakliyeci ?? ""}</td>
+          <td>${rowData.USER ?? ""}</td>
+          <td>${rowData.Cikis_Evrak ?? ""}</td>
+          <td>${rowData.CTarih ?? ""}</td>
+          <td class="double-column">${formatNumber2(rowData.CKdv)}</td>
+          <td>${rowData.CDoviz ?? ""}</td>
+          <td class="double-column">${formatNumber2(rowData.CFiat)}</td>
+          <td class="double-column">${formatNumber2(rowData.CTutar)}</td>
+          <td class="double-column">${formatNumber2(rowData.CKur)}</td>
+          <td>${rowData.CCari_Firma ?? ""}</td>
+          <td>${rowData.CAdres_Firma ?? ""}</td>
+          <td class="double-column">${formatNumber2(rowData.CIskonto)}</td>
+          <td class="double-column">${formatNumber2(rowData.CTevkifat)}</td>
+          <td>${rowData.C_Ana_Grup ?? ""}</td>
+          <td>${rowData.C_Alt_Grup ?? ""}</td>
+          <td>${rowData.C_Depo ?? ""}</td>
+          <td>${rowData.COzel_Kod ?? ""}</td>
+          <td>${rowData.CIzahat ?? ""}</td>
+          <td>${rowData.C_Nakliyeci ?? ""}</td>
+          <td>${rowData.CUSER ?? ""}</td>
+        `;
+        mainTableBody && mainTableBody.appendChild(row);
+      });
+    } catch (err) {
+      M.showError(err?.message || "Beklenmeyen bir hata oluştu.");
+    } finally {
+      M.setBtn("kerestedetayyenileButton", false, "Yenile");
+      M.setCursor(false);
+      M.updatePaginationUI();
+    }
+  };
+
+  /* ---------------- download report (jQuery yok) ---------------- */
+  M.kerestedetaydownloadReport = async () => {
+    M.clearError();
+    M.setCursor(true);
+
+    M.setBtn("kerestedetayreportDownload", true, "İşleniyor...");
+    M.setBtn("keresteyenileButton", true); // senin id böyleydi (yanlışsa düzelt)
+
+    try {
+      const table = document.querySelector("#main-table");
+      if (!table) throw new Error("Tablo bulunamadı.");
+
+      const headers = [];
+      const rows = [];
+
+      table.querySelectorAll("thead th").forEach((th) => headers.push(th.innerText.trim()));
+
+      table.querySelectorAll("tbody tr").forEach((tr) => {
+        const rowData = {};
+        let isEmpty = true;
+
+        tr.querySelectorAll("td").forEach((td, index) => {
+          const value = td.innerText.trim();
+          if (value !== "") isEmpty = false;
+          rowData[headers[index]] = value;
+        });
+
+        if (!isEmpty) rows.push(rowData);
+      });
+
+      const response = await fetchWithSessionCheckForDownload("kereste/kerdetay_download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(rows)
+      });
+
+      if (response?.blob) {
+        const disposition = response.headers.get("Content-Disposition") || "";
+        const m = disposition.match(/filename="(.+)"/);
+        const fileName = m ? m[1] : "kerdetay.xlsx";
+
+        const url = window.URL.createObjectURL(response.blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      } else {
+        throw new Error("Dosya indirilemedi.");
+      }
+    } catch (err) {
+      M.showError(err?.message || "Bilinmeyen bir hata oluştu.");
+    } finally {
+      M.setBtn("kerestedetayreportDownload", false, "Rapor İndir");
+      M.setBtn("keresteyenileButton", false);
+      M.setCursor(false);
+    }
+  };
+
+  /* ---------------- mail (jQuery yok) ---------------- */
+  M.kerestedetaymailAt = () => {
     localStorage.removeItem("tableData");
     localStorage.removeItem("grprapor");
     localStorage.removeItem("tablobaslik");
-    document.body.style.cursor = "wait";
-    let table = document.querySelector("#main-table");
-    let headers = [];
-    let rows = [];
-    table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
-    table.querySelectorAll("tbody tr").forEach(tr => {
-        let rowData = {};
-        let isEmpty = true;
-        tr.querySelectorAll("td").forEach((td, index) => {
-            let value = td.innerText.trim();
-            if (value !== "") {
-                isEmpty = false;
-            }
-            rowData[headers[index]] = value;
-        });
-        if (!isEmpty) {
-            rows.push(rowData);
-        }
+
+    const table = document.querySelector("#main-table");
+    if (!table) {
+      M.showError("Tablo bulunamadı.");
+      return;
+    }
+
+    const headers = [];
+    const rows = [];
+
+    table.querySelectorAll("thead th").forEach((th) => headers.push(th.innerText.trim()));
+    table.querySelectorAll("tbody tr").forEach((tr) => {
+      const rowData = {};
+      let isEmpty = true;
+
+      tr.querySelectorAll("td").forEach((td, index) => {
+        const value = td.innerText.trim();
+        if (value !== "") isEmpty = false;
+        rowData[headers[index]] = value;
+      });
+
+      if (!isEmpty) rows.push(rowData);
     });
-    localStorage.setItem("tableData", JSON.stringify({ rows: rows }));
+
+    localStorage.setItem("tableData", JSON.stringify({ rows }));
     const degerler = "kerdetay";
     const url = `/send_email?degerler=${encodeURIComponent(degerler)}`;
     mailsayfasiYukle(url);
-}
+  };
 
-async function anagrpChanged(anagrpElement, altgrpElement) {
+  /* ---------------- anagrpChanged (genel) ---------------- */
+  M.anagrpChanged = async (anagrpElement, altgrpElementId) => {
     const anagrup = anagrpElement.value;
-    const errorDiv = document.getElementById("errorDiv");
-    const selectElement = document.getElementById(altgrpElement);
-    selectElement.innerHTML = '';
+    const selectElement = M.el(altgrpElementId);
+
+    if (!selectElement) return;
+
+    selectElement.innerHTML = "";
     if (anagrup === "") {
-        selectElement.disabled = true;
-        return;
+      selectElement.disabled = true;
+      return;
     }
-    document.body.style.cursor = "wait";
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
+
+    M.setCursor(true);
+    M.clearError();
+
     try {
-        const response = await fetchWithSessionCheck("kereste/altgrup", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ anagrup: anagrup }),
-        });
-        if (response.errorMessage) {
-            throw new Error(response.errorMessage);
-        }
-        response.altKodlari.forEach(kod => {
-            const option = document.createElement("option");
-            option.value = kod.ALT_GRUP;
-            option.textContent = kod.ALT_GRUP;
-            selectElement.appendChild(option);
-        });
-        selectElement.disabled = selectElement.options.length === 0;
-    } catch (error) {
-        selectElement.disabled = true;
-        errorDiv.style.display = "block";
-        errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-    } finally {
-        document.body.style.cursor = "default";
-    }
-}
+      const response = await fetchWithSessionCheck("kereste/altgrup", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ anagrup })
+      });
 
-async function openenvModal(modal) {
-    $(modal).modal('show');
-    document.body.style.cursor = "wait";
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      (response?.altKodlari || []).forEach((kod) => {
+        const option = document.createElement("option");
+        option.value = kod.ALT_GRUP;
+        option.textContent = kod.ALT_GRUP;
+        selectElement.appendChild(option);
+      });
+
+      selectElement.disabled = selectElement.options.length === 0;
+    } catch (err) {
+      selectElement.disabled = true;
+      M.showError(err?.message);
+    } finally {
+      M.setCursor(false);
+    }
+  };
+
+  /* ---------------- modal open (Bootstrap 5 jQuery yok) ---------------- */
+  M.openkdetayModal = async (modalSelectorOrEl) => {
+    M.setCursor(true);
+    M.clearError();
+
     try {
-        const response = await fetchWithSessionCheck("kereste/anadepo", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (response.errorMessage) {
-            throw new Error(response.errorMessage);
+      const modalEl = (typeof modalSelectorOrEl === "string")
+        ? document.querySelector(modalSelectorOrEl)
+        : modalSelectorOrEl;
+
+      if (modalEl && window.bootstrap?.Modal) {
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
+      }
+
+      const response = await fetchWithSessionCheck("kereste/anadepo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (response?.errorMessage) throw new Error(response.errorMessage);
+
+      const ana = response.anaKodlari || [];
+      const dpo = response.depoKodlari || [];
+      const oz  = response.oz1Kodlari || [];
+
+      const anaSelect  = M.el("anagrp");
+      const canaSelect = M.el("canagrp");
+      const dpoSelect  = M.el("depo");
+      const cdpoSelect = M.el("cdepo");
+      const ozSelect   = M.el("ozkod");
+      const cozSelect  = M.el("cozkod");
+
+      [anaSelect, canaSelect, dpoSelect, cdpoSelect, ozSelect, cozSelect].forEach(s => { if (s) s.innerHTML = ""; });
+
+      ana.forEach((item) => {
+        if (anaSelect) {
+          const o = document.createElement("option");
+          o.value = item.ANA_GRUP;
+          o.textContent = item.ANA_GRUP;
+          anaSelect.appendChild(o);
         }
-        const ana = response.anaKodlari;
-        const dpo = response.depoKodlari;
-        const oz = response.oz1Kodlari;
-        const anaSelect = document.getElementById("anagrp");
-        const canaSelect = document.getElementById("canagrp");
-        const dpoSelect = document.getElementById("depo");
-        const cdpoSelect = document.getElementById("cdepo");
-        const ozSelect = document.getElementById("ozkod");
-        const cozSelect = document.getElementById("cozkod");
-        anaSelect.innerHTML = "";
-        canaSelect.innerHTML = "";
-        dpoSelect.innerHTML = "";
-        cdpoSelect.innerHTML = "";
-        ozSelect.innerHTML = "";
-        cozSelect.innerHTML = "";
-        ana.forEach(item => {
-            const optionAna = document.createElement("option");
-            optionAna.value = item.ANA_GRUP;
-            optionAna.textContent = item.ANA_GRUP;
-            anaSelect.appendChild(optionAna);
-            const optionUrana = document.createElement("option");
-            optionUrana.value = item.ANA_GRUP;
-            optionUrana.textContent = item.ANA_GRUP;
-            canaSelect.appendChild(optionUrana);
-        });
-        dpo.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item.DEPO;
-            option.textContent = item.DEPO;
-            dpoSelect.appendChild(option);
+        if (canaSelect) {
+          const o = document.createElement("option");
+          o.value = item.ANA_GRUP;
+          o.textContent = item.ANA_GRUP;
+          canaSelect.appendChild(o);
+        }
+      });
 
-            const optioncdpo = document.createElement("option");
-            optioncdpo.value = item.DEPO;
-            optioncdpo.textContent = item.DEPO;
-            cdpoSelect.appendChild(optioncdpo);
+      dpo.forEach((item) => {
+        if (dpoSelect) {
+          const o = document.createElement("option");
+          o.value = item.DEPO;
+          o.textContent = item.DEPO;
+          dpoSelect.appendChild(o);
+        }
+        if (cdpoSelect) {
+          const o = document.createElement("option");
+          o.value = item.DEPO;
+          o.textContent = item.DEPO;
+          cdpoSelect.appendChild(o);
+        }
+      });
 
-        });
+      oz.forEach((item) => {
+        if (ozSelect) {
+          const o = document.createElement("option");
+          o.value = item.OZEL_KOD_1;
+          o.textContent = item.OZEL_KOD_1;
+          ozSelect.appendChild(o);
+        }
+        if (cozSelect) {
+          const o = document.createElement("option");
+          o.value = item.OZEL_KOD_1;
+          o.textContent = item.OZEL_KOD_1;
+          cozSelect.appendChild(o);
+        }
+      });
 
-        oz.forEach(item => {
-            const optionOz = document.createElement("option");
-            optionOz.value = item.OZEL_KOD_1;
-            optionOz.textContent = item.OZEL_KOD_1;
-            ozSelect.appendChild(optionOz);
+      // "Bos Olanlar" opsiyonlarını 2. sıraya koy
+      const insertBos = (sel) => {
+        if (!sel) return;
+        const o = document.createElement("option");
+        o.value = "Bos Olanlar";
+        o.textContent = "Bos Olanlar";
+        sel.insertBefore(o, sel.options[1] || null);
+      };
+      insertBos(anaSelect);
+      insertBos(canaSelect);
+      insertBos(dpoSelect);
+      insertBos(cdpoSelect);
 
-            const optioncoz = document.createElement("option");
-            optioncoz.value = item.OZEL_KOD_1;
-            optioncoz.textContent = item.OZEL_KOD_1;
-            cozSelect.appendChild(optioncoz);
-        });
-
-        const newOption = document.createElement("option");
-        newOption.value = "Bos Olanlar";
-        newOption.textContent = "Bos Olanlar";
-
-        const newOption1 = document.createElement("option");
-        newOption1.value = "Bos Olanlar";
-        newOption1.textContent = "Bos Olanlar";
-
-        const newOption2 = document.createElement("option");
-        newOption2.value = "Bos Olanlar";
-        newOption2.textContent = "Bos Olanlar";
-
-        const newOption3 = document.createElement("option");
-        newOption3.value = "Bos Olanlar";
-        newOption3.textContent = "Bos Olanlar";
-
-        anaSelect.insertBefore(newOption, anaSelect.options[1]);
-        canaSelect.insertBefore(newOption1, canaSelect.options[1]);
-        dpoSelect.insertBefore(newOption2, dpoSelect.options[1]);
-        cdpoSelect.insertBefore(newOption3, cdpoSelect.options[1]);
-    } catch (error) {
-        const modalError = document.getElementById("errorDiv");
-        modalError.style.display = "block";
-        modalError.innerText = `Bir hata oluştu: ${error.message}`;
+    } catch (err) {
+      M.showError(`Bir hata oluştu: ${err?.message || String(err)}`);
     } finally {
-        document.body.style.cursor = "default";
+      M.setCursor(false);
     }
-}
+  };
+
+  /* ---------------- expose (HTML onclick için) ---------------- */
+  window.updatePaginationUI = M.updatePaginationUI;
+
+  window.ilksayfa = M.ilksayfa;
+  window.oncekisayfa = M.oncekisayfa;
+  window.sonrakisayfa = M.sonrakisayfa;
+  window.sonsayfa = M.sonsayfa;
+
+  window.toplampagesize = M.toplampagesize;
+  window.kerestedetaydoldur = M.kerestedetaydoldur;
+  window.kerestedetayfetchTableData = M.kerestedetayfetchTableData;
+
+  window.kerestedetaydownloadReport = M.kerestedetaydownloadReport;
+  window.kerestedetaymailAt = M.kerestedetaymailAt;
+
+  window.anagrpChanged = M.anagrpChanged;
+  window.openenvModal = M.openenvModal;
+
+})();

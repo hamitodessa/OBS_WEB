@@ -287,7 +287,7 @@
         <div class="deg-select-wrap" style="position: relative; width: 100%;">
           <select class="form-select" id="degiskenler"
                   style="font-weight: bold; width: 100%;"
-                  onchange="degiskenchange(this)">
+                  onchange="OBS.KERDEGISKENLER.degiskenchange(this)">
             <option value="anagrp">Ana Grup</option>
             <option value="altgrp">Alt Grup</option>
             <option value="mensei">Mensei</option>
@@ -310,7 +310,7 @@
         <div class="deg-select-wrap" style="position: relative; width: 100%;">
           <select class="form-select" id="altgrpAna"
                   style="font-weight: bold; width: 100%;"
-                  onchange="altgrpdoldur()">
+                  onchange="OBS.KERDEGISKENLER.altgrpdoldur()">
             <option th:each="kod : ${anaKodlari}"
                     th:value="${kod.ANA_GRUP}"
                     th:text="${kod.ANA_GRUP}"></option>
@@ -327,7 +327,7 @@
       <div class="deg-row">
         <span class="deg-label">Arama</span>
         <input type="text" id="arama" class="form-control"
-               oninput="filterTable()" placeholder="Ara...">
+               oninput="OBS.KERDEGISKENLER.filterTable()" placeholder="Ara...">
       </div>
 
       <!-- 4) Açıklama -->
@@ -354,14 +354,14 @@
 
       <!-- 6) Butonlar -->
       <div class="deg-actions">
-        <button class="btn btn-primary" type="button" id="degkaydetButton" onclick="degKayit()">Kaydet</button>
-        <button class="btn btn-primary" type="button" id="degsilButton" onclick="degYoket()">Sil</button>
-        <button class="btn btn-primary" type="button" id="btnYeni" onclick="degyeni()">+</button>
+        <button class="btn btn-primary" type="button" id="degkaydetButton" onclick="OBS.KERDEGISKENLER.degKayit()">Kaydet</button>
+        <button class="btn btn-primary" type="button" id="degsilButton" onclick="OBS.KERDEGISKENLER.degYoket()">Sil</button>
+        <button class="btn btn-primary" type="button" id="btnYeni" onclick="OBS.KERDEGISKENLER.degyeni()">+</button>
       </div>
 
     </div>
   </div>
 </div>
 
-<script src="/obs_js_files/kereste/degiskenler.js"></script>
+
   

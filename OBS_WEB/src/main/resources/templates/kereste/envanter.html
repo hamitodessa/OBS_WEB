@@ -237,10 +237,10 @@
 				style="margin-left: 10px;" onclick="openFirstModal('kerenvanter')">Filtre</button>
 			
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="envanterDownload"
-			 onclick="envanterDownload()" disabled>Excel Indir</button>
+			 onclick="OBS.KERENVANTER.envanterDownload()" disabled>Excel Indir</button>
 
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="envantermailButton"
-			 onclick="envantermailAt()" disabled>Email Gonder</button>
+			 onclick="OBS.KERENVANTER.envantermailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>
 	<div id="errorDiv"></div>
@@ -259,6 +259,6 @@
 
 <input type="hidden" id="envanterBilgi"  />
 
-<script src="/obs_js_files/kereste/raporlar/envanter.js"></script>
+
 <div th:replace="~{modal/kereste/envanterfiltre :: modalkeresteenvanter}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>

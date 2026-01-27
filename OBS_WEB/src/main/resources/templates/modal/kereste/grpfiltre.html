@@ -20,7 +20,7 @@
 
           <span class="input-group-text">Ana Grup</span>
           <div class="select-wrap">
-            <select class="form-select cins_bold" id="anagrp" onchange="anagrpChanged(this,'altgrp')"></select>
+            <select class="form-select cins_bold" id="anagrp" onchange="OBS.KERGRPRAPOR.anagrpChanged(this,'altgrp')"></select>
             <span class="select-arrow">▼</span>
           </div>
           
@@ -92,7 +92,7 @@
         <div class="input-group">
           <span class="input-group-text">Birim</span>
           <div class="select-wrap">
-            <select class="form-select cins_bold" id="birim" onchange="birimChanged()">
+            <select class="form-select cins_bold" id="birim" onchange="OBS.KERGRPRAPOR.birimChanged()">
               <option value="m3">m3</option>
               <option value="Tutar">Tutar</option>
               <option value="Miktar">Miktar</option>
@@ -104,7 +104,7 @@
           <!-- gizli bloklar: hizayı bozmasın diye 3 kolon -->
           <span></span>
           <div class="select-wrap">
-            <input type="checkbox" class="form-check-input is-hidden" id="dvzcevirchc" onchange="dvzcevirChanged()">
+            <input type="checkbox" class="form-check-input is-hidden" id="dvzcevirchc" onchange="OBS.KERGRPRAPOR.dvzcevirChanged()">
             <span class="form-check-label is-hidden" id="dvzcvrspn">Dvz Cevir</span>
           </div>
           

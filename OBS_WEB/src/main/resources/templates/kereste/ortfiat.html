@@ -212,10 +212,10 @@
 				style="margin-left: 10px;" onclick="openFirstModal('kerortfiat')">Filtre</button>
 			
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="ortfiatDownload"
-			 onclick="ortfiatDownload()" disabled>Excel Indir</button>
+			 onclick="OBS.KERORTFIAT.ortfiatDownload()" disabled>Excel Indir</button>
 
 			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="ortfiatmailButton"
-			 onclick="ortfiatmailAt()" disabled>Email Gonder</button>
+			 onclick="OBS.KERORTFIAT.ortfiatmailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>
 	<div id="errorDiv"></div>
@@ -234,6 +234,6 @@
 
 <input type="hidden" id="ortfiatBilgi"  />
 
-<script src="/obs_js_files/kereste/raporlar/ortfiat.js"></script>
+
 <div th:replace="~{modal/kereste/ortfiatfiltre :: modalortfiat}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
