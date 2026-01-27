@@ -790,7 +790,11 @@
   const pageModules = {
     "/wellcome": { js: "/obs_js_files/wellcome.js", init: "getWellcomeData" },
 
-    "/cari/ekstre": { js: "/obs_js_files/cari/cariekstre.js", init: "cariBaslik" },
+    "/cari/ekstre": { js: "/obs_js_files/cari/cariekstre.js",
+    	init: () => {
+            if (typeof window.cariBaslik === "function") window.cariBaslik();
+       }
+    },
 
     "/cari/hspplngiris": {
       js: "/obs_js_files/cari/hspplngiris.js",

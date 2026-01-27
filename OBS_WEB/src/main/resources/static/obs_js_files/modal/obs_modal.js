@@ -86,6 +86,15 @@ function openFirstModal(nerdenGeldi) {
 	  } else if (nerden === "kerortfiat") {
 	  OBS.KERORTFIAT.openkortModal(modal);	  
   } 
+  else {
+	const modalEl = (typeof modal === "string")
+	      ? document.querySelector(modal)
+	      : modal;
+
+	    if (modalEl && window.bootstrap?.Modal) {
+	      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+	    }
+  }
 }
 
 /* =========================
