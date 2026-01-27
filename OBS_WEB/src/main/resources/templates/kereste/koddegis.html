@@ -12,10 +12,6 @@
   padding: 0px !important;
 }
 
-/* =======================
-   CARD / ÜST PANEL
-   ======================= */
-
 
 #ara_content .cardd{
   display: flex;
@@ -287,9 +283,11 @@
             <label style="width:120px;">Paket No</label>
             <input class="form-control" style="font-weight:900; width:120px;"
               maxlength="10" id="pakno" onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
+            
             <input class="form-control" style="font-weight:900; width:175px;"
               value="00-000-0000-0000" maxlength="16" id="kodu"
               onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
+              
           </div>
           <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
             <label style="width:120px;">Giris Evrak</label>

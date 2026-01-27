@@ -152,17 +152,3 @@ OBS.REPORTMAIL.send = async function () {
     if (btn) { btn.disabled = false; btn.innerText = "Gönder"; }
   }
 };
-
-/* =========================
-   GLOBAL KÖPRÜLER (HTML ve pageModules için)
-   ========================= */
-
-// HTML: onclick="sendmailAt()" aynen kalsın
-window.sendmailAt = function () {
-  return OBS.REPORTMAIL.send();
-};
-
-// pageModules init: DOM basıldıktan sonra çağır
-window.sendEmailInit = function () {
-  OBS.REPORTMAIL.init();
-};

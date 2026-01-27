@@ -77,7 +77,7 @@ OBS.FORUM = OBS.FORUM || {};
         F.renderSubjects(subjects);
 
         // istersen burada mesaj sayısını bas
-        if (mesajsayi) mesajsayi.innerText = String(subjects.length);
+        //if (mesajsayi) mesajsayi.innerText = String(subjects.length);
       } else {
         F.errShow("Bir hata oluştu.");
       }

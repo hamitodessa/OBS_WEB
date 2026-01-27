@@ -27,96 +27,89 @@ OBS.KODDEGIS = OBS.KODDEGIS || {};
     errorDiv.innerText = "";
   };
 
-  /* =========================================================
-     MASK (Inputmask varsa kullan, yoksa vanilla)
-     Eski: $("#kodu").inputmask({ mask:"AA-999-9999-9999", placeholder:"-" ... })
-     ========================================================= */
 
-	 /* =========================================================
-	    MASK (CDN: inputmask.min.js yüklü)
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.js"></script>
-	    ========================================================= */
+	 /* Local script tag: <script src="/obs_js_files/inputmask/inputmask.min.js"></script> */
+	 /* format: AA-999-9999-9999 */
+	 M._formatUkodu = function (val) {
+	   const raw = (val || "")
+	     .toUpperCase()
+	     .replace(/[^A-Z0-9]/g, "");
 
-	 /* Vanilla maske (fallback) */
-	 M._applyVanillaMask = function (input) {
-	   if (!input) return;
+	   const a = raw.slice(0, 2);
+	   const b = raw.slice(2, 5);
+	   const c = raw.slice(5, 9);
+	   const d = raw.slice(9, 13);
 
-	   const toAllowed = (ch) => {
-	     const c = (ch || "").toString();
-	     return /[A-Za-z0-9]/.test(c) ? c.toUpperCase() : "";
-	   };
+	   let out = a;
+	   if (b.length) out += "-" + b;
+	   if (c.length) out += "-" + c;
+	   if (d.length) out += "-" + d;
 
-	   const format = (raw) => {
-	     const chars = (raw || "")
-	       .replace(/[^A-Za-z0-9]/g, "")
-	       .split("")
-	       .map(toAllowed)
-	       .join("");
-
-	     const a1 = chars.slice(0, 2);
-	     const n1 = chars.slice(2, 5);
-	     const n2 = chars.slice(5, 9);
-	     const n3 = chars.slice(9, 13);
-
-	     let out = "";
-	     if (a1.length) out += a1;
-	     if (chars.length > 2) out += "-" + n1;
-	     if (chars.length > 5) out += "-" + n2;
-	     if (chars.length > 9) out += "-" + n3;
-
-	     return out;
-	   };
-
-	   const onInput = () => {
-	     input.value = format(input.value || "");
-	   };
-
-	   input.addEventListener("input", onInput);
-	   input.addEventListener("blur", () => {
-	     if (!input.value || input.value.trim() === "") {
-	       input.value = "00-000-0000-0000";
-	     }
-	   });
-
-	   if (!input.value || input.value.trim() === "") input.value = "00-000-0000-0000";
-	   onInput();
+	   return out;
 	 };
 
-	 /* CDN ile Inputmask uygula */
 	 M.applyMask = function () {
 	   const koduInput = M.byId("kodu");
 	   if (!koduInput) return;
 
-	   // Default değer (senin eski sistem)
+	   // aynı input'a iki kez bağlanma
+	   if (koduInput.dataset.maskBound === "1") return;
+	   koduInput.dataset.maskBound = "1";
+
+	   // default değer
 	   if (!koduInput.value || koduInput.value.trim() === "") {
 	     koduInput.value = "00-000-0000-0000";
 	   }
 
-	   // CDN ile yüklenen Inputmask varsa direkt onu kullan
-	   if (typeof window.Inputmask === "function") {
-	     // Önce varsa eski maskeyi temizle (bazı sayfalarda tekrar init olunca gerekebilir)
+	   // LOCAL Inputmask yüklüyse kullan
+	   if (window.Inputmask && typeof window.Inputmask === "function") {
 	     try {
-	       if (koduInput.inputmask) koduInput.inputmask.remove();
+	       if (koduInput.inputmask && typeof koduInput.inputmask.remove === "function") {
+	         koduInput.inputmask.remove();
+	       }
 	     } catch (e) {}
 
-	     // Uygula
 	     window.Inputmask({
 	       mask: "AA-999-9999-9999",
-	       placeholder: "-",                 // senin eski kod
+	       placeholder: "_",      // senin eski sistem
+	       clearIncomplete: false,
+	       showMaskOnHover: false,
+	       showMaskOnFocus: true,
+
 	       definitions: {
-	         A: { validator: "[A-Za-z0-9]", cardinality: 1 },
+	         A: { validator: "[A-Za-z0-9]", casing: "upper" }
 	       },
-	       // İstersen şu iki satır da eklenebilir, default yoksa gerek yok:
-	       // clearIncomplete: false,
-	       // showMaskOnHover: false,
+
+	       // paste / manuel girişte format garanti
+	       onBeforeWrite: function (event, buffer) {
+	         const raw = (buffer || []).join("").replace(/[^A-Z0-9]/gi, "");
+	         const formatted = M._formatUkodu(raw);
+	         return {
+	           refreshFromBuffer: true,
+	           buffer: formatted.split(""),
+	           caret: formatted.length
+	         };
+	       }
 	     }).mask(koduInput);
 
+	     // boş bırakırlarsa defaulta dön
+	     koduInput.addEventListener("blur", () => {
+	       if (!koduInput.value || koduInput.value.trim() === "") {
+	         koduInput.value = "00-000-0000-0000";
+	       } else {
+	         
+	         koduInput.value = M._formatUkodu(koduInput.value);
+	       }
+	     });
+
+	    
+	     koduInput.value = M._formatUkodu(koduInput.value);
 	     return;
 	   }
 
-	   // CDN yüklenmemişse (internet yok, CSP engeli vs.) fallback
-	   M._applyVanillaMask(koduInput);
+	   
 	 };
+
 
 
   /* =========================================================

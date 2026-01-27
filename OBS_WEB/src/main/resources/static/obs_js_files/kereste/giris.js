@@ -92,7 +92,7 @@
       }).mask(inp);
     });
   };
-	OBS.KERGIRIS.  _formatUkodu = function (val) {
+	OBS.KERGIRIS._formatUkodu = function (val) {
     const raw = (val || "")
       .toUpperCase()
       .replace(/[^A-Z0-9]/g, "");
