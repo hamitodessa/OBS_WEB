@@ -1,7 +1,7 @@
 
 <style>
 /* =========================
-   2026 GLASS THEME - FIRMA AYAR (LOGO / KAŞE)
+   2026 GLASS THEME - FIRMA AYAR (KOMPAKT / GRID / FILE UI)
    wrapper: #ara_content
    ========================= */
 
@@ -17,24 +17,27 @@
   -webkit-backdrop-filter: blur(14px) !important;
 }
 
-/* Ana panel genişliği (tahsilat child mantığı) */
+/* Card padding kompakt */
+#ara_content .card.p-4{ padding: 5px !important; }
+
+/* Ana panel */
 #ara_content .centered-div{
-  width: 860px;
-  max-width: 100%;
+  width: 45%;
+ 
   margin: 0 auto;
   box-sizing: border-box;
   text-align: left;
 }
 
-/* group-box = satır */
+/* satır */
 #ara_content .group-box{
   width: 100% !important;
-  padding: 6px 4px !important;
-  margin: 0 0 8px 0 !important;
+  padding: 4px 2px !important;
+  margin: 0 0 2px 0 !important;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   flex-wrap: nowrap;
   border: none !important;
 }
@@ -42,40 +45,41 @@
 /* Kaydet satırı */
 #ara_content .aramagroup-box{
   width: 100% !important;
-  margin-top: 10px !important;
-  padding: 10px 10px !important;
+  margin-top: 8px !important;
+  padding: 8px 10px !important;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   gap: 10px;
   border: 1px solid rgba(255,255,255,.14) !important;
-  border-radius: 16px;
+  border-radius: 14px;
   background: rgba(255,255,255,.03);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
-  height: auto !important; /* eski sabit 50px'i iptal */
+  height: auto !important;
 }
 
-/* span.input-group-text = label görünümü */
+/* Label */
 #ara_content .input-group-text{
   min-width: 110px !important;
-  height: 46px;
+  height: 27px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 12px !important;
-  border-radius: 14px !important;
+  padding: 0 8px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255,255,255,.14) !important;
   background: rgba(255,255,255,.06) !important;
   color: rgba(255,255,255,.85) !important;
   font-weight: 900 !important;
   letter-spacing: .2px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  font-size: 10px;
 }
 
 /* INPUT */
 #ara_content .form-control{
-  height: 46px !important;
-  border-radius: 14px !important;
+  height: 30px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.45) !important;
   color: rgba(255,255,255,.92) !important;
@@ -84,23 +88,28 @@
 #ara_content .form-control::placeholder{ color: rgba(255,255,255,.45); }
 #ara_content .form-control:focus{
   border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
+  box-shadow: 0 0 0 4px rgba(56,189,248,.18) !important;
   background: rgba(8,14,26,.65) !important;
   color: #fff !important;
 }
 
-/* BUTTONS (secondary) */
-#ara_content .btn.btn-secondary{
-  height: 46px;
-  min-width: 46px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.08);
-  color: rgba(255,255,255,.92);
+/* BUTTONS */
+#ara_content .btn{
+  height: 40px;
+  border-radius: 12px;
+  font-weight: 900;
+  transition: .16s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: .16s ease;
+  gap: 8px;
+}
+
+#ara_content .btn.btn-secondary{
+  min-width: 40px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
 }
 #ara_content .btn.btn-secondary:hover{
   background: rgba(255,255,255,.12);
@@ -108,139 +117,262 @@
   transform: translateY(-2px);
 }
 
-/* Kaydet butonu da secondary ise biraz “primary” gibi parlasın */
-#ara_content  button.btn.btn-primary{
-   width: 100px !important;
-  height: 44px !important;
- 
-
-  border-radius: 16px !important;
-  font-weight: 900 !important;
-  font-size: 15px !important;
+#ara_content button.btn.btn-primary{
+  width: 96px !important;
+  height: 40px !important;
+  border-radius: 14px !important;
+  font-size: 14px !important;
   letter-spacing: .3px !important;
-
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
 }
-#ara_content  button.btn.btn-primary:hover{
- background: rgba(56,189,248,.26) !important;
+#ara_content button.btn.btn-primary:hover{
+  background: rgba(56,189,248,.26) !important;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
 
-/* Görsel kutuları (logo/kaşe) */
-#ara_content .resimgoster{
-  width: 315px !important;
-  height: 150px !important;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.35) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  object-fit: contain;   /* resim taşmasın, oran korunsun */
-  padding: 10px;
+/* =========================
+   LOGO / KAŞE GRID
+   ========================= */
+
+#ara_content .img-grid{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
 }
 
-/* Senin div'lerin borderını da cam yapalım (inline style olsa da dursun) */
-#ara_content .group-box > div[style*="border"]{
-  border: 1px solid rgba(255,255,255,.14) !important;
-  border-radius: 16px;
+#ara_content .img-card{
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
   background: rgba(255,255,255,.03);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
   overflow: hidden;
+  padding: 8px;
+}
+
+#ara_content .img-title{
+  font-weight: 900;
+  font-size: 12.5px;
+  color: rgba(255,255,255,.80);
+  margin: 0 0 6px 2px;
+  letter-spacing: .2px;
+}
+
+#ara_content .resimgoster{
+  width: 100% !important;
+  height: 132px !important;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  background: rgba(8,14,26,.35) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  display: block;
+  object-fit: contain;
+  padding: 8px;
+}
+
+/* =========================
+   FILE UI (ikon + dosya adı)
+   ========================= */
+
+/* native file input gizle */
+#ara_content .file-native{
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* dosya satırı: 2 sütun */
+#ara_content .file-grid{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+/* her bir file block */
+#ara_content .file-box{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  padding: 8px;
+}
+
+/* seç butonu */
+#ara_content .file-pick{
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(56,189,248,.35);
+  background: rgba(56,189,248,.16);
+  color: rgba(255,255,255,.95);
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+#ara_content .file-pick:hover{
+  background: rgba(56,189,248,.24);
+  border-color: rgba(56,189,248,.55);
+  transform: translateY(-1px);
+}
+
+/* dosya adı chip */
+#ara_content .file-name{
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(8,14,26,.35);
+  color: rgba(255,255,255,.86);
+  font-weight: 800;
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* remove butonu küçük */
+#ara_content .file-remove{
+  height: 36px !important;
+  min-width: 36px !important;
+  border-radius: 12px !important;
 }
 
 /* Error */
 #ara_content #errorDiv{
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 14px;
+  display:none;
+  margin-top: 8px;
+  padding: 9px 11px;
+  border-radius: 12px;
   border: 1px solid rgba(251,113,133,.35);
   background: rgba(251,113,133,.10);
   color: rgba(255,255,255,.95) !important;
   font-weight: 900;
 }
-
-
 </style>
+
 <!-- Ana Sayfa -->
 
 <div class="card p-4 d-flex flex-row gap-3">
-    <div class="centered-div">
-        <div class="group-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Firma Adi</span>
-            <span style="padding-left: 5px;"></span>
-           <input 	type="text" class="form-control"   id="adi" maxlength="50">
-					
-         </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Adres 1</span>
-            <span style="padding-left: 5px;"></span>
-       		 <input 	type="text" class="form-control"  id="adr1" maxlength="50">
-        </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Adres 2</span>
-            <span style="padding-left: 5px;"></span>
-            <input 	type="text" class="form-control"  id="adr2" maxlength="50">
-        </div>
-        
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;" >VD - VN</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" class="form-control" id="vdvn" maxlength="60">
-        </div>
+	<div class="centered-div">
+		<div class="group-box" style="margin-top: 5px;">
+			 <span	class="input-group-text" style="min-width: 100px;">Firma Adi</span>
+			 <input type="text"	class="form-control" id="adi" maxlength="50">
 
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">E Mail</span>
-            <span style="padding-left: 5px;"></span>
-            <input 	type="text" class="form-control"  id="mail" maxlength="60">
-						
-        </div>
-        <div class="group-box">
-            <span style="padding-left: 5px;"></span>
-            <span class="input-group-text" style="min-width:100px;">Diger</span>
-            <span style="padding-left: 5px;"></span>
-            <input type="text" 	class="form-control"  id="diger" maxlength="50">
-        </div>
-        <div class="group-box" style="margin-top: 10px;">
-            <span style="padding-left: 5px;"></span>
-            <div style="min-width:315px;height:150px;border: 1px solid #ddd;">
- 				<img id="resimLogo" class="resimgoster"  src="" alt="Logo"  />
-    		</div>
-            <span style="padding-left: 50px;"></span>
-            <div style="min-width:315px;height:150px;border: 1px solid #ddd;">
- 				<img id="resimKase" class="resimgoster"  src="" alt="Kase"  />
-    		</div>
-        </div>
-        <div class="group-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="logoremove" class="btn btn-secondary ml-2" onclick="OBS.TAHAYAR.logoSil()" ><i class="fa fa-remove"></i>	</button>
-            <span style="padding-left: 5px;"></span>
-            <input type="file" style="min-width:325px;" name="image" id="imageLogo" accept="image/*" />
-      		
-      		
-      		<button type="button" id="kaseremove" class="btn btn-secondary ml-2" onclick="OBS.TAHAYAR.kaseSil()" ><i class="fa fa-remove"></i>	</button>
-            <span style="padding-left: 5px;"></span>
-            <input type="file" style="max-width:250px;" name="image" id="imageKase" accept="image/*" />
-       
-       
-        </div>
-        
-        <div class="aramagroup-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
-            <button type="button" id="serverButton" class="btn btn-primary" onclick="OBS.TAHAYAR.ayarKayit()" >Kaydet</button>
-        </div>
-        <div id="errorDiv"></div>
-       </div>
-    
+		</div>
+		<div class="group-box">
+			<span
+				class="input-group-text" style="min-width: 100px;">Adres 1</span>
+				<input type="text"
+				class="form-control" id="adr1" maxlength="50">
+		</div>
+
+		<div class="group-box">
+			<span
+				class="input-group-text" style="min-width: 100px;">Adres 2</span>
+				 <input type="text"
+				class="form-control" id="adr2" maxlength="50">
+		</div>
+
+		<div class="group-box">
+			<span
+				class="input-group-text" style="min-width: 100px;">VD - VN</span> 
+				<input type="text"
+				class="form-control" id="vdvn" maxlength="60">
+		</div>
+
+		<div class="group-box">
+			<span
+				class="input-group-text" style="min-width: 100px;">E Mail</span> 
+				<input type="text"
+				class="form-control" id="mail" maxlength="60">
+
+		</div>
+		<div class="group-box">
+			<span
+				class="input-group-text" style="min-width: 100px;">Diger</span>
+				 <input type="text"
+				class="form-control" id="diger" maxlength="50">
+		</div>
+		<div class="group-box" style="margin-top: 10px;">
+			<div class="img-grid">
+				<div class="img-card">
+					<div class="img-title">Logo</div>
+					<img id="resimLogo" class="resimgoster" src="" alt="Logo" />
+				</div>
+
+				<div class="img-card">
+					<div class="img-title">Kaşe</div>
+					<img id="resimKase" class="resimgoster" src="" alt="Kase" />
+				</div>
+			</div>
+		</div>
+
+
+		<div class="group-box" style="margin-top: 5px;">
+			<div class="file-grid">
+
+				<!-- LOGO -->
+				<div class="file-box">
+					<button type="button" id="logoremove"
+						class="btn btn-secondary file-remove"
+						onclick="OBS.TAHAYAR.logoSil()">
+						<i class="fa fa-remove"></i>
+					</button>
+
+					<label class="file-pick" for="imageLogo"> <i
+						class="fa fa-image"></i> Logo Seç
+					</label> <input class="file-native" type="file" name="image" id="imageLogo"
+						accept="image/*" />
+
+					<div class="file-name" id="logoFileName">Dosya seçilmedi</div>
+				</div>
+
+				<!-- KAŞE -->
+				<div class="file-box">
+					<button type="button" id="kaseremove"
+						class="btn btn-secondary file-remove"
+						onclick="OBS.TAHAYAR.kaseSil()">
+						<i class="fa fa-remove"></i>
+					</button>
+
+					<label class="file-pick" for="imageKase"> <i
+						class="fa fa-stamp"></i> Kaşe Seç
+					</label> <input class="file-native" type="file" name="image" id="imageKase"
+						accept="image/*" />
+
+					<div class="file-name" id="kaseFileName">Dosya seçilmedi</div>
+				</div>
+
+			</div>
+		</div>
+
+
+		<div class="aramagroup-box" style="margin-top: 5px;">
+			
+			<button type="button" id="serverButton" class="btn btn-primary"
+				onclick="OBS.TAHAYAR.ayarKayit()">Kaydet</button>
+		</div>
+		<div id="errorDiv"></div>
+	</div>
+
 </div>

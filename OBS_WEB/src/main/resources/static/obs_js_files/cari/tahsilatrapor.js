@@ -259,6 +259,11 @@ OBS.TAHRAP.opentahrapModal = async function (modalSelectorOrEl) {
   }
 };
 
+OBS.TAHRAP._setDisabled = (id, disabled) => {
+  const el = OBS.TAHRAP._el(id);
+  if (!el) return;
+  el.disabled = !!disabled;
+};
 /* =========================
    DOWNLOAD
    ========================= */
@@ -267,7 +272,7 @@ OBS.TAHRAP.tahrapdownloadReport = async function () {
 
   document.body.style.cursor = "wait";
   OBS.TAHRAP._setDisabled("tahrapreportFormat", true);
-  OBS.TAHRAP._setDisabled("tahrapyenileButton", true);
+  OBS.TAHRAP._setDisabled("tahrapmailAt", true);
 
   try {
     const rows = OBS.TAHRAP.extractTableData("main-table");
@@ -296,8 +301,8 @@ OBS.TAHRAP.tahrapdownloadReport = async function () {
   } catch (err) {
     OBS.TAHRAP._showError(err?.message || "Bilinmeyen bir hata oluştu.");
   } finally {
-    OBS.TAHRAP._setDisabled("tahrapreportFormat", false);
-    OBS.TAHRAP._setDisabled("tahrapyenileButton", false);
+	OBS.TAHRAP._setDisabled("tahrapreportFormat", false);
+	OBS.TAHRAP._setDisabled("tahrapmailAt", false);
     document.body.style.cursor = "default";
   }
 };

@@ -1,6 +1,6 @@
 <style>
 /* =========================
-   2026 CAM – SEND EMAIL
+   2026 CAM – SEND EMAIL (KOMPAKT)
    ========================= */
 
 #ara_content{
@@ -23,23 +23,26 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* container marginlarını sadeleştir */
-#ara_content .container.mt-5{ margin-top: 12px !important; }
+/* container marginlarını daha da sadeleştir */
+#ara_content .container.mt-5{ margin-top: 8px !important; }
 
-/* group-box cam */
+/* card iç padding kompakt */
+#ara_content .card.p-4{ padding: 14px !important; }
+
+/* group-box cam (kompakt) */
 #ara_content .group-box{
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(255,255,255,.05);
-  padding: 14px;
+  padding: 10px;
   border-radius: 16px;
-  margin-top: 10px;
-  width: 50%;
+  margin-top: 8px;
+  width: 49%;
 }
 
 /* başlık */
 #ara_content .group-box h4{
-  margin: 0 0 10px 0;
-  font-size: 14px;
+  margin: 0 0 8px 0;
+  font-size: 13px;
   font-weight: 900;
   color: rgba(255,255,255,.90);
   text-align:center;
@@ -48,49 +51,55 @@
 /* row yapısı */
 #ara_content .group-row{
   display:flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 #ara_content .form-row{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap: 8px;
   width:100%;
+  margin: 0;
 }
+
+/* label kompakt */
 #ara_content .form-row label{
-  width: 80px;
+  width: 68px;
   font-weight: 900;
-  font-size: 13px;
+  font-size: 12.5px;
   color: rgba(255,255,255,.82);
   margin:0;
 }
 
 /* uzun-kısa kutular */
-#ara_content .long-box{ flex: 2; }
+#ara_content .long-box{ flex: 2; min-width: 510px; }
 #ara_content .short-box{ flex: 1; }
 
-/* input/select/textarea – cam input standardı */
+/* input/select/textarea – cam input standardı (kompakt) */
 #ara_content .form-control,
 #ara_content .form-select,
 #ara_content textarea.form-control{
-  height: 48px;
-  border-radius: 14px;
+  height: 35px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
 }
 
+/* textarea kompakt */
 #ara_content textarea.form-control{
-  height: auto;          /* textarea için */
-  min-height: 110px;
-  padding-top: 10px;
+  height: auto;
+  min-height: 50px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
+/* focus */
 #ara_content .form-control:focus,
 #ara_content .form-select:focus,
 #ara_content textarea.form-control:focus{
   border-color: rgba(56,189,248,.65);
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  box-shadow: 0 0 0 4px rgba(56,189,248,.18);
   background: rgba(8,14,26,.65);
   color:#fff;
 }
@@ -102,39 +111,35 @@
   color: rgba(255,255,255,.70);
 }
 
-/* buton standardı */
+/* buton standardı (kompakt) */
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 40px;
+  border-radius: 12px;
+  padding: 0 14px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
   transition: .16s ease;
   font-weight: 800;
 }
-#ara_content .btn.btn-primary{
- background: rgba(56,189,248,.18) !important;
-  border: 1px solid rgba(56,189,248,.35) !important;
-  color: rgba(255,255,255,.95) !important;
-}
 
 #ara_content .btn.btn-primary:hover{
- background: rgba(56,189,248,.26) !important;
+  background: rgba(56,189,248,.26) !important;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
 
 /* select satırı tek başına kalınca hizalama */
 #ara_content .form-row select.form-select{
-  width: 180px;
+  width: 170px;
 }
 
 /* error div standard */
 #ara_content #errorDiv{
   display:none;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: 12px;
   border: 1px solid rgba(251,113,133,.35);
   background: rgba(251,113,133,.10);
   color: #fff;
@@ -151,8 +156,9 @@
 }
 </style>
 
+
 <div class="container mt-5">
-  <div class="card p-4 mb-4" style="width: 70%">
+  <div class="card p-4 mb-4" style="width: 60%">
     <form id="sendEmail" enctype="multipart/form-data">
       <div class="group-row">
         <div class="form-row">

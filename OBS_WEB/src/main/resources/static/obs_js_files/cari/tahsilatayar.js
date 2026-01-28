@@ -2,7 +2,7 @@ window.OBS = window.OBS || {};
 OBS.TAHAYAR = OBS.TAHAYAR || {};
 
 /* =========================
-   helpers
+   HELPERS (tek yer)
    ========================= */
 OBS.TAHAYAR._el = (id) => document.getElementById(id);
 
@@ -33,6 +33,25 @@ OBS.TAHAYAR._setImg = function (imgId, base64) {
   }
 };
 
+OBS.TAHAYAR._setFileName = function (nameSpanId, text) {
+  const el = OBS.TAHAYAR._el(nameSpanId);
+  if (!el) return;
+  el.textContent = text || "Dosya seçilmedi";
+};
+
+OBS.TAHAYAR._resetFile = function (inputId, previewImgId, nameSpanId) {
+  const inp = OBS.TAHAYAR._el(inputId);
+  if (inp) inp.value = "";
+
+  const img = OBS.TAHAYAR._el(previewImgId);
+  if (img) {
+    img.src = "";
+    img.style.display = "none";
+  }
+
+  OBS.TAHAYAR._setFileName(nameSpanId, "Dosya seçilmedi");
+};
+
 OBS.TAHAYAR._appendBase64ImgAsBlob = function (formData, imgId, formKey, filename) {
   const img = OBS.TAHAYAR._el(imgId);
   if (!img) return;
@@ -55,52 +74,62 @@ OBS.TAHAYAR._appendBase64ImgAsBlob = function (formData, imgId, formKey, filenam
 };
 
 /* =========================
-   file size validation
+   FILE CHANGE (tek akış)
    ========================= */
-OBS.TAHAYAR.handleFileChange = function (event) {
-  const input = event?.target;
+OBS.TAHAYAR._MAX_KB = 500;
+
+OBS.TAHAYAR._onFileChanged = function (inputId, previewImgId, nameSpanId) {
+  const input = OBS.TAHAYAR._el(inputId);
   if (!input) return;
 
   const file = input.files?.[0];
-  const maxSizeInKB = 500;
-  const maxSizeInBytes = maxSizeInKB * 1024;
-
-  // errorDiv yoksa da patlamasın
-  const errorDiv = OBS.TAHAYAR._el("errorDiv");
-
-  if (file && file.size > maxSizeInBytes) {
-    if (errorDiv) {
-      errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-      errorDiv.style.display = "block";
-    }
-    input.value = ""; // seçimi sıfırla
-  } else {
-    if (errorDiv) {
-      errorDiv.style.display = "none";
-      errorDiv.innerText = "";
-    }
+  if (!file) {
+    OBS.TAHAYAR._setFileName(nameSpanId, "Dosya seçilmedi");
+    return;
   }
+
+  const maxBytes = OBS.TAHAYAR._MAX_KB * 1024;
+  if (file.size > maxBytes) {
+    OBS.TAHAYAR._showError(`Dosya boyutu ${OBS.TAHAYAR._MAX_KB} KB'ı geçemez!`);
+    // her şeyi sıfırla
+    OBS.TAHAYAR._resetFile(inputId, previewImgId, nameSpanId);
+    return;
+  }
+
+  OBS.TAHAYAR._clearError();
+  OBS.TAHAYAR._setFileName(nameSpanId, file.name);
+
+  // preview
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = OBS.TAHAYAR._el(previewImgId);
+    if (!img) return;
+    img.src = e.target.result;
+    img.style.display = "block";
+  };
+  reader.readAsDataURL(file);
 };
 
 OBS.TAHAYAR._bindFileEvents = function () {
   const logoInput = OBS.TAHAYAR._el("imageLogo");
-  if (logoInput) {
-    logoInput.addEventListener("change", (e) =>
-      OBS.TAHAYAR.handleFileChangeWithPreview(e, "resimLogo")
+  if (logoInput && logoInput.dataset.bound !== "1") {
+    logoInput.dataset.bound = "1";
+    logoInput.addEventListener("change", () =>
+      OBS.TAHAYAR._onFileChanged("imageLogo", "resimLogo", "logoFileName")
     );
   }
 
   const kaseInput = OBS.TAHAYAR._el("imageKase");
-  if (kaseInput) {
-    kaseInput.addEventListener("change", (e) =>
-      OBS.TAHAYAR.handleFileChangeWithPreview(e, "resimKase")
+  if (kaseInput && kaseInput.dataset.bound !== "1") {
+    kaseInput.dataset.bound = "1";
+    kaseInput.addEventListener("change", () =>
+      OBS.TAHAYAR._onFileChanged("imageKase", "resimKase", "kaseFileName")
     );
   }
 };
 
-
 /* =========================
-   dto
+   DTO
    ========================= */
 OBS.TAHAYAR.gettahayarDTO = function () {
   return {
@@ -114,21 +143,19 @@ OBS.TAHAYAR.gettahayarDTO = function () {
 };
 
 /* =========================
-   clear
+   CLEAR
    ========================= */
 OBS.TAHAYAR.clearInputs = function () {
   const root = OBS.TAHAYAR._el("tahayar_content") || document;
   root.querySelectorAll(".form-control").forEach(inp => { inp.value = ""; });
 
-  const imgLogo = OBS.TAHAYAR._el("resimLogo");
-  if (imgLogo) { imgLogo.src = ""; imgLogo.style.display = "none"; }
-
-  const imgKase = OBS.TAHAYAR._el("resimKase");
-  if (imgKase) { imgKase.src = ""; imgKase.style.display = "none"; }
+  // preview + file ui temizle
+  OBS.TAHAYAR._resetFile("imageLogo", "resimLogo", "logoFileName");
+  OBS.TAHAYAR._resetFile("imageKase", "resimKase", "kaseFileName");
 };
 
 /* =========================
-   save
+   SAVE
    ========================= */
 OBS.TAHAYAR.ayarKayit = async function () {
   const adi = OBS.TAHAYAR._el("adi");
@@ -146,6 +173,7 @@ OBS.TAHAYAR.ayarKayit = async function () {
   const fileKase = OBS.TAHAYAR._el("imageKase")?.files?.[0];
   if (fileKase) formData.append("resimkase", fileKase);
 
+  // Eğer kullanıcı dosya seçmemiş ama preview'da base64 var ise onu da gönder
   OBS.TAHAYAR._appendBase64ImgAsBlob(formData, "resimLogo", "resimgosterlogo", "base64ResimLogo.jpg");
   OBS.TAHAYAR._appendBase64ImgAsBlob(formData, "resimKase", "resimgosterkase", "base64ResimKase.jpg");
 
@@ -167,7 +195,7 @@ OBS.TAHAYAR.ayarKayit = async function () {
 };
 
 /* =========================
-   load first
+   LOAD FIRST
    ========================= */
 OBS.TAHAYAR.tahayarIlk = async function () {
   OBS.TAHAYAR._clearError();
@@ -181,8 +209,7 @@ OBS.TAHAYAR.tahayarIlk = async function () {
 
     if (dto?.errorMessage) throw new Error(dto.errorMessage);
 
-    OBS.TAHAYAR.clearInputs();
-
+    // inputlar
     OBS.TAHAYAR._el("adi").value   = dto.adi || "";
     OBS.TAHAYAR._el("adr1").value  = dto.ad1 || "";
     OBS.TAHAYAR._el("adr2").value  = dto.ad2 || "";
@@ -190,8 +217,17 @@ OBS.TAHAYAR.tahayarIlk = async function () {
     OBS.TAHAYAR._el("mail").value  = dto.mail || "";
     OBS.TAHAYAR._el("diger").value = dto.diger || "";
 
+    // resimler
     OBS.TAHAYAR._setImg("resimLogo", dto.base64Resimlogo);
     OBS.TAHAYAR._setImg("resimKase", dto.base64Resimkase);
+
+    // dosya adlarını resetle (serverdan geldiyse bile dosya seçilmedi say)
+    OBS.TAHAYAR._setFileName("logoFileName", "Dosya seçilmedi");
+    OBS.TAHAYAR._setFileName("kaseFileName", "Dosya seçilmedi");
+
+    // input file temiz kalsın
+    const il = OBS.TAHAYAR._el("imageLogo"); if (il) il.value = "";
+    const ik = OBS.TAHAYAR._el("imageKase"); if (ik) ik.value = "";
 
   } catch (err) {
     OBS.TAHAYAR._showError(err?.message || "Beklenmeyen bir hata oluştu.");
@@ -201,69 +237,23 @@ OBS.TAHAYAR.tahayarIlk = async function () {
 };
 
 /* =========================
-   delete img preview
+   DELETE PREVIEW (UI ile beraber)
    ========================= */
 OBS.TAHAYAR.logoSil = function () {
-  const img = OBS.TAHAYAR._el("resimLogo");
-  if (!img) return;
-  img.src = "";
-  img.style.display = "none";
+  OBS.TAHAYAR._clearError();
+  OBS.TAHAYAR._resetFile("imageLogo", "resimLogo", "logoFileName");
 };
 
 OBS.TAHAYAR.kaseSil = function () {
-  const img = OBS.TAHAYAR._el("resimKase");
-  if (!img) return;
-  img.src = "";
-  img.style.display = "none";
-};
-
-
-/* =========================
-   file change + preview
-   ========================= */
-OBS.TAHAYAR.handleFileChangeWithPreview = function (event, previewImgId) {
-  const input = event?.target;
-  if (!input) return;
-
-  const file = input.files?.[0];
-  const maxSizeInKB = 500;
-  const maxSizeInBytes = maxSizeInKB * 1024;
-  const errorDiv = OBS.TAHAYAR._el("errorDiv");
-
-  if (file && file.size > maxSizeInBytes) {
-    if (errorDiv) {
-      errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-      errorDiv.style.display = "block";
-    }
-    input.value = "";
-    return;
-  }
-
-  if (errorDiv) {
-    errorDiv.style.display = "none";
-    errorDiv.innerText = "";
-  }
-
-  // preview
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    const img = OBS.TAHAYAR._el(previewImgId);
-    if (!img) return;
-    img.src = e.target.result;
-    img.style.display = "block";
-  };
-  reader.readAsDataURL(file);
+  OBS.TAHAYAR._clearError();
+  OBS.TAHAYAR._resetFile("imageKase", "resimKase", "kaseFileName");
 };
 
 /* =========================
-   sayfa init
+   INIT
    çağır: OBS.TAHAYAR.init();
    ========================= */
 OBS.TAHAYAR.init = function () {
-  // input change eventlerini bağla (dinamik sayfa geldiğinde)
   OBS.TAHAYAR._bindFileEvents();
-
-  // sayfa açılınca ilk yükle
   OBS.TAHAYAR.tahayarIlk();
 };
