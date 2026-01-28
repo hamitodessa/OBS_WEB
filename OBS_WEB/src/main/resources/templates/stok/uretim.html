@@ -2,7 +2,7 @@
 
 <style>
 /* =========================
-   2026 CAM – IMALAT / URETIM
+   2026 CAM – IMALAT / URETIM  (KOMPAKT ÜST KISIM)
    wrapper: #ara_content
    hover: YOK
    ========================= */
@@ -22,7 +22,7 @@
 /* ===== LAYOUT (child / child2) ===== */
 #ara_content .cardd{
   display: flex;
-  gap: 12px;
+  gap: 10px;                  /* kompakt */
   align-items: flex-start;
 }
 
@@ -33,55 +33,72 @@
   padding: 0;
 }
 
-#ara_content .child{ width: 90%; }
-#ara_content .child2{ width: 10%; }
+/* üst kısım daha dengeli (resim alanı çok dar kalmasın) */
+#ara_content .child{  width: 82%; }
+#ara_content .child2{ width: 18%; }
 
-/* ===== GROUP-BOX ===== */
+/* ===== GROUP-BOX (kompakt) ===== */
 #ara_content .group-box{
   border: 1px solid rgba(255,255,255,.14) !important;
   background: rgba(8,14,26,.35);
   border-radius: 16px;
-  padding: 12px;
-  margin: 10px 0;
+  padding: 10px;              /* ↓ */
+  margin: 8px 0;              /* ↓ */
 }
 
-/* ===== LABEL ===== */
+/* group-box içindeki inline flex satırları otomatik wrap + sıkı gap */
+#ara_content .group-box > div[style*="display: flex"]{
+  flex-wrap: wrap;
+  gap: 8px 10px;              /* satır/kolon boşlukları */
+}
+
+/* ===== LABEL (kompakt) ===== */
 #ara_content label{
   color: rgba(255,255,255,.84);
-  font-weight: 800;
-  font-size: 13px;
+  font-weight: 900;
+  font-size: 12px;            /* ↓ */
+  line-height: 1;
 }
 
-/* ===== INPUTS / SELECT ===== */
+/* ===== INPUTS / SELECT (kompakt) ===== */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 44px;
-  border-radius: 14px;
+  height: 32px;               /* ✅ üst kısım kompakt */
+  min-height: 32px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
-  padding: 10px 14px !important;
+  padding: 6px 12px !important; /* ↓ */
   outline: none;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 #ara_content .form-control::placeholder{
   color: rgba(255,255,255,.55) !important;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 #ara_content .form-control:focus,
 #ara_content .form-select:focus{
   border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  box-shadow: 0 0 0 4px rgba(56,189,248,.16); /* ↓ */
   background: rgba(8,14,26,.65) !important;
   color:#fff !important;
 }
 
-/* ===== BUTTONS ===== */
+/* date input koyu tema */
+#ara_content input[type="date"]{
+  color-scheme: dark;
+}
+
+/* ===== BUTTONS (kompakt) ===== */
 #ara_content .btn-primary{
-border-radius: 14px;
+  border-radius: 12px;
   font-weight: 900;
-  height: 40px;
+  height: 36px;               /* ↓ */
+  padding: 6px 14px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -92,45 +109,82 @@ border-radius: 14px;
   transform: translateY(-1px);
 }
 
-
-
-	
 #ara_content .btn.btn-secondary{
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(255,255,255,.06) !important;
   color: rgba(255,255,255,.88) !important;
+  height: 36px;               /* ✅ aynı hizaya gelsin */
+  min-height: 36px;
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 #ara_content .btn.btn-secondary:hover{
   background: rgba(56,189,248,.12) !important;
   border-color: rgba(56,189,248,.35) !important;
 }
 
+/* inline "▼" okları daha kompakt görünüm */
+#ara_content span[style*="pointer-events:none"][style*="▼"]{
+  right: 10px !important;
+  font-size: 12px !important;
+  opacity: .9;
+}
+
+/* ===== CAM BORDER (Uretim Bilgileri) – kompakt ===== */
+#ara_content .cam-border-2026{
+  margin-top: 8px;
+  padding: 8px;               /* ↓ */
+  border: 1px solid rgba(56,189,248,.35);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.06),
+    0 12px 35px rgba(0,0,0,.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Üretim bilgilerindeki iç flex satırı da kompakt + wrap */
+#ara_content .cam-border-2026 > div[style*="display: flex"]{
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
+}
+
 /* ===== RESIM (TAM SIĞSIN) ===== */
 #ara_content .resimdiv{
   width: 100%;
-  height: 100%;              /* child2 yüksekliğine göre */
-  min-height: 330px;         /* istersen 280/350 yap */
+  height: 100%;
+  padding: 2px;                /* 🔑 kritik: resme nefes */
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,.10),
+    rgba(255,255,255,.04)
+  ) !important;
+
   border: 1px solid rgba(255,255,255,.18) !important;
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.05),
+    0 10px 30px rgba(0,0,0,.35);
 }
 
-/* img tam sığar, taşma yok */
+/* 🔥 resim DIV'in İÇİNE %100 SIĞAR */
 #ara_content #resimGoster.resimgoster{
-  display: block;
-  width: 100%;
+   width: 100%;
   height: 100%;
-  object-fit: contain;       /* ✅ tam sığdır */
-  object-position: center;
-  background: rgba(0,0,0,.20) !important;
+  object-fit: contain;
 }
+
 
 /* =========================
    TABLE – imaTable (hover YOK)
@@ -160,15 +214,15 @@ border-radius: 14px;
   white-space: nowrap;
 }
 
-/* sadece alt çizgi */
+/* sadece alt çizgi + kompakt */
 #ara_content #imaTable th,
 #ara_content #imaTable td{
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  padding: 6px 10px !important;
-  height: 28px;
+  padding: 4px 8px !important;
+  height: 26px !important;
   white-space: nowrap;
-  vertical-align: middle;
+  vertical-align: middle !important;
 }
 
 /* td cam */
@@ -188,13 +242,13 @@ border-radius: 14px;
   color: rgba(255,255,255,.78) !important;
 }
 
-/* hover tamamen kapalı (NET) */
+/* hover tamamen kapalı */
 #ara_content #imaTable tbody tr:hover > *{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
 }
 
-/* seçili satır istersen (hover yok ama selected olabilir) */
+/* seçili satır */
 #ara_content #imaTable tbody tr.selected > *{
   background: linear-gradient(135deg, rgba(56,189,248,.18), rgba(34,197,94,.12)) !important;
   color: #fff !important;
@@ -234,45 +288,14 @@ border-radius: 14px;
   font-weight: 900;
 }
 
-#ara_content .cam-border-2026{
-  margin-top: 10px;
-  padding: 10px;
-
-  
-
-  border: 1px solid rgba(56,189,248,.35); /* CAM MAVİ */
-  border-radius: 16px;
-
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.06),
-    0 12px 35px rgba(0,0,0,.45);
-
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-#ara_content input[type="date"]{
-  color-scheme: dark;
-}
-
-
-
 /* =========================
    2026 CAM – IMA TABLE (SATIR INPUTLARI KOMPAKT)
    Scope: #ara_content #imaTable
    ========================= */
 
-/* Hücre padding ve yüksekliği sıkı */
-#ara_content #imaTable th,
-#ara_content #imaTable td{
-  padding: 4px 8px !important;
-  height: 26px !important;
-  vertical-align: middle !important;
-}
-
-/* Satır içi input/select/label -> KOMPAKT */
 #ara_content #imaTable tbody .form-control,
 #ara_content #imaTable tbody .form-select{
-  height: 30px !important;          /* ✅ kompakt */
+  height: 30px !important;
   min-height: 30px !important;
   border-radius: 10px !important;
   padding: 4px 8px !important;
@@ -285,7 +308,6 @@ border-radius: 14px;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
 }
 
-/* label.form-control (readonly gibi kullandıkların) */
 #ara_content #imaTable tbody label.form-control{
   display: flex !important;
   align-items: center !important;
@@ -297,7 +319,6 @@ border-radius: 14px;
   line-height: 1;
 }
 
-/* Focus daha ince */
 #ara_content #imaTable tbody .form-control:focus,
 #ara_content #imaTable tbody .form-select:focus{
   border-color: rgba(56,189,248,.65) !important;
@@ -305,7 +326,6 @@ border-radius: 14px;
   background: rgba(8,14,26,.65) !important;
 }
 
-/* İçteki ok (▼) daha küçük + hizalı */
 #ara_content #imaTable tbody td > div[style*="position: relative"] > span{
   right: 8px !important;
   font-size: 12px !important;
@@ -313,13 +333,11 @@ border-radius: 14px;
   text-shadow: 0 0 10px rgba(0,0,0,.55);
 }
 
-/* datalist/select için sağ padding (okla çakışmasın) */
 #ara_content #imaTable tbody td > div[style*="position: relative"] input.form-control,
 #ara_content #imaTable tbody td > div[style*="position: relative"] select.form-control{
   padding-right: 26px !important;
 }
 
-/* trash butonu da kompakt */
 #ara_content #imaTable tbody .btn.btn-secondary{
   height: 30px !important;
   width: 34px !important;
@@ -338,7 +356,6 @@ border-radius: 14px;
   border-color: rgba(56,189,248,.35) !important;
 }
 
-/* tablo satırı içinde ml-2 falan taşırmasın */
 #ara_content #imaTable tbody .ml-2{ margin-left: 0 !important; }
 
 #ara_content .ima-rel{
@@ -353,22 +370,17 @@ border-radius: 14px;
   pointer-events: none;
 }
 
-
-/* kart */
+/* ===== ALT BİLGİ KARTI (ima-info) ===== */
 #ara_content .ima-info{
   padding: 10px 12px !important;
   border-radius: 18px !important;
   border: 1px solid rgba(255,255,255,.14) !important;
-  background: linear-gradient(180deg,
-    rgba(255,255,255,.08),
-    rgba(255,255,255,.04)
-  ) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)) !important;
   box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
 }
 
-/* satır: 4 kutu yan yana, küçük ekranda otomatik alta iner */
 #ara_content .ima-info .form-row{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -376,15 +388,13 @@ border-radius: 14px;
   margin-bottom: 8px !important;
 }
 
-/* her alan: CAP + VALUE aynı hizada */
 #ara_content .ima-info .ima-field{
   display: grid;
-  grid-template-columns: 92px 1fr; /* tüm satırlarda aynı kolon! */
+  grid-template-columns: 92px 1fr;
   align-items: center;
   gap: 10px;
 }
 
-/* başlık */
 #ara_content .ima-info .ima-cap{
   color: rgba(255,255,255,.72) !important;
   font-weight: 900;
@@ -394,7 +404,6 @@ border-radius: 14px;
   white-space: nowrap;
 }
 
-/* değer */
 #ara_content .ima-info .ima-val{
   display: flex;
   align-items: center;
@@ -405,10 +414,7 @@ border-radius: 14px;
 
   border-radius: 12px !important;
   border: 1px solid rgba(255,255,255,.14) !important;
-  background: linear-gradient(180deg,
-    rgba(255,255,255,.12),
-    rgba(255,255,255,.06)
-  ) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06)) !important;
 
   color: rgba(255,255,255,.94) !important;
   font-weight: 900 !important;
@@ -421,7 +427,6 @@ border-radius: 14px;
     0 10px 28px rgba(0,0,0,.28);
 }
 
-/* numeric sağa */
 #ara_content .ima-info .ima-val.is-right{
   justify-content: flex-end;
   text-align: right;
@@ -432,112 +437,123 @@ border-radius: 14px;
 
 </style>
 
+
 <div class="card p-0">
 	<div class="cardd p-4">
 		<div class="child">
 			<!-- ****************************************************************************************************** -->
 			<div class="group-box">
-				<div style="display: flex; align-items: center; ">
-					<label style="width:60px;">Fis No</label>
-					<div style="min-width: 120px;max-width: 120px;">
-						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') uretimOku()" ondblclick="yeniFis();">
+				<div style="display: flex; align-items: center;">
+					<label style="width: 60px;">Fis No</label>
+					<div style="min-width: 120px; max-width: 120px;">
+						<input class="form-control" style="font-weight: bold;"
+							maxlength="10" id="fisno"
+							onkeydown="if(event.key === 'Enter') OBS.URETIM.uretimOku()"
+							ondblclick="OBS.URETIM.yeniFis();">
 					</div>
 					<span style="padding-left: 5px;"></span>
-					<button type="button" class="btn btn-secondary ml-2" onclick="OBS.URETIM.sonfis()">
-							<i class="fa fa-refresh"></i>
+					<button type="button" class="btn btn-secondary ml-2"
+						onclick="OBS.URETIM.sonfis()">
+						<i class="fa fa-refresh"></i>
 					</button>
-					<span style="padding-left: 10px;"></span> 
-					<input type="date" id="fisTarih" class="form-control"
-							th:value="${tarih}" style="width: 125px; font-weight: bold;" />
-					
-					<span style="padding-left: 10px;"></span> 	
-					<label style="min-width:60px;">Depo</label>	
-					 <div style="position:relative; width:125px;">
-						<select class="form-select cins_bold" style="width: 120px; " id="depo" >
-    						<option th:each="kod : ${depoKodlari}" th:value="${kod.DEPO}" th:text="${kod.DEPO}"></option>
-						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>	
-					<span style="padding-left: 10px;"></span> 	
-					<label style="min-width:75px;">Ana Grup</label>	
-				 <div style="position:relative; width:125px;">	
-						<select class="form-select cins_bold" style="width: 120px;" id="anagrp" onchange="OBS.URETIM.anagrpChanged(this)">
-    						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
-						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
-						
-					<span style="padding-left: 10px;"></span> 	
-					<label style="min-width:75px;">Alt Grup</label>	
-					 <div style="position:relative; width:125px;">	
-						<select class="form-select cins_bold" style="width: 120px; " id="altgrp" disabled>
-    						
-						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
+					<span style="padding-left: 10px;"></span> <input type="date"
+						id="fisTarih" class="form-control" th:value="${tarih}"
+						style="width: 125px; font-weight: bold;" /> <span
+						style="padding-left: 10px;"></span> <label
+						style="min-width: 60px;">Depo</label>
+					<div style="position: relative; width: 125px;">
+						<select class="form-select cins_bold" style="width: 120px;"
+							id="depo">
+							<option th:each="kod : ${depoKodlari}" th:value="${kod.DEPO}"
+								th:text="${kod.DEPO}"></option>
+						</select> <span
+							style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); pointer-events: none; color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .35); font-weight: 700; line-height: 1;">▼</span>
+					</div>
+					<span style="padding-left: 10px;"></span> <label
+						style="min-width: 75px;">Ana Grup</label>
+					<div style="position: relative; width: 125px;">
+						<select class="form-select cins_bold" style="width: 120px;"
+							id="anagrp" onchange="OBS.URETIM.anagrpChanged(this)">
+							<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}"
+								th:text="${kod.ANA_GRUP}"></option>
+						</select> <span
+							style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); pointer-events: none; color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .35); font-weight: 700; line-height: 1;">▼</span>
+					</div>
+
+					<span style="padding-left: 10px;"></span> <label
+						style="min-width: 75px;">Alt Grup</label>
+					<div style="position: relative; width: 125px;">
+						<select class="form-select cins_bold" style="width: 120px;"
+							id="altgrp" disabled>
+
+						</select> <span
+							style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); pointer-events: none; color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .35); font-weight: 700; line-height: 1;">▼</span>
+					</div>
 				</div>
-				
+
 				<!-- 				Uretim Bilgileri -->
 				<div class="cam-border-2026">
-				<div style="display: flex; align-items: center;margin-top: 10px;margin-bottom: 10px;">
-					<span style="padding-left: 5px;"></span>
-					<label style="min-width: 80px;">Urun Kodu</label>
-					<input class="form-control" style="width: 100px; font-weight: bold;" maxlength="12" ondblclick="openurunkodlariModal('girenurnkod', 'imalat','ukodukod')" id="girenurnkod" onkeydown="if(event.key === 'Enter') urnaramaYap('Kodu')">
-					<span style="padding-left: 10px;"></span>
-					<button type="button" class="btn btn-secondary ml-2" onclick="">
+					<div
+						style="display: flex; align-items: center; margin-top: 10px; margin-bottom: 10px;">
+						<span style="padding-left: 5px;"></span> <label
+							style="min-width: 80px;">Urun Kodu</label> <input
+							class="form-control" style="width: 100px; font-weight: bold;"
+							maxlength="12"
+							ondblclick="openurunkodlariModal('girenurnkod', 'imalat','ukodukod')"
+							id="girenurnkod"
+							onkeydown="if(event.key === 'Enter') OBS.URETIM.urnaramaYap('Kodu')">
+						<span style="padding-left: 10px;"></span>
+						<button type="button" class="btn btn-secondary ml-2" onclick="">
 							<i class="fa fa-refresh"></i>
-					</button>
-					<span style="padding-left: 10px;"></span>
-					<label  style="min-width: 75px;">Recete Kodu</label>
-					<span style="padding-left: 10px;"></span>
-					<input class="form-control cins_bold" maxlength="10" id="recetekod" style="width: 125px;">
-					<span style="padding-left: 10px;"></span>
-					<label  style="min-width: 75px;">Uretim Miktari</label>
-					<span style="padding-left: 10px;"></span>
-					<input class="form-control saga_bold" maxlength="10" id="uretmiktar" value="0" style="width: 75px; font-weight: bold;">
-					<span style="padding-left: 10px;"></span>
-					<label id="mikbirim" style="min-width: 75px;"></label>
-					<span style="padding-left: 10px;"></span>
-					<label  style="width: 75px;">Para Cinsi</label>
-					<input class="form-control" id="dvzcins" th:value="${doviz}" style="width: 75px;">
+						</button>
+						<span style="padding-left: 10px;"></span> <label
+							style="min-width: 75px;">Recete Kodu</label> <span
+							style="padding-left: 10px;"></span> <input
+							class="form-control cins_bold" maxlength="10" id="recetekod"
+							style="width: 125px;"> <span style="padding-left: 10px;"></span>
+						<label style="min-width: 75px;">Uretim Miktari</label> <span
+							style="padding-left: 10px;"></span> <input
+							class="form-control saga_bold" maxlength="10" id="uretmiktar"
+							value="0" style="width: 75px; font-weight: bold;"> <span
+							style="padding-left: 10px;"></span> <label id="mikbirim"
+							style="min-width: 75px;"></label> <span
+							style="padding-left: 10px;"></span> <label style="width: 75px;">Para
+							Cinsi</label> <input class="form-control" id="dvzcins"
+							th:value="${doviz}" style="width: 75px;">
+					</div>
 				</div>
+
+				<div style="display: flex; align-items: center; margin-top: 7px;">
+					<label style="width: 150px;">Uygulanacak Fiat</label> <span
+						style="padding-left: 10px;"></span>
+
+					<div style="position: relative; width: 150px;">
+						<select class="form-select" id="uygulananfiat"
+							onchange="OBS.URETIM.uygulananfiatchange()">
+							<option value=""></option>
+							<option value="ortfiat">Ortalama_Gris_Fiati</option>
+							<option value="sonimalat">Son_Imalat</option>
+							<option value="fiat1">Fiat_1</option>
+							<option value="fiat2">Fiat_2</option>
+							<option value="fiat3">Fiat_3</option>
+						</select> <span
+							style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); pointer-events: none; color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .35); font-weight: 700; line-height: 1;">▼</span>
+					</div>
+
+					<span style="padding-left: 10px;"></span> <label id="datlabel"
+						style="visibility: hidden">Dikkatae Alinacak Tarih</label> <span
+						style="padding-left: 10px;"></span> <input type="date"
+						id="fiatTarih" style="visibility: hidden; width: 125px;"
+						class="form-control" value="1900-01-01" /> <span
+						style="padding-left: 100px;"></span> <label style="width: 150px;">Uretim
+						Birim Fiat</label> <span style="padding-left: 10px;"></span> <label
+						style="width: 75px; font-weight: bold;" id="birimfiati">0.00</label>
 				</div>
-				
-				<div style="display: flex;align-items:center;margin-top:7px;">
-					<label style="width: 150px;">Uygulanacak Fiat</label>
-					<span style="padding-left: 10px;"></span>
-					
-					<select class="form-select" id="uygulananfiat" onchange="uygulananfiatchange()" style="width: 150px;">
-						<option value=""></option>
-						<option value="ortfiat">Ortalama_Gris_Fiati</option>
-						<option value="sonimalat">Son_Imalat</option>
-						<option value="fiat1">Fiat_1</option>
-						<option value="fiat2">Fiat_2</option>
-						<option value="fiat3">Fiat_3</option>
-					</select>
-						
-					<span style="padding-left: 10px;"></span>
-					<label id="datlabel"  style="visibility:hidden">Dikkatae Alinacak Tarih</label>
-					<span style="padding-left: 10px;"></span>
-					<input type="date" id="fiatTarih"  style="visibility:hidden;width: 125px;" class="form-control"
-							value="1900-01-01"  />
-							
-					<span style="padding-left: 100px;"></span>
-					<label style="width: 150px;">Uretim Birim Fiat</label>
-					<span style="padding-left: 10px;"></span>
-					<label style="width: 75px; font-weight: bold;" id="birimfiati">0.00</label>
-				</div>	
-				<div style="display: flex;align-items:center;margin-top:7px;">
-					<label style="width: 150px;">Aciklama</label>
-					<span style="padding-left: 10px;"></span>
-					<input class="form-control" maxlength="50" id="aciklama" style="width: 300px;">
-				</div>	
+				<div style="display: flex; align-items: center; margin-top: 7px;">
+					<label style="width: 150px;">Aciklama</label> <span
+						style="padding-left: 10px;"></span> <input class="form-control"
+						maxlength="50" id="aciklama" style="width: 300px;">
+				</div>
 			</div>
 
 			<div class="group-box">
@@ -552,41 +568,48 @@ border-radius: 14px;
 
 		</div>
 		<div class="child2">
-				<div class="resimdiv">
- 					<img id="resimGoster" class="resimgoster"  src="" alt="Base64 Resim" style="display: none;" />
-     			</div>
+			<div class="resimdiv">
+				<img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim"
+					style="display: none;" />
+			</div>
 		</div>
 	</div>
 </div>
 <div id="errorDiv"></div>
-		
-<div style="display: flex;align-items:center;margin-top:7px;">
-	<button type="button" class="btn btn-secondary ml-2" style="margin-top: 5px;" onclick="OBS.URETIM.satirekle()"><i class="fa fa-plus"></i></button>
+
+<div style="display: flex; align-items: center; margin-top: 7px;">
+	<button type="button" class="btn btn-secondary ml-2"
+		style="margin-top: 5px;" onclick="OBS.URETIM.satirekle()">
+		<i class="fa fa-plus"></i>
+	</button>
 	<span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" style="margin-top: 5px;" onclick="OBS.URETIM.uretimYap()"><i class="fa fa-archive"></i></button>
+	<button type="button" class="btn btn-secondary ml-2"
+		style="margin-top: 5px;" onclick="OBS.URETIM.uretimYap()">
+		<i class="fa fa-archive"></i>
+	</button>
 
 </div>
 <table class="table table-bordered" id="imaTable"
 	style="margin-top: 5px;">
 	<thead class="thead-dark">
 		<tr>
-			<th style="width:25px"></th>
-			<th style="width:5%">TUR</th>
-			<th style="width:7%">URUN KODU</th>
+			<th style="width: 25px"></th>
+			<th style="width: 5%">TUR</th>
+			<th style="width: 7%">URUN KODU</th>
 			<th>ADI</th>
-			<th style="width:20%">IZAHAT</th>
-			<th style="width:10%">DEPO</th>
-			<th class="double-column" style="width:7%">MIKTAR</th>
-			<th style="width:6%">BIRIM</th>
-			<th class="double-column" style="width:10%">FIAT</th>
-			<th class="double-column" style="width:10%">TUTAR</th>
+			<th style="width: 20%">IZAHAT</th>
+			<th style="width: 10%">DEPO</th>
+			<th class="double-column" style="width: 7%">MIKTAR</th>
+			<th style="width: 6%">BIRIM</th>
+			<th class="double-column" style="width: 10%">FIAT</th>
+			<th class="double-column" style="width: 10%">TUTAR</th>
 		</tr>
 	</thead>
 	<tbody id="tbody">
 	</tbody>
 	<tfoot>
 		<tr>
-		<td></td>
+			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
@@ -599,48 +622,45 @@ border-radius: 14px;
 		</tr>
 	</tfoot>
 </table>
- <div class="card p-4 ima-info">
-  <div class="form-row">
-    <div class="ima-field">
-      <span class="ima-cap">Adi :</span>
-      <label class="ima-val" id="adi">...</label>
-    </div>
+<div class="card p-4 ima-info">
+	<div class="form-row">
+		<div class="ima-field">
+			<span class="ima-cap">Adi :</span> <label class="ima-val" id="adi">...</label>
+		</div>
 
-    <div class="ima-field">
-      <span class="ima-cap">Birim :</span>
-      <label class="ima-val" id="birim">...</label>
-    </div>
+		<div class="ima-field">
+			<span class="ima-cap">Birim :</span> <label class="ima-val"
+				id="birim">...</label>
+		</div>
 
-    <div class="ima-field">
-      <span class="ima-cap">Ana Grup :</span>
-      <label class="ima-val" id="anagrpl">...</label>
-    </div>
+		<div class="ima-field">
+			<span class="ima-cap">Ana Grup :</span> <label class="ima-val"
+				id="anagrpl">...</label>
+		</div>
 
-    <div class="ima-field">
-      <span class="ima-cap">Agirlik :</span>
-      <label class="ima-val is-right" id="agirlik">...</label>
-    </div>
-  </div>
+		<div class="ima-field">
+			<span class="ima-cap">Agirlik :</span> <label
+				class="ima-val is-right" id="agirlik">...</label>
+		</div>
+	</div>
 
-  <div class="form-row">
-    <div class="ima-field">
-      <span class="ima-cap">Barkod :</span>
-      <label class="ima-val" id="barkod">...</label>
-    </div>
+	<div class="form-row">
+		<div class="ima-field">
+			<span class="ima-cap">Barkod :</span> <label class="ima-val"
+				id="barkod">...</label>
+		</div>
 
-    <div class="ima-field">
-      <span class="ima-cap">Sinif :</span>
-      <label class="ima-val" id="sinif">...</label>
-    </div>
+		<div class="ima-field">
+			<span class="ima-cap">Sinif :</span> <label class="ima-val"
+				id="sinif">...</label>
+		</div>
 
-    <div class="ima-field">
-      <span class="ima-cap">Alt Grup :</span>
-      <label class="ima-val" id="altgrpl">...</label>
-    </div>
-    <div class="ima-field">
-      
-    </div>
-  </div>
+		<div class="ima-field">
+			<span class="ima-cap">Alt Grup :</span> <label class="ima-val"
+				id="altgrpl">...</label>
+		</div>
+		<div class="ima-field"></div>
+	</div>
 </div>
 
 <input type="hidden" id="uretimBilgi"  value="">
