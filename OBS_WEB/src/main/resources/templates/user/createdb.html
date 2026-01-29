@@ -26,7 +26,7 @@
 
 /* centered-div: daha temiz */
 #ara_content .centered-div{
-  width: min(860px, 100%);
+  width: 40%;
   margin: 0 auto;
   box-sizing: border-box;
   text-align: left;            /* center değil: daha premium */
@@ -45,8 +45,8 @@
 /* label pill (input-group-text) */
 #ara_content .input-group-text{
   min-width: 140px !important;
-  height: 48px;
-  border-radius: 14px;
+  height: 34px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(255,255,255,.06);
   color: rgba(255,255,255,.86);
@@ -59,8 +59,8 @@
 /* input/select */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 48px;
-  border-radius: 14px;
+  height: 38px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: var(--text);
@@ -106,8 +106,8 @@
 /* ikon buton */
 #ara_content .aramagroup-box .btn{
   width: 54px;
-  height: 46px;
-  border-radius: 14px;
+  height: 40px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.18) !important;
   background: rgba(255,255,255,.08) !important;
   color: rgba(255,255,255,.92) !important;
@@ -163,9 +163,9 @@ display:none;
 <div class="card p-4 d-flex flex-row gap-3">
     <div class="centered-div">
         <div class="group-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
+           
             <span class="input-group-text" style="min-width:120px;">Modul</span>
-            <span style="padding-left: 5px;"></span>
+           
           <div style="position:relative; flex:1;width:100%;">
            <select class="form-select" id="user_modul" name="user_modul">
 				<option value="Cari Hesap">Cari Hesap</option>
@@ -183,9 +183,9 @@ display:none;
            </div>
          </div>
         <div class="group-box">
-            <span style="padding-left: 5px;"></span>
+            
             <span class="input-group-text" style="min-width:120px;">Unvan</span>
-            <span style="padding-left: 5px;"></span>
+           
              <div style="position:relative; flex:1;width:100%;">
             <select class="form-select" id="hangi_sql" name="hangi_sql" onchange=serversuperviserdurum() >
 				<option value="MS SQL">MS SQL</option>
@@ -199,41 +199,41 @@ display:none;
         </div>
         
         <div class="group-box">
-            <span style="padding-left: 5px;"></span>
+           
             <span class="input-group-text" style="min-width:120px;">Kodu</span>
-            <span style="padding-left: 5px;"></span>
+          
             <input 	type="text" class="form-control"  id="user_prog_kodu" maxlength="10">
         </div>
         
         <div class="group-box">
-            <span style="padding-left: 5px;"></span>
+           
             <span class="input-group-text" style="min-width:120px;">Server Kullanici</span>
-            <span style="padding-left: 5px;"></span>
+           
             <input type="text" class="form-control" id="user_server" maxlength="50">
         </div>
 
         <div class="group-box">
-            <span style="padding-left: 5px;"></span>
+            
             <span class="input-group-text" style="min-width:120px;">Şifre Sunucu</span>
-            <span style="padding-left: 5px;"></span>
+          
             <input 	type="password" class="form-control" id="user_pwd_server" maxlength="50">
 						
         </div>
         <div class="group-box">
-            <span style="padding-left: 5px;"></span>
+          
             <span class="input-group-text" style="min-width:120px;">Ip</span>
-            <span style="padding-left: 5px;"></span>
+           
             <input type="text" 	class="form-control" id="user_ip" maxlength="50">
         </div>
         <div class="group-box" id="superviserdiv" style="visibility: hidden; opacity: 0; transition: all 0.3s ease;" >
-            <span style="padding-left: 5px;"></span>
+           
             <span class="input-group-text" style="min-width:120px;">Superviser</span>
-            <span style="padding-left: 5px;"></span>
+            
             <input type="text" 	class="form-control" id="superviser" maxlength="50">
         </div>
         
         <div class="aramagroup-box" style="margin-top:5px;">
-            <span style="padding-left: 5px;"></span>
+           
             <button type="button" id="serverButton" class="btn btn-secondary ml-2"  ><i class="fa fa-server"></i>	</button>
             <span style="padding-left: 5px;"></span>
             <button type="button" id="dbKontrolButton" class="btn btn-secondary ml-2" disabled  ><i class="fa fa-database"></i>	</button>
