@@ -20,23 +20,7 @@ async function raporYoket(raporid) {
 			errorDiv.innerText = response.errorMessage || "Bir hata oluştu.";
 		} else {
 			const url = "user/gidenraporlar";
-			$.ajax({
-				url: url,
-				type: "GET",
-				success: function (data) {
-					if (data.includes('<form') && data.includes('name="username"')) {
-						window.location.href = "/login";
-					} else {
-						$('#ara_content').html(data);
-					}
-				},
-				error: function (xhr) {
-					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.statusText + '</h2>');
-				},
-				complete: function () {
-					document.body.style.cursor = "default";
-				},
-			});
+			if (window.sayfaYukle) window.sayfaYukle(url);
 		}
 	} catch (error) {
 		errorDiv.style.display = "block";

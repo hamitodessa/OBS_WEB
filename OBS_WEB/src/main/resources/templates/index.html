@@ -666,6 +666,7 @@
           <a href="" class="changeLink" data-url="/user/createdb"><span>Yeni Veritabani Olustur</span></a>
           <a href="" class="changeLink" data-url="/user/copyuser"><span>Kullanici Kopyala</span></a>
           <a href="" class="changeLink" data-url="/user/deleteaccount"><span>Hesap Silme</span></a>
+          <a th:if="${menuitemvisible}" href="" class="changeLink" data-url="/user/userlist"><span>Kullanici Listesi</span></a>
         </div>
       </details>
 
@@ -1040,6 +1041,8 @@
     },      
     
     
+   "/user/gidenraporlar": {js: "/obs_js_files/giden_rapor/gidenrapor.js"},
+    
     "/user/mailgonderme": {
       js: "/obs_js_files/sendemail/sendemail.js",
       init: () => {
@@ -1071,6 +1074,12 @@
         OBS?.USERIZIN?.adminbaglihesapoku?.();
       }
     },
+    "/user/userlist": {
+        js: "/obs_js_files/user/userlist.js",
+        init: () => {
+          OBS?.USERS_LIST?.init?.();
+        }
+      },
 
     "/user/emailsettings": {
       js: "/obs_js_files/user/emailayar.js",

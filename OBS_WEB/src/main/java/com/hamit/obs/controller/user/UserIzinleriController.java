@@ -10,15 +10,19 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
+import com.hamit.obs.dto.user.UserRowDTO;
 import com.hamit.obs.dto.user.User_DetailsDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.model.user.RolEnum;
@@ -32,6 +36,7 @@ import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.kur.KurService;
 import com.hamit.obs.service.user.UserDetailsService;
+import com.hamit.obs.service.user.UserListService;
 import com.hamit.obs.service.user.UserService;
 
 @Controller
@@ -54,6 +59,8 @@ public class UserIzinleriController {
 	private KeresteService keresteService;
 	@Autowired
 	private UserDetailsService userDetailsService;
+	@Autowired
+	private UserListService userListService;
 
 	@GetMapping("user/userizinler")
 	public String user_detailss() {
@@ -195,4 +202,27 @@ public class UserIzinleriController {
 		}
 		return response;
 	}
+	
+	@GetMapping("user/userlist")
+	public String user_list() {
+	        return "user/userlist";
+    
+	}
+	
+	@GetMapping("user/list")
+	public ResponseEntity<List<UserRowDTO>> list() {
+		System.out.println("213");
+		return ResponseEntity.ok(userListService.listUsers());
+	}
+
+	// Silme istersen:
+	// DELETE /user/api/{id}
+	@DeleteMapping("user/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		userListService.deleteUser(id);
+		return ResponseEntity.noContent().build();
+	}
+
+
+
 }

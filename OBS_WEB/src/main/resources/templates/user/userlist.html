@@ -1,0 +1,257 @@
+<!-- users_list.html  (Dinamik: #ara_content içine basılacak) -->
+
+<div class="cam-card users-card">
+  <div class="cam-card-head">
+    <div class="cam-title">
+      <div class="cam-title-main">Kullanıcılar</div>
+      <div class="cam-title-sub">Sistemde kayıtlı kullanıcı listesi</div>
+    </div>
+
+    <div class="cam-actions">
+      <input id="users_q" class="cam-input" type="text" placeholder="Ara: ad / mail / modül..." autocomplete="off">
+      <button id="users_refresh" class="cam-btn cam-btn-ghost" type="button">Yenile</button>
+    </div>
+  </div>
+
+  <div id="users_error" class="cam-alert cam-alert-danger" style="display:none;"></div>
+
+  <div class="table-container">
+    <table class="cam-table" id="users_table">
+      <thead>
+        <tr>
+          <th class="col-del">Sil</th>
+          <th class="col-id">ID</th>
+          <th>Ad Soyad</th>
+          <th>E-posta</th>
+        </tr>
+      </thead>
+      <tbody id="users_tbody">
+        <tr>
+          <td colspan="8" class="cam-td-muted">Yükleniyor…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cam-card-foot">
+    <div class="cam-meta">
+      <span id="users_count">0</span> kayıt
+    </div>
+  </div>
+</div>
+
+<!-- Sayfaya özel küçük dokunuşlar (global CAM css’in varsa istersen kaldır) -->
+<style>
+  #ara_content .users-card { width: 100%; }
+  #ara_content .cam-card-head{
+    display:flex; gap:14px; align-items:center; justify-content:space-between;
+    padding:14px 14px 10px 14px;
+  }
+  #ara_content .cam-actions{ display:flex; gap:10px; align-items:center; }
+  #ara_content .cam-input{
+    min-width: 280px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: inherit;
+    outline: none;
+  }
+  #ara_content .cam-btn{
+    border-radius: 12px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(255,255,255,.10);
+    cursor:pointer;
+  }
+  #ara_content .cam-btn-ghost{
+    background: rgba(0,0,0,.12);
+  }
+  /* =========================
+   USERS TABLE (2026 CAM)
+   ========================= */
+
+#ara_content .cam-table-wrap{
+  width:100%;
+  max-height: calc(100vh - 210px); /* istersen değiştir */
+  overflow:auto;
+  border-radius:16px;
+}
+
+/* Table */
+#ara_content #users_table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:16px;
+  overflow:hidden;
+  font-size:13px;
+}
+
+/* Cells */
+#ara_content #users_table th,
+#ara_content #users_table td{
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 6px 10px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Header sticky */
+#ara_content #users_table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 900;
+  text-align: left;
+}
+
+/* Body base */
+#ara_content #users_table tbody td{
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.82);
+  transition: color .12s ease, background .12s ease;
+  height: 26px;
+  line-height: 18px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+/* Hover foreground fix */
+#ara_content #users_table tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #ffffff !important;
+}
+
+/* Seçili satır (kalıcı) */
+#ara_content #users_table tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color: #ffffff !important;
+}
+
+/* Kolon genişlikleri */
+#ara_content #users_table th.col-del,
+#ara_content #users_table td.col-del{
+  width:64px;
+  text-align:center;
+}
+
+#ara_content #users_table th.col-id,
+#ara_content #users_table td.col-id{
+  width:80px;
+}
+
+#ara_content #users_table th.col-active,
+#ara_content #users_table td.col-active{
+  width:100px;
+}
+
+#ara_content #users_table th.col-date,
+#ara_content #users_table td.col-date{
+  width:180px;
+}
+
+/* Delete icon button (tablo içinde) */
+#ara_content #users_table .cam-iconbtn{
+  width: 32px;
+  height: 32px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  cursor:pointer;
+}
+#ara_content #users_table .cam-iconbtn:hover{
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.22);
+}
+
+/* Roles / pill görünümü CAM */
+#ara_content #users_table .cam-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  font-weight: 700;
+}
+#ara_content #users_table .cam-pill.ok{
+  box-shadow: 0 0 0 1px rgba(80,255,190,.18) inset;
+}
+#ara_content #users_table .cam-pill.no{
+  box-shadow: 0 0 0 1px rgba(255,110,120,.18) inset;
+}
+
+/* Boş/Loading satırı */
+#ara_content #users_table .cam-td-muted{
+  text-align:center;
+  opacity:.78;
+  padding: 18px 10px;
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.75);
+}
+
+/* Numeric kolon (ID gibi) */
+#ara_content #users_table .double-column{
+  text-align:right;
+  font-variant-numeric: tabular-nums;
+}
+
+  #ara_content .cam-td-muted{ opacity:.75; text-align:center; padding: 18px 10px; }
+  #ara_content .col-del{ width:64px; text-align:center; }
+  #ara_content .col-id{ width:80px; }
+  #ara_content .col-active{ width:90px; }
+  #ara_content .col-date{ width:180px; }
+
+  #ara_content .cam-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(255,255,255,.08);
+    font-weight: 600;
+  }
+  #ara_content .cam-pill.ok{ box-shadow: 0 0 0 1px rgba(80,255,190,.18) inset; }
+  #ara_content .cam-pill.no{ box-shadow: 0 0 0 1px rgba(255,110,120,.18) inset; }
+
+  #ara_content .cam-iconbtn{
+    width: 36px; height: 36px;
+    display:inline-flex; align-items:center; justify-content:center;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(255,255,255,.08);
+    cursor:pointer;
+  }
+  #ara_content .cam-iconbtn:hover{ background: rgba(255,255,255,.12); }
+  #ara_content .cam-alert{
+    margin: 10px 14px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,120,120,.30);
+    background: rgba(255,80,80,.12);
+  }
+  #ara_content .cam-card-foot{
+    padding: 10px 14px 14px 14px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  
+  #ara_content #users_refresh{
+  color: rgba(255,255,255,.92);          /* yazı net */
+  text-shadow: 0 1px 2px rgba(0,0,0,.35); /* cam üstünde okunur */
+}
+
+#ara_content #users_refresh:hover{
+  color: #ffffff;
+  background: rgba(255,255,255,.16);
+  border-color: rgba(255,255,255,.28);
+}
+  
+</style>

@@ -31,7 +31,7 @@ public class DeleteAccountController {
 
 	@GetMapping("user/accountdelete")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<?> raporSil() {
+	public ResponseEntity<?> userSil() {
 		try {
 			User user = userService.getCurrentUser();
 			userService.deleteUser(user);
