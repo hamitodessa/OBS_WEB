@@ -13,7 +13,7 @@
   -webkit-backdrop-filter: blur(14px);
 
   /* SCROLL */
-  max-height: 85vh;          /* dikey scroll için şart */
+  max-height: 65vh;          /* dikey scroll için şart */
   overflow-y: auto;
   overflow-x: auto;
 
@@ -26,11 +26,13 @@
   height: 10px;
 }
 #ara_content .card.p-4::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.25);
-  border-radius: 10px;
+  background: rgba(255,255,255,.18);
+  border:2px solid rgba(0,0,0,.20);
+  border-radius:999px;
 }
 #ara_content .card.p-4::-webkit-scrollbar-track{
-  background: transparent;
+   background: rgba(0,0,0,.18);
+  border-radius:999px;
 }
 
 
@@ -47,6 +49,7 @@
   margin-top: 5px;
   
   width: 50%;
+  min-width:700px;
   box-sizing: border-box;
 }
 
@@ -320,8 +323,6 @@
 <link rel="stylesheet" href="style/yenihsppln.css" />
 
 <div class="card p-4">
-	
-	
 			<!-- İlk Child -->
 				<div class="group-box">
 					<div class="form-row">
@@ -331,18 +332,18 @@
 						<button type="button" class="btn btn-secondary ml-2" onclick="dekgerifisNo()">
 							<i class="fa fa-backward"></i>
 						</button>
-						<span style="padding-left: 5px;"></span>
+						
 						<button type="button" class="btn btn-secondary ml-2" onclick="deksonfisNo()">
 							<i class="fa fa-refresh"></i>
 						</button>
-						<span style="padding-left: 5px;"></span>
+						
 						<button type="button" class="btn btn-secondary ml-2" onclick="dekilerifisNo()">
 							<i class="fa fa-forward"></i>
 						</button>
-						<span style="padding-left: 5px;"></span>
+						
 						<input type="text" id="evrakNo"  name="evrakNo" placeholder="0" onkeypress="checkEnter(event)" onkeydown="allowOnlyNumbers(event)"
 							class="form-control saga-bold" style="width: 100px;" />
-						<span style="padding-left: 5px;"></span>
+						
 						<button type="button" id="btnYeni" class="btn btn-secondary ml-2" onclick="dekyenifis()" ><i class="fa fa-plus"></i>	</button>
 					</div>
 				</div>
@@ -377,7 +378,7 @@
 							<option value="SS">SS</option>
 						</select> 
 						
-						<span style="padding-left: 10px;"></span>
+						
 						<input class="form-control saga-bold" style="width: 100px" type="number" id="borcKur" value="1.0000" disabled /> 
 						<input class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)" id="borcTutar" value="0.00" ondblclick="tutarKontrolBorc()" disabled />
 					</div>
@@ -413,7 +414,7 @@
 							<option value="SS">SS</option>
 						</select> 
 							
-						<span style="padding-left: 10px;"></span>
+						
 						<input class="form-control saga-bold" style="width: 100px" type="number" id="alacakKur" value="1.0000" disabled />
 						<input	ondblclick="tutarKontrolAlacak()" class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)"	id="alacakTutar" value="0.00" disabled />
 					</div>

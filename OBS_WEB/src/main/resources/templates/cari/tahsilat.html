@@ -17,6 +17,7 @@
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+
 }
 
 /* ===== NAV TABS ===== */
@@ -58,7 +59,7 @@
 
 /* group-box artık “satır” (mantık aynı) */
 #ara_content .group-box{
-  border: none !important;
+ 
   padding: 6px 4px;
   margin: 0 0 8px 0;
   width: 100%;
@@ -66,6 +67,9 @@
 
   /* SADECE RENK STANDARD (arka planı bozmaz, cam dili verir) */
   background: rgba(255,255,255,.02);
+  
+   border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
 }
 
 /* ===== ROW ===== */
@@ -87,8 +91,8 @@
 /* ===== INPUT / SELECT ===== */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 46px;
-  border-radius: 14px;
+  height: 38px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -131,9 +135,9 @@
 
 /* ===== BUTTONS ===== */
 #ara_content .btn.btn-secondary{
-  height: 46px;
-  min-width: 46px;
-  border-radius: 14px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.18);
   background: rgba(255,255,255,.08);
   color: rgba(255,255,255,.92);
@@ -149,8 +153,8 @@
 }
 
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 40px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.18);
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
@@ -196,9 +200,10 @@
    ========================= */
 #ara_content #cekTable{
   width: 100%;
-  margin-top: 8px;
+  margin-top: 5px;
   border-collapse: separate;
   border-spacing: 0;
+  
 }
 
 /* header */
@@ -212,12 +217,14 @@
   font-weight: 900;
   text-align: left;
   white-space: nowrap;
+  border: 1px solid rgba(255,255,255,.08);
 }
 
 /* sadece alt çizgi */
 #ara_content #cekTable th,
 #ara_content #cekTable td{
-  border: 0 !important;
+  /* border: 0 !important; */
+ 
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
   padding: 6px 10px;
   height: 28px;
@@ -275,6 +282,18 @@
   text-shadow: 0 2px 10px rgba(56,189,248,.75);
 }
 
+#ara_content .select-arrow{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(255,255,255,.85);
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
+}
 /* tfoot hover / focus / active KAPALI */
 #ara_content #cekTable tfoot tr:hover td,
 #ara_content #cekTable tfoot tr:focus td{
@@ -334,8 +353,6 @@
   <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
 
     <div class="child">
-
-      <!-- SATIR 1: tarih + nav + evrak + yeni -->
       <div class="group-box">
         <div class="form-row">
           <input type="date" id="tahTarih" class="form-control"
@@ -359,29 +376,34 @@
       <!-- SATIR 2: tah/ted + tur + tutar -->
       <div class="group-box">
         <div class="form-row">
+        <div style="position: relative; width: 160px;">
           <select class="form-select" style="width: 160px;" id="tah_ted" name="tah_ted">
             <option value="Tahsilat">Tahsilat</option>
             <option value="Tediye">Tediye</option>
-          </select>
+          </select> 
+           <span class="select-arrow">▼</span>
+		</div>
 
+		<div style="position: relative; width: 160px;">
           <select class="form-select" style="width: 160px;" id="tur" name="tur" onchange="turChange()">
             <option value="Nakit">Nakit</option>
             <option value="Cek">Cek</option>
             <option value="Kredi Karti">Kredi Karti</option>
-          </select>
-
+          </select> 
+           <span class="select-arrow">▼</span>		
+           	</div>
           <div style="flex:1 1 auto;"></div>
 
           <input type="text" id="tutar" onblur="formatInputBox2(this)"
                  class="form-control saga-bold" value="0.00"
-                 style="width: 180px;" />
+                 style="width: 200px;" />
         </div>
       </div>
 
       <!-- SATIR 3: Cari kod + Adres kod -->
 			<div class="group-box">
 				<div class="form-row" style="gap: 14px;">
-					<label style="width: 80px;">Cari Kodu</label>
+					<label style="width: 70px;">Cari Kodu</label>
 					<div style="position: relative; width: 140px;">
 						<input class="form-control cins_bold"
 							ondblclick="openSecondModal('tcheskod', 'tahsilat')"
@@ -390,20 +412,16 @@
 						<datalist id="chkoduOptions">
 							<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
 						</datalist>
-						<span
-							style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
-							▼ </span>
+						 <span class="select-arrow">▼</span>
 					</div>
-					<div style="flex: 1 1 auto;"></div>
-					<label style="width: 90px;">Adres Kodu</label>
+					<div style="width:140px;"></div>
+					<label style="width: 80px;">Adres Kodu</label>
 					<div style="position: relative; width: 140px;">
 						<input class="form-control cins_bold"
 							oninput="adrhesapAdiOgren('adresheskod','lbladrheskod')"
 							list="adreskoduOptions" maxlength="12" id="adresheskod">
 						<datalist id="adreskoduOptions"></datalist>
-						<span
-							style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
-							▼ </span>
+						 <span class="select-arrow">▼</span>
 					</div>
 				</div>
 				<div class="form-row" style="margin-top: 6px;">
@@ -416,7 +434,10 @@
 			<!-- SATIR 4: Döviz + çek info + pos banka -->
 			<div class="group-box">
 				<div class="form-row">
-					<label style="width: 95px;">Doviz Cinsi</label> <select
+					<label style="width: 95px;">Doviz Cinsi</label>
+					
+					<div style="position: relative; width: 110px;">
+					 <select
 						class="form-select" style="width: 110px;" id="dvz_cins"
 						name="dvz_cins">
 						<option value="TL">TL</option>
@@ -424,6 +445,8 @@
 						<option value="EUR">EUR</option>
 						<option value="RUB">RUB</option>
 					</select>
+					 <span class="select-arrow">▼</span>
+					</div>
 					<!-- senin JS'in beklediği LABEL div -->
 					<div class="col" id="divcekbilgi" style="display: none;">
 						<label style="width: 100px">Cek Sayisi</label>
@@ -446,10 +469,8 @@
 							<datalist id="posbankaOptions">
 								<option th:each="kod : ${nameBanks}" th:value="${kod.BANKA}"></option>
 							</datalist>
-							<span
-								style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">
-								▼ </span>
-						</div>
+							 <span class="select-arrow">▼</span>
+						</div>	 
 					</div>
 				</div>
 			</div>
@@ -481,11 +502,11 @@
   <!-- ================= TAB 2 ================= -->
   <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
 
-    <button type="button" class="btn btn-secondary" onclick="addRow()">
+    <button type="button" class="btn btn-secondary" style="margin-top:5px;" onclick="addRow()">
       <i class="fa fa-plus"></i>
     </button>
 
-    <div style="margin-top:8px; border-radius:16px; overflow:auto; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.03);">
+    <div style="margin-top:8px; border-radius:10px; overflow:auto; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.03);">
       <table class="table" id="cekTable">
         <thead class="thead-dark">
           <tr>

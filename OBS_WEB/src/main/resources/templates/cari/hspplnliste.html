@@ -27,7 +27,7 @@
 
 /* CONTAINER */
 .container{
-  height: 100vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -38,6 +38,7 @@
 
 /* TABLE CONTAINER */
 .table-container{
+ margin-top: 10px;
   flex-grow: 1;
   overflow: auto;
   border-radius: 16px;
@@ -46,15 +47,7 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
 }
 
-/* ===== TABLE WRAP ===== */
-#ara_content .table-container{
-  flex-grow: 1;
-  overflow: auto;
-  border: 1px solid rgba(255,255,255,.14);
-  margin-top: 10px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.03);
-}
+
 
 /* ===== TABLE ===== */
 #ara_content table{
@@ -123,14 +116,15 @@ td img{
 }
 
 /* SCROLLBAR */
-.table-container::-webkit-scrollbar{ height: 10px; width: 10px; }
-.table-container::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.22);
-  border-radius: 10px;
+#ara_content .table-container::-webkit-scrollbar{ height: 10px; width: 10px; }
+#ara_content .table-container::-webkit-scrollbar-thumb{
+   background: rgba(255,255,255,.18);
+  border:2px solid rgba(0,0,0,.20);
+  border-radius:999px;
 }
-.table-container::-webkit-scrollbar-track{
-  background: rgba(0,0,0,.15);
-  border-radius: 10px;
+#ara_content .table-container::-webkit-scrollbar-track{
+  background: rgba(0,0,0,.18);
+  border-radius:999px;
 }
 
 /* ERROR */
@@ -156,7 +150,7 @@ td img{
 
 <div class="container">
   <div class="table-container">
-    <div style="overflow-x: auto; width: 100%; height: 650px">
+   
       <table class="table table-bordered table-hover table-row-height" id="myTable">
         <thead class="thead-dark">
           <tr>
@@ -223,6 +217,6 @@ td img{
           <td th:text="${hsppln.USER}"></td>
         </tr>
       </table>
-    </div>
+   
   </div>
 </div>
