@@ -176,44 +176,7 @@ adrhesapAdiOgren = async function (inputId, targetLabelId1) {
 
 async function mailsayfasiYukle(url) {
 	if (window.sayfaYukle) window.sayfaYukle(url);
-	/*
-	try {
-		$('html, body').css('cursor', 'wait');
-		$.ajax({
-			url: url,
-			type: "GET",
-			success: function (data) {
-				if (data.includes('<form') && data.includes('name="username"')) {
-					window.location.href = "/login";
-				} else {
-					$('#ara_content').html(data);
-				}
-			},
-			error: function (xhr) {
-				if (xhr.status === 401) {
-					window.location.href = "/login";
-				} else {
-					$('#ara_content').html('<h2>Bir hata oluştu: ' + xhr.status + ' - ' + xhr.statusText + '</h2>');
-				}
-			},
-			complete: function () {
-				//$('body').css('cursor', 'default');
-			}
-		});
-	} catch (error) {
-		$('#ara_content').html(
-			`<h2>Bir hata oluştu: ${error.message}</h2>`
-		);
-	} finally {
-		//$('body').css('cursor', 'default');
-	}
-	*/
 }
-
-
-
-
-
 
 async function cariBaslik() {
 	try {
