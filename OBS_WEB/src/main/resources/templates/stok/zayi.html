@@ -2,29 +2,29 @@
 
 <style>
 /* =========================
-   2026 CAM – ZAI
-   wrapper: #ara_content
-   hover: YOK
+   2026 CAM – ZAI (CLEAN FINAL)
+   Scope: #ara_content
    ========================= */
 
 #ara_content{ color: rgba(255,255,255,.92); }
 
-/* CARD */
-#ara_content .card{
+/* Card */
+#ara_content .cam-card{
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  width:80%;
 }
 
-/* NAV TABS */
-#ara_content .nav-tabs{
+/* Tabs */
+#ara_content .cam-tabs{
   border-bottom: 1px solid rgba(255,255,255,.14) !important;
   gap: 8px;
 }
-#ara_content .nav-tabs .nav-link{
+#ara_content .cam-tabs .nav-link{
   border: 1px solid rgba(255,255,255,.14) !important;
   border-bottom: none !important;
   background: rgba(255,255,255,.06) !important;
@@ -33,85 +33,83 @@
   font-weight: 900;
   padding: 10px 14px;
 }
-#ara_content .nav-tabs .nav-link.active{
+#ara_content .cam-tabs .nav-link.active{
   background: linear-gradient(135deg, rgba(56,189,248,.28), rgba(34,197,94,.18)) !important;
   color: #fff !important;
   box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-/* LAYOUT */
-#ara_content .cardd{ display:flex; gap:12px; align-items:flex-start; }
-#ara_content .child{ width:100% !important; border:none !important; background:transparent !important; padding:0 !important; }
-
-/* LABEL */
+/* Base label */
 #ara_content label{
   color: rgba(255,255,255,.84);
-  font-weight: 800;
-  font-size: 13px;
+  font-weight: 900;
+  font-size: 12px;
 }
 
-/* INPUT / SELECT */
-#ara_content .form-control,
-#ara_content .form-select{
-  height: 44px;
-  border-radius: 14px;
+/* Inputs / Select */
+#ara_content .cam-input,
+#ara_content .cam-select{
+  height: 30px;
+  min-height: 30px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
-  padding: 10px 14px !important;
+  padding: 6px 10px !important;
   outline: none;
+  font-weight: 900;
+  font-size: 12px;
+  box-sizing: border-box;
 }
-#ara_content .form-control:focus,
-#ara_content .form-select:focus{
+#ara_content .cam-input:focus,
+#ara_content .cam-select:focus{
   border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  box-shadow: 0 0 0 4px rgba(56,189,248,.16);
   background: rgba(8,14,26,.65) !important;
   color:#fff !important;
 }
 #ara_content input[type="date"]{ color-scheme: dark; }
 
-/* input-group-text */
-#ara_content .input-group-text{
-  height: 44px;
-  border-radius: 14px;
+/* Input group addon */
+#ara_content .cam-addon{
+  height: 30px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.45) !important;
   color: rgba(255,255,255,.88) !important;
   font-weight: 900;
-  letter-spacing: .2px;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  font-size: 12px;
 }
 
-/* BUTTONS */
+/* Buttons (bootstrap override) */
 #ara_content .btn-primary{
-border-radius: 14px;
+  border-radius: 10px;
   font-weight: 900;
   height: 40px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
 }
-#ara_content .btn-primary:hover{
-  background: rgba(56,189,248,.26) !important;
-  border-color: rgba(56,189,248,.55) !important;
-  transform: translateY(-1px);
-}
-
-
 #ara_content .btn.btn-secondary{
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(255,255,255,.06) !important;
   color: rgba(255,255,255,.88) !important;
 }
-#ara_content .btn.btn-secondary:hover{
-  background: rgba(56,189,248,.12) !important;
-  border-color: rgba(56,189,248,.35) !important;
+
+/* Icon buttons (trash/plus/refresh) */
+#ara_content .cam-icon{
+  height: 30px !important;
+  width: 34px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-/* =========================
-   GROUP-BOX (cam + sexy scroll)
-   ========================= */
+/* Group box */
 #ara_content .group-box{
   position: relative;
   overflow-x: auto;
@@ -122,11 +120,9 @@ border-radius: 14px;
   border: 1px solid rgba(255,255,255,.14) !important;
   background: rgba(8,14,26,.35) !important;
   border-radius: 16px;
-  padding: 12px;
+  padding: 10px;
   margin: 10px 0;
 }
-
-/* scrollbar */
 #ara_content .group-box::-webkit-scrollbar{ height: 10px; }
 #ara_content .group-box::-webkit-scrollbar-track{
   background: rgba(255,255,255,.06);
@@ -143,12 +139,73 @@ border-radius: 14px;
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
 
-/* =========================
-   TABLE – zaiTable (hover YOK)
-   ========================= */
+/* Top layout row */
+#ara_content .zai-row{
+  display: grid;
+  grid-template-columns: 85px 120px 38px 125px 75px 240px 75px 280px;
+  gap: 8px 10px;
+  align-items: center;
+}
+
+/* Actions row */
+#ara_content .zai-actions{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Numbers right */
+#ara_content .ta-right,
+#ara_content .saga-bold{
+  text-align:right !important;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900 !important;
+}
+
+/* ===== ARROW (tek sistem) ===== */
+#ara_content .zai-rel{
+  position: relative;
+  width: 100%;
+  display: block;
+  min-width: 0;
+}
+
+/* native select ok kapat */
+#ara_content select.cam-select{
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+/* input/select genişlik + oka yer */
+#ara_content .zai-rel > .cam-input,
+#ara_content .zai-rel > .cam-select{
+  width: 100% !important;
+  min-width: 0 !important;
+  padding-right: 32px !important;
+  box-sizing: border-box !important;
+}
+
+/* arrow */
+#ara_content .zai-arrow{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 10;
+  font-weight: 900;
+  font-size: 12px;
+  color: rgba(255,255,255,.78);
+  text-shadow: 0 0 10px rgba(0,0,0,.55);
+}
+
+/* ===== TABLE ===== */
 #ara_content #zaiTable{
   width: 100%;
-  margin-top: 8px;
+  min-width:1000px;
+  table-layout: fixed; /* colgroup width oturtur */
   border-collapse: separate;
   border-spacing: 0;
   border: 1px solid rgba(255,255,255,.14) !important;
@@ -156,41 +213,32 @@ border-radius: 14px;
   overflow: hidden;
   background: rgba(255,255,255,.03) !important;
 }
-
 #ara_content #zaiTable thead th{
   position: sticky;
   top: 0;
   z-index: 2;
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
   color: #fff !important;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
   text-align: left;
   white-space: nowrap;
 }
-
 #ara_content #zaiTable th,
 #ara_content #zaiTable td{
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  padding: 6px 10px !important;
-  height: 28px;
+  padding: 4px 6px !important;   /* input kesilmesin */
+  height: 26px !important;
+  vertical-align: middle !important;
   white-space: nowrap;
-  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 #ara_content #zaiTable tbody td{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
 }
-
-/* hover kapalı */
-#ara_content #zaiTable tbody tr:hover > *{
-  background: rgba(255,255,255,.04) !important;
-  color: rgba(255,255,255,.78) !important;
-}
-
-/* tfoot */
 #ara_content #zaiTable tfoot td{
   background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
   color: #fff !important;
@@ -200,64 +248,37 @@ border-radius: 14px;
   padding: 8px 10px !important;
 }
 
-#ara_content .double-column,
-#ara_content .saga-bold{
-  text-align: right !important;
-  font-weight: 900 !important;
-}
-
-/* =========================
-   ALT INFO – zai-info (KOMPAKT)
-   ========================= */
-
-#ara_content .zai-info{ padding: 10px 12px !important; }
-
-#ara_content .zai-info .form-row{
-  display:flex !important;
-  flex-wrap: wrap;
-  align-items:center;
-  gap: 6px 10px !important;
-  margin-bottom: 0 !important;
-}
-
-/* padding-left span hack iptal */
-#ara_content .zai-info .form-row > span{ padding-left: 0 !important; }
-
-/* başlık gibi kullanılan span'ler küçülsün */
-#ara_content .zai-info .form-row > span[style*="width"]{
-  color: rgba(255,255,255,.72) !important;
-  font-weight: 900;
-  font-size: 12px;
-  line-height: 1.1;
-}
-
-/* label’lar kompakt cam badge */
-#ara_content .zai-info .form-row > label{
-  display:inline-flex;
-  align-items:center;
-  justify-content: flex-start;
-
-  background: rgba(255,255,255,.04) !important;
-  border: 1px solid rgba(255,255,255,.10) !important;
-  border-radius: 10px !important;
-
-  padding: 4px 8px !important;
-  min-height: 28px !important;
-  font-size: 12px !important;
-
-  color: rgba(255,255,255,.92) !important;
-  font-weight: 900 !important;
-}
-
-/* barkod input küçük */
-#ara_content .zai-info .form-control{
+/* Row inputs compact */
+#ara_content #zaiTable tbody .cam-input,
+#ara_content #zaiTable tbody .cam-select{
   height: 30px !important;
+  min-height: 30px !important;
   border-radius: 10px !important;
   padding: 4px 8px !important;
   font-size: 12px !important;
-  font-weight: 900 !important;
 }
 
+/* TD içindeki wrapper tam otursun (150px vs kesilme fix) */
+#ara_content #zaiTable td .zai-rel{
+  width: 100%;
+  min-width: 0;
+}
+#ara_content #zaiTable td .cam-input,
+#ara_content #zaiTable td .cam-select{
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* readonly label (birim) */
+#ara_content .cam-label{
+  display:flex !important;
+  align-items:center !important;
+  margin: 0 !important;
+}
+#ara_content .cam-label span{ width:100%; line-height:1; }
+
+/* Error */
 #ara_content #errorDiv{
   display:none;
   margin-top: 12px;
@@ -269,306 +290,205 @@ border-radius: 14px;
   font-weight: 900;
 }
 
-/* =========================
-   2026 CAM – ZAI TABLE (SATIR INPUTLARI KOMPAKT)
-   Scope: #ara_content #zaiTable
-   ========================= */
-
-/* Hücre padding ve yüksekliği sıkı */
-#ara_content #zaiTable th,
-#ara_content #zaiTable td{
-  padding: 4px 8px !important;
-  height: 26px !important;
-  vertical-align: middle !important;
-}
-
-/* Satır içi input/select/label -> KOMPAKT */
-#ara_content #zaiTable tbody .form-control,
-#ara_content #zaiTable tbody .form-select{
-  height: 30px !important;          /* ✅ kompakt */
-  min-height: 30px !important;
-  border-radius: 10px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.95) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
-}
-
-/* label.form-control (readonly gibi kullandıkların) */
-#ara_content #zaiTable tbody label.form-control{
-  display: flex !important;
-  align-items: center !important;
-  margin: 0 !important;
-}
-#ara_content #zaiTable tbody label.form-control span{
-  display: inline-block;
-  width: 100%;
-  line-height: 1;
-}
-
-/* Focus daha ince */
-#ara_content #zaiTable tbody .form-control:focus,
-#ara_content #zaiTable tbody .form-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
-  background: rgba(8,14,26,.65) !important;
-}
-
-/* İçteki ok (▼) daha küçük + hizalı */
-#ara_content #zaiTable tbody td > div[style*="position: relative"] > span{
-  right: 8px !important;
-  font-size: 12px !important;
-  color: rgba(255,255,255,.78) !important;
-  text-shadow: 0 0 10px rgba(0,0,0,.55);
-}
-
-/* datalist/select için sağ padding (okla çakışmasın) */
-#ara_content #zaiTable tbody td > div[style*="position: relative"] input.form-control,
-#ara_content #zaiTable tbody td > div[style*="position: relative"] select.form-control{
-  padding-right: 26px !important;
-}
-
-/* trash butonu da kompakt */
-#ara_content #zaiTable tbody .btn.btn-secondary{
-  height: 30px !important;
-  width: 34px !important;
-  padding: 0 !important;
-  border-radius: 10px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(255,255,255,.06) !important;
-  color: rgba(255,255,255,.88) !important;
-}
-#ara_content #zaiTable tbody .btn.btn-secondary:hover{
-  background: rgba(56,189,248,.12) !important;
-  border-color: rgba(56,189,248,.35) !important;
-}
-
-/* tablo satırı içinde ml-2 falan taşırmasın */
-#ara_content #zaiTable tbody .ml-2{ margin-left: 0 !important; }
-
-#ara_content .zai-rel{
-  position: relative;
-  width: 100%;
-}
-
-/* =========================
-   TAB1 – ULTRA KOMPAKT
-   ========================= */
-
-#ara_content #tab1 .group-box{
-  padding: 8px 10px !important;
-}
-
-#ara_content #tab1 label{
-  font-size: 12px !important;
-  font-weight: 900 !important;
-}
-
-#ara_content #tab1 .form-control,
-#ara_content #tab1 .form-select{
-  height: 34px !important;
-  min-height: 34px !important;
-  padding: 5px 10px !important;
-  font-size: 12px !important;
-  border-radius: 12px !important;
-}
-
-/* date input biraz daha ince */
-#ara_content #tab1 input[type="date"]{
-  padding: 4px 8px !important;
-}
-
-
-
-/* ikonlu refresh / plus */
-#ara_content #tab1 .btn.btn-secondary{
-  width: 38px !important;
-  padding: 0 !important;
-  display: inline-flex;
+/* Info badges (SOL hizalı) */
+#ara_content .zai-badges{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-left: 20px;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: center;
+}
+#ara_content .zai-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  min-width: 150px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+  text-align: left;
+}
+#ara_content .zai-badge:empty::before{ content:"—"; opacity:.65; }
+
+#ara_content .zai-table-scroll{
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* padding-left ile şişen boşlukları bastır */
-#ara_content #tab1 span[style*="padding-left"]{
-  padding-left: 10px !important;
+/* istersen aynı sexy scroll burada da */
+#ara_content .zai-table-scroll::-webkit-scrollbar{ height: 10px; }
+#ara_content .zai-table-scroll::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .zai-table-scroll::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+#ara_content .zai-table-scroll{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
 
-/* =========================
-   TAB3 – SADE & TEMİZ
-   ========================= */
-#ara_content #tab2 .form-control{
-  height: 36px !important;
-  padding: 6px 12px !important;
-  font-size: 13px !important;
-  border-radius: 12px !important;
-}
-
-#ara_content #tab2 .input-group-text{
-  height: 36px !important;
-  font-size: 12px !important;
-  font-weight: 900;
-}
-
-#ara_content .ta-right{
-  text-align: right !important;
-}
-
-/* istersen numeriklerde daha net dursun */
-#ara_content input.ta-right{
-  font-variant-numeric: tabular-nums;
-}
 </style>
 
-<div class="card p-4">
-	<ul class="nav nav-tabs" id="myTab" role="tablist">
-		<li class="nav-item" role="presentation">
-			<button class="nav-link active" id="tab1-tab"
-				style="font-weight: bold;" data-bs-toggle="tab"
-				data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1"
-				aria-selected="true">Fatura Bilgileri</button>
-		</li>
-		<li class="nav-item" role="presentation">
-			<button class="nav-link" id="tab2-tab" style="font-weight: bold;"
-				data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
-				aria-controls="tab2" aria-selected="false">Ek Bilgiler</button>
-		</li>
-	</ul>
+
+<!-- TABS HEADER -->
+<div class="cam-card p-3">
+  <ul class="nav nav-tabs cam-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="tab1-tab"
+        data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab"
+        aria-controls="tab1" aria-selected="true">Fatura Bilgileri</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="tab2-tab"
+        data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab"
+        aria-controls="tab2" aria-selected="false">Ek Bilgiler</button>
+    </li>
+  </ul>
 </div>
-<!-- Tab Content -->
+
 <div class="tab-content" id="myTabContent">
-	<!-- Tab 1 Content -->
-	<div class="tab-pane fade show active" id="tab1" role="tabpanel"
-		aria-labelledby="tab1-tab">
-		<div class="cardd p-0">
-		<div class="child">
-			<!-- ****************************************************************************************************** -->
-			<div class="group-box">
-				<div style="display: flex; align-items: center; ">
-					<label style="width:85px;">Fis No</label>
-					<div style="min-width: 120px;max-width: 120px;">
-						<input class="form-control" style="font-weight: bold;" maxlength="10" id="fisno"  onkeydown="if(event.key === 'Enter') OBS.ZAI.zaiOku()" ondblclick="OBS.ZAI.yeniFis();">
-					</div>
-					<span style="padding-left: 5px;"></span>
-					<button type="button" class="btn btn-secondary ml-2" onclick="OBS.ZAI.sonfis()">
-							<i class="fa fa-refresh"></i>
-					</button>
-					<span style="padding-left: 10px;"></span> 
-					<input type="date" id="fisTarih" class="form-control" th:value="${fisTarih}" style="width: 125px; font-weight: bold;" />
-					<span style="padding-left: 10px;"></span> 	
-					<label style="width:75px;">Ana Grup</label>	
-					<div style="position:relative; width:155px;">
-						<select class="form-select cins_bold" style="width: 150px; " id="anagrp" onchange="OBS.ZAI.anagrpChanged(this)">
-    						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
-						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
-					<span style="padding-left: 10px;"></span> 	
-					<label style="width:75px;">Alt Grup</label>	
-					<div style="position:relative; width:170px;">
-						<select class="form-select cins_bold" style="width: 165px; " id="altgrp" disabled>
-    						
-						</select>
-						<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>	
-				</div>
-			</div>
-			<div class="group-box">
-				<div class="form-row">
-					<button class="btn btn-primary" type="button" id="zaikaydetButton"
-						onclick="OBS.ZAI.zaiKayit()">Kaydet</button>
-					<span style="padding-left: 5px;"></span>
-					<button class="btn btn-primary" type="button" id="zaisilButton"	onclick="OBS.ZAI.zaiYoket()">Sil</button>
-										
-				</div>
-			</div>
-		</div>
-		</div>
-		<div id="errorDiv"></div>
-	</div>
-	<!-- Tab 2 Content -->
-	<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab3-tab">
-	<div class="card p-4">
-		<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">1 -</span>
-				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="a1" class="form-control" style="max-width: 300px;">
-			</div>
-		</div>
-			<div class="form-row">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">2 -</span>
-				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="a2" class="form-control" style="max-width: 300px;">
-			</div>
-			</div>
-		</div>
-	</div>	
-</div>
-<button type="button" class="btn btn-secondary ml-2" onclick="OBS.ZAI.satirekle()"><i class="fa fa-plus"></i></button>
-<div class="card p-1" style="margin-top:10px;">
 
-<table class="table table-bordered" id="zaiTable"
-	style="margin-top: 5px;">
-	<thead class="thead-dark">
-		<tr>
-			<th style="width:25px;"></th>
-			<th style="width:12%">Barkod</th>
-			<th>Urun Kodu</th>
-			<th style="width:18%">Depo</th>
-			<th style="width:9%" class="double-column">Fiat</th>
-			<th style="width:8%" class="double-column">Miktar</th>
-			<th style="width:6%">Birim</th>
-			<th style="width:12%" class="double-column">Tutar</th>
-			<th style="width:20%">Izahat</th>
-		</tr>
-	</thead>
-	<tbody id="tbody">
-	</tbody>
-	<tfoot>
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td id="totalMiktar" class="saga-bold">0.000</td>
-			<td></td>
-			<td id="totalTutar" class="saga-bold">0.00</td>
-			<td></td>
-		</tr>
-	</tfoot>
-</table>
+  <!-- TAB 1 -->
+  <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+    <div class="cam-card p-3 mt-2">
 
-<div class="group-box zai-info">
-	<div class="form-row">
-		<span style="padding-left: 10px;width:90px;">Barkod:</span>
-		<input  id="barkod" class="form-control" style="width: 170px; font-weight: bold;" />
-		<span style="padding-left: 20px;"></span>
-		<label style="width:150px;text-align: right; font-weight: bold;" id="adil"></label> 
-		<span style="padding-left: 20px;"></span>
-		<label style="width:150px;text-align: right; font-weight: bold;" id="anagrpl"></label> 
-		<span style="padding-left: 20px;"></span>
-		<label style="width:150px;text-align: right; font-weight: bold;" id="altgrpl"></label> 
-	</div>
-	</div>
+      <div class="group-box">
+        <div class="zai-row">
+
+          <label>Fis No</label>
+          <input class="cam-input" maxlength="10" id="fisno"
+            onkeydown="if(event.key==='Enter') OBS.ZAI.zaiOku()"
+            ondblclick="OBS.ZAI.yeniFis();" />
+
+          <button type="button" class="btn btn-secondary cam-icon" onclick="OBS.ZAI.sonfis()">
+            <i class="fa fa-refresh"></i>
+          </button>
+
+          <input type="date" id="fisTarih" class="cam-input" th:value="${fisTarih}" />
+
+          <label>Ana Grup</label>
+          <div class="zai-rel">
+            <select class="cam-select" id="anagrp" onchange="OBS.ZAI.anagrpChanged(this)">
+              <option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
+            </select>
+            <span class="zai-arrow">▼</span>
+          </div>
+
+          <label>Alt Grup</label>
+          <div class="zai-rel">
+            <select class="cam-select" id="altgrp" disabled></select>
+            <span class="zai-arrow">▼</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="group-box">
+        <div class="zai-actions">
+          <button class="btn btn-primary" type="button" id="zaikaydetButton" onclick="OBS.ZAI.zaiKayit()">Kaydet</button>
+          <button class="btn btn-primary" type="button" id="zaisilButton" onclick="OBS.ZAI.zaiYoket()">Sil</button>
+        </div>
+      </div>
+
+      <div id="errorDiv"></div>
+    </div>
+  </div>
+
+  <!-- TAB 2 -->
+  <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+    <div class="cam-card p-3 mt-2">
+      <div class="input-group mb-2">
+        <span class="input-group-text cam-addon" style="width:150px;">1 -</span>
+        <input type="text" id="a1" class="cam-input" style="max-width:300px;">
+      </div>
+      <div class="input-group">
+        <span class="input-group-text cam-addon" style="width:150px;">2 -</span>
+        <input type="text" id="a2" class="cam-input" style="max-width:300px;">
+      </div>
+    </div>
+  </div>
+
 </div>
+
+<!-- SATIR EKLE -->
+<div class="mt-2">
+  <button type="button" class="btn btn-secondary cam-icon" onclick="OBS.ZAI.satirekle()">
+    <i class="fa fa-plus"></i>
+  </button>
+</div>
+
+<!-- TABLE -->
+<div class="cam-card p-2 mt-2">
+<div class="zai-table-scroll">
+  <table class="table table-bordered" id="zaiTable">
+
+    <!-- ✅ width sadece burada -->
+    <colgroup>
+      <col style="width:50px">
+      <col style="width:100px">
+      <col style="width:100px">
+      <col style="width:175px">
+      <col style="width:150px">
+      <col style="width:100px">
+      <col style="width:80px">
+      <col style="width:175px">
+      <col>
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th></th>
+        <th>Barkod</th>
+        <th>Urun Kodu</th>
+        <th>Depo</th>
+        <th class="saga-bold">Fiat</th>
+        <th class="saga-bold">Miktar</th>
+        <th>Birim</th>
+        <th class="saga-bold">Tutar</th>
+        <th>Izahat</th>
+      </tr>
+    </thead>
+
+    <tbody id="tbody"></tbody>
+
+    <tfoot>
+      <tr>
+        <td></td><td></td><td></td><td></td>
+        <td></td>
+        <td id="totalMiktar" class="saga-bold">0.000</td>
+        <td></td>
+        <td id="totalTutar" class="saga-bold">0.00</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+ </div>
+  <!-- INFO -->
+  <div class="group-box zai-info">
+    <div class="zai-actions">
+      <span style="width:90px; font-weight:900; color:rgba(255,255,255,.72);">Barkod:</span>
+      <input id="barkod" class="cam-input" style="width:170px;" />
+
+      <div class="zai-badges">
+        <label id="adil" class="zai-badge"></label>
+        <label id="anagrpl" class="zai-badge"></label>
+        <label id="altgrpl" class="zai-badge"></label>
+      </div>
+    </div>
+  </div>
+</div>
+
 <input type="hidden" id="zayiBilgi">
+
+
 <div th:replace="~{modal/stok/urunadlari :: urnsecondModal}"></div>

@@ -142,89 +142,90 @@ OBS.ZAI = OBS.ZAI || {};
       .map(kod => `<option value="${kod.DEPO}">${kod.DEPO}</option>`)
       .join("");
 
-    newRow.innerHTML = `
-      <td>
-        <button id="bsatir_${Z.rowCounter}"
-          type="button"
-          class="btn btn-secondary"
-          onclick="OBS.ZAI.satirsil(this)">
-          <i class="fa fa-trash"></i>
-        </button>
-      </td>
+	  newRow.innerHTML = `
+	    <td>
+	      <button id="bsatir_${Z.rowCounter}"
+	        type="button"
+	        class="btn btn-secondary cam-icon"
+	        onclick="OBS.ZAI.satirsil(this)">
+	        <i class="fa fa-trash"></i>
+	      </button>
+	    </td>
 
-      <td>
-        <div class="zai-rel">
-          <input class="form-control cins_bold"
-            list="barkodOptions_${Z.rowCounter}"
-            maxlength="20"
-            id="barkod_${Z.rowCounter}"
-            onkeydown="OBS.ZAI.focusNextCell(event, this)"
-            ondblclick="openurunkodlariModal('barkod_${Z.rowCounter}','fatsatir','barkodkod')"
-            onchange="OBS.ZAI.updateRowValues(this,'Barkod')">
-          <datalist id="barkodOptions_${Z.rowCounter}"></datalist>
-          <span class="zai-arrow">▼</span>
-        </div>
-      </td>
+	    <td>
+	      <div class="zai-rel">
+	        <input class="cam-input"
+	          list="barkodOptions_${Z.rowCounter}"
+	          maxlength="20"
+	          id="barkod_${Z.rowCounter}"
+	          onkeydown="OBS.ZAI.focusNextCell(event, this)"
+	          ondblclick="openurunkodlariModal('barkod_${Z.rowCounter}','fatsatir','barkodkod')"
+	          onchange="OBS.ZAI.updateRowValues(this,'Barkod')">
+	        <datalist id="barkodOptions_${Z.rowCounter}"></datalist>
+	        <span class="zai-arrow">▼</span>
+	      </div>
+	    </td>
 
-      <td>
-        <div class="zai-rel">
-          <input class="form-control cins_bold"
-            list="ukoduOptions_${Z.rowCounter}"
-            maxlength="12"
-            id="ukodu_${Z.rowCounter}"
-            onkeydown="OBS.ZAI.focusNextCell(event, this)"
-            ondblclick="openurunkodlariModal('ukodu_${Z.rowCounter}','recetesatir','ukodukod')"
-            onchange="OBS.ZAI.updateRowValues(this,'Kodu')">
-          <datalist id="ukoduOptions_${Z.rowCounter}">
-            ${ukoduoptionsHTML}
-          </datalist>
-          <span class="zai-arrow">▼</span>
-        </div>
-      </td>
+	    <td>
+	      <div class="zai-rel">
+	        <input class="cam-input"
+	          list="ukoduOptions_${Z.rowCounter}"
+	          maxlength="12"
+	          id="ukodu_${Z.rowCounter}"
+	          onkeydown="OBS.ZAI.focusNextCell(event, this)"
+	          ondblclick="openurunkodlariModal('ukodu_${Z.rowCounter}','recetesatir','ukodukod')"
+	          onchange="OBS.ZAI.updateRowValues(this,'Kodu')">
+	        <datalist id="ukoduOptions_${Z.rowCounter}">
+	          ${ukoduoptionsHTML}
+	        </datalist>
+	        <span class="zai-arrow">▼</span>
+	      </div>
+	    </td>
 
-      <td>
-        <div class="zai-rel">
-          <select class="form-control" id="depo_${Z.rowCounter}">
-            ${depoOptionsHTML}
-          </select>
-          <span class="zai-arrow">▼</span>
-        </div>
-      </td>
+	    <td>
+	      <div class="zai-rel">
+	        <select class="cam-select" id="depo_${Z.rowCounter}">
+	          ${depoOptionsHTML}
+	        </select>
+	        <span class="zai-arrow">▼</span>
+	      </div>
+	    </td>
 
-      <td>
-        <input class="form-control ta-right"
-          value="${formatNumber2(0)}"
-          onfocus="OBS.ZAI.selectAllContent(this)"
-          onblur="OBS.ZAI.handleBlur(this)"
-          onkeydown="OBS.ZAI.focusNextCell(event, this)">
-      </td>
+	    <td>
+	      <input class="cam-input ta-right"
+	        value="${formatNumber2(0)}"
+	        onfocus="OBS.ZAI.selectAllContent(this)"
+	        onblur="OBS.ZAI.handleBlur(this)"
+	        onkeydown="OBS.ZAI.focusNextCell(event, this)">
+	    </td>
 
-      <td>
-        <input class="form-control ta-right"
-          value="${formatNumber3(0)}"
-          onfocus="OBS.ZAI.selectAllContent(this)"
-          onblur="OBS.ZAI.handleBlur3(this)"
-          onkeydown="OBS.ZAI.focusNextCell(event, this)">
-      </td>
+	    <td>
+	      <input class="cam-input ta-right"
+	        value="${formatNumber3(0)}"
+	        onfocus="OBS.ZAI.selectAllContent(this)"
+	        onblur="OBS.ZAI.handleBlur3(this)"
+	        onkeydown="OBS.ZAI.focusNextCell(event, this)">
+	    </td>
 
-      <td>
-        <label class="form-control"><span>&nbsp;</span></label>
-      </td>
+	    <td>
+	      <label class="cam-input cam-label"><span>&nbsp;</span></label>
+	    </td>
 
-      <td>
-        <input class="form-control ta-right"
-          value="${formatNumber2(0)}"
-          onfocus="OBS.ZAI.selectAllContent(this)"
-          onblur="OBS.ZAI.handleBlur(this)"
-          onkeydown="OBS.ZAI.focusNextCell(event, this)">
-      </td>
+	    <td>
+	      <input class="cam-input ta-right"
+	        value="${formatNumber2(0)}"
+	        onfocus="OBS.ZAI.selectAllContent(this)"
+	        onblur="OBS.ZAI.handleBlur(this)"
+	        onkeydown="OBS.ZAI.focusNextCell(event, this)">
+	    </td>
 
-      <td>
-        <input class="form-control"
-          onfocus="OBS.ZAI.selectAllContent(this)"
-          onkeydown="OBS.ZAI.focusNextRow(event, this)">
-      </td>
-    `;
+	    <td>
+	      <input class="cam-input"
+	        onfocus="OBS.ZAI.selectAllContent(this)"
+	        onkeydown="OBS.ZAI.focusNextRow(event, this)">
+	    </td>
+	  `;
+
 
     return newRow;
   };
