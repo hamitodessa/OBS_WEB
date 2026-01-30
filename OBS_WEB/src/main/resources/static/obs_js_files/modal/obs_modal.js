@@ -228,10 +228,16 @@ function bindHspModalKeyboard(inputId, secondnerden) {
           e.preventDefault();
           clickActive();
         } else if (e.key === "Escape") {
-          // istersen ESC => tekrar aramaya dön
-          e.preventDefault();
-          search.focus();
-        }
+		    e.preventDefault();
+		    e.stopPropagation();
+		    clearActive();
+		    activeIndex = -1;
+		    requestAnimationFrame(() => {
+			  tbody.parentElement?.scrollTo({ top: 0, behavior: "smooth" });
+		      search.focus();
+		      search.select(); // istersen text de seçilsin
+		    });
+		  }
       });
     });
   };
