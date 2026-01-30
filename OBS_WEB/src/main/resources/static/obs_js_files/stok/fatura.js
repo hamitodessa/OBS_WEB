@@ -212,7 +212,7 @@ OBS.FATURA ||= {};
 
       <td>
         <div class="fat-rel">
-          <select class="form-control" id="depo_${N.rowCounter}">
+          <select class="form-control" id="depo_${N.rowCounter}" onkeydown="OBS.FATURA.focusNextCell(event, this)">
             ${depoOptionsHTML}
           </select>
           <span class="fat-arrow">▼</span>

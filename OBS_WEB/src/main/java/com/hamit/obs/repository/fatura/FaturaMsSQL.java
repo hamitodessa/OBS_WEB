@@ -122,7 +122,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				deger = resultSet.getString(fieldd);
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException("urun_kod_degisken_ara", e);
 		}
 		return deger;
 	}
@@ -254,7 +254,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				E_NUMBER = resultSet.getString("NO") == null ? "0" : resultSet.getString("NO");
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException("uret_son_bordro_no_al", e);
 		}
 		return E_NUMBER;
 
@@ -304,7 +304,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				aciklama = resultSet.getString("ACIKLAMA");
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException("aciklama_oku", e);
 		}
 		return aciklama;
 	}
@@ -421,7 +421,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				fiat = resultSet.getDouble("Ortalama");
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException("gir_ort_fiati_okuı", e);
 		}
 		return fiat;
 	}
@@ -718,7 +718,8 @@ public class FaturaMsSQL implements IFaturaDatabase {
 	@Override
 	public double son_satis_fiati_oku(String kodu, String muskodu, String gircik, ConnectionDetails faturaConnDetails) {
 		double fiat = 0.0;
-		String sql = "SELECT TOP 1  Fiat " + " FROM FATURA WITH (INDEX (IX_FATURA)) " 
+		String sql = "SELECT TOP 1  Fiat " 
+				+ " FROM FATURA WITH (INDEX (IX_FATURA)) " 
 				+ " WHERE  Cari_Firma = ? AND  Kodu = ? AND Gir_Cik = ? "
 				+ " ORDER BY  Tarih desc  OPTION (FAST 1)";
 		try (Connection connection = DriverManager.getConnection(faturaConnDetails.getJdbcUrl(),
@@ -726,13 +727,13 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)){
 			preparedStatement.setString(1, muskodu);
 			preparedStatement.setString(2, kodu);
-			preparedStatement.setString(1, gircik);
+			preparedStatement.setString(3, gircik);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				fiat = resultSet.getDouble("Fiat");
 			}
 		} catch (Exception e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException("son_satis_fiati_oku", e);
 		}
 		return fiat;
 	}
@@ -804,7 +805,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				son_no = resultSet.getString("NO");
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException("son_no_al", e);
 		}
 		return son_no;
 	}
@@ -3919,7 +3920,7 @@ public class FaturaMsSQL implements IFaturaDatabase {
 				son_no = resultSet.getString("NO");
 			}
 		} catch (SQLException e) {
-			throw new ServiceException("Firma adı okunamadı", e);
+			throw new ServiceException("son_irsno_al", e);
 		}
 		return son_no;
 	}
