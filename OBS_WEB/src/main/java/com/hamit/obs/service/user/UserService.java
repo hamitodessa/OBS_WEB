@@ -79,6 +79,11 @@ public class UserService {
 	public User findUserByUsername(String username) {
 		return userRepository.findByEmail(username);
 	}
+	
+	public User findById(Long id) {
+	    return userRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("User bulunamadı: " + id));
+	}
 
 	public boolean checkLogin(String username, String password) {
 		User user = userRepository.findByEmail(username);

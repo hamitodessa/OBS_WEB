@@ -12,14 +12,14 @@ OBS.setCursorDefault = function () {
   M.byId = (id) => document.getElementById(id);
 
   M._showError = function (msg) {
-    const e = M.byId("users_error");
+    const e = M.byId("errorDiv");
     if (!e) return;
     e.style.display = "block";
     e.textContent = msg || "Beklenmeyen hata.";
   };
 
   M._clearError = function () {
-    const e = M.byId("users_error");
+    const e = M.byId("errorDiv");
     if (!e) return;
     e.style.display = "none";
     e.textContent = "";
@@ -123,8 +123,6 @@ OBS.setCursorDefault = function () {
         }
         return;
       }
-
-     
       await M.load();
 
 

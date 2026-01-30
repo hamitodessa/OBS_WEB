@@ -10,16 +10,17 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.dto.user.UserRowDTO;
@@ -32,6 +33,7 @@ import com.hamit.obs.model.user.User_Details;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
+import com.hamit.obs.service.forum.ForumService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.kur.KurService;
@@ -61,6 +63,8 @@ public class UserIzinleriController {
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private UserListService userListService;
+	@Autowired
+	private ForumService forumService;
 
 	@GetMapping("user/userizinler")
 	public String user_detailss() {
@@ -71,7 +75,7 @@ public class UserIzinleriController {
 	    if (isAdmin) {
 	        return "user/userizinleri";
 	    } else {
-	        return "/deneme";
+	        return "/wellcome";
 	    }
 	}
 
@@ -211,18 +215,23 @@ public class UserIzinleriController {
 	
 	@GetMapping("user/list")
 	public ResponseEntity<List<UserRowDTO>> list() {
-		System.out.println("213");
+		
 		return ResponseEntity.ok(userListService.listUsers());
 	}
 
-	// Silme istersen:
-	// DELETE /user/api/{id}
-	@DeleteMapping("user/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		userListService.deleteUser(id);
-		return ResponseEntity.noContent().build();
+	@PostMapping("user/userSil")
+	public ResponseEntity<?> userSil(@RequestParam Long id) {
+		try {
+			
+			User user = userService.findById(id);
+			forumService.mesajsayiDeleteUser(user.getEmail());
+			userListService.deleteUser(id);
+			UserSessionManager.removeUserSessionsByUsername(user.getEmail());
+			return ResponseEntity.ok(Map.of("errorMessage", ""));
+		} catch (ServiceException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("errorMessage", e.getMessage()));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("errorMessage", "Beklenmeyen bir hata oluştu: " + e.getMessage()));
+		}
 	}
-
-
-
 }
