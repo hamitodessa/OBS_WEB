@@ -707,7 +707,7 @@ function saveToMain() {
 	  OBS.CEKGIR.cekcariIsle();
 	}
   else if (nerden === "kurrapor") {
-    OBS.KURRAPOR.kurrapfetchTableData();
+    OBS.KURRAPOR.fetchTableData();
   }
   else if (nerden === "tahsilatckaydet") {
     OBS.TAHSILAT.tahcariIsle();

@@ -136,4 +136,3 @@ window.logdoldur      = () => OBS.LOG.logdoldur();
 window.lograpor       = (p) => OBS.LOG.lograpor(p);
 
 
-updatePaginationUI();
