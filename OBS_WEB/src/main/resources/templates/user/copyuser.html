@@ -1,7 +1,5 @@
 <style>
-/* =========================
-   2026 CAM – COPY USER
-   ========================= */
+
 :root{
   --text: rgba(255,255,255,.92);
   --muted: rgba(255,255,255,.70);
@@ -73,8 +71,10 @@
 }
 
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 40px;
+   width:150px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.18);
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -134,14 +134,15 @@
                placeholder="ornek@firma.com">
       </div>
     </div>
+   <div id="errorDiv"></div>
   </div>
 
-  <div id="errorDiv"></div>
+
+ 
 
   <div class="group-box">
     <button class="btn btn-primary" type="button" id="kaydetButton"
-            style="width:150px;" disabled onclick="copyUser()">
-      Kaydet
+             disabled onclick="copyUser()">Kaydet
     </button>
   </div>
 </div>

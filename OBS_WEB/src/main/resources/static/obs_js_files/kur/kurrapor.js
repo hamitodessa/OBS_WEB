@@ -1,69 +1,100 @@
-async function kurrapfetchTableData() {
-  const hiddenFieldValue = document.getElementById("kurraporBilgi")?.value || "";
-  const parsedValues = hiddenFieldValue.split(",");
+window.OBS = window.OBS || {};
+OBS.KURRAPOR = OBS.KURRAPOR || {};
 
-  const startDate = parsedValues[0];
-  const endDate   = parsedValues[1];
-  const cins1     = parsedValues[2];
-  const cins2     = parsedValues[3];
+(function (M) {
+  M.byId = (id) => document.getElementById(id);
 
-  const errorDiv = document.getElementById("errorDiv");
-  errorDiv.style.display = "none";
-  errorDiv.innerText = "";
+  M._showError = function (msg) {
+    const e = M.byId("errorDiv");
+    if (!e) return;
+    e.style.display = "block";
+    e.innerText = msg || "Beklenmeyen hata.";
+  };
 
-  const kurraporDTO = { startDate, endDate, cins1, cins2 };
+  M._clearError = function () {
+    const e = M.byId("errorDiv");
+    if (!e) return;
+    e.style.display = "none";
+    e.innerText = "";
+  };
 
-  const tableBody = document.getElementById("tableBody");
-  tableBody.innerHTML = "";
+  M._setCursorWait = () => requestAnimationFrame(() => {
+    document.body.style.cursor = "wait";
+  });
 
-  document.body.style.cursor = "wait";
-
-  const yenileBtn = document.getElementById("yenileButton");
-  if (yenileBtn) {
-    yenileBtn.disabled = true;
-    yenileBtn.innerText = "İşleniyor...";
-  }
-
-  try {
-    const data = await fetchWithSessionCheck("kur/kurrapor", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(kurraporDTO),
-    });
-
-    if (data?.errorMessage) {
-      throw new Error(data.errorMessage);
-    }
-
-    if (data.success && Array.isArray(data.data)) {
-      data.data.forEach(item => {
-        const row = document.createElement("tr");
-        row.classList.add("table-row-height");
-        row.innerHTML = `
-          <td>${formatDate(item.Tarih)}</td>
-          <td>${item.Kur || ""}</td>
-          <td class="double-column">${formatNumber4(item.MA)}</td>
-          <td class="double-column">${formatNumber4(item.MS)}</td>
-          <td class="double-column">${formatNumber4(item.SA)}</td>
-          <td class="double-column">${formatNumber4(item.SS)}</td>
-          <td class="double-column">${formatNumber4(item.BA)}</td>
-          <td class="double-column">${formatNumber4(item.BS)}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    } else {
-      errorDiv.style.display = "block";
-      errorDiv.innerText = data.errorMessage || "Bir hata oluştu.";
-    }
-
-  } catch (error) {
-    errorDiv.style.display = "block";
-    errorDiv.innerText = error.message || "Beklenmeyen hata.";
-  } finally {
+  M._setCursorDefault = () => requestAnimationFrame(() => {
     document.body.style.cursor = "default";
-    if (yenileBtn) {
-      yenileBtn.disabled = false;
-      yenileBtn.innerText = "Yenile";
+  });
+
+  M._setButtonBusy = function (busy) {
+    const btn = M.byId("yenileButton");
+    if (!btn) return;
+    btn.disabled = !!busy;
+    btn.innerText = busy ? "İşleniyor..." : "Yenile";
+  };
+
+  M._readParams = function () {
+    const raw = M.byId("kurraporBilgi")?.value || "";
+    const p = raw.split(",");
+    return {
+      startDate: p[0] || "",
+      endDate:   p[1] || "",
+      cins1:     p[2] || "",
+      cins2:     p[3] || ""
+    };
+  };
+
+  M._clearTable = function () {
+    const tb = M.byId("tableBody");
+    if (tb) tb.innerHTML = "";
+  };
+
+  M._appendRow = function (tb, item) {
+    const row = document.createElement("tr");
+    row.classList.add("table-row-height");
+    row.innerHTML = `
+      <td>${formatDate(item.Tarih)}</td>
+      <td>${item.Kur || ""}</td>
+      <td class="double-column">${formatNumber4(item.MA)}</td>
+      <td class="double-column">${formatNumber4(item.MS)}</td>
+      <td class="double-column">${formatNumber4(item.SA)}</td>
+      <td class="double-column">${formatNumber4(item.SS)}</td>
+      <td class="double-column">${formatNumber4(item.BA)}</td>
+      <td class="double-column">${formatNumber4(item.BS)}</td>
+    `;
+    tb.appendChild(row);
+  };
+
+  M.fetchTableData = async function () {
+    const dto = M._readParams();
+
+    M._clearError();
+    M._clearTable();
+    M._setCursorWait();
+    M._setButtonBusy(true);
+
+    try {
+      const data = await fetchWithSessionCheck("kur/kurrapor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+      });
+
+      if (data?.errorMessage) throw new Error(data.errorMessage);
+
+      if (data?.success && Array.isArray(data.data)) {
+        const tb = M.byId("tableBody");
+        if (!tb) return;
+        data.data.forEach(item => M._appendRow(tb, item));
+      } else {
+        M._showError(data?.errorMessage || "Bir hata oluştu.");
+      }
+    } catch (err) {
+      M._showError(err?.message || "Beklenmeyen hata.");
+    } finally {
+      M._setCursorDefault();
+      M._setButtonBusy(false);
     }
-  }
-}
+  };
+
+})(OBS.KURRAPOR);

@@ -1086,6 +1086,52 @@
       window.location.href = url;
     }
   };
+	
+	K.kercariIsle = async function () {
+	    const hesapKodu = K.byId("kerBilgi")?.value || "";
+	    const fisno = K.byId("fisno")?.value || "";
+
+	    const table = K.byId("kerTable");
+	    const rowsLen = table?.rows?.length || 0;
+
+	    if (!fisno || fisno === "0" || rowsLen === 0) {
+	      alert("Geçerli bir evrak numarası giriniz.");
+	      return;
+	    }
+
+	    K.clearError();
+	    document.body.style.cursor = "wait";
+	    K.setBtnBusy("carkayitButton", true, "İşleniyor...", "Cari Kaydet");
+
+	    const keresteDTO = {
+	      fisno: fisno,
+	      tarih: K.byId("fisTarih")?.value || "",
+	      carikod: K.byId("carikod")?.value || "",
+	      miktar: K.byId("totalM3")?.textContent || 0,
+	      tutar: parseLocaleNumber(K.byId("tevhartoptut")?.innerText || 0),
+	      karsihesapkodu: hesapKodu,
+	    };
+
+	    try {
+	      const response = await fetchWithSessionCheck("kereste/kergcariKayit", {
+	        method: "POST",
+	        headers: { "Content-Type": "application/json" },
+	        body: JSON.stringify(keresteDTO),
+	      });
+
+	      if (response?.errorMessage && response.errorMessage.trim() !== "") {
+	        throw new Error(response.errorMessage);
+	      }
+
+	      K.clearError();
+	    } catch (e) {
+	      K.showError(e?.message || "Beklenmeyen bir hata oluştu.");
+	    } finally {
+	      K.setBtnBusy("carkayitButton", false, "İşleniyor...", "Cari Kaydet");
+				document.body.style.cursor = "default";
+	    }
+	  };
+	
 
   /* ========================= init ========================= */
   K.init = () => {

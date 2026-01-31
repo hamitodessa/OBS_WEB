@@ -50,7 +50,7 @@
   max-width: 100%;
   margin-top: 12px;
   padding: 16px;
-  border-radius: 18px;
+  border-radius: 16px;
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
@@ -60,7 +60,7 @@
 /* group-box artık “satır” (mantık aynı) */
 #ara_content .group-box{
  
-  padding: 6px 4px;
+  padding: 7px;
   margin: 0 0 8px 0;
   width: 100%;
   box-sizing: border-box;
@@ -69,7 +69,7 @@
   background: rgba(255,255,255,.02);
   
    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 14px;
+    border-radius: 12px;
 }
 
 /* ===== ROW ===== */
@@ -78,6 +78,8 @@
   align-items:center;
   gap: 10px;
   flex-wrap: nowrap;
+ 
+ 
 }
 
 /* ===== LABEL ===== */
@@ -189,11 +191,44 @@
 }
 
 /* ===== CHECKBOX ===== */
-#ara_content .form-check-input{
-  transform: scale(1.15);
-  margin: 0;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,.45));
+#hsp_content .form-check-input{
+  width: 18px;
+  height: 18px;
+  appearance: none;              /* native görünümü kapat */
+  -webkit-appearance: none;
+  border-radius: 5px;
+  border: 2px solid rgba(255,255,255,.85);
+  background: rgba(8,14,26,.55);
+  cursor: pointer;
+  position: relative;
+ 
 }
+
+/* işaret */
+#hsp_content .form-check-input:checked{
+  background: rgba(56,189,248,.25);
+  border-color: #ffffff;
+}
+
+/* beyaz check */
+#hsp_content .form-check-input:checked::after{
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* focus */
+#hsp_content .form-check-input:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.35);
+}
+
 
 /* =========================
    TAB2 - CEK TABLE (hover YOK)
@@ -424,7 +459,7 @@
 						 <span class="select-arrow">▼</span>
 					</div>
 				</div>
-				<div class="form-row" style="margin-top: 6px;">
+				<div class="form-row" style="margin-top: 6px; height: 25px;">
 					<div style="width: 80px;"></div>
 					<label id="lblcheskod" style="width: 420px; font-weight: 900;">...</label>
 					<div style="flex: 1 1 auto;"></div>
@@ -434,7 +469,7 @@
 			<!-- SATIR 4: Döviz + çek info + pos banka -->
 			<div class="group-box">
 				<div class="form-row">
-					<label style="width: 95px;">Doviz Cinsi</label>
+					<label style="width: 95px;margin-left:10px;">Doviz Cinsi</label>
 					
 					<div style="position: relative; width: 110px;">
 					 <select
@@ -449,12 +484,12 @@
 					</div>
 					<!-- senin JS'in beklediği LABEL div -->
 					<div class="col" id="divcekbilgi" style="display: none;">
-						<label style="width: 100px">Cek Sayisi</label>
+						<label style="width: 100px;">Cek Sayisi</label>
 					</div>
 					<!-- senin JS'in beklediği INPUT div -->
 					<div class="col" id="cekbilgidiv" style="display: none;">
 						<label id="ceksayisi" class="form-control"
-							style="width: 110px; height: 46px; display: flex; align-items: center;">0</label>
+							style="width: 70px; height: 38px; display: flex; align-items: center;">0</label>
 					</div>
 					<div style="flex: 1 1 auto;"></div>
 					<!-- senin JS'in beklediği LABEL div -->
@@ -477,10 +512,10 @@
 			<!-- SATIR 5: checkbox -->
 			<div class="group-box">
         <div class="form-row">
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="fisnoyazdir">
+         
+            <input type="checkbox" class="form-check-input" style="margin-left:10px;" id="fisnoyazdir">
             <label class="form-check-label" for="fisnoyazdir">Yazicida Fis No Yazdir</label>
-          </div>
+          
         </div>
       </div>
 

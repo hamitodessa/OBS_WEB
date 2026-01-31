@@ -51,7 +51,10 @@ function openFirstModal(nerdenGeldi) {
   } else if (nerdenGeldi === "kerestegiris") {
     const fisno = val("fisno");
     if (!fisno || fisno === "0") return;
-  }
+  }	else if (nerdenGeldi === "kerestecikis") {
+		    const fisno = val("fisno");
+		    if (!fisno || fisno === "0") return;
+	}
 
   const modal = byId("firstModal");
   nerden = nerdenGeldi;
@@ -101,6 +104,7 @@ function openFirstModal(nerdenGeldi) {
 /* ================================================================================================================
    SECOND MODAL OPEN (HSP PLAN)
    ========================= */
+	 /*
 async function openSecondModal(inputId, secondnerden) {
   activeNestedInputId = inputId;
   modalShow("secondModal");
@@ -280,6 +284,8 @@ function filterTable() {
   });
 }
 
+
+
 function selectValue(inputId, selectedValue, secondnerden) {
   const inputElement = byId(inputId);
   if (!inputElement) return;
@@ -299,7 +305,7 @@ function selectValue(inputId, selectedValue, secondnerden) {
 
   modalHide("secondModal");
 }
-
+*/
 /* ====================================================================================================================*/
 /* =========================
    SAVE (FIRST MODAL -> MAIN)
@@ -546,6 +552,9 @@ function saveToMain() {
   else if (nerden === "kerestegiris") {
     setHiddenInAraContent("kerBilgi", val("ckodu"));
   }
+	else if (nerden === "kerestecikis") {
+	    setHiddenInAraContent("kerBilgi", val("ckodu"));
+	}
 
   else if (nerden === "kerestedetayrapor") {
     const degerler = [
@@ -698,20 +707,23 @@ function saveToMain() {
 	  OBS.CEKGIR.cekcariIsle();
 	}
   else if (nerden === "kurrapor") {
-    kurrapfetchTableData();
+    OBS.KURRAPOR.kurrapfetchTableData();
   }
   else if (nerden === "tahsilatckaydet") {
-    tahcariIsle();
+    OBS.TAHSILAT.tahcariIsle();
   }
   else if (nerden === "fatura") {
     OBS.FATURA.fatcariIsle();
   }
   else if (nerden === "irsaliye") {
-    irscariIsle();
+    OBS.IRSALIYE.irscariIsle();
   }
   else if (nerden === "kerestegiris") {
-    kercariIsle();
+    OBS.KERGIRIS.kercariIsle();
   }
+	else if (nerden === "kerestecikis") {
+	  OBS.KERCIKIS.kercariIsle();
+	}
   else if (nerden === "fatrapor") {
     OBS.FATRAPOR.fatdoldur();
     byId("fatrapmailButton") && (byId("fatrapmailButton").disabled = false);

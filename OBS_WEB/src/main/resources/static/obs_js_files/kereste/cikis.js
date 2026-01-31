@@ -1,5 +1,5 @@
 /* ==========================================================
-   OBS.KERCIKIS  (Vanilla / jQuery YOK)
+   OBS.KERCIKIS  (Vanilla / jQuery YOK)  - CLEAN FULL
    ========================================================== */
 window.OBS = window.OBS || {};
 OBS.KERCIKIS = OBS.KERCIKIS || {};
@@ -8,9 +8,11 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
   "use strict";
 
   /* ============ STATE ============ */
-  rowCounter = 0;
-  depolar = [];
-  urnkodlar = [];
+  NS.state = NS.state || {
+    rowCounter: 0,
+    depolar: [],
+    urnkodlar: [],
+  };
 
   /* ============ HELPERS (çakışmasız) ============ */
   const byId = (id) => document.getElementById(id);
@@ -40,12 +42,10 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     document.body.style.cursor = wait ? "wait" : "default";
   }
 
-  /* rowCounter artır */
   function incrementRowCounter() {
-    rowCounter++;
+    NS.state.rowCounter++;
   }
 
-  /* boş hücre üretici (label+span) */
   function emptyCellKer(textAlignRight = false, value = "") {
     return `
       <td>
@@ -57,7 +57,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
       </td>`;
   }
 
-  /* kerTbody altındaki satırları getir */
   function getKerRows() {
     return document.querySelectorAll("#kerTable #kerTbody tr");
   }
@@ -66,9 +65,9 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
   async function fetchpakdepo() {
     clearError();
 
-    rowCounter = 0;
-    depolar = [];
-    urnkodlar = [];
+    NS.state.rowCounter = 0;
+    NS.state.depolar = [];
+    NS.state.urnkodlar = [];
 
     try {
       const response = await fetchWithSessionCheck("kereste/getpakdepo", {
@@ -78,8 +77,8 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
 
       if (response?.errorMessage) throw new Error(response.errorMessage);
 
-      urnkodlar = response.paknolar || [];
-      depolar = response.depolar || [];
+      NS.state.urnkodlar = response.paknolar || [];
+      NS.state.depolar = response.depolar || [];
 
       initializeRows();
     } catch (e) {
@@ -89,8 +88,14 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
 
   /* 5 satır başlat */
   function initializeRows() {
-    rowCounter = 0;
+    const tbody = byId("kerTbody");
+    if (tbody) tbody.innerHTML = "";
+
+    NS.state.rowCounter = 0;
+
     for (let i = 0; i < 5; i++) satirekle();
+    updatePaketM3();
+    updateColumnTotal();
   }
 
   /* ============ ROW ADD ============ */
@@ -109,19 +114,20 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
 
     const newRow = tbody.insertRow();
     incrementRowCounter();
+    const rc = NS.state.rowCounter;
 
-    const paknooptionsHTML = (urnkodlar || [])
+    const paknooptionsHTML = (NS.state.urnkodlar || [])
       .map((kod) => `<option value="${kod.Paket_No}">${kod.Paket_No}</option>`)
       .join("");
 
-    const depOptionsHTML = (depolar || [])
+    const depOptionsHTML = (NS.state.depolar || [])
       .map((kod) => `<option value="${kod.DEPO}">${kod.DEPO}</option>`)
       .join("");
 
     newRow.innerHTML = `
       <!-- SIL -->
       <td>
-        <button id="bsatir_${rowCounter}" type="button"
+        <button id="bsatir_${rc}" type="button"
           class="btn btn-secondary ker-rowbtn" onclick="OBS.KERCIKIS.satirsil(this)">
           <i class="fa fa-trash"></i>
         </button>
@@ -131,11 +137,11 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
       <td>
         <div class="ker-dd">
           <input class="form-control cins_bold ker-cell"
-            list="pakOptions_${rowCounter}"
-            id="pakno_${rowCounter}"
+            list="pakOptions_${rc}"
+            id="pakno_${rc}"
             maxlength="30"
             onkeydown="if(event.key === 'Enter') OBS.KERCIKIS.paketkontrol(event,this)">
-          <datalist id="pakOptions_${rowCounter}">${paknooptionsHTML}</datalist>
+          <datalist id="pakOptions_${rc}">${paknooptionsHTML}</datalist>
           <span class="ker-dd-arrow">▼</span>
         </div>
       </td>
@@ -150,7 +156,7 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
       <!-- DEPO -->
       <td>
         <div class="ker-dd">
-          <select class="form-select ker-cell" id="depo_${rowCounter}"
+          <select class="form-select ker-cell" id="depo_${rc}"
             onkeydown="OBS.KERCIKIS.focusNextCell(event, this)">
             ${depOptionsHTML}
           </select>
@@ -251,7 +257,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
         return;
       }
 
-      // hedef index
       const currentRow = input.closest("tr");
       let targetIndex = currentRow.rowIndex - 1; // thead varsayımı
 
@@ -285,7 +290,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
         const m3Span = cells[5]?.querySelector("label span");
         if (m3Span) m3Span.textContent = formatNumber3(hesaplaM3(item.Kodu, item.Miktar) || 0);
 
-        // gizli satır no (en sonda)
         const hiddenIdx = cells.length - 1;
         if (cells[hiddenIdx]) cells[hiddenIdx].innerText = item.Satir || 0;
 
@@ -310,7 +314,7 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     const totalMiktarCell = byId("totalMiktar");
     const totalM3Cell = byId("totalM3");
     const totalPaketM3Cell = byId("totalPaketM3");
-    const tevoran = byId("tevoran");
+    const tevoranEl = byId("tevoran");
 
     let totalm3 = 0;
     let totalpakm3 = 0;
@@ -320,12 +324,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     let iskTop = 0;
     let kdvTop = 0;
     let brutTop = 0;
-
-    if (totalSatirCell) totalSatirCell.textContent = "0";
-    if (totalTutarCell) totalTutarCell.textContent = "0.00";
-    if (totalMiktarCell) totalMiktarCell.textContent = "0";
-    if (totalM3Cell) totalM3Cell.textContent = "0.000";
-    if (totalPaketM3Cell) totalPaketM3Cell.textContent = "0.000";
 
     rows.forEach((row) => {
       const firstColumn = row.querySelector("td:nth-child(2) input"); // paket no
@@ -358,25 +356,25 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
         if (result > 0) {
           brutTop += result;
           iskTop += (result * isk) / 100;
-          kdvTop += ((result - (result * isk / 100)) * kdv) / 100;
+          kdvTop += ((result - (result * isk) / 100) * kdv) / 100;
         }
       }
     });
 
-    // sağ bloklar (varsa)
+    const tev = tevoranEl ? (parseLocaleNumber(tevoranEl.value) || 0) : 0;
+
     byId("iskonto") && (byId("iskonto").innerText = formatNumber2(iskTop));
     byId("bakiye") && (byId("bakiye").innerText = formatNumber2(brutTop - iskTop));
     byId("kdv") && (byId("kdv").innerText = formatNumber2(kdvTop));
 
-    const tev = tevoran ? (parseLocaleNumber(tevoran.value) || 0) : 0;
-
     byId("tevedkdv") && (byId("tevedkdv").innerText = formatNumber2((kdvTop / 10) * tev));
     const genelTop = (brutTop - iskTop) + kdvTop;
     byId("tevdahtoptut") && (byId("tevdahtoptut").innerText = formatNumber2(genelTop));
-    byId("beyedikdv") &&
-      (byId("beyedikdv").innerText = formatNumber2(kdvTop - (kdvTop / 10) * tev));
-    byId("tevhartoptut") &&
-      (byId("tevhartoptut").innerText = formatNumber2((brutTop - iskTop) + (kdvTop - (kdvTop / 10) * tev)));
+    byId("beyedikdv") && (byId("beyedikdv").innerText = formatNumber2(kdvTop - (kdvTop / 10) * tev));
+    byId("tevhartoptut") && (
+      byId("tevhartoptut").innerText =
+        formatNumber2((brutTop - iskTop) + (kdvTop - (kdvTop / 10) * tev))
+    );
 
     if (totalTutarCell)
       totalTutarCell.textContent = brutTop.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -390,7 +388,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
       totalSatirCell.textContent = totalsatir.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   }
 
-  /* ============ M3 ============ */
   function hesaplaM3(kodu, miktar) {
     if (!kodu) return 0;
     const token = kodu.split("-");
@@ -399,12 +396,11 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     const d1 = token[1]?.trim();
     const d2 = token[2]?.trim();
     const d3 = token[3]?.trim();
-
     if (!d1 || !d2 || !d3) return 0;
+
     return ((parseFloat(d1) * parseFloat(d2) * parseFloat(d3)) * (miktar || 0)) / 1000000000;
   }
 
-  /* ============ PAKET M3 TOPLA ============ */
   function updatePaketM3() {
     const rows = getKerRows();
     const paketMap = new Map();
@@ -442,7 +438,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     if (tp) tp.textContent = "Paket:" + formatNumber0(paketadet);
   }
 
-  /* ============ NAV ENTER ============ */
   function focusNextRow(event, element) {
     if (event.key !== "Enter") return;
     event.preventDefault();
@@ -454,7 +449,7 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
       const secondInput = nextRow.querySelector("td:nth-child(2) input");
       if (secondInput) {
         secondInput.focus();
-        secondInput.select();
+        secondInput.select?.();
       }
     } else {
       satirekle();
@@ -463,7 +458,7 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
       const secondInput = lastRow?.querySelector("td:nth-child(2) input");
       if (secondInput) {
         secondInput.focus();
-        secondInput.select();
+        secondInput.select?.();
       }
     }
   }
@@ -479,20 +474,18 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
       const focusable = nextCell.querySelector("input,select");
       if (focusable) {
         focusable.focus();
-        if (focusable.select) focusable.select();
+        focusable.select?.();
         break;
       }
       nextCell = nextCell.nextElementSibling;
     }
   }
 
-  /* ============ CLEAR ============ */
   function clearInputs() {
-    // tablo temizle
     const tableBody = byId("kerTbody");
     if (tableBody) tableBody.innerHTML = "";
 
-    rowCounter = 0;
+    NS.state.rowCounter = 0;
     initializeRows();
 
     byId("totalSatir") && (byId("totalSatir").textContent = formatNumber0(0));
@@ -502,7 +495,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     byId("totalTutar") && (byId("totalTutar").textContent = formatNumber2(0));
     byId("totalPakadet") && (byId("totalPakadet").textContent = "");
 
-    // sağ bloklar
     byId("iskonto") && (byId("iskonto").innerText = "0.00");
     byId("bakiye") && (byId("bakiye").innerText = "0.00");
     byId("kdv") && (byId("kdv").innerText = "0.00");
@@ -512,165 +504,117 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     byId("tevhartoptut") && (byId("tevhartoptut").innerText = "0.00");
   }
 
-  /* ============ KER OKU ============ */
-  async function 	kerOku() {
-	  const fisno = document.getElementById("fisno")?.value?.trim() || "";
-	  if (!fisno) return;
+  async function kerOku() {
+    const fisno = byId("fisno")?.value?.trim() || "";
+    if (!fisno) return;
 
-	  const errorDiv = document.getElementById("errorDiv");
-	  document.body.style.cursor = "wait";
+    setCursor(true);
+    clearError();
 
-	  try {
-	    const response = await fetchWithSessionCheck("kereste/kerOku", {
-	      method: "POST",
-	      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-	      body: new URLSearchParams({ fisno, cins: "CIKIS" }),
-	    });
+    try {
+      const data = await fetchWithSessionCheck("kereste/kerOku", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ fisno, cins: "CIKIS" }),
+      });
 
-	    const data = response;
-	    clearInputs();
+      clearInputs();
 
-	    if (response?.errorMessage) throw new Error(response.errorMessage);
-	    if (!data?.data || data.data.length === 0) return;
+      if (data?.errorMessage) throw new Error(data.errorMessage);
+      if (!data?.data || data.data.length === 0) return;
 
-	    // gerekirse satır ekle
-	    const rowsNow = getKerRows();
-	    if (data.data.length > rowsNow.length) {
-	      const add = data.data.length - rowsNow.length;
-	      for (let i = 0; i < add; i++) satirekle();
-	    }
+      const rowsNow = getKerRows();
+      if (data.data.length > rowsNow.length) {
+        const add = data.data.length - rowsNow.length;
+        for (let i = 0; i < add; i++) satirekle();
+      }
 
-	    const rows = getKerRows();
+      const rows = getKerRows();
 
-	    data.data.forEach((item, index) => {
-	      const cells = rows[index]?.cells;
-	      if (!cells) return;
+      data.data.forEach((item, index) => {
+        const cells = rows[index]?.cells;
+        if (!cells) return;
 
-	      // 2. kolon: paketno input
-	      const paknoInput = cells[1]?.querySelector("input");
-	      if (paknoInput) paknoInput.value = (item.Paket_No || "") + "-" + (item.Konsimento || "");
+        const paknoInput = cells[1]?.querySelector("input");
+        if (paknoInput) paknoInput.value = (item.Paket_No || "") + "-" + (item.Konsimento || "");
 
-	      // 3-7 kolonlar: label spanlar
-	      const barkodSpan = cells[2]?.querySelector("label span");
-	      if (barkodSpan) barkodSpan.textContent = (item.Barkod && item.Barkod.trim()) ? item.Barkod : "\u00A0";
+        const barkodSpan = cells[2]?.querySelector("label span");
+        if (barkodSpan) barkodSpan.textContent = (item.Barkod && item.Barkod.trim()) ? item.Barkod : "\u00A0";
 
-	      const urunSpan = cells[3]?.querySelector("label span");
-	      if (urunSpan) urunSpan.textContent = item.Kodu || "\u00A0";
+        const urunSpan = cells[3]?.querySelector("label span");
+        if (urunSpan) urunSpan.textContent = item.Kodu || "\u00A0";
 
-	      const mikSpan = cells[4]?.querySelector("label span");
-	      if (mikSpan) mikSpan.textContent = formatNumber0(item.Miktar || 0);
+        const mikSpan = cells[4]?.querySelector("label span");
+        if (mikSpan) mikSpan.textContent = formatNumber0(item.Miktar || 0);
 
-	      const m3Span = cells[5]?.querySelector("label span");
-	      if (m3Span) m3Span.textContent = formatNumber3(hesaplaM3(item.Kodu, item.Miktar) || 0);
+        const m3Span = cells[5]?.querySelector("label span");
+        if (m3Span) m3Span.textContent = formatNumber3(hesaplaM3(item.Kodu, item.Miktar) || 0);
 
-	      const pm3Span = cells[6]?.querySelector("label span");
-	      if (pm3Span) pm3Span.textContent = "\u00A0";
+        const pm3Span = cells[6]?.querySelector("label span");
+        if (pm3Span) pm3Span.textContent = "\u00A0";
 
-	      // depo select
-	      const depoSel = cells[7]?.querySelector("select");
-	      if (depoSel) depoSel.value = item.CDepo || "";
+        const depoSel = cells[7]?.querySelector("select");
+        if (depoSel) depoSel.value = item.CDepo || "";
 
-	      // fiat/isk/kdv/tutar
-	      const fiatInput = cells[8]?.querySelector("input");
-	      if (fiatInput) fiatInput.value = formatNumber2(item.CFiat || 0);
+        const fiatInput = cells[8]?.querySelector("input");
+        if (fiatInput) fiatInput.value = formatNumber2(item.CFiat || 0);
 
-	      const iskInput = cells[9]?.querySelector("input");
-	      if (iskInput) iskInput.value = formatNumber2(item.CIskonto || 0);
+        const iskInput = cells[9]?.querySelector("input");
+        if (iskInput) iskInput.value = formatNumber2(item.CIskonto || 0);
 
-	      const kdvInput = cells[10]?.querySelector("input");
-	      if (kdvInput) kdvInput.value = formatNumber2(item.CKdv || 0);
+        const kdvInput = cells[10]?.querySelector("input");
+        if (kdvInput) kdvInput.value = formatNumber2(item.CKdv || 0);
 
-	      const tutarInput = cells[11]?.querySelector("input");
-	      if (tutarInput) tutarInput.value = formatNumber2(item.CTutar || 0);
+        const tutarInput = cells[11]?.querySelector("input");
+        if (tutarInput) tutarInput.value = formatNumber2(item.CTutar || 0);
 
-	      // izahat
-	      const izahatInput = cells[12]?.querySelector("input");
-	      if (izahatInput) izahatInput.value = item.CIzahat || "";
+        const izahatInput = cells[12]?.querySelector("input");
+        if (izahatInput) izahatInput.value = item.CIzahat || "";
 
-	      // gizli satır no (sende bazen 13, bazen en son td)
-	      const hiddenIdx = (cells.length > 13) ? 13 : (cells.length - 1);
-	      if (cells[hiddenIdx]) cells[hiddenIdx].innerText = item.Satir || "";
-	    });
+        const hiddenIdx = cells.length - 1;
+        if (cells[hiddenIdx]) cells[hiddenIdx].innerText = item.Satir || "";
+      });
 
-	    // üst alanlar (senin orijinalin birebir)
-	    const first = data.data[0];
-	    if (first) {
-	      const fisTarih = document.getElementById("fisTarih");
-	      if (fisTarih) fisTarih.value = formatdateSaatsiz(first.CTarih);
+      // üst alanlar (senin blok korunuyor)
+      const first = data.data[0];
+      if (first) {
+        byId("fisTarih") && (byId("fisTarih").value = formatdateSaatsiz(first.CTarih));
+        byId("anagrp") && (byId("anagrp").value = first.Ana_Grup || "");
+        byId("kur") && (byId("kur").value = first.CKur || "");
+        if (typeof anagrpChanged === "function" && byId("anagrp")) await anagrpChanged(byId("anagrp"));
+        byId("altgrp") && (byId("altgrp").value = first.Alt_Grup || "");
+        byId("ozelkod") && (byId("ozelkod").value = first.Ozel_Kod || "");
+        byId("nakliyeci") && (byId("nakliyeci").value = first.Nakliyeci || "");
+        byId("tevoran") && (byId("tevoran").value = first.CTevkifat || "0");
+        byId("carikod") && (byId("carikod").value = first.CCari_Firma || "");
+        byId("adreskod") && (byId("adreskod").value = first.CAdres_Firma || "");
+        byId("dovizcins") && (byId("dovizcins").value = first.CDoviz || "");
+      }
 
-	      const anagrp = document.getElementById("anagrp");
-	      if (anagrp) anagrp.value = first.Ana_Grup || "";
+      byId("a1") && (byId("a1").value = data.a1 || "");
+      byId("a2") && (byId("a2").value = data.a2 || "");
+      byId("not1") && (byId("not1").value = data?.dipnot?.[0] || "");
+      byId("not2") && (byId("not2").value = data?.dipnot?.[1] || "");
+      byId("not3") && (byId("not3").value = data?.dipnot?.[2] || "");
 
-	      const kur = document.getElementById("kur");
-	      if (kur) kur.value = first.CKur || "";
+      updatePaketM3();
+      updateColumnTotal();
 
-	      // altgrup doldurma (async)
-	      if (typeof anagrpChanged === "function" && anagrp) {
-	        await anagrpChanged(anagrp);
-	      }
+      if (typeof hesapAdiOgren === "function") {
+        hesapAdiOgren(byId("carikod")?.value || "", "cariadilbl");
+      }
+      if (typeof adrhesapAdiOgren === "function") {
+        adrhesapAdiOgren("adreskod", "adresadilbl");
+      }
 
-	      const altgrp = document.getElementById("altgrp");
-	      if (altgrp) altgrp.value = first.Alt_Grup || "";
+      clearError();
+    } catch (e) {
+      showError(e.message);
+    } finally {
+      setCursor(false);
+    }
+  }
 
-	      const ozelkod = document.getElementById("ozelkod");
-	      if (ozelkod) ozelkod.value = first.Ozel_Kod || "";
-
-	      const nakliyeci = document.getElementById("nakliyeci");
-	      if (nakliyeci) nakliyeci.value = first.Nakliyeci || "";
-
-	      const tevoran = document.getElementById("tevoran");
-	      if (tevoran) tevoran.value = first.CTevkifat || "0";
-
-	      const carikod = document.getElementById("carikod");
-	      if (carikod) carikod.value = first.CCari_Firma || "";
-
-	      const adreskod = document.getElementById("adreskod");
-	      if (adreskod) adreskod.value = first.CAdres_Firma || "";
-
-	      const dovizcins = document.getElementById("dovizcins");
-	      if (dovizcins) dovizcins.value = first.CDoviz || "";
-	    }
-
-	    const a1 = document.getElementById("a1");
-	    if (a1) a1.value = data.a1 || "";
-
-	    const a2 = document.getElementById("a2");
-	    if (a2) a2.value = data.a2 || "";
-
-	    const not1 = document.getElementById("not1");
-	    if (not1) not1.value = data?.dipnot?.[0] || "";
-
-	    const not2 = document.getElementById("not2");
-	    if (not2) not2.value = data?.dipnot?.[1] || "";
-
-	    const not3 = document.getElementById("not3");
-	    if (not3) not3.value = data?.dipnot?.[2] || "";
-
-	    updatePaketM3();
-	    updateColumnTotal();
-
-	    if (typeof hesapAdiOgren === "function") {
-	      hesapAdiOgren(document.getElementById("carikod")?.value || "", "cariadilbl");
-	    }
-	    if (typeof adrhesapAdiOgren === "function") {
-	      adrhesapAdiOgren("adreskod", "adresadilbl");
-	    }
-
-	    if (errorDiv) {
-	      errorDiv.style.display = "none";
-	      errorDiv.innerText = "";
-	    }
-	  } catch (error) {
-	    if (errorDiv) {
-	      errorDiv.style.display = "block";
-	      errorDiv.innerText = error.message || "Beklenmeyen bir hata oluştu.";
-	    }
-	  } finally {
-	    document.body.style.cursor = "default";
-	  }
-	}
-
-  /* ============ ROW DELETE ============ */
   function satirsil(button) {
     const row = button.closest("tr");
     if (row) row.remove();
@@ -678,9 +622,9 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     updateColumnTotal();
   }
 
-  /* ============ SON FIS / YENI FIS ============ */
   async function sonfis() {
     setCursor(true);
+    clearError();
     try {
       const response = await fetchWithSessionCheck("kereste/sonfis", {
         method: "POST",
@@ -690,10 +634,7 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
 
       if (response?.errorMessage) throw new Error(response.errorMessage);
 
-      const fisNoInput = byId("fisno");
-      if (fisNoInput) fisNoInput.value = response.fisno || "";
-
-      clearError();
+      byId("fisno") && (byId("fisno").value = response.fisno || "");
       clearInputs();
       kerOku();
     } catch (e) {
@@ -717,8 +658,7 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
 
       if (response?.errorMessage) throw new Error(response.errorMessage);
 
-      const fisNoInput = byId("fisno");
-      if (fisNoInput) fisNoInput.value = response.fisno || "";
+      byId("fisno") && (byId("fisno").value = response.fisno || "");
     } catch (e) {
       showError(e.message);
     } finally {
@@ -726,13 +666,12 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     }
   }
 
-  /* ============ YOKET (jQuery yok) ============ */
   async function kerYoket() {
     const fisno = byId("fisno")?.value?.trim() || "";
     const table = byId("kerTable");
-    const rows = table ? table.rows : [];
+    const rowsLen = table?.rows?.length || 0;
 
-    if (!fisno || fisno === "0" || rows.length === 0) {
+    if (!fisno || fisno === "0" || rowsLen === 0) {
       alert("Geçerli bir evrak numarası giriniz.");
       return;
     }
@@ -742,7 +681,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     setBtn("kersilButton", true, "Siliniyor...");
 
     try {
-      // NOT: endpoint ismini senin yazdığın gibi bıraktım
       const response = await fetchWithSessionCheck("kereste/fiscYoket", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -762,7 +700,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     }
   }
 
-  /* ============ SAVE DTO ============ */
   function prepareureKayit() {
     const keresteDTO = {
       fisno: byId("fisno")?.value || "",
@@ -798,38 +735,36 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     rows.forEach((row) => {
       const cells = row.querySelectorAll("td");
       const paketNo = cells[1]?.querySelector("input")?.value || "";
+      if (!paketNo.trim()) return;
 
-      if (paketNo.trim()) {
-        const hiddenIdx = cells.length - 1;
+      const hiddenIdx = cells.length - 1;
 
-        data.push({
-          paketno: paketNo,
-          cdepostring: cells[7]?.querySelector("select")?.value || "",
-          cfiat: parseLocaleNumber(cells[8]?.querySelector("input")?.value || 0),
-          ciskonto: parseLocaleNumber(cells[9]?.querySelector("input")?.value || 0),
-          ckdv: parseLocaleNumber(cells[10]?.querySelector("input")?.value || 0),
-          ctutar: parseLocaleNumber(cells[11]?.querySelector("input")?.value || 0),
-          cizahat: cells[12]?.querySelector("input")?.value || "",
-          satir: parseInt(cells[hiddenIdx]?.textContent?.trim() || "0", 10) || 0,
+      data.push({
+        paketno: paketNo,
+        cdepostring: cells[7]?.querySelector("select")?.value || "",
+        cfiat: parseLocaleNumber(cells[8]?.querySelector("input")?.value || 0),
+        ciskonto: parseLocaleNumber(cells[9]?.querySelector("input")?.value || 0),
+        ckdv: parseLocaleNumber(cells[10]?.querySelector("input")?.value || 0),
+        ctutar: parseLocaleNumber(cells[11]?.querySelector("input")?.value || 0),
+        cizahat: cells[12]?.querySelector("input")?.value || "",
+        satir: parseInt(cells[hiddenIdx]?.textContent?.trim() || "0", 10) || 0,
 
-          ukodu: cells[3]?.textContent?.trim() || "",
-          miktar: parseInt(cells[4]?.textContent?.trim() || "0", 10) || 0,
-          m3: parseFloat(cells[5]?.textContent?.trim() || "0") || 0.0,
-          pakm3: parseFloat(cells[6]?.textContent?.trim() || "0") || 0.0,
-        });
-      }
+        ukodu: cells[3]?.textContent?.trim() || "",
+        miktar: parseInt(cells[4]?.textContent?.trim() || "0", 10) || 0,
+        m3: parseFloat(cells[5]?.textContent?.trim() || "0") || 0.0,
+        pakm3: parseFloat(cells[6]?.textContent?.trim() || "0") || 0.0,
+      });
     });
 
     return data;
   }
 
-  /* ============ KAYIT (jQuery yok) ============ */
   async function kerKayit() {
     const fisno = byId("fisno")?.value || "";
     const table = byId("kerTable");
-    const rows = table ? table.rows : [];
+    const rowsLen = table?.rows?.length || 0;
 
-    if (!fisno || fisno === "0" || rows.length === 0) {
+    if (!fisno || fisno === "0" || rowsLen === 0) {
       alert("Geçerli bir evrak numarası giriniz.");
       return;
     }
@@ -837,6 +772,7 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     const dto = prepareureKayit();
     setBtn("kerkaydetButton", true, "İşleniyor...");
     setCursor(true);
+    clearError();
 
     try {
       const response = await fetchWithSessionCheck("kereste/cikKayit", {
@@ -858,7 +794,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     }
   }
 
-  /* ============ DOWNLOAD / MAIL ============ */
   function cikisbilgiler() {
     return {
       totaltutar: byId("totalTutar")?.innerText?.trim() || "0.00",
@@ -880,9 +815,9 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
   async function downloadcikis() {
     const fisno = byId("fisno")?.value || "";
     const table = byId("kerTable");
-    const rows = table ? table.rows : [];
+    const rowsLen = table?.rows?.length || 0;
 
-    if (!fisno || fisno === "0" || rows.length === 0) {
+    if (!fisno || fisno === "0" || rowsLen === 0) {
       alert("Geçerli bir evrak numarası giriniz.");
       return;
     }
@@ -890,6 +825,7 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     const dto = { ...prepareureKayit(), cikisbilgiDTO: cikisbilgiler() };
     setBtn("cikisdownloadButton", true, "İşleniyor...");
     setCursor(true);
+    clearError();
 
     try {
       const response = await fetchWithSessionCheckForDownload("kereste/cikis_download", {
@@ -898,9 +834,10 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
         body: JSON.stringify(dto),
       });
 
-      if (response.blob) {
-        const disposition = response.headers.get("Content-Disposition");
-        const fileName = disposition.match(/filename="(.+)"/)[1];
+      if (response?.blob) {
+        const disposition = response.headers.get("Content-Disposition") || "";
+        const m = disposition.match(/filename="(.+)"/);
+        const fileName = m ? m[1] : "rapor.bin";
 
         const url = window.URL.createObjectURL(response.blob);
         const a = document.createElement("a");
@@ -936,10 +873,54 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     else console.warn("mailsayfasiYukle bulunamadı!");
   }
 
+  /* ============ CARI ISLE (EKLENDI + EXPORT) ============ */
+  async function kercariIsle() {
+    const hesapKodu = byId("kerBilgi")?.value || "";
+    const fisno = byId("fisno")?.value || "";
+    const table = byId("kerTable");
+    const rowsLen = table?.rows?.length || 0;
+
+    if (!fisno || fisno === "0" || rowsLen === 0) {
+      alert("Geçerli bir evrak numarasi giriniz.");
+      return;
+    }
+
+    clearError();
+    setCursor(true);
+    setBtn("kercarikayitButton", true, "İşleniyor...");
+
+    const keresteDTO = {
+      fisno: fisno,
+      tarih: byId("fisTarih")?.value || "",
+      carikod: byId("carikod")?.value || "",
+      miktar: byId("totalM3")?.textContent || 0,
+      tutar: parseLocaleNumber(byId("tevhartoptut")?.innerText || 0),
+      karsihesapkodu: hesapKodu,
+    };
+
+    try {
+      const response = await fetchWithSessionCheck("kereste/kerccariKayit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(keresteDTO),
+      });
+
+      if (response?.errorMessage && response.errorMessage.trim() !== "") {
+        throw new Error(response.errorMessage);
+      }
+
+      clearError();
+    } catch (e) {
+      showError(e?.message || "Beklenmeyen bir hata oluştu.");
+    } finally {
+      setBtn("kercarikayitButton", false, "Cari Kaydet");
+      setCursor(false);
+    }
+  }
+
   /* ============ INIT ============ */
   function init() {
-    // sayfa açılınca dataları çekip 5 satırı bas
-    fetchpakdepo();
+    fetchpakdepo(); // bu zaten initializeRows çağırıyor
   }
 
   /* ============ EXPORTS ============ */
@@ -978,4 +959,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
   NS.downloadcikis = downloadcikis;
   NS.cikismailAt = cikismailAt;
 
+  NS.kercariIsle = kercariIsle;
 })(OBS.KERCIKIS);
+

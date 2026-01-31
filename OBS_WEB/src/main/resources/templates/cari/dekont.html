@@ -45,10 +45,10 @@
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.02);
   border-radius: 16px;
-  padding: 12px;
+  padding: 10px;
   margin-top: 5px;
   
-  width: 50%;
+  width: 55%;
   min-width:700px;
   box-sizing: border-box;
 }
@@ -129,7 +129,7 @@
 /* ===== GENİŞLİK HELPERS (senin eski classların) ===== */
 #ara_content .width-50{ width: 50px; }
 #ara_content .width-150{ width: 150px; }
-#ara_content .width-250{ width: 250px; }
+#ara_content .width-350{ width: 350px; }
 
 #ara_content .saga-bold{
   text-align: right;
@@ -149,7 +149,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
-  max-width: 260px;
+  max-width: 350px;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 #ara_content .alacakliAdi{
@@ -160,16 +160,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
-  max-width: 260px;
+  max-width: 350px;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
 /* ===== ÖZEL: BORÇ/ALACAK SATIRI YAN YANA KİLİT ===== */
-/* datalistli wrapper div (position:relative) sabit 150px */
+/* datalistli wrapper div (position:relative) sabit 150px 
 #ara_content .form-row > div[style*="position: relative"]{
   flex: 0 0 150px !important;
   width: 150px !important;
-}
+}*/
 
 /* cins label sabit */
 #ara_content #borcluHesapCins,
@@ -183,13 +183,15 @@
 #ara_content #alacakKurCins{
   flex: 0 0 110px !important;
   width: 110px !important;
+  
 }
 
 /* kur */
 #ara_content #borcKur,
 #ara_content #alacakKur{
-  flex: 0 0 100px !important;
-  width: 100px !important;
+  flex: 0 0 120px !important;
+  width: 120px !important;
+  margin-left:10px;
 }
 
 /* tutar (geniş) */
@@ -309,7 +311,18 @@
   font-weight: 900;
 }
 
+#ara_content .select-arrow{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
 
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(255,255,255,.85);
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
+}
 
 /* ===== RESPONSIVE (dar ekranda alt alta düşsün) ===== */
 @media (max-width: 820px){
@@ -329,29 +342,29 @@
 						<input type="date" id="dekontTarih" class="form-control" th:value="${evrakTarih}"
 							style="width: 140px;font-weight: bold;" /> 
 						<label for="bos" style="width: 160px;"></label>
-						<button type="button" class="btn btn-secondary ml-2" onclick="dekgerifisNo()">
+						<button type="button" class="btn btn-secondary ml-2" onclick="OBS.DEKONT.dekgerifisNo()">
 							<i class="fa fa-backward"></i>
 						</button>
 						
-						<button type="button" class="btn btn-secondary ml-2" onclick="deksonfisNo()">
+						<button type="button" class="btn btn-secondary ml-2" onclick="OBS.DEKONT.deksonfisNo()">
 							<i class="fa fa-refresh"></i>
 						</button>
 						
-						<button type="button" class="btn btn-secondary ml-2" onclick="dekilerifisNo()">
+						<button type="button" class="btn btn-secondary ml-2" onclick="OBS.DEKONT.dekilerifisNo()">
 							<i class="fa fa-forward"></i>
 						</button>
 						
-						<input type="text" id="evrakNo"  name="evrakNo" placeholder="0" onkeypress="checkEnter(event)" onkeydown="allowOnlyNumbers(event)"
+						<input type="text" id="evrakNo"  name="evrakNo" placeholder="0" onkeypress="OBS.DEKONT.checkEnter(event)" onkeydown="OBS.DEKONT.allowOnlyNumbers(event)"
 							class="form-control saga-bold" style="width: 100px;" />
 						
-						<button type="button" id="btnYeni" class="btn btn-secondary ml-2" onclick="dekyenifis()" ><i class="fa fa-plus"></i>	</button>
+						<button type="button" id="btnYeni" class="btn btn-secondary ml-2" onclick="OBS.DEKONT.dekyenifis()" ><i class="fa fa-plus"></i>	</button>
 					</div>
 				</div>
 			<!-- Borclu Hesap Child -->
 			<h6 style="text-align:left; color:red;">Borclu Hesap</h6>
 				<div class="group-box">
 					<div class="form-row-borc-alacak">    
-						<label for="cins" class="borcluAdi width-250" id="borcluAdi"></label> 
+						<label for="cins" class="borcluAdi width-350" id="borcluAdi"></label> 
 						<label for="cins"></label>
 					</div>
 					<div class="form-row">
@@ -361,7 +374,7 @@
 								ondblclick="openSecondModal('borcHesap', 'dekont')"
 								maxlength="12" style="width: 100%; padding-right: 30px;"
 								list="borcOptions" id="borcHesap" 
-								oninput="dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"	disabled>
+								oninput="OBS.DEKONT.dekhesapAdiOgren('borcHesap', 'borcluAdi', 'borcluHesapCins'); validateAutoSearch('borcHesap', 'borcOptions')"	disabled>
 								<datalist id="borcOptions" >
 									<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
 								</datalist>
@@ -370,24 +383,26 @@
 						</div>
 						<label for="cins" class="width-50 cins_bold" id="borcluHesapCins"></label> 
 						
-						<select class="form-select" style="width: 100px;" id="borcKurCins" disabled onchange="dekkurOku('borcluHesapCins',this,'borcKur')">
+						<div style="width:100px;position: relative;">
+						<select class="form-select" style="width:100px;" id="borcKurCins" disabled onchange="OBS.DEKONT.dekkurOku('borcluHesapCins',this,'borcKur')">
 							<option value="">Kur Cinsi</option>
 							<option value="MA">MA</option>
 							<option value="MS">MS</option>
 							<option value="SA">SA</option>
 							<option value="SS">SS</option>
 						</select> 
+						<span class="select-arrow">▼</span>
+						</div>
 						
-						
-						<input class="form-control saga-bold" style="width: 100px" type="number" id="borcKur" value="1.0000" disabled /> 
-						<input class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)" id="borcTutar" value="0.00" ondblclick="tutarKontrolBorc()" disabled />
+						<input class="form-control saga-bold"  type="number" id="borcKur" value="1.0000" disabled /> 
+						<input class="form-control saga-bold"  type="text" onblur="formatInputBox2(this)" id="borcTutar" value="0.00" ondblclick="OBS.DEKONT.tutarKontrolBorc()" disabled />
 					</div>
 				</div>
 			<!-- Alacakli Child -->
 			<h6 style="text-align:left; color:green;">Alacakli Hesap</h6>
 				<div class="group-box">
 					<div class="form-row-borc-alacak">
-						<label for="cins" class="alacakliAdi width-250" id="alacakliAdi"></label> 
+						<label for="cins" class="alacakliAdi width-350" id="alacakliAdi"></label> 
 						<label for="cins" ></label>
 					</div>
 					<div class="form-row">
@@ -396,7 +411,7 @@
 								ondblclick="openSecondModal('alacakHesap', 'dekont')"
 								style="width: 100%; padding-right: 30px;" list="alacakOptions"
 								maxlength="12" id="alacakHesap" 
-								oninput="dekhesapAdiOgren('alacakHesap', 'alacakliAdi', 'alacakliHesapCins'); validateAutoSearch('alacakHesap', 'alacakOptions')"
+								oninput="OBS.DEKONT.dekhesapAdiOgren('alacakHesap', 'alacakliAdi', 'alacakliHesapCins'); validateAutoSearch('alacakHesap', 'alacakOptions')"
 								disabled>
 							<datalist id="alacakOptions">
 								<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
@@ -406,17 +421,19 @@
 						</div>
 						<label for="cins" id="alacakliHesapCins" class="width-50 cins_bold"></label> 
 						
-						<select class="form-select" style="width: 100px" id="alacakKurCins" disabled onchange="dekkurOku('alacakliHesapCins',this,'alacakKur')">
+						<div style="position: relative;width:100px;">
+						<select class="form-select" style="width:100px;" id="alacakKurCins" disabled onchange="OBS.DEKONT.dekkurOku('alacakliHesapCins',this,'alacakKur')">
 							<option value="">Kur Cinsi</option>
 							<option value="MA">MA</option>
 							<option value="MS">MS</option>
 							<option value="SA">SA</option>
 							<option value="SS">SS</option>
 						</select> 
-							
+						<span class="select-arrow">▼</span>
+						</div>	
 						
-						<input class="form-control saga-bold" style="width: 100px" type="number" id="alacakKur" value="1.0000" disabled />
-						<input	ondblclick="tutarKontrolAlacak()" class="form-control saga-bold" style="width: 160px" type="text" onblur="formatInputBox2(this)"	id="alacakTutar" value="0.00" disabled />
+						<input class="form-control saga-bold"  type="number" id="alacakKur" value="1.0000" disabled />
+						<input	ondblclick="OBS.DEKONT.tutarKontrolAlacak()" class="form-control saga-bold"  type="text" onblur="formatInputBox2(this)"	id="alacakTutar" value="0.00" disabled />
 					</div>
 				</div>
 			<!-- Dördüncü Child -->
@@ -431,9 +448,9 @@
 			<!-- Buttonlar -->
 			<div class="buttonBolum">
 				<button class="btn btn-primary" type="button" id="dekkaydetButton"
-					onclick="dekfisKayit()">Kaydet</button>
+					onclick="OBS.DEKONT.dekfisKayit()">Kaydet</button>
 				<button class="btn btn-primary" type="button" id="deksilButton" 
-					onclick="dekfisYoket()">Sil</button>
+					onclick="OBS.DEKONT.dekfisYoket()">Sil</button>
 			</div>
 			<div id="errorDiv"></div>
     
