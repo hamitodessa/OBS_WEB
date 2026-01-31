@@ -5,29 +5,29 @@
    hover: YOK
    ========================= */
 
-#ara_content{ color: rgba(255,255,255,.92); }
+#ara_content{ color: rgba(255,255,255,.92);
 
-/* CARD */
-#ara_content .card{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
+ }
 
 /* LAYOUT */
-#ara_content .cardd{ display:flex; gap:12px; align-items:flex-start; }
+#ara_content .cardd{
+ display:flex;
+ gap:10px;
+ 
+ align-items:flex-start;
+ }
+
+
 #ara_content .child{
   width: 80%;
-  border: none !important;
+ 
   background: transparent !important;
-  padding: 0 !important;
+ 
 }
 
 /* GROUP-BOX cam + sexy horizontal scroll */
 #ara_content .group-box{
+  width: 100%;
   position: relative;
   overflow-x: auto;
   overflow-y: hidden;
@@ -35,23 +35,13 @@
 
   border: 1px solid rgba(255,255,255,.14) !important;
   background: rgba(8,14,26,.35) !important;
-  border-radius: 16px;
-  padding: 12px;
+  border-radius: 12px;
+  padding: 10px;
   margin: 10px 0;
 }
 
 /* scrollbar */
 #ara_content .group-box::-webkit-scrollbar{ height: 10px; }
-#ara_content .group-box::-webkit-scrollbar-track{
-  background: rgba(255,255,255,.06);
-  border-radius: 10px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-}
-#ara_content .group-box::-webkit-scrollbar-thumb{
-  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
-}
 #ara_content .group-box{
   scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
@@ -85,7 +75,7 @@
 
 /* TEXTAREA (Aciklama) */
 #ara_content textarea{
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
@@ -101,7 +91,7 @@
 
 /* BUTTONS */
 #ara_content .btn-primary{
-border-radius: 14px;
+border-radius: 12px;
   font-weight: 900;
   height: 40px;
   background: rgba(56,189,248,.18) !important;
@@ -117,13 +107,14 @@ border-radius: 14px;
 
 #ara_content .btn.btn-secondary{
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(255,255,255,.06) !important;
-  color: rgba(255,255,255,.88) !important;
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
 }
 #ara_content .btn.btn-secondary:hover{
-  background: rgba(56,189,248,.12) !important;
-  border-color: rgba(56,189,248,.35) !important;
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
 }
 
 /* =========================
@@ -186,6 +177,7 @@ border-radius: 14px;
 
 #ara_content .rec-info{
   padding: 10px 12px !important;
+   background: transparent !important;
 }
 
 #ara_content .rec-info .form-row{
@@ -364,6 +356,7 @@ border-radius: 14px;
   grid-template-columns: 80px 120px 40px 80px 150px 80px 150px; /* label+input+btn + label+select + label+select */
   gap: 8px 10px;
   align-items: center;
+  padding:10px;
 }
 
 /* Aciklama satırı: sol 3 kolon + sağ durum 2 kolon */
@@ -451,53 +444,47 @@ border-radius: 14px;
 
 </style>
 <link rel="stylesheet" href="style/urnkodlari.css" />
-<div class="card p-0">
-    <div class="cardd p-2">
+
+    <div class="cardd p-0">
         <div class="child">
-            <!-- ****************************************************************************************************** -->
-            <div class="group-box">
-                <div class="group-box">
-  <div class="rec-top">
+           <div class="group-box">
+  			<div class="rec-top">
+				 <label class="rec-kodu-label">Kodu</label>
 
-    <label class="rec-kodu-label">Kodu</label>
+			    <div class="rec-kodu-input" style="min-width:120px;max-width:120px;">
+      				<input class="form-control" style="font-weight:bold;" maxlength="10" id="recno"
+             		onkeydown="if(event.key === 'Enter') OBS.RECETE.receteOku()" ondblclick="OBS.RECETE.yeniFis();">
+    			</div>
 
-    <div class="rec-kodu-input" style="min-width:120px;max-width:120px;">
-      <input class="form-control" style="font-weight:bold;" maxlength="10" id="recno"
-             onkeydown="if(event.key === 'Enter') OBS.RECETE.receteOku()" ondblclick="OBS.RECETE.yeniFis();">
-    </div>
+    			<button class="btn btn-secondary rec-kodu-btn" type="button" onclick="OBS.RECETE.sonfis()">
+      					<i class="fa fa-refresh"></i>
+    			</button>
 
-    <button class="btn btn-secondary rec-kodu-btn" type="button" onclick="OBS.RECETE.sonfis()">
-      <i class="fa fa-refresh"></i>
-    </button>
+    			<label class="rec-anagrp-label">Ana Grup</label>
+    			<div class="rec-anagrp rec-select">
+      				<select class="form-select cins_bold" id="anagrp" onchange="OBS.RECETE.anagrpChanged(this)">
+        				<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
+      				</select>
+    			</div>
+				<label class="rec-altgrp-label">Alt Grup</label>
+    			<div class="rec-altgrp rec-select">
+      				<select class="form-select cins_bold" id="altgrp" disabled></select>
+    			</div>
+			    <label class="rec-aciklama-label" style="margin-top:6px;">Aciklama</label>
+    			<textarea class="rec-aciklama-text" id="aciklama" placeholder="Aciklama"
+              			rows="2" required maxlength="50" style="margin-top:6px;"></textarea>
+			    <label class="rec-durum-label" style="margin-top:6px;">Durum</label>
+    			<div class="rec-durum-select rec-select" style="margin-top:6px;">
+      				<select class="form-select cins_bold" id="durum">
+        				<option value="A">Aktif</option>
+        				<option value="P">Pasif</option>
+      				</select>
+    			</div>
+			</div>
+			</div>
+				
 
-    <label class="rec-anagrp-label">Ana Grup</label>
-    <div class="rec-anagrp rec-select">
-      <select class="form-select cins_bold" id="anagrp" onchange="OBS.RECETE.anagrpChanged(this)">
-        <option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
-      </select>
-    </div>
-
-    <label class="rec-altgrp-label">Alt Grup</label>
-    <div class="rec-altgrp rec-select">
-      <select class="form-select cins_bold" id="altgrp" disabled></select>
-    </div>
-
-    <label class="rec-aciklama-label" style="margin-top:6px;">Aciklama</label>
-    <textarea class="rec-aciklama-text" id="aciklama" placeholder="Aciklama"
-              rows="2" required maxlength="50" style="margin-top:6px;"></textarea>
-
-    <label class="rec-durum-label" style="margin-top:6px;">Durum</label>
-    <div class="rec-durum-select rec-select" style="margin-top:6px;">
-      <select class="form-select cins_bold" id="durum">
-        <option value="A">Aktif</option>
-        <option value="P">Pasif</option>
-      </select>
-    </div>
-
-  </div>
-</div>
-
-            </div>
+            
             <div class="group-box">
                 <div class="form-row">
                     <button class="btn btn-primary" type="button" id="reckaydetButton"
@@ -511,13 +498,14 @@ border-radius: 14px;
     </div>
 
     <div id="errorDiv"></div>
-    <div class="cardd p-1">
-        <div class="child">
-            <div class="group-box">
-                <div style="display: flex;align-items:center;margin-top:5px;">
-                    <button type="button" class="btn btn-secondary ml-2" 
-                        onclick="OBS.RECETE.satirekle()"><i class="fa fa-plus"></i></button>
-                </div>
+     <div class="cardd p-0">
+     <div class="child">
+        <button type="button" class="btn btn-secondary ml-2"
+         onclick="OBS.RECETE.satirekle()"><i class="fa fa-plus"></i></button>
+    </div> 
+        </div>          
+    <div class="cardd p-0">
+        <div class="child" >
                 <table class="table table-bordered" id="recTable" style="margin-top: 5px;">
                     <thead class="thead-dark">
                         <tr>
@@ -532,13 +520,13 @@ border-radius: 14px;
                     <tbody id="tbody">
                     </tbody>
                 </table>
-            </div>
+            
         </div>
     </div>
     <span class="rec-title">Uretilecek Yeni Urun</span>
 
-    <div class="cardd p-1">
-        <div class="child">
+    <div class="cardd p-0">
+        <div class="child" >
             <div class="group-box rec-info">
                 <div class="form-row">
                     <span style="padding-left: 20px;width:100px;">Kodu :</span>
@@ -565,7 +553,7 @@ border-radius: 14px;
             </div>
         </div>
     </div>
-</div>
+
 
 <input type="hidden" id="uretimBilgi" value="">
 

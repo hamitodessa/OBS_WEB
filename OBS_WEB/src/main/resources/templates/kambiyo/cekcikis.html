@@ -19,6 +19,19 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
+#ara_content .cardd{
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top:5px;
+   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+   box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+   padding: 5px !important;
+}
 /* NAV TABS */
 #ara_content .nav-tabs{
   border-bottom: 1px solid rgba(255,255,255,.14) !important;
@@ -40,11 +53,7 @@
 }
 
 /* LAYOUT */
-#ara_content .cardd{
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
+
 #ara_content .child{ width: 80%; }
 #ara_content .child2{ width: 20%; }
 
@@ -443,7 +452,7 @@ border-radius: 14px;
 	<!-- Tab 2 Content -->
 	<div class="tab-pane fade" id="tab2" role="tabpanel"
 		aria-labelledby="tab2-tab">
-		<div class="card p-4">
+		<div class="card p-4" style="margin-top:10px;">
 			<div class="input-group" style="padding: 2px;">
 				<div class="input-group-prepend">
 					<span class="input-group-text" style="width: 150px;">Aciklama
@@ -463,10 +472,10 @@ border-radius: 14px;
 		</div>
 	</div>
 </div>
-<button type="button" class="btn btn-secondary ml-2"
-	onclick="OBS.CEKCIK.cekcikaddRow()">
+<button type="button" class="btn btn-secondary ml-2" style="margin-top:5px;" onclick="OBS.CEKCIK.cekcikaddRow()">
 	<i class="fa fa-plus"></i>
 </button>
+
 <table class="table table-bordered tah-table" id="gbTable"
 	style="margin-top: 5px;">
 	<thead class="thead-dark">
@@ -510,7 +519,7 @@ border-radius: 14px;
 	th:if="${errorMessage}" th:text="${errorMessage}"></div>
 <input type="hidden" id="cekcikBilgi" name="cekcikBilgi" value="initialValue">
 
-<script src="/obs_js_files/kambiyo/cekcikis.js"></script>
+
 
 <div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>

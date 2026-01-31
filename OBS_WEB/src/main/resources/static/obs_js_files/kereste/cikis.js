@@ -918,6 +918,40 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
     }
   }
 
+	/* ========================= anagrpChanged ========================= */
+	async function anagrpChanged (anagrpElement)  {
+	    const anagrup = anagrpElement?.value || "";
+	    const selectElement = byId("altgrp");
+	    if (!selectElement) return;
+	    selectElement.innerHTML = "";
+	    if (anagrup === "") {
+	      selectElement.disabled = true;
+	      return;
+	    }
+	   setCursor(true);
+	   clearError();
+	    try {
+	      const response = await window.fetchWithSessionCheck("kereste/altgrup", {
+	        method: "POST",
+	        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+	        body: new URLSearchParams({ anagrup })
+	      });
+	      if (response?.errorMessage) throw new Error(response.errorMessage);
+	      (response?.altKodlari || []).forEach((kod) => {
+	        const option = document.createElement("option");
+	        option.value = kod.ALT_GRUP;
+	        option.textContent = kod.ALT_GRUP;
+	        selectElement.appendChild(option);
+	      });
+
+	      selectElement.disabled = selectElement.options.length === 0;
+	    } catch (error) {
+	      selectElement.disabled = true;
+	      showError(error?.message || "Beklenmeyen bir hata oluştu.");
+	    } finally {
+	      setCursor(false);
+	    }
+	  }
   /* ============ INIT ============ */
   function init() {
     fetchpakdepo(); // bu zaten initializeRows çağırıyor
@@ -960,5 +994,6 @@ OBS.KERCIKIS = OBS.KERCIKIS || {};
   NS.cikismailAt = cikismailAt;
 
   NS.kercariIsle = kercariIsle;
+	NS.anagrpChanged = anagrpChanged;
 })(OBS.KERCIKIS);
 

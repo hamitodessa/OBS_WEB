@@ -13,13 +13,30 @@
 
 /* CARD */
 #ara_content .card{
+  padding: 5px !important;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  margin-top:10px;
 }
+
+#ara_content .cardd{ 
+ display: flex;
+ gap: 6px;
+ align-items: flex-start;
+ margin-top:10px;
+ background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+ border: 1px solid rgba(255,255,255,.16) !important;
+ border-radius: 18px;
+ box-shadow: 0 18px 55px rgba(0,0,0,.45);
+ backdrop-filter: blur(14px);
+ -webkit-backdrop-filter: blur(14px);
+  padding: 5px !important;
+ 
+ }
 
 /* NAV TABS */
 #ara_content .nav-tabs{
@@ -42,7 +59,7 @@
 }
 
 /* LAYOUT */
-#ara_content .cardd{ display:flex; gap:12px; align-items:flex-start; }
+
 #ara_content .child, 
 #ara_content .child2{ border:none !important; background:transparent; padding:0; }
 #ara_content .child{ width: 80%; }
@@ -181,7 +198,8 @@ border-radius: 14px;
 
 #ara_content .resimdiv{
   width: 100%;
-  min-height: 250px;
+  max-height: 240px;
+  height: 240px;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -587,7 +605,8 @@ border-radius: 14px;
 							<i class="fa fa-refresh"></i>
 					</button>
 					<span style="padding-left: 10px;"></span> 
-					<input type="date" id="fisTarih" class="form-control" th:value="${fisTarih}" style="width: 125px; font-weight: bold;" />
+					<input type="date" id="fisTarih" class="form-control" th:value="${fisTarih}" 
+						style="width: 125px; font-weight: bold;" />
 					<span style="padding-left: 10px;"></span> 
 					<label style="width:75px;">Ozel Kod</label>	
 					<div style="position:relative; width:125px;">
@@ -629,7 +648,9 @@ border-radius: 14px;
 								oninput="hesapAdiOgren(this.value, 'cariadilbl')">
 					</div>
 					<span style="padding-left: 50px;"></span> 
-					<input type="date" id="sevkTarih" class="form-control"  style="width: 125px; " />
+					
+					<input type="date" id="sevkTarih" class="form-control"  style="width: 125px; font-weight: bold;"/>
+					
 					<span style="padding-left: 10px;"></span> 
 					<label style="width:80px;">Adres Kod</label>
 					<span style="padding-left: 5px;"></span> 
@@ -657,7 +678,7 @@ border-radius: 14px;
 				</div>
 			<!-- 2 SATIR  SONU -->
 			<!-- 3 SATIR  -->
-			<div style="display: flex; align-items: center;margin-top:10px; ">
+			<div style="display: flex; align-items: center;height:25px; ">
 					<span style="padding-left: 85px;"></span> 
 					<label style="width:350px;" id="cariadilbl"></label>
 					<span style="padding-left: 5px;"></span> 
@@ -768,7 +789,8 @@ border-radius: 14px;
 		</div>	
 	</div>	
 </div>
-<button type="button" class="btn btn-secondary ml-2" onclick="OBS.IRSALIYE.satirekle()"><i class="fa fa-plus"></i></button>
+<button type="button" class="btn btn-secondary ml-2" style="margin-top:5px;" 
+			onclick="OBS.IRSALIYE.satirekle()"><i class="fa fa-plus"></i></button>
 
 <table class="table table-bordered" id="irsTable"
 	style="margin-top: 5px;">

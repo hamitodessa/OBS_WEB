@@ -25,11 +25,11 @@
 #ara_content .child2{
   width: calc(50% - 5px);
   min-width: 420px;
-  padding: 8px;
+  padding: 5px;
   margin: 0;
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.04);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,.25);
 }
 
@@ -43,10 +43,10 @@
 
 #ara_content .group-box{
   width: 100%;
-  padding: 8px;
+  padding: 5px;
   margin: 0;
   box-sizing: border-box;
-  border-radius: 16px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.12);
   background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
 }
@@ -61,8 +61,8 @@
 /* Inputs / Select */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 40px !important;
-  border-radius: 12px;
+  height: 36px !important;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -83,18 +83,18 @@
 
 /* Buttons */
 #ara_content .btn{
+  border-radius: 14px;
+  font-weight: 900;
   height: 40px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.08);
-  color: rgba(255,255,255,.92);
-  transition: .16s ease;
-  padding: 0 12px;
+ background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
 }
 
 #ara_content .btn:hover{
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
-  background: rgba(255,255,255,.12);
 }
 
 #ara_content .ml-2{ margin-left: 8px !important; }
@@ -264,15 +264,9 @@
 }
 
 </style>
-
-
-
-
  
     <div class="cardd">
-
       <div class="child">
-       
           <div style="display:flex; align-items:center; gap:10px;">
             <label style="width:120px;">Konsimento</label>
             <input class="form-control" style="font-weight:900; width:120px;"
@@ -311,7 +305,7 @@
           </button>
         </div>
 
-        <div style="height:8px;"></div>
+        
 
         <div style="display:flex; align-items:center; gap:10px;">
           <label style="width:120px;">Yeni Konsimento</label>

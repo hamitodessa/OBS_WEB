@@ -13,14 +13,28 @@
 
 /* ===== CARD (genel) ===== */
 #ara_content .card{
+  padding: 5px !important;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  margin-top:10px;
 }
-
+#ara_content .cardd{
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 5px !important;
+}
 /* ===== NAV TABS ===== */
 #ara_content .nav-tabs{
   border-bottom: 1px solid rgba(255,255,255,.14) !important;
@@ -44,11 +58,7 @@
 }
 
 /* ===== LAYOUT (child / child2) ===== */
-#ara_content .cardd{
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
+
 
 #ara_content .child,
 #ara_content .child2{
@@ -76,7 +86,7 @@
   background: rgba(8,14,26,.35) !important;
   border-radius: 16px;
   padding: 12px;
-  margin: 10px 0;
+  margin: 8px 0 !important;
 }
 
 /* WebKit scrollbar */
@@ -200,10 +210,11 @@ border-radius: 14px;
 /* ===== RESIM (tam sığsın) ===== */
 #ara_content .resimdiv{
   width: 100%;
-  max-height: 250px;   /* resim alanı sabit şık */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-height: 240px;
+  height: 240px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
   border: 1px solid rgba(255,255,255,.18) !important;
@@ -211,15 +222,15 @@ border-radius: 14px;
   overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
 }
-
 #ara_content #resimGoster.resimgoster{
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;   /* ✅ taşma yok */
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit: contain;
   object-position: center;
   background: rgba(0,0,0,.20) !important;
 }
+
 
 /* =========================
    TABLE – fatTable (hover YOK)
@@ -800,7 +811,7 @@ border-radius: 14px;
 				</div>
 			<!-- 2 SATIR  SONU -->
 			<!-- 3 SATIR  -->
-			<div style="display: flex; align-items: center; ">
+			<div style="display: flex; align-items: center;height:25px; ">
 					<span style="padding-left: 85px;"></span> 
 					<label style="width:350px;" id="cariadilbl"></label>
 					<span style="padding-left: 5px;"></span> 
@@ -890,7 +901,8 @@ border-radius: 14px;
 		</div>
 	</div>	
 </div>
-<button type="button" class="btn btn-secondary ml-2" onclick="OBS.FATURA.satirekle()"><i class="fa fa-plus"></i></button>
+<button type="button" class="btn btn-secondary ml-2" style="margin-top:5px;" 
+			onclick="OBS.FATURA.satirekle()"><i class="fa fa-plus"></i></button>
 
 <table class="table table-bordered" id="fatTable"
 	style="margin-top: 5px;">

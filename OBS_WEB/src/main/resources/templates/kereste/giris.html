@@ -20,7 +20,23 @@ padding: 0px !important;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  margin-top:10px;
+  padding: 5px !important;
 }
+
+#ara_content #tab2 .card,
+#ara_content #tab3 .card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  margin-top:10px;
+  padding: 5px !important;
+}
+
+
 
 /* ===== NAV TABS ===== */
 #ara_content .nav-tabs{
@@ -63,8 +79,8 @@ padding: 0px !important;
 /* ===== INPUT / SELECT (base) ===== */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 44px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
@@ -112,15 +128,22 @@ border-radius: 14px;
 }
 
 
-#ara_content .btn.btn-secondary{
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(255,255,255,.06) !important;
-  color: rgba(255,255,255,.88) !important;
+
+
+#ara_content .btn-secondary{
+  border-radius: 10px;
+  font-weight: 900;
+  height: 40px;
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
 }
-#ara_content .btn.btn-secondary:hover{
-  background: rgba(56,189,248,.12) !important;
-  border-color: rgba(56,189,248,.35) !important;
+
+
+#ara_content .btn-secondary:hover{ 
+ background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
 }
 
 /* =========================
@@ -150,9 +173,9 @@ border-radius: 14px;
 /* input/select kompakt */
 #ara_content #tab1 .ker-compact .form-control,
 #ara_content #tab1 .ker-compact .form-select{
-  height: 38px !important;
+  height: 36px !important;
   padding: 8px 10px !important;
-  border-radius: 12px !important;
+  border-radius: 10px !important;
   font-weight: 800;
 }
 
@@ -463,18 +486,7 @@ border-radius: 14px;
    Scope: #ara_content #tab2 / #tab3
    ========================= */
 
-#ara_content #tab2 .card,
-#ara_content #tab3 .card{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
 
-  /* KOMPAKT */
-  padding: 10px 12px !important;
-}
 
 /* satırlar kompakt */
 #ara_content #tab2 .form-row,
@@ -494,8 +506,8 @@ border-radius: 14px;
 
 #ara_content #tab2 .input-group-text,
 #ara_content #tab3 .input-group-text{
-  height: 44px !important;
-  border-radius: 14px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.45) !important;
   color: rgba(255,255,255,.88) !important;
@@ -508,8 +520,8 @@ border-radius: 14px;
 /* tab2-tab3 input cam */
 #ara_content #tab2 .form-control,
 #ara_content #tab3 .form-control{
-  height: 44px !important;
-  border-radius: 14px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
@@ -669,6 +681,7 @@ border-radius: 14px;
 							ondblclick="openSecondModal('carikod', 'fatura')" maxlength="12"
 							oninput="hesapAdiOgren(this.value, 'cariadilbl')">
 					</div>
+					
 					<label>Adres Kod</label>
 					<div style="min-width: 120px; max-width: 120px;">
 						<input id="adreskod" class="form-control"
@@ -680,7 +693,9 @@ border-radius: 14px;
 					<label>Cari</label> <label class="ker-wide" id="cariadilbl">....</label>
 					<label>Adres</label> <label class="ker-wide" id="adresadilbl">....</label>
 				</div>
-				<div class="group-box">
+				
+			</div>
+			<div class="group-box">
 					<div class="form-row">
 						<button class="btn btn-primary" type="button" id="kerkaydetButton"
 							onclick="OBS.KERGIRIS.kerKayit()">Kaydet</button>
@@ -698,7 +713,6 @@ border-radius: 14px;
 							onclick="OBS.KERGIRIS.girismailAt()">Mail At</button>
 					</div>
 				</div>
-			</div>
 		</div>
 		<div id="errorDiv"></div>
 		<!-- Tab 2 Content -->
@@ -753,7 +767,7 @@ border-radius: 14px;
 		</div>
 	</div>
 </div>
-<button type="button" class="btn btn-secondary ml-2" onclick="OBS.KERGIRIS.satirekle()">
+<button type="button" class="btn btn-secondary ml-2" style="margin-top:5px;"  onclick="OBS.KERGIRIS.satirekle()">
 		<i class="fa fa-plus"></i></button>
 		
 	<table class="table table-bordered" id="kerTable"

@@ -14,12 +14,14 @@ padding: 0px !important;
 
 /* ===== CARD ===== */
 #ara_content .card{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+ background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  margin-top:10px;
+  padding: 5px !important;
 }
 
 /* ===== NAV TABS ===== */
@@ -92,8 +94,8 @@ padding: 0px !important;
 #ara_content #tab1 .input-group-text,
 #ara_content #tab2 .input-group-text,
 #ara_content #tab3 .input-group-text{
-  height: 38px !important;
-  border-radius: 12px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.45) !important;
   color: rgba(255,255,255,.90) !important;
@@ -110,9 +112,9 @@ padding: 0px !important;
 #ara_content #tab2 .form-select,
 #ara_content #tab3 .form-control,
 #ara_content #tab3 .form-select{
-  height: 38px !important;
-  min-height: 38px !important;
-  border-radius: 12px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  border-radius: 10px !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
@@ -145,9 +147,25 @@ padding: 0px !important;
 /* date dark */
 #ara_content #tab1 input[type="date"]{ color-scheme: dark; }
 
-/* buttons */
-#ara_content #tab1 .btn{
- border-radius: 14px;
+#ara_content .btn-primary{
+border-radius: 14px;
+  font-weight: 900;
+  height: 40px;
+ background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
+}
+#ara_content .btn-primary:hover{
+   background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
+}
+
+
+
+
+#ara_content .btn-secondary{
+  border-radius: 10px;
   font-weight: 900;
   height: 40px;
   background: rgba(56,189,248,.18) !important;
@@ -156,23 +174,12 @@ padding: 0px !important;
 }
 
 
-#ara_content #tab1 .btn.btn-primary:hover{ 
+#ara_content .btn-secondary:hover{ 
  background: rgba(56,189,248,.26) !important;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
 
-
-#ara_content .btn.btn-secondary{
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(255,255,255,.06) !important;
-  color: rgba(255,255,255,.88) !important;
-}
-#ara_content .btn.btn-secondary:hover{
-  background: rgba(56,189,248,.12) !important;
-  border-color: rgba(56,189,248,.35) !important;
-}
 
 /* select ok (beyaz) */
 #ara_content #tab1 .form-select,
@@ -245,6 +252,13 @@ padding: 0px !important;
   border: 1px solid rgba(255,255,255,.10);
   color: rgba(255,255,255,.92);
   font-weight:900;
+}
+#ara_content label{
+  color: rgba(255,255,255,.84);
+  font-weight: 800;
+  font-size: 13px;
+  margin: 0 !important;
+  white-space: nowrap;
 }
 
 /* responsive */
@@ -651,7 +665,6 @@ padding: 0px !important;
               ondblclick="openSecondModal('carikod','fatura')" maxlength="12"
               oninput="hesapAdiOgren(this.value,'cariadilbl')">
           </div>
-
           <label>Adres Kod</label>
           <div style="min-width:120px;max-width:120px;">
           <input id="adreskod" class="form-control" style="width:120px;font-weight:bold;"
@@ -664,8 +677,8 @@ padding: 0px !important;
 					<label>Cari</label> <label class="ker-wide" id="cariadilbl">....</label>
 					<label>Adres</label> <label class="ker-wide" id="adresadilbl">....</label>
 		</div>
-
       </div>
+
       <div class="group-box">
         <div class="form-row" style="gap:8px;margin:0;">
           <button class="btn btn-primary" type="button" id="kerkaydetButton" onclick="OBS.KERCIKIS.kerKayit()">Kaydet</button>
@@ -748,7 +761,7 @@ padding: 0px !important;
 <!-- =======================
    TABLO + BUTON
 ======================= -->
-<button type="button" class="btn btn-secondary ml-2" onclick="OBS.KERCIKIS.satirekle()">
+<button type="button" class="btn btn-secondary ml-2" style="margin-top:5px;" onclick="OBS.KERCIKIS.satirekle()">
   <i class="fa fa-plus"></i>
 </button>
 
