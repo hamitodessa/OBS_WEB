@@ -2,43 +2,61 @@
 <link rel="stylesheet" href="style/adrkodlari.css" />
 <link rel="stylesheet" href="/style/carihesap/borcalacak.css">
 <style>
-/* =========================
-   2026 CAM – KERESTE (TEMIZ)
-   wrapper: #ara_content
-   ========================= */
+/* =========================================
+   2026 CAM – KERESTE (CLEAN PACK)
+   Scope: #ara_content
+   ========================================= */
 
-#ara_content{ 
-color: rgba(255,255,255,.92); 
-padding: 0px !important;
+#ara_content{
+  color: rgba(255,255,255,.92);
+  padding: 0 !important;
 }
 
-/* ===== CARD (genel) ===== */
+/* -------------------------
+   TOKENS (okunabilirlik)
+------------------------- */
+#ara_content{
+  --cam-bg1: rgba(255,255,255,.10);
+  --cam-bg2: rgba(255,255,255,.06);
+  --cam-border: rgba(255,255,255,.16);
+  --cam-soft: rgba(255,255,255,.10);
+
+  --ink: rgba(255,255,255,.92);
+  --ink-dim: rgba(255,255,255,.78);
+  --ink-muted: rgba(255,255,255,.55);
+
+  --field-bg: rgba(8,14,26,.55);
+  --field-bg-focus: rgba(8,14,26,.65);
+
+  --acc1: rgba(56,189,248,.65);
+  --acc1-soft: rgba(56,189,248,.18);
+  --acc1-mid: rgba(56,189,248,.26);
+  --acc1-border: rgba(56,189,248,.35);
+
+  --acc2: rgba(34,197,94,.55);
+
+  --radius-card: 18px;
+  --radius-ctrl: 10px;
+  --blur: 14px;
+}
+
+/* -------------------------
+   CARD (genel)
+------------------------- */
 #ara_content .card{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  margin-top:10px;
-  padding: 5px !important;
-}
-
-#ara_content #tab2 .card,
-#ara_content #tab3 .card{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px !important;
+  background: linear-gradient(180deg, var(--cam-bg1), var(--cam-bg2)) !important;
+  border: 1px solid var(--cam-border) !important;
+  border-radius: var(--radius-card) !important;
   box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  margin-top:10px;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  margin-top: 10px;
   padding: 5px !important;
 }
 
-
-
-/* ===== NAV TABS ===== */
+/* -------------------------
+   NAV TABS
+------------------------- */
 #ara_content .nav-tabs{
   border-bottom: 1px solid rgba(255,255,255,.14) !important;
   gap: 8px;
@@ -58,16 +76,9 @@ padding: 0px !important;
   box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-/* ===== GROUP BOX ===== */
-#ara_content .group-box{
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.35) !important;
-  border-radius: 16px;
-  padding: 12px;
-  margin: 10px 0;
-}
-
-/* ===== LABEL ===== */
+/* -------------------------
+   LABEL
+------------------------- */
 #ara_content label{
   color: rgba(255,255,255,.84);
   font-weight: 800;
@@ -76,31 +87,38 @@ padding: 0px !important;
   white-space: nowrap;
 }
 
-/* ===== INPUT / SELECT (base) ===== */
+/* -------------------------
+   INPUT / SELECT (base CAM 2026)
+------------------------- */
 #ara_content .form-control,
 #ara_content .form-select{
   height: 36px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.92) !important;
+  border-radius: var(--radius-ctrl);
+  border: 1px solid var(--cam-border) !important;
+  background: var(--field-bg) !important;
+  color: #fff !important;
+  font-weight: 900;
+  text-shadow: 0 2px 10px rgba(0,0,0,.55);
   padding: 10px 14px !important;
   outline: none;
 }
+
 #ara_content .form-control::placeholder{
-  color: rgba(255,255,255,.55) !important;
+  color: var(--ink-muted) !important;
   font-weight: 600;
 }
+
 #ara_content .form-control:focus,
 #ara_content .form-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
+  border-color: var(--acc1) !important;
   box-shadow: 0 0 0 5px rgba(56,189,248,.18);
-  background: rgba(8,14,26,.65) !important;
-  color:#fff !important;
+  background: var(--field-bg-focus) !important;
+  color: #fff !important;
 }
+
 #ara_content input[type="date"]{ color-scheme: dark; }
 
-/* ===== SELECT ARROW (BEYAZ) ===== */
+/* SELECT ok */
 #ara_content .form-select{
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -113,70 +131,81 @@ padding: 0px !important;
 }
 #ara_content .form-select::-ms-expand{ display: none; }
 
-#ara_content .btn-primary{
-border-radius: 14px;
-  font-weight: 900;
-  height: 40px;
- background: rgba(56,189,248,.18) !important;
-  border: 1px solid rgba(56,189,248,.35) !important;
-  color: rgba(255,255,255,.95) !important;
-}
-#ara_content .btn-primary:hover{
-   background: rgba(56,189,248,.26) !important;
-  border-color: rgba(56,189,248,.55) !important;
-  transform: translateY(-1px);
-}
-
-
-
-
+/* -------------------------
+   BUTTONS (CAM)
+------------------------- */
+#ara_content .btn-primary,
 #ara_content .btn-secondary{
-  border-radius: 10px;
+  border-radius: 14px;
   font-weight: 900;
   height: 40px;
-  background: rgba(56,189,248,.18) !important;
-  border: 1px solid rgba(56,189,248,.35) !important;
+  background: var(--acc1-soft) !important;
+  border: 1px solid var(--acc1-border) !important;
   color: rgba(255,255,255,.95) !important;
 }
-
-
-#ara_content .btn-secondary:hover{ 
- background: rgba(56,189,248,.26) !important;
+#ara_content .btn-primary:hover,
+#ara_content .btn-secondary:hover{
+  background: var(--acc1-mid) !important;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
+}
+
+/* -------------------------
+   GROUP BOX + CHILD SCROLL (tek yerde!)
+------------------------- */
+#ara_content .group-box{
+  background: rgba(8,14,26,.18);
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: 18px;
+  padding: 10px;
+  margin: 10px 0;
+
+  max-height: calc(100vh - 220px);
+  overflow: auto;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .group-box::-webkit-scrollbar{ width: 10px; height: 10px; }
+#ara_content .group-box::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .group-box::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25), inset 0 0 0 1px rgba(255,255,255,.20);
+}
+#ara_content .group-box::-webkit-scrollbar-thumb:active{
+  background: linear-gradient(135deg, rgba(56,189,248,.85), rgba(34,197,94,.70));
 }
 
 /* =========================
-   KER - GIRIS BILGILERI (KOMPAKT)
-   sadece #tab1 .ker-compact
+   TAB1 – KER COMPACT GRID
    ========================= */
-
-#ara_content #tab1 .ker-compact{
-  padding: 10px 12px !important;
-}
-
-/* eskiden span ile boşluk veriyordun, kompakt modda kapat */
+#ara_content #tab1 .ker-compact{ padding: 10px 12px !important; }
 #ara_content #tab1 .ker-compact span[style*="padding-left"]{ display:none !important; }
 
-/* satırlar grid */
 #ara_content #tab1 .ker-compact .ker-row{
   display: grid !important;
   align-items: center;
   column-gap: 10px;
   row-gap: 8px;
-
-  /* ✅ satırlar arası 5px boşluk */
   margin: 0 0 5px 0 !important;
 }
 #ara_content #tab1 .ker-compact .ker-row:last-child{ margin-bottom: 0 !important; }
 
-/* input/select kompakt */
+/* Tab1 input/select biraz daha “kompakt” */
 #ara_content #tab1 .ker-compact .form-control,
 #ara_content #tab1 .ker-compact .form-select{
   height: 36px !important;
   padding: 8px 10px !important;
   border-radius: 10px !important;
-  font-weight: 800;
+  font-weight: 900 !important;
 }
 
 /* refresh butonu */
@@ -198,28 +227,23 @@ border-radius: 14px;
     55px 60px;
 }
 
-/* 2. satır (senin istediğin hizaya göre: Nakliyeci Ozel Kod altı) */
+/* 2. satır (Nakliyeci altına kaydırma) */
 #ara_content #tab1 .ker-compact .ker-row.row-2{
   grid-template-columns:
-    72px 120px 44px 125px     /* solda boş */
-    72px 150px                /* Nakliyeci */
-    72px 150px                /* Mensei */
-    62px 150px                /* Depo */
-    55px 80px                 /* Kur */
-  !important;
+    72px 120px 44px 125px
+    72px 150px
+    72px 150px
+    62px 150px
+    55px 80px !important;
 }
-#ara_content #tab1 .ker-compact .ker-row.row-2 > :first-child{
-  grid-column: 5 !important;
-}
+#ara_content #tab1 .ker-compact .ker-row.row-2 > :first-child{ grid-column: 5 !important; }
 
 /* 3. satır */
 #ara_content #tab1 .ker-compact .ker-row.row-3{
-  grid-template-columns:
-    72px 1fr
-    72px 1fr;
+  grid-template-columns: 72px 1fr 72px 1fr;
 }
 
-/* isim label'ları */
+/* cari/adres isim label chip */
 #ara_content #tab1 .ker-compact .ker-wide{
   overflow: hidden;
   text-overflow: ellipsis;
@@ -241,10 +265,109 @@ border-radius: 14px;
 }
 
 /* =========================
+   TAB2 / TAB3 – form-row, input-group, checkbox
+   ========================= */
+#ara_content #tab2 .form-row,
+#ara_content #tab3 .form-row{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px 14px !important;
+  margin: 0 0 8px 0 !important;
+  flex-wrap: wrap;
+}
+
+/* input-group cam (text + input) */
+#ara_content #tab2 .input-group,
+#ara_content #tab3 .input-group{ margin: 0 !important; }
+
+#ara_content #tab2 .input-group-text,
+#ara_content #tab3 .input-group-text{
+  height: 36px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.45) !important;
+  color: rgba(255,255,255,.88) !important;
+  font-weight: 900 !important;
+  letter-spacing: .2px !important;
+  padding: 10px 14px !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+
+/* tab2/tab3 input zaten base; sadece küçük ince ayar */
+#ara_content #tab2 .form-control,
+#ara_content #tab3 .form-control{
+  font-weight: 900 !important;
+}
+
+/* TAB2 checkbox cam chip */
+#ara_content #tab2 .form-check{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 12px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.35) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+  margin: 0 !important;
+}
+#ara_content #tab2 .form-check-input{
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  background-color: rgba(255,255,255,.08) !important;
+}
+#ara_content #tab2 .form-check-input:checked{
+  background-color: rgba(34,197,94,.85) !important;
+  border-color: rgba(34,197,94,.85) !important;
+}
+#ara_content #tab2 .form-check-label{
+  margin: 0 !important;
+  color: rgba(255,255,255,.86) !important;
+  font-weight: 900 !important;
+  font-size: 13px !important;
+  letter-spacing: .15px !important;
+}
+
+/* responsive */
+@media (max-width: 1100px){
+  #ara_content #tab2 .input-group,
+  #ara_content #tab3 .input-group{ width: 100% !important; }
+
+  #ara_content #tab2 .form-control[style*="max-width"],
+  #ara_content #tab3 .form-control[style*="max-width"]{
+    max-width: none !important;
+    width: 100% !important;
+  }
+  #ara_content #tab2 .form-check{
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+}
+
+/* =========================
+   TABLE WRAPPER (X scroll)
+   ========================= */
+#ara_content .ker-table-x{
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  width: 100%;
+  border-radius: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .ker-table-x::-webkit-scrollbar{ height: 10px; }
+
+/* =========================
    TABLE – kerTable
    ========================= */
 #ara_content #kerTable{
-  width: 100%;
+  display: inline-table !important;
+  width: max-content !important;
+  min-width: 100% !important;
+
   margin-top: 8px;
   border-collapse: separate;
   border-spacing: 0;
@@ -253,6 +376,7 @@ border-radius: 14px;
   overflow: hidden;
   background: rgba(255,255,255,.03) !important;
 }
+
 #ara_content #kerTable thead th{
   position: sticky;
   top: 0;
@@ -264,6 +388,7 @@ border-radius: 14px;
   text-align: left;
   white-space: nowrap;
 }
+
 #ara_content #kerTable th,
 #ara_content #kerTable td{
   border: 0 !important;
@@ -273,19 +398,23 @@ border-radius: 14px;
   white-space: nowrap;
   vertical-align: middle;
 }
+
 #ara_content #kerTable tbody td{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
 }
+
 #ara_content #kerTable tbody tr.selected > *{
   background: linear-gradient(135deg, rgba(56,189,248,.18), rgba(34,197,94,.12)) !important;
   color: #fff !important;
 }
+
 #ara_content .double-column,
 #ara_content .saga-bold{
   text-align: right !important;
   font-weight: 900;
 }
+
 #ara_content #kerTable tfoot td{
   background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
   color: #fff !important;
@@ -302,21 +431,50 @@ border-radius: 14px;
   text-shadow: 0 2px 10px rgba(56,189,248,.55);
 }
 
-/* error */
-#ara_content #errorDiv{
-  display:none;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(251,113,133,.35);
-  background: rgba(251,113,133,.10);
-  color: #fff;
-  font-weight: 900;
+/* table içi kompakt hücre */
+#ara_content #kerTable td{ padding: 4px 8px !important; }
+#ara_content #kerTable tbody tr{ height: 36px; }
+
+#ara_content #kerTable .ker-cell{
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 4px 8px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+
+  background: rgba(8,14,26,.55) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: rgba(255,255,255,.92) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+#ara_content #kerTable .ker-cell:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
+  background: rgba(8,14,26,.65) !important;
+  color: #fff !important;
+}
+#ara_content #kerTable .ker-cell.ker-label{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  pointer-events: none;
+  user-select: none;
+}
+#ara_content #kerTable .ker-right{ text-align:right !important; }
+#ara_content #kerTable .ker-left{ text-align:left !important; }
+
+#ara_content #kerTable .ker-rowbtn{
+  height: 32px !important;
+  width: 38px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
 }
 
-/* =========================
-   ker-info (alt toplamlar alanı)
-   ========================= */
+/* -------------------------
+   ker-info (alt toplamlar)
+------------------------- */
 #ara_content .ker-info{
   background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)) !important;
   border: 1px solid rgba(255,255,255,.16);
@@ -343,25 +501,19 @@ border-radius: 14px;
 #ara_content .ker-info .form-row > label{
   display:inline-flex;
   align-items:center;
-
   background: rgba(255,255,255,.04) !important;
   border: 1px solid rgba(255,255,255,.10) !important;
   border-radius: 10px !important;
-
   padding: 4px 8px !important;
   min-height: 28px !important;
   font-size: 12px !important;
   line-height: 1.1 !important;
-
   color: rgba(255,255,255,.92) !important;
   font-weight: 900 !important;
   text-shadow: 0 1px 8px rgba(0,0,0,.45);
-
-  /* default solda */
   justify-content: flex-start;
   text-align: left !important;
 }
-/* sadece sağa hizalılar */
 #ara_content .ker-info .form-row > label[style*="text-align: right"]{
   justify-content: flex-end;
   text-align: right !important;
@@ -374,229 +526,19 @@ border-radius: 14px;
   font-weight: 900 !important;
 }
 
-/* =========================
-   2026 CAM – child SCROLL (SEKSI)
-   ========================= */
-#ara_content .group-box{
-  /* kart gibi dursun */
-  background: rgba(8,14,26,.18);
-  border: 1px solid rgba(255,255,255,.10);
-  border-radius: 18px;
-  padding: 10px;
-
-  /* ✅ scroll */
-  max-height: calc(100vh - 220px);  /* header/tablar payı */
-  overflow-y: auto;
-  overflow-x: auto;
-
-  /* cam hissi */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+/* -------------------------
+   error
+------------------------- */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
 }
-
-/* WebKit scrollbar (Chrome/Edge) */
-#ara_content .group-box::-webkit-scrollbar{
-  width: 10px;
-  height: 10px;
-}
-#ara_content .group-box::-webkit-scrollbar-track{
-  background: rgba(255,255,255,.06);
-  border-radius: 10px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-}
-#ara_content .group-box::-webkit-scrollbar-thumb{
-  background: linear-gradient(135deg,
-    rgba(56,189,248,.65),
-    rgba(34,197,94,.55)
-  );
-  border-radius: 10px;
-  box-shadow:
-    0 0 12px rgba(56,189,248,.25),
-    inset 0 0 0 1px rgba(255,255,255,.20);
-}
-#ara_content .group-box::-webkit-scrollbar-thumb:active{
-  background: linear-gradient(135deg,
-    rgba(56,189,248,.85),
-    rgba(34,197,94,.70)
-  );
-}
-
-/* Firefox */
-#ara_content .group-box{
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
-}
-
-
-/* =========================
-   2026 CAM – TABLE CELL COMPACT
-   sadece #kerTable icinde
-   ========================= */
-
-#ara_content #kerTable td{ padding: 4px 8px !important; } /* satırlar yapışmasın */
-#ara_content #kerTable tbody tr{ height: 36px; }          /* row yüksekliği */
-
-/* satır içi input/label kompakt */
-#ara_content #kerTable .ker-cell{
-  height: 32px !important;
-  min-height: 32px !important;
-  padding: 4px 8px !important;
-  border-radius: 10px !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  line-height: 1.1 !important;
-
-  background: rgba(8,14,26,.55) !important;
-  border: 1px solid rgba(255,255,255,.14) !important;
-  color: rgba(255,255,255,.92) !important;
-
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
-}
-
-/* focus */
-#ara_content #kerTable .ker-cell:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
-  background: rgba(8,14,26,.65) !important;
-  color: #fff !important;
-}
-
-/* label gibi duran (readonly) hücreler */
-#ara_content #kerTable .ker-cell.ker-label{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-end !important; /* default sağ */
-  pointer-events: none;                 /* tıklanmasın */
-  user-select: none;
-}
-
-/* sağ-sol yardımcıları */
-#ara_content #kerTable .ker-right{ text-align:right !important; }
-#ara_content #kerTable .ker-left{ text-align:left !important; }
-
-/* satır içi buton (çöp kutusu) kompakt */
-#ara_content #kerTable .ker-rowbtn{
-  height: 32px !important;
-  width: 38px !important;
-  padding: 0 !important;
-  border-radius: 10px !important;
-}
-/* =========================
-   2026 CAM – TAB2 / TAB3 (FATURA MANTIĞI)
-   Scope: #ara_content #tab2 / #tab3
-   ========================= */
-
-
-
-/* satırlar kompakt */
-#ara_content #tab2 .form-row,
-#ara_content #tab3 .form-row{
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px 14px !important;
-  margin: 0 0 8px 0 !important;
-  flex-wrap: wrap;
-}
-
-/* input-group cam */
-#ara_content #tab2 .input-group,
-#ara_content #tab3 .input-group{
-  margin: 0 !important;
-}
-
-#ara_content #tab2 .input-group-text,
-#ara_content #tab3 .input-group-text{
-  height: 36px !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.45) !important;
-  color: rgba(255,255,255,.88) !important;
-  font-weight: 900 !important;
-  letter-spacing: .2px !important;
-  padding: 10px 14px !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
-}
-
-/* tab2-tab3 input cam */
-#ara_content #tab2 .form-control,
-#ara_content #tab3 .form-control{
-  height: 36px !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.92) !important;
-  padding: 10px 14px !important;
-  outline: none !important;
-}
-
-#ara_content #tab2 .form-control::placeholder,
-#ara_content #tab3 .form-control::placeholder{
-  color: rgba(255,255,255,.55) !important;
-  font-weight: 600 !important;
-}
-
-#ara_content #tab2 .form-control:focus,
-#ara_content #tab3 .form-control:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
-  background: rgba(8,14,26,.65) !important;
-  color:#fff !important;
-}
-
-/* TAB2 checkbox - cam chip */
-#ara_content #tab2 .form-check{
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-
-  padding: 10px 12px !important;
-  border-radius: 14px !important;
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.35) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
-
-  margin: 0 !important;
-}
-
-#ara_content #tab2 .form-check-input{
-  width: 18px !important;
-  height: 18px !important;
-  margin: 0 !important;
-  border-radius: 6px !important;
-  border: 1px solid rgba(255,255,255,.22) !important;
-  background-color: rgba(255,255,255,.08) !important;
-}
-
-#ara_content #tab2 .form-check-input:checked{
-  background-color: rgba(34,197,94,.85) !important;
-  border-color: rgba(34,197,94,.85) !important;
-}
-
-#ara_content #tab2 .form-check-label{
-  margin: 0 !important;
-  color: rgba(255,255,255,.86) !important;
-  font-weight: 900 !important;
-  font-size: 13px !important;
-  letter-spacing: .15px !important;
-}
-
-/* responsive: max-width inline'ları taşırmasın */
-@media (max-width: 1100px){
-  #ara_content #tab2 .input-group,
-  #ara_content #tab3 .input-group{
-    width: 100% !important;
-  }
-  #ara_content #tab2 .form-control[style*="max-width"],
-  #ara_content #tab3 .form-control[style*="max-width"]{
-    max-width: none !important;
-    width: 100% !important;
-  }
-  #ara_content #tab2 .form-check{
-    width: 100% !important;
-    justify-content: flex-start !important;
-  }
-}
-
 
 </style>
 <div class="card p-2">
@@ -769,23 +711,23 @@ border-radius: 14px;
 </div>
 <button type="button" class="btn btn-secondary ml-2" style="margin-top:5px;"  onclick="OBS.KERGIRIS.satirekle()">
 		<i class="fa fa-plus"></i></button>
-		
+	<div class="ker-table-x">	
 	<table class="table table-bordered" id="kerTable"
 		style="margin-top: 5px;">
 		<thead class="thead-dark">
 			<tr class="data-row">
 				<th style="width: 25px;"></th>
-				<th style="width: 10%">BARKOD</th>
-				<th style="width: 12%">URUN KODU</th>
-				<th style="width: 8%">PAKET_NO</th>
-				<th style="width: 5%" class="double-column">MIKTAR</th>
-				<th style="width: 5%" class="double-column">M3</th>
-				<th style="width: 6%;" class="double-column">PAK._M3</th>
-				<th style="width: 6%">KONS.</th>
-				<th style="width: 7%" class="double-column">FIAT</th>
-				<th style="width: 5%" class="double-column">ISK.</th>
-				<th style="width: 5%" class="double-column">KDV</th>
-				<th style="width: 10%" class="double-column">TUTAR</th>
+				<th style="width: 50px;">BARKOD</th>
+				<th style="width: 160px;">URUN KODU</th>
+				<th style="width: 180px;">PAKET_NO</th>
+				<th style="width: 60px;" class="double-column">MIKTAR</th>
+				<th style="width: 80px;" class="double-column">M3</th>
+				<th style="width: 80px;" class="double-column">PAK._M3</th>
+				<th style="width: 100px;">KONS.</th>
+				<th style="width: 100px;" class="double-column">FIAT</th>
+				<th style="width: 70px;" class="double-column">ISK.</th>
+				<th style="width: 80px;" class="double-column">KDV</th>
+				<th style="width: 150px;" class="double-column">TUTAR</th>
 				<th>IZAHAT</th>
 			</tr>
 		</thead>
@@ -809,6 +751,7 @@ border-radius: 14px;
 			</tr>
 		</tfoot>
 	</table>
+</div>
 	<div class="card p-4 ker-info">
 		<div class="form-row">
 			<span style="padding-left: 10px; width: 70px;"></span> 

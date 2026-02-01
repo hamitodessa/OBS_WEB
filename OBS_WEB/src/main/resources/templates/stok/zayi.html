@@ -2,30 +2,41 @@
 
 <style>
 /* =========================
-   2026 CAM – ZAI (CLEAN FINAL)
+   2026 CAM – ZAI (CLEAN FINAL v2)
    Scope: #ara_content
    ========================= */
 
 #ara_content{ color: rgba(255,255,255,.92); }
 
-/* Card */
+/* ---------- TOKENS ---------- */
+#ara_content{
+  --cam-bg1: rgba(255,255,255,.10);
+  --cam-bg2: rgba(255,255,255,.06);
+  --cam-line: rgba(255,255,255,.16);
+  --cam-line2: rgba(255,255,255,.14);
+  --cam-dark: rgba(8,14,26,.55);
+  --cam-dark2: rgba(8,14,26,.65);
+  --cam-ac1: rgba(56,189,248,.65);
+  --cam-ac2: rgba(34,197,94,.55);
+}
+
+/* ---------- CARD ---------- */
 #ara_content .cam-card{
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
+  background: linear-gradient(180deg, var(--cam-bg1), var(--cam-bg2)) !important;
+  border: 1px solid var(--cam-line) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  width:90%;
 }
 
-/* Tabs */
+/* ---------- TABS ---------- */
 #ara_content .cam-tabs{
-  border-bottom: 1px solid rgba(255,255,255,.14) !important;
+  border-bottom: 1px solid var(--cam-line2) !important;
   gap: 8px;
 }
 #ara_content .cam-tabs .nav-link{
-  border: 1px solid rgba(255,255,255,.14) !important;
+  border: 1px solid var(--cam-line2) !important;
   border-bottom: none !important;
   background: rgba(255,255,255,.06) !important;
   color: rgba(255,255,255,.80) !important;
@@ -39,54 +50,68 @@
   box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-/* Base label */
+/* ---------- LABEL ---------- */
 #ara_content label{
   color: rgba(255,255,255,.84);
   font-weight: 900;
   font-size: 12px;
+  line-height: 1;
 }
 
-/* Inputs / Select */
+/* ---------- INPUTS / SELECT ---------- */
 #ara_content .cam-input,
 #ara_content .cam-select{
-  height: 30px;
-  min-height: 30px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.92) !important;
+  height: 34px;
+  min-height: 34px;
+  border-radius: 12px;
+  border: 1px solid var(--cam-line) !important;
+  background: var(--cam-dark) !important;
+  color: rgba(255,255,255,.94) !important;
   padding: 6px 10px !important;
   outline: none;
   font-weight: 900;
   font-size: 12px;
   box-sizing: border-box;
 }
+#ara_content .cam-input::placeholder{
+  color: rgba(255,255,255,.55) !important;
+  font-weight: 800;
+}
 #ara_content .cam-input:focus,
 #ara_content .cam-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
+  border-color: var(--cam-ac1) !important;
   box-shadow: 0 0 0 4px rgba(56,189,248,.16);
-  background: rgba(8,14,26,.65) !important;
+  background: var(--cam-dark2) !important;
   color:#fff !important;
 }
 #ara_content input[type="date"]{ color-scheme: dark; }
 
-/* Input group addon */
+/* native select ok kapat */
+#ara_content select.cam-select{
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+
+/* ---------- INPUT GROUP ADDON ---------- */
 #ara_content .cam-addon{
-  height: 30px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.16) !important;
+  height: 34px;
+  min-height: 34px;
+  border-radius: 12px;
+  border: 1px solid var(--cam-line) !important;
   background: rgba(8,14,26,.45) !important;
   color: rgba(255,255,255,.88) !important;
   font-weight: 900;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
   font-size: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
 }
 
-/* Buttons (bootstrap override) */
+/* ---------- BUTTONS ---------- */
 #ara_content .btn-primary{
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: 900;
-  height: 40px;
+  height: 34px;
+  padding: 6px 14px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -97,29 +122,34 @@
   transform: translateY(-1px);
 }
 
+/* secondary: daha “cam” */
 #ara_content .btn.btn-secondary{
-  border-radius: 10px;
-   background: rgba(56,189,248,.18) !important;
-  border: 1px solid rgba(56,189,248,.35) !important;
-  color: rgba(255,255,255,.95) !important;
+  border-radius: 12px;
+  height: 34px;
+  padding: 6px 12px;
+  font-weight: 900;
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  color: rgba(255,255,255,.92) !important;
 }
 #ara_content .btn.btn-secondary:hover{
-   background: rgba(56,189,248,.26) !important;
-  border-color: rgba(56,189,248,.55) !important;
+  background: rgba(56,189,248,.12) !important;
+  border-color: rgba(56,189,248,.35) !important;
   transform: translateY(-1px);
 }
-/* Icon buttons (trash/plus/refresh) */
+
+/* icon buttons */
 #ara_content .cam-icon{
-  height: 30px !important;
-  width: 34px !important;
+  height: 34px !important;
+  width: 40px !important;
   padding: 0 !important;
-  border-radius: 10px !important;
+  border-radius: 12px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
 
-/* Group box */
+/* ---------- GROUP BOX ---------- */
 #ara_content .group-box{
   position: relative;
   overflow-x: auto;
@@ -127,12 +157,14 @@
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
 
-  border: 1px solid rgba(255,255,255,.14) !important;
+  border: 1px solid var(--cam-line2) !important;
   background: rgba(8,14,26,.35) !important;
   border-radius: 16px;
   padding: 10px;
   margin: 10px 0;
 }
+
+/* sexy scroll */
 #ara_content .group-box::-webkit-scrollbar{ height: 10px; }
 #ara_content .group-box::-webkit-scrollbar-track{
   background: rgba(255,255,255,.06);
@@ -149,15 +181,19 @@
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
 
-/* Top layout row */
+/* ---------- TOP GRID ---------- */
+/* Esnek olsun: daralınca kaymasın, yine düzenli kalsın */
 #ara_content .zai-row{
   display: grid;
-  grid-template-columns: 85px 120px 38px 125px 75px 240px 75px 280px;
+  grid-template-columns:
+    70px 140px 44px 150px
+    70px minmax(180px, 1fr)
+    70px minmax(180px, 1fr);
   gap: 8px 10px;
   align-items: center;
 }
 
-/* Actions row */
+/* ---------- ACTIONS ---------- */
 #ara_content .zai-actions{
   display:flex;
   align-items:center;
@@ -165,7 +201,7 @@
   flex-wrap: wrap;
 }
 
-/* Numbers right */
+/* ---------- NUMBERS ---------- */
 #ara_content .ta-right,
 #ara_content .saga-bold{
   text-align:right !important;
@@ -173,31 +209,18 @@
   font-weight: 900 !important;
 }
 
-/* ===== ARROW (tek sistem) ===== */
+/* ---------- ARROW SYSTEM ---------- */
 #ara_content .zai-rel{
   position: relative;
   width: 100%;
-  display: block;
   min-width: 0;
 }
-
-/* native select ok kapat */
-#ara_content select.cam-select{
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-}
-
-/* input/select genişlik + oka yer */
 #ara_content .zai-rel > .cam-input,
 #ara_content .zai-rel > .cam-select{
   width: 100% !important;
   min-width: 0 !important;
-  padding-right: 32px !important;
-  box-sizing: border-box !important;
+  padding-right: 34px !important;
 }
-
-/* arrow */
 #ara_content .zai-arrow{
   position: absolute;
   top: 50%;
@@ -211,126 +234,12 @@
   text-shadow: 0 0 10px rgba(0,0,0,.55);
 }
 
-/* ===== TABLE ===== */
-#ara_content #zaiTable{
-  width: 100%;
-  min-width:1000px;
-  table-layout: fixed; /* colgroup width oturtur */
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid rgba(255,255,255,.14) !important;
-  border-radius: 16px;
-  overflow: hidden;
-  background: rgba(255,255,255,.03) !important;
-}
-#ara_content #zaiTable thead th{
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
-  color: #fff !important;
-  font-size: 12px;
-  font-weight: 900;
-  text-align: left;
-  white-space: nowrap;
-}
-#ara_content #zaiTable th,
-#ara_content #zaiTable td{
-  border: 0 !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  padding: 4px 6px !important;   /* input kesilmesin */
-  height: 26px !important;
-  vertical-align: middle !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#ara_content #zaiTable tbody td{
-  background: rgba(255,255,255,.04) !important;
-  color: rgba(255,255,255,.78) !important;
-}
-#ara_content #zaiTable tfoot td{
-  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
-  color: #fff !important;
-  font-weight: 900;
-  border-top: 1px solid rgba(56,189,248,.45) !important;
-  border-bottom: none !important;
-  padding: 8px 10px !important;
-}
-
-/* Row inputs compact */
-#ara_content #zaiTable tbody .cam-input,
-#ara_content #zaiTable tbody .cam-select{
-  height: 30px !important;
-  min-height: 30px !important;
-  border-radius: 10px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-}
-
-/* TD içindeki wrapper tam otursun (150px vs kesilme fix) */
-#ara_content #zaiTable td .zai-rel{
-  width: 100%;
-  min-width: 0;
-}
-#ara_content #zaiTable td .cam-input,
-#ara_content #zaiTable td .cam-select{
-  width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-}
-
-/* readonly label (birim) */
-#ara_content .cam-label{
-  display:flex !important;
-  align-items:center !important;
-  margin: 0 !important;
-}
-#ara_content .cam-label span{ width:100%; line-height:1; }
-
-/* Error */
-#ara_content #errorDiv{
-  display:none;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(251,113,133,.35);
-  background: rgba(251,113,133,.10);
-  color: #fff;
-  font-weight: 900;
-}
-
-/* Info badges (SOL hizalı) */
-#ara_content .zai-badges{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-left: 20px;
-  justify-content: flex-start;
-  align-items: center;
-}
-#ara_content .zai-badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:flex-start;
-  min-width: 150px;
-  padding: 4px 10px;
-  border-radius: 10px;
-  background: rgba(255,255,255,.04) !important;
-  border: 1px solid rgba(255,255,255,.10) !important;
-  color: rgba(255,255,255,.92) !important;
-  font-weight: 900 !important;
-  text-align: left;
-}
-#ara_content .zai-badge:empty::before{ content:"—"; opacity:.65; }
-
+/* ---------- TABLE WRAP ---------- */
 #ara_content .zai-table-scroll{
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 }
-
-/* istersen aynı sexy scroll burada da */
 #ara_content .zai-table-scroll::-webkit-scrollbar{ height: 10px; }
 #ara_content .zai-table-scroll::-webkit-scrollbar-track{
   background: rgba(255,255,255,.06);
@@ -347,11 +256,124 @@
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
 
+/* ---------- TABLE ---------- */
+#ara_content #zaiTable{
+  width: 100%;
+  min-width: 1000px;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--cam-line2) !important;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,.03) !important;
+}
+
+#ara_content #zaiTable thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  font-size: 12px;
+  font-weight: 900;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#ara_content #zaiTable th,
+#ara_content #zaiTable td{
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  padding: 4px 6px !important;
+  height: 28px !important;
+  vertical-align: middle !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#ara_content #zaiTable tbody td{
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+  overflow: visible !important;    /* 🔥 kritik */
+  height: 38px !important;         /* 30px input + padding için */
+  padding: 4px 8px !important;
+}
+
+#ara_content #zaiTable tfoot td{
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
+}
+
+/* row inputs */
+#ara_content #zaiTable tbody .cam-input,
+#ara_content #zaiTable tbody .cam-select{
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  line-height: 1 !important;
+}
+
+/* wrapper %100 otursun */
+#ara_content #zaiTable td .zai-rel{
+  width: 100%;
+  min-width: 0;
+}
+
+/* readonly label */
+#ara_content .cam-label{
+  display:flex !important;
+  align-items:center !important;
+  margin: 0 !important;
+}
+#ara_content .cam-label span{ width:100%; line-height:1; }
+
+/* ---------- ERROR ---------- */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* ---------- BADGES ---------- */
+#ara_content .zai-badges{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-left: 12px;
+  justify-content: flex-start;
+  align-items: center;
+}
+#ara_content .zai-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  min-width: 150px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+  text-align: left;
+}
+#ara_content .zai-badge:empty::before{ content:"—"; opacity:.65; }
 </style>
 
-
 <!-- TABS HEADER -->
-<div class="cam-card p-3">
+<div class="cam-card p-3" style="max-width: 1200px;">
   <ul class="nav nav-tabs cam-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="tab1-tab"
@@ -370,7 +392,7 @@
 
   <!-- TAB 1 -->
   <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-    <div class="cam-card p-3 mt-2">
+    <div class="cam-card p-3 mt-2" style="max-width: 1200px;">
 
       <div class="group-box">
         <div class="zai-row">
@@ -416,7 +438,7 @@
 
   <!-- TAB 2 -->
   <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
-    <div class="cam-card p-3 mt-2">
+    <div class="cam-card p-3 mt-2" style="max-width: 1200px;">
       <div class="input-group mb-2">
         <span class="input-group-text cam-addon" style="width:150px;">1 -</span>
         <input type="text" id="a1" class="cam-input" style="max-width:300px;">
@@ -431,60 +453,59 @@
 </div>
 
 <!-- SATIR EKLE -->
-<div class="mt-2">
+<div class="mt-2" style="max-width: 1200px;">
   <button type="button" class="btn btn-secondary cam-icon" onclick="OBS.ZAI.satirekle()">
     <i class="fa fa-plus"></i>
   </button>
 </div>
 
 <!-- TABLE -->
-<div class="cam-card p-2 mt-2">
-<div class="zai-table-scroll">
-  <table class="table table-bordered" id="zaiTable">
+<div class="cam-card p-2 mt-2" style="max-width: 1200px;">
+  <div class="zai-table-scroll">
+    <table class="table table-bordered" id="zaiTable">
+      <colgroup>
+        <col style="width:50px">
+        <col style="width:100px">
+        <col style="width:100px">
+        <col style="width:175px">
+        <col style="width:150px">
+        <col style="width:100px">
+        <col style="width:80px">
+        <col style="width:175px">
+        <col>
+      </colgroup>
 
-    <!-- ✅ width sadece burada -->
-    <colgroup>
-      <col style="width:50px">
-      <col style="width:100px">
-      <col style="width:100px">
-      <col style="width:175px">
-      <col style="width:150px">
-      <col style="width:100px">
-      <col style="width:80px">
-      <col style="width:175px">
-      <col>
-    </colgroup>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Barkod</th>
+          <th>Urun Kodu</th>
+          <th>Depo</th>
+          <th class="saga-bold">Fiat</th>
+          <th class="saga-bold">Miktar</th>
+          <th>Birim</th>
+          <th class="saga-bold">Tutar</th>
+          <th>Izahat</th>
+        </tr>
+      </thead>
 
-    <thead>
-      <tr>
-        <th></th>
-        <th>Barkod</th>
-        <th>Urun Kodu</th>
-        <th>Depo</th>
-        <th class="saga-bold">Fiat</th>
-        <th class="saga-bold">Miktar</th>
-        <th>Birim</th>
-        <th class="saga-bold">Tutar</th>
-        <th>Izahat</th>
-      </tr>
-    </thead>
+      <tbody id="tbody"></tbody>
 
-    <tbody id="tbody"></tbody>
+      <tfoot>
+        <tr>
+          <td></td><td></td><td></td><td></td>
+          <td></td>
+          <td id="totalMiktar" class="saga-bold">0.000</td>
+          <td></td>
+          <td id="totalTutar" class="saga-bold">0.00</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 
-    <tfoot>
-      <tr>
-        <td></td><td></td><td></td><td></td>
-        <td></td>
-        <td id="totalMiktar" class="saga-bold">0.000</td>
-        <td></td>
-        <td id="totalTutar" class="saga-bold">0.00</td>
-        <td></td>
-      </tr>
-    </tfoot>
-  </table>
- </div>
   <!-- INFO -->
-  <div class="group-box zai-info">
+  <div class="group-box">
     <div class="zai-actions">
       <span style="width:90px; font-weight:900; color:rgba(255,255,255,.72);">Barkod:</span>
       <input id="barkod" class="cam-input" style="width:170px;" />

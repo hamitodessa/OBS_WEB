@@ -3,44 +3,56 @@
 <link rel="stylesheet" href="style/adrkodlari.css" />
 <link rel="stylesheet" href="/style/carihesap/borcalacak.css">
 <style>
-/* =========================
-   2026 CAM – FATURA
+/* =========================================================
+   2026 CAM – FATURA (TEMIZ CORE)
    wrapper: #ara_content
-   hover: YOK (NET)
-   ========================= */
+   ========================================================= */
 
-#ara_content{ color: rgba(255,255,255,.92); }
+#ara_content{
+  color: rgba(255,255,255,.92);
+}
 
-/* ===== CARD (genel) ===== */
-#ara_content .card{
-  padding: 5px !important;
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
+/* ---------- TOKENS ---------- */
+#ara_content{
+  --cam-bg1: rgba(255,255,255,.10);
+  --cam-bg2: rgba(255,255,255,.06);
+  --cam-line: rgba(255,255,255,.16);
+  --cam-ink: rgba(255,255,255,.92);
+  --cam-muted: rgba(255,255,255,.72);
+  --cam-field: rgba(8,14,26,.55);
+  --cam-field2: rgba(8,14,26,.65);
+  --cam-chip: rgba(255,255,255,.04);
+  --cam-chip-line: rgba(255,255,255,.10);
+  --cam-ac1: rgba(56,189,248,.65);
+  --cam-ac1-soft: rgba(56,189,248,.16);
+}
+
+/* ---------- CARD ---------- */
+#ara_content .cam-card{
+  padding: 6px !important;
+  background: linear-gradient(180deg, var(--cam-bg1), var(--cam-bg2)) !important;
+  border: 1px solid var(--cam-line) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  margin-top:10px;
+  margin-top: 10px;
 }
-#ara_content .cardd{
-  display: flex;
-  gap: 6px;
-  align-items: flex-start;
-  margin-top:10px;
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  padding: 5px !important;
+
+/* iki kolonlu üst alan */
+#ara_content .cam-split{
+  display:flex;
+  gap: 8px;
+  align-items:flex-start;
 }
-/* ===== NAV TABS ===== */
+#ara_content .cam-left{ width: 80%; }
+#ara_content .cam-right{ width: 20%; }
+
+/* ---------- NAV TABS ---------- */
 #ara_content .nav-tabs{
   border-bottom: 1px solid rgba(255,255,255,.14) !important;
   gap: 8px;
 }
-
 #ara_content .nav-tabs .nav-link{
   border: 1px solid rgba(255,255,255,.14) !important;
   border-bottom: none !important;
@@ -50,141 +62,80 @@
   font-weight: 900;
   padding: 10px 14px;
 }
-
 #ara_content .nav-tabs .nav-link.active{
   background: linear-gradient(135deg, rgba(56,189,248,.28), rgba(34,197,94,.18)) !important;
   color: #fff !important;
   box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-/* ===== LAYOUT (child / child2) ===== */
-
-
-#ara_content .child,
-#ara_content .child2{
-  background: transparent;
-  border: none !important;
-  padding: 0;
-}
-
-#ara_content .child{ width: 80%; }
-#ara_content .child2{ width: 20%; }
-
-/* ===== GROUP BOX ===== */
-/* =========================
-   2026 CAM – GROUP-BOX HORIZONTAL SCROLL (SEKSI)
-   ========================= */
-
-#ara_content .group-box{
-  position: relative;       /* fade için şart */
-  overflow-x: auto;         /* scroll var */
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  overscroll-behavior-x: contain;
-
+/* ---------- GROUP BOX (düz kart) ---------- */
+#ara_content .cam-box{
   border: 1px solid rgba(255,255,255,.14) !important;
   background: rgba(8,14,26,.35) !important;
   border-radius: 16px;
-  padding: 12px;
+  padding: 10px 12px;
   margin: 8px 0 !important;
 }
 
-/* WebKit scrollbar */
-#ara_content .group-box::-webkit-scrollbar{
-  height: 10px;
-}
-#ara_content .group-box::-webkit-scrollbar-track{
-  background: rgba(255,255,255,.06);
-  border-radius: 10px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-}
-#ara_content .group-box::-webkit-scrollbar-thumb{
-  background: linear-gradient(135deg,
-    rgba(56,189,248,.65),
-    rgba(34,197,94,.55)
-  );
-  border-radius: 10px;
-  box-shadow:
-    0 0 12px rgba(56,189,248,.35),
-    inset 0 0 0 1px rgba(255,255,255,.25);
-}
-#ara_content .group-box::-webkit-scrollbar-thumb:active{
-  background: linear-gradient(135deg,
-    rgba(56,189,248,.85),
-    rgba(34,197,94,.70)
-  );
-}
-
-/* Firefox */
-#ara_content .group-box{
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
-}
-
-/* Sağ/sol fade (devamı var hissi) */
-#ara_content .group-box::before,
-#ara_content .group-box::after{
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 22px;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-}
-#ara_content .group-box::before{
-  left: 0;
-  background: linear-gradient(to right,
-    rgba(8,14,26,.95),
-    rgba(8,14,26,0)
-  );
-}
-#ara_content .group-box::after{
-  right: 0;
-  background: linear-gradient(to left,
-    rgba(8,14,26,.95),
-    rgba(8,14,26,0)
-  );
-}
-
-
-/* ===== LABEL ===== */
+/* ---------- FORM TYPO / INPUTS ---------- */
 #ara_content label{
   color: rgba(255,255,255,.84);
-  font-weight: 800;
-  font-size: 13px;
+  font-weight: 900;
+  font-size: 12px;
+  margin: 0 !important;
+  white-space: nowrap;
 }
 
-/* ===== INPUT / SELECT ===== */
+/* ortak field */
+#ara_content .form-control,
+#ara_content .form-select,
+#ara_content .input-group-text{
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  font-weight: 900;
+  text-shadow: 0 2px 10px rgba(0,0,0,.55);
+}
+
+/* input/select */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 44px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.92) !important;
-  padding: 10px 14px !important;
+  height: 36px;
+  padding: 6px 10px !important;
+  background: var(--cam-field) !important;
+  color: #fff !important;
   outline: none;
-}
+ 
+  box-sizing: border-box !important;
 
+}
 #ara_content .form-control::placeholder{
   color: rgba(255,255,255,.55) !important;
-  font-weight: 600;
+  font-weight: 700;
 }
-
 #ara_content .form-control:focus,
 #ara_content .form-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
-  background: rgba(8,14,26,.65) !important;
-  color:#fff !important;
+  border-color: var(--cam-ac1) !important;
+  box-shadow: 0 0 0 4px var(--cam-ac1-soft) !important;
+  background: var(--cam-field2) !important;
+  color: #fff !important;
+}
+#ara_content input[type="date"]{ color-scheme: dark; }
+
+/* input-group text */
+#ara_content .input-group-text{
+  height: 36px;
+  padding: 6px 10px !important;
+  background: rgba(8,14,26,.45) !important;
+  color: rgba(255,255,255,.90) !important;
+  font-size: 12px !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
 }
 
-/* ===== BUTTONS ===== */
+/* ---------- BUTTONS ---------- */
 #ara_content .btn-primary{
-border-radius: 14px;
+  border-radius: 12px;
   font-weight: 900;
-  height: 40px;
+  height: 36px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -194,9 +145,8 @@ border-radius: 14px;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
-
-
 #ara_content .btn.btn-secondary{
+  height: 36px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(255,255,255,.06) !important;
@@ -207,15 +157,64 @@ border-radius: 14px;
   border-color: rgba(56,189,248,.35) !important;
 }
 
-/* ===== RESIM (tam sığsın) ===== */
+/* ---------- SELECT OK (TEK YERDEN) ----------
+   background ok’u kapat, overlay ok kullan
+*/
+#ara_content .cam-select{
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+#ara_content .cam-select > select{
+  background-image: none !important;
+  padding-right: 34px !important;
+}
+#ara_content .cam-select::after{
+  content:"▼";
+  position:absolute;
+  top:50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events:none;
+  color: rgba(255,255,255,.88);
+  text-shadow: 0 0 6px rgba(255,255,255,.20);
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* ---------- TAB1 satırları: inline flex yerine class ---------- */
+#ara_content .cam-row{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+#ara_content .cam-gap-sm{ gap: 6px; }
+#ara_content .cam-mt{ margin-top: 10px; }
+
+/* cari/adres isim label’ları */
+#ara_content .cam-wide{
+  min-height: 26px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: var(--cam-chip);
+  border: 1px solid var(--cam-chip-line);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- RESIM ---------- */
 #ara_content .resimdiv{
   width: 100%;
-  max-height: 240px;
   height: 240px;
+  max-height: 240px;
   display:flex;
   justify-content:center;
   align-items:center;
-
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
   border: 1px solid rgba(255,255,255,.18) !important;
   border-radius: 16px;
@@ -231,11 +230,7 @@ border-radius: 14px;
   background: rgba(0,0,0,.20) !important;
 }
 
-
-/* =========================
-   TABLE – fatTable (hover YOK)
-   ========================= */
-
+/* ---------- TABLE (FAT) ---------- */
 #ara_content #fatTable{
   width: 100%;
   margin-top: 8px;
@@ -246,8 +241,6 @@ border-radius: 14px;
   overflow: hidden;
   background: rgba(255,255,255,.03) !important;
 }
-
-/* header sticky + gradient */
 #ara_content #fatTable thead th{
   position: sticky;
   top: 0;
@@ -259,44 +252,38 @@ border-radius: 14px;
   text-align: left;
   white-space: nowrap;
 }
-
-/* sadece alt çizgi */
 #ara_content #fatTable th,
 #ara_content #fatTable td{
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  padding: 6px 10px !important;
-  height: 28px;
+  padding: 4px 8px !important;
+  height: 26px !important;
   white-space: nowrap;
   vertical-align: middle;
 }
-
-/* td cam */
 #ara_content #fatTable tbody td{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
 }
-
-/* hover tamamen kapalı (NET) */
 #ara_content #fatTable tbody tr:hover > *{
-  background: rgba(255,255,255,.04) !important;
+  background: rgba(255,255,255,.04) !important; /* hover yok */
   color: rgba(255,255,255,.78) !important;
 }
-
-/* seçili satır kullanıyorsan (hover yok ama selected olabilir) */
 #ara_content #fatTable tbody tr.selected > *{
   background: linear-gradient(135deg, rgba(56,189,248,.18), rgba(34,197,94,.12)) !important;
   color: #fff !important;
 }
-
-/* right align helpers */
-#ara_content .double-column,
-#ara_content .saga-bold{
-  text-align: right !important;
-  font-weight: 900;
+/* satır içi input/select */
+#ara_content #fatTable tbody .form-control,
+#ara_content #fatTable tbody .form-select{
+  height: 30px !important;
+  min-height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
 }
-
-/* ===== TFOOT (TOPLAM) ===== */
+/* tfoot */
 #ara_content #fatTable tfoot td{
   background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
   color: #fff !important;
@@ -305,290 +292,6 @@ border-radius: 14px;
   border-bottom: none !important;
   padding: 8px 10px !important;
 }
-
-#ara_content #totalTutar{
-  font-size: 15px;
-  font-weight: 900;
-  text-align: right;
-  color: #fff !important;
-  text-shadow: 0 2px 10px rgba(56,189,248,.55);
-}
-
-/* error */
-#ara_content #errorDiv{
-  display:none;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(251,113,133,.35);
-  background: rgba(251,113,133,.10);
-  color: #fff;
-  font-weight: 900;
-}
-
-#ara_content input[type="date"]{
-  color-scheme: dark;
-}
-
-
-#ara_content .input-group-text{
-  height: 44px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.45) !important;
-  color: rgba(255,255,255,.88) !important;
-  font-weight: 900;
-  letter-spacing: .2px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-}
-
-/* input-group içinde yan yana durunca köşeler düzgün olsun */
-#ara_content .input-group .input-group-text{
-  border-top-right-radius: 14px !important;
-  border-bottom-right-radius: 14px !important;
-}
-
-/* =========================
-   2026 CAM – FATURA ALT BILGI (IZOLE)
-   scope: .fat-info
-   ========================= */
-
-#ara_content .fat-info{
-  background: linear-gradient(180deg,
-    rgba(255,255,255,.08),
-    rgba(255,255,255,.04)) !important;
-  border: 1px solid rgba(255,255,255,.16);
-  border-radius: 20px;
-  box-shadow: 0 20px 55px rgba(0,0,0,.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-/* satır düzeni – yıldızlar artık hizalı */
-#ara_content .fat-info .form-row{
-  display: flex !important;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 18px;
-  margin-bottom: 10px;
-}
-
-
-/* başlık yazıları (Barkod, Iskonto vs) */
-#ara_content .fat-info .form-row > span{
-  color: rgba(255,255,255,.80);
-  font-weight: 900;
-  letter-spacing: .2px;
-  text-shadow: 0 1px 8px rgba(0,0,0,.45);
-}
-
-/* değer alanları (0.00 olanlar) – cam chip */
-#ara_content .fat-info .form-row > label{
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
-
-  min-height: 38px;
-  padding: 8px 14px;
-
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 14px;
-
-  color: #fff;
-  font-weight: 900;
-  text-shadow: 0 2px 10px rgba(0,0,0,.55);
-}
-
-
-
-/* barkod & tevkifat input */
-#ara_content .fat-info #barkod,
-#ara_content .fat-info #tevoran{
-  height: 44px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.18) !important;
-  background: rgba(8,14,26,.60) !important;
-  color: rgba(255,255,255,.95) !important;
-  font-weight: 900;
-}
-
-/* mobilde de dağılmasın */
-@media (max-width: 1200px){
-  #ara_content .fat-info .form-row > span,
-  #ara_content .fat-info .form-row > label{
-    width: auto !important;
-  }
-}
-
-/* =========================
-   2026 CAM – FAT-INFO (KOMPAKT / YER KAPLAMAZ)
-   sadece .fat-info icinde
-   ========================= */
-
-#ara_content .fat-info{
-  padding: 10px 12px !important;
-}
-
-/* satırlar daha sıkı */
-#ara_content .fat-info .form-row{
-  gap: 6px 10px !important;
-  margin-bottom: 6px !important;
-}
-
-/* span'ler label gibi ama minik */
-#ara_content .fat-info .form-row > span{
-  padding-left: 0 !important;
-  color: rgba(255,255,255,.72) !important;
-  font-weight: 900;
-  font-size: 12px;
-  line-height: 1.1;
-  text-shadow: 0 1px 8px rgba(0,0,0,.35);
-}
-
-/* değer label’ları: CHIP DEĞİL → KOMPAKT CAM */
-#ara_content .fat-info .form-row > label{
-  background: rgba(255,255,255,.04) !important;
-  border: 1px solid rgba(255,255,255,.10) !important;
-  border-radius: 10px !important;
-
-  padding: 4px 8px !important;     /* ✅ küçüldü */
-  min-height: 28px !important;     /* ✅ küçüldü */
-  font-size: 12px !important;      /* ✅ küçüldü */
-  line-height: 1.1 !important;
-
-  color: rgba(255,255,255,.92) !important;
-  font-weight: 900 !important;
-  text-shadow: 0 1px 8px rgba(0,0,0,.45);
-}
-
-/* sağa hizalı değerler */
-#ara_content .fat-info .form-row > label[style*="text-align: right"]{
-  justify-content: flex-end;
-  text-align: right !important;
-}
-
-/* input’lar: form-control hissi kalsın ama KOMPAKT */
-#ara_content .fat-info .form-control{
-  height: 30px !important;         /* ✅ küçüldü */
-  border-radius: 10px !important;
-  padding: 4px 8px !important;     /* ✅ küçüldü */
-  font-size: 12px !important;
-  font-weight: 900 !important;
-
-  background: rgba(8,14,26,.55) !important;
-  border: 1px solid rgba(255,255,255,.14) !important;
-  color: rgba(255,255,255,.95) !important;
-}
-
-#ara_content .fat-info .form-control:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
-  background: rgba(8,14,26,.65) !important;
-}
-
-/* genişlik zorlamaları küçük ekranda taşırmasın */
-@media (max-width: 1200px){
-  #ara_content .fat-info .form-row > span[style*="width"],
-  #ara_content .fat-info .form-row > label[style*="width"]{
-    width: auto !important;
-  }
-}
-#ara_content .fat-info .form-row > label{
-  justify-content: flex-start !important;
-  text-align: left !important;
-}
-
-/* SADECE numeric olanlar */
-#ara_content .fat-info .form-row > label[style*="text-align: right"]{
-  justify-content: flex-end !important;
-  text-align: right !important;
-}
-
-/* =========================
-   2026 CAM – FAT TABLE (SATIR INPUTLARI KOMPAKT)
-   Scope: #ara_content #fatTable
-   ========================= */
-
-/* Hücre padding ve yüksekliği sıkı */
-#ara_content #fatTable th,
-#ara_content #fatTable td{
-  padding: 4px 8px !important;
-  height: 26px !important;
-  vertical-align: middle !important;
-}
-
-/* Satır içi input/select/label -> KOMPAKT */
-#ara_content #fatTable tbody .form-control,
-#ara_content #fatTable tbody .form-select{
-  height: 30px !important;          /* ✅ kompakt */
-  min-height: 30px !important;
-  border-radius: 10px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.95) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
-}
-
-/* label.form-control (readonly gibi kullandıkların) */
-#ara_content #fatTable tbody label.form-control{
-  display: flex !important;
-  align-items: center !important;
-  margin: 0 !important;
-}
-#ara_content #fatTable tbody label.form-control span{
-  display: inline-block;
-  width: 100%;
-  line-height: 1;
-}
-
-/* Focus daha ince */
-#ara_content #fatTable tbody .form-control:focus,
-#ara_content #fatTable tbody .form-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
-  background: rgba(8,14,26,.65) !important;
-}
-
-/* İçteki ok (▼) daha küçük + hizalı */
-#ara_content #fatTable tbody td > div[style*="position: relative"] > span{
-  right: 8px !important;
-  font-size: 12px !important;
-  color: rgba(255,255,255,.78) !important;
-  text-shadow: 0 0 10px rgba(0,0,0,.55);
-}
-
-/* datalist/select için sağ padding (okla çakışmasın) */
-#ara_content #fatTable tbody td > div[style*="position: relative"] input.form-control,
-#ara_content #fatTable tbody td > div[style*="position: relative"] select.form-control{
-  padding-right: 26px !important;
-}
-
-/* trash butonu da kompakt */
-#ara_content #fatTable tbody .btn.btn-secondary{
-  height: 30px !important;
-  width: 34px !important;
-  padding: 0 !important;
-  border-radius: 10px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(255,255,255,.06) !important;
-  color: rgba(255,255,255,.88) !important;
-}
-#ara_content #fatTable tbody .btn.btn-secondary:hover{
-  background: rgba(56,189,248,.12) !important;
-  border-color: rgba(56,189,248,.35) !important;
-}
-
-/* tablo satırı içinde ml-2 falan taşırmasın */
-#ara_content #fatTable tbody .ml-2{ margin-left: 0 !important; }
 
 #ara_content .fat-rel{
   position: relative;
@@ -602,107 +305,69 @@ border-radius: 14px;
   pointer-events: none;
 }
 
-/* =========================
-   TAB1 – ULTRA KOMPAKT
-   ========================= */
 
-#ara_content #tab1 .group-box{
-  padding: 8px 10px !important;
+/* helpers */
+#ara_content .ta-right{ text-align:right !important; font-variant-numeric: tabular-nums; }
+#ara_content .saga-bold, #ara_content .double-column{ text-align:right !important; font-weight:900; }
+
+/* ---------- FAT-INFO ---------- */
+#ara_content .fat-info{
+  padding: 10px 12px !important;
 }
-
-#ara_content #tab1 label{
-  font-size: 12px !important;
-  font-weight: 900 !important;
-}
-
-#ara_content #tab1 .form-control,
-#ara_content #tab1 .form-select{
-  height: 34px !important;
-  min-height: 34px !important;
-  padding: 5px 10px !important;
-  font-size: 12px !important;
-  border-radius: 12px !important;
-}
-
-/* date input biraz daha ince */
-#ara_content #tab1 input[type="date"]{
-  padding: 4px 8px !important;
-}
-
-/* butonlar mini */
-#ara_content #tab1 .btn{
-  height: 34px !important;
-  padding: 6px 12px !important;
-  font-size: 12px !important;
-  border-radius: 12px !important;
-  font-weight: 900 !important;
-}
-
-/* ikonlu refresh / plus */
-#ara_content #tab1 .btn.btn-secondary{
-  width: 38px !important;
-  padding: 0 !important;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* padding-left ile şişen boşlukları bastır */
-#ara_content #tab1 span[style*="padding-left"]{
-  padding-left: 10px !important;
-}
-/* =========================
-   TAB2 – ORTA KOMPAKT
-   ========================= */
-
-#ara_content #tab2 .form-control{
-  height: 36px !important;
-  padding: 6px 12px !important;
-  font-size: 13px !important;
-  border-radius: 12px !important;
-}
-
-#ara_content #tab2 .input-group-text{
-  height: 36px !important;
-  font-size: 12px !important;
-  font-weight: 900;
-}
-
-#ara_content #tab2 .form-row{
+#ara_content .fat-info .form-row{
+  display:flex !important;
+  flex-wrap: wrap;
+  align-items:center;
+  gap: 6px 10px !important;
   margin-bottom: 6px !important;
 }
-
-/* =========================
-   TAB3 – SADE & TEMİZ
-   ========================= */
-
-#ara_content #tab3 .form-control{
-  height: 36px !important;
-  padding: 6px 12px !important;
-  font-size: 13px !important;
-  border-radius: 12px !important;
+#ara_content .fat-info .form-row > span{
+  color: rgba(255,255,255,.72) !important;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1.1;
+  text-shadow: 0 1px 8px rgba(0,0,0,.35);
+}
+#ara_content .fat-info .form-row > label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  min-height: 28px !important;
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+}
+#ara_content .fat-info .form-row > label[style*="text-align: left"]{
+  justify-content:flex-start !important;
+}
+#ara_content .fat-info .form-control{
+  height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
 }
 
-#ara_content #tab3 .input-group-text{
-  height: 36px !important;
-  font-size: 12px !important;
+/* ---------- ERROR ---------- */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
   font-weight: 900;
 }
-
-/* FATURA – sağa hizalama helper */
-#ara_content .ta-right{
-  text-align: right !important;
-}
-
-/* istersen numeriklerde daha net dursun */
-#ara_content input.ta-right{
-  font-variant-numeric: tabular-nums;
-}
-
 
 </style>
 
-<div class="card p-4">
+<div class="cam-card">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
 		<li class="nav-item" role="presentation">
 			<button class="nav-link active" id="tab1-tab"
@@ -727,10 +392,10 @@ border-radius: 14px;
 	<!-- Tab 1 Content -->
 	<div class="tab-pane fade show active" id="tab1" role="tabpanel"
 		aria-labelledby="tab1-tab">
-		<div class="cardd p-0">
+		<div class="cam-card cam-split">
 		<div class="child">
 			<!-- ****************************************************************************************************** -->
-			<div class="group-box">
+			<div class="cam-box">
 				<div style="display: flex; align-items: center; ">
 					<label style="min-width:85px;">Fis No</label>
 					<div style="min-width: 120px;max-width: 120px;">
@@ -756,24 +421,19 @@ border-radius: 14px;
           		
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Ana Grup</label>	
-					<div style="position:relative; width:125px;">
+					
+					<div class="cam-select" style="width:125px;">
 						<select class="form-select cins_bold" style="width: 120px; " id="anagrp" onchange="OBS.FATURA.anagrpChanged(this)">
     						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
 						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
+					 </div>		
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Alt Grup</label>	
-					<div style="position:relative; width:125px;">
+					<div class="cam-select" style="width:125px;">
 						<select class="form-select cins_bold" style="width: 120px; " id="altgrp" disabled>
     						
 						</select>
-				<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>			
+				 </div>			
 				</div>
 			<!-- 2 SATIR  -->
 			<div style="display: flex; align-items: center;margin-top:10px; ">
@@ -790,7 +450,7 @@ border-radius: 14px;
 					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')" ondblclick="openadrkodlariModal('adreskod', 'fatura')"  style="width: 120px; font-weight: bold;" />
 					<span style="padding-left: 35px;"></span> 	
 					<label style="width:80px;">Varsayilan</label>	
-					<div style="position:relative; width:155px;">
+					<div class="cam-select" style="width:155px;">
 						<select class="form-select cins_bold" style="width: 150px; " id="uygulananfiat" >
     						<option value=""></option>
     						<option value="fiat1">Fiat 1</option>
@@ -798,10 +458,7 @@ border-radius: 14px;
     						<option value="fiat3">Fiat 3</option>
     						<option value="sonsatis">Son Satis Fiati</option>
 						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
+					 </div>		
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Doviz</label>	
 					<input id="dovizcins" class="form-control" style="width: 50px;" th:value="${doviz}"/>
@@ -820,7 +477,7 @@ border-radius: 14px;
 				</div>
 			<!-- 3 SATIR  SONU -->
 			</div>
-			<div class="group-box">
+			<div class="cam-box">
 				<div class="form-row">
 					<button class="btn btn-primary" type="button" id="fatkaydetButton"
 						onclick="OBS.FATURA.fatKayit()">Kaydet</button>
@@ -830,15 +487,12 @@ border-radius: 14px;
 					<button class="btn btn-primary" type="button" id="carkayitButton"	onclick="openFirstModal('fatura')">Cari Kaydet</button>
 					<span style="padding-left: 25%;"></span>
 					
-					<div style="position:relative; width:155px;margin-top:10px;">
+					<div class="cam-select" style="width:155px;">
 							<select class="form-select" style="width: 150px;font-weight: bold;" id="gircik" >
     							<option value="SATIS">SATIS</option>
     							<option value="ALIS">ALIS</option>
 							</select>
-						<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
+						 </div>		
 					
 				</div>
 			</div>
@@ -853,7 +507,7 @@ border-radius: 14px;
 	</div>
 	<!-- Tab 2 Content -->
 	<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
-		<div class="card p-4">
+		<div class="cam-card">
 		<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
 				<span class="input-group-text" style="width: 150px;">Not 1</span>
@@ -883,7 +537,7 @@ border-radius: 14px;
 	</div>
 	<div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
 		
-	<div class="card p-4">
+	<div class="cam-card">
 		<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
 				<span class="input-group-text" style="width: 150px;">1 -</span>
@@ -939,7 +593,7 @@ border-radius: 14px;
 		</tr>
 	</tfoot>
 </table>
-<div class="card p-4 fat-info">
+<div class="cam-card fat-info">
 	<div class="form-row">
 		<span style="padding-left: 10px;width:70px;">Barkod:</span>
 		<input  id="barkod" class="form-control" style="width: 150px; font-weight: bold;" />
@@ -959,10 +613,10 @@ border-radius: 14px;
 		<span style="padding-left: 5px;width:70px;">Bakiye :</span>
 		<label style="width:100px;text-align: right; font-weight: bold;" id="bakiye">0.00</label> 
 		<span style="padding-left: 5px;width:80px;">Tev.Oran :</span>
-		<input  id="tevoran" class="form-control" style="width: 50px; font-weight: bold;" oninput="updateColumnTotal()"  value="0.00"/>
-		<span style="padding-left: 10px;width:40px;"></span>
-		<span style="padding-left: 60px;width:100px;">Te.Dh.Top.Tut:</span>
+		<input  id="tevoran" class="form-control" style="width: 50px !important; font-weight: bold;" oninput="updateColumnTotal()"  value="0.00"/>
 		
+		<span style="padding-left: 55px;width:120px;">Te.Dh.Top.Tut:</span>
+		<span style="padding-left: 21px;"></span>
 		<label style="width:100px;text-align: right; font-weight: bold;" id="tevdahtoptut">0.00</label> 
 		<span style="padding-left: 5px;width:100px;">Te.Hr.Top.Tut:</span>
 		<span style="padding-left: 10px;"></span>

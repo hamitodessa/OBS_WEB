@@ -37,8 +37,8 @@
 /* ===== INPUT / SELECT ===== */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 48px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -58,8 +58,8 @@
 
 /* ===== BUTTON ===== */
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -80,7 +80,7 @@
 
 /* ===== CONTAINER ===== */
 #ara_content .container{
-   height: auto !important;
+ height: 70vh;
   display: flex;
   flex-direction: column;
   margin-top: 10px;
@@ -98,6 +98,12 @@
   margin-top: 10px;
   border-radius: 16px;
   background: rgba(255,255,255,.03);
+}
+
+#ara_content .table-container::-webkit-scrollbar{ height: 10px; }
+#ara_content .table-container{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
 
 /* ===== TABLE ===== */
@@ -202,9 +208,9 @@
 				style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); pointer-events: none; color: #fff; text-shadow: 0 0 6px rgba(255, 255, 255, .35); font-weight: 700; line-height: 1;">▼</span>
 		</div>
 		<span style="padding-left: 5px;"></span> <input type="date"
-			style="width: 120px;" id="startDate" class="form-control"
+			style="width: 140px;" id="startDate" class="form-control"
 			value="1900-01-01"> <span style="padding-left: 5px;"></span>
-		<input type="date" style="width: 120px;" id="endDate"
+		<input type="date" style="width: 140px;" id="endDate"
 			class="form-control" value="2100-12-31"> <span
 			style="padding-left: 5px;"></span> <input type="text" id="aciklama"
 			style="width: 200px;" class="form-control" placeholder="Aciklama" />

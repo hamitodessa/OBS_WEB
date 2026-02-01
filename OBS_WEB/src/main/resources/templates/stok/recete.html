@@ -1,108 +1,99 @@
 <link rel="stylesheet" href="style/urnkodlari.css" />
 <style>
 /* =========================
-   2026 CAM – RECETE
-   wrapper: #ara_content
-   hover: YOK
+   2026 CAM – RECETE (FINAL TEK PARÇA)
+   - rec-top: 2 satır (grid)
+   - group-box: taşarsa yatay scroll
+   - tablo input kırpılmaz
    ========================= */
 
-#ara_content{ color: rgba(255,255,255,.92);
+#ara_content{ color: rgba(255,255,255,.92); }
 
- }
-
-/* LAYOUT */
-#ara_content .card{
- background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  
- display:flex;
- gap:10px;
- 
- align-items:flex-start;
-  width: 80%;
- }
-
-
-#ara_content .child{
-  width: 80%;
- 
-  background: transparent !important;
- 
-}
-
-/* GROUP-BOX cam + sexy horizontal scroll */
+/* ===== GROUP-BOX (CAM + SCROLL) ===== */
 #ara_content .group-box{
-  width: 100%;
   position: relative;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
 
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 10px;
   margin: 10px 0;
 }
 
-/* scrollbar */
+/* sexy scroll */
 #ara_content .group-box::-webkit-scrollbar{ height: 10px; }
+#ara_content .group-box::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .group-box::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+}
 #ara_content .group-box{
   scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
 
-/* LABEL */
+/* ===== LABEL ===== */
 #ara_content label{
   color: rgba(255,255,255,.84);
-  font-weight: 800;
-  font-size: 13px;
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1;
 }
 
-/* INPUT / SELECT */
+/* ===== INPUT / SELECT / TEXTAREA ===== */
 #ara_content .form-control,
-#ara_content .form-select{
-  height: 38px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.92) !important;
-  padding: 8px 12px !important;
-  outline: none;
-}
-#ara_content .form-control:focus,
-#ara_content .form-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
-  background: rgba(8,14,26,.65) !important;
-  color:#fff !important;
-}
-
-/* TEXTAREA (Aciklama) */
+#ara_content .form-select,
 #ara_content textarea{
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
-  padding: 10px 12px !important;
   outline: none;
+  font-weight: 900;
+  font-size: 12px;
+  box-sizing: border-box;
 }
+
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 32px;
+  min-height: 32px;
+  padding: 6px 10px !important;
+}
+
+#ara_content textarea{
+  padding: 8px 10px !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  resize: vertical;
+}
+
+#ara_content .form-control:focus,
+#ara_content .form-select:focus,
 #ara_content textarea:focus{
   border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  box-shadow: 0 0 0 4px rgba(56,189,248,.16);
   background: rgba(8,14,26,.65) !important;
   color:#fff !important;
 }
 
-/* BUTTONS */
+#ara_content input[type="date"]{ color-scheme: dark; }
+
+/* ===== BUTTONS ===== */
 #ara_content .btn-primary{
-border-radius: 12px;
+  border-radius: 12px;
   font-weight: 900;
-  height: 40px;
+  height: 36px;
+  padding: 6px 14px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -113,22 +104,130 @@ border-radius: 12px;
   transform: translateY(-1px);
 }
 
-
 #ara_content .btn.btn-secondary{
   border-radius: 12px;
-  background: rgba(56,189,248,.18) !important;
-  border: 1px solid rgba(56,189,248,.35) !important;
-  color: rgba(255,255,255,.95) !important;
+  height: 36px;
+  min-height: 36px;
+  width: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  color: rgba(255,255,255,.90) !important;
 }
 #ara_content .btn.btn-secondary:hover{
-  background: rgba(56,189,248,.26) !important;
-  border-color: rgba(56,189,248,.55) !important;
-  transform: translateY(-1px);
+  background: rgba(56,189,248,.12) !important;
+  border-color: rgba(56,189,248,.35) !important;
 }
 
-/* =========================
-   TABLE – recTable (hover YOK)
-   ========================= */
+/* =========================================================
+   REC-TOP: 2 SATIR GRID (AÇIKLAMA + DURUM 2. SATIR)
+   ========================================================= */
+#ara_content .rec-top{
+  display: grid;
+  grid-template-columns: 70px 120px 40px 80px 160px 80px 160px;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  row-gap: 8px;
+  align-items: center;
+
+  min-width: 980px;     /* taşarsa group-box scroll */
+}
+
+/* 1. satır */
+#ara_content .rec-kodu-label { grid-column: 1; grid-row: 1; }
+#ara_content .rec-kodu-input { grid-column: 2; grid-row: 1; }
+#ara_content .rec-kodu-btn   { grid-column: 3; grid-row: 1; }
+
+#ara_content .rec-anagrp-label{ grid-column: 4; grid-row: 1; justify-self: stretch; text-align:right; padding-right:10px; }
+#ara_content .rec-anagrp      { grid-column: 5; grid-row: 1; }
+
+#ara_content .rec-altgrp-label{ grid-column: 6; grid-row: 1; justify-self: stretch; text-align:right; padding-right:10px; }
+#ara_content .rec-altgrp      { grid-column: 7; grid-row: 1; }
+
+/* 2. satır */
+#ara_content .rec-aciklama-label{ grid-column: 1; grid-row: 2; }
+#ara_content .rec-aciklama-text { grid-column: 2 / 6; grid-row: 2; width: 100%; }
+
+#ara_content .rec-durum-label { grid-column: 6; grid-row: 2; justify-self: stretch; text-align:right; padding-right:10px; }
+#ara_content .rec-durum-select  { grid-column: 7; grid-row: 2; }
+
+/* select arrow tek sistem */
+#ara_content .rec-rel{
+  position: relative;
+  width: 100%;
+  justify-self: stretch;
+}
+
+/* ✅ grid içinde taşma olmasın (kritik) */
+#ara_content .rec-top > *{ min-width:0; }
+
+/* ✅ label’larda eski margin/padding kalıntılarını sıfırla */
+#ara_content .rec-top label{
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  display: block;
+}
+
+/* ✅ sağdaki label’ları tek kuralla aynı hizaya kilitle */
+#ara_content .rec-anagrp-label,
+#ara_content .rec-altgrp-label,
+#ara_content .rec-durum-label{
+  justify-self: stretch;
+  text-align: right;
+  padding-right: 10px !important;
+  margin-left: 0 !important;   /* 🔥 varsa bitirir */
+}
+
+/* ✅ textarea grid’de “taşma” yapıp çizgiyi kaydırmasın */
+#ara_content .rec-aciklama-text{
+  width: 100%;
+  min-width: 0 !important;     /* 🔥 şart */
+}
+
+#ara_content .rec-rel,
+#ara_content .rec-anagrp,
+#ara_content .rec-altgrp,
+#ara_content .rec-durum-select{
+  min-width: 0 !important;
+  width: 100%;
+}
+
+#ara_content .rec-anagrp-label,
+#ara_content .rec-altgrp-label,
+#ara_content .rec-durum-label{
+  justify-self: start;          /* 🔥 */
+  text-align: left;             /* 🔥 */
+  padding-right: 0 !important;  /* 🔥 */
+  margin-left: 0 !important;
+}
+
+#ara_content .rec-rel > select.form-select{
+  width: 100% !important;
+  padding-right: 30px !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+}
+#ara_content .rec-arrow{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-weight: 900;
+  font-size: 12px;
+  color: rgba(255,255,255,.78);
+  text-shadow: 0 0 10px rgba(0,0,0,.55);
+}
+
+/* =========================================================
+   TABLE – recTable (input kırpma yok)
+   ========================================================= */
 #ara_content #recTable{
   width: 100%;
   margin-top: 8px;
@@ -139,55 +238,79 @@ border-radius: 12px;
   overflow: hidden;
   background: rgba(255,255,255,.03) !important;
 }
-
 #ara_content #recTable thead th{
   position: sticky;
   top: 0;
   z-index: 2;
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
   color: #fff !important;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
-  text-align: left;
   white-space: nowrap;
 }
-
 #ara_content #recTable th,
 #ara_content #recTable td{
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
   padding: 6px 10px !important;
-  height: 28px;
+  height: 42px !important;          /* kırpma biter */
+  vertical-align: middle !important;
   white-space: nowrap;
-  vertical-align: middle;
 }
-
 #ara_content #recTable tbody td{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
+  overflow: visible !important;
+}
+#ara_content #recTable tbody .form-control,
+#ara_content #recTable tbody .form-select{
+  height: 30px !important;
+  min-height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
 }
 
-/* hover kapalı */
-#ara_content #recTable tbody tr:hover > *{
-  background: rgba(255,255,255,.04) !important;
-  color: rgba(255,255,255,.78) !important;
-}
-
-/* right align */
+/* sağa hizalı kolonlar */
 #ara_content .double-column,
 #ara_content .saga-bold{
   text-align: right !important;
   font-weight: 900 !important;
+  font-variant-numeric: tabular-nums;
 }
 
-/* =========================
-   ALT BILGI – rec-info (kompakt)
-   ========================= */
 
+#ara_content #recTable tbody .form-control,
+#ara_content #recTable tbody .form-select{
+  height: 30px !important;
+  min-height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+/* tablo içi trash butonu */
+#ara_content #recTable tbody .btn.btn-secondary{
+  height: 30px !important;
+  width: 34px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+#ara_content #recTable tbody .ml-2{ margin-left: 0 !important; }
+
+#ara_content .ta-right{ text-align: right !important; }
+
+/* ===== ALT BİLGİ (rec-info) ===== */
 #ara_content .rec-info{
   padding: 10px 12px !important;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 16px;
 }
 
 #ara_content .rec-info .form-row{
@@ -198,10 +321,7 @@ border-radius: 12px;
   margin-bottom: 6px !important;
 }
 
-/* padding-left hack iptal */
-#ara_content .rec-info .form-row > span{ padding-left: 0 !important; }
-
-/* başlık spanleri küçült */
+/* span başlıklar */
 #ara_content .rec-info .form-row > span[style*="width"]{
   color: rgba(255,255,255,.72) !important;
   font-weight: 900;
@@ -209,18 +329,17 @@ border-radius: 12px;
   line-height: 1.1;
 }
 
-/* label değerler cam badge */
+/* değer label badge */
 #ara_content .rec-info .form-row > label{
   display:inline-flex;
   align-items:center;
-  justify-content: flex-start;
 
   background: rgba(255,255,255,.04) !important;
   border: 1px solid rgba(255,255,255,.10) !important;
   border-radius: 10px !important;
 
-  padding: 4px 8px !important;
-  min-height: 28px !important;
+  padding: 4px 10px !important;
+  min-height: 30px !important;
   font-size: 12px !important;
   line-height: 1.1 !important;
 
@@ -228,16 +347,7 @@ border-radius: 12px;
   font-weight: 900 !important;
 }
 
-/* input (ukodu) kompakt */
-#ara_content .rec-info .form-control{
-  height: 30px !important;
-  border-radius: 10px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-}
-
-/* "Uretilecek Yeni Urun" başlık */
+/* başlık */
 #ara_content .rec-title{
   display:block;
   margin: 8px 0 0 20px;
@@ -246,6 +356,7 @@ border-radius: 12px;
   text-shadow: 0 0 14px rgba(56,189,248,.18);
 }
 
+/* error */
 #ara_content #errorDiv{
   display:none;
   margin-top: 12px;
@@ -256,237 +367,44 @@ border-radius: 12px;
   color: #fff;
   font-weight: 900;
 }
-
-
-/* =========================
-   2026 CAM – REC TABLE (SATIR INPUTLARI KOMPAKT)
-   Scope: #ara_content #recTable
-   ========================= */
-
-/* Hücre padding ve yüksekliği sıkı */
-#ara_content #recTable th,
-#ara_content #recTable td{
-  padding: 4px 8px !important;
-  height: 26px !important;
-  vertical-align: middle !important;
-}
-
-/* Satır içi input/select/label -> KOMPAKT */
-#ara_content #recTable tbody .form-control,
-#ara_content #recTable tbody .form-select{
-  height: 30px !important;          /* ✅ kompakt */
-  min-height: 30px !important;
-  border-radius: 10px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.95) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
-}
-
-/* label.form-control (readonly gibi kullandıkların) */
-#ara_content #recTable tbody label.form-control{
-  display: flex !important;
-  align-items: center !important;
-  margin: 0 !important;
-}
-#ara_content #recTable tbody label.form-control span{
-  display: inline-block;
-  width: 100%;
-  line-height: 1;
-}
-
-/* Focus daha ince */
-#ara_content #recTable tbody .form-control:focus,
-#ara_content #recTable tbody .form-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
-  background: rgba(8,14,26,.65) !important;
-}
-
-/* İçteki ok (▼) daha küçük + hizalı */
-#ara_content #recTable tbody td > div[style*="position: relative"] > span{
-  right: 8px !important;
-  font-size: 12px !important;
-  color: rgba(255,255,255,.78) !important;
-  text-shadow: 0 0 10px rgba(0,0,0,.55);
-}
-
-/* datalist/select için sağ padding (okla çakışmasın) */
-#ara_content #recTable tbody td > div[style*="position: relative"] input.form-control,
-#ara_content #recTable tbody td > div[style*="position: relative"] select.form-control{
-  padding-right: 26px !important;
-}
-
-/* trash butonu da kompakt */
-#ara_content #recTable tbody .btn.btn-secondary{
-  height: 30px !important;
-  width: 34px !important;
-  padding: 0 !important;
-  border-radius: 10px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(255,255,255,.06) !important;
-  color: rgba(255,255,255,.88) !important;
-}
-#ara_content #recTable tbody .btn.btn-secondary:hover{
-  background: rgba(56,189,248,.12) !important;
-  border-color: rgba(56,189,248,.35) !important;
-}
-
-/* tablo satırı içinde ml-2 falan taşırmasın */
-#ara_content #recTable tbody .ml-2{ margin-left: 0 !important; }
-
-#ara_content .rec-rel{
-  position: relative;
-  width: 100%;
-}
-#ara_content .rec-arrow{
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-/* =========================
-   RECETE – ÜST BLOK KOMPAKT (GRID)
-   Scope: #ara_content .rec-top
-   ========================= */
-
-/* group-box içi artık grid */
-#ara_content .rec-top{
-  display: grid;
-  grid-template-columns: 80px 120px 40px 80px 150px 80px 150px; /* label+input+btn + label+select + label+select */
-  gap: 8px 10px;
-  align-items: center;
-  padding:10px;
-}
-
-/* Aciklama satırı: sol 3 kolon + sağ durum 2 kolon */
-#ara_content .rec-top .rec-aciklama-label{ grid-column: 1 / 2; }
-#ara_content .rec-top .rec-aciklama-text { grid-column: 2 / 6; }  /* geniş */
-#ara_content .rec-top .rec-durum-label   { grid-column: 6 / 7; justify-self: end; }
-#ara_content .rec-top .rec-durum-select  { grid-column: 7 / 8; }
-
-/* ilk satır elemanları */
-#ara_content .rec-top .rec-kodu-label{ grid-column: 1 / 2; }
-#ara_content .rec-top .rec-kodu-input{ grid-column: 2 / 3; }
-#ara_content .rec-top .rec-kodu-btn  { grid-column: 3 / 4; justify-self: start; }
-
-#ara_content .rec-top .rec-anagrp-label{ grid-column: 4 / 5; justify-self: end; }
-#ara_content .rec-top .rec-anagrp{ grid-column: 5 / 6; }
-
-#ara_content .rec-top .rec-altgrp-label{ grid-column: 6 / 7; justify-self: end; }
-#ara_content .rec-top .rec-altgrp{ grid-column: 7 / 8; }
-
-/* select oklarını tek sınıfla yönet (inline spanleri azalt) */
-#ara_content .rec-select{
-  position: relative;
-  width: 150px;
-}
-#ara_content .rec-select .form-select{
-  width: 150px !important;
-  padding-right: 28px !important;
-}
-#ara_content .rec-select::after{
-  content: "▼";
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: rgba(255,255,255,.86);
-  text-shadow: 0 0 6px rgba(255,255,255,.30);
-  font-weight: 800;
-  font-size: 12px;
-}
-
-/* textarea kompakt */
-#ara_content .rec-top textarea{
-  min-height: 44px !important;
-  height: 44px !important;
-  resize: vertical;
-}
-
-#ara_content .ta-right{
-  text-align: right !important;
-}
-
-/* istersen numeriklerde daha net dursun */
-#ara_content input.ta-right{
-  font-variant-numeric: tabular-nums;
-}
-
-/* küçük ekranda alt alta */
-@media (max-width: 1100px){
-  #ara_content .rec-top{
-    grid-template-columns: 80px 1fr 44px;
-  }
-  #ara_content .rec-top .rec-anagrp-label,
-  #ara_content .rec-top .rec-altgrp-label,
-  #ara_content .rec-top .rec-durum-label{ justify-self: start; }
-
-  #ara_content .rec-top .rec-kodu-label{ grid-column: 1 / 2; }
-  #ara_content .rec-top .rec-kodu-input{ grid-column: 2 / 3; }
-  #ara_content .rec-top .rec-kodu-btn  { grid-column: 3 / 4; }
-
-  #ara_content .rec-top .rec-anagrp-label{ grid-column: 1 / 2; }
-  #ara_content .rec-top .rec-anagrp{ grid-column: 2 / 4; width: 100%; }
-
-  #ara_content .rec-top .rec-altgrp-label{ grid-column: 1 / 2; }
-  #ara_content .rec-top .rec-altgrp{ grid-column: 2 / 4; width: 100%; }
-
-  #ara_content .rec-top .rec-aciklama-label{ grid-column: 1 / 2; }
-  #ara_content .rec-top .rec-aciklama-text { grid-column: 2 / 4; width: 100%; }
-
-  #ara_content .rec-top .rec-durum-label{ grid-column: 1 / 2; }
-  #ara_content .rec-top .rec-durum-select{ grid-column: 2 / 4; width: 100%; }
-  #ara_content .rec-select{ width: 100%; }
-  #ara_content .rec-select .form-select{ width: 100% !important; }
-}
-
 </style>
+
 
     <div class="child">
            <div class="group-box">
   			<div class="rec-top">
 				 <label class="rec-kodu-label">Kodu</label>
-
 			    <div class="rec-kodu-input" style="min-width:120px;max-width:120px;">
       				<input class="form-control" style="font-weight:bold;" maxlength="10" id="recno"
              		onkeydown="if(event.key === 'Enter') OBS.RECETE.receteOku()" ondblclick="OBS.RECETE.yeniFis();">
     			</div>
-
-    			<button class="btn btn-secondary rec-kodu-btn" type="button" onclick="OBS.RECETE.sonfis()">
+    			<button class="btn btn-secondary rec-kodu-btn rec-icon" type="button" onclick="OBS.RECETE.sonfis()">
       					<i class="fa fa-refresh"></i>
     			</button>
-
     			<label class="rec-anagrp-label">Ana Grup</label>
-    			<div class="rec-anagrp rec-select">
+    			<div class="rec-anagrp rec-rel">
       				<select class="form-select cins_bold" id="anagrp" onchange="OBS.RECETE.anagrpChanged(this)">
         				<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
       				</select>
+      				<span class="rec-arrow">▼</span>
     			</div>
 				<label class="rec-altgrp-label">Alt Grup</label>
-    			<div class="rec-altgrp rec-select">
+    			<div class="rec-altgrp rec-rel">
       				<select class="form-select cins_bold" id="altgrp" disabled></select>
+      				<span class="rec-arrow">▼</span>
     			</div>
-			    <label class="rec-aciklama-label" style="margin-top:6px;">Aciklama</label>
+			    <label class="rec-aciklama-label" >Aciklama</label>
     			<textarea class="rec-aciklama-text" id="aciklama" placeholder="Aciklama"
-              			rows="2" required maxlength="50" style="margin-top:6px;"></textarea>
-			    <label class="rec-durum-label" style="margin-top:6px;">Durum</label>
-    			<div class="rec-durum-select rec-select" style="margin-top:6px;">
+              			rows="2" required maxlength="50"></textarea>
+              			
+			    <label class="rec-durum-label" >Durum</label>
+			    
+    			<div class="rec-durum-select rec-rel" >
       				<select class="form-select cins_bold" id="durum">
         				<option value="A">Aktif</option>
         				<option value="P">Pasif</option>
       				</select>
+      				<span class="rec-arrow">▼</span>
     			</div>
 			</div>
 			</div>

@@ -105,7 +105,9 @@
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.92) !important;
+  color: #fff;
+  font-weight: 900;
+  text-shadow: 0 2px 10px rgba(0,0,0,.55);
   padding: 6px 10px !important;
   box-sizing: border-box;
   outline: none;
@@ -232,6 +234,29 @@ border-radius: 14px;
   overflow: hidden;
   background: rgba(255,255,255,.03) !important;
 }
+
+#ara_content #gbTable tbody .form-control,
+#ara_content #gbTable tbody .form-select{
+  height: 30px !important;          /* ✅ kompakt */
+  min-height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.95) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+
+#ara_content #gbTable tbody .form-control:focus,
+#ara_content #gbTable tbody .form-select:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
+  background: rgba(8,14,26,.65) !important;
+}
+
 #ara_content #gbTable thead th{
   position: sticky;
   top: 0;
@@ -248,7 +273,7 @@ border-radius: 14px;
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
   padding: 6px 10px !important;
-  height: 28px;
+  height: 30px;
   white-space: nowrap;
   vertical-align: middle;
 }
@@ -346,6 +371,16 @@ border-radius: 14px;
 }
 
 #ara_content input[type="date"]{ color-scheme: dark; }
+
+#ara_content span{
+  color: rgba(255,255,255,.88) !important;
+  font-weight: 900;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 </style>
 <div class="card p-4">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -372,7 +407,7 @@ border-radius: 14px;
 				<!-- TOP LINE -->
 				<div class="group-box">
 					<div class="gb-top">
-						<label>Bordro No</label> <input class="form-control"
+						<span>Bordro No</span> <input class="form-control"
 							style="font-weight: bold;" maxlength="12" id="bordrono"
 							onkeydown="OBS.CEKCIK.bordroOku()" ondblclick="OBS.CEKCIK.yeniBordro()">
 						<button type="button" class="btn btn-secondary"
@@ -380,8 +415,8 @@ border-radius: 14px;
 							<i class="fa fa-refresh"></i>
 						</button>
 						<input type="date" id="bordroTarih" class="form-control"
-							th:value="${evrakTarih}" style="font-weight: bold;" /> <label>Ozel
-							Kod</label>
+							th:value="${evrakTarih}" style="font-weight: bold;" /> <span>Ozel
+							Kod</span>
 						<div style="position: relative;">
 							<input class="form-control cins_bold" list="ozelkodOptions"
 								maxlength="12" id="ozelkod">
@@ -392,14 +427,14 @@ border-radius: 14px;
 							<span
 								style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
 						</div>
-						<label>Doviz</label> <input class="form-control cins_bold"
+						<span>Doviz</span> <input class="form-control cins_bold"
 							id="dvzcinsi" th:value="${doviz}" style="max-width: 90px;">
 					</div>
 				</div>
 				<!-- CARI -->
 				<div class="group-box">
 					<div class="gb-cari">
-						<label>Cari Kodu</label>
+						<span>Cari Kodu</span>
 						<div style="position: relative;">
 							<input class="form-control cins_bold"
 								ondblclick="openSecondModal('bcheskod', 'cekcikis')"
@@ -437,11 +472,11 @@ border-radius: 14px;
 			<div class="child2">
 				<div class="group-box">
 					<div class="gb-right">
-						<label>Faiz</label> <input class="form-control cins_bold"
+						<span>Faiz</span> <input class="form-control cins_bold"
 							id="faiz" style="text-align: right; max-width: 140px;"
-							oninput="ortgun()"> <label>Faiz Tutari</label>
+							oninput="ortgun()"> <span>Faiz Tutari</span>
 						<div class="val-right" id="lblfaiztutari">0.00</div>
-						<label>Ort.Gun</label>
+						<span>Ort.Gun</span>
 						<div class="val-right" id="lblortgun">0</div>
 					</div>
 				</div>
