@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/style/carihesap/borcalacak.css">
 <style>
 /* =========================
-   2026 CAM – IRSALIYE (CLEAN FINAL)
+   2026 CAM – IRSALIYE (FINAL)
    wrapper: #ara_content
    ========================= */
 
@@ -12,7 +12,6 @@
   color: rgba(255,255,255,.92);
   padding: 0 !important;
 
-  /* CAM2026 token */
   --cam-fs-label: 12px;
   --cam-fs-input: 12px;
   --cam-fs-table: 12px;
@@ -35,11 +34,23 @@
   margin-top: 10px;
 }
 
+/* ===== ÜST BLOK (child + resim) =====
+   - küçük ekranda resim alta DÜŞMEZ
+   - yatay scroll ile yan yana kalır
+*/
 #ara_content .cardd{
   display:flex;
+  flex-wrap: nowrap !important;     /* ✅ ASIL FIX */
   gap: 6px;
   align-items:flex-start;
   margin-top:10px;
+
+  max-width: 100%;
+  overflow-x: auto;                 /* ✅ küçük ekranda kaydır */
+  overflow-y: hidden;
+
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
 
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
@@ -48,6 +59,23 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding: 5px !important;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .cardd > *{ flex: 0 0 auto; } /* ✅ yan yana sabitle */
+
+/* sexy scroll cardd */
+#ara_content .cardd::-webkit-scrollbar{ height: 10px; }
+#ara_content .cardd::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .cardd::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
 }
 
 /* ===== NAV TABS ===== */
@@ -77,8 +105,8 @@
   background: transparent;
   padding: 0;
 }
-#ara_content .child{ width: 80%; }
-#ara_content .child2{ width: 20%; }
+#ara_content .child{  width: 1150px; min-width: 1150px; }
+#ara_content .child2{ width: 240px;  min-width: 240px; }
 
 /* ===== LABEL ===== */
 #ara_content label{
@@ -92,14 +120,14 @@
 /* ===== INPUT / SELECT (GENEL) ===== */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 36px !important;
-  min-height: 36px !important;
-  border-radius: 12px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  border-radius: 10px !important;
   border: var(--cam-bd) !important;
   background: var(--cam-bg) !important;
   color: #fff !important;
   font-weight: 900 !important;
-/*  font-size: var(--cam-fs-input) !important;  */
+  font-size: var(--cam-fs-input) !important;
   letter-spacing: .2px;
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
   padding: 8px 10px !important;
@@ -120,12 +148,11 @@
   background: rgba(8,14,26,.65) !important;
 }
 
-/* date dark */
 #ara_content input[type="date"]{ color-scheme: dark; }
 
 /* input-group-text */
 #ara_content .input-group-text{
-  height: 36px !important;
+  height: 34px !important;
   border-radius: 12px !important;
   border: var(--cam-bd) !important;
   background: var(--cam-bg2) !important;
@@ -151,7 +178,9 @@
   transform: translateY(-1px);
 }
 #ara_content .btn.btn-secondary{
-  border-radius: 12px;
+height: 34px !important;
+  min-height: 34px !important;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(255,255,255,.06) !important;
   color: rgba(255,255,255,.88) !important;
@@ -161,9 +190,31 @@
   border-color: rgba(56,189,248,.35) !important;
 }
 
-/* =========================================================
-   GROUP-BOX (SEKSI HORIZONTAL SCROLL)
-   ========================================================= */
+/* ---------- SELECT (tek yerden ok) ---------- */
+#ara_content .cam-select{
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+#ara_content .cam-select > select{
+  background-image: none !important;
+  padding-right: 32px !important;
+}
+#ara_content .cam-select::after{
+  content:"▼";
+  position:absolute;
+  top:50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events:none;
+  color: rgba(255,255,255,.88);
+  text-shadow: 0 0 6px rgba(255,255,255,.20);
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* ===== GROUP-BOX ===== */
 #ara_content .group-box{
   position: relative;
   overflow-x: auto;
@@ -176,9 +227,10 @@
   border-radius: 16px;
   padding: 12px;
   margin: 10px 0 !important;
-}
 
-/* WebKit scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
 #ara_content .group-box::-webkit-scrollbar{ height: 10px; }
 #ara_content .group-box::-webkit-scrollbar-track{
   background: rgba(255,255,255,.06);
@@ -190,43 +242,12 @@
   border-radius: 10px;
   box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
 }
-#ara_content .group-box::-webkit-scrollbar-thumb:active{
-  background: linear-gradient(135deg, rgba(56,189,248,.85), rgba(34,197,94,.70));
-}
-/* Firefox */
-#ara_content .group-box{
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
-}
 
-/* fade */
-#ara_content .group-box::before,
-#ara_content .group-box::after{
-  content:"";
-  position:absolute;
-  top:0;
-  width:22px;
-  height:100%;
-  pointer-events:none;
-  z-index:2;
-}
-#ara_content .group-box::before{
-  left:0;
-  background: linear-gradient(to right, rgba(8,14,26,.95), rgba(8,14,26,0));
-}
-#ara_content .group-box::after{
-  right:0;
-  background: linear-gradient(to left, rgba(8,14,26,.95), rgba(8,14,26,0));
-}
-
-/* =========================================================
-   SELECT OK – ALT SATIRA DUSMESIN (GLOBAL)
-   Senin HTML’deki position:relative wrapper + span ▼ için
-   ========================================================= */
+/* select ok kaymasın (senin inline wrapper) */
 #ara_content div[style*="position:relative"]{
   display:flex !important;
   align-items:center !important;
-  flex-wrap: nowrap !important;  /* ✅ ok kaymasın */
+  flex-wrap: nowrap !important;
   line-height: 1 !important;
 }
 #ara_content div[style*="position:relative"] > select.form-select{
@@ -245,21 +266,18 @@
   z-index:3 !important;
 }
 
-/* =========================================================
-   RESIM – tam sığsın
-   ========================================================= */
+/* ===== RESIM ===== */
 #ara_content .resimdiv{
   width: 100%;
-  max-height: 240px;
   height: 240px;
+  max-height: 240px;
   display:flex;
   justify-content:center;
   align-items:center;
-
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
   border: 1px solid rgba(255,255,255,.18) !important;
   border-radius: 16px;
-  overflow:hidden;
+  overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
 }
 #ara_content #resimGoster.resimgoster{
@@ -267,28 +285,54 @@
   width:100%;
   height:100%;
   object-fit: contain;
-  object-position:center;
+  object-position: center;
   background: rgba(0,0,0,.20) !important;
 }
 
-/* =========================================================
-   TABLE – irsTable (CAM + KOMPAKT + HOVER YOK)
-   ========================================================= */
-#ara_content #irsTable{
+/* ===== TABLE WRAP ===== */
+#ara_content .irs-table-wrap{
   width: 100%;
-  margin-top: 8px;
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid rgba(255,255,255,.14) !important;
+  margin-top: 5px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
   border-radius: 16px;
-  overflow: hidden;
-  background: rgba(255,255,255,.03) !important;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+
+  padding: 0;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .irs-table-wrap::-webkit-scrollbar{ height: 10px; }
+#ara_content .irs-table-wrap::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .irs-table-wrap::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
 }
 
+#ara_content #irsTable{
+  min-width: 1100px;
+  width: 100%;
+  margin: 0 !important;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  border: none !important;
+  background: transparent !important;
+}
 #ara_content #irsTable thead th{
   position: sticky;
   top: 0;
-  z-index: 5;
+  z-index: 2;
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
   color: #fff !important;
   font-size: 13px;
@@ -296,23 +340,19 @@
   text-align: left;
   white-space: nowrap;
 }
-
 #ara_content #irsTable th,
 #ara_content #irsTable td{
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
   padding: 4px 8px !important;
-  height: 26px !important;
-  white-space: nowrap !important;
-  vertical-align: middle !important;
+  height: 28px !important;
+  white-space: nowrap;
+  vertical-align: middle;
 }
-
 #ara_content #irsTable tbody td{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
 }
-
-/* hover kapalı */
 #ara_content #irsTable tbody tr:hover > *{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
@@ -325,43 +365,9 @@
   min-height: 30px !important;
   border-radius: 10px !important;
   padding: 4px 8px !important;
-  font-size: var(--cam-fs-table) !important;
+  font-size: 12px !important;
   font-weight: 900 !important;
-
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.95) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
 }
-
-#ara_content #irsTable tbody label.form-control{
-  height: 30px !important;
-  min-height: 30px !important;
-  border-radius: 10px !important;
-  padding: 0 8px !important;
-  display:flex !important;
-  align-items:center !important;
-  margin: 0 !important;
-
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.95) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
-}
-#ara_content #irsTable tbody label.form-control span{
-  display:block !important;
-  width:100% !important;
-  line-height:1 !important;
-}
-
-#ara_content #irsTable tbody .form-control:focus,
-#ara_content #irsTable tbody .form-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
-  background: rgba(8,14,26,.65) !important;
-}
-
-/* tfoot */
 #ara_content #irsTable tfoot td{
   background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
   color: #fff !important;
@@ -370,67 +376,11 @@
   border-bottom: none !important;
   padding: 8px 10px !important;
 }
-
 #ara_content .ta-right,
 #ara_content .saga-bold{
   text-align:right !important;
   font-weight:900 !important;
 }
-
-
-/* =========================================================
-   ALT BILGI – irs-info (KOMPAKT)
-   ========================================================= */
-#ara_content .irs-info{
-  padding: 10px 12px !important;
-}
-#ara_content .irs-info .form-row{
-  display:flex !important;
-  flex-wrap: wrap;
-  align-items:center;
-  gap: 6px 10px !important;
-  margin-bottom: 6px !important;
-}
-#ara_content .irs-info .form-row > span{
-  padding-left: 0 !important;
-  color: rgba(255,255,255,.72) !important;
-  font-weight: 900;
-  font-size: 12px;
-  line-height: 1.1;
-}
-#ara_content .irs-info .form-row > label{
-  display:inline-flex;
-  align-items:center;
-  justify-content:flex-start;
-
-  background: rgba(255,255,255,.04) !important;
-  border: 1px solid rgba(255,255,255,.10) !important;
-  border-radius: 10px !important;
-
-  padding: 4px 8px !important;
-  min-height: 28px !important;
-  font-size: 12px !important;
-  line-height: 1.1 !important;
-
-  color: rgba(255,255,255,.92) !important;
-  font-weight: 900 !important;
-}
-#ara_content .irs-info .form-row > label[style*="text-align: right"]{
-  justify-content:flex-end !important;
-  text-align:right !important;
-}
-#ara_content .irs-info #anaalt{
-  justify-content:flex-start !important;
-  text-align:left !important;
-}
-#ara_content .irs-info .form-control{
-  height: 30px !important;
-  border-radius: 10px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-}
-
 #ara_content .irs-rel{
   position: relative;
   width: 100%;
@@ -442,6 +392,109 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
+/* =========================================================
+   IRS-INFO (GRID) – scroll YOK, responsiveda cuk oturur
+   ========================================================= */
+/* =========================================================
+   IRS-INFO – GRID + HORIZONTAL SCROLL (KIRILMA YOK)
+   ========================================================= */
+#ara_content .irs-info{
+  overflow-x: auto;        /* ✅ scroll */
+  overflow-y: hidden;
+  white-space: nowrap;
+
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+
+/* sexy scrollbar */
+#ara_content .irs-info::-webkit-scrollbar{ height: 10px; }
+#ara_content .irs-info::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+#ara_content .irs-info::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg,
+    rgba(56,189,248,.65),
+    rgba(34,197,94,.55)
+  );
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.35);
+}
+
+/* === GRID SABİT === */
+#ara_content .irs-info .form-row{
+  display: grid !important;
+
+  /* SABİT GRID → ASLA KIRILMAZ */
+  grid-template-columns:
+    90px 170px
+    100px 100px
+    120px 100px
+    150px 100px
+    120px 100px;
+
+  gap: 6px 10px;
+  align-items: center;
+  margin-bottom: 5px !important;   /* ✅ satırlar arası 5px */
+  padding-top: 2px;
+  padding-bottom: 2px;
+  
+  min-width: 1200px;   /* ✅ scroll’u zorla */
+  white-space: nowrap;
+}
+
+#ara_content .irs-info .form-row:last-child{
+  margin-bottom: 0 !important;
+}
+/* span (etiketler) */
+#ara_content .irs-info .form-row > span{
+  color: rgba(255,255,255,.72) !important;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+/* input */
+#ara_content .irs-info .form-control{
+  width: 100% !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+/* value label */
+#ara_content .irs-info .form-row > label{
+  width: 100% !important;
+  margin: 0 !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: 10px !important;
+
+  padding: 4px 8px !important;
+  min-height: 30px !important;
+  font-size: 12px !important;
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+}
+
+/* sağa yaslı label */
+#ara_content .irs-info .form-row > label[style*="text-align: right"]{
+  justify-content:flex-end !important;
+  text-align:right !important;
+}
+
+
 
 /* error */
 #ara_content #errorDiv{
@@ -454,14 +507,8 @@
   color: #fff;
   font-weight: 900;
 }
-
-/* responsive (çok dar ekranda dağılmasın) */
-@media (max-width: 1200px){
-  #ara_content .child{ width: 100%; }
-  #ara_content .child2{ width: 100%; }
-  #ara_content .cardd{ flex-direction: column; }
-}
 </style>
+
 
 
 <div class="card p-4">
@@ -493,7 +540,7 @@
 <div class="tab-content" id="myTabContent">
 	<!-- Tab 1 Content -->
 	<div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-		<div class="cardd p-0">
+		<div class="cardd">
 		<div class="child">
 			<div class="group-box">
 				<div style="display: flex; align-items: center; ">
@@ -597,15 +644,13 @@
 					<span style="padding-left: 5px;"></span>
 					<button class="btn btn-primary" type="button" id="carkayitButton"	onclick="openFirstModal('irsaliye')">Cari Kaydet</button>
 					<span style="padding-left: 25%;"></span>
-					<div style="position:relative; width:155px;margin-top:10px;">
-							<select class="form-select" style="width: 150px;font-weight: bold;" id="gircik" >
-    							<option value="SATIS">SATIS</option>
-    							<option value="ALIS">ALIS</option>
+					<div class="cam-select" style="width: 155px;">
+							<select class="form-select"
+								style="width: 150px; font-weight: bold;" id="gircik">
+								<option value="SATIS">SATIS</option>
+								<option value="ALIS">ALIS</option>
 							</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
+						</div>	
 				</div>
 			</div>
 		</div>
@@ -693,6 +738,8 @@
 <button type="button" class="btn btn-secondary ml-2" style="margin-top:5px;" 
 			onclick="OBS.IRSALIYE.satirekle()"><i class="fa fa-plus"></i></button>
 
+
+<div class="irs-table-wrap">
 <table class="table table-bordered" id="irsTable"
 	style="margin-top: 5px;">
 	<thead class="thead-dark">
@@ -728,35 +775,36 @@
 		</tr>
 	</tfoot>
 </table>
+</div>
+
 <div class="card p-4 irs-info">
 	<div class="form-row">
-		<span style="padding-left: 10px;width:90px;">Barkod:</span>
+		<span >Barkod:</span>
 		<input  id="barkod" class="form-control" style="width: 170px; font-weight: bold;" />
-		<span style="padding-left: 20px;width:100px;">Iskonto:</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="iskonto">0.00</label> 
-		<span style="padding-left: 20px;width:120px;">K.D.V.:</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="kdv">0.00</label> 
-		<span style="padding-left: 20px;width:150px;">Tev.Edi.K.D.V.:</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="tevedkdv">0.00</label> 
-		<span style="padding-left: 20px;width:120px;">Beyan.Edi.K.D.V.:</span>
-		<span style="padding-left: 10px;"></span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="beyedikdv">0.00</label> 
+		<span >Iskonto:</span>
+		<label style="text-align: right; font-weight: bold;" id="iskonto">0.00</label> 
+		<span >K.D.V.:</span>
+		<label style="text-align: right; font-weight: bold;" id="kdv">0.00</label> 
+		<span >Tev.Edi.K.D.V.:</span>
+		<label style="text-align: right; font-weight: bold;" id="tevedkdv">0.00</label> 
+		<span >Beyan.Edi.K.D.V.:</span>
+		 <label style="text-align: right; font-weight: bold;" id="beyedikdv">0.00</label> 
 	</div>
 	<div class="form-row">
-		<span style="padding-left: 10px;width:90px;"></span>
-		<label style="width:170px; font-weight: bold;" id="urunadi"></label> 
-		<span style="padding-left: 20px;width:100px;">Bakiye :</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="bakiye">0.00</label> 
-		<span style="padding-left: 20px;width:120px;">Tevkifat Oran :</span>
-		<input  id="tevoran" class="form-control" style="width: 50px; font-weight: bold;" oninput="updateColumnTotal()"  value="0.00"/>
-		<span style="padding-left: 70px;width:200px;">Tev.Dah.Top.Tut.:</span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="tevdahtoptut">0.00</label> 
-		<span style="padding-left: 20px;width:120px;">Tev.Har.Top.Tut. :</span>
-		<span style="padding-left: 10px;"></span>
-		<label style="width:100px;text-align: right; font-weight: bold;" id="tevhartoptut">0.00</label> 
+		<span></span>
+		<label style="font-weight: bold;" id="urunadi"></label> 
+		<span>Bakiye :</span>
+		<label style="text-align: right; font-weight: bold;" id="bakiye">0.00</label> 
+		<span>Tevkifat Oran :</span>
+		<input  id="tevoran" class="form-control" style="font-weight: bold;" oninput="updateColumnTotal()"  value="0.00"/>
+		<span>Tev.Dah.Top.Tut.:</span>
+		<label style="text-align: right; font-weight: bold;" id="tevdahtoptut">0.00</label> 
+		<span>Tev.Har.Top.Tut. :</span>
+		
+		<label style="text-align: right; font-weight: bold;" id="tevhartoptut">0.00</label> 
 	</div>
 	<div class="form-row">
-		<span style="padding-left: 10px;width:90px;"></span>
+		<span></span>
 		<label style="width:170px; font-weight: bold;" id="anaalt"></label> 
 		
 	</div>

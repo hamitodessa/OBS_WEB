@@ -4,16 +4,17 @@
 <link rel="stylesheet" href="/style/carihesap/borcalacak.css">
 <style>
 /* =========================================================
-   2026 CAM – FATURA (TEMIZ CORE)
-   wrapper: #ara_content
+   2026 CAM – FATURA (FINAL TEK PARÇA)
+   - Tab1/2/3: 34px kompakt
+   - Table: scroll + yuvarlak köşe (wrapper clip)
+   - fat-info: grid + scroll
+   Scope: #ara_content
    ========================================================= */
 
 #ara_content{
   color: rgba(255,255,255,.92);
-}
 
-/* ---------- TOKENS ---------- */
-#ara_content{
+  /* TOKENS */
   --cam-bg1: rgba(255,255,255,.10);
   --cam-bg2: rgba(255,255,255,.06);
   --cam-line: rgba(255,255,255,.16);
@@ -25,6 +26,10 @@
   --cam-chip-line: rgba(255,255,255,.10);
   --cam-ac1: rgba(56,189,248,.65);
   --cam-ac1-soft: rgba(56,189,248,.16);
+
+  /* COMPACT */
+  --ctl-h: 34px;
+  --ctl-r: 10px;
 }
 
 /* ---------- CARD ---------- */
@@ -39,24 +44,6 @@
   margin-top: 10px;
 }
 
-/* iki kolonlu üst alan */
-#ara_content .cam-split{
-  display:flex;
-  flex-wrap: nowrap;
-  gap: 6px;
-  padding: 8px !important;
-
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  scroll-behavior: smooth;
-  overscroll-behavior-x: contain;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
-}
-#ara_content .cam-split > *{ flex: 0 0 auto; }
 /* ---------- NAV TABS ---------- */
 #ara_content .nav-tabs{
   border-bottom: 1px solid rgba(255,255,255,.14) !important;
@@ -77,7 +64,38 @@
   box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-/* ===== LAYOUT ===== */
+/* ---------- TOP SPLIT (child + resim) ---------- */
+#ara_content .cam-split{
+  display:flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  padding: 8px !important;
+
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .cam-split > *{ flex: 0 0 auto; }
+
+/* sexy scroll cam-split */
+#ara_content .cam-split::-webkit-scrollbar{ height: 10px; }
+#ara_content .cam-split::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .cam-split::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+
 #ara_content .child,
 #ara_content .child2{
   border: none !important;
@@ -87,14 +105,7 @@
 #ara_content .child{  width: 1150px; }
 #ara_content .child2{ width: 240px; }
 
-/* group-box içindeki "display:flex" satırlar -> wrap + gap */
-#ara_content .cam-box > div[style*="display: flex"]{
-  flex-wrap: wrap !important;
-  gap: 8px 10px !important;
-}
-
-
-/* ---------- GROUP BOX (düz kart) ---------- */
+/* ---------- GROUP BOX ---------- */
 #ara_content .cam-box{
   border: 1px solid rgba(255,255,255,.14) !important;
   background: rgba(8,14,26,.35) !important;
@@ -103,37 +114,46 @@
   margin: 8px 0 !important;
 }
 
-/* ---------- FORM TYPO / INPUTS ---------- */
+/* cam-box içindeki inline flex satırlar -> wrap + gap (ama kompakt) */
+#ara_content .cam-box > div[style*="display: flex"]{
+  flex-wrap: wrap !important;
+  gap: 8px 10px !important;
+  align-items: center !important;
+  min-height: var(--ctl-h) !important;
+}
+
+/* ---------- TYPO ---------- */
 #ara_content label{
   color: rgba(255,255,255,.84);
   font-weight: 900;
   font-size: 12px;
   margin: 0 !important;
   white-space: nowrap;
-  
 }
 
-/* ortak field */
-#ara_content .form-control,
-#ara_content .form-select,
-#ara_content .input-group-text{
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  font-weight: 900;
-  font-size: 12px;
-  text-shadow: 0 2px 10px rgba(0,0,0,.55);
+/* ---------- COMMON FIELDS (Tab içi 34px) ---------- */
+#ara_content .tab-content .form-control,
+#ara_content .tab-content .form-select,
+#ara_content .tab-content .btn,
+#ara_content .tab-content .input-group-text{
+  height: var(--ctl-h) !important;
+  min-height: var(--ctl-h) !important;
+  border-radius: var(--ctl-r) !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
 }
 
-/* input/select */
+/* Input / Select */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 32px !important;
-  padding: 4px 8px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
   background: var(--cam-field) !important;
   color: #fff !important;
   outline: none;
   box-sizing: border-box !important;
-
+  font-weight: 900;
+  text-shadow: 0 2px 10px rgba(0,0,0,.55);
+  padding: 5px 10px !important;
 }
 #ara_content .form-control::placeholder{
   color: rgba(255,255,255,.55) !important;
@@ -150,22 +170,23 @@
 
 /* input-group text */
 #ara_content .input-group-text{
-  height: 32px;
-  padding: 4px 8px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.45) !important;
   color: rgba(255,255,255,.90) !important;
-  font-size: 12px !important;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+  padding: 5px 10px !important;
+  font-weight: 900 !important;
 }
 
-/* ---------- BUTTONS ---------- */
+/* Buttons */
 #ara_content .btn-primary{
   border-radius: 12px;
   font-weight: 900;
-  height: 36px;
+  height: var(--ctl-h) !important;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
+  padding: 6px 14px !important;
 }
 #ara_content .btn-primary:hover{
   background: rgba(56,189,248,.26) !important;
@@ -173,8 +194,9 @@
   transform: translateY(-1px);
 }
 #ara_content .btn.btn-secondary{
-  height: 32px;
-  border-radius: 10px;
+  height: var(--ctl-h) !important;
+  min-height: var(--ctl-h) !important;
+  border-radius: var(--ctl-r) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(255,255,255,.06) !important;
   color: rgba(255,255,255,.88) !important;
@@ -184,9 +206,32 @@
   border-color: rgba(56,189,248,.35) !important;
 }
 
-/* ---------- SELECT OK (TEK YERDEN) ----------
-   background ok’u kapat, overlay ok kullan
-*/
+/* ikon secondary butonları kare yap */
+#ara_content .tab-content .btn.btn-secondary.ml-2,
+#ara_content .tab-content .btn.btn-secondary.rec-icon{
+  width: var(--ctl-h) !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* checkbox satırı */
+#ara_content .tab-content .form-check{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px;
+  min-height: var(--ctl-h) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+#ara_content .tab-content .form-check-input{
+  width: 16px;
+  height: 16px;
+  margin-top: 0 !important;
+}
+
+/* ---------- SELECT (tek yerden ok) ---------- */
 #ara_content .cam-select{
   position: relative;
   width: 100%;
@@ -208,30 +253,6 @@
   font-weight: 900;
   font-size: 12px;
   line-height: 1;
-}
-
-/* ---------- TAB1 satırları: inline flex yerine class ---------- */
-#ara_content .cam-row{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  flex-wrap: nowrap;
-}
-#ara_content .cam-gap-sm{ gap: 6px; }
-#ara_content .cam-mt{ margin-top: 10px; }
-
-/* cari/adres isim label’ları */
-#ara_content .cam-wide{
-  min-height: 26px;
-  padding: 4px 8px;
-  border-radius: 10px;
-  background: var(--cam-chip);
-  border: 1px solid var(--cam-chip-line);
-  color: rgba(255,255,255,.92);
-  font-weight: 900;
-  overflow:hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* ---------- RESIM ---------- */
@@ -257,24 +278,31 @@
   background: rgba(0,0,0,.20) !important;
 }
 
-/* ---------- TABLE (FAT) ---------- */
+/* =========================================================
+   TABLE – FAT (scroll + gerçek radius)
+   ========================================================= */
 
+/* wrapper clip: radius burada çalışır */
 #ara_content .fat-table-wrap{
-  width: 100%;                 /* senin layout */
+  width: 100%;
+  margin-top: 5px;
+
   overflow-x: auto;
   overflow-y: hidden;
-  margin-top:5px;
+
   border-radius: 16px;
-   /*
   border: 1px solid rgba(255,255,255,.14);
-  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
-  padding: 0;                 /* tablo kenarı tam otursun */
+  background: rgba(255,255,255,.03);
+
+  padding: 0;
+  /* radius görünmesi için kritik 
+  -webkit-mask-image: -webkit-radial-gradient(white, black);*/
 }
 
-/* sexy scroll (wrapper’a) */
+#ara_content .fat-table-wrap{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
 #ara_content .fat-table-wrap::-webkit-scrollbar{ height: 10px; }
 #ara_content .fat-table-wrap::-webkit-scrollbar-track{
   background: rgba(255,255,255,.06);
@@ -287,17 +315,16 @@
   box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
 }
 
-
 #ara_content #fatTable{
- 
   min-width: 1100px;
-  margin-top: 8px;
+  width: 100%;
+  margin: 0 !important;
+
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid rgba(255,255,255,.14) !important;
-  border-radius: 16px;
-  overflow: hidden;
-  background: rgba(255,255,255,.03) !important;
+
+  border: none !important;        /* border wrapper’da */
+  background: transparent !important;
 }
 #ara_content #fatTable thead th{
   position: sticky;
@@ -315,7 +342,7 @@
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
   padding: 4px 8px !important;
-  height: 26px !important;
+  height: 28px !important;
   white-space: nowrap;
   vertical-align: middle;
 }
@@ -323,15 +350,10 @@
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
 }
-#ara_content #fatTable tbody tr:hover > *{
-  background: rgba(255,255,255,.04) !important; /* hover yok */
-  color: rgba(255,255,255,.78) !important;
-}
 #ara_content #fatTable tbody tr.selected > *{
   background: linear-gradient(135deg, rgba(56,189,248,.18), rgba(34,197,94,.12)) !important;
   color: #fff !important;
 }
-/* satır içi input/select */
 #ara_content #fatTable tbody .form-control,
 #ara_content #fatTable tbody .form-select{
   height: 30px !important;
@@ -341,7 +363,6 @@
   font-size: 12px !important;
   font-weight: 900 !important;
 }
-/* tfoot */
 #ara_content #fatTable tfoot td{
   background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
   color: #fff !important;
@@ -351,42 +372,25 @@
   padding: 8px 10px !important;
 }
 
-#ara_content .fat-rel{
-  position: relative;
-  width: 100%;
-}
-#ara_content .fat-arrow{
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-
 /* helpers */
 #ara_content .ta-right{ text-align:right !important; font-variant-numeric: tabular-nums; }
 #ara_content .saga-bold, #ara_content .double-column{ text-align:right !important; font-weight:900; }
+#ara_content .fat-rel{ position: relative; width: 100%; }
+ #ara_content .fat-arrow{ position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; }
+/* =========================================================
+   FAT-INFO – grid + scroll (küçülünce kaydır)
+   ========================================================= */
 
-/* ---------- FAT-INFO ---------- */
-/* =========================
-   2026 CAM – FAT-INFO (KOMPAKT GRID + SCROLL)
-   Scope: #ara_content
-   ========================= */
-
-/* wrapper: scroll burada */
 #ara_content .fat-info{
-  padding: 10px;
+  padding: 10px !important;
   border-radius: 16px;
   overflow-x: auto !important;
   overflow-y: hidden !important;
-  padding-bottom: 10px !important; /* scrollbar boşluğu */
-  
+  padding-bottom: 10px !important;
+
   scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
-
-/* sexy scroll (fat-info’ya) */
 #ara_content .fat-info::-webkit-scrollbar{ height: 10px; }
 #ara_content .fat-info::-webkit-scrollbar-track{
   background: rgba(255,255,255,.06);
@@ -399,19 +403,16 @@
   box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
 }
 
-/* satırlar: GRID */
 #ara_content .fat-info .form-row{
   display: grid !important;
   align-items: center;
   gap: 6px 10px !important;
   margin: 0 0 8px 0 !important;
 
-  /* 🔥 küçülünce taşsın -> wrapper scroll */
- 
-  min-width: 1000px;
+  min-width: 1000px; /* küçülünce taşsın -> fat-info scroll */
 }
 
-/* ortak: span başlık */
+/* başlık */
 #ara_content .fat-info .form-row > span{
   color: rgba(255,255,255,.72) !important;
   font-weight: 900;
@@ -421,7 +422,7 @@
   justify-self: end;
 }
 
-/* ortak: değer label */
+/* değer label */
 #ara_content .fat-info .form-row > label{
   display: inline-flex;
   align-items: center;
@@ -442,7 +443,7 @@
   white-space: nowrap;
 }
 
-/* input (barkod, tevoran) */
+/* inputlar */
 #ara_content .fat-info .form-row > input.form-control{
   height: 30px !important;
   min-height: 30px !important;
@@ -455,19 +456,19 @@
   color: #fff !important;
 }
 
-/* sol hizalı “isim” label’ları (urunadi, anaalt) */
+/* sol hizalı isim label’ları */
 #ara_content .fat-info #urunadi,
 #ara_content .fat-info #anaalt{
   justify-content: flex-start !important;
   text-align: left !important;
-  min-width: 260px;                 /* kompakt ama taşma olmasın */
+  min-width: 260px;
   max-width: 420px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* ---------- SATIR 1: Barkod + Iskonto + KDV + TevKDV + BeyKDV ---------- */
+/* satır şablonları */
 #ara_content .fat-info .form-row:nth-of-type(1){
   grid-template-columns:
     70px 180px   /* Barkod */
@@ -476,8 +477,6 @@
     95px 110px   /* Te.Edi.KDV */
     95px 110px;  /* Be.Edi.KDV */
 }
-
-/* ---------- SATIR 2: Ürün adı + Bakiye + TevOran + TevDh + TevHr ---------- */
 #ara_content .fat-info .form-row:nth-of-type(2){
   grid-template-columns:
     260px        /* urunadi */
@@ -486,12 +485,9 @@
     95px 110px   /* Te.Dh.Top.Tut */
     95px 110px;  /* Te.Hr.Top.Tut */
 }
-
-/* ---------- SATIR 3: anaalt ---------- */
 #ara_content .fat-info .form-row:nth-of-type(3){
   grid-template-columns: 420px;
 }
-
 
 /* ---------- ERROR ---------- */
 #ara_content #errorDiv{
@@ -588,7 +584,7 @@
 							id="carikod" ondblclick="openSecondModal('carikod', 'fatura')"
 							maxlength="12" oninput="hesapAdiOgren(this.value, 'cariadilbl')">
 
-						<span style="padding-left: 175px;"></span> <label
+						<span style="padding-left: 170px;"></span> <label
 							style="width: 75px;">Adres Kod</label> <input id="adreskod"
 							class="form-control"
 							oninput="adrhesapAdiOgren('adreskod','adresadilbl')"
