@@ -557,34 +557,26 @@ height: 34px !important;
 						style="width: 125px; font-weight: bold;" />
 					<span style="padding-left: 10px;"></span> 
 					<label style="width:75px;">Ozel Kod</label>	
-					<div style="position:relative; width:125px;">
+					<div class="cam-select" style="width: 120px;">
 						<select class="form-select" style=" width: 120px; " id="ozelkod" >
     						<option th:each="kod : ${ozelKodlari}" th:value="${kod.Ozel_Kod}" th:text="${kod.Ozel_Kod}"></option>
 						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
+					 </div>		
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Ana Grup</label>	
-					<div style="position:relative; width:125px;">
+					<div class="cam-select" style="width: 120px;">
 						<select class="form-select cins_bold" style="width: 120px; " id="anagrp" onchange="OBS.IRSALIYE.anagrpChanged(this)">
     						<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
 						</select>
-						<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
+						
           	</div>	
 					<span style="padding-left: 10px;"></span> 	
 					<label style="width:75px;">Alt Grup</label>	
-					<div style="position:relative; width:125px;">
+					<div class="cam-select" style="width: 120px;">
 						<select class="form-select cins_bold" style="width: 120px; " id="altgrp" disabled>
     						
 						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>		
+					 </div>		
 				</div>
 			<!-- 2 SATIR  -->
 			<div style="display: flex; align-items: center;margin-top:10px; ">
@@ -595,32 +587,30 @@ height: 34px !important;
 								maxlength="12" 
 								oninput="hesapAdiOgren(this.value, 'cariadilbl')">
 					</div>
-					<span style="padding-left: 50px;"></span> 
+					<span style="padding-left: 55px;"></span> 
 					
 					<input type="date" id="sevkTarih" class="form-control"  style="width: 125px; font-weight: bold;"/>
 					
 					<span style="padding-left: 10px;"></span> 
-					<label style="width:80px;">Adres Kod</label>
-					<span style="padding-left: 5px;"></span> 
+					<label style="width:75px;">Adres Kod</label>
+					
 					<input  id="adreskod" class="form-control" oninput="adrhesapAdiOgren('adreskod','adresadilbl')" ondblclick="openadrkodlariModal('adreskod', 'irsaliye')"  style="width: 120px; font-weight: bold;" />
-					<span style="padding-left: 10px;"></span> 	
-					<label style="width:85px;">Varsayilan</label>	
-					<div style="position:relative; width:155px;">
-						<select class="form-select cins_bold" style="width: 150px; " id="uygulananfiat" >
+					
+					<span style="padding-left: 10px;"></span> 
+					<label style="width:75px;">Varsayilan</label>	
+					<div class="cam-select" style="width: 120px;">
+						<select class="form-select cins_bold" style="width: 120px; " id="uygulananfiat" >
     						<option value=""></option>
     						<option value="fiat1">Fiat 1</option>
     						<option value="fiat2">Fiat 2</option>
     						<option value="fiat3">Fiat 3</option>
     						<option value="sonsatis">Son Satis Fiati</option>
 						</select>
-					<span style="position:absolute; top:50%; right:12px;
-              transform:translateY(-50%); pointer-events:none; color:#fff; text-shadow:0 0 6px rgba(255,255,255,.35);
-              font-weight:700;line-height:1;">▼</span>
-          	</div>			
-					<span style="padding-left: 10px;"></span> 	
+					 </div>			
+					<span style="padding-left: 10px;"></span> 
 					<label style="width:75px;">Doviz</label>	
 					<input id="dovizcins" class="form-control" style="width: 50px;" th:value="${doviz}"/>
-					<span style="padding-left: 20px;"></span> 	
+					<span style="padding-left: 10px;"></span> 	
 					<label style="width:40px;">Kur</label>	
 					<input  id="kur" class="form-control" style="width: 70px;text-align: right;" value="0.0000" />
 				</div>
