@@ -391,8 +391,8 @@
     }
     #ara_content .cam-error{
       background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
-      border: 1px solid rgba(248,113,113,.45);
-      border-radius: 18px;
+      border: 1px solid rgba(251,113,133,.35);
+      border-radius: 14px;
       padding: 18px 20px;
       font-weight: 900;
       font-size: 20px;
@@ -1164,21 +1164,21 @@
       }
 
       if (!res.ok) {
-        ara.innerHTML = `<div class="cam-error" style="color:#fff;">Serverda hata: ${res.status} - ${res.statusText || "error"}</div>`;
+        ara.innerHTML = `<div class="cam-error">Serverda hata: ${res.status} - ${res.statusText || "error"}</div>`;
         return;
       }
 
       ara.innerHTML = data;
 
       try { await runPageModule(url); }
-      catch (e) { ara.innerHTML += `<div class="cam-error" style="color:#fff;">${e.message}</div>`; }
+      catch (e) { ara.innerHTML += `<div class="cam-error">${e.message}</div>`; }
 
       if (window.urlActions && typeof window.urlActions[new URL(url, location.origin).pathname] === "function") {
         try { window.urlActions[new URL(url, location.origin).pathname](); } catch(e) {}
       }
 
     } catch (e) {
-      ara.innerHTML = `<div class="cam-error" style="color:#fff;">Bir hata: ${e?.message ?? "Bilinmeyen hata"}</div>`;
+      ara.innerHTML = `<div class="cam-error">Bir hata: ${e?.message ?? "Bilinmeyen hata"}</div>`;
     } finally {
       document.body.style.cursor = "default";
     }

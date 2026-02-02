@@ -16,7 +16,7 @@
   overflow-y: hidden;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
-
+  width:60%;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 16px;
@@ -36,11 +36,12 @@
   border-radius: 10px;
   box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
 }
+/*
 #ara_content .group-box{
   scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
-
+*/
 /* ===== LABEL ===== */
 #ara_content label{
   color: rgba(255,255,255,.84);
@@ -134,7 +135,7 @@
   row-gap: 8px;
   align-items: center;
 
-  min-width: 980px;     /* taşarsa group-box scroll */
+  min-width: 800px;     /* taşarsa group-box scroll */
 }
 
 /* 1. satır */
@@ -228,32 +229,63 @@
 /* =========================================================
    TABLE – recTable (input kırpma yok)
    ========================================================= */
+   
+/* tablo wrapper: scroll burada */
+#ara_content .rec-table-wrap{
+  width: 60%;                 /* senin layout */
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-top:5px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  padding: 0;                 /* tablo kenarı tam otursun */
+}
+
+/* sexy scroll (wrapper’a) */
+#ara_content .rec-table-wrap::-webkit-scrollbar{ height: 10px; }
+#ara_content .rec-table-wrap::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .rec-table-wrap::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+
 #ara_content #recTable{
   width: 100%;
-  margin-top: 8px;
+  min-width: 800px;           /* taşınca scroll çıkar */
+  margin: 0 !important;
+  border: 0 !important;
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid rgba(255,255,255,.14) !important;
-  border-radius: 16px;
-  overflow: hidden;
-  background: rgba(255,255,255,.03) !important;
+  background: transparent !important;
+  table-layout: fixed;
 }
+
+
+/* header sticky çalışsın */
 #ara_content #recTable thead th{
-  position: sticky;
+ position: sticky;
   top: 0;
   z-index: 2;
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
   color: #fff !important;
   font-size: 12px;
   font-weight: 900;
+  text-align: left;
   white-space: nowrap;
 }
+
 #ara_content #recTable th,
 #ara_content #recTable td{
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  padding: 6px 10px !important;
-  height: 42px !important;          /* kırpma biter */
+  padding: 5px 8px !important;
+  height: 34px !important;          /* kırpma biter */
   vertical-align: middle !important;
   white-space: nowrap;
 }
@@ -262,16 +294,6 @@
   color: rgba(255,255,255,.78) !important;
   overflow: visible !important;
 }
-#ara_content #recTable tbody .form-control,
-#ara_content #recTable tbody .form-select{
-  height: 30px !important;
-  min-height: 30px !important;
-  border-radius: 10px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-}
-
 /* sağa hizalı kolonlar */
 #ara_content .double-column,
 #ara_content .saga-bold{
@@ -293,7 +315,7 @@
 
 /* tablo içi trash butonu */
 #ara_content #recTable tbody .btn.btn-secondary{
-  height: 30px !important;
+  height: 28px !important;
   width: 34px !important;
   padding: 0 !important;
   border-radius: 10px !important;
@@ -311,14 +333,23 @@
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 16px;
+  flex-wrap: nowrap !important;   /* 🔥 kırma yok */
+  overflow-x: auto !important;    /* 🔥 taşarsa kaydır */
+  overflow-y: hidden !important;
+  white-space: nowrap;
+  padding-bottom: 6px;            /* scrollbar alt boşluk */
+ 
 }
 
 #ara_content .rec-info .form-row{
   display:flex !important;
-  flex-wrap: wrap;
   align-items:center;
   gap: 6px 10px !important;
   margin-bottom: 6px !important;
+}
+
+#ara_content .rec-info .form-row > *{
+  flex: 0 0 auto;
 }
 
 /* span başlıklar */
@@ -370,115 +401,121 @@
 </style>
 
 
-    <div class="child">
-           <div class="group-box">
-  			<div class="rec-top">
-				 <label class="rec-kodu-label">Kodu</label>
-			    <div class="rec-kodu-input" style="min-width:120px;max-width:120px;">
-      				<input class="form-control" style="font-weight:bold;" maxlength="10" id="recno"
-             		onkeydown="if(event.key === 'Enter') OBS.RECETE.receteOku()" ondblclick="OBS.RECETE.yeniFis();">
-    			</div>
-    			<button class="btn btn-secondary rec-kodu-btn rec-icon" type="button" onclick="OBS.RECETE.sonfis()">
-      					<i class="fa fa-refresh"></i>
-    			</button>
-    			<label class="rec-anagrp-label">Ana Grup</label>
-    			<div class="rec-anagrp rec-rel">
-      				<select class="form-select cins_bold" id="anagrp" onchange="OBS.RECETE.anagrpChanged(this)">
-        				<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}" th:text="${kod.ANA_GRUP}"></option>
-      				</select>
-      				<span class="rec-arrow">▼</span>
-    			</div>
-				<label class="rec-altgrp-label">Alt Grup</label>
-    			<div class="rec-altgrp rec-rel">
-      				<select class="form-select cins_bold" id="altgrp" disabled></select>
-      				<span class="rec-arrow">▼</span>
-    			</div>
-			    <label class="rec-aciklama-label" >Aciklama</label>
-    			<textarea class="rec-aciklama-text" id="aciklama" placeholder="Aciklama"
-              			rows="2" required maxlength="50"></textarea>
-              			
-			    <label class="rec-durum-label" >Durum</label>
-			    
-    			<div class="rec-durum-select rec-rel" >
-      				<select class="form-select cins_bold" id="durum">
-        				<option value="A">Aktif</option>
-        				<option value="P">Pasif</option>
-      				</select>
-      				<span class="rec-arrow">▼</span>
-    			</div>
-			</div>
-			</div>
-				
+<div class="group-box">
+	<div class="rec-top">
+		<label class="rec-kodu-label">Kodu</label>
+		<div class="rec-kodu-input"
+			style="min-width: 120px; max-width: 120px;">
+			<input class="form-control" style="font-weight: bold;" maxlength="10"
+				id="recno"
+				onkeydown="if(event.key === 'Enter') OBS.RECETE.receteOku()"
+				ondblclick="OBS.RECETE.yeniFis();">
+		</div>
+		<button class="btn btn-secondary rec-kodu-btn rec-icon" type="button"
+			onclick="OBS.RECETE.sonfis()">
+			<i class="fa fa-refresh"></i>
+		</button>
+		<label class="rec-anagrp-label">Ana Grup</label>
+		<div class="rec-anagrp rec-rel">
+			<select class="form-select cins_bold" id="anagrp"
+				onchange="OBS.RECETE.anagrpChanged(this)">
+				<option th:each="kod : ${anaKodlari}" th:value="${kod.ANA_GRUP}"
+					th:text="${kod.ANA_GRUP}"></option>
+			</select> <span class="rec-arrow">▼</span>
+		</div>
+		<label class="rec-altgrp-label">Alt Grup</label>
+		<div class="rec-altgrp rec-rel">
+			<select class="form-select cins_bold" id="altgrp" disabled></select>
+			<span class="rec-arrow">▼</span>
+		</div>
+		<label class="rec-aciklama-label">Aciklama</label>
+		<textarea class="rec-aciklama-text" id="aciklama"
+			placeholder="Aciklama" rows="2" required maxlength="50"></textarea>
 
-            
-            <div class="group-box">
-                <div class="form-row">
-                    <button class="btn btn-primary" type="button" id="reckaydetButton"
-                        onclick="OBS.RECETE.recKayit()">Kaydet</button>
-                    <span style="padding-left: 5px;"></span>
-                    <button class="btn btn-primary" type="button" id="recsilButton" onclick="OBS.RECETE.recYoket()">Sil</button>
-                </div>
-            </div>
+		<label class="rec-durum-label">Durum</label>
 
-        </div>
-   
+		<div class="rec-durum-select rec-rel">
+			<select class="form-select cins_bold" id="durum">
+				<option value="A">Aktif</option>
+				<option value="P">Pasif</option>
+			</select> <span class="rec-arrow">▼</span>
+		</div>
+	</div>
+</div>
 
-    <div id="errorDiv"></div>
-    
-     <div class="child">
-        <button type="button" class="btn btn-secondary ml-2"
-         onclick="OBS.RECETE.satirekle()"><i class="fa fa-plus"></i></button>
-    </div> 
-                
-  
-        <div class="child" >
-                <table class="table table-bordered" id="recTable" style="margin-top: 5px;">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th style="width:25px;"></th>
-                            <th style="width:7%">TUR</th>
-                            <th style="width:13%">URUN KODU</th>
-                            <th>ADI</th>
-                            <th style="width:10%">BIRIM</th>
-                            <th class="double-column" style="width:17%">MIKTAR</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    </tbody>
-                </table>
-            
-        </div>
-    
-    <span class="rec-title">Uretilecek Yeni Urun</span>
 
-    
-        <div class="child" >
-            <div class="group-box rec-info">
-                <div class="form-row">
-                    <span style="padding-left: 20px;width:100px;">Kodu :</span>
-                    <input id="ukodu" class="form-control" style="width: 120px; font-weight: bold;" maxlength="12"
-                            ondblclick="openurunkodlariModal('ukodu', 'recetealt','ukodukod')"
-                             onchange="OBS.RECETE.updateurunValues(this)" />
-                    <span style="padding-left: 20px;width:100px;">Agirlik :</span>
-                    <label style="width:100px;" id="agirlik">0.000</label>
-                    <span style="padding-left: 20px;width:150px;">Ana Grup :</span>
-                    <label style="width:150px;" id="anagrpl"></label>
-                </div>
-                <div class="form-row">
-                    <span style="padding-left: 20px;width:100px;">Barkod :</span>
-                    <label style="width:120px;" id="barkod"></label>
-                    <span style="padding-left: 20px;width:100px;">Birim :</span>
-                    <label style="width:100px;" id="birim"></label>
-                    <span style="padding-left: 20px;width:150px;">Alt Grup :</span>
-                    <label style="width:150px;" id="altgrpl"></label>
-                </div>
-                <div class="form-row">
-                    <span style="padding-left: 20px;width:100px;"></span>
-                    <label style="width:300px;" id="adi">...</label>
-                </div>
-            </div>
-        </div>
-    
+
+<div class="group-box">
+	<div class="form-row">
+		<button class="btn btn-primary" type="button" id="reckaydetButton"
+			onclick="OBS.RECETE.recKayit()">Kaydet</button>
+		<span style="padding-left: 5px;"></span>
+		<button class="btn btn-primary" type="button" id="recsilButton"
+			onclick="OBS.RECETE.recYoket()">Sil</button>
+	</div>
+</div>
+
+<div id="errorDiv"></div>
+
+<button type="button" class="btn btn-secondary ml-2"
+	onclick="OBS.RECETE.satirekle()">
+	<i class="fa fa-plus"></i>
+</button>
+
+<div class="rec-table-wrap">
+<table class="table table-bordered" id="recTable"
+	style="margin-top: 5px;">
+	<colgroup>
+		<col style="width: 30px;">
+		<col style="width: 100px;">
+		<col style="width: 100px;">
+		<col style="width: 250px;">
+		<col style="width: 100px;">
+		<col style="width: 150px;">
+	</colgroup>
+	<thead class="thead-dark">
+		<tr>
+			<th></th>
+			<th>TUR</th>
+			<th>URUN KODU</th>
+			<th>ADI</th>
+			<th>BIRIM</th>
+			<th class="double-column">MIKTAR</th>
+		</tr>
+	</thead>
+	<tbody id="tbody">
+	</tbody>
+</table>
+</div>
+<span class="rec-title">Uretilecek Yeni Urun</span>
+
+<div class="group-box rec-info">
+	<div class="form-row">
+		<span style="padding-left: 20px; width: 100px;">Kodu :</span> <input
+			id="ukodu" class="form-control"
+			style="width: 120px; font-weight: bold;" maxlength="12"
+			ondblclick="openurunkodlariModal('ukodu', 'recetealt','ukodukod')"
+			onchange="OBS.RECETE.updateurunValues(this)" /> <span
+			style="padding-left: 20px; width: 100px;">Agirlik :</span> <label
+			style="width: 100px;" id="agirlik">0.000</label> <span
+			style="padding-left: 20px; width: 150px;">Ana Grup :</span> <label
+			style="width: 150px;" id="anagrpl"></label>
+	</div>
+	<div class="form-row">
+		<span style="padding-left: 20px; width: 100px;">Barkod :</span> <label
+			style="width: 120px;" id="barkod"></label> <span
+			style="padding-left: 20px; width: 100px;">Birim :</span> <label
+			style="width: 100px;" id="birim"></label> <span
+			style="padding-left: 20px; width: 150px;">Alt Grup :</span> <label
+			style="width: 150px;" id="altgrpl"></label>
+	</div>
+	<div class="form-row">
+		<span style="padding-left: 20px; width: 100px;"></span> <label
+			style="width: 300px;" id="adi">...</label>
+	</div>
+</div>
+
+
 
 
 <input type="hidden" id="uretimBilgi" value="">
