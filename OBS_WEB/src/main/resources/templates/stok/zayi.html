@@ -2,14 +2,17 @@
 
 <style>
 /* =========================
-   2026 CAM – ZAI (CLEAN FINAL v2)
+   2026 CAM – ZAI (FINAL CLEAN v3)
    Scope: #ara_content
+   - TAB1: tek yatay scroll (zai-tab1-scroll)
+   - Grid taşması yok
+   - Table + Info scroll ayrı
    ========================= */
 
-#ara_content{ color: rgba(255,255,255,.92); }
-
-/* ---------- TOKENS ---------- */
 #ara_content{
+  color: rgba(255,255,255,.92);
+
+  /* TOKENS */
   --cam-bg1: rgba(255,255,255,.10);
   --cam-bg2: rgba(255,255,255,.06);
   --cam-line: rgba(255,255,255,.16);
@@ -28,6 +31,8 @@
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  
+  width:90%;
 }
 
 /* ---------- TABS ---------- */
@@ -121,8 +126,6 @@
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
-
-/* secondary: daha “cam” */
 #ara_content .btn.btn-secondary{
   border-radius: 12px;
   height: 34px;
@@ -137,8 +140,6 @@
   border-color: rgba(56,189,248,.35) !important;
   transform: translateY(-1px);
 }
-
-/* icon buttons */
 #ara_content .cam-icon{
   height: 34px !important;
   width: 40px !important;
@@ -152,53 +153,78 @@
 /* ---------- GROUP BOX ---------- */
 #ara_content .group-box{
   position: relative;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  overscroll-behavior-x: contain;
-
   border: 1px solid var(--cam-line2) !important;
   background: rgba(8,14,26,.35) !important;
   border-radius: 16px;
   padding: 10px;
   margin: 10px 0;
+
+  /* içeriden taşan görüntüyü kes (grid sağa taşma görünmesin) */
+  overflow: hidden;
+  width: 1100px;
 }
 
-/* sexy scroll */
-#ara_content .group-box::-webkit-scrollbar{ height: 10px; }
-#ara_content .group-box::-webkit-scrollbar-track{
+/* ---------- SCROLL SKIN (reusable) ---------- */
+#ara_content .zai-tab1-scroll::-webkit-scrollbar,
+#ara_content .zai-table-scroll::-webkit-scrollbar,
+#ara_content .zai-actions-scroll::-webkit-scrollbar{ height: 10px; }
+
+#ara_content .zai-tab1-scroll::-webkit-scrollbar-track,
+#ara_content .zai-table-scroll::-webkit-scrollbar-track,
+#ara_content .zai-actions-scroll::-webkit-scrollbar-track{
   background: rgba(255,255,255,.06);
   border-radius: 10px;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
 }
-#ara_content .group-box::-webkit-scrollbar-thumb{
+#ara_content .zai-tab1-scroll::-webkit-scrollbar-thumb,
+#ara_content .zai-table-scroll::-webkit-scrollbar-thumb,
+#ara_content .zai-actions-scroll::-webkit-scrollbar-thumb{
   background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
   border-radius: 10px;
   box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
 }
-#ara_content .group-box{
+#ara_content .zai-tab1-scroll,
+#ara_content .zai-table-scroll,
+#ara_content .zai-actions-scroll{
   scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
 
-/* ---------- TOP GRID ---------- */
-/* Esnek olsun: daralınca kaymasın, yine düzenli kalsın */
+/* ---------- TAB1 TEK SCROLL WRAP ---------- */
+#ara_content .zai-tab1-scroll{
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+  width: 100%;
+ 
+}
+
+/* ---------- TOP GRID (TAB1) ---------- */
 #ara_content .zai-row{
   display: grid;
   grid-template-columns:
     70px 140px 44px 150px
-    70px minmax(180px, 1fr)
-    70px minmax(180px, 1fr);
+    70px minmax(140px, 1fr)
+    70px minmax(140px, 1fr);
   gap: 8px 10px;
   align-items: center;
-}
 
-/* ---------- ACTIONS ---------- */
+  /* dar ekranda sıkışıp sağa taşmak yerine -> scroll’a gitsin */
+  width: 100%;
+
+}
+#ara_content .zai-row > *{ min-width: 0; } /* 🔥 taşmayı bitirir */
+
+/* ---------- ACTIONS (TAB1 butonlar) ---------- */
 #ara_content .zai-actions{
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: max-content;
+  min-width: 400px; /* sadece Kaydet/Sil var; küçük tut */
+  padding: 10px;
 }
 
 /* ---------- NUMBERS ---------- */
@@ -239,27 +265,13 @@
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-}
-#ara_content .zai-table-scroll::-webkit-scrollbar{ height: 10px; }
-#ara_content .zai-table-scroll::-webkit-scrollbar-track{
-  background: rgba(255,255,255,.06);
-  border-radius: 10px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-}
-#ara_content .zai-table-scroll::-webkit-scrollbar-thumb{
-  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(56,189,248,.35), inset 0 0 0 1px rgba(255,255,255,.25);
-}
-#ara_content .zai-table-scroll{
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+  margin-top:5px;
 }
 
 /* ---------- TABLE ---------- */
 #ara_content #zaiTable{
-  width: 100%;
-  min-width: 1000px;
+  width:90%;
+  min-width: 1100px;
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
@@ -268,7 +280,6 @@
   overflow: hidden;
   background: rgba(255,255,255,.03) !important;
 }
-
 #ara_content #zaiTable thead th{
   position: sticky;
   top: 0;
@@ -280,7 +291,6 @@
   text-align: left;
   white-space: nowrap;
 }
-
 #ara_content #zaiTable th,
 #ara_content #zaiTable td{
   border: 0 !important;
@@ -292,15 +302,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 #ara_content #zaiTable tbody td{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
-  overflow: visible !important;    /* 🔥 kritik */
-  height: 38px !important;         /* 30px input + padding için */
+  overflow: visible !important;
+  height: 38px !important;
   padding: 4px 8px !important;
 }
-
 #ara_content #zaiTable tfoot td{
   background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
   color: #fff !important;
@@ -309,8 +317,6 @@
   border-bottom: none !important;
   padding: 8px 10px !important;
 }
-
-/* row inputs */
 #ara_content #zaiTable tbody .cam-input,
 #ara_content #zaiTable tbody .cam-select{
   display: block !important;
@@ -320,38 +326,29 @@
   min-height: 30px !important;
   line-height: 1 !important;
 }
-
-/* wrapper %100 otursun */
 #ara_content #zaiTable td .zai-rel{
   width: 100%;
   min-width: 0;
 }
 
-/* readonly label */
-#ara_content .cam-label{
-  display:flex !important;
-  align-items:center !important;
-  margin: 0 !important;
+/* ---------- INFO (alt kısım) ---------- */
+#ara_content .zai-actions-scroll{
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0px;
+  
+  background: linear-gradient(180deg, var(--cam-bg1), var(--cam-bg2)) !important;
+  border: 1px solid var(--cam-line) !important;
+  border-radius: 18px;
+  
+  width:90%;
+  margin: 10px 0;
 }
-#ara_content .cam-label span{ width:100%; line-height:1; }
-
-/* ---------- ERROR ---------- */
-#ara_content #errorDiv{
-  display:none;
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(251,113,133,.35);
-  background: rgba(251,113,133,.10);
-  color: #fff;
-  font-weight: 900;
-}
-
-/* ---------- BADGES ---------- */
 #ara_content .zai-badges{
   display:flex;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-left: 12px;
   justify-content: flex-start;
   align-items: center;
@@ -370,10 +367,23 @@
   text-align: left;
 }
 #ara_content .zai-badge:empty::before{ content:"—"; opacity:.65; }
+
+/* ---------- ERROR ---------- */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
 </style>
 
 <!-- TABS HEADER -->
-<div class="cam-card p-3" style="max-width: 1200px;">
+<div class="cam-card p-3" >
   <ul class="nav nav-tabs cam-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="tab1-tab"
@@ -392,16 +402,14 @@
 
   <!-- TAB 1 -->
   <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-    <div class="cam-card p-3 mt-2" style="max-width: 1200px;">
-
+    <div class="cam-card p-3 mt-2">
+    <div class="zai-tab1-scroll">
       <div class="group-box">
         <div class="zai-row">
-
           <label>Fis No</label>
           <input class="cam-input" maxlength="10" id="fisno"
             onkeydown="if(event.key==='Enter') OBS.ZAI.zaiOku()"
             ondblclick="OBS.ZAI.yeniFis();" />
-
           <button type="button" class="btn btn-secondary cam-icon" onclick="OBS.ZAI.sonfis()">
             <i class="fa fa-refresh"></i>
           </button>
@@ -424,21 +432,22 @@
 
         </div>
       </div>
-
+  
       <div class="group-box">
-        <div class="zai-actions">
+       
           <button class="btn btn-primary" type="button" id="zaikaydetButton" onclick="OBS.ZAI.zaiKayit()">Kaydet</button>
           <button class="btn btn-primary" type="button" id="zaisilButton" onclick="OBS.ZAI.zaiYoket()">Sil</button>
-        </div>
+        
       </div>
-
-      <div id="errorDiv"></div>
+</div>
+   
     </div>
+     <div id="errorDiv"></div>
   </div>
 
   <!-- TAB 2 -->
   <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
-    <div class="cam-card p-3 mt-2" style="max-width: 1200px;">
+    <div class="cam-card p-3 mt-2" >
       <div class="input-group mb-2">
         <span class="input-group-text cam-addon" style="width:150px;">1 -</span>
         <input type="text" id="a1" class="cam-input" style="max-width:300px;">
@@ -453,14 +462,14 @@
 </div>
 
 <!-- SATIR EKLE -->
-<div class="mt-2" style="max-width: 1200px;">
+<div class="mt-2">
   <button type="button" class="btn btn-secondary cam-icon" onclick="OBS.ZAI.satirekle()">
     <i class="fa fa-plus"></i>
   </button>
 </div>
 
 <!-- TABLE -->
-<div class="cam-card p-2 mt-2" style="max-width: 1200px;">
+
   <div class="zai-table-scroll">
     <table class="table table-bordered" id="zaiTable">
       <colgroup>
@@ -505,19 +514,19 @@
   </div>
 
   <!-- INFO -->
-  <div class="group-box">
+  
+  <div class="zai-actions-scroll">
     <div class="zai-actions">
       <span style="width:90px; font-weight:900; color:rgba(255,255,255,.72);">Barkod:</span>
       <input id="barkod" class="cam-input" style="width:170px;" />
-
       <div class="zai-badges">
         <label id="adil" class="zai-badge"></label>
         <label id="anagrpl" class="zai-badge"></label>
         <label id="altgrpl" class="zai-badge"></label>
       </div>
     </div>
-  </div>
 </div>
+
 
 <input type="hidden" id="zayiBilgi">
 
