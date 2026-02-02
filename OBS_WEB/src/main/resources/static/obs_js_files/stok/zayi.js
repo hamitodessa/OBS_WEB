@@ -184,7 +184,7 @@ OBS.ZAI = OBS.ZAI || {};
 
 	    <td>
 	      <div class="zai-rel">
-	        <select class="cam-select" id="depo_${Z.rowCounter}">
+	        <select class="cam-select" id="depo_${Z.rowCounter}" onkeydown="OBS.ZAI.focusNextCell(event, this)">
 	          ${depoOptionsHTML}
 	        </select>
 	        <span class="zai-arrow">▼</span>
