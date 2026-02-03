@@ -328,6 +328,8 @@ OBS.ADR.resimSil = function () {
   if (!img) return;
   img.src = "";
   img.style.display = "none";
+	const fileInput = OBS.ADR.byId("resim");
+	 if (fileInput) fileInput.value = "";
 };
 
 /* ---------- init (event bağla) ---------- */

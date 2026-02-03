@@ -131,8 +131,9 @@
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
-  color: #fff;
+  color: rgba(255,255,255,.84);
   font-weight: 900;
+  font-size: 14px;
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
   padding: 6px 10px !important;
   box-sizing: border-box;
@@ -150,30 +151,35 @@
   color:#fff !important;
 }
 
-#ara_content label,
-#ara_content .input-group-text,
-#ara_content label.form-control{
+#ara_content form-control{
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.45) !important;
   color: rgba(255,255,255,.88) !important;
   font-weight: 900;
-  font-size: 12px;
+  font-size: 14px;
   display:flex;
   align-items:center;
   justify-content:center;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
 }
-
-/* label.form-control içindeki span hizalama */
-#ara_content label.form-control{
-  display:flex;
+#ara_content label{
+ color: rgba(255,255,255,.84);
+ font-weight: 900;
+ font-size: 14px;
+ margin: 0 !important;
+ white-space: nowrap;
+ align-items: center !important;   /* dikey ortala */
+ line-height: 1 !important;        /* font baseline kaymasın */
+}
+#ara_content .gb-aciklama{
+  display:grid !important;
+  grid-template-columns: 150px 1fr;
+  gap: 8px 10px;
+  margin-left:10px;
   align-items:center;
 }
-#ara_content label.form-control span{
-  display:block;
-  width:100%;
-}
+
 
 /* datalist ok (span ▼) */
 #ara_content span[style*="pointer-events: none"]{
@@ -351,6 +357,11 @@
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.95) !important;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+  
+  display: flex;
+  align-items: center;      /* dikey center */
+  padding: 0 8px;
+  
 }
 #ara_content #gbTable tbody .form-control:focus,
 #ara_content #gbTable tbody .form-select:focus{
@@ -359,11 +370,19 @@
   background: rgba(8,14,26,.65) !important;
 }
 
-#ara_content .double-column,
-#ara_content .saga-bold{
-  text-align:right !important;
+
+#ara_content #gbTable .cell-right{
+  display:block;
+  width:100%;
   font-weight:900;
+  text-align:right !important;
 }
+#ara_content #gbTable .cell-left{
+  display:block;
+  width:100%;
+  text-align:left !important;
+}
+
 #ara_content #gbTable tfoot td{
   background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
   color:#fff !important;
@@ -469,7 +488,7 @@
 				<!-- TOP LINE -->
 				<div class="group-box">
 					<div class="gb-top">
-						<span>Bordro No</span> <input class="form-control"
+						<label>Bordro No</label> <input class="form-control"
 							style="font-weight: bold;" maxlength="12" id="bordrono"
 							onkeydown="OBS.CEKCIK.bordroOku()" ondblclick="OBS.CEKCIK.yeniBordro()">
 						<button type="button" class="btn btn-secondary"
@@ -477,8 +496,8 @@
 							<i class="fa fa-refresh"></i>
 						</button>
 						<input type="date" id="bordroTarih" class="form-control"
-							th:value="${evrakTarih}" style="font-weight: bold;" /> <span>Ozel
-							Kod</span>
+							th:value="${evrakTarih}" style="font-weight: bold;" /> <label>Ozel
+							Kod</label>
 						<div style="position: relative;">
 							<input class="form-control cins_bold" list="ozelkodOptions"
 								maxlength="12" id="ozelkod">
@@ -489,14 +508,14 @@
 							<span
 								style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
 						</div>
-						<span>Doviz</span> <input class="form-control cins_bold"
+						<label>Doviz</label> <input class="form-control cins_bold"
 							id="dvzcinsi" th:value="${doviz}" style="max-width: 90px;">
 					</div>
 				</div>
 				<!-- CARI -->
 				<div class="group-box">
 					<div class="gb-cari">
-						<span>Cari Kodu</span>
+						<label>Cari Kodu</label>
 						<div style="position: relative;">
 							<input class="form-control cins_bold"
 								ondblclick="openSecondModal('bcheskod', 'cekcikis')"
@@ -534,11 +553,11 @@
 			<div class="child2">
 				<div class="group-box">
 					<div class="gb-right">
-						<span>Faiz</span> <input class="form-control cins_bold"
+						<label>Faiz</label> <input class="form-control cins_bold"
 							id="faiz" style="text-align: right; max-width: 140px;"
-							oninput="ortgun()"> <span>Faiz Tutari</span>
+							oninput="ortgun()"> <label>Faiz Tutari</label>
 						<div class="val-right" id="lblfaiztutari">0.00</div>
-						<span>Ort.Gun</span>
+						<label>Ort.Gun</label>
 						<div class="val-right" id="lblortgun">0</div>
 					</div>
 				</div>
@@ -550,22 +569,12 @@
 	<div class="tab-pane fade" id="tab2" role="tabpanel"
 		aria-labelledby="tab2-tab">
 		<div class="card p-4" style="margin-top:10px;">
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">Aciklama
-						1</span>
-				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="aciklama1" class="form-control" style="max-width: 300px;">
-			</div>
-			<div class="input-group" style="padding: 2px;">
-				<div class="input-group-prepend">
-					<span class="input-group-text" style="width: 150px;">Aciklama
-						2</span>
-				</div>
-				<span style="padding-left: 5px;"></span> <input type="text"
-					id="aciklama2" class="form-control" style="max-width: 300px;">
-			</div>
+			<div class="gb-aciklama">
+        <label  style="width: 120px;">Aciklama 1</label>
+        <input type="text" id="aciklama1" style="max-width: 300px;" class="form-control" placeholder="...">
+        <label  style="width: 120px;">Aciklama 2</label>
+        <input type="text" id="aciklama2" style="max-width: 300px;" class="form-control" placeholder="...">
+      </div>
 		</div>
 	</div>
 </div>
@@ -587,7 +596,7 @@
 			<th>ILK BORCLU</th>
 			<th>HESAP</th>
 			<th>Cins</th>
-			<th class="double-column">TUTAR</th>
+			<th class="cell-right">TUTAR</th>
 		</tr>
 	</thead>
 	<tbody id="tbody">

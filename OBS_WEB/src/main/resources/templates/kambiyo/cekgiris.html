@@ -130,19 +130,29 @@
 }
 
 /* LABEL / TEXT */
-#ara_content label,
-#ara_content .input-group-text,
-#ara_content label.form-control{
+#ara_content form-control{
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.45) !important;
-  color: rgba(255,255,255,.88) !important;
   font-weight: 900;
-  font-size: 12px;
+  font-size: 14px;
+  color: rgba(255,255,255,.84);
+  margin: 0 !important;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+
+#ara_content label{
+  color: rgba(255,255,255,.84);
+  font-weight: 900;
+  font-size: 14px;
+  margin: 0 !important;
+  white-space: nowrap;
+   align-items: center !important;   /* dikey ortala */
+  line-height: 1 !important;        /* font baseline kaymasın */
 }
 
 /* INPUT / SELECT */
@@ -231,6 +241,7 @@
   display:grid !important;
   grid-template-columns: 150px 1fr;
   gap: 8px 10px;
+  margin-left:10px;
   align-items:center;
 }
 @media (max-width:1200px){
@@ -328,6 +339,8 @@
 }
 #ara_content #gbTable tbody .form-control,
 #ara_content #gbTable tbody .form-select{
+
+
   height: 30px !important;
   min-height: 30px !important;
   border-radius: 10px !important;
@@ -447,7 +460,7 @@
       <div class="child">
         <div class="group-box">
           <div class="gb-top">
-            <span>Bordro No</span>
+            <label>Bordro No</label>
             <input class="form-control" style="font-weight:bold;" maxlength="12"
                    id="bordrono" onkeydown="OBS.CEKGIR.bordroOku()" ondblclick="OBS.CEKGIR.yeniBordro()">
 
@@ -458,7 +471,7 @@
             <input type="date" id="bordroTarih" class="form-control"
                    th:value="${evrakTarih}" style="font-weight:bold;" />
 
-            <span>Ozel Kod</span>
+            <label>Ozel Kod</label>
             <div style="position:relative;">
               <input class="form-control cins_bold" list="ozelkodOptions" maxlength="12" id="ozelkod">
               <datalist id="ozelkodOptions">
@@ -467,7 +480,7 @@
               <span style="position:absolute; top:50%; right:10px; transform:translateY(-50%); pointer-events:none;">▼</span>
             </div>
 
-            <span>Doviz</span>
+            <label>Doviz</label>
             <input class="form-control cins_bold" id="dvzcinsi" th:value="${doviz}" style="max-width:90px;">
           </div>
         </div>
@@ -475,7 +488,7 @@
         <!-- CARI -->
         <div class="group-box">
           <div class="gb-cari">
-            <span>Cari Kodu</span>
+            <label>Cari Kodu</label>
 
             <div style="position:relative;">
               <input class="form-control cins_bold"
@@ -513,13 +526,13 @@
       <div class="child2">
         <div class="group-box">
           <div class="gb-right">
-            <span>Faiz</span>
+            <label>Faiz</label>
             <input class="form-control cins_bold" id="faiz" style="text-align:right; max-width:140px;" oninput="ortgun()">
 
-            <span>Faiz Tutari</span>
+            <label>Faiz Tutari</label>
             <div class="val-right" id="lblfaiztutari">0.00</div>
 
-            <span>Ort.Gun</span>
+            <label>Ort.Gun</label>
             <div class="val-right" id="lblortgun">0</div>
           </div>
         </div>
@@ -535,10 +548,10 @@
   <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
     <div class="card p-4" style="margin-top:10px;">
       <div class="gb-aciklama">
-        <span class="input-group-text">Aciklama 1</span>
-        <input type="text" id="aciklama1" class="form-control" placeholder="...">
-        <span class="input-group-text">Aciklama 2</span>
-        <input type="text" id="aciklama2" class="form-control" placeholder="...">
+        <label  style="width: 120px;">Aciklama 1</label>
+        <input type="text" id="aciklama1" style="max-width: 300px;" class="form-control" placeholder="...">
+        <label  style="width: 120px;">Aciklama 2</label>
+        <input type="text" id="aciklama2" style="max-width: 300px;" class="form-control" placeholder="...">
       </div>
     </div>
   </div>

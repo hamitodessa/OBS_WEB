@@ -134,7 +134,8 @@ OBS.USERUPD._onSubmit = async function (event) {
     if (err) OBS.USERUPD.showMsg(err, "error");
     else if (okm) OBS.USERUPD.showMsg(okm, "success");
     else OBS.USERUPD.showMsg("Kaydedildi.", "success");
-
+     
+		window.location.href = '/index';
   } catch (error) {
     OBS.USERUPD.showMsg(error?.message || "Beklenmeyen bir hata oluştu.", "error");
   } finally {
@@ -146,7 +147,6 @@ OBS.USERUPD._onSubmit = async function (event) {
 
 /* ---------- init / destroy ---------- */
 OBS.USERUPD.init = function () {
-  const root = OBS.USERUPD._root();
 
   // image listeners (direct)
   const fileInput = OBS.USERUPD.byId("image");

@@ -100,23 +100,7 @@ OBS.CEKRAP.init = function () {
   // OBS.CEKRAP.fetchTableData();
 
   // Yenile butonuna event bağlayalım (onclick yazmak istemezsen)
-  const yenile = OBS.CEKRAP._btn("rapyenileButton") || OBS.CEKRAP._btn("cekrapyenileButton");
-  if (yenile && !yenile._obsBound) {
-    yenile.addEventListener("click", () => OBS.CEKRAP.fetchTableData());
-    yenile._obsBound = true;
-  }
-
-  const indir = OBS.CEKRAP._btn("cekrapreportFormat");
-  if (indir && !indir._obsBound) {
-    indir.addEventListener("click", () => OBS.CEKRAP.downloadReport());
-    indir._obsBound = true;
-  }
-
-  const mail = OBS.CEKRAP._btn("cekrapmailButton");
-  if (mail && !mail._obsBound) {
-    mail.addEventListener("click", () => OBS.CEKRAP.mailAt());
-    mail._obsBound = true;
-  }
+  
 };
 
 /* =========================

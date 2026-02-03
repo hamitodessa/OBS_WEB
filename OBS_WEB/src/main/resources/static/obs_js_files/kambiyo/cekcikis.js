@@ -82,7 +82,7 @@ OBS.CEKCIK.emptyCell = function (textAlignRight = false, value = "") {
   return `
     <td>
       <label class="form-control">
-        <span class="${textAlignRight ? "cell-right" : "cell-left"}">
+        <span class="${textAlignRight ? "cell-right" : "cell-left"}" >
           ${value || "&nbsp;"}
         </span>
       </label>
@@ -312,7 +312,6 @@ OBS.CEKCIK.bordroOku = async function () {
   const bordroNo = (OBS.CEKCIK.byId("bordrono") || document.getElementById("bordrono"))?.value;
   if (!bordroNo) return;
 
-  const errorDiv = OBS.CEKCIK.byId("errorDiv") || document.getElementById("errorDiv");
 
   OBS.CEKCIK._cursor(true);
   try {

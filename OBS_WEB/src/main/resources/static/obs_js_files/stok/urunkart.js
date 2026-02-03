@@ -331,7 +331,12 @@ OBS.URUNKART.sayfaYukle = async () => {
 };
 
 /* ---------- misc ---------- */
-OBS.URUNKART.resimSil = () => OBS.URUNKART._setImg("");
+
+OBS.URUNKART.resimSil = function () {
+   OBS.URUNKART._setImg("");
+   const fileInput = OBS.URUNKART._el("resim");
+   if (fileInput) fileInput.value = "";
+};
 
 OBS.URUNKART.anaChanged = async (selectEl) => {
   const selectedValue = selectEl?.value || "";
