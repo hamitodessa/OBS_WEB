@@ -1058,6 +1058,12 @@
     	  if (typeof OBS?.REPORTMAIL?.init === "function") OBS.REPORTMAIL.init();
     		}
     },
+    "/send_email": {
+        js: "/obs_js_files/sendemail/sendemail.js",
+        init: () => {
+      	  if (typeof OBS?.REPORTMAIL?.init === "function") OBS.REPORTMAIL.init();
+      		}
+      },
 
     "/user/lograpor": { js: "/obs_js_files/user/lograpor.js" ,init: () => OBS?.LOG?.updatePaginationUI()},
 
