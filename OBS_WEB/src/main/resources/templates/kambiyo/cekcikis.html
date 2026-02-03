@@ -24,13 +24,18 @@
   gap: 6px;
   align-items: flex-start;
   margin-top:5px;
-   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
-   box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-   padding: 5px !important;
+  padding: 5px !important;
+   
+  flex-wrap: nowrap !important;       /* ✅ child2 alta düşmez */
+  overflow-x: hidden !important;      /* ✅ genişte scroll gizli */
+  overflow-y: hidden !important;
+  max-width: 100% !important;
 }
 /* NAV TABS */
 #ara_content .nav-tabs{
@@ -52,14 +57,42 @@
   box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-/* LAYOUT */
+#ara_content .child{
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+#ara_content .child2{
+  flex: 0 0 320px !important;
+  width: 320px !important;
+  min-width: 320px !important;
+}
 
-#ara_content .child{ width: 80%; }
-#ara_content .child2{ width: 20%; }
 
-@media (max-width:1200px){
-  #ara_content .cardd{ flex-direction: column; }
-  #ara_content .child,#ara_content .child2{ width: 100%; }
+
+/* Daralınca: X scroll aç, elemanlar ezilmesin */
+@media (max-width: 1400px){
+  #ara_content .cardd{
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  #ara_content .child{ min-width: 900px !important; }
+}
+
+/* Üstte sexy scroll */
+#ara_content .cardd{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .cardd::-webkit-scrollbar{ height: 10px; }
+#ara_content .cardd::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+#ara_content .cardd::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25);
 }
 
 /* GROUP BOX */
@@ -220,12 +253,39 @@ border-radius: 14px;
   #ara_content .gb-top{ grid-template-columns: 90px 1fr 46px 1fr; }
 }
 
+
+/* =====================================================
+   TABLO – X scroll wrapper ile
+   HTML: <div class="gb-table-x"><table id="gbTable">...</table></div>
+   ===================================================== */
+#ara_content .gb-table-x{
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 100% !important;
+  border-radius: 16px;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .gb-table-x::-webkit-scrollbar{ height: 10px; }
+#ara_content .gb-table-x::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+#ara_content .gb-table-x::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25);
+}
+
 /* TABLE (hover yok) */
 /* =========================
    TABLE – gbTable
    ========================= */
 #ara_content #gbTable{
   width: 100%;
+   min-width: 1200px !important;   /* ✅ taşarsa X scroll */
   margin-top: 8px;
   border-collapse: separate;
   border-spacing: 0;
@@ -381,6 +441,44 @@ border-radius: 14px;
   justify-content: center;
 }
 
+
+#ara_content .cg-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:nowrap;
+  width:100%;
+  padding:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+}
+
+#ara_content .cg-badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:nowrap;
+  align-items:center;
+}
+
+/* hem span hem label aynı “chip” gibi dursun */
+#ara_content .cg-badges > span,
+#ara_content .cg-badges > label{
+  display:inline-flex;
+  align-items:center;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+  white-space: nowrap;
+}
+
+#ara_content .cg-badges > label:empty::before{ content:"—"; opacity:.65; }
+
 </style>
 <div class="card p-4">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -511,6 +609,7 @@ border-radius: 14px;
 	<i class="fa fa-plus"></i>
 </button>
 
+<div class="gb-table-x">
 <table class="table table-bordered tah-table" id="gbTable"
 	style="margin-top: 5px;">
 	<thead class="thead-dark">
@@ -544,12 +643,15 @@ border-radius: 14px;
 		</tr>
 	</tfoot>
 </table>
-<div class="card p-4">
-	<div class="form-row">
-		<span style="padding-left: 20px;">Cek Sayisi :</span> <label
-			style="text-align: right; width: 50px;" id="ceksayisi">0</label>
-	</div>
 </div>
+
+<div class="cg-actions">
+  <div class="cg-badges">
+    <span>Cek Sayisi :</span>
+    <label id="ceksayisi">0</label>
+  </div>
+</div>
+
 <div th:with="errorMessage=${errorMessage ?: ''}" id="errorDiv2"
 	th:if="${errorMessage}" th:text="${errorMessage}"></div>
 <input type="hidden" id="cekcikBilgi" name="cekcikBilgi" value="initialValue">

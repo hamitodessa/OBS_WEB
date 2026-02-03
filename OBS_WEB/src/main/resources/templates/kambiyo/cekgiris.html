@@ -5,10 +5,19 @@
    2026 CAM – KAMBİYO / BORDRO (EXTRA KOMPAKT – 38px)
    wrapper: #ara_content
    ===================================================== */
+/* =====================================================
+   2026 CAM – KAMBİYO / BORDRO (CLEAN FINAL)
+   wrapper: #ara_content
+   - Üst (cardd): genişte scroll yok, daralınca X scroll
+   - child2: ilk açılışta alta düşmez
+   - Tablo: X scroll wrapper ile
+   - Alt kart: X scroll
+   ===================================================== */
 
 #ara_content{ color: rgba(255,255,255,.92); }
+#ara_content, #ara_content *{ box-sizing: border-box !important; }
 
-/* CARD */
+/* CARD (tabs ve alt kartlar) */
 #ara_content .card.p-4{
   padding: 5px !important;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
@@ -18,19 +27,7 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
-#ara_content .cardd{
-  display: flex;
-  gap: 6px;
-  align-items: flex-start;
-  margin-top:5px;
-   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px;
-   box-shadow: 0 18px 55px rgba(0,0,0,.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-   padding: 5px !important;
-}
+
 /* NAV TABS */
 #ara_content .nav-tabs{
   border-bottom: 1px solid rgba(255,255,255,.14) !important;
@@ -51,17 +48,69 @@
   box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
-/* LAYOUT */
+/* =====================================================
+   ÜST BÖLÜM (cardd) – ana fix
+   ===================================================== */
+#ara_content .cardd{
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  margin-top: 5px;
 
-#ara_content .child{ width: 80%; }
-#ara_content .child2{ width: 20%; }
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 5px !important;
 
-@media (max-width:1200px){
-  #ara_content .cardd{ flex-direction: column; }
-  #ara_content .child,#ara_content .child2{ width: 100%; }
+  flex-wrap: nowrap !important;       /* ✅ child2 alta düşmez */
+  overflow-x: hidden !important;      /* ✅ genişte scroll gizli */
+  overflow-y: hidden !important;
+  max-width: 100% !important;
 }
 
-/* GROUP BOX */
+/* Sol büyür, sağ sabit */
+#ara_content .child{
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+#ara_content .child2{
+  flex: 0 0 320px !important;
+  width: 320px !important;
+  min-width: 320px !important;
+}
+
+/* Daralınca: X scroll aç, elemanlar ezilmesin */
+@media (max-width: 1400px){
+  #ara_content .cardd{
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  #ara_content .child{ min-width: 900px !important; }
+}
+
+/* Üstte sexy scroll */
+#ara_content .cardd{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .cardd::-webkit-scrollbar{ height: 10px; }
+#ara_content .cardd::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+#ara_content .cardd::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25);
+}
+
+/* =====================================================
+   GROUP BOX
+   ===================================================== */
 #ara_content .group-box{
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(8,14,26,.32);
@@ -69,10 +118,9 @@
   padding: 10px !important;
   margin: 8px 0 !important;
 }
-/* padding-left span’leri sustur */
 #ara_content .group-box span[style*="padding-left"]{ display:none !important; }
 
-
+/* CONTROL HEIGHT */
 #ara_content .form-control,
 #ara_content .form-select,
 #ara_content .input-group-text,
@@ -103,15 +151,11 @@
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
- 
   padding: 6px 12px !important;
-  box-sizing: border-box;
   outline: none;
-  
   color: #fff;
   font-weight: 900;
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
-  
 }
 #ara_content .form-control::placeholder{
   color: rgba(255,255,255,.55) !important;
@@ -125,34 +169,11 @@
   color:#fff !important;
 }
 
-/* datalist ok (span ▼) */
-#ara_content span[style*="pointer-events: none"]{
-  color: rgba(255,255,255,.80) !important;
-  text-shadow: 0 0 8px rgba(56,189,248,.25);
-}
+#ara_content input[type="date"]{ color-scheme: dark; }
 
-/* value label */
-#ara_content #lblcheskod,
-#ara_content .val-right{
-  height: 34px !important;
-  display:flex;
-  align-items:center;
-  padding: 0 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.90);
-  font-weight: 900;
-  box-sizing: border-box;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#ara_content .val-right{ justify-content:flex-end; }
-
-/* BUTTONS */
+/* Buttons */
 #ara_content .btn-primary{
-border-radius: 14px;
+  border-radius: 14px;
   font-weight: 900;
   height: 40px;
   background: rgba(56,189,248,.18) !important;
@@ -164,8 +185,6 @@ border-radius: 14px;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
-
-
 #ara_content .btn.btn-secondary{
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16) !important;
@@ -176,7 +195,8 @@ border-radius: 14px;
   background: rgba(56,189,248,.12) !important;
   border-color: rgba(56,189,248,.35) !important;
 }
-/* ===== KOMPAKT GRID BLOKLARI ===== */
+
+/* Grid blokları */
 #ara_content .gb-top{
   display:grid !important;
   grid-template-columns: 80px 140px 46px 130px 90px 160px 70px 70px;
@@ -189,14 +209,12 @@ border-radius: 14px;
   gap: 8px 10px;
   align-items:center;
 }
-
 #ara_content .gb-cariadi{
   display:grid !important;
   grid-template-columns: 80px 350px 1fr;
   gap: 8px 10px;
   align-items:center;
 }
-
 #ara_content .gb-actions{
   display:flex !important;
   flex-wrap:wrap;
@@ -215,17 +233,63 @@ border-radius: 14px;
   gap: 8px 10px;
   align-items:center;
 }
-
 @media (max-width:1200px){
   #ara_content .gb-top{ grid-template-columns: 90px 1fr 46px 1fr; }
 }
 
-/* TABLE (hover yok) */
-/* =========================
-   TABLE – gbTable
-   ========================= */
+/* value label */
+#ara_content #lblcheskod,
+#ara_content .val-right{
+  height: 34px !important;
+  display:flex;
+  align-items:center;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.90);
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#ara_content .val-right{ justify-content:flex-end; }
+
+/* Datalist ok işareti */
+#ara_content span[style*="pointer-events: none"]{
+  color: rgba(255,255,255,.80) !important;
+  text-shadow: 0 0 8px rgba(56,189,248,.25);
+}
+
+/* =====================================================
+   TABLO – X scroll wrapper ile
+   HTML: <div class="gb-table-x"><table id="gbTable">...</table></div>
+   ===================================================== */
+#ara_content .gb-table-x{
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 100% !important;
+  border-radius: 16px;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .gb-table-x::-webkit-scrollbar{ height: 10px; }
+#ara_content .gb-table-x::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+#ara_content .gb-table-x::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25);
+}
+
+/* Table */
 #ara_content #gbTable{
   width: 100%;
+  min-width: 1200px !important;   /* ✅ taşarsa X scroll */
   margin-top: 8px;
   border-collapse: separate;
   border-spacing: 0;
@@ -234,30 +298,6 @@ border-radius: 14px;
   overflow: hidden;
   background: rgba(255,255,255,.03) !important;
 }
-
-#ara_content #gbTable tbody .form-control,
-#ara_content #gbTable tbody .form-select{
-  height: 30px !important;          /* ✅ kompakt */
-  min-height: 30px !important;
-  border-radius: 10px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-
-  border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.95) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
-}
-
-#ara_content #gbTable tbody .form-control:focus,
-#ara_content #gbTable tbody .form-select:focus{
-  border-color: rgba(56,189,248,.65) !important;
-  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
-  background: rgba(8,14,26,.65) !important;
-}
-
-
 #ara_content #gbTable thead th{
   position: sticky;
   top: 0;
@@ -286,6 +326,26 @@ border-radius: 14px;
   background: linear-gradient(135deg, rgba(56,189,248,.18), rgba(34,197,94,.12)) !important;
   color: #fff !important;
 }
+#ara_content #gbTable tbody .form-control,
+#ara_content #gbTable tbody .form-select{
+  height: 30px !important;
+  min-height: 30px !important;
+  border-radius: 10px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.95) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+#ara_content #gbTable tbody .form-control:focus,
+#ara_content #gbTable tbody .form-select:focus{
+  border-color: rgba(56,189,248,.65) !important;
+  box-shadow: 0 0 0 4px rgba(56,189,248,.16) !important;
+  background: rgba(8,14,26,.65) !important;
+}
+
 #ara_content .double-column,
 #ara_content .saga-bold{
   text-align: right !important;
@@ -320,19 +380,44 @@ border-radius: 14px;
   font-weight: 900;
 }
 
-#ara_content input[type="date"]{ color-scheme: dark; }
 
-#ara_content span{
-  
- 
-  color: rgba(255,255,255,.88) !important;
-  font-weight: 900;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
+#ara_content .cg-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:nowrap;
+  width:100%;
+  padding:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
 }
+
+#ara_content .cg-badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:nowrap;
+  align-items:center;
+}
+
+/* hem span hem label aynı “chip” gibi dursun */
+#ara_content .cg-badges > span,
+#ara_content .cg-badges > label{
+  display:inline-flex;
+  align-items:center;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900 !important;
+  white-space: nowrap;
+}
+
+#ara_content .cg-badges > label:empty::before{ content:"—"; opacity:.65; }
+
 </style>
 
 <!-- ===================== TABS ===================== -->
@@ -464,6 +549,7 @@ border-radius: 14px;
   <i class="fa fa-plus"></i>
 </button>
 
+<div class="gb-table-x">
 <!-- ===================== TABLE ===================== -->
 <table class="table table-bordered tah-table" id="gbTable" style="margin-top: 5px;">
   <thead class="thead-dark">
@@ -490,14 +576,16 @@ border-radius: 14px;
     </tr>
   </tfoot>
 </table>
-
+</div>
 <!-- ===================== COUNT CARD ===================== -->
-<div class="card p-4">
-  <div class="form-row">
-    <span style="padding-left: 20px;">Cek Sayisi :</span>
-    <label style="text-align: right; width: 50px;" id="ceksayisi">0</label>
+
+<div class="cg-actions">
+  <div class="cg-badges">
+    <span>Cek Sayisi :</span>
+    <label id="ceksayisi">0</label>
   </div>
 </div>
+
 
 <input type="hidden" id="cekgirBilgi" name="cekgirBilgi">
 
