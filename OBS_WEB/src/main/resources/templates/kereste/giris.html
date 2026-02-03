@@ -38,6 +38,7 @@
   --radius-card: 18px;
   --radius-ctrl: 10px;
   --blur: 14px;
+  --h-ctrl: 34px;     /* input/select */
 }
 
 /* -------------------------
@@ -82,9 +83,15 @@
 #ara_content label{
   color: rgba(255,255,255,.84);
   font-weight: 800;
-  font-size: 13px;
+  font-size: 14px;
+
+  height: 40px !important;
   margin: 0 !important;
   white-space: nowrap;
+
+  display: flex !important;
+  align-items: center !important;   /* dikey ortala */
+  line-height: 1 !important;        /* font baseline kaymasın */
 }
 
 /* -------------------------
@@ -92,7 +99,9 @@
 ------------------------- */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 36px;
+  height: var(--h-ctrl) !important;
+  font-weight: 800;
+  font-size: 14px;
   border-radius: var(--radius-ctrl);
   border: 1px solid var(--cam-border) !important;
   background: var(--field-bg) !important;
@@ -210,10 +219,10 @@
 
 /* refresh butonu */
 #ara_content #tab1 .ker-compact .btn.btn-secondary{
-  height: 38px !important;
-  width: 44px;
+  height: 34px !important;
+  width: 34px;
   padding: 0 !important;
-  border-radius: 12px !important;
+  border-radius: 10px !important;
 }
 
 /* 1. satır */
@@ -240,7 +249,11 @@
 
 /* 3. satır */
 #ara_content #tab1 .ker-compact .ker-row.row-3{
-  grid-template-columns: 72px 1fr 72px 1fr;
+  grid-template-columns: 72px 120px 180px 72px 120px;
+}
+
+#ara_content #tab1 .ker-compact .ker-row.row-4{
+  grid-template-columns: 72px 372px 10px 372px;
 }
 
 /* cari/adres isim label chip */
@@ -254,15 +267,21 @@
   border: 1px solid rgba(255,255,255,.10);
 }
 
-/* responsive */
+/* Küçük ekranda ALT ALTA DÜŞME YOK -> yatay scroll */
 @media (max-width: 1200px){
-  #ara_content #tab1 .ker-compact .ker-row.row-1,
-  #ara_content #tab1 .ker-compact .ker-row.row-2,
-  #ara_content #tab1 .ker-compact .ker-row.row-3{
-    grid-template-columns: 110px 1fr !important;
+  #ara_content #tab1 .group-box.ker-compact{
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
   }
-  #ara_content #tab1 .ker-compact .btn.btn-secondary{ width: 100%; }
+
+  #ara_content #tab1 .ker-compact .ker-row{
+    width: max-content !important;
+    min-width: 100% !important;
+  }
+
+ 
 }
+
 
 /* =========================
    TAB2 / TAB3 – form-row, input-group, checkbox
@@ -526,6 +545,39 @@
   font-weight: 900 !important;
 }
 
+/* =========================================================
+   FIX-2: ALT KISIM (ker-info) de scroll alsın
+   -> küçük ekranda kırılma yok, yatay scroll var
+   ========================================================= */
+
+#ara_content .ker-info{
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+
+  /* aynı “seksi scroll” görünümü */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .ker-info::-webkit-scrollbar{ height: 10px; }
+#ara_content .ker-info::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .ker-info::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25), inset 0 0 0 1px rgba(255,255,255,.20);
+}
+
+/* ker-info içindeki satırlar kırılmasın -> tek sıra, taşarsa scroll */
+#ara_content .ker-info .form-row{
+  flex-wrap: nowrap !important;
+  width: max-content !important;
+  min-width: 100% !important;
+}
 /* -------------------------
    error
 ------------------------- */
@@ -623,7 +675,7 @@
 							ondblclick="openSecondModal('carikod', 'fatura')" maxlength="12"
 							oninput="hesapAdiOgren(this.value, 'cariadilbl')">
 					</div>
-					
+					<span></span>
 					<label>Adres Kod</label>
 					<div style="min-width: 120px; max-width: 120px;">
 						<input id="adreskod" class="form-control"
@@ -631,9 +683,11 @@
 							ondblclick="openadrkodlariModal('adreskod', 'fatura')" />
 					</div>
 				</div>
-				<div class="ker-row row-3">
-					<label>Cari</label> <label class="ker-wide" id="cariadilbl">....</label>
-					<label>Adres</label> <label class="ker-wide" id="adresadilbl">....</label>
+				<div class="ker-row row-4">
+					<span></span>
+					<label class="ker-wide" id="cariadilbl">....</label>
+					<span></span>
+					<label class="ker-wide" id="adresadilbl">....</label>
 				</div>
 				
 			</div>

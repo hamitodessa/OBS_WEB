@@ -31,7 +31,7 @@
   --radius-ctrl: 10px;
   --blur: 14px;
 
-  --h-ctrl: 36px;     /* input/select */
+  --h-ctrl: 34px;     /* input/select */
   --fs-ctrl: 12px;    /* input text */
 }
 
@@ -77,9 +77,15 @@
 #ara_content label{
   color: rgba(255,255,255,.84);
   font-weight: 800;
-  font-size: 13px;
+  font-size: 14px;
+
+  height: 40px !important;
   margin: 0 !important;
   white-space: nowrap;
+
+  display: flex !important;
+  align-items: center !important;   /* dikey ortala */
+  line-height: 1 !important;        /* font baseline kaymasın */
 }
 
 /* -------------------------
@@ -93,7 +99,8 @@
   border: 1px solid var(--border) !important;
   background: var(--bg-field) !important;
   color: #fff !important;
-  font-weight: 900 !important;
+  font-size: 14px;
+  font-weight: 800;
  
   text-shadow: 0 2px 10px rgba(0,0,0,.55);
   padding: 8px 10px !important;
@@ -145,6 +152,12 @@
   transform: translateY(-1px);
 }
 
+#ara_content #tab1 .ker-compact .btn.btn-secondary{
+  height: 34px !important;
+  width: 34px;
+  padding: 0 !important;
+  border-radius: 10px !important;
+}
 /* -------------------------
    TAB1/TAB2/TAB3: inline span boşlukları kapat
 ------------------------- */
@@ -223,8 +236,13 @@
 }
 #ara_content #tab1 .ker-compact .ker-row.row-2 > :first-child{ grid-column: 5 !important; }
 #ara_content #tab1 .ker-compact .ker-row.row-3{
-  grid-template-columns: 72px 1fr 72px 1fr;
+  grid-template-columns: 72px 120px 180px 72px 120px;
 }
+
+#ara_content #tab1 .ker-compact .ker-row.row-4{
+  grid-template-columns: 72px 372px 10px 372px;
+}
+
 #ara_content #tab1 .ker-compact .ker-wide{
   overflow: hidden;
   text-overflow: ellipsis;
@@ -233,16 +251,50 @@
   border-radius: 12px;
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.10);
-  color: rgba(255,255,255,.92);
-  font-weight: 900;
+
 }
 
-/* responsive */
-@media (max-width:1200px){
-  #ara_content #tab1 .ker-compact .ker-row.row-1,
-  #ara_content #tab1 .ker-compact .ker-row.row-2,
-  #ara_content #tab1 .ker-compact .ker-row.row-3{
-    grid-template-columns: 110px 1fr !important;
+/* üst kapsayıcı yatay scroll */
+#ara_content #tab1 .group-box.ker-compact{
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 100% !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* her satır içerik kadar geniş olsun (kırılma yok) */
+#ara_content #tab1 .group-box.ker-compact .ker-row{
+  width: max-content !important;
+  min-width: max-content !important;  /* ✅ burası fark yaratır */
+}
+
+/* içeride hiçbir şey wrap yapmasın */
+#ara_content #tab1 .group-box.ker-compact .ker-row > *,
+#ara_content #tab1 .group-box.ker-compact label,
+#ara_content #tab1 .group-box.ker-compact input,
+#ara_content #tab1 .group-box.ker-compact select,
+#ara_content #tab1 .group-box.ker-compact button{
+  white-space: nowrap !important;
+}
+
+/* Küçük ekranda ALT ALTA DÜŞME YOK -> yatay scroll */
+@media (max-width: 1200px){
+  #ara_content #tab1 .group-box.ker-compact{
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+
+  #ara_content #tab1 .ker-compact .ker-row{
+    width: max-content !important;
+    min-width: 100% !important;
+  }
+
+  /* buton width:100% yapma, o da yerleşimi bozuyor */
+  #ara_content #tab1 .ker-compact .btn.btn-secondary{
+    height: 34px !important;
+  width: 34px;
+  padding: 0 !important;
+  border-radius: 10px !important;
   }
 }
 
@@ -475,7 +527,28 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding: 10px 12px !important;
+  
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 100% !important;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+  
 }
+
+#ara_content .ker-info::-webkit-scrollbar{ height: 10px; }
+#ara_content .ker-info::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+#ara_content .ker-info::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25);
+}
+
 #ara_content .ker-info .form-row{
   display:flex !important;
   flex-wrap:wrap;
@@ -518,7 +591,15 @@
   font-weight: 900 !important;
 }
 
-
+/* form-row tek satır kalsın */
+#ara_content .ker-info .form-row{
+  flex-wrap: nowrap !important;
+  width: max-content !important;
+  min-width: 100% !important;
+}
+#ara_content .ker-info .form-row > *{
+  white-space: nowrap !important;
+}
 </style>
 
 
@@ -611,6 +692,7 @@
               ondblclick="openSecondModal('carikod','fatura')" maxlength="12"
               oninput="hesapAdiOgren(this.value,'cariadilbl')">
           </div>
+         <span></span>
           <label>Adres Kod</label>
           <div style="min-width:120px;max-width:120px;">
           <input id="adreskod" class="form-control" style="width:120px;font-weight:bold;"
@@ -619,12 +701,14 @@
              </div>
             
         </div>
-        <div class="ker-row row-3">
-					<label>Cari</label> <label class="ker-wide" id="cariadilbl">....</label>
-					<label>Adres</label> <label class="ker-wide" id="adresadilbl">....</label>
+        <div class="ker-row row-4">
+        	<span></span>
+			<label class="ker-wide"  id="cariadilbl">....</label>
+			<span></span>
+			<label class="ker-wide" id="adresadilbl">....</label>
 		</div>
       </div>
-
+ </div>
       <div class="group-box">
         <div class="form-row" style="gap:8px;margin:0;">
           <button class="btn btn-primary" type="button" id="kerkaydetButton" onclick="OBS.KERCIKIS.kerKayit()">Kaydet</button>
@@ -636,7 +720,7 @@
       </div>
 
       <div id="errorDiv"></div>
-    </div>
+   
 
   </div>
   <!-- ========== TAB 1 BİTTİ ========== -->

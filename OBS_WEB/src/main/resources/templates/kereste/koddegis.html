@@ -14,12 +14,42 @@
 
 
 #ara_content .cardd{
-  display: flex;
+  display: flex !important;
+  flex-wrap: nowrap !important;     /* ✅ alta düşme yok */
   gap: 10px;
   align-items: flex-start;
-  flex-wrap: wrap;
-  
+
+  overflow-x: auto !important;      /* ✅ yatay scroll */
+  overflow-y: hidden !important;
+  max-width: 100% !important;
+  -webkit-overflow-scrolling: touch;
+
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.55) rgba(255,255,255,.06);
 }
+
+/* çocuklar yan yana sabit kalsın */
+#ara_content .child,
+#ara_content .child2{
+  flex: 0 0 auto !important;        /* ✅ sıkışıp küçülmesin */
+  min-width: 420px;                 /* sende zaten var */
+}
+
+/* seksi scrollbar */
+#ara_content .cardd::-webkit-scrollbar{ height: 10px; }
+#ara_content .cardd::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+#ara_content .cardd::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25);
+}
+
 
 #ara_content .child,
 #ara_content .child2{
@@ -31,6 +61,7 @@
   background: rgba(255,255,255,.04);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  height:150px;
 }
 
 @media (max-width: 1100px){
@@ -53,21 +84,31 @@
 
 /* Label */
 #ara_content label{
-  font-weight: 900;
-  font-size: 12px;
-  color: rgba(255,255,255,.82);
+   color: rgba(255,255,255,.84);
+  font-weight: 800;
+  font-size: 14px;
+
+  height: 34px !important;
+  margin: 0 !important;
+  white-space: nowrap;
+
+  display: flex !important;
+  align-items: center !important;   /* dikey ortala */
+  line-height: 1 !important;        /* font baseline kaymasın */
 }
 
 /* Inputs / Select */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 36px !important;
+  height: 34px !important;
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
   padding: 6px 10px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  font-weight: 800;
+  font-size: 14px;
 }
 
 #ara_content .form-control::placeholder{
@@ -83,9 +124,9 @@
 
 /* Buttons */
 #ara_content .btn{
-  border-radius: 14px;
+  border-radius: 10px;
   font-weight: 900;
-  height: 40px;
+  height: 34px;
  background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -114,18 +155,12 @@
 /* =======================
    TABLO ALANI
    ======================= */
-#ara_content .container{
-  height: 55vh;
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
-  padding: 0;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
+
 
 #ara_content .table-container{
+  height: 55vh;
+  width: 100%;
+  margin-top: 10px;
   flex-grow: 1;
   overflow: auto;
   position: relative; /* sticky için */
@@ -171,9 +206,9 @@
 
 /* TBODY cam */
 #ara_content #urunTable tbody td{
-  background: rgba(8,14,26,.35) !important;
-  color: rgba(255,255,255,.88) !important;
-  transition: background .12s ease, color .12s ease;
+background: rgba(255, 255, 255, .04);
+	color: rgba(255, 255, 255, .82);
+	transition: color .12s ease, background .12s ease;
 }
 
 /* Hover + Selected (diğer sayfa mantığı) */
@@ -268,13 +303,13 @@
     <div class="cardd">
       <div class="child">
           <div style="display:flex; align-items:center; gap:10px;">
-            <label style="width:120px;">Konsimento</label>
+            <label style="min-width:120px;">Konsimento</label>
             <input class="form-control" style="font-weight:900; width:120px;"
               maxlength="15" id="kons" onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
             <label style="width:60px;">Kodu</label>
           </div>
-          <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
-            <label style="width:120px;">Paket No</label>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:5px;">
+            <label style="min-width:120px;">Paket No</label>
             <input class="form-control" style="font-weight:900; width:120px;"
               maxlength="10" id="pakno" onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
             
@@ -283,8 +318,8 @@
               onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
               
           </div>
-          <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
-            <label style="width:120px;">Giris Evrak</label>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:5px;">
+            <label style="min-width:120px;">Giris Evrak</label>
             <input class="form-control" maxlength="10" id="gevrak" style="width:120px;"
               onkeydown="if(event.key === 'Enter') OBS.KODDEGIS.fetchTable()" />
           </div>
@@ -326,7 +361,7 @@
 
   <div id="errorDiv"></div>
 
-  <div class="container">
+  
     <div class="table-container">
       <table class="table table-bordered table-hover" id="urunTable" style="margin-top: 0;">
         <thead class="thead-dark">
@@ -367,5 +402,5 @@
         </tfoot>
       </table>
     </div>
-  </div>
+ 
 
