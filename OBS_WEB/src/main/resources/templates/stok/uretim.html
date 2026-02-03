@@ -617,6 +617,7 @@
             <label style="min-width: 75px;">Uretim Miktari</label>
            
             <input class="form-control saga_bold" maxlength="10" id="uretmiktar"
+            	onkeydown="if(event.key === 'Enter') OBS.URETIM.uretimYap()"
                    value="0" style="width: 75px; font-weight: bold;">
            
             <label id="mikbirim" style="min-width: 75px;"></label>

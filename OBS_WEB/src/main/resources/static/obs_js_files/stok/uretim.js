@@ -182,6 +182,10 @@ OBS.URETIM.urunAramaYap = async (kodbarkod = "Kodu") => {
         img.style.display = "none";
       }
     }
+	
+	const urtmmiktar =  OBS.URETIM._el("uretmiktar");
+	urtmmiktar.focus();
+	
   } catch (err) {
     OBS.URETIM._showError(err?.message);
   } finally {
