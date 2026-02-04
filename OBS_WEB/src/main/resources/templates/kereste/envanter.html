@@ -25,8 +25,8 @@
 
 /* BUTTON */
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -48,8 +48,8 @@
 /* INPUT */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 48px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -232,14 +232,14 @@
 
 
 	<div class="card p-1">
-		<div style="display: flex; align-items: center;">
+		<div style="display: flex; align-items: center;gap:10px;">
 			<button class="btn btn-primary" type="button" id="envanteryenileButton"
-				style="margin-left: 10px;" onclick="openFirstModal('kerenvanter')">Filtre</button>
+				  onclick="openFirstModal('kerenvanter')">Filtre</button>
 			
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="envanterDownload"
+			<button class="btn btn-primary"   type="button" id="envanterDownload"
 			 onclick="OBS.KERENVANTER.envanterDownload()" disabled>Excel Indir</button>
 
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="envantermailButton"
+			<button class="btn btn-primary"   type="button" id="envantermailButton"
 			 onclick="OBS.KERENVANTER.envantermailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>

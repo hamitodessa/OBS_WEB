@@ -1,7 +1,7 @@
 /* =========================================================
    KERFATRAPOR (jQuery YOK) - OBS Namespace
-   window.OBS = window.OBS || {};
-   OBS.KERFATRAPOR = ...
+   - fkodu’da 1. sütun daralmasın: table class has-toggle/no-toggle
+   - toggle td class kullanımın (td.toggle-button) korunuyor
    ========================================================= */
 
 window.OBS = window.OBS || {};
@@ -46,8 +46,12 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
 
   M.formUrlEncoded = (obj) => new URLSearchParams(obj);
 
+  M.setText = (id, val) => {
+    const el = M.el(id);
+    if (el) el.innerText = val ?? "";
+  };
+
   /* ---------------- DTO ---------------- */
-  // jQuery yok: hidden input'tan oku
   M.getfatraporDTO = () => {
     const hidden = M.el("fatrapBilgi");
     const raw = hidden ? (hidden.value || "") : "";
@@ -88,9 +92,8 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
 
   /* ---------------- select change ---------------- */
   M.anagrpChanged = async (anagrpElement) => {
-    const anagrup = anagrpElement.value;
+    const anagrup = anagrpElement?.value || "";
     const selectElement = M.el("altgrp");
-
     if (!selectElement) return;
 
     selectElement.innerHTML = "";
@@ -121,7 +124,7 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
       selectElement.disabled = selectElement.options.length === 0;
     } catch (err) {
       selectElement.disabled = true;
-      M.showError(err?.message);
+      M.showError(err?.message || String(err));
     } finally {
       M.setCursor(false);
     }
@@ -164,7 +167,7 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
   M.kerfatdoldur = async () => {
     M.setCursor(true);
     try {
-      await M.toplampagesize();          // ✅ await yoksa totalPages yetişmiyor
+      await M.toplampagesize();          // ✅ await
       await M.kerfetchTableData(0);
     } finally {
       M.setCursor(false);
@@ -180,9 +183,20 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
     tfoot.querySelectorAll("th").forEach((th) => (th.textContent = ""));
   };
 
+  M._ensureTfoot = () => {
+    const table = document.querySelector("#main-table");
+    if (!table) return null;
+    let tfoot = table.querySelector("tfoot");
+    if (!tfoot) {
+      tfoot = document.createElement("tfoot");
+      table.appendChild(tfoot);
+    }
+    return tfoot;
+  };
+
   /* ---------------- details fetch ---------------- */
   M.fetchDetails = async (evrakNo, cins) => {
-    let gircik = (cins === "Alis") ? "G" : "C";
+    const gircik = (cins === "Alis") ? "G" : "C";
 
     const response = await fetchWithSessionCheck("kereste/fatdetay", {
       method: "POST",
@@ -197,14 +211,8 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
   /* ---------------- header builders ---------------- */
   M.updateTableHeadersfno = (headers) => {
     const thead = document.querySelector("#main-table thead");
-    const table = document.querySelector("#main-table");
-    if (!thead || !table) return;
-
-    let tfoot = table.querySelector("tfoot");
-    if (!tfoot) {
-      tfoot = document.createElement("tfoot");
-      table.appendChild(tfoot);
-    }
+    const tfoot = M._ensureTfoot();
+    if (!thead || !tfoot) return;
 
     thead.innerHTML = "";
     const trHead = document.createElement("tr");
@@ -241,14 +249,8 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
 
   M.updateTableHeadersfkodu = (headers) => {
     const thead = document.querySelector("#main-table thead");
-    const table = document.querySelector("#main-table");
-    if (!thead || !table) return;
-
-    let tfoot = table.querySelector("tfoot");
-    if (!tfoot) {
-      tfoot = document.createElement("tfoot");
-      table.appendChild(tfoot);
-    }
+    const tfoot = M._ensureTfoot();
+    if (!thead || !tfoot) return;
 
     thead.innerHTML = "";
     const trHead = document.createElement("tr");
@@ -285,14 +287,8 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
 
   M.updateTableHeadersfnotar = (headers) => {
     const thead = document.querySelector("#main-table thead");
-    const table = document.querySelector("#main-table");
-    if (!thead || !table) return;
-
-    let tfoot = table.querySelector("tfoot");
-    if (!tfoot) {
-      tfoot = document.createElement("tfoot");
-      table.appendChild(tfoot);
-    }
+    const tfoot = M._ensureTfoot();
+    if (!thead || !tfoot) return;
 
     thead.innerHTML = "";
     const trHead = document.createElement("tr");
@@ -354,12 +350,26 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
 
       M.data = response;
 
+      const raporturu = response.raporturu;
+      const table = document.querySelector("#main-table");
+
+      // ✅ KRİTİK: fkodu’da toggle yok => ilk sütunu daraltma
+      if (table) {
+        if (raporturu === "fkodu") {
+          table.classList.remove("has-toggle");
+          table.classList.add("no-toggle");
+        } else {
+          table.classList.add("has-toggle");
+          table.classList.remove("no-toggle");
+        }
+      }
+
       // headers
-      if (response.raporturu === "fno") {
+      if (raporturu === "fno") {
         M.updateTableHeadersfno(["", "EVRAK NO", "HAREKET", "TARIH", "CARI_HESAP", "ADRES_HESAP", "DOVIZ", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"]);
-      } else if (response.raporturu === "fkodu") {
+      } else if (raporturu === "fkodu") {
         M.updateTableHeadersfkodu(["CARI_HESAP", "HAREKET", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"]);
-      } else if (response.raporturu === "fnotar") {
+      } else if (raporturu === "fnotar") {
         M.updateTableHeadersfnotar(["", "EVRAK NO", "HAREKET", "TARIH", "UNVAN", "VERGI NO", "M3", "TUTAR", "ISK. TUTAR", "KDV TUTAR", "TOPLAM TUTAR"]);
       }
 
@@ -373,7 +383,7 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
         const row = document.createElement("tr");
         row.classList.add("expandable", "table-row-height");
 
-        if (response.raporturu === "fno") {
+        if (raporturu === "fno") {
           row.innerHTML = `
             <td class="toggle-button">+</td>
             <td>${rowData.Fatura_No || ""}</td>
@@ -390,7 +400,8 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
           `;
           totalmiktar += (rowData.m3 || 0);
           totaltutar += (rowData.Toplam_Tutar || 0);
-        } else if (response.raporturu === "fkodu") {
+
+        } else if (raporturu === "fkodu") {
           row.innerHTML = `
             <td>${rowData.Firma_Kodu || ""}</td>
             <td>${rowData.Hareket || ""}</td>
@@ -404,7 +415,8 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
           `;
           totalmiktar += (rowData.m3 || 0);
           totaltutar += (rowData.Toplam_Tutar || 0);
-        } else if (response.raporturu === "fnotar") {
+
+        } else if (raporturu === "fnotar") {
           row.innerHTML = `
             <td class="toggle-button">+</td>
             <td>${rowData.Fatura_No || ""}</td>
@@ -432,12 +444,12 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
         if (mainTableBody) mainTableBody.appendChild(detailsRow);
 
         // fkodu detay yok
-        if (response.raporturu === "fkodu") return;
+        if (raporturu === "fkodu") return;
 
         const toggle = row.querySelector(".toggle-button");
         if (!toggle) return;
 
-        // row select (toggle dışına da tıklansa)
+        // row select
         row.addEventListener("click", () => {
           document.querySelectorAll("#main-table tbody tr.selected")
             .forEach((r) => r.classList.remove("selected"));
@@ -452,7 +464,9 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
           // tek satır açık kalsın
           document.querySelectorAll("#main-table tr.details-row").forEach((r) => (r.style.display = "none"));
           document.querySelectorAll("#main-table tbody tr").forEach((r) => r.classList.remove("selected"));
-          document.querySelectorAll("#main-table .toggle-button").forEach((x) => { if (x.textContent === "-") x.textContent = "+"; });
+          document.querySelectorAll("#main-table .toggle-button").forEach((x) => {
+            if (x.textContent === "-") x.textContent = "+";
+          });
 
           if (isOpen) {
             detailsRow.style.display = "none";
@@ -523,7 +537,8 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
             detailsRow.children[0].innerHTML = html;
             detailsRow.dataset.loaded = "1";
           } catch (err) {
-            detailsRow.children[0].innerHTML = `<div class="details-wrap"><b>Hata:</b> Detaylar alınamadı.</div>`;
+            detailsRow.children[0].innerHTML =
+              `<div class="details-wrap"><b>Hata:</b> Detaylar alınamadı.</div>`;
           } finally {
             M.setCursor(false);
           }
@@ -531,22 +546,17 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
       });
 
       // totals
-      if (response.raporturu === "fno") {
-        const t1 = M.el("toplam-7");
-        const t2 = M.el("toplam-11");
-        if (t1) t1.innerText = formatNumber3(totalmiktar);
-        if (t2) t2.innerText = formatNumber2(totaltutar);
-      } else if (response.raporturu === "fkodu") {
-        const t1 = M.el("toplam-4");
-        const t2 = M.el("toplam-8");
-        if (t1) t1.innerText = formatNumber3(totalmiktar);
-        if (t2) t2.innerText = formatNumber2(totaltutar);
-      } else if (response.raporturu === "fnotar") {
-        const t1 = M.el("toplam-6");
-        const t2 = M.el("toplam-10");
-        if (t1) t1.innerText = formatNumber3(totalmiktar);
-        if (t2) t2.innerText = formatNumber2(totaltutar);
+      if (raporturu === "fno") {
+        M.setText("toplam-7", formatNumber3(totalmiktar));
+        M.setText("toplam-11", formatNumber2(totaltutar));
+      } else if (raporturu === "fkodu") {
+        M.setText("toplam-4", formatNumber3(totalmiktar));
+        M.setText("toplam-8", formatNumber2(totaltutar));
+      } else if (raporturu === "fnotar") {
+        M.setText("toplam-6", formatNumber3(totalmiktar));
+        M.setText("toplam-10", formatNumber2(totaltutar));
       }
+
     } catch (err) {
       M.showError(err?.message || String(err));
     } finally {
@@ -591,51 +601,20 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
       [anaSelect, canaSelect, dpoSelect, cdpoSelect, ozSelect, cozSelect].forEach(s => { if (s) s.innerHTML = ""; });
 
       ana.forEach((item) => {
-        if (anaSelect) {
-          const o = document.createElement("option");
-          o.value = item.ANA_GRUP;
-          o.textContent = item.ANA_GRUP;
-          anaSelect.appendChild(o);
-        }
-        if (canaSelect) {
-          const o = document.createElement("option");
-          o.value = item.ANA_GRUP;
-          o.textContent = item.ANA_GRUP;
-          canaSelect.appendChild(o);
-        }
+        if (anaSelect)  anaSelect.appendChild(new Option(item.ANA_GRUP, item.ANA_GRUP));
+        if (canaSelect) canaSelect.appendChild(new Option(item.ANA_GRUP, item.ANA_GRUP));
       });
 
       dpo.forEach((item) => {
-        if (dpoSelect) {
-          const o = document.createElement("option");
-          o.value = item.DEPO;
-          o.textContent = item.DEPO;
-          dpoSelect.appendChild(o);
-        }
-        if (cdpoSelect) {
-          const o = document.createElement("option");
-          o.value = item.DEPO;
-          o.textContent = item.DEPO;
-          cdpoSelect.appendChild(o);
-        }
+        if (dpoSelect)  dpoSelect.appendChild(new Option(item.DEPO, item.DEPO));
+        if (cdpoSelect) cdpoSelect.appendChild(new Option(item.DEPO, item.DEPO));
       });
 
       oz.forEach((item) => {
-        if (ozSelect) {
-          const o = document.createElement("option");
-          o.value = item.OZEL_KOD_1;
-          o.textContent = item.OZEL_KOD_1;
-          ozSelect.appendChild(o);
-        }
-        if (cozSelect) {
-          const o = document.createElement("option");
-          o.value = item.OZEL_KOD_1;
-          o.textContent = item.OZEL_KOD_1;
-          cozSelect.appendChild(o);
-        }
+        if (ozSelect)  ozSelect.appendChild(new Option(item.OZEL_KOD_1, item.OZEL_KOD_1));
+        if (cozSelect) cozSelect.appendChild(new Option(item.OZEL_KOD_1, item.OZEL_KOD_1));
       });
 
-      // "Bos Olanlar" opsiyonlarını 2. sıraya koy (options[1])
       const insertBos = (sel) => {
         if (!sel) return;
         const o = document.createElement("option");
@@ -672,7 +651,10 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
 
       table.querySelectorAll("thead th").forEach((th) => headers.push(th.innerText.trim()));
 
+      // details-row dahil etme
       table.querySelectorAll("tbody tr").forEach((tr) => {
+        if (tr.classList.contains("details-row")) return;
+
         const rowData = {};
         let isEmpty = true;
 
@@ -732,7 +714,10 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
     const rows = [];
 
     table.querySelectorAll("thead th").forEach((th) => headers.push(th.innerText.trim()));
+
     table.querySelectorAll("tbody tr").forEach((tr) => {
+      if (tr.classList.contains("details-row")) return;
+
       const rowData = {};
       let isEmpty = true;
 
@@ -753,7 +738,6 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
   };
 
   /* ---------------- expose (HTML onclick için) ---------------- */
-  // HTML tarafı direkt çağırabilsin:
   window.anagrpChanged = M.anagrpChanged;
   window.ilksayfa = M.ilksayfa;
   window.oncekisayfa = M.oncekisayfa;
@@ -762,6 +746,6 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
   window.kerfatdoldur = M.kerfatdoldur;
   window.fatrapdownloadReport = M.fatrapdownloadReport;
   window.fatrapmailAt = M.fatrapmailAt;
-  window.openenvModal = M.openenvModal;
+  window.openkfatrapModal = M.openkfatrapModal;
 
 })();

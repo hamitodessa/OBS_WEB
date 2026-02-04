@@ -1,6 +1,6 @@
 <style>
 /* =========================
-   2026 CAM – USER DETAILS
+   2026 CAM – USER DETAILS (CLEAN FINAL)
    ========================= */
 
 #ara_content{
@@ -17,13 +17,14 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* ===== FORM ===== */
+/* ===== LABEL ===== */
 #ara_content label{
   font-weight: 900;
   font-size: 13px;
   color: rgba(255,255,255,.82);
 }
 
+/* ===== INPUT / SELECT ===== */
 #ara_content .form-control,
 #ara_content .form-select{
   height: 38px;
@@ -52,18 +53,83 @@
   margin-left: 6px;
 }
 
-/* ===== TOOLBAR (ARAMA GROUP) ===== */
+/* =====================================================
+   UST CONTAINER – YATAY SCROLL (ALT ALTA INME YOK)
+   ===================================================== */
+/* === UST CONTAINER: FLEX + AUTO SCROLL (SIDEBAR UYUMLU) === */
+#ara_content .ust-container{
+  background: rgba(8,14,26,.18);
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: 18px;
+  padding: 10px;
+  margin: 10px 0;
+
+  overflow-x: auto !important;   /* sadece taşarsa */
+  overflow-y: hidden !important;
+
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .ust-container::-webkit-scrollbar{ height: 10px; }
+#ara_content .ust-container::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .ust-container::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25), inset 0 0 0 1px rgba(255,255,255,.20);
+}
+
+/* ===== FORM: TEK PARÇA ===== */
+#ara_content #userForm{
+  display: block !important;
+  width: max-content !important;
+  min-width: 100% !important;     /* full ekranda bar yok */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Bootstrap .row kullanma; kendi satır class’ımız */
+#ara_content #userForm .form-row{
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-end;
+  gap: 10px 14px !important;
+  margin: 0 0 6px 0 !important;
+  width: max-content !important;  /* satır taşarsa genişler */
+  min-width: 100% !important;     /* sığarsa tam oturur */
+}
+
+/* kolonlar sabit */
+#ara_content #userForm .form-row > .form-group{
+  flex: 0 0 auto !important;
+}
+
+
+/* =====================================================
+   TOOLBAR (ARAMA GROUP)
+   ===================================================== */
 #ara_content .aramagroup-box{
-  margin-top: 14px;
+  display:flex !important;
+  flex-direction: row !important;
+  align-items:center;
+  gap:10px;
+
+  margin-top: 5px;
   padding: 10px;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.05);
-  gap: 8px;
 }
 
-/* Buttons (bootstrap override) */
-#ara_content .btn-primary{
+/* ===== BUTTONS ===== */
+#ara_content .btn-primary,
+#ara_content .btn.btn-secondary{
   border-radius: 10px;
   font-weight: 900;
   height: 40px;
@@ -71,20 +137,9 @@
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
 }
-#ara_content .btn-primary:hover{
-  background: rgba(56,189,248,.26) !important;
-  border-color: rgba(56,189,248,.55) !important;
-  transform: translateY(-1px);
-}
-
-#ara_content .btn.btn-secondary{
-  border-radius: 10px;
-   background: rgba(56,189,248,.18) !important;
-  border: 1px solid rgba(56,189,248,.35) !important;
-  color: rgba(255,255,255,.95) !important;
-}
+#ara_content .btn-primary:hover,
 #ara_content .btn.btn-secondary:hover{
-   background: rgba(56,189,248,.26) !important;
+  background: rgba(56,189,248,.26) !important;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
@@ -94,8 +149,45 @@
   transform:none;
 }
 
+/* =====================================================
+   TABLE CONTAINER
+   ===================================================== */
+#ara_content .table-container{
+  height: 35vh;
+  display:flex;
+  flex-direction:column;
+  margin-top:10px;
+  padding:0;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+
+  overflow:auto;
+
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+
+#ara_content .table-container::-webkit-scrollbar{ width:10px; height:10px; }
+#ara_content .table-container::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border:2px solid rgba(0,0,0,.20);
+  border-radius:999px;
+}
+#ara_content .table-container::-webkit-scrollbar-track{
+  background: rgba(0,0,0,.18);
+  border-radius:999px;
+}
+
+/* ===== TABLE ===== */
 #ara_content table{
   width:100%;
+  min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -103,10 +195,6 @@
   font-size:13px;
 }
 
-/* Cells */
-
-
-/* Header sticky */
 #ara_content thead th{
   position: sticky;
   top: 0;
@@ -118,42 +206,6 @@
   text-align: left;
 }
 
-/* Body base */
-#ara_content tbody td{
-  background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.82);
-  transition: color .12s ease, background .12s ease;
-}
-
-
-/* Hover foreground fix */
-#ara_content .table-hover tbody tr:hover td{
-  background: rgba(56,189,248,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Seçili satır (kalıcı) */
-#ara_content tbody tr.selected td{
-  background: rgba(34,197,94,.14) !important;
-  color: #ffffff !important;
-}
-
-
-#ara_content tbody td{
-  height: 26px;
-  line-height: 18px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-
-#ara_content .table-row-height td{
-  height: 28px;
-  line-height: 28px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
 #ara_content th,
 #ara_content td{
   border: 1px solid rgba(255,255,255,.08);
@@ -162,16 +214,41 @@
   vertical-align: middle;
 }
 
+#ara_content tbody td{
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.78);
+  transition: color .12s ease, background .12s ease;
+  height: 26px;
+  line-height: 18px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
 
+#ara_content .table-row-height td{
+  height: 28px;
+  line-height: 28px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+#ara_content .table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color:#fff !important;
+}
+
+#ara_content tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color:#fff !important;
+}
+
+#ara_content tbody tr{ cursor:pointer; }
 
 /* ===== INFO TEXT ===== */
 #createdbMenuLink{
   color: rgba(56,189,248,.95);
   font-weight: 900;
 }
-#createdbMenuLink:hover{
-  text-decoration: underline;
-}
+#createdbMenuLink:hover{ text-decoration: underline; }
 
 /* ===== ERROR ===== */
 #errorDiv{
@@ -184,31 +261,12 @@
   font-weight: 900;
 }
 
-#ara_content .aramagroup-box{
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center;
-  gap: 10px;
-}
 
-#ara_content tbody tr td{
-  color: rgba(255,255,255,.78);
-  transition: color .12s ease, background .12s ease;
-}
-
-/* HOVER SATIRI – FOREGROUND FIX */
-#ara_content .table-hover tbody tr:hover td{
-  color: #ffffff !important;
-}
-
-#ara_content tbody tr{
-  cursor: pointer;
-}
 </style>
 
-	<div class="card p-1 mb-4">
+	<div class="ust-container">
 		<form id="userForm">
-			<div class="row">
+			<div class="form-row">
 				<div class="form-group"  style="width:200px;">
 					<label for="user_modul">User Modul:</label> 
 					<div style="position:relative; flex:1;width:100%;">
@@ -240,7 +298,7 @@
           			</div>
 				</div>
 			</div>
-			<div class="row"  style="padding-top:5px;">
+			<div class="form-row"  style="padding-top:5px;">
 				<div class="form-group" style="width:200px;">
 					<label for="user_prog_kodu" >Program Kodu:</label> 
 					<input 	type="text" class="form-control" style="margin-top:10px;" id="user_prog_kodu"
@@ -256,9 +314,9 @@
 						type="password" class="form-control" id="user_pwd_server"
 						maxlength="50">
 				</div>
-				<div class="form-group" style="width:250px;">
+				<div class="form-group"  >
 					<label for="user_ip">IP:</label> 
-					<input type="text" style="margin-top:10px;" class="form-control" id="user_ip" maxlength="50">
+					<input type="text" style="margin-top:10px;width:250px;" class="form-control" id="user_ip" maxlength="50">
 				</div>
 				<div class="form-group" style="width:200px;visibility:hidden;" id="superviserdiv">
 					<label for="user_pwd_server">Superviser:</label> 
@@ -266,7 +324,7 @@
 				</div>
 				
 			</div>
-			<div class="row mt-4" >
+			<div class="form-row mt-4" >
 				<div class="form-group" style="width:200px;display:none;" id="izinlimidiv" >
 					<div class="form-check">
 						<input type="checkbox" class="form-check-input" id="izinlimi">
@@ -286,7 +344,7 @@
 					</div>
 				</div>
 			</div>
-		<div class="aramagroup-box" style="margin-top: 5px;">
+			<div class="aramagroup-box" style="margin-top: 5px;">
 			<span style="padding-left: 5px;"></span>
 			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERDETAIL.checkFile()" id="checkfilebutton">
 				<i class="fa fa-retweet"></i>
@@ -306,13 +364,16 @@
 		</div>
 		</form>
 	</div>
+	
+	
 	<p style="font-weight:bold; cursor: pointer;" id="createdbMenuLink">
     Yeni veritabanını Menuden "Yeni Veritabani Olustur" bolumunden yapabilirsiniz
 	</p>	
 	<p></p>	
 	<input type="hidden" id="hiddenId" name="hiddenId">
 	<div id="errorDiv"></div>
-	<div id="moduleTable" class="card p-4">
+	
+	<div id="moduleTable" class="table-container">
 		<table class="table table-bordered table-hover table-row-height">
 			<thead class="thead-dark">
 				<tr>

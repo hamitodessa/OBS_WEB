@@ -19,8 +19,8 @@
 
 /* ===== BUTTON / SELECT / INPUT ===== */
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -41,8 +41,8 @@
 
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 48px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -207,13 +207,13 @@
 </style>
 
 <div class="card p-1">
-	<div style="display: flex; align-items: center">
+	<div style="display: flex; align-items: center;gap:10px;">
 		<button class="btn btn-primary" type="button" id="stokyenileButton"
-			style="margin-left: 10px" onclick="openFirstModal('stokrapor')">Filtre</button>
-		<button class="btn btn-primary" style="margin-left: 10px"
+			 onclick="openFirstModal('stokrapor')">Filtre</button>
+		<button class="btn btn-primary"  
 			type="button" id="stokrapreportDownload"
 			onclick="OBS.STKRAP.stokdownloadReport()" disabled>Excel Indir</button>
-		<button class="btn btn-primary" style="margin-left: 10px"
+		<button class="btn btn-primary"  
 			type="button" id="stokrapmailButton" onclick="OBS.STKRAP.stokmailAt()" disabled>Email
 			Gonder</button>
 	</div>

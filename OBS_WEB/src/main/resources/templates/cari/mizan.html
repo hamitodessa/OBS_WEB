@@ -21,8 +21,8 @@
 
 /* ===== BUTTON / SELECT / INPUT ===== */
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -42,8 +42,8 @@
 
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 48px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -73,6 +73,9 @@ height: 75vh;
   margin-top:10px;
   
   background: rgba(255,255,255,.03);
+  
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
 
 /* Scrollbar (Chrome/Edge) */
@@ -90,6 +93,7 @@ height: 75vh;
 /* ===== TABLE ===== */
 #ara_content table{
   width:100%;
+   min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -210,12 +214,12 @@ height: 75vh;
 }
 </style>
 <div class="card p-1">
-	<div style="display: flex; align-items: center">
+	<div style="display: flex; align-items: center;gap:10px;">
 		<button class="btn btn-primary" type="button" id="mizyenileButton"
 			style="margin-left: 10px" onclick="openFirstModal('mizan')">Filtre</button>
-		<div style="position: relative; width: 150px; margin-left: 10px;">
+		<div style="position: relative; width: 150px; ">
 			<select id="reportFormat" class="form-select"
-				style="width: 150px; margin-left: 10px"
+				style="width: 150px; "
 				onchange="OBS.MIZAN.mizdownloadReport(this.value)" disabled>
 				<option value="" disabled selected>Rapor Indir</option>
 				<option value="pdf">PDF</option>
@@ -225,7 +229,7 @@ height: 75vh;
 			</select> <span
 				style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
 		</div>
-		<button class="btn btn-primary" style="margin-left: 10px"
+		<button class="btn btn-primary" 
 			type="button" id="mailButton" onclick="OBS.MIZAN.mizmailAt()" disabled>
 			Email Gonder</button>
 	</div>

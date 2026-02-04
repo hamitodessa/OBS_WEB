@@ -20,8 +20,8 @@
 
 /* BUTTON */
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -45,6 +45,21 @@
   transform:none !important;
 }
 
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+}
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65);
+  color: #fff;
+}
 /* ERROR */
 #ara_content .irsrap #errorDiv{
   display:none;
@@ -288,12 +303,12 @@
 
 <div class="irsrap">
 	<div class="card p-1">
-		<div style="display: flex; align-items: center;">
+		<div style="display: flex; align-items: center;gap:10px;">
 			<button class="btn btn-primary" type="button" id="irsrapyenileButton"
-				style="margin-left: 10px;" onclick="openFirstModal('irsrapor')">Filtre</button>
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="irsrapreportFormat"
+				  onclick="openFirstModal('irsrapor')">Filtre</button>
+			<button class="btn btn-primary"  type="button" id="irsrapreportFormat"
 			 onclick="OBS.IRSRAPOR.irsrapdownloadReport()" disabled>Excel Indir</button>
-			<button class="btn btn-primary" style="margin-left: 10px;" type="button" id="irsrapmailButton"
+			<button class="btn btn-primary"  type="button" id="irsrapmailButton"
 			 onclick="OBS.IRSRAPOR.irsrapmailAt()" disabled>Email Gonder</button>
 		</div>
 	</div>

@@ -29,7 +29,9 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
     e.innerText = msg || "Beklenmeyen bir hata oluştu.";
   };
 
-  F.cursor = (mode) => { document.body.style.cursor = mode || "default"; };
+  F.cursor = (mode) => {
+    document.body.style.cursor = mode || "default";
+  };
 
   F.disableBtn = (id, yes, textYes, textNo) => {
     const b = F.byId(id);
@@ -37,6 +39,12 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
     b.disabled = !!yes;
     if (yes && textYes != null) b.innerText = textYes;
     if (!yes && textNo != null) b.innerText = textNo;
+  };
+
+  F.setText = (id, val) => {
+    const el = F.byId(id);
+    if (!el) return;
+    el.innerText = val ?? "";
   };
 
   /* =========================
@@ -103,31 +111,31 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
   F.getfatraporDTO = function () {
     const hf = F.byId("fatrapBilgi");
     const hiddenFieldValue = hf ? (hf.value || "") : "";
-    const parsedValues = hiddenFieldValue.split(",");
+    const p = hiddenFieldValue.split(",");
 
     return {
-      fatno1: parsedValues[0],
-      fatno2: parsedValues[1],
-      anagrp: parsedValues[2],
-      tar1: parsedValues[3],
-      tar2: parsedValues[4],
-      altgrp: parsedValues[5],
-      ckod1: parsedValues[6],
-      ckod2: parsedValues[7],
-      depo: parsedValues[8],
-      adr1: parsedValues[9],
-      adr2: parsedValues[10],
-      turu: parsedValues[11],
-      ukod1: parsedValues[12],
-      ukod2: parsedValues[13],
-      tev1: parsedValues[14],
-      tev2: parsedValues[15],
-      okod1: parsedValues[16],
-      okod2: parsedValues[17],
-      gruplama: parsedValues[18],
-      dvz1: parsedValues[19],
-      dvz2: parsedValues[20],
-      caradr: parsedValues[21]
+      fatno1: p[0],
+      fatno2: p[1],
+      anagrp: p[2],
+      tar1: p[3],
+      tar2: p[4],
+      altgrp: p[5],
+      ckod1: p[6],
+      ckod2: p[7],
+      depo: p[8],
+      adr1: p[9],
+      adr2: p[10],
+      turu: p[11],
+      ukod1: p[12],
+      ukod2: p[13],
+      tev1: p[14],
+      tev2: p[15],
+      okod1: p[16],
+      okod2: p[17],
+      gruplama: p[18],
+      dvz1: p[19],
+      dvz2: p[20],
+      caradr: p[21]
     };
   };
 
@@ -148,14 +156,15 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
       const totalRecords = response?.totalRecords || 0;
       F.totalPages = Math.ceil(totalRecords / F.pageSize);
     } catch (error) {
-      F.errShow((error && error.message) ? error.message : String(error));
+      F.errShow(error?.message || String(error));
+    } finally {
       F.cursor("default");
     }
   };
 
   F.fatdoldur = async function () {
     F.cursor("wait");
-    await F.toplampagesize();    // ✅ await (yoksa sayfa sayısı yetişmiyor)
+    await F.toplampagesize();      // ✅ await
     await F.fatfetchTableData(0);
   };
 
@@ -166,12 +175,14 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
     const fatraporDTO = F.getfatraporDTO();
     fatraporDTO.page = page;
     fatraporDTO.pageSize = F.pageSize;
+
     F.currentPage = page;
 
     F.errClear();
     F.cursor("wait");
 
-    F.disableBtn("fatrapyenileButton", true, "İşleniyor...", "Yenile");
+    // UI
+    F.disableBtn("fatrapyenileButton", true, "İşleniyor...", "Filtre");
 
     const mainTableBody = F.byId("mainTableBody");
     if (mainTableBody) mainTableBody.innerHTML = "";
@@ -188,6 +199,18 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
 
       const res = response;
       const raporturu = res.raporturu;
+
+      // ✅ fkodu’da 1. ve 2. sütun birbirine girmesin: tabloya class bağla
+      const table = document.querySelector("#main-table");
+      if (table) {
+        if (raporturu === "fkodu") {
+          table.classList.remove("has-toggle");
+          table.classList.add("no-toggle");
+        } else {
+          table.classList.add("has-toggle");
+          table.classList.remove("no-toggle");
+        }
+      }
 
       // HEADER
       let sqlHeaders = [];
@@ -260,14 +283,14 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
           totaltutar += (rowData.Toplam_Tutar || 0);
         }
 
-        mainTableBody.appendChild(row);
+        if (mainTableBody) mainTableBody.appendChild(row);
 
-        // details row
+        // details row (fkodu’da da koyuyoruz ama detaysız kalacak)
         const detailsRow = document.createElement("tr");
         detailsRow.classList.add("details-row");
         detailsRow.style.display = "none";
         detailsRow.innerHTML = `<td colspan="${thCount}"></td>`;
-        mainTableBody.appendChild(detailsRow);
+        if (mainTableBody) mainTableBody.appendChild(detailsRow);
 
         // fkodu detaysız
         if (raporturu === "fkodu") return;
@@ -275,6 +298,7 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
         const toggle = row.querySelector(".toggle-button");
         if (!toggle) return;
 
+        // selected satır
         row.addEventListener("click", () => {
           document.querySelectorAll("#main-table tbody tr.selected").forEach(r => r.classList.remove("selected"));
           row.classList.add("selected");
@@ -286,7 +310,7 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
           const isOpen = (detailsRow.style.display === "table-row");
 
           // tek satır açık kalsın
-          document.querySelectorAll("#main-table tr.details-row").forEach(r => r.style.display = "none");
+          document.querySelectorAll("#main-table tr.details-row").forEach(r => (r.style.display = "none"));
           document.querySelectorAll("#main-table tbody tr").forEach(r => r.classList.remove("selected"));
           document.querySelectorAll("#main-table .toggle-button").forEach(x => {
             if (x.textContent === "-") x.textContent = "+";
@@ -307,7 +331,7 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
           F.cursor("wait");
           try {
             const detResp = await F.fetchDetails(rowData.Fatura_No, rowData.Hareket);
-            const det = (detResp && detResp.data) ? detResp.data : [];
+            const det = detResp?.data ? detResp.data : [];
 
             let html = `
               <div class="details-wrap">
@@ -371,22 +395,29 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
         });
       });
 
-      // TOPLAM
+      // TOPLAM (null guard)
       if (raporturu === "fno") {
-        F.byId("toplam-7").innerText = formatNumber3(totalmiktar);
-        F.byId("toplam-9").innerText = formatNumber2(totaltutar);
+        F.setText("toplam-7", formatNumber3(totalmiktar));
+        F.setText("toplam-9", formatNumber2(totaltutar));
       } else if (raporturu === "fkodu") {
-        F.byId("toplam-4").innerText = formatNumber3(totalmiktar);
-        F.byId("toplam-8").innerText = formatNumber2(totaltutar);
+        F.setText("toplam-4", formatNumber3(totalmiktar));
+        F.setText("toplam-8", formatNumber2(totaltutar));
       } else if (raporturu === "fnotar") {
-        F.byId("toplam-6").innerText = formatNumber3(totalmiktar);
-        F.byId("toplam-10").innerText = formatNumber2(totaltutar);
+        F.setText("toplam-6", formatNumber3(totalmiktar));
+        F.setText("toplam-10", formatNumber2(totaltutar));
       }
 
+      // Excel + Mail butonlarını aktif et (data geldiyse)
+      const hasData = (res.data || []).length > 0;
+      const excelBtn = F.byId("fatrapreportFormat");
+      const mailBtn = F.byId("fatrapmailButton");
+      if (excelBtn) excelBtn.disabled = !hasData;
+      if (mailBtn) mailBtn.disabled = !hasData;
+
     } catch (error) {
-      F.errShow((error && error.message) ? error.message : String(error));
+      F.errShow(error?.message || String(error));
     } finally {
-      F.disableBtn("fatrapyenileButton", false, "İşleniyor...", "Yenile");
+      F.disableBtn("fatrapyenileButton", false, "İşleniyor...", "Filtre");
       F.cursor("default");
     }
   };
@@ -398,24 +429,20 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
     const table = document.querySelector("#main-table");
     const tfoot = table?.querySelector("tfoot");
     if (!tfoot) return;
-    tfoot.querySelectorAll("th").forEach(th => th.textContent = "");
+    tfoot.querySelectorAll("th").forEach(th => (th.textContent = ""));
   };
 
   /* =========================
      DETAILS FETCH
      ========================= */
   F.fetchDetails = async function (evrakNo, cins) {
-    try {
-      const gircik = (cins === "Alis") ? "G" : "C";
-      const response = await fetchWithSessionCheck("stok/fatdetay", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ evrakNo, gircik }),
-      });
-      return response;
-    } catch (error) {
-      throw error;
-    }
+    const gircik = (cins === "Alis") ? "G" : "C";
+    const response = await fetchWithSessionCheck("stok/fatdetay", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ evrakNo, gircik }),
+    });
+    return response;
   };
 
   /* =========================
@@ -434,9 +461,8 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
 
   F.updateTableHeadersfno = function (headers) {
     const thead = document.querySelector("#main-table thead");
-    const table = document.querySelector("#main-table");
     const tfoot = F._ensureTfoot();
-    if (!thead || !table || !tfoot) return;
+    if (!thead || !tfoot) return;
 
     thead.innerHTML = "";
     const trHead = document.createElement("tr");
@@ -448,7 +474,6 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
       if (index >= headers.length - 3) th.classList.add("double-column");
       trHead.appendChild(th);
     });
-
     thead.appendChild(trHead);
 
     tfoot.innerHTML = "";
@@ -475,9 +500,8 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
 
   F.updateTableHeadersfkodu = function (headers) {
     const thead = document.querySelector("#main-table thead");
-    const table = document.querySelector("#main-table");
     const tfoot = F._ensureTfoot();
-    if (!thead || !table || !tfoot) return;
+    if (!thead || !tfoot) return;
 
     thead.innerHTML = "";
     const trHead = document.createElement("tr");
@@ -489,7 +513,6 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
       if (index >= headers.length - 5) th.classList.add("double-column");
       trHead.appendChild(th);
     });
-
     thead.appendChild(trHead);
 
     tfoot.innerHTML = "";
@@ -516,9 +539,8 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
 
   F.updateTableHeadersfnotar = function (headers) {
     const thead = document.querySelector("#main-table thead");
-    const table = document.querySelector("#main-table");
     const tfoot = F._ensureTfoot();
-    if (!thead || !table || !tfoot) return;
+    if (!thead || !tfoot) return;
 
     thead.innerHTML = "";
     const trHead = document.createElement("tr");
@@ -530,7 +552,6 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
       if (index >= headers.length - 5) th.classList.add("double-column");
       trHead.appendChild(th);
     });
-
     thead.appendChild(trHead);
 
     tfoot.innerHTML = "";
@@ -572,6 +593,8 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
     modal.show();
 
     F.cursor("wait");
+    F.errClear();
+
     try {
       const response = await fetchWithSessionCheck("stok/anadepo", {
         method: "POST",
@@ -606,7 +629,7 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
       fillSelect(dpoSelect, dpo, "DEPO");
 
     } catch (error) {
-      F.errShow(`Bir hata oluştu: ${error.message}`);
+      F.errShow(`Bir hata oluştu: ${error?.message || error}`);
     } finally {
       F.cursor("default");
     }
@@ -614,22 +637,32 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
 
   /* =========================
      DOWNLOAD (jQuery yok)
+     - buton id: fatrapreportFormat
      ========================= */
   F.fatrapdownloadReport = async function () {
     F.errClear();
 
     F.cursor("wait");
-    F.disableBtn("indirButton", true, "İşleniyor...", "Rapor İndir");
-    const yenile = F.byId("yenileButton");
-    if (yenile) yenile.disabled = true;
+    F.disableBtn("fatrapreportFormat", true, "İşleniyor...", "Excel Indir");
+    const filtreBtn = F.byId("fatrapyenileButton");
+    if (filtreBtn) filtreBtn.disabled = true;
 
     const table = document.querySelector("#main-table");
+    if (!table) {
+      F.errShow("Tablo bulunamadı.");
+      F.cursor("default");
+      return;
+    }
+
     const headers = [];
     const rows = [];
 
     table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
 
+    // details-row satırlarını mail/excel’e katma
     table.querySelectorAll("tbody tr").forEach(tr => {
+      if (tr.classList.contains("details-row")) return;
+
       const rowData = {};
       let isEmpty = true;
 
@@ -665,16 +698,17 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
         throw new Error("Dosya indirilemedi.");
       }
     } catch (error) {
-      F.errShow(error?.message);
+      F.errShow(error?.message || String(error));
     } finally {
-      F.disableBtn("indirButton", false, "İşleniyor...", "Rapor İndir");
-      if (yenile) yenile.disabled = false;
+      F.disableBtn("fatrapreportFormat", false, "İşleniyor...", "Excel Indir");
+      if (filtreBtn) filtreBtn.disabled = false;
       F.cursor("default");
     }
   };
 
   /* =========================
-     MAIL (aynı mantık, jQuery yok zaten)
+     MAIL
+     - buton id: fatrapmailButton
      ========================= */
   F.fatrapmailAt = function () {
     localStorage.removeItem("tableData");
@@ -684,12 +718,20 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
     F.cursor("wait");
 
     const table = document.querySelector("#main-table");
+    if (!table) {
+      F.errShow("Tablo bulunamadı.");
+      F.cursor("default");
+      return;
+    }
+
     const headers = [];
     const rows = [];
 
     table.querySelectorAll("thead th").forEach(th => headers.push(th.innerText.trim()));
 
     table.querySelectorAll("tbody tr").forEach(tr => {
+      if (tr.classList.contains("details-row")) return;
+
       const rowData = {};
       let isEmpty = true;
 

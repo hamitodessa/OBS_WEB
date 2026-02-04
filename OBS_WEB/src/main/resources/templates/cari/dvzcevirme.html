@@ -13,10 +13,10 @@
 #ara_content .card{
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  border-radius: 18px !important;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 
 /* ===== BUTTON / SELECT / INPUT ===== */
@@ -55,6 +55,8 @@
   background: rgba(8,14,26,.65);
   color: #fff;
 }
+
+
 #ara_content input[type="date"]{ color-scheme: dark; }
 
 
@@ -75,7 +77,8 @@ height: 75vh;
   border:1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
 
-  
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
 
 /* Scrollbar (Chrome/Edge) */
@@ -93,6 +96,7 @@ height: 75vh;
 /* ===== TABLE ===== */
 #ara_content table{
   width:100%;
+   min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -167,9 +171,18 @@ height: 75vh;
   position: sticky;
   bottom: 0;
   z-index: 2;
-  background: rgba(255,255,255,.04);
+ 
   border-color: rgba(255,255,255,.08);
   font-weight: 900;
+}
+
+#ara_content tfoot td{
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
 }
 
 /* ===== PAGINATION ===== */
@@ -198,18 +211,21 @@ height: 75vh;
   font-weight: 900;
 }
 
-#ara_content #hesapAdi{
-  color: rgba(255,255,255,.92) !important;
-  font-weight: 900;
+#ara_content label{
+  color: rgba(255,255,255,.84);
+  font-weight: 800;
+  font-size: 14px;
+ 
 }
+
 </style>
 <div class="card p-1">
-	<div style="display: flex; align-items: center">
+	<div style="display: flex; align-items: center;gap:10px;">
 		<button class="btn btn-primary" type="button" id="dvzyenileButton"
 			style="margin-left: 10px" onclick="openFirstModal('dvzcevirme')">Yenile</button>
-		<div style="position: relative; width: 150px; margin-left: 10px;">
+		<div style="position: relative; width: 150px; ">
 			<select id="reportFormat" class="form-select"
-				style="width: 150px; margin-left: 10px"
+				style="width: 150px; "
 				onchange="OBS.DVZ.dvzdownloadReport(this.value)" disabled>
 				<option value="" disabled selected>Rapor Indir</option>
 				<option value="pdf">PDF</option>
@@ -219,13 +235,13 @@ height: 75vh;
 			</select> <span
 				style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
 		</div>
-		<button class="btn btn-primary" style="margin-left: 10px"
+		<button class="btn btn-primary"
 			type="button" id="mailButton" onclick="OBS.DVZ.dvzmailAt()" disabled>Email
 			Gonder</button>
 		<label id="hesapAdi"
-			style="width: 300px; font-weight: bold; margin-left: 40px">.....</label>
+			style="width: 300px; ">.....</label>
 		<label id="dvzaciklama"
-			style="width: 300px; font-weight: bold; margin-left: 40px"></label>
+			style="width: 300px;"></label>
 	</div>
 </div>
 <div id="errorDiv"></div>
@@ -255,8 +271,8 @@ height: 75vh;
 					<td></td>
 					<td></td>
 					<td></td>
-					<td id="dvzBakiye" style="text-align: right; font-weight: bold"></td>
-					<td id="bakiye" style="text-align: right; font-weight: bold"></td>
+					<td></td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>

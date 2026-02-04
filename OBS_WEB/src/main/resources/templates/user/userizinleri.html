@@ -1,11 +1,9 @@
 <style>
 /* =========================
-   S026 CAM – USER İZİNLERİ
+   S026 CAM – USER İZİNLERİ (CLEAN FINAL / KERESTE MANTIĞI)
    ========================= */
 
-#ara_content{
-  color: rgba(255,255,255,.92);
-}
+#ara_content{ color: rgba(255,255,255,.92); }
 
 /* cam card */
 #ara_content .card{
@@ -22,6 +20,7 @@
   font-weight: 900;
   font-size: 13px;
   color: rgba(255,255,255,.82);
+  white-space: nowrap;
 }
 
 /* input/select */
@@ -32,6 +31,7 @@
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
+  font-weight: 900;
 }
 
 #ara_content .form-control:focus,
@@ -53,23 +53,89 @@
   margin-left: 6px;
 }
 
-/* ===== toolbar (butonlar) ===== */
-#ara_content .aramagroup-box{
-  box-sizing: border-box;
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center;
-  gap: 10px;
+/* =====================================================
+   FORM WRAPPER (KERESTE MANTIĞI) – taşarsa yatay scroll
+   ===================================================== */
+#ara_content .userizin-box{
 
-  height: auto;
+
+  background: rgba(8,14,26,.18);
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: 18px;
   padding: 10px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.05);
+  margin: 0;
+
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
+}
+#ara_content .userizin-box::-webkit-scrollbar{ height: 10px; }
+#ara_content .userizin-box::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+#ara_content .userizin-box::-webkit-scrollbar-thumb{
+  background: linear-gradient(135deg, rgba(56,189,248,.65), rgba(34,197,94,.55));
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56,189,248,.25), inset 0 0 0 1px rgba(255,255,255,.20);
 }
 
-/* Buttons (bootstrap override) */
-#ara_content .btn-primary{
+/* form strip: sığarsa 100%, taşarsa içerik kadar */
+#ara_content #userForm{
+  display:block !important;
+  width: max-content !important;
+  min-width: 100% !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+
+/* bootstrap .row yerine: form-row */
+#ara_content #userForm .form-row{
+  display:flex !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-end;
+  gap: 10px 14px !important;
+  margin: 0 0 8px 0 !important;
+
+  width: max-content !important;
+  min-width: 100% !important;
+}
+#ara_content #userForm .form-row:last-child{ margin-bottom: 0 !important; }
+
+/* form-group sabit */
+#ara_content #userForm .form-group{
+  flex: 0 0 auto !important;
+}
+
+/* checkbox satırı: hizalı dursun */
+#ara_content #userForm .form-row.checks{
+  align-items: center !important;
+  margin-top: 10px !important;
+}
+
+/* ===== toolbar (butonlar) ===== */
+#ara_content .aramagroup-box{
+  box-sizing:border-box;
+  display:flex !important;
+  flex-direction: row !important;
+  align-items:center;
+  gap:10px;
+
+  padding:10px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.05);
+  margin-top: 10px;
+}
+
+/* buttons */
+#ara_content .btn-primary,
+#ara_content .btn.btn-secondary{
   border-radius: 10px;
   font-weight: 900;
   height: 40px;
@@ -77,61 +143,65 @@
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
 }
-#ara_content .btn-primary:hover{
+#ara_content .btn-primary:hover,
+#ara_content .btn.btn-secondary:hover{
   background: rgba(56,189,248,.26) !important;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
 
-#ara_content .btn.btn-secondary{
-  border-radius: 10px;
-   background: rgba(56,189,248,.18) !important;
-  border: 1px solid rgba(56,189,248,.35) !important;
-  color: rgba(255,255,255,.95) !important;
+/* =====================================================
+   TABLE CONTAINER
+   ===================================================== */
+#ara_content .table-container{
+  height: 35vh;
+  display:flex;
+  flex-direction:column;
+  margin-top:10px;
+  padding:0;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+
+  overflow:auto;
+
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
 }
-#ara_content .btn.btn-secondary:hover{
-   background: rgba(56,189,248,.26) !important;
-  border-color: rgba(56,189,248,.55) !important;
-  transform: translateY(-1px);
+#ara_content .table-container::-webkit-scrollbar{ width:10px; height:10px; }
+#ara_content .table-container::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border:2px solid rgba(0,0,0,.20);
+  border-radius:999px;
 }
-/* ===== table ===== */
-#ara_content table{
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
-  border-radius: 16px;
+#ara_content .table-container::-webkit-scrollbar-track{
+  background: rgba(0,0,0,.18);
+  border-radius:999px;
 }
 
-/* header */
+/* table */
+#ara_content table{
+  width:100%;
+  min-width:1000px;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:16px;
+  overflow:hidden;
+  font-size:13px;
+}
+
 #ara_content .table .thead-dark th{
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
-  color: #fff !important;
-  border: none !important;
-  font-size: 13px;
-  font-weight: 900;
-  text-align: center;
-}
-
-/* body */
-#ara_content tbody td{
-  background: rgba(255,255,255,.04);
-  border-color: rgba(255,255,255,.08);
-  font-size: 13px;
-  text-align: center;
-  color: rgba(255,255,255,.78);
-  transition: color .12s ease, background .12s ease;
-}
-
-/* hover: background + foreground */
-#ara_content .table-hover tbody tr:hover td{
-  background: rgba(56,189,248,.14) !important;
-  color: #fff !important;
-}
-
-/* satır yüksekliği (senin 10px çok küçük, ama istersen kalsın) */
-#ara_content .table-row-height td{
-  height: 28px;
-  line-height: 28px;
+  color:#fff !important;
+  border:none !important;
+  font-size:13px;
+  font-weight:900;
+  text-align:center;
 }
 
 #ara_content th,
@@ -142,10 +212,28 @@
   vertical-align: middle;
 }
 
+#ara_content tbody td{
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.08);
+  font-size: 13px;
+  text-align: center;
+  color: rgba(255,255,255,.78);
+  transition: color .12s ease, background .12s ease;
+}
 
-/* hata mesajı */
-#errorDiv{
- display:none; 
+#ara_content .table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #fff !important;
+}
+
+#ara_content .table-row-height td{
+  height: 28px;
+  line-height: 28px;
+}
+
+/* error */
+#ara_content #errorDiv{
+  display:none;
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
@@ -156,133 +244,139 @@
 }
 </style>
 
-	<div class="card p-1 mb-4">
-		<form id="userForm">
-			<div class="row">
-				<div class="form-group"  style="width:200px;">
-					<label for="user_modul">User Modul:</label> 
-					<div style="position:relative; flex:1;width:100%;">
-					<select   style="margin-top:10px;"
-						class="form-select" id="user_modul" name="user_modul"
-						onchange=detailoku()>
-						<option value="Cari Hesap">Cari Hesap</option>
-						<option value="Fatura">Fatura</option>
-						<option value="Kambiyo">Kambiyo</option>
-						<option value="Adres">Adres</option>
-						<option value="Kur">Kur</option>
-						<option value="Kereste">Kereste</option>
-					</select>
-					<span style=" position:absolute;top:50%;right:12px;
-              				transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
-              				font-weight:700; line-height:1; ">▼</span>
-          			</div>
-				</div>
-				<div class="form-group" style="width:200px;">
-					<label for="user_role">Hangi Sql</label> 
-					<div style="position:relative; flex:1;width:100%;">
-					<select style="margin-top:10px;"  
-						class="form-select" id="hangi_sql" onchange="OBS.USERIZIN.sqlchanged()" name="hangi_sql">
-						<option value="MS SQL">MS SQL</option>
-						<option value="MY SQL">MY SQL</option>
-						<option value="PG SQL">PG SQL</option>
-					</select>
-					<span style=" position:absolute;top:50%;right:12px;
-              				transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
-              				font-weight:700; line-height:1; ">▼</span>
-          			</div>
-				</div>
-				<div class="form-group" style="width:250px;">
-					<label for="user_role">Admin Hesaba Bagli Kullanici</label> 
-					<div style="position:relative; flex:1;width:100%;">
-					<select style="margin-top:10px;" class="form-select" id="kullanici" name="kullanici" onchange=OBS.USERIZIN.detailoku() >
-					</select>
-					<span style=" position:absolute;top:50%;right:12px;
-              				transform:translateY(-50%);pointer-events:none; color:#fff;  text-shadow:0 0 6px rgba(255,255,255,.35);
-              				font-weight:700; line-height:1; ">▼</span>
-          			</div>
-				</div>
-			</div>
-			<div class="row"  style="padding-top:5px;">
-				<div class="form-group" style="width:200px;">
-					<label for="user_prog_kodu" >Program Kodu:</label> 
-					<input 	type="text" class="form-control" style="margin-top:10px;" id="user_prog_kodu"
-						maxlength="10">
-				</div>
-				<div class="form-group" style="width:200px;">
-					<label for="user_server">Server Kull</label> <input type="text" style="margin-top:10px;"
-						class="form-control" id="user_server" maxlength="50">
-				</div>
-				<div class="form-group" style="width:200px;">
-					<label for="user_pwd_server">Şifre Sunucu:</label> <input style="margin-top:10px;"
-						type="password" class="form-control" id="user_pwd_server"
-						maxlength="50">
-				</div>
-				<div class="form-group" style="width:200px;">
-					<label for="user_ip">IP:</label> <input type="text" style="margin-top:10px;"
-						class="form-control" id="user_ip" maxlength="50">
-				</div>
-				<div class="form-group" style="width:200px;visibility:hidden;" id="superviserdiv">
-					<label for="user_pwd_server">Superviser:</label> 
-					<input style="margin-top:10px;" class="form-control" id="superviser" maxlength="50">
-				</div>
-			</div>
-			<div class="row mt-4" >
-				<div class="form-group" style="width:200px;" id="izinlimidiv" >
-					<div class="form-check">
-						<input type="checkbox" class="form-check-input" id="izinlimi">
-						<label class="form-check-label" for="izinlimi">İzinli mi</label>
-					</div>
-				</div>
-				<div class="form-group" style="width:200px;" id="calisanmidiv">
-					<div class="form-check">
-						<input type="checkbox" class="form-check-input" id="calisanmi">
-						<label class="form-check-label" for="calisanmi">Çalışan mı</label>
-					</div>
-				</div>
-				<div class="form-group" style="width:200px;" id="logiznidiv">
-					<div class="form-check">
-						<input type="checkbox" class="form-check-input" id="log">
-						<label class="form-check-label" for="log">Log</label>
-					</div>
-				</div>
-			</div>
-			<div class="aramagroup-box" style="margin-top: 10px;margin-bottom: 10px;">
-			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.save()">
-				<i class="fa fa-save"></i>
-			</button>
-			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.clearForm(true)">
-				<i class="fa fa-plus"></i>
-			</button>
-			<span style="padding-left: 5px;"></span>
-			<button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.confirmDelete()">
-				<i class="fa fa-trash"></i>
-			</button>
-			</div>
-		</form>
-	</div>
-	
-	<div id="errorDiv"></div>
-	<div id="moduleTable" class="card p-4" style="margin-top: 5px;">
-		<table class="table table-bordered table-hover table-row-height">
-			<thead class="thead-dark">
-				<tr>
-					<th style="display: none;">ID</th>
-					<th>Program Kodu</th>
-					<th>Server Kullanici</th>
-					<th>Şifre Sunucu</th>
-					<th>Ip</th>
-					<th>User Modul</th>
-					<th>Hangi Sql</th>
-					<th>İzinli mi</th>
-					<th>Çalışan mı</th>
-					<th>Log</th>
-					<th>Superviser</th>
-				</tr>
-			</thead>
-			<tbody id="tableBody">
-			</tbody>
-		</table>
-	<input type="hidden" id="hiddenId" name="hiddenId">
+
+
+  <!-- KERESTE MANTIĞI WRAPPER -->
+  <div class="userizin-box">
+    <form id="userForm">
+
+      <!-- SATIR-1 -->
+      <div class="form-row">
+        <div class="form-group" style="width:200px;">
+          <label for="user_modul">User Modul:</label>
+          <div style="position:relative; flex:1;width:100%;">
+            <select style="margin-top:10px;" class="form-select" id="user_modul" name="user_modul" onchange="detailoku()">
+              <option value="Cari Hesap">Cari Hesap</option>
+              <option value="Fatura">Fatura</option>
+              <option value="Kambiyo">Kambiyo</option>
+              <option value="Adres">Adres</option>
+              <option value="Kur">Kur</option>
+              <option value="Kereste">Kereste</option>
+            </select>
+            <span style="position:absolute;top:50%;right:12px;transform:translateY(-50%);pointer-events:none;color:#fff;text-shadow:0 0 6px rgba(255,255,255,.35);font-weight:700;line-height:1;">▼</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="width:200px;">
+          <label for="hangi_sql">Hangi Sql</label>
+          <div style="position:relative; flex:1;width:100%;">
+            <select style="margin-top:10px;" class="form-select" id="hangi_sql" name="hangi_sql" onchange="OBS.USERIZIN.sqlchanged()">
+              <option value="MS SQL">MS SQL</option>
+              <option value="MY SQL">MY SQL</option>
+              <option value="PG SQL">PG SQL</option>
+            </select>
+            <span style="position:absolute;top:50%;right:12px;transform:translateY(-50%);pointer-events:none;color:#fff;text-shadow:0 0 6px rgba(255,255,255,.35);font-weight:700;line-height:1;">▼</span>
+          </div>
+        </div>
+
+        <div class="form-group" style="width:250px;">
+          <label for="kullanici">Admin Hesaba Bagli Kullanici</label>
+          <div style="position:relative; flex:1;width:100%;">
+            <select style="margin-top:10px;" class="form-select" id="kullanici" name="kullanici" onchange="OBS.USERIZIN.detailoku()"></select>
+            <span style="position:absolute;top:50%;right:12px;transform:translateY(-50%);pointer-events:none;color:#fff;text-shadow:0 0 6px rgba(255,255,255,.35);font-weight:700;line-height:1;">▼</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SATIR-2 -->
+      <div class="form-row" style="padding-top:5px;">
+        <div class="form-group" style="width:200px;">
+          <label for="user_prog_kodu">Program Kodu:</label>
+          <input type="text" class="form-control" style="margin-top:10px;" id="user_prog_kodu" maxlength="10">
+        </div>
+
+        <div class="form-group" style="width:200px;">
+          <label for="user_server">Server Kull</label>
+          <input type="text" class="form-control" style="margin-top:10px;" id="user_server" maxlength="50">
+        </div>
+
+        <div class="form-group" style="width:200px;">
+          <label for="user_pwd_server">Şifre Sunucu:</label>
+          <input type="password" class="form-control" style="margin-top:10px;" id="user_pwd_server" maxlength="50">
+        </div>
+
+        <div class="form-group" style="width:200px;">
+          <label for="user_ip">IP:</label>
+          <input type="text" class="form-control" style="margin-top:10px;" id="user_ip" maxlength="50">
+        </div>
+
+        <div class="form-group" style="width:200px;visibility:hidden;" id="superviserdiv">
+          <label for="superviser">Superviser:</label>
+          <input style="margin-top:10px;" class="form-control" id="superviser" maxlength="50">
+        </div>
+      </div>
+
+      <!-- SATIR-3: CHECKBOX -->
+      <div class="form-row checks">
+        <div class="form-group" style="width:200px;" id="izinlimidiv">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="izinlimi">
+            <label class="form-check-label" for="izinlimi">İzinli mi</label>
+          </div>
+        </div>
+
+        <div class="form-group" style="width:200px;" id="calisanmidiv">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="calisanmi">
+            <label class="form-check-label" for="calisanmi">Çalışan mı</label>
+          </div>
+        </div>
+
+        <div class="form-group" style="width:200px;" id="logiznidiv">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="log">
+            <label class="form-check-label" for="log">Log</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="aramagroup-box">
+        <button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.save()">
+          <i class="fa fa-save"></i>
+        </button>
+        <button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.clearForm(true)">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button type="button" class="btn btn-secondary ml-2" onclick="OBS.USERIZIN.confirmDelete()">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+
+<div id="errorDiv"></div>
+
+<div id="moduleTable" class="table-container" style="margin-top: 5px;">
+  <table class="table table-bordered table-hover table-row-height">
+    <thead class="thead-dark">
+      <tr>
+        <th style="display: none;">ID</th>
+        <th>Program Kodu</th>
+        <th>Server Kullanici</th>
+        <th>Şifre Sunucu</th>
+        <th>Ip</th>
+        <th>User Modul</th>
+        <th>Hangi Sql</th>
+        <th>İzinli mi</th>
+        <th>Çalışan mı</th>
+        <th>Log</th>
+        <th>Superviser</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <input type="hidden" id="hiddenId" name="hiddenId">
 </div>

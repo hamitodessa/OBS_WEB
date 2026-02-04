@@ -21,8 +21,8 @@
 
 /* ===== BUTTON / SELECT / INPUT ===== */
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -42,8 +42,8 @@
 }
 
 #ara_content .form-control, #ara_content .form-select {
-	height: 48px;
-	border-radius: 14px;
+	height: 36px;
+	border-radius: 12px;
 	border: 1px solid rgba(255, 255, 255, .16);
 	background: rgba(8, 14, 26, .45);
 	color: rgba(255, 255, 255, .92);
@@ -82,10 +82,6 @@
   background: rgba(255,255,255,.03);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
   
-	scrollbar-gutter: stable both-edges; /* layout zıplamasın */
-	scrollbar-width: thin; /* Firefox */
-	scrollbar-color: rgba(56, 189, 248, .38) rgba(0, 0, 0, .18);
-	/* Firefox */
 }
 
 /* Chrome/Edge */
@@ -235,19 +231,18 @@
 }
 </style>
 <div class="card p-1">
-	<div style="display: flex; align-items: center;">
+	<div style="display: flex; align-items: center;gap:10px;">
 		<button class="btn btn-primary" type="button" id="grpyenileButton"
-			style="margin-left: 10px;" onclick="openFirstModal('grprapor')">Filtre</button>
-		<button class="btn btn-primary" style="margin-left: 10px;"
+			  onclick="openFirstModal('grprapor')">Filtre</button>
+		<button class="btn btn-primary"  
 			type="button" id="grprapreportDownload" onclick="OBS.GRPRAP.grpdownloadReport()"
 			disabled>Excel Indir</button>
-		<button class="btn btn-primary" style="margin-left: 10px;"
+		<button class="btn btn-primary"  
 			type="button" id="grprapmailButton" onclick="OBS.GRPRAP.grpmailAt()" disabled>Email
 			Gonder</button>
 	</div>
 </div>
 <div id="errorDiv"></div>
-
 	<div class="table-container">
 		<table id="main-table"
 			class="table table-bordered table-hover table-row-height">

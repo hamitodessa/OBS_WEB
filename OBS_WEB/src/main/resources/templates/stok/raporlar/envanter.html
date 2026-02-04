@@ -2,11 +2,6 @@
 <link rel="stylesheet" href="/style/stok/envrapormodal.css">
 <style>
 /* =========================
-   2026 CAM – TABLE STANDARD (EKSTRE)
-   Scope: #ara_content
-   ========================= */
-
-/* =========================
    2026 CAM – ENVANTER (MAIN + SECOND TABLE)
    Scope: #ara_content
    ========================= */
@@ -25,8 +20,8 @@
 
 /* BUTTON */
 #ara_content .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -47,8 +42,8 @@
 /* INPUT */
 #ara_content .form-control,
 #ara_content .form-select{
-  height: 48px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
   background: rgba(8,14,26,.45);
   color: rgba(255,255,255,.92);
@@ -218,14 +213,14 @@
 </style>
 
 <div class="card p-1">
-  <div style="display: flex; align-items: center">
-    <button class="btn btn-primary" type="button" id="envyenileButton" style="margin-left: 10px"
+  <div style="display: flex; align-items: center;gap:10px;">
+    <button class="btn btn-primary" type="button" id="envyenileButton" 
       onclick="openFirstModal('envanter')">Filtre</button>
 
-    <button class="btn btn-primary" style="margin-left: 10px" type="button" id="envDownloadButton"
+    <button class="btn btn-primary"   type="button" id="envDownloadButton"
       onclick="OBS.ENVANTER.envdownloadReport()" disabled>Excel Indir</button>
 
-    <button class="btn btn-primary" style="margin-left: 10px" type="button" id="envmailButton"
+    <button class="btn btn-primary"   type="button" id="envmailButton"
       onclick="OBS.ENVANTER.envmailAt()" disabled>Email Gonder</button>
   </div>
 </div>
@@ -234,7 +229,7 @@
 
 <div class="container">
   <div class="table-container">
-    <table id="main-table" class="table table-bordered table-hover table-row-height">
+    <table id="main-table" class="table table-bordered table-hover">
       <thead>
         <tr>
           <th>KODU</th>
@@ -256,7 +251,7 @@
   </div>
 
   <div class="table-container" id="second-table-container">
-    <table id="second-table" class="table table-bordered table-hover table-row-height">
+    <table id="second-table" class="table table-bordered table-hover">
       <thead class="thead-dark"></thead>
       <tbody id="secondTableBody"></tbody>
     </table>

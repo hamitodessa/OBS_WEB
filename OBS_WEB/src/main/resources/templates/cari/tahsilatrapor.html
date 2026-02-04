@@ -21,8 +21,8 @@
 
 /* BUTTON */
 #ara_content .tahrap .btn{
-  height: 46px;
-  border-radius: 14px;
+  height: 36px;
+  border-radius: 12px;
   background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
@@ -49,6 +49,22 @@
   transform:none !important;
 }
 
+#ara_content .form-control,
+#ara_content .form-select{
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+}
+#ara_content .form-control:focus,
+#ara_content .form-select:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.65);
+  color: #fff;
+}
+
 /* ERROR */
 #ara_content .tahrap #errorDiv{
   display:none;
@@ -62,7 +78,7 @@
 }
 
 #ara_content .tahrap .table-container{
- height: 75vh;
+  height: 75vh;
   display:flex;
   flex-direction:column;
   margin-top:10px;
@@ -74,15 +90,17 @@
   flex-grow:1;
   overflow:auto;
   margin-top:10px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.14);
+  
   background: rgba(255,255,255,.03);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
 
 /* ===== MAIN TABLE ===== */
 #ara_content .tahrap table.t-main{
   width:100%;
+  min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -224,7 +242,7 @@
 
 <div class="tahrap">
   <div class="card p-1">
-    <div style="display:flex; align-items:center; gap:10px; padding:6px 6px;">
+    <div style="display:flex; align-items:center; gap:10px;">
       <button class="btn btn-primary" type="button" id="tahrapyenileButton"
               onclick="openFirstModal('tahsilatrapor')">Filtre</button>
 

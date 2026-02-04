@@ -1,1231 +1,296 @@
 <!DOCTYPE html>
 <html lang="tr" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OBS Sistem</title>
-  <link rel="icon" href="images/favicon.png" type="image/png" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBS Sistem</title>
+<link rel="icon" href="images/favicon.png" type="image/png" />
 
-  <!-- icon/css -->
-  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-     
-  <script src="/obs_js_files/inputmask/inputmask.min.js"></script>
-  <script src="/obs_js_files/fetchWithSessionCheck.js"></script>
-  <script src="/obs_js_files/fetchWithSessionCheckForDownload.js"></script>
-    
-  <script src="/obs_js_files/obs_global.js"></script>
-  <script src="/obs_js_files/ortak/firmaismi.js"></script>
-  <script src="/obs_js_files/modal/obs_modal.js"></script>
-  
-  
-  <script src="/obs_js_files/modal/cari/hspplnmodal.js"></script>
-  <script src="/obs_js_files/modal/stok_modal.js"></script>
-  <script src="/obs_js_files/modal/adres/adreshplmodal.js"></script>
-  
-  <style>
-    :root{
-      --sb-open: 278px;
-      --sb-closed: 84px;
-      --hdr-h: 64px;
+<!-- icon/css -->
+<link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-      --txt: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-      --brd: rgba(255,255,255,.14);
-      --glass: rgba(255,255,255,.10);
-      --glass2: rgba(255,255,255,.05);
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-    }
+<script src="/obs_js_files/inputmask/inputmask.min.js"></script>
+<script src="/obs_js_files/fetchWithSessionCheck.js"></script>
+<script src="/obs_js_files/fetchWithSessionCheckForDownload.js"></script>
 
-    *{ box-sizing:border-box; }
-    html, body{ height:100%; }
-    body{
-      margin:0;
-      color: var(--txt);
-      overflow:hidden;
-      background:
-        radial-gradient(1200px 600px at 35% 0%, rgba(56,189,248,.14), transparent 65%),
-        radial-gradient(900px 500px at 80% 30%, rgba(34,197,94,.10), transparent 60%),
-        linear-gradient(180deg, #050b13 0%, #050a10 100%);
-    }
+<script src="/obs_js_files/obs_global.js"></script>
+<script src="/obs_js_files/ortak/firmaismi.js"></script>
+<script src="/obs_js_files/modal/obs_modal.js"></script>
 
-    /* ============ APP SHELL ============ */
-    .app-shell{
-      height:100vh;
-      display:grid;
-      grid-template-columns: var(--sb-open) 1fr;
-      transition: grid-template-columns .18s ease;
-    }
-    .app-shell.is-collapsed{
-      grid-template-columns: var(--sb-closed) 1fr;
-    }
+<script src="/obs_js_files/modal/cari/hspplnmodal.js"></script>
+<script src="/obs_js_files/modal/stok_modal.js"></script>
+<script src="/obs_js_files/modal/adres/adreshplmodal.js"></script>
 
-    /* ============ SIDEBAR ============ */
-    #sidebar{
-      height:100vh;
-      overflow:hidden;
-      border-right: 1px solid rgba(255,255,255,.10);
-      background:
-        radial-gradient(900px 520px at 20% 12%, rgba(56,189,248,.14), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)),
-        rgba(6,12,20,.92);
-      box-shadow: 18px 0 60px rgba(0,0,0,.35);
-    }
-
-    .sb-top{
-  height: var(--hdr-h);              /* sağ üst ile aynı */
-  display:flex;
-  align-items:center;
-  gap:10px;
-
-  padding: 10px 14px;                /* sağ üst ile aynı */
-  border-bottom: 1px solid rgba(255,255,255,.10);
-  box-sizing: border-box;
-}
-
-    .sb-logo{
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      display:grid;
-      place-items:center;
-      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      overflow:hidden;
-      flex: 0 0 auto;
-    }
-    .sb-logo img{ width: 34px; height: 34px; object-fit: contain; }
-    .sb-brand{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      min-width: 0;
-    }
-    .sb-brand .t{
-      font-weight: 900;
-      letter-spacing: .2px;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .sb-brand .s{
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* collapsed: yazıları gizle */
-    .app-shell.is-collapsed .sb-brand{ display:none; }
-
-    .sb-user{
-      margin: 12px 14px 10px;
-      padding: 12px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
-    .sb-user .avatar{
-      width: 46px; height: 46px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.16);
-      overflow:hidden;
-      background: rgba(255,255,255,.06);
-      flex: 0 0 auto;
-    }
-    .sb-user .avatar img{
-      width:100%; height:100%;
-      object-fit: cover;
-      display:block;
-    }
-    .sb-user .info{ min-width:0; }
-    .sb-user .name{
-      font-weight: 900;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .sb-user .status{
-      display:flex; align-items:center; gap:8px;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 4px;
-    }
-    .dot{
-      width:9px; height:9px; border-radius:50%;
-      background: rgba(34,197,94,.95);
-      box-shadow: 0 0 12px rgba(34,197,94,.55);
-    }
-
-    .app-shell.is-collapsed .sb-user .info{ display:none; }
-    .app-shell.is-collapsed .sb-user{ justify-content:center; }
-
-    .sb-menu-title{
-      padding: 10px 16px 8px;
-      color: rgba(255,255,255,.75);
-      font-weight: 900;
-      font-size: 12px;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-    }
-    .app-shell.is-collapsed .sb-menu-title{ display:none; }
-
-    .sb-menu{
-      height: calc(100vh - 230px);
-      overflow:auto;
-      padding: 6px 10px 14px;
-    }
-    .sb-menu::-webkit-scrollbar{ width:10px; }
-    .sb-menu::-webkit-scrollbar-thumb{
-      background: rgba(255,255,255,.12);
-      border-radius: 999px;
-      border: 2px solid rgba(0,0,0,0);
-      background-clip: padding-box;
-    }
-
-    /* MENÜ BUTONLARI */
-    .sb-a, .sb-sum, .sb-sub a{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      width:100%;
-      padding: 10px 12px;
-      border-radius: 14px;
-      color: rgba(255,255,255,.88);
-      text-decoration:none;
-      border: 1px solid rgba(255,255,255,.00);
-      background: transparent;
-      cursor:pointer;
-      user-select:none;
-    }
-    .sb-a:hover, .sb-sum:hover, .sb-sub a:hover{
-      background: rgba(255,255,255,.06);
-      border-color: rgba(255,255,255,.10);
-    }
-
-    .ico{
-      width: 34px; height: 34px;
-      border-radius: 12px;
-      display:grid;
-      place-items:center;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      flex: 0 0 auto;
-    }
-    .txt{
-      flex:1;
-      min-width:0;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      font-weight: 800;
-      font-size: 13.5px;
-    }
-    .chev{ opacity:.7; }
-
-    .app-shell.is-collapsed .txt,
-    .app-shell.is-collapsed .chev{ display:none; }
-
-    details.sb-group{
-      border-radius: 16px;
-      margin-bottom: 6px;
-      overflow:hidden;
-    }
-    details.sb-group[open] > summary{
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-      border: 1px solid rgba(255,255,255,.12);
-    }
-    summary.sb-sum{
-      list-style:none;
-    }
-    summary.sb-sum::-webkit-details-marker{ display:none; }
-
-    .sb-sub{
-      padding: 6px 6px 10px 46px;
-    }
-    .app-shell.is-collapsed .sb-sub{ display:none; }
-
-    .sb-sub a{
-      padding: 8px 10px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 13px;
-      color: rgba(255,255,255,.80);
-    }
-
-    /* ============ MAIN ============ */
-    #content{
-      position: relative;
-      height:100vh;
-      overflow:hidden;
-      background:
-        radial-gradient(1200px 520px at top center, rgba(56,189,248,0.10), transparent 60%),
-        linear-gradient(180deg, #0b1623 0%, #0e1f2f 40%, #0b1a28 100%);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
-    }
-
-    .app-header{
-      height: var(--hdr-h);
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-bottom: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    .btn-icon{
-      width: 46px; height: 46px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
-      display:grid;
-      place-items:center;
-      cursor:pointer;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      min-width: 0;
-    }
-    .brand .logo{
-      width: 36px; height: 36px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      display:grid;
-      place-items:center;
-      overflow:hidden;
-    }
-    .brand .logo img{ width: 28px; height: 28px; object-fit:contain; }
-
-
-    .hdr-spacer{ flex:1; }
-
-    .btn-exit{
-      width: 46px; height: 46px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
-      display:grid;
-      place-items:center;
-      text-decoration:none;
-    }
-
-    /* TITLE + CONTENT WRAP */
-    .mid{
-      height: calc(100vh - var(--hdr-h));
-      overflow:auto;
-      padding: 16px;
-    }
-    .mid::-webkit-scrollbar{ width:10px; height:10px; }
-    .mid::-webkit-scrollbar-thumb{
-      background: rgba(255,255,255,.12);
-      border-radius: 999px;
-      border: 2px solid rgba(0,0,0,0);
-      background-clip: padding-box;
-    }
-
-    .page_title{
-      position: relative;
-      margin-bottom: 12px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
-      border: 1px solid rgba(255,255,255,.18);
-      box-shadow: 0 12px 35px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      animation: titleFade .35s ease;
-    }
-    .page_title::after{
-      content:"";
-      position:absolute;
-      left:16px; right:16px; bottom:-1px;
-      height:1px;
-      background: linear-gradient(90deg, transparent, rgba(56,189,248,.85), transparent);
-    }
-    .page_title h2{
-      margin:0;
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: .3px;
-      color: rgba(255,255,255,.95);
-      text-shadow: 0 2px 8px rgba(0,0,0,.55);
-      white-space: pre;
-    }
-
-    #ara_content{
-      padding: 10px;
-      border-radius: 18px;
-      background:
-        radial-gradient(circle at 20% 15%, rgba(56,189,248,.18), transparent 55%),
-        radial-gradient(circle at 80% 30%, rgba(34,197,94,.14), transparent 55%),
-        linear-gradient(180deg, #0b1220 0%, #050914 100%);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), 0 18px 45px rgba(0,0,0,.55);
-      min-height: 300px;
-    }
-    #ara_content > *{ animation: araIn .28s ease-out both; }
-    @keyframes araIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;} }
-    @keyframes titleFade{ from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:none;} }
-
-    /* ERROR PANEL */
-    #ara_content .cam-error,
-    #ara_content .cam-error *{
-      color: rgba(255,255,255,.95) !important;
-    }
-    #ara_content .cam-error{
-      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
-      border: 1px solid rgba(251,113,133,.35);
-      border-radius: 14px;
-      padding: 18px 20px;
-      font-weight: 900;
-      font-size: 20px;
-      box-shadow: 0 18px 55px rgba(0,0,0,.45);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      text-shadow: 0 0 12px rgba(0,0,0,.45), 0 0 18px rgba(248,113,113,.25);
-    }
-
-    .footer{
-      margin-top: 14px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 -10px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.10);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      text-align:center;
-      position: relative;
-    }
-    .footer::before{
-      content:"";
-      position:absolute;
-      top:0; left:16px; right:16px;
-      height:1px;
-      background: linear-gradient(90deg, transparent, rgba(56,189,248,.75), transparent);
-    }
-    .footer p{ margin:0; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,.75); }
-    .footer a{ color: rgba(56,189,248,.95); font-weight: 700; text-decoration:none; }
-    .footer a:hover{ color:#fff; text-decoration:underline; }
-    .footer #ip{ display:inline-block; margin-top:6px; font-size:12px; color: rgba(255,255,255,.55); }
-  
-  
-  /* ===== 2026 CAM – MENU ICON COLORS ===== */
-.ico i{
-  font-size: 16px;
-  filter: drop-shadow(0 0 6px rgba(0,0,0,.35));
-}
-
-/* modüllere özel renk */
-.ico .fa-dashboard{ color:#facc15; }     /* Cari */
-.ico .fa-money{ color:#fb923c; }          /* Kur */
-.ico .fa-envelope-o{ color:#38bdf8; }     /* Adres */
-.ico .fa-table{ color:#a78bfa; }           /* Kambiyo */
-.ico .fa-clone{ color:#22c55e; }           /* Stok */
-.ico .fa-paper-plane{ color:#ef4444; }    /* Kereste */
-.ico .fa-envelope-square{ color:#f97316;} /* Mail */
-.ico .fa-briefcase{ color:#3b82f6; }       /* Rapor */
-.ico .fa-object-group{ color:#22d3ee; }    /* Log */
-.ico .fa-cog{ color:#e5e7eb; }             /* Ayarlar */
-.ico .fa-cloud{ color:#8b5cf6; }           /* Backup */
-.ico .fa-map{ color:#06b6d4; }              /* GPS */
-
-/* hover’da hafif parlasın */
-.sb-a:hover .ico i,
-.sb-sum:hover .ico i{
-  filter:
-    drop-shadow(0 0 8px currentColor)
-    drop-shadow(0 0 14px rgba(255,255,255,.25));
-}
-
-/* ===== 2026 CAM – HEADER ICON COLORS ===== */
-
-/* forum */
-.btn-icon .fa-comments-o{
-  color: #38bdf8; /* cyan */
-  filter: drop-shadow(0 0 6px rgba(56,189,248,.45));
-}
-
-/* exit */
-.btn-exit .fa-sign-out{
-  color: #ef4444; /* red */
-  filter: drop-shadow(0 0 6px rgba(239,68,68,.45));
-}
-
-/* hover glow */
-.btn-icon:hover i,
-.btn-exit:hover i{
-  filter:
-    drop-shadow(0 0 10px currentColor)
-    drop-shadow(0 0 18px rgba(255,255,255,.25));
-}
-
-  
-  .btn-icon{ position: relative; }
-  
-  #mesajadet{
-  position:absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 11px;
-  padding: 3px 6px;
-  border-radius: 999px;
-  background: #ef4444;
-  color: #fff;
-  box-shadow: 0 0 10px rgba(239,68,68,.6);
-}
-
-  </style>
-
+<link rel="stylesheet" href="/style/index.css">
 
 
 </head>
 
 <body>
-<div class="app-shell" id="appShell">
-
-  <!-- SIDEBAR -->
-  <aside id="sidebar">
-
-    <div class="sb-top">
-      <a class="sb-logo" href="/index" title="OBS">
-        <img src="images/logo/obs_logo_son.png" alt="OBS">
-      </a>
-      <div class="sb-brand">
-        <div class="t">OBS Sistem</div>
-        <div class="s">2026 Cam Tema</div>
-      </div>
-    </div>
-
-    <div class="sb-user">
-      <div class="avatar">
-        <img th:if="${profileImage != null}" th:src="'data:image/jpeg;base64,' + ${profileImage}" alt="user">
-      </div>
-      <div class="info">
-        <div class="name">
-          <span id="kullaniciAdi" sec:authorize="isAuthenticated()" sec:authentication="name"></span>
-        </div>
-        <div class="status"><span class="dot"></span> Online</div>
-      </div>
-    </div>
-
-    <div class="sb-menu-title">Menu</div>
-
-    <!-- MENÜ: eski data-url / onclick / th:if AYNI -->
-    <div class="sb-menu">
-
-      <details class="sb-group">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-dashboard"></i></span>
-          <span class="txt">Cari Hesap</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" class="changeLink" data-url="/cari/hspplngiris"><span>Hesap Plani Giris</span></a>
-          <a href="" class="changeLink" data-url="/cari/hspplnliste"><span>Hesap Plani</span></a>
-          <a href="" class="changeLink" data-url="/cari/dekont"><span>Dekont</span></a>
-          <a href="" class="changeLink" data-url="/cari/tahsilat"><span>Tahsilat Fisi</span></a>
-          <a href="" class="changeLink" data-url="/cari/ekstre"><span>Cari Ekstre</span></a>
-          <a href="" class="changeLink" data-url="/cari/mizan"><span>Cari Mizan</span></a>
-          <a href="" class="changeLink" data-url="/cari/ozelmizan"><span>Cari Ozel Mizan</span></a>
-          <a href="" class="changeLink" data-url="/cari/dvzcevirme"><span>Cari Dovize Cevirme</span></a>
-          <a href="" class="changeLink" data-url="/cari/gunlukkontrol"><span>Gunluk Takip</span></a>
-          <a href="" class="changeLink" data-url="/cari/tahsilatrapor"><span>Tahsilat Raporlama</span></a>
-          <a href="" class="changeLink" data-url="/cari/tahsilatdegerleri"><span>Tahsilat Degerleri</span></a>
-          <a href="" class="changeLink" data-url="/cari/ornekhesapplani"><span>Ornek Hesap Plani</span></a>
-          <a href="" class="changeLink" data-url="/cari/carikoddegis"><span>Kod Degistirme</span></a>
-          <a href="" class="changeLink" data-url="/obs/firmaismi" data-modul="cari"><span>Firma Ismi Degistirme</span></a>
-       <!--   <a href="" onclick="firmaIsmi('cari', event)"><span>Firma Ismi Degistirme</span></a>  --> 
-        </div>
-      </details>
-
-      <details class="sb-group">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-money"></i></span>
-          <span class="txt">Kur Islemleri</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" class="changeLink" data-url="/kur/kurgiris"><span>Kur Giris</span></a>
-          <a href="" class="changeLink" data-url="/kur/kurrapor"><span>Kur Raporlama</span></a>
-        </div>
-      </details>
-
-      <details class="sb-group">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-envelope-o"></i></span>
-          <span class="txt">Adres Islemleri</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" class="changeLink" data-url="/adres/adresgiris"><span>Adres Giris</span></a>
-          <a href="" class="changeLink" data-url="/adres/etiketliste"><span>Etiket Listeleme</span></a>
-          <a href="" class="changeLink" data-url="/adres/etiketayar"><span>Etiket Ayar</span></a>
-          <a href="" class="changeLink" data-url="/obs/firmaismi" data-modul="adres"><span>Firma Ismi Degistirme</span></a>
-        </div>
-      </details>
-
-      <details class="sb-group">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-table"></i></span>
-          <span class="txt">Kambiyo Islemleri</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" class="changeLink" data-url="/kambiyo/cekgiris"><span>Cek Giris</span></a>
-          <a href="" class="changeLink" data-url="/kambiyo/cekcikis"><span>Cek Cikis</span></a>
-          <a href="" class="changeLink" data-url="/kambiyo/cektakip"><span>Cek Takip</span></a>
-          <a href="" class="changeLink" data-url="/kambiyo/cekrapor"><span>Cek Raporlama</span></a>
-          <a href="" class="changeLink" data-url="/obs/firmaismi" data-modul="kambiyo"><span>Firma Ismi Degistirme</span></a>
-        </div>
-      </details>
-
-      <details class="sb-group">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-clone"></i></span>
-          <span class="txt">Stok Islemleri</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" class="changeLink" data-url="/stok/urunkart"><span>Urun Giris</span></a>
-          <a href="" class="changeLink" data-url="/stok/uretim"><span>Uretim</span></a>
-          <a href="" class="changeLink" data-url="/stok/fatura"><span>Fatura</span></a>
-          <a href="" class="changeLink" data-url="/stok/irsaliye"><span>Irsaliye</span></a>
-          <a href="" class="changeLink" data-url="/stok/zayi"><span>Zayi</span></a>
-          <a href="" class="changeLink" data-url="/stok/recete"><span>Recete</span></a>
-          <a href="" class="changeLink" data-url="/stok/fatrapor"><span>Fatura Rapor</span></a>
-          <a href="" class="changeLink" data-url="/stok/irsrapor"><span>Irsaliye Rapor</span></a>
-          <a href="" class="changeLink" data-url="/stok/envanter"><span>Envanter</span></a>
-          <a href="" class="changeLink" data-url="/stok/imarapor"><span>Imalat Rapor</span></a>
-          <a href="" class="changeLink" data-url="/stok/imagrprapor"><span>Imalat Grup Rapor</span></a>
-          <a href="" class="changeLink" data-url="/stok/stokrapor"><span>Stok Rapor</span></a>
-          <a href="" class="changeLink" data-url="/stok/grprapor"><span>Grup Rapor</span></a>
-          <a href="" class="changeLink" data-url="/stok/stokdetay"><span>Stok Detay Rapor</span></a>
-          <a href="" class="changeLink" data-url="/stok/degiskenler"><span>Degiskenler</span></a>
-          <a href="" class="changeLink" data-url="/obs/firmaismi" data-modul="fatura"><span>Firma Ismi Degistirme</span></a>
-        </div>
-      </details>
-
-      <details class="sb-group">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-paper-plane"></i></span>
-          <span class="txt">Kereste Islemleri</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" class="changeLink" data-url="/kereste/giris"><span>Giris</span></a>
-          <a href="" class="changeLink" data-url="/kereste/cikis"><span>Cikis</span></a>
-          <a href="" class="changeLink" data-url="/kereste/koddegis"><span>Kod Degistirme</span></a>
-          <a href="" class="changeLink" data-url="/kereste/fatrapor"><span>Kereste Fatura Raporlama</span></a>
-          <a href="" class="changeLink" data-url="/kereste/detay"><span>Kereste Detay Raporlama</span></a>
-          <a href="" class="changeLink" data-url="/kereste/grprapor"><span>Grup Rapor</span></a>
-          <a href="" class="changeLink" data-url="/kereste/envanter"><span>Envanter Rapor</span></a>
-          <a href="" class="changeLink" data-url="/kereste/ortfiat"><span>Ortalama Fiat</span></a>
-          <a href="" class="changeLink" data-url="/kereste/kodaciklama"><span>Kod Aciklama</span></a>
-          <a href="" class="changeLink" data-url="/kereste/konsimentoaciklama"><span>Konsimento Aciklama</span></a>
-          <a href="" class="changeLink" data-url="/kereste/degiskenler"><span>Degiskenler</span></a>
-          <a href="" class="changeLink" data-url="/obs/firmaismi" data-modul="kereste"><span>Firma Ismi Degistirme</span></a>
-        </div>
-      </details>
-
-      <a href="" data-url="/user/mailgonderme" class="sb-a changeLink">
-        <span class="ico"><i class="fa fa-envelope-square"></i></span>
-        <span class="txt">Mail Gonderme</span>
-      </a>
-
-      <a href="" data-url="/user/gidenraporlar" class="sb-a changeLink">
-        <span class="ico"><i class="fa fa-briefcase"></i></span>
-        <span class="txt">Giden Raporlar</span>
-      </a>
-
-      <a href="" data-url="/user/lograpor" class="sb-a changeLink">
-        <span class="ico"><i class="fa fa-object-group"></i></span>
-        <span class="txt">Log Rapor</span>
-      </a>
-
-      <details class="sb-group">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-cog"></i></span>
-          <span class="txt">Ayarlar</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" class="changeLink" data-url="/user/user_pwd_change"><span>Sifre Degis</span></a>
-          <a href="" class="changeLink" data-url="/user/user_update"><span>Isim Degis</span></a>
-          <a href="" class="changeLink" data-url="/user/userdetails"><span>Kullanici Detaylari</span></a>
-          <a th:if="${menuitemvisible}" href="" class="changeLink" data-url="/user/userizinler"><span>Admin İşlemleri</span></a>
-          <a href="" class="changeLink" data-url="/user/emailsettings"><span>E Mail Ayarlari</span></a>
-          <a href="" class="changeLink" data-url="/user/createdb"><span>Yeni Veritabani Olustur</span></a>
-          <a href="" class="changeLink" data-url="/user/copyuser"><span>Kullanici Kopyala</span></a>
-          <a href="" class="changeLink" data-url="/user/deleteaccount"><span>Hesap Silme</span></a>
-          <a th:if="${menuitemvisiblegps}" href="" class="changeLink" data-url="/user/userlist"><span>Kullanici Listesi</span></a>
-        </div>
-      </details>
-
-      <details class="sb-group">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-cloud"></i></span>
-          <span class="txt">Backup Takip</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" data-url="/backup/backuptakip" class="changeLink"><span>Emir Bilgileri</span></a>
-          <a href="" data-url="/backup/lograpor" class="changeLink"><span>Log Raporlama</span></a>
-        </div>
-      </details>
-
-      <details class="sb-group" th:if="${menuitemvisiblegps}">
-        <summary class="sb-sum">
-          <span class="ico"><i class="fa fa-map"></i></span>
-          <span class="txt">Gps Takip</span>
-          <span class="chev">▾</span>
-        </summary>
-        <div class="sb-sub">
-          <a href="" data-url="/gps/gps" class="changeLink"><span>Gps Izleme</span></a>
-        </div>
-      </details>
-
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main id="content">
-    <header class="app-header">
-      <button class="btn-icon" id="sidebarCollapse" type="button" title="Menu">
-        <i class="fa fa-bars"></i>
-      </button>
-
-      <div class="brand">
-        <div class="logo">
-         <a href=""
-   data-url="/wellcome"
-   class="changeLink"
-   data-bs-toggle="tooltip"
-   data-bs-placement="bottom"
-   title="Ana Sayfa"
-   style="display:grid;place-items:center;width:100%;height:100%;">
-  <img src="images/logo/obs_logo_son.png" alt="OBS">
-</a>
-
-        </div>
-       
-      </div>
-
-      <div class="hdr-spacer"></div>
-      <a href="" data-url="/forum" class="btn-icon changeLink" data-toggle="tooltip" data-placement="top" title="Forum">
-        <i class="fa fa-comments-o"></i>
-        <span class="badge" id="mesajadet" th:text="${mesajadet}"></span>
-      </a>
-
-      <a class="btn-exit" href="/logout" title="Cikis">
-        <i class="fa fa-sign-out"></i>
-      </a>
-    </header>
-
-    <div class="mid">
-      <div class="page_title">
-        <h2 id="baslik"></h2>
-      </div>
-
-      <div id="ara_content">
-        <!-- Dinamik içerik buraya yüklenecek -->
-      </div>
-
-      <div class="footer">
-        <p>
-          Copyright © 2024 Designed by html.design. All rights reserved.
-          <br> Distributed By: <a href="https://okumus.gen.tr/">Hamit Okumus</a>
-          <br> <a id="ip" th:text="${ip}"></a>
-        </p>
-      </div>
-    </div>
-  </main>
-
-</div>
-
-<script>
-  /* =========================
-     OBS – Dynamic Page Loader (çakışmasız)
-     - data-url ile sayfa yükler
-     - data-modul gibi parametreleri query olarak taşır
-     - pageModules key = PATH (query yok)
-     - init: function veya "string" (window fonksiyonu)
-     - init(params, urlObj) parametre alır
-     ========================= */
-
-  const ROOT = {
-    ara: document.querySelector("#appShell #ara_content"),
-    baslik: document.getElementById("baslik")
-  };
-
-  const loadedScripts = new Set();
-
-  function loadScriptOnce(src) {
-    return new Promise((resolve, reject) => {
-      if (!src) return resolve();
-      if (loadedScripts.has(src) || document.querySelector(`script[data-dyn="${src}"]`)) return resolve();
-
-      const s = document.createElement("script");
-      s.src = src;
-      s.async = true;
-      s.dataset.dyn = src;
-      s.onload = () => { loadedScripts.add(src); resolve(); };
-      s.onerror = () => reject(new Error("JS dosyası yüklenemedi: " + src));
-      document.head.appendChild(s);
-    });
-  }
-
-  /* -------------------------
-     PAGE MODULES
-     Key: pathname (query yok)
-     ------------------------- */
-  const pageModules = {
-    "/wellcome": { js: "/obs_js_files/wellcome.js", init: "getWellcomeData" },
-
-    "/cari/ekstre": { js: "/obs_js_files/cari/cariekstre.js",
-    	init: () => {
-            if (typeof window.cariBaslik === "function") window.cariBaslik();
-       }
-    },
-
-    "/cari/hspplngiris": {
-      js: "/obs_js_files/cari/hspplngiris.js",
-      init: () => {
-        if (typeof window.cariBaslik === "function") window.cariBaslik();
-        if (typeof OBS?.HSPPLN?.initResimSizeCheck === "function") OBS.HSPPLN.initResimSizeCheck();
-        if (typeof OBS?.HSPPLN?.aramaYap === "function") OBS.HSPPLN.aramaYap();
-        const arama = document.getElementById("arama");
-        if (arama) arama.value = "";
-      }
-    },
-
-    "/cari/hspplnliste": { js: "/obs_js_files/cari/hspplnliste.js", init: "cariBaslik" },
-    "/cari/dekont": { js: "/obs_js_files/cari/dekont.js", init: "cariBaslik" },
-
-    "/cari/tahsilat": {
-      js: "/obs_js_files/cari/tahsilat.js",
-      init: () => {
-        if (typeof window.cariBaslik === "function") window.cariBaslik();
-        if (typeof window.fetchHesapKodlariOnce === "function") window.fetchHesapKodlariOnce();
-      }
-    },
-
-    "/cari/mizan": { js: "/obs_js_files/cari/mizan.js", init: "cariBaslik" },
-    "/cari/ozelmizan": { js: "/obs_js_files/cari/ozelmizan.js", init: "cariBaslik" },
-    "/cari/dvzcevirme": { js: "/obs_js_files/cari/dvzcevirme.js", init: "cariBaslik" },
-    "/cari/gunlukkontrol": { js: "/obs_js_files/cari/gunluktakip.js", init: "cariBaslik" },
-    "/cari/tahsilatrapor": { js: "/obs_js_files/cari/tahsilatrapor.js", init: "cariBaslik" },
-
-    "/cari/tahsilatdegerleri": {
-      js: "/obs_js_files/cari/tahsilatayar.js",
-      init: () => {
-        if (typeof window.cariBaslik === "function") window.cariBaslik();
-        if (typeof OBS?.TAHAYAR?.init === "function") OBS.TAHAYAR.init();
-      }
-    },
-
-    "/cari/ornekhesapplani": { js: "/obs_js_files/cari/ornhsppln.js", init: "cariBaslik" },
-    "/cari/carikoddegis": { js: "/obs_js_files/cari/koddegis.js", init: "cariBaslik" },
-
-    /* ✅ TEK entry: firmaismi (modul parametre ile seçilecek) */
-    "/obs/firmaismi": {
-      js: "/obs_js_files/ortak/firmaismi.js",
-      init: (params) => {
-        const modul = params?.get("modul") || ""; // "cari" / "adres" / vs
-        if (typeof OBS?.FIRMA?.firmaIsmiSayfa === "function") OBS.FIRMA.firmaIsmiSayfa(modul);
-      }
-    },
-
-    "/kur/kurgiris": { js: "/obs_js_files/kur/kurgiris.js", init: () => OBS?.KUR?.init?.() },
-    "/kur/kurrapor": { js: "/obs_js_files/kur/kurrapor.js" },
-
-    "/adres/adresgiris": {
-      js: "/obs_js_files/adres/adresgiris.js",
-      init: () => {
-        if (typeof OBS?.ADR?.init === "function") OBS.ADR.init();
-        if (typeof OBS?.ADR?.aramaYap === "function") OBS.ADR.aramaYap();
-        const arama = document.getElementById("arama");
-        if (arama) arama.value = "";
-      }
-    },
-
-    "/adres/etiketliste": { js: "/obs_js_files/adres/etiketlistele.js", init: "adresBaslik" },
-
-    "/adres/etiketayar": {
-      js: "/obs_js_files/adres/etiketayar.js",
-      init: () => {
-        if (typeof window.adresBaslik === "function") window.adresBaslik();
-        if (typeof OBS?.ADR?.init === "function") OBS.ADR.init();
-      }
-    },
-    "/kambiyo/cekgiris": {
-        js: "/obs_js_files/kambiyo/cekgiris.js",
-        init: () => {
-          if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
-          if (typeof OBS?.CEKGIR?.init === "function") OBS.CEKGIR.init();
-        }
-    },
-    "/kambiyo/cekcikis": {js: "/obs_js_files/kambiyo/cekcikis.js",
-        init: () => {
-          if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
-          if (typeof OBS?.CEKCIK?.init === "function") OBS.CEKCIK.init();
-        }
-    },
-        
-    "/kambiyo/cektakip": {js: "/obs_js_files/kambiyo/cekkontrol.js",
-        init: () => {
-           if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
-        }
-    },
-    "/kambiyo/cekrapor": {js: "/obs_js_files/kambiyo/cekrapor.js",
-        init: () => {
-          if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
-          if (typeof OBS?.CEKRAP?.init === "function") OBS.CEKRAP.init();
-        }
-    },          
-
-    "/stok/urunkart": {js: "/obs_js_files/stok/urunkart.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-            if (typeof OBS?.URUNKART?.init === "function") OBS.URUNKART.init();
-            if (typeof OBS?.URUNKART?.aramaYap === "function") OBS.URUNKART.aramaYap("Kodu");
-            const arama = document.getElementById("arama");
-            if (arama) arama.value = "";
-        }
-    },   
-    "/stok/uretim": {js: "/obs_js_files/stok/uretim.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-            if (typeof OBS?.URETIM?.init === "function") OBS.URETIM.init();
-        }
-    },       
-    "/stok/fatura": {js: "/obs_js_files/stok/fatura.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-            if (typeof OBS?.FATURA?.init === "function") OBS.FATURA.init();
-        }
-    }, 
-    "/stok/irsaliye": {js: "/obs_js_files/stok/irsaliye.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-            if (typeof OBS?.IRSALIYE?.init === "function") OBS.IRSALIYE.init();
-        }
-    }, 
-    "/stok/zayi": {js: "/obs_js_files/stok/zayi.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-            if (typeof OBS?.ZAI?.fetchkod === "function") OBS.ZAI.fetchkod();
-        }
-    }, 
-    "/stok/recete": {js: "/obs_js_files/stok/recete.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-            if (typeof OBS?.RECETE?.fetchkod === "function") OBS.RECETE.fetchkod();
-        }
-    }, 
-    "/stok/fatrapor": {js: "/obs_js_files/stok/raporlar/fatrapor.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    },   
-    "/stok/irsrapor": {js: "/obs_js_files/stok/raporlar/irsrapor.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    },      
-    "/stok/envanter": {js: "/obs_js_files/stok/raporlar/envanter.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    },      
-    "/stok/imarapor": {js: "/obs_js_files/stok/raporlar/imarapor.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    }, 
-    "/stok/imagrprapor": {js: "/obs_js_files/stok/raporlar/imagrprapor.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    }, 
-    "/stok/stokrapor": {js: "/obs_js_files/stok/raporlar/stokrapor.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    }, 
-    "/stok/grprapor": {js: "/obs_js_files/stok/raporlar/grprapor.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    }, 
-    "/stok/stokdetay": {js: "/obs_js_files/stok/raporlar/stokdetay.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    },
-    "/stok/degiskenler": {js: "/obs_js_files/stok/degiskenler.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.stokBaslik();
-        	if (typeof OBS?.DEGISKENLER?.init === "function") OBS.DEGISKENLER.init();
-        }
-    },
-    
-    "/kereste/giris": {js: "/obs_js_files/kereste/giris.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.keresteBaslik();
-            if (typeof OBS?.KERGIRIS?.init === "function") OBS.KERGIRIS.init();
-        }
-    },     
-    "/kereste/cikis": {js: "/obs_js_files/kereste/cikis.js",
-        init: () => {
-        	if (typeof window.stokBaslik === "function") window.keresteBaslik();
-        	if (typeof OBS?.KERCIKIS?.init === "function") OBS.KERCIKIS.init();
-        }
-    }, 
-    "/kereste/koddegis": {js: "/obs_js_files/kereste/koddegis.js",
-        init: () => {
-           if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-           if (typeof OBS?.KODDEGIS?.init === "function") OBS.KODDEGIS.init();
-        }
-    }, 
-    "/kereste/fatrapor": {js: "/obs_js_files/kereste/raporlar/fatrapor.js",
-        init: () => {
-        	if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-        }
-    },  
-    "/kereste/detay": {js: "/obs_js_files/kereste/raporlar/kerdetay.js",
-        init: () => {
-        	if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-        }
-    },      
-    "/kereste/grprapor": {js: "/obs_js_files/kereste/raporlar/grprapor.js",
-        init: () => {
-        	if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-        }
-    },       
-    "/kereste/envanter": {js: "/obs_js_files/kereste/raporlar/envanter.js",
-        init: () => {
-        	if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-        }
-    },  
-    "/kereste/ortfiat": {js: "/obs_js_files/kereste/raporlar/ortfiat.js",
-        init: () => {
-        	if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-        }
-    },  
-    "/kereste/kodaciklama": {js: "/obs_js_files/kereste/kodaciklama.js",
-        init: () => {
-        	if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-        	if (typeof window.kodacikyukle === "function") window.kodacikyukle();
-        }
-    },
-    "/kereste/konsimentoaciklama": {js: "/obs_js_files/kereste/konsaciklama.js",
-        init: () => {
-        	if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-        	if (typeof window.konsacikyukle === "function") window.konsacikyukle();
-        }
-    },  
-    "/kereste/degiskenler": {js: "/obs_js_files/kereste/degiskenler.js",
-        init: () => {
-        	if (typeof window.keresteBaslik === "function") window.keresteBaslik();
-        	if (typeof OBS?.KERDEGISKENLER?.init === "function") OBS.KERDEGISKENLER.init();
-        }
-    },      
-    
-    
-   "/user/gidenraporlar": {js: "/obs_js_files/giden_rapor/gidenrapor.js"},
-    
-    "/user/mailgonderme": {
-      js: "/obs_js_files/sendemail/sendemail.js",
-      init: () => {
-    	  if (typeof OBS?.REPORTMAIL?.init === "function") OBS.REPORTMAIL.init();
-    		}
-    },
-    "/send_email": {
-        js: "/obs_js_files/sendemail/sendemail.js",
-        init: () => {
-      	  if (typeof OBS?.REPORTMAIL?.init === "function") OBS.REPORTMAIL.init();
-      		}
-      },
-
-    "/user/lograpor": { js: "/obs_js_files/user/lograpor.js" ,init: () => OBS?.LOG?.updatePaginationUI()},
-
-    "/backup/backuptakip": { js: "/obs_js_files/backup/backuptakip.js" },
-    "/backup/lograpor": { js: "/obs_js_files/backup/lograpor.js" },
-
-    "/user/user_pwd_change": { js: "/obs_js_files/user/sifredegis.js", init: () => OBS?.PWD?.init?.() },
-
-    "/user/user_update": { js: "/obs_js_files/user/userupdate.js", init: () => OBS?.USERUPD?.init?.() },
-
-    "/user/userdetails": {
-      js: "/obs_js_files/user/userDetails.js",
-      init: () => {
-        OBS?.USERDETAIL?.init?.();
-        OBS?.USERDETAIL?.detailoku?.();
-      }
-    },
-
-    "/user/userizinler": {
-      js: "/obs_js_files/user/userizinleri.js",
-      init: () => {
-        OBS?.USERIZIN?.init?.();
-        OBS?.USERIZIN?.adminbaglihesapoku?.();
-      }
-    },
-    "/user/userlist": {
-        js: "/obs_js_files/user/userlist.js",
-        init: () => {
-          OBS?.USERS_LIST?.init?.();
-        }
-      },
-
-    "/user/emailsettings": {
-      js: "/obs_js_files/user/emailayar.js",
-      init: () => { if (window.emailSettingsInit) window.emailSettingsInit(); }
-    },
-
-    "/user/createdb": {
-      js: "/obs_js_files/server/createdb.js",
-      init: () => { if (window.createDbInit) window.createDbInit(); }
-    },
-
-    "/user/copyuser": { js: "/obs_js_files/user/copyuser.js" },
-
-    "/user/deleteaccount": {
-      js: "/obs_js_files/user/deleteuser.js",
-      init: () => { if (window.accountDeleteInit) window.accountDeleteInit(); }
-    },
-    "/forum": {
-        js: "/obs_js_files/forum/forum.js",
-        init: () => {
-        	OBS?.FORUM?.init?.();
-        }
-      }
-  };
-  /* -------------------------
-     Module runner (query destekli)
-     ------------------------- */
-  async function runPageModule(url) {
-    const u = new URL(url, window.location.origin);
-    const path = u.pathname;              // "/obs/firmaismi"
-    const params = u.searchParams;        // ?modul=cari
-
-    const mod = pageModules[path];
-    if (!mod) return;
-
-    await loadScriptOnce(mod.js);
-
-    const fn = (typeof mod.init === "function") ? mod.init : window[mod.init];
-    if (typeof fn === "function") fn(params, u);
-  }
-
-  /* -------------------------
-     Main loader
-     ------------------------- */
-  async function sayfaYukle(url) {
-    const ara = ROOT.ara;
-    const baslik = ROOT.baslik;
-    if (!ara) return;
-
-    try {
-      if (baslik) baslik.innerText = "";
-      document.body.style.cursor = "wait";
-
-      const res = await fetch(url, {
-        method: "GET",
-        credentials: "same-origin",
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-        cache: "no-store"
-      });
-
-      if (res.status === 401) { window.location.href = "/login"; return; }
-
-      const data = await res.text();
-
-      if (data.includes("<form") && data.includes('name="username"')) {
-        window.location.href = "/login";
-        return;
-      }
-
-      if (!res.ok) {
-        ara.innerHTML = `<div class="cam-error">Serverda hata: ${res.status} - ${res.statusText || "error"}</div>`;
-        return;
-      }
-
-      ara.innerHTML = data;
-
-      try { await runPageModule(url); }
-      catch (e) { ara.innerHTML += `<div class="cam-error">${e.message}</div>`; }
-
-      if (window.urlActions && typeof window.urlActions[new URL(url, location.origin).pathname] === "function") {
-        try { window.urlActions[new URL(url, location.origin).pathname](); } catch(e) {}
-      }
-
-    } catch (e) {
-      ara.innerHTML = `<div class="cam-error">Bir hata: ${e?.message ?? "Bilinmeyen hata"}</div>`;
-    } finally {
-      document.body.style.cursor = "default";
-    }
-  }
-
-  /* -------------------------
-     changeLink click
-     data-url="/obs/firmaismi"
-     data-modul="cari" -> /obs/firmaismi?modul=cari
-     ------------------------- */
-  document.addEventListener("click", (e) => {
-    const link = e.target.closest(".changeLink");
-    if (!link) return;
-
-    e.preventDefault();
-
-    const rawUrl = link.getAttribute("data-url");
-    if (!rawUrl) return;
-
-    const u = new URL(rawUrl, window.location.origin);
-
-    // data- parametrelerini query'ye ekle (data-url hariç)
-    // ör: data-modul="cari" => ?modul=cari
-    for (const [k, v] of Object.entries(link.dataset)) {
-      if (k === "url") continue;
-      if (v != null && String(v).trim() !== "") u.searchParams.set(k, v);
-    }
-
-    sayfaYukle(u.pathname + u.search);
-  });
-
-  document.getElementById("sidebarCollapse")?.addEventListener("click", () => {
-    document.getElementById("appShell")?.classList.toggle("is-collapsed");
-  });
-
-  window.addEventListener("load", () => {
-    const trigger = new URLSearchParams(window.location.search).get("trigger");
-    if (trigger === "userdetails") sayfaYukle("/user/userdetails");
-    else sayfaYukle("/wellcome");
-  });
-
-  // dışarıdan çağırmak istersen:
-  window.sayfaYukle = sayfaYukle;
-</script>
+	<div class="app-shell" id="appShell">
+		<!-- SIDEBAR -->
+		<aside id="sidebar">
+			<div class="sb-top">
+				<a class="sb-logo" href="/index" title="OBS"> <img
+					src="images/logo/obs_logo_son.png" alt="OBS">
+				</a>
+				<div class="sb-brand">
+					<div class="t">OBS Sistem</div>
+					<div class="s">2026 Cam Tema</div>
+				</div>
+			</div>
+			<div class="sb-user">
+				<div class="avatar">
+					<img th:if="${profileImage != null}"
+						th:src="'data:image/jpeg;base64,' + ${profileImage}" alt="user">
+				</div>
+				<div class="info">
+					<div class="name">
+						<span id="kullaniciAdi" sec:authorize="isAuthenticated()"
+							sec:authentication="name"></span>
+					</div>
+					<div class="status">
+						<span class="dot"></span> Online
+					</div>
+				</div>
+			</div>
+			<!-- <div class="sb-menu-title">Menu</div> -->
+			<!-- MENÜ: -->
+			<div class="sb-menu">
+				<details class="sb-group">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-dashboard"></i></span> <span
+							class="txt">Cari Hesap</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" class="changeLink" data-url="/cari/hspplngiris"><span>Hesap
+								Plani Giris</span></a> <a href="" class="changeLink"
+							data-url="/cari/hspplnliste"><span>Hesap Plani</span></a> <a
+							href="" class="changeLink" data-url="/cari/dekont"><span>Dekont</span></a>
+						<a href="" class="changeLink" data-url="/cari/tahsilat"><span>Tahsilat
+								Fisi</span></a> <a href="" class="changeLink" data-url="/cari/ekstre"><span>Cari
+								Ekstre</span></a> <a href="" class="changeLink" data-url="/cari/mizan"><span>Cari
+								Mizan</span></a> <a href="" class="changeLink" data-url="/cari/ozelmizan"><span>Cari
+								Ozel Mizan</span></a> <a href="" class="changeLink"
+							data-url="/cari/dvzcevirme"><span>Cari Dovize Cevirme</span></a>
+						<a href="" class="changeLink" data-url="/cari/gunlukkontrol"><span>Gunluk
+								Takip</span></a> <a href="" class="changeLink"
+							data-url="/cari/tahsilatrapor"><span>Tahsilat
+								Raporlama</span></a> <a href="" class="changeLink"
+							data-url="/cari/tahsilatdegerleri"><span>Tahsilat
+								Degerleri</span></a> <a href="" class="changeLink"
+							data-url="/cari/ornekhesapplani"><span>Ornek Hesap
+								Plani</span></a> <a href="" class="changeLink"
+							data-url="/cari/carikoddegis"><span>Kod Degistirme</span></a> <a
+							href="" class="changeLink" data-url="/obs/firmaismi"
+							data-modul="cari"><span>Firma Ismi Degistirme</span></a>
+						<!--   <a href="" onclick="firmaIsmi('cari', event)"><span>Firma Ismi Degistirme</span></a>  -->
+					</div>
+				</details>
+				<details class="sb-group">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-money"></i></span> <span
+							class="txt">Kur Islemleri</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" class="changeLink" data-url="/kur/kurgiris"><span>Kur
+								Giris</span></a> <a href="" class="changeLink" data-url="/kur/kurrapor"><span>Kur
+								Raporlama</span></a>
+					</div>
+				</details>
+				<details class="sb-group">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-envelope-o"></i></span> <span
+							class="txt">Adres Islemleri</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" class="changeLink" data-url="/adres/adresgiris"><span>Adres
+								Giris</span></a> <a href="" class="changeLink"
+							data-url="/adres/etiketliste"><span>Etiket Listeleme</span></a> <a
+							href="" class="changeLink" data-url="/adres/etiketayar"><span>Etiket
+								Ayar</span></a> <a href="" class="changeLink" data-url="/obs/firmaismi"
+							data-modul="adres"><span>Firma Ismi Degistirme</span></a>
+					</div>
+				</details>
+				<details class="sb-group">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-table"></i></span> <span
+							class="txt">Kambiyo Islemleri</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" class="changeLink" data-url="/kambiyo/cekgiris"><span>Cek
+								Giris</span></a> <a href="" class="changeLink" data-url="/kambiyo/cekcikis"><span>Cek
+								Cikis</span></a> <a href="" class="changeLink" data-url="/kambiyo/cektakip"><span>Cek
+								Takip</span></a> <a href="" class="changeLink" data-url="/kambiyo/cekrapor"><span>Cek
+								Raporlama</span></a> <a href="" class="changeLink"
+							data-url="/obs/firmaismi" data-modul="kambiyo"><span>Firma
+								Ismi Degistirme</span></a>
+					</div>
+				</details>
+				<details class="sb-group">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-clone"></i></span> <span
+							class="txt">Stok Islemleri</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" class="changeLink" data-url="/stok/urunkart"><span>Urun
+								Giris</span></a> <a href="" class="changeLink" data-url="/stok/uretim"><span>Uretim</span></a>
+						<a href="" class="changeLink" data-url="/stok/fatura"><span>Fatura</span></a>
+						<a href="" class="changeLink" data-url="/stok/irsaliye"><span>Irsaliye</span></a>
+						<a href="" class="changeLink" data-url="/stok/zayi"><span>Zayi</span></a>
+						<a href="" class="changeLink" data-url="/stok/recete"><span>Recete</span></a>
+						<a href="" class="changeLink" data-url="/stok/fatrapor"><span>Fatura
+								Rapor</span></a> <a href="" class="changeLink" data-url="/stok/irsrapor"><span>Irsaliye
+								Rapor</span></a> <a href="" class="changeLink" data-url="/stok/envanter"><span>Envanter</span></a>
+						<a href="" class="changeLink" data-url="/stok/imarapor"><span>Imalat
+								Rapor</span></a> <a href="" class="changeLink" data-url="/stok/imagrprapor"><span>Imalat
+								Grup Rapor</span></a> <a href="" class="changeLink"
+							data-url="/stok/stokrapor"><span>Stok Rapor</span></a> <a href=""
+							class="changeLink" data-url="/stok/grprapor"><span>Grup
+								Rapor</span></a> <a href="" class="changeLink" data-url="/stok/stokdetay"><span>Stok
+								Detay Rapor</span></a> <a href="" class="changeLink"
+							data-url="/stok/degiskenler"><span>Degiskenler</span></a> <a
+							href="" class="changeLink" data-url="/obs/firmaismi"
+							data-modul="fatura"><span>Firma Ismi Degistirme</span></a>
+					</div>
+				</details>
+
+				<details class="sb-group">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-paper-plane"></i></span> <span
+							class="txt">Kereste Islemleri</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" class="changeLink" data-url="/kereste/giris"><span>Giris</span></a>
+						<a href="" class="changeLink" data-url="/kereste/cikis"><span>Cikis</span></a>
+						<a href="" class="changeLink" data-url="/kereste/koddegis"><span>Kod
+								Degistirme</span></a> <a href="" class="changeLink"
+							data-url="/kereste/fatrapor"><span>Kereste Fatura
+								Raporlama</span></a> <a href="" class="changeLink"
+							data-url="/kereste/detay"><span>Kereste Detay
+								Raporlama</span></a> <a href="" class="changeLink"
+							data-url="/kereste/grprapor"><span>Grup Rapor</span></a> <a
+							href="" class="changeLink" data-url="/kereste/envanter"><span>Envanter
+								Rapor</span></a> <a href="" class="changeLink" data-url="/kereste/ortfiat"><span>Ortalama
+								Fiat</span></a> <a href="" class="changeLink"
+							data-url="/kereste/kodaciklama"><span>Kod Aciklama</span></a> <a
+							href="" class="changeLink" data-url="/kereste/konsimentoaciklama"><span>Konsimento
+								Aciklama</span></a> <a href="" class="changeLink"
+							data-url="/kereste/degiskenler"><span>Degiskenler</span></a> <a
+							href="" class="changeLink" data-url="/obs/firmaismi"
+							data-modul="kereste"><span>Firma Ismi Degistirme</span></a>
+					</div>
+				</details>
+				<a href="" data-url="/user/mailgonderme" class="sb-a changeLink">
+					<span class="ico"><i class="fa fa-envelope-square"></i></span> <span
+					class="txt">Mail Gonderme</span>
+				</a> <a href="" data-url="/user/gidenraporlar" class="sb-a changeLink">
+					<span class="ico"><i class="fa fa-briefcase"></i></span> <span
+					class="txt">Giden Raporlar</span>
+				</a> <a href="" data-url="/user/lograpor" class="sb-a changeLink"> <span
+					class="ico"><i class="fa fa-object-group"></i></span> <span
+					class="txt">Log Rapor</span>
+				</a>
+				<details class="sb-group">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-cog"></i></span> <span
+							class="txt">Ayarlar</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" class="changeLink" data-url="/user/user_pwd_change"><span>Sifre
+								Degis</span></a> <a href="" class="changeLink" data-url="/user/user_update"><span>Isim
+								Degis</span></a> <a href="" class="changeLink" data-url="/user/userdetails"><span>Kullanici
+								Detaylari</span></a> <a th:if="${menuitemvisible}" href=""
+							class="changeLink" data-url="/user/userizinler"><span>Admin
+								İşlemleri</span></a> <a href="" class="changeLink"
+							data-url="/user/emailsettings"><span>E Mail Ayarlari</span></a> <a
+							href="" class="changeLink" data-url="/user/createdb"><span>Yeni
+								Veritabani Olustur</span></a> <a href="" class="changeLink"
+							data-url="/user/copyuser"><span>Kullanici Kopyala</span></a> <a
+							href="" class="changeLink" data-url="/user/deleteaccount"><span>Hesap
+								Silme</span></a> <a th:if="${menuitemvisiblegps}" href=""
+							class="changeLink" data-url="/user/userlist"><span>Kullanici
+								Listesi</span></a>
+					</div>
+				</details>
+
+				<details class="sb-group">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-cloud"></i></span> <span
+							class="txt">Backup Takip</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" data-url="/backup/backuptakip" class="changeLink"><span>Emir
+								Bilgileri</span></a> <a href="" data-url="/backup/lograpor"
+							class="changeLink"><span>Log Raporlama</span></a>
+					</div>
+				</details>
+
+				<details class="sb-group" th:if="${menuitemvisiblegps}">
+					<summary class="sb-sum">
+						<span class="ico"><i class="fa fa-map"></i></span> <span
+							class="txt">Gps Takip</span> <span class="chev">▾</span>
+					</summary>
+					<div class="sb-sub">
+						<a href="" data-url="/gps/gps" class="changeLink"><span>Gps
+								Izleme</span></a>
+					</div>
+				</details>
+
+			</div>
+		</aside>
+		<!-- MAIN -->
+		<main id="content">
+			<header class="app-header">
+				<button class="btn-icon" id="sidebarCollapse" type="button"
+					title="Menu">
+					<i class="fa fa-bars"></i>
+				</button>
+				<div class="brand">
+					<div class="logo">
+						<a href="" data-url="/wellcome" class="changeLink"
+							data-bs-toggle="tooltip" data-bs-placement="bottom"
+							title="Ana Sayfa"
+							style="display: grid; place-items: center; width: 100%; height: 100%;">
+							<img src="images/logo/obs_logo_son.png" alt="OBS">
+						</a>
+					</div>
+				</div>
+				<div class="hdr-spacer"></div>
+				<a href="" data-url="/forum" class="btn-icon changeLink"
+					data-toggle="tooltip" data-placement="top" title="Forum"> <i
+					class="fa fa-comments-o"></i> <span class="badge" id="mesajadet"
+					th:text="${mesajadet}"></span>
+				</a> <a class="btn-exit" href="/logout" title="Cikis"> <i
+					class="fa fa-sign-out"></i>
+				</a>
+			</header>
+			<div class="mid">
+				<div class="page_title">
+					<h2 id="baslik"></h2>
+				</div>
+				<div id="ara_content">
+					<!-- Dinamik içerik buraya yüklenecek -->
+				</div>
+				<div class="footer">
+					<p>
+						Copyright © 2024 Designed by html.design. All rights reserved. <br>
+						Distributed By: <a href="https://okumus.gen.tr/">Hamit Okumus</a>
+						<br> <a id="ip" th:text="${ip}"></a>
+					</p>
+				</div>
+			</div>
+		</main>
+	</div>
+<script src="/obs_js_files/index.js"></script>
 </body>
 </html>
-
