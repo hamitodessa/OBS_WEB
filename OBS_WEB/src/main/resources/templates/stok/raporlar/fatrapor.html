@@ -66,8 +66,9 @@
 }
 
 /* LAYOUT */
-#ara_content .fatrap .container{
-  height: 75vh;
+
+#ara_content .fatrap .table-container{
+ height: 75vh;
   display:flex;
   flex-direction:column;
   margin-top:10px;
@@ -75,8 +76,6 @@
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-}
-#ara_content .fatrap .table-container{
   flex-grow:1;
   overflow:auto;
   margin-top:10px;
@@ -95,6 +94,7 @@
 /* ===== MAIN TABLE ===== */
 #ara_content .fatrap table.t-main{
   width:100%;
+  min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -128,6 +128,18 @@
   padding-bottom: 2px;
 }
 
+#ara_content #main-table tfoot th{
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900 !important;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
 /* hover + selected sadece ANA satır */
 #ara_content .fatrap table.t-main tbody tr:not(.details-row):hover td{
   background: rgba(56,189,248,.14) !important;
@@ -359,7 +371,7 @@
 		</div>
 	</div>
 	<div id="errorDiv"></div>
-	<div class="container">
+
 		<div class="table-container">
 			<table id="main-table" class="t-main">
 				<thead class="thead-dark">
@@ -370,7 +382,7 @@
     			</tfoot>
 			</table>
 		</div>
-	</div>
+
 <!--		Start Pagination -->
 <div class='pagination-container' style="margin-top: 5px">
 	<button type="button" class="btn btn-secondary ml-2" onclick="OBS.FATRAPOR.ilksayfa()">

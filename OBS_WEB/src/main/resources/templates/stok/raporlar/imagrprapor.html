@@ -58,8 +58,14 @@
 #ara_content input[type="date"]{ color-scheme: dark; }
 
 
-#ara_content .container{
-  height: 75vh;
+
+/* =========================
+   2026 CAM – SCROLLBAR (SEKSI)
+   scope: #ara_content .table-container
+   ========================= */
+
+#ara_content .table-container{
+ height: 75vh;
   display:flex;
   flex-direction:column;
   margin-top:10px;
@@ -67,13 +73,14 @@
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-}
-/* =========================
-   2026 CAM – SCROLLBAR (SEKSI)
-   scope: #ara_content .table-container
-   ========================= */
-
-#ara_content .table-container{
+  flex-grow:1;
+  overflow:auto;
+  margin-top:10px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+  
   scrollbar-gutter: stable both-edges;   /* layout zıplamasın */
   scrollbar-width: thin;                /* Firefox */
   scrollbar-color: rgba(56,189,248,.38) rgba(0,0,0,.18); /* Firefox */
@@ -124,6 +131,7 @@
 /* ===== TABLE ===== */
 #ara_content table{
   width:100%;
+  min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -249,8 +257,8 @@
 	</div>
 </div>
 <div id="errorDiv"></div>
-<div class="container">
-	<div class="table-container" style="overflow-x: auto;">
+
+	<div class="table-container">
 		<table id="main-table"
 			class="table table-bordered table-hover table-row-height">
 			<thead class="thead-dark">
@@ -261,7 +269,7 @@
 			</tfoot>
 		</table>
 	</div>
-</div>
+
 <input type="hidden" id="imagrpBilgi" name="imagrpBilgi" value="" />
 
 <div th:replace="~{modal/stok/imagrpfiltre :: modalimagrp}"></div>

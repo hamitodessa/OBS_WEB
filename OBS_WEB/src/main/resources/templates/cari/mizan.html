@@ -57,9 +57,9 @@
 }
 #ara_content input[type="date"]{ color-scheme: dark; }
 
-/* ===== TABLE LAYOUT ===== */
-#ara_content .container{
-  height: 75vh;
+
+#ara_content .table-container{
+height: 75vh;
   display:flex;
   flex-direction:column;
   margin-top:10px;
@@ -67,13 +67,11 @@
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-}
-#ara_content .table-container{
+  
   flex-grow:1;
   overflow:auto;
   margin-top:10px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.14);
+  
   background: rgba(255,255,255,.03);
 }
 
@@ -123,8 +121,9 @@
 /* Body base */
 #ara_content tbody td{
   background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.82);
-  transition: color .12s ease, background .12s ease;
+  background: rgba(255,255,255,.04) !important;
+  color: rgba(255,255,255,.78) !important;
+  transition: .12s ease;
 }
 
 
@@ -166,11 +165,19 @@
   position: sticky;
   bottom: 0;
   z-index: 2;
-  background: rgba(255,255,255,.04);
+ 
   border-color: rgba(255,255,255,.08);
   font-weight: 900;
 }
 
+#ara_content tfoot td{
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
+}
 /* ===== PAGINATION ===== */
 #ara_content .pagination-container{
   margin-top: 10px !important;
@@ -224,7 +231,6 @@
 	</div>
 </div>
 <div id="errorDiv"></div>
-<div class="container">
 	<div class="table-container">
 		<table class="table table-bordered table-hover table-row-height">
 			<thead class="thead-dark">
@@ -250,7 +256,7 @@
 			</tfoot>
 		</table>
 	</div>
-</div>
+
 <input type="hidden" id="mizanBilgi" name="mizanBilgi"
 	value="initialValue" />
 

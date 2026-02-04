@@ -57,7 +57,8 @@
 #ara_content input[type="date"]{ color-scheme: dark; }
 
 
-#ara_content .container{
+
+#ara_content .table-container{
   height: 75vh;
   display:flex;
   flex-direction:column;
@@ -66,14 +67,13 @@
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-}
-#ara_content .table-container{
   flex-grow:1;
   overflow:auto;
   margin-top:10px;
   border-radius:16px;
   border:1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
 }
 
 /* Scrollbar (Chrome/Edge) */
@@ -91,6 +91,7 @@
 /* ===== TABLE ===== */
 #ara_content table{
   width:100%;
+  min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -218,7 +219,7 @@
 	</div>
 </div>
 <div id="errorDiv"></div>
-<div class="container">
+
 	<div class="table-container">
 		<table id="main-table" class="table table-bordered table-hover table-row-height">
 			<thead class="thead-dark"></thead>
@@ -226,7 +227,7 @@
 			<tfoot></tfoot>
 		</table>
 	</div>
-</div>
+
 <input type="hidden" id="stokBilgi" name="stokBilgi" value="" />
 
 <div th:replace="~{modal/stok/stokfiltre :: modalstok}"></div>

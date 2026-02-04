@@ -124,7 +124,7 @@
 #ara_content tbody td{
   background: rgba(255,255,255,.04);
   color: rgba(255,255,255,.82);
-  transition: color .12s ease, background .12s ease;
+  transition: .12s ease;
 }
 
 
@@ -166,9 +166,17 @@
   position: sticky;
   bottom: 0;
   z-index: 2;
-  background: rgba(255,255,255,.04);
   border-color: rgba(255,255,255,.08);
   font-weight: 900;
+}
+
+#ara_content tfoot td{
+  background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
+  color: #fff !important;
+  font-weight: 900;
+  border-top: 1px solid rgba(56,189,248,.45) !important;
+  border-bottom: none !important;
+  padding: 8px 10px !important;
 }
 
 /* ===== PAGINATION ===== */

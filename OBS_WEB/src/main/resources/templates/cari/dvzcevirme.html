@@ -57,9 +57,9 @@
 }
 #ara_content input[type="date"]{ color-scheme: dark; }
 
-/* ===== TABLE LAYOUT ===== */
-#ara_content .container{
-  height: 75vh;
+
+#ara_content .table-container{
+height: 75vh;
   display:flex;
   flex-direction:column;
   margin-top:10px;
@@ -67,14 +67,15 @@
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-}
-#ara_content .table-container{
+  
   flex-grow:1;
   overflow:auto;
   margin-top:10px;
   border-radius:16px;
   border:1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
+
+  
 }
 
 /* Scrollbar (Chrome/Edge) */
@@ -228,7 +229,7 @@
 	</div>
 </div>
 <div id="errorDiv"></div>
-<div class="container">
+
 	<div class="table-container">
 		<table class="table table-bordered table-hover">
 			<thead class="thead-dark">
@@ -264,7 +265,7 @@
 			</tfoot>
 		</table>
 	</div>
-</div>
+
 <div class='pagination-container' style="margin-top: 5px">
 	<button type="button" class="btn btn-secondary ml-2" id="ilksayfa"
 		onclick="OBS.DVZ.ilksayfa()">

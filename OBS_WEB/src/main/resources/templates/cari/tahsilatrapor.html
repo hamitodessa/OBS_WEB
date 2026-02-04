@@ -61,9 +61,8 @@
   font-weight: 900;
 }
 
-/* LAYOUT */
-#ara_content .tahrap .container{
-  height: 75vh;
+#ara_content .tahrap .table-container{
+ height: 75vh;
   display:flex;
   flex-direction:column;
   margin-top:10px;
@@ -71,8 +70,7 @@
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-}
-#ara_content .tahrap .table-container{
+  
   flex-grow:1;
   overflow:auto;
   margin-top:10px;
@@ -240,7 +238,7 @@
 
   <div id="errorDiv"></div>
 
-  <div class="container">
+
     <div class="table-container">
       <!-- Bootstrap table class YOK -->
       <table id="main-table" class="t-main">
@@ -263,7 +261,7 @@
         <tbody id="mainTableBody"></tbody>
       </table>
     </div>
-  </div>
+
 </div>
 <input type="hidden" id="tahrapBilgi" name="tahrapBilgi" value="initialValue" />
 
