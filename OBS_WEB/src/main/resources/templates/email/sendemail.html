@@ -219,12 +219,16 @@
       </div>
       <div class="group-row">
         <div class="form-row" style="padding-top: 5px">
-          <select class="form-select" id="format" name="format">
+        <div style="position: relative; width: 150px;">
+          <select class="form-select" id="format" style="width: 150px;" name="format">
             <option value="pdf">PDF</option>
             <option value="xlsx">Excel (XLSX)</option>
             <option value="docx">Word (DOCX)</option>
             <option value="xml">XML</option>
           </select>
+          <span
+				style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
+           </div>
         </div>
       </div>
       <div class="form-row" style="padding-top: 5px">
