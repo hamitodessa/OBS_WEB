@@ -6,21 +6,17 @@
 
 #ara_content{ color: rgba(255,255,255,.92); }
 
-/* CARD */
-#ara_content .card.p-4{
+
+/* CONTAINER */
+#ara_content .container{
+  width: 100%;
+ 
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-}
-
-/* CONTAINER */
-#ara_content .container{
-  width: 95%;
-  margin: 10px auto;
-  background: transparent;
   padding: 10px;
 }
 
@@ -40,6 +36,7 @@
   color: rgba(255,255,255,.95);
   font-weight: 900;
   margin-bottom: 14px;
+  margin-left:10px;
   text-shadow: 0 0 12px rgba(56,189,248,.35);
 }
 
@@ -97,7 +94,8 @@
   border: 1px solid rgba(255,255,255,.14) !important;
   background: rgba(8,14,26,.35);
   color: rgba(255,255,255,.88);
-  border-radius: 14px !important;
+  border-radius: 10px !important;
+  padding:10px;
 }
 
 /* COMMITS */
@@ -119,6 +117,7 @@
   font-size: 13px;
   font-weight: 900;
   color: #38bdf8;
+ 
 }
 #ara_content .commit p{
   margin: 6px 0 0 0;
@@ -159,9 +158,14 @@
 
 /* ERROR */
 #ara_content #errorDiv{
-  color: #f87171 !important;
-  font-weight: 900 !important;
-  margin: 10px 0;
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
 }
 
 #ara_content .subject h4{
@@ -180,13 +184,6 @@
   box-shadow: none !important;
   transform: none !important;
 }
-
-
-/* =========================
-   SUBJECT – HOVER KAPAT (RENKLER KALSIN)
-   ========================= */
-
-
 
 /* Yazılar sabit beyaz kalsın */
 #ara_content .subject h4,
@@ -264,33 +261,24 @@
 }
 
 </style>
-
-
-  <div class="container">
-    <div class="header">
-      <h4 style="font-weight: bold;">Forum</h4>
-    </div>
-
-    <div class="search-container" style="margin-bottom: 10px;margin-top: 20px;">
-      <input type="text" class="form-control" id="search-input"
-             placeholder="Konuları ara..." onkeyup="OBS.FORUM.filterSubjects()" />
-    </div>
-
-    <div id="errorDiv" style="display:none;"></div>
-
-    <div class="subject-section"></div>
-
-    <div class="form">
-      <h4>Yeni Konu Ekle</h4>
-
-      <input type="text" class="form-control"
-             id="subject-title" placeholder="Konu Basligi"
-             maxlength="255" required />
-
-      <textarea class="form-control"
-                id="subject-description" placeholder="Konu Detayi"
-                rows="4" maxlength="300" required style="margin-top:5px;"></textarea>
-
-      <button onclick="OBS.FORUM.addSubject()" id="saveButton">Kaydet</button>
-    </div>
-  </div>
+<div class="container">
+	<div class="header">
+		<h4 style="font-weight: bold;">Forum</h4>
+	</div>
+	<div class="search-container"
+		style="margin-bottom: 10px; margin-top: 20px;">
+		<input type="text" class="form-control" id="search-input"
+			placeholder="Konuları ara..." onkeyup="OBS.FORUM.filterSubjects()" />
+	</div>
+	<div id="errorDiv"></div>
+	<div class="subject-section"></div>
+	<div class="form">
+		<h4>Yeni Konu Ekle</h4>
+		<input type="text" class="form-control" id="subject-title"
+			placeholder="Konu Basligi" maxlength="255" required />
+		<textarea class="form-control" id="subject-description"
+			placeholder="Konu Detayi" rows="4" maxlength="300" required
+			style="margin-top: 5px;"></textarea>
+		<button onclick="OBS.FORUM.addSubject()" id="saveButton">Kaydet</button>
+	</div>
+</div>

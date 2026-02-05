@@ -129,8 +129,22 @@
   font-size: 14px;
   margin: 0 !important;
   white-space: nowrap;
+  
 }
-
+#ara_content #cariadilbl ,
+#ara_content #adresadilbl{
+display: flex;  
+  height: 28px !important;
+  align-items:center;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+   color: rgba(255,255,255,.84);
+  font-weight: 900;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 /* ---------- COMMON FIELDS (Tab içi 34px) ---------- */
 #ara_content .tab-content .form-control,
 #ara_content .tab-content .form-select,
@@ -610,10 +624,10 @@
 					</div>
 					<!-- 2 SATIR  SONU -->
 					<!-- 3 SATIR  -->
-					<div style="display: flex; align-items: center; height: 25px;">
+					<div id="isimBilgi" style="display: flex; align-items: center; height: 30px;margin-top:5px;">
 						<span style="padding-left: 60px;"></span> <label
 							style="width: 350px;" id="cariadilbl"></label> <span
-							style="padding-left: 35px;"></span> <label
+							style="padding-left: 30px;"></span> <label
 							style="min-width: 350px;" id="adresadilbl"></label>
 					</div>
 					<!-- 3 SATIR  SONU -->
