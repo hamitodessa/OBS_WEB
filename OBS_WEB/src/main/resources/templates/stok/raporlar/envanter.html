@@ -68,6 +68,9 @@
   max-width:100%;
   box-sizing:border-box;
   gap: 10px;
+  
+   scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
 
 /* TABLE WRAPPER */
@@ -76,6 +79,9 @@
   border-radius:16px;
   border:1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.03);
+  
+   scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
 
 /* sadece 1 tablo açıkken */
@@ -111,6 +117,7 @@
 /* TABLE BASE */
 #ara_content table{
   width:100%;
+  min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -123,6 +130,14 @@
   padding: 6px 10px;
   white-space: nowrap;
   vertical-align: middle;
+}
+
+
+#ara_content .table-row-height td{
+  height: 18px;
+  line-height: 18px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 /* HEADER */
@@ -144,19 +159,21 @@
   transition: color .12s ease, background .12s ease;
 }
 
-/* ROW HEIGHTS */
-#ara_content #main-table tbody td{
-  height: 26px;
-  line-height: 18px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
+
 #ara_content #second-table tbody td{
   height: 18px;
   line-height: 18px;
   padding-top: 2px;
   padding-bottom: 2px;
 }
+
+#ara_content #second-table .table-row-height td{
+  height: 18px;
+  line-height: 18px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
 
 /* HOVER + SELECTED */
 #ara_content .table-hover tbody tr:hover td{
@@ -229,7 +246,7 @@
 
 <div class="container">
   <div class="table-container">
-    <table id="main-table" class="table table-bordered table-hover">
+    <table id="main-table" class="table table-bordered table-hover table-row-height">
       <thead>
         <tr>
           <th>KODU</th>
