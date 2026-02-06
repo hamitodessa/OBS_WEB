@@ -201,7 +201,7 @@
 				for="server">Server</label> <input type="text" id="server"
 				class="form-control" style="width: 200px;"> <label
 				for="sifre">Şifre</label> <input type="password" id="sifre"
-				class="form-control" style="width: 125px;"  onkeypress="OBS.BACKUPLOG.emirIsmiDoldur()">
+				class="form-control" style="width: 125px;"  onkeydown="if(event.key === 'Enter') OBS.BACKUPLOG.emirIsmiDoldur()">
 			<div style="position: relative;  width: 150px;">
 				<select style="width: 150px;" class="form-select"
 					onchange="OBS.BACKUPLOG.logListe(0)" id="hangi_emir" name="hangi_emir"></select> <span
