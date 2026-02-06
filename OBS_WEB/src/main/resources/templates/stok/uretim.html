@@ -89,7 +89,7 @@
   padding: 0;
 }
 #ara_content .child{  width: 1200px; }  /* controller alanı */
-#ara_content .child2{ width: 220px; }   /* resim alanı */
+#ara_content .child2{ width: 240px; }   /* resim alanı */
 
 /* ===== GROUP-BOX ===== */
 #ara_content .group-box{
@@ -235,8 +235,8 @@
 /* ===== RESIM ===== */
 #ara_content .resimdiv{
   width: 100%;
-  height: 100%;
-  padding: 2px;
+  height: 240px;
+  max-height: 240px;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -250,10 +250,14 @@
     inset 0 0 0 1px rgba(255,255,255,.05),
     0 10px 30px rgba(0,0,0,.35);
 }
-#ara_content #resimGoster.resimgoster{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+
+#ara_content .resimgoster{
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+ 
+  border-radius: 14px; /* 18 - 2 - 2 */
+  background: transparent;
+  mix-blend-mode: multiply;
 }
 
 /* =========================================================
