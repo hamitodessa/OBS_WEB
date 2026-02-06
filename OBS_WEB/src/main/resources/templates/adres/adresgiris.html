@@ -106,10 +106,14 @@
 #ara_content .form-control{
   height: 32px; /* kompakt */
   background: rgba(8,14,26,.42) !important;
-  color: rgba(255,255,255,.95) !important;
+ 
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 12px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+  
+  color: rgba(255,255,255,.84);
+  font-weight: 900;
+  font-size: 14px;
 }
 #ara_content .form-control::placeholder{ color: rgba(255,255,255,.55) !important; }
 #ara_content .form-control:focus{
@@ -219,19 +223,25 @@
 }
 #ara_content .resimdiv{
   width: 100%;
-  min-height: 280px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-height: 280px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.16);
-  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  border-radius: 18px;
   overflow: hidden;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.05),
+    0 10px 30px rgba(0,0,0,.35);
 }
 #ara_content .resimgoster{
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+ 
+  border-radius: 14px; /* 18 - 2 - 2 */
   background: transparent;
   mix-blend-mode: multiply;
 }

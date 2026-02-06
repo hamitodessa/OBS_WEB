@@ -31,8 +31,8 @@
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
- margin-top: 5px !important;
- padding: 5px;
+  margin-top: 5px !important;
+  padding: 5px;
 }
 
 /* ===== ÜST BLOK (child + resim) =====
@@ -182,6 +182,42 @@ display: flex;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06) !important;
 }
 
+
+
+#ara_content .form-check-input{
+ 
+  width: 18px;
+  height: 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 5px;
+  border: 2px solid rgba(255,255,255,.85);
+  background: rgba(8,14,26,.55);
+  cursor: pointer;
+  position: relative;
+}
+
+#ara_content .form-check-input:checked{
+  background: rgba(56,189,248,.25);
+  border-color: #fff;
+}
+#ara_content .form-check-input:checked::after{
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+#ara_content .form-check-input:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.35);
+}
+
+
 /* ===== BUTTONS ===== */
 #ara_content .btn-primary{
   border-radius: 14px;
@@ -296,17 +332,17 @@ height: 34px !important;
   align-items:center;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
   border: 1px solid rgba(255,255,255,.18) !important;
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
 }
 #ara_content #resimGoster.resimgoster{
-  display:block;
-  width:100%;
-  height:100%;
+ width: calc(100% - 4px);
+  height: calc(100% - 4px);
+ 
+  border-radius: 14px; /* 18 - 2 - 2 */
   background: transparent;
   mix-blend-mode: multiply;
-  object-position: center;
  
 }
 
@@ -675,7 +711,7 @@ height: 34px !important;
 	</div>
 	<!-- Tab 2 Content -->
 	<div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
-		<div class="card p-4">
+		<div class="card">
 		<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
 				<div class="input-group-prepend">
@@ -684,7 +720,7 @@ height: 34px !important;
 				<span style="padding-left: 5px;"></span> <input type="text"
 					id="not1" class="form-control" style="max-width: 300px;">
 			</div>
-			<div class="form-check" style="width: 350px;">
+			<div class="form-check" style="margin-left:8px ;width: 350px;">
 				<input type="checkbox" class="form-check-input" id="fatmikyazdir">
 				<label class="form-check-label" for="izinlimi" >Faturada Toplam miktar Yazdir</label>
 			</div>
@@ -710,7 +746,7 @@ height: 34px !important;
 		</div>
 	</div>
 	<div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
-	<div class="card p-4">
+	<div class="card">
 		<div class="form-row">
 			<div class="input-group" style="padding: 2px;">
 				<div class="input-group-prepend">
@@ -733,7 +769,7 @@ height: 34px !important;
 	</div>
 	<!-- Tab 4 Content -->
 	<div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
-		<div class="card p-4">
+		<div class="card">
 			<div class="group-box">
 				<div style="display: flex; align-items: center; ">
 					<span style="padding-left: 20px;"></span> 
@@ -753,7 +789,7 @@ height: 34px !important;
 <div class="irs-table-wrap">
 <table class="table table-bordered" id="irsTable"
 	style="margin-top: 5px;">
-	<thead class="thead-dark">
+	<thead>
 		<tr>
 			<th style="width:25px;"></th>
 			<th style="width:10%">BARKOD</th>

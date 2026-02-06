@@ -43,8 +43,8 @@
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
- margin-top: 5px !important;
- padding: 5px;
+  margin-top: 5px !important;
+  padding: 5px;
 
 }
 /* ---------- TOP SPLIT (child + resim) ---------- */
@@ -232,19 +232,37 @@ display: flex;
   justify-content: center !important;
 }
 
-/* checkbox satırı */
-#ara_content .tab-content .form-check{
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 8px;
-  min-height: var(--ctl-h) !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
+
 #ara_content .tab-content .form-check-input{
-  width: 16px;
-  height: 16px;
-  margin-top: 0 !important;
+  width: 18px;
+  height: 18px;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 5px;
+  border: 2px solid rgba(255,255,255,.85);
+  background: rgba(8,14,26,.55);
+  cursor: pointer;
+  position: relative;
+}
+
+#ara_content .tab-content .form-check-input:checked{
+  background: rgba(56,189,248,.25);
+  border-color: #fff;
+}
+#ara_content .tab-content .form-check-input:checked::after{
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+#ara_content .tab-content .form-check-input:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(56,189,248,.35);
 }
 
 /* ---------- SELECT (tek yerden ok) ---------- */
@@ -282,17 +300,17 @@ margin-top:10px;
   align-items:center;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
   border: 1px solid rgba(255,255,255,.18) !important;
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
 }
 #ara_content #resimGoster.resimgoster{
-  display:block;
-  width:100%;
-  height:100%;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+ 
+  border-radius: 14px; /* 18 - 2 - 2 */
   background: transparent;
   mix-blend-mode: multiply;
-  object-position: center;
   
 }
 
@@ -678,7 +696,7 @@ margin-top:10px;
 						style="padding-left: 5px;"></span> <input type="text" id="not1"
 						class="form-control" style="max-width: 300px;">
 				</div>
-				<div class="form-check" style="width: 350px;">
+				<div class="form-check" style="margin-left:7px ;width: 350px;">
 					<input type="checkbox" class="form-check-input" id="fatmikyazdir">
 					<label class="form-check-label" for="izinlimi">Faturada
 						Toplam miktar Yazdir</label>
