@@ -1,15 +1,12 @@
 <style>
 /* =========================
    2026 CAM – HSP KOMPAKT (GRID) - OUTER BOX REMOVED
-   wrapper: #hsp_content
+   wrapper: #ara_content
    ========================= */
 
-#hsp_content{
-  color: rgba(255,255,255,.92);
-}
-
+#ara_content{ color: rgba(255,255,255,.92);padding: 0 !important; }
 /* CARD */
-#hsp_content .card{
+#ara_content .card{
    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
@@ -21,18 +18,18 @@
 /* ======================================================
    LAYOUT: sol form + sağ resim
    ====================================================== */
-#hsp_content .hsp-layout{
+#ara_content .hsp-layout{
   display: grid;
   grid-template-columns: 1fr 280px;
   gap: 12px;
   align-items: start;
 }
 @media (max-width: 1100px){
-  #hsp_content .hsp-layout{ grid-template-columns: 1fr; }
+  #ara_content .hsp-layout{ grid-template-columns: 1fr; }
 }
 
 /* SOL alan: tek cam panel */
-#hsp_content .hsp-left{
+#ara_content .hsp-left{
   width: 100%;
   padding: 12px;
   border-radius: 18px;
@@ -45,7 +42,7 @@
 /* =======================
    1) TOOLBAR (AYNI KALSIN)
    ======================= */
-#hsp_content .hsp-toolbar{
+#ara_content .hsp-toolbar{
   display: grid;
   grid-template-columns: 110px 1fr 170px;
   gap: 8px;
@@ -60,7 +57,7 @@
 /* ==========================
    2) NAV/ACTION (AYNI KALSIN)
    ========================== */
-#hsp_content .hsp-actions{
+#ara_content .hsp-actions{
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -76,13 +73,13 @@
 /* =========================================
    3) HESAP KODU + UNVAN (AYNI KALSIN)
    ========================================= */
-#hsp_content .hsp-form{
+#ara_content .hsp-form{
   margin-top: 8px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 8px;
 }
-#hsp_content .hsp-field{
+#ara_content .hsp-field{
   display: flex;
   align-items: center;
   gap: 8px;
@@ -95,7 +92,7 @@
 }
 
 /* label chip */
-#hsp_content .hsp-label{
+#ara_content .hsp-label{
   height: 28px;
   min-width: 84px;
 
@@ -116,9 +113,9 @@
 }
 
 /* input/select/textarea */
-#hsp_content .form-control,
-#hsp_content .form-select,
-#hsp_content textarea.form-control{
+#ara_content .form-control,
+#ara_content .form-select,
+#ara_content textarea.form-control{
   height: 32px; /* daha kompakt */
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.16);
@@ -127,20 +124,20 @@
   box-sizing: border-box;
 }
 
-#hsp_content .form-control:focus,
-#hsp_content .form-select:focus,
-#hsp_content textarea.form-control:focus{
+#ara_content .form-control:focus,
+#ara_content .form-select:focus,
+#ara_content textarea.form-control:focus{
   border-color: rgba(56,189,248,.65);
   box-shadow: 0 0 0 5px rgba(56,189,248,.18);
   background: rgba(8,14,26,.65);
   color:#fff;
 }
 
-#hsp_content input[type="date"]{ color-scheme: dark; }
+#ara_content input[type="date"]{ color-scheme: dark; }
 
-#hsp_content .form-control:disabled,
-#hsp_content .form-select:disabled,
-#hsp_content textarea.form-control:disabled{
+#ara_content .form-control:disabled,
+#ara_content .form-select:disabled,
+#ara_content textarea.form-control:disabled{
   opacity: .90;
   color: rgba(255,255,255,.80);
   background: rgba(8,14,26,.30);
@@ -149,14 +146,14 @@
 
 
 /* kod kontrol */
-#hsp_content #kodKontrol{
+#ara_content #kodKontrol{
   color: rgba(251,113,133,.95) !important;
   font-weight: 900;
   text-shadow: 0 2px 8px rgba(0,0,0,.45);
 }
 
 /* buton */
-#hsp_content .btn.btn-secondary{
+#ara_content .btn.btn-secondary{
   height: 34px;
   min-width: 44px;
   border-radius: 12px;
@@ -168,14 +165,14 @@
   justify-content: center;
   transition: .16s ease;
 }
-#hsp_content .btn.btn-secondary:hover{
+#ara_content .btn.btn-secondary:hover{
   background: rgba(255,255,255,.12);
   border-color: rgba(56,189,248,.35);
   transform: translateY(-2px);
 }
 
 /* datalist ok */
-#hsp_content .datalist-arrow{
+#ara_content .datalist-arrow{
   color: rgba(255,255,255,.9);
   text-shadow: 0 0 6px rgba(255,255,255,.35);
 }
@@ -183,18 +180,18 @@
 /* =========================================
    ALT GRID (KOMPAKT) - DIŞ KUTU KALDIRILDI
    ========================================= */
-#hsp_content .hsp-grid{
+#ara_content .hsp-grid{
   margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px 12px; /* dikey boşluk az */
 }
 @media (max-width: 1100px){
-  #hsp_content .hsp-grid{ grid-template-columns: 1fr; }
+  #ara_content .hsp-grid{ grid-template-columns: 1fr; }
 }
 
 /* artık kutu yok, sadece hizalama */
-#hsp_content .hsp-item{
+#ara_content .hsp-item{
   display: grid;
   grid-template-columns: 84px 1fr; /* label daha dar */
   gap: 6px;
@@ -207,27 +204,27 @@
 }
 
 /* sms satırı */
-#hsp_content .hsp-item.sms{
+#ara_content .hsp-item.sms{
   grid-template-columns: 84px auto;
   justify-content: start;
 }
 
 /* tam satır alanlar */
-#hsp_content .span2{ grid-column: 1 / -1; }
+#ara_content .span2{ grid-column: 1 / -1; }
 
 /* SAĞ FOTO */
-#hsp_content .hsp-photo{
+#ara_content .hsp-photo{
   position: sticky;
   top: 14px;
 }
-#hsp_content .resimcentered-div{
+#ara_content .resimcentered-div{
   width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-#hsp_content .resimdiv{
+#ara_content .resimdiv{
   width: 100%;
   height: 320px;
   border-radius: 16px;
@@ -239,14 +236,14 @@
   align-items: center;
   justify-content: center;
 }
-#hsp_content .resimgoster{
+#ara_content .resimgoster{
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
 /* ERROR */
-#hsp_content #errorDiv{
+#ara_content #errorDiv{
   display:none;
   margin-bottom: 10px;
   padding: 10px 12px;
@@ -258,7 +255,7 @@
 }
 
 /* ===== CHECKBOX – DARK THEME FIX ===== */
-#hsp_content .form-check-input{
+#ara_content .form-check-input{
   width: 18px;
   height: 18px;
   appearance: none;              /* native görünümü kapat */
@@ -271,13 +268,13 @@
 }
 
 /* işaret */
-#hsp_content .form-check-input:checked{
+#ara_content .form-check-input:checked{
   background: rgba(56,189,248,.25);
   border-color: #ffffff;
 }
 
 /* beyaz check */
-#hsp_content .form-check-input:checked::after{
+#ara_content .form-check-input:checked::after{
   content: "✓";
   position: absolute;
   top: 50%;
@@ -290,23 +287,23 @@
 }
 
 /* focus */
-#hsp_content .form-check-input:focus{
+#ara_content .form-check-input:focus{
   outline: none;
   box-shadow: 0 0 0 3px rgba(56,189,248,.35);
 }
 
 /* SPAN HELPERS (ilk satır için) */
-#hsp_content .c12{ grid-column: span 12; }
-#hsp_content .c8 { grid-column: span 8; }
-#hsp_content .c6 { grid-column: span 6; }
-#hsp_content .c4 { grid-column: span 4; }
+#ara_content .c12{ grid-column: span 12; }
+#ara_content .c8 { grid-column: span 8; }
+#ara_content .c6 { grid-column: span 6; }
+#ara_content .c4 { grid-column: span 4; }
 @media (max-width: 1100px){
-  #hsp_content .c4, #hsp_content .c6, #hsp_content .c8{ grid-column: span 12; }
+  #ara_content .c4, #ara_content .c6, #ara_content .c8{ grid-column: span 12; }
 }
 </style>
 
 
-<div id="hsp_content">
+
   <div id="errorDiv"></div>
 
   <div class="card">
@@ -495,7 +492,7 @@
 
     </div>
   </div>
-</div>
+
 
 
 

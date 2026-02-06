@@ -24,14 +24,15 @@
 
 /* ===== CARD ===== */
 #ara_content .card{
-  padding: 5px !important;
+ 
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  margin-top: 10px;
+ margin-top: 5px !important;
+ padding: 5px;
 }
 
 /* ===== ÜST BLOK (child + resim) =====
@@ -41,9 +42,11 @@
 #ara_content .cardd{
   display:flex;
   flex-wrap: nowrap !important;     /* ✅ ASIL FIX */
-  gap: 6px;
+ 
   align-items:flex-start;
-  margin-top:10px;
+  margin-top:5px;
+  gap:5px;
+  padding: 5px !important;
 
   max-width: 100%;
   overflow-x: auto;                 /* ✅ küçük ekranda kaydır */
@@ -58,7 +61,7 @@
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  padding: 5px !important;
+  
 
   scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.65) rgba(255,255,255,.06);
@@ -106,7 +109,7 @@
   padding: 0;
 }
 #ara_content .child{  width: 1150px; min-width: 1150px; }
-#ara_content .child2{ width: 240px;  min-width: 240px; }
+#ara_content .child2{ width: 200px;  min-width: 200px; }
 
 /* ===== LABEL ===== */
 #ara_content label{
@@ -284,9 +287,10 @@ height: 34px !important;
 
 /* ===== RESIM ===== */
 #ara_content .resimdiv{
+ margin-top:10px;
   width: 100%;
-  height: 240px;
-  max-height: 240px;
+  height: 200px;
+  max-height: 200px;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -527,7 +531,7 @@ height: 34px !important;
 
 
 
-<div class="card p-4">
+<div class="card">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
 		<li class="nav-item" role="presentation">
 			<button class="nav-link active" id="tab1-tab"
@@ -593,7 +597,7 @@ height: 34px !important;
     						
 						</select>
 					 </div>		
-				</div>
+			</div>
 			<!-- 2 SATIR  -->
 			<div style="display: flex; align-items: center;margin-top:10px; ">
 					<label style="min-width:70px;">Cari Kod</label>
@@ -633,10 +637,10 @@ height: 34px !important;
 			<!-- 2 SATIR  SONU -->
 			<!-- 3 SATIR  -->
 			<div style="display: flex; align-items: center;height:30px;margin-top:5px; ">
-					<span style="padding-left: 75px;"></span> 
+					<span style="padding-left: 70px;"></span> 
 					<label style="width:350px;" id="cariadilbl"></label>
 					
-					<span style="padding-left: 30px;"></span> 	
+					<span style="padding-left: 35px;"></span> 	
 					<label style="min-width:350px;" id="adresadilbl"></label>	
 				</div>
 			<!-- 3 SATIR  SONU -->
