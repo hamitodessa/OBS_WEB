@@ -185,7 +185,7 @@ OBS.URETIM.urunAramaYap = async (kodbarkod = "Kodu") => {
 	
 	const urtmmiktar =  OBS.URETIM._el("uretmiktar");
 	urtmmiktar.focus();
-	
+	urtmmiktar.select();
   } catch (err) {
     OBS.URETIM._showError(err?.message);
   } finally {
