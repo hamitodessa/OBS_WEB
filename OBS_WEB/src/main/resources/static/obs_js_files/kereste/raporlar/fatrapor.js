@@ -505,7 +505,7 @@ OBS.KERFATRAPOR = OBS.KERFATRAPOR || {};
 
             det.forEach((item) => {
               html += `
-                <tr class="drow">
+                <tr>
                   <td style="min-width:80px;">${item.Fatura_No || ""}</td>
                   <td>${item.Barkod || ""}</td>
                   <td>${item.Kodu || ""}</td>

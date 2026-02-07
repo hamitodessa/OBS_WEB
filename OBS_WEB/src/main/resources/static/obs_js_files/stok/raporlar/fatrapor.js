@@ -353,7 +353,7 @@ OBS.FATRAPOR = OBS.FATRAPOR || {};
 
             det.forEach(item => {
               html += `
-                <tr class="drow">
+                <tr>
                   <td>${item.Kodu || ""}</td>
                   <td>${item.Adi || ""}</td>
                   <td class="double-column">${formatNumber3(item.Miktar)}</td>
