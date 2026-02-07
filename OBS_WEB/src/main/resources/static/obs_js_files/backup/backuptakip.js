@@ -50,7 +50,9 @@ OBS.EMIRLISTE._renderRows = function (data) {
       <td>${typeof formatTarihsqlite === "function"
             ? formatTarihsqlite(row?.SON_YUKLEME)
             : (row?.SON_YUKLEME ?? "")}</td>
-      <td>${row?.GELECEK_YEDEKLEME ?? ""}</td>
+			<td>${typeof formatTarihsqlite === "function"
+			      ? formatTarihsqlite(row?.GELECEK_YUKLEME)
+			      : (row?.GELECEK_YUKLEME ?? "")}</td>
     `;
 
     if (row?.DURUM != 1) {
