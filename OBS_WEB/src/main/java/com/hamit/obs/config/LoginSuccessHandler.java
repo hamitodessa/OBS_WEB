@@ -22,7 +22,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
-
 @Component
 @AllArgsConstructor
 
@@ -46,6 +45,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	@Autowired
 	private KeresteService keresteService;
 	
+	
+	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
@@ -56,8 +57,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			String uri      = request.getRequestURI();
 			log.info("LOGIN OK   - user={} ip={} ua={} uri={}", username, ip, ua, uri);
 
+			
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			UserSessionManager.removeUserSessionsByUsername(useremail);
+			
+			//RolEnum rol = RoleUtil.resolveRolEnum(authentication);
+			
 			cariService.initialize();
 			kurService.initialize();
 			adresService.initialize();

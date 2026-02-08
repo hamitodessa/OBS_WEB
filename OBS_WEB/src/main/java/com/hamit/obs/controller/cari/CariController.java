@@ -39,6 +39,7 @@ public class CariController {
 	@ResponseBody
 	public Map<String, String> hesapadiOgren(@RequestParam String hesapkodu) {
 		Map<String, String> response = new HashMap<>();
+		
 		try {
 			String[] hesAdiString = cariservice.hesap_adi_oku(hesapkodu);
 			if (hesAdiString == null || hesAdiString.length < 2) {

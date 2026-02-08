@@ -41,7 +41,6 @@ public class UserDetailsController {
 
 	@Autowired
 	private UserService userService;
-	
 	@Autowired
 	private CariService cariService ;
 	@Autowired

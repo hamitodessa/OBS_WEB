@@ -82,6 +82,14 @@ public class CariService {
 	}
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable){
 		try {
+			//RolEnum rolEnum = RoleUtil.resolveRolEnum(SecurityContextHolder.getContext().getAuthentication());
+			//String rolAdi = rolEnum != null ? rolEnum.name() : null;
+			
+			//if (! RoleUtil.hasRole(SecurityContextHolder.getContext().getAuthentication(), RolEnum.USER)) {
+			//	   System.out.println("Rol Adi=" +RolEnum.USER.toString());
+			//	   throw new ServiceException("Yetkiniz Yok =" + RolEnum.USER.toString());
+			//}
+			
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			return strategy.ekstre(hesap, t1, t2,pageable,cariConnDetails);
@@ -131,6 +139,7 @@ public class CariService {
 
 	public boolean cari_dekont_kaydet(dekontDTO dBilgi){
 		try {
+			
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			loglamaDTO.setEvrak(String.valueOf(dBilgi.getFisNo()));

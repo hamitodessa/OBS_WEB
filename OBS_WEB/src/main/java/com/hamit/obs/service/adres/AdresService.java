@@ -18,6 +18,7 @@ import com.hamit.obs.service.context.AdresDatabaseContext;
 
 @Service
 public class AdresService {
+//			RolEnum role = RoleUtil.resolveRolEnum(SecurityContextHolder.getContext().getAuthentication());
 
 	@Autowired
 	private ConnectionManager masterConnectionManager;

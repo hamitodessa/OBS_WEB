@@ -4,7 +4,8 @@ public enum  RolEnum {
 
 	ADMIN,
 	USER,
-	MANAGER;
+	MANAGER,
+	GORUNTULEME;
 
 	public static boolean isValidRole(String roleName) {
 		for (RolEnum rol : RolEnum.values()) {
