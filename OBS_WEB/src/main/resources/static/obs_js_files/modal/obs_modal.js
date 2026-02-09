@@ -60,6 +60,15 @@ function openFirstModal(nerdenGeldi) {
   const modal = byId("firstModal");
   nerden = nerdenGeldi;
 
+  
+  const setEkstreFocus = () => {
+      const fhkodu1 = document.getElementById("fhkodu1");
+      if (!fhkodu1) return;
+      fhkodu1.value = "";
+      fhkodu1.focus({ preventScroll: true });
+      fhkodu1.select?.();
+    };
+	
   // senin özel modal açıcıların
   if (nerden === "tahsilatrapor") {
     OBS.TAHRAP.opentahrapModal(modal);
@@ -81,25 +90,29 @@ function openFirstModal(nerdenGeldi) {
 	  OBS.STKDETAY.openstkdtyModal(modal);
 	} else if (nerden === "kerfatrapor") {
 	  OBS.KERFATRAPOR.openkfatrapModal(modal);
-  } else if (nerden === "kerestedetayrapor") {
+    } else if (nerden === "kerestedetayrapor") {
   	  OBS.KERDETAY.openkdetayModal(modal);	  
 	} else if (nerden === "kergrprapor") {
    	  OBS.KERGRPRAPOR.openkgrpModal(modal);	
-	  } else if (nerden === "kerenvanter") {
+	} else if (nerden === "kerenvanter") {
 	  OBS.KERENVANTER.openkenvModal(modal);	 
-	  } else if (nerden === "kerortfiat") {
+	} else if (nerden === "kerortfiat") {
 	  OBS.KERORTFIAT.openkortModal(modal);	  
   } 
   else {
-	const modalEl = (typeof modal === "string")
-	      ? document.querySelector(modal)
-	      : modal;
+	const modalEl = (typeof modal === "string") ? document.querySelector(modal) : modal;
 
-		
 	    if (modalEl && window.bootstrap?.Modal) {
+	      if (nerden === "ekstre") {
+	        modalEl.addEventListener("shown.bs.modal", setEkstreFocus, { once: true });
+	      }
 	      bootstrap.Modal.getOrCreateInstance(modalEl).show();
 	    }
   }
+  /*---- */
+  if (nerden === "ekstre") {
+      requestAnimationFrame(() => setTimeout(setEkstreFocus, 50));
+    }
 };
 
 /* =========================
