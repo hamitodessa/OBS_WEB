@@ -69,7 +69,7 @@ const pageModules = {
     js: "/obs_js_files/cari/hspplngiris.js",
     init: () => {
       if (typeof window.cariBaslik === "function") window.cariBaslik();
-      if (typeof OBS?.HSPPLN?.initResimSizeCheck === "function") OBS.HSPPLN.initResimSizeCheck();
+			if (typeof OBS?.HSPPLN?.init === "function") OBS.HSPPLN.init();
       if (typeof OBS?.HSPPLN?.aramaYap === "function") OBS.HSPPLN.aramaYap();
       const arama = document.getElementById("arama");
       if (arama) arama.value = "";

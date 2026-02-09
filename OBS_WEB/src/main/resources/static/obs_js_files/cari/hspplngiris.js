@@ -1,148 +1,243 @@
+window.OBS = window.OBS || {};
+OBS.HSPPLN = OBS.HSPPLN || {};
+
 /* =========================
-   HSP PLAN (çakışmasız)
-   Namespace: OBS.HSPPLN
+   HELPERS
    ========================= */
-window.OBS ||= {};
-OBS.HSPPLN ||= {};
+OBS.HSPPLN._el = (id) => document.getElementById(id);
 
-/* ---------- helpers ---------- */
-OBS.HSPPLN._root = () =>
-  document.getElementById("hsp_content") ||
-  document.getElementById("ara_content") ||
-  document;
-
-OBS.HSPPLN.byId = (id) => OBS.HSPPLN._root().querySelector("#" + id);
-
-OBS.HSPPLN._inputs = () =>
-  OBS.HSPPLN._root().querySelectorAll(".form-control, .form-check-input");
-
-/* ---------- enable / disable / clear ---------- */
-OBS.HSPPLN.enableInputs = function () {
-  OBS.HSPPLN.clearInputs();
-  OBS.HSPPLN._inputs().forEach((el) => { el.disabled = false; });
+OBS.HSPPLN._showError = function (msg) {
+  const e = OBS.HSPPLN._el("errorDiv");
+  if (!e) return;
+  e.style.display = "block";
+  e.innerText = msg || "Beklenmeyen hata.";
 };
 
-OBS.HSPPLN.enableDuzeltmeInputs = function () {
-  OBS.HSPPLN._inputs().forEach((el) => {
-    if (el.id !== "kodu") el.disabled = false;
-  });
+OBS.HSPPLN._clearError = function () {
+  const e = OBS.HSPPLN._el("errorDiv");
+  if (!e) return;
+  e.style.display = "none";
+  e.innerText = "";
 };
 
-OBS.HSPPLN.disableInputs = function () {
-  OBS.HSPPLN._inputs().forEach((el) => {
-    if (el.id !== "arama") el.disabled = true;
-  });
+OBS.HSPPLN._setFileName = function (text) {
+  const el = OBS.HSPPLN._el("resimFileName");
+  if (!el) return;
+  el.textContent = text || "Dosya seçilmedi";
 };
 
-OBS.HSPPLN.clearInputs = function () {
-  OBS.HSPPLN._inputs().forEach((el) => {
-    // arama kalsın
-    //if (el.id === "arama") return;
+OBS.HSPPLN._resetFileUI = function () {
+  const inp = OBS.HSPPLN._el("resim");
+  if (inp) inp.value = "";
 
-    if (el.type === "checkbox") el.checked = false;
-    else el.value = ""; // text + file dahil
-  });
-
-  const imgElement = OBS.HSPPLN.byId("resimGoster");
-  if (imgElement) {
-    imgElement.src = "";
-    imgElement.style.display = "none";
+  const img = OBS.HSPPLN._el("resimGoster");
+  if (img) {
+    img.src = "";
+    img.style.display = "none";
   }
 
-  const kk = OBS.HSPPLN.byId("kodKontrol");
-  if (kk) kk.innerText = "";
-
-  const errorDiv = OBS.HSPPLN.byId("errorDiv");
-  if (errorDiv) { errorDiv.style.display = "none"; errorDiv.innerText = ""; }
+  OBS.HSPPLN._setFileName("Dosya seçilmedi");
 };
 
-/* ---------- dto ---------- */
-OBS.HSPPLN.getHesapPlaniDTO = function () {
+OBS.HSPPLN._setImgBase64 = function (base64) {
+  const img = OBS.HSPPLN._el("resimGoster");
+  if (!img) return;
+
+  if (base64 && base64.trim() !== "") {
+    img.src = "data:image/jpeg;base64," + base64.trim();
+    img.style.display = "block";
+  } else {
+    img.src = "";
+    img.style.display = "none";
+  }
+};
+
+OBS.HSPPLN._appendBase64ImgAsBlob = function (formData, imgId, formKey, filename) {
+  const img = OBS.HSPPLN._el(imgId);
+  if (!img) return;
+
+  const src = img.src || "";
+  if (!src.startsWith("data:image")) return;
+
+  const base64 = src.split(",")[1];
+  if (!base64) return;
+
+  const byteCharacters = atob(base64);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) byteNumbers[i] = byteCharacters.charCodeAt(i);
+  const byteArray = new Uint8Array(byteNumbers);
+
+  const blob = new Blob([byteArray], { type: "image/jpeg" });
+  formData.append(formKey, blob, filename);
+};
+
+/* =========================
+   FILE (500KB + preview)
+   ========================= */
+OBS.HSPPLN._MAX_KB = 500;
+
+OBS.HSPPLN.onFileChanged = function () {
+  const input = OBS.HSPPLN._el("resim");
+  if (!input) return;
+
+  const file = input.files?.[0];
+  if (!file) {
+    OBS.HSPPLN._setFileName("Dosya seçilmedi");
+    return;
+  }
+
+  if (file.type && !file.type.startsWith("image/")) {
+    OBS.HSPPLN._showError("Lütfen bir resim dosyası seçin!");
+    OBS.HSPPLN._resetFileUI();
+    return;
+  }
+
+  const maxBytes = OBS.HSPPLN._MAX_KB * 1024;
+  if (file.size > maxBytes) {
+    OBS.HSPPLN._showError(`Dosya boyutu ${OBS.HSPPLN._MAX_KB} KB'ı geçemez!`);
+    OBS.HSPPLN._resetFileUI();
+    return;
+  }
+
+  OBS.HSPPLN._clearError();
+  OBS.HSPPLN._setFileName(file.name);
+
+  // preview
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = OBS.HSPPLN._el("resimGoster");
+    if (!img) return;
+    img.src = e.target.result;
+    img.style.display = "block";
+
+    /*
+    img.style.objectFit = "contain";
+    img.style.mixBlendMode = "normal";
+    img.style.visibility = "visible";
+    img.style.opacity = "1";
+		*/
+  };
+  reader.readAsDataURL(file);
+};
+
+OBS.HSPPLN.resimSil = function () {
+  OBS.HSPPLN._clearError();
+  OBS.HSPPLN._resetFileUI();
+};
+
+/* =========================
+   DTO
+   ========================= */
+OBS.HSPPLN.getDTO = function () {
+  const v = (id) => OBS.HSPPLN._el(id)?.value || "";
+  const c = (id) => !!OBS.HSPPLN._el(id)?.checked;
+
   return {
-    kodu: OBS.HSPPLN.byId("kodu").value,
-    adi: OBS.HSPPLN.byId("adi").value,
-    karton: OBS.HSPPLN.byId("karton").value,
-    hcins: OBS.HSPPLN.byId("hcins").value,
-    yetkili: OBS.HSPPLN.byId("yetkili").value,
-    ad1: OBS.HSPPLN.byId("ad1").value,
-    ad2: OBS.HSPPLN.byId("ad2").value,
-    semt: OBS.HSPPLN.byId("semt").value,
-    seh: OBS.HSPPLN.byId("seh").value,
-    vd: OBS.HSPPLN.byId("vd").value,
-    vn: OBS.HSPPLN.byId("vn").value,
-    t1: OBS.HSPPLN.byId("t1").value,
-    t2: OBS.HSPPLN.byId("t2").value,
-    t3: OBS.HSPPLN.byId("t3").value,
-    fx: OBS.HSPPLN.byId("fx").value,
-    o1: OBS.HSPPLN.byId("o1").value,
-    o2: OBS.HSPPLN.byId("o2").value,
-    o3: OBS.HSPPLN.byId("o3").value,
-    web: OBS.HSPPLN.byId("web").value,
-    mail: OBS.HSPPLN.byId("mail").value,
-    kim: OBS.HSPPLN.byId("kim").value,
-    acik: OBS.HSPPLN.byId("acik").value,
-    sms: OBS.HSPPLN.byId("sms").checked
+    kodu: v("kodu"),
+    adi: v("adi"),
+    karton: v("karton"),
+    hcins: v("hcins"),
+    yetkili: v("yetkili"),
+    ad1: v("ad1"),
+    ad2: v("ad2"),
+    semt: v("semt"),
+    seh: v("seh"),
+    vd: v("vd"),
+    vn: v("vn"),
+    t1: v("t1"),
+    t2: v("t2"),
+    t3: v("t3"),
+    fx: v("fx"),
+    o1: v("o1"),
+    o2: v("o2"),
+    o3: v("o3"),
+    web: v("web"),
+    mail: v("mail"),
+    kim: v("kim"),
+    acik: v("acik"),
+    sms: c("sms")
   };
 };
 
-/* ---------- kayit ---------- */
+/* =========================
+   INPUT STATE
+   ========================= */
+OBS.HSPPLN._inputs = () => document.querySelectorAll("#ara_content .form-control, #ara_content .form-check-input");
+
+OBS.HSPPLN.clearInputs = function () {
+  OBS.HSPPLN._inputs().forEach((el) => {
+    if (el.type === "checkbox") el.checked = false;
+    else el.value = "";
+  });
+
+  const kk = OBS.HSPPLN._el("kodKontrol");
+  if (kk) kk.innerText = "";
+
+  OBS.HSPPLN._clearError();
+  OBS.HSPPLN._resetFileUI();
+};
+
+OBS.HSPPLN.disableInputs = function () {
+  OBS.HSPPLN._inputs().forEach((el) => { if (el.id !== "arama") el.disabled = true; });
+};
+
+OBS.HSPPLN.enableInputs = function () {
+  OBS.HSPPLN.clearInputs();
+  OBS.HSPPLN._inputs().forEach((el) => (el.disabled = false));
+};
+
+OBS.HSPPLN.enableDuzeltmeInputs = function () {
+  OBS.HSPPLN._inputs().forEach((el) => { if (el.id !== "kodu") el.disabled = false; });
+};
+
+/* =========================
+   KAYIT
+   ========================= */
 OBS.HSPPLN.kayit = async function () {
-  const koduInput = OBS.HSPPLN.byId("kodu");
-  if (!koduInput || ["0", ""].includes(koduInput.value)) return;
+  const kodu = OBS.HSPPLN._el("kodu")?.value || "";
+  if (!kodu || kodu === "0") return;
 
-  const hesapplaniDTO = OBS.HSPPLN.getHesapPlaniDTO();
+  OBS.HSPPLN._clearError();
+
+  const dto = OBS.HSPPLN.getDTO();
   const formData = new FormData();
-  for (const key in hesapplaniDTO) formData.append(key, hesapplaniDTO[key]);
+  Object.keys(dto).forEach((k) => formData.append(k, dto[k]));
 
-  const fileInput = OBS.HSPPLN.byId("resim");
-  const file = fileInput?.files?.[0];
+  const file = OBS.HSPPLN._el("resim")?.files?.[0];
   if (file) formData.append("resim", file);
 
-  const imgElement = OBS.HSPPLN.byId("resimGoster");
-  const src = imgElement?.src || "";
-  const base64Data = src.startsWith("data:image") ? src.split(",")[1] : null;
+  // dosya seçmediyse ama ekranda base64 resim varsa onu da gönder
+  OBS.HSPPLN._appendBase64ImgAsBlob(formData, "resimGoster", "resimGoster", "base64Resim.jpg");
 
-  if (base64Data) {
-    const byteCharacters = atob(base64Data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) byteNumbers[i] = byteCharacters.charCodeAt(i);
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: "image/jpeg" });
-    formData.append("resimGoster", blob, "base64Resim.jpg");
-  }
-
-  const errorDiv = OBS.HSPPLN.byId("errorDiv");
   document.body.style.cursor = "wait";
-  if (errorDiv) { errorDiv.style.display = "none"; errorDiv.innerText = ""; }
-
   try {
-    const response = await fetchWithSessionCheck("cari/hsplnkayit", {
+    const resp = await fetchWithSessionCheck("cari/hsplnkayit", {
       method: "POST",
       body: formData
     });
-    if (response?.errorMessage) throw new Error(response.errorMessage);
+    if (resp?.errorMessage) throw new Error(resp.errorMessage);
 
     window.sayfaYukle("/cari/hspplngiris");
-  } catch (error) {
-    if (errorDiv) {
-      errorDiv.style.display = "block";
-      errorDiv.innerText = error?.message || "Beklenmeyen hata.";
-    }
+  } catch (e) {
+    OBS.HSPPLN._showError(e?.message || "Beklenmeyen hata.");
   } finally {
     document.body.style.cursor = "default";
   }
 };
 
-/* ---------- arama ---------- */
+/* =========================
+   ARAMA
+   ========================= */
 OBS.HSPPLN.aramaYap = async function () {
-  const kk = OBS.HSPPLN.byId("kodKontrol");
+  const kk = OBS.HSPPLN._el("kodKontrol");
   if (kk) kk.innerText = "";
 
-  const aramaVal = OBS.HSPPLN.byId("arama")?.value ?? "";
+  OBS.HSPPLN._clearError();
+
+  const aramaVal = OBS.HSPPLN._el("arama")?.value || "";
   if (!aramaVal) return;
 
   document.body.style.cursor = "wait";
-
   try {
     const dto = await fetchWithSessionCheck("cari/hsplnArama", {
       method: "POST",
@@ -150,127 +245,117 @@ OBS.HSPPLN.aramaYap = async function () {
       body: new URLSearchParams({ arama: aramaVal })
     });
 
-    if (dto?.errorMessage === "Bu Numarada Kayıtlı Hesap Yok") {
-      const err = OBS.HSPPLN.byId("errorDiv");
-      if (err) { err.style.display = "block"; err.innerText = dto.errorMessage; }
-      return;
-    }
+    if (dto?.errorMessage) throw new Error(dto.errorMessage);
 
-    OBS.HSPPLN.byId("kodu").value = dto.kodu;
-    OBS.HSPPLN.byId("adi").value = dto.adi || "";
-    OBS.HSPPLN.byId("karton").value = dto.karton || "";
-    OBS.HSPPLN.byId("hcins").value = dto.hcins || "";
-    OBS.HSPPLN.byId("yetkili").value = dto.yetkili || "";
-    OBS.HSPPLN.byId("ad1").value = dto.ad1 || "";
-    OBS.HSPPLN.byId("ad2").value = dto.ad2 || "";
-    OBS.HSPPLN.byId("semt").value = dto.semt || "";
-    OBS.HSPPLN.byId("seh").value = dto.seh || "";
-    OBS.HSPPLN.byId("vd").value = dto.vd || "";
-    OBS.HSPPLN.byId("vn").value = dto.vn || "";
-    OBS.HSPPLN.byId("t1").value = dto.t1 || "";
-    OBS.HSPPLN.byId("t2").value = dto.t2 || "";
-    OBS.HSPPLN.byId("t3").value = dto.t3 || "";
-    OBS.HSPPLN.byId("fx").value = dto.fx || "";
-    OBS.HSPPLN.byId("o1").value = dto.o1 || "";
-    OBS.HSPPLN.byId("o2").value = dto.o2 || "";
-    OBS.HSPPLN.byId("o3").value = dto.o3 || "";
-    OBS.HSPPLN.byId("web").value = dto.web || "";
-    OBS.HSPPLN.byId("mail").value = dto.mail || "";
-    OBS.HSPPLN.byId("kim").value = dto.kim || "";
-    OBS.HSPPLN.byId("acik").value = dto.acik || "";
-    OBS.HSPPLN.byId("sms").checked = !!dto.sms;
+    const setVal = (id, val) => {
+      const el = OBS.HSPPLN._el(id);
+      if (el) el.value = val || "";
+    };
 
-    const img = OBS.HSPPLN.byId("resimGoster");
-    const fileInput = OBS.HSPPLN.byId("resim");
-    if (fileInput) fileInput.value = "";
+    setVal("kodu", dto.kodu);
+    setVal("adi", dto.adi);
+    setVal("karton", dto.karton);
+    setVal("hcins", dto.hcins);
+    setVal("yetkili", dto.yetkili);
+    setVal("ad1", dto.ad1);
+    setVal("ad2", dto.ad2);
+    setVal("semt", dto.semt);
+    setVal("seh", dto.seh);
+    setVal("vd", dto.vd);
+    setVal("vn", dto.vn);
+    setVal("t1", dto.t1);
+    setVal("t2", dto.t2);
+    setVal("t3", dto.t3);
+    setVal("fx", dto.fx);
+    setVal("o1", dto.o1);
+    setVal("o2", dto.o2);
+    setVal("o3", dto.o3);
+    setVal("web", dto.web);
+    setVal("mail", dto.mail);
+    setVal("kim", dto.kim);
+    setVal("acik", dto.acik);
 
-    if (dto.base64Resim && dto.base64Resim.trim() !== "") {
-      img.src = "data:image/jpeg;base64," + dto.base64Resim.trim();
-      img.style.display = "block";
-    } else {
-      img.src = "";
-      img.style.display = "none";
-    }
+    const sms = OBS.HSPPLN._el("sms");
+    if (sms) sms.checked = !!dto.sms;
+
+    // file input temiz kalsın
+    const inp = OBS.HSPPLN._el("resim");
+    if (inp) inp.value = "";
+    OBS.HSPPLN._setFileName("Dosya seçilmedi");
+
+    // resim (server base64)
+    OBS.HSPPLN._setImgBase64(dto.base64Resim);
 
     OBS.HSPPLN.disableInputs();
     OBS.HSPPLN.enableDuzeltmeInputs();
-
-    const err = OBS.HSPPLN.byId("errorDiv");
-    if (err) { err.style.display = "none"; err.innerText = ""; }
-  } catch (error) {
-    const err = OBS.HSPPLN.byId("errorDiv");
-    if (err) {
-      err.style.display = "block";
-      err.innerText = error?.message || "Beklenmeyen bir hata oluştu.";
-    }
+  } catch (e) {
+    OBS.HSPPLN._showError(e?.message || "Beklenmeyen bir hata oluştu.");
   } finally {
     document.body.style.cursor = "default";
   }
 };
 
-/* ---------- nav ---------- */
+/* =========================
+   NAV
+   ========================= */
+OBS.HSPPLN._options = function () {
+  const dl = OBS.HSPPLN._el("hesapOptions");
+  return dl ? Array.from(dl.getElementsByTagName("option")) : [];
+};
+
 OBS.HSPPLN.ilk = function () {
-  const datalist = OBS.HSPPLN.byId("hesapOptions");
-  const options = datalist?.getElementsByTagName("option") || [];
-  if (options.length === 0) {
-    OBS.HSPPLN.clearInputs();
-    OBS.HSPPLN.disableInputs();
-    return null;
-  }
-  const firstValue = options[0].value;
-  OBS.HSPPLN.byId("arama").value = firstValue;
+  const opts = OBS.HSPPLN._options();
+  if (opts.length === 0) return;
+  const arama = OBS.HSPPLN._el("arama");
+  if (!arama) return;
+  arama.value = opts[0].value;
   OBS.HSPPLN.aramaYap();
-  OBS.HSPPLN.byId("arama").value = "";
+  arama.value = "";
 };
 
 OBS.HSPPLN.geri = function () {
-  const arama = OBS.HSPPLN.byId("kodu")?.value ?? "";
-  const datalist = OBS.HSPPLN.byId("hesapOptions");
-  const options = datalist?.getElementsByTagName("option") || [];
-  if (options.length === 0) return null;
+  const kodu = OBS.HSPPLN._el("kodu")?.value || "";
+  const opts = OBS.HSPPLN._options();
+  if (!kodu || opts.length === 0) return;
 
-  let index = -1;
-  for (let i = 0; i < options.length; i++) {
-    if (options[i].value === arama) { index = i; break; }
-  }
-  if (index > 0) {
-    const prevValue = options[index - 1].value;
-    OBS.HSPPLN.byId("arama").value = prevValue;
+  const idx = opts.findIndex(o => o.value === kodu);
+  if (idx > 0) {
+    const arama = OBS.HSPPLN._el("arama");
+    arama.value = opts[idx - 1].value;
     OBS.HSPPLN.aramaYap();
-    OBS.HSPPLN.byId("arama").value = "";
+    arama.value = "";
   }
 };
 
 OBS.HSPPLN.ileri = function () {
-  const arama = OBS.HSPPLN.byId("kodu")?.value ?? "";
-  const datalist = OBS.HSPPLN.byId("hesapOptions");
-  const options = datalist?.getElementsByTagName("option") || [];
-  if (options.length === 0) return null;
+  const kodu = OBS.HSPPLN._el("kodu")?.value || "";
+  const opts = OBS.HSPPLN._options();
+  if (!kodu || opts.length === 0) return;
 
-  let index = -1;
-  for (let i = 0; i < options.length; i++) {
-    if (options[i].value === arama) { index = i; break; }
-  }
-  if (index !== -1 && index < options.length - 1) {
-    const nextValue = options[index + 1].value;
-    OBS.HSPPLN.byId("arama").value = nextValue;
+  const idx = opts.findIndex(o => o.value === kodu);
+  if (idx !== -1 && idx < opts.length - 1) {
+    const arama = OBS.HSPPLN._el("arama");
+    arama.value = opts[idx + 1].value;
     OBS.HSPPLN.aramaYap();
-    OBS.HSPPLN.byId("arama").value = "";
+    arama.value = "";
   }
 };
 
-/* ---------- sil ---------- */
+/* =========================
+   SİL
+   ========================= */
 OBS.HSPPLN.hesapSil = async function () {
-  const hesapKodu = OBS.HSPPLN.byId("kodu")?.value ?? "";
-  if (["0", ""].includes(hesapKodu)) return;
+  const hesapKodu = OBS.HSPPLN._el("kodu")?.value || "";
+  if (!hesapKodu || hesapKodu === "0") return;
 
-  const message =
+  const msg =
     "Kayit Dosyadan Silinecek ..?\n\n" +
     "Oncelikle Bu Hesaba Ait Fisleri Silmeniz\n\n" +
     "Tavsiye Olunur ....";
 
-  if (!confirm(message)) return;
+  if (!confirm(msg)) return;
 
+  OBS.HSPPLN._clearError();
   document.body.style.cursor = "wait";
   try {
     const dto = await fetchWithSessionCheck("cari/hspplnSil", {
@@ -282,46 +367,26 @@ OBS.HSPPLN.hesapSil = async function () {
 
     window.sayfaYukle("/cari/hspplngiris");
   } catch (e) {
-    const err = OBS.HSPPLN.byId("errorDiv");
-    if (err) { err.style.display = "block"; err.innerText = e?.message || "Beklenmeyen hata"; }
+    OBS.HSPPLN._showError(e?.message || "Beklenmeyen hata");
   } finally {
     document.body.style.cursor = "default";
   }
 };
 
-/* ---------- resim ---------- */
-OBS.HSPPLN.resimSil = function () {
-  const img = OBS.HSPPLN.byId("resimGoster");
-  if (img) { img.src = ""; img.style.display = "none"; }
 
-  const fileInput = OBS.HSPPLN.byId("resim");
-  if (fileInput) fileInput.value = "";
+OBS.HSPPLN._bindFileEvents = function () {
+  const logoInput = OBS.HSPPLN._el("resim");
+  if (logoInput && logoInput.dataset.bound !== "1") {
+    logoInput.dataset.bound = "1";
+    logoInput.addEventListener("change", OBS.HSPPLN.onFileChanged);
+  }
+
 };
 
-OBS.HSPPLN.initResimSizeCheck = function () {
-  const input = OBS.HSPPLN.byId("resim");
-  if (!input) return;
-
-  input.addEventListener("change", function (event) {
-    const file = event.target.files?.[0];
-    const maxSizeInKB = 500;
-    const maxSizeInBytes = maxSizeInKB * 1024;
-    const errorDiv = OBS.HSPPLN.byId("errorDiv");
-
-    if (file && file.size > maxSizeInBytes) {
-      if (errorDiv) {
-        errorDiv.innerText = `Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`;
-        errorDiv.style.display = "block";
-      }
-      event.target.value = "";
-    } else if (errorDiv) {
-      errorDiv.style.display = "none";
-      errorDiv.innerText = "";
-    }
-  });
-};
-
-/* init (loader’dan çağır) */
+/* =========================
+   INIT
+   ========================= */
 OBS.HSPPLN.init = function () {
-  OBS.HSPPLN.initResimSizeCheck();
+ 	OBS.HSPPLN._bindFileEvents();
+  OBS.HSPPLN._setFileName("Dosya seçilmedi");
 };

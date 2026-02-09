@@ -22,7 +22,7 @@
 
 /* Ana panel */
 #ara_content .centered-div{
-  width: 45%;
+  width: 55%;
  
   margin: 0 auto;
   box-sizing: border-box;
@@ -271,47 +271,32 @@
 </style>
 
 <!-- Ana Sayfa -->
-
 <div class="card p-4 d-flex flex-row gap-3">
 	<div class="centered-div">
 		<div class="group-box" style="margin-top: 5px;">
-			 <span	class="input-group-text" style="min-width: 100px;">Firma Adi</span>
-			 <input type="text"	class="form-control" id="adi" maxlength="50">
-
+			<span class="input-group-text" style="min-width: 100px;">Firma
+				Adi</span> <input type="text" class="form-control" id="adi" maxlength="50">
 		</div>
 		<div class="group-box">
-			<span
-				class="input-group-text" style="min-width: 100px;">Adres 1</span>
-				<input type="text"
-				class="form-control" id="adr1" maxlength="50">
-		</div>
-
-		<div class="group-box">
-			<span
-				class="input-group-text" style="min-width: 100px;">Adres 2</span>
-				 <input type="text"
-				class="form-control" id="adr2" maxlength="50">
-		</div>
-
-		<div class="group-box">
-			<span
-				class="input-group-text" style="min-width: 100px;">VD - VN</span> 
-				<input type="text"
-				class="form-control" id="vdvn" maxlength="60">
-		</div>
-
-		<div class="group-box">
-			<span
-				class="input-group-text" style="min-width: 100px;">E Mail</span> 
-				<input type="text"
-				class="form-control" id="mail" maxlength="60">
-
+			<span class="input-group-text" style="min-width: 100px;">Adres
+				1</span> <input type="text" class="form-control" id="adr1" maxlength="50">
 		</div>
 		<div class="group-box">
-			<span
-				class="input-group-text" style="min-width: 100px;">Diger</span>
-				 <input type="text"
-				class="form-control" id="diger" maxlength="50">
+			<span class="input-group-text" style="min-width: 100px;">Adres
+				2</span> <input type="text" class="form-control" id="adr2" maxlength="50">
+		</div>
+		<div class="group-box">
+			<span class="input-group-text" style="min-width: 100px;">VD -
+				VN</span> <input type="text" class="form-control" id="vdvn" maxlength="60">
+		</div>
+		<div class="group-box">
+			<span class="input-group-text" style="min-width: 100px;">E
+				Mail</span> <input type="text" class="form-control" id="mail"
+				maxlength="60">
+		</div>
+		<div class="group-box">
+			<span class="input-group-text" style="min-width: 100px;">Diger</span>
+			<input type="text" class="form-control" id="diger" maxlength="50">
 		</div>
 		<div class="group-box" style="margin-top: 10px;">
 			<div class="img-grid">
@@ -319,18 +304,14 @@
 					<div class="img-title">Logo</div>
 					<img id="resimLogo" class="resimgoster" src="" alt="Logo" />
 				</div>
-
 				<div class="img-card">
 					<div class="img-title">Kaşe</div>
 					<img id="resimKase" class="resimgoster" src="" alt="Kase" />
 				</div>
 			</div>
 		</div>
-
-
 		<div class="group-box" style="margin-top: 5px;">
 			<div class="file-grid">
-
 				<!-- LOGO -->
 				<div class="file-box">
 					<button type="button" id="logoremove"
@@ -338,15 +319,12 @@
 						onclick="OBS.TAHAYAR.logoSil()">
 						<i class="fa fa-remove"></i>
 					</button>
-
 					<label class="file-pick" for="imageLogo"> <i
 						class="fa fa-image"></i> Logo Seç
 					</label> <input class="file-native" type="file" name="image" id="imageLogo"
 						accept="image/*" />
-
 					<div class="file-name" id="logoFileName">Dosya seçilmedi</div>
 				</div>
-
 				<!-- KAŞE -->
 				<div class="file-box">
 					<button type="button" id="kaseremove"
@@ -354,25 +332,18 @@
 						onclick="OBS.TAHAYAR.kaseSil()">
 						<i class="fa fa-remove"></i>
 					</button>
-
 					<label class="file-pick" for="imageKase"> <i
 						class="fa fa-stamp"></i> Kaşe Seç
 					</label> <input class="file-native" type="file" name="image" id="imageKase"
 						accept="image/*" />
-
 					<div class="file-name" id="kaseFileName">Dosya seçilmedi</div>
 				</div>
-
 			</div>
 		</div>
-
-
 		<div class="aramagroup-box" style="margin-top: 5px;">
-			
 			<button type="button" id="serverButton" class="btn btn-primary"
 				onclick="OBS.TAHAYAR.ayarKayit()">Kaydet</button>
 		</div>
 		<div id="errorDiv"></div>
 	</div>
-
 </div>

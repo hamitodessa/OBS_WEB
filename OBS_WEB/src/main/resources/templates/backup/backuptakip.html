@@ -5,7 +5,7 @@
    ========================= */
 
 /* ===== CARD (ÜST BAR) ===== */
-.card{
+#ara_content .card{
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
@@ -15,7 +15,7 @@
 }
 
 /* ===== FILTER BAR ===== */
-.filter-row{
+#ara_content .filter-row{
   display:flex;
   align-items:center;
   gap:10px;
@@ -23,7 +23,7 @@
   padding: 6px 8px;
 }
 
-.filter-row label{
+#ara_content .filter-row label{
   font-weight: 900;
   font-size: 13px;
   color: rgba(255,255,255,.82);
@@ -31,15 +31,15 @@
 }
 
 /* ===== INPUT / SELECT ===== */
-.form-control{
+#ara_content .form-control{
   height: 36px;
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,.16);
-  background: rgba(8,14,26,.45);
-  color: rgba(255,255,255,.92);
+  background: rgba(8,14,26,.45) !important;;
+  color: rgba(255,255,255,.92) !important;;
 }
 
-.form-control:focus{
+#ara_content .form-control:focus{
   border-color: rgba(56,189,248,.65);
   box-shadow: 0 0 0 5px rgba(56,189,248,.18);
   background: rgba(8,14,26,.65);
@@ -68,7 +68,7 @@
 }
 
 /* ===== CONTAINER ===== */
-.container{
+#ara_content .container{
   height: 60vh;
   display:flex;
   flex-direction:column;
@@ -78,7 +78,7 @@
 }
 
 /* ===== TABLE CONTAINER ===== */
-.table-container{
+#ara_content .table-container{
   flex-grow: 1;
   overflow: auto;
   border: 1px solid rgba(255,255,255,.14);
@@ -146,7 +146,7 @@
 }
 
 /* ===== ERROR ===== */
-#errorDiv{
+#ara_content #errorDiv{
   display:none;
   margin-top: 12px;
   padding: 10px 12px;
