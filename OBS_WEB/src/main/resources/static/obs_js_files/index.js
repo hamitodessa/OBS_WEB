@@ -363,10 +363,9 @@ const pageModules = {
     js: "/obs_js_files/forum/forum.js",
     init: () => { OBS?.FORUM?.init?.(); }
   },
-	"/gps/gps": {
-	    js: "/obs_js_files/gps/gps.js",
-	    init: () => { OBS?.FORUM?.init?.(); }
-	  }
+  "/gps/gps": {
+	    js: "/obs_js_files/gps/gps.js", }
+	 
 };
 
 /* -------------------------

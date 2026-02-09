@@ -1,101 +1,341 @@
 	
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+
+
+
 <style>
 
-.table-hover tbody tr:hover {
-	background-color: #ced4da !important;
-	color: inherit !important;
+/* =========================
+   2026 CAM – GPS (DARK GLASS)
+   Scope: #ara_content
+   ========================= */
+#ara_content{
+  color: rgba(255,255,255,.92);
+  padding: 0 !important;
+
+  /* TOKENS */
+  --cam-bg1: rgba(255,255,255,.10);
+  --cam-bg2: rgba(255,255,255,.06);
+  --cam-line: rgba(255,255,255,.16);
+  --cam-line2: rgba(255,255,255,.12);
+
+  --cam-dark: rgba(8,14,26,.55);
+  --cam-dark2: rgba(8,14,26,.70);
+  --cam-dark3: rgba(8,14,26,.82);
+
+  --cam-ink: rgba(255,255,255,.92);
+  --cam-muted: rgba(255,255,255,.72);
+
+  --cam-ac1: rgba(56,189,248,.65);
+  --cam-ac1b: rgba(56,189,248,.35);
+  --cam-ac1soft: rgba(56,189,248,.18);
+
+  --cam-danger: rgba(251,113,133,.70);
+  --cam-dangerb: rgba(251,113,133,.35);
+  --cam-dangerSoft: rgba(251,113,133,.12);
+
+  --cam-r: 18px;
+  --cam-r2: 14px;
+  --cam-h: 36px;
 }
 
-.table-row-height td {
-	height: 10px;
-	line-height: 10px;
+/* ===== CARD ===== */
+#ara_content .card{
+  background: linear-gradient(180deg, var(--cam-bg1), var(--cam-bg2)) !important;
+  border: 1px solid var(--cam-line) !important;
+  border-radius: var(--cam-r);
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.table .thead-dark th {
- color: #fff;
-  background: #214162;
+/* ===== ÜST BAR (input/select/button) ===== */
+#ara_content #ustbolum{
+  padding: 8px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: auto;
-  }
-  th,
-  td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    white-space: nowrap;
-  }
-  .table-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    margin-top: 1px;
-  }
-  .container {
-    height: 70vh;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    padding: 0px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+#ara_content #ustbolum .form-control,
+#ara_content #ustbolum .form-select{
+  height: var(--cam-h);
+  border-radius: 12px;
+  border: 1px solid var(--cam-line2);
+  background: var(--cam-dark);
+  color: var(--cam-ink);
+}
 
-#map {
+#ara_content #ustbolum .form-control:focus,
+#ara_content #ustbolum .form-select:focus{
+  border-color: var(--cam-ac1b);
+  box-shadow: 0 0 0 5px var(--cam-ac1soft);
+  background: var(--cam-dark2);
+  color: #fff;
+}
+
+#ara_content #ustbolum input[type="date"]{
+  color-scheme: dark;
+}
+
+/* buttons */
+#ara_content #ustbolum .btn{
+  height: var(--cam-h);
+  border-radius: 12px;
+  border: 1px solid var(--cam-ac1b);
+  background: rgba(56,189,248,.14) !important;
+  color: rgba(255,255,255,.95) !important;
+  font-weight: 900;
+  transition: .16s ease;
+}
+#ara_content #ustbolum .btn:hover{
+  background: rgba(56,189,248,.22) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
+}
+#ara_content #ustbolum .btn:active{
+  transform: translateY(0px) scale(.99);
+}
+#ara_content #ustbolum .btn:disabled{
+  opacity: .55;
+  transform: none;
+}
+
+/* play/pause renkleri de CAM uyumlu */
+#ara_content #btnPlay.btn-success{
+  border-color: rgba(34,197,94,.35) !important;
+  background: rgba(34,197,94,.14) !important;
+}
+#ara_content #btnPlay.btn-success:hover{
+  background: rgba(34,197,94,.20) !important;
+}
+#ara_content #btnPause.btn-warning{
+  border-color: rgba(251,191,36,.35) !important;
+  background: rgba(251,191,36,.14) !important;
+}
+#ara_content #btnPause.btn-warning:hover{
+  background: rgba(251,191,36,.20) !important;
+}
+
+/* ===== ALT KONTROL BAR ===== */
+#ara_content #gpsControls{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: var(--cam-r2);
+  border: 1px solid var(--cam-line2);
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+}
+
+/* slider */
+#ara_content #gpsSlider{
+  flex: 1 1 auto;
+  height: 6px;
+  accent-color: rgba(56,189,248,.85); /* modern browser */
+}
+#ara_content #gpsSlider::-webkit-slider-runnable-track{
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+#ara_content #gpsSlider::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  margin-top: -5px;
+  border-radius: 999px;
+  background: rgba(56,189,248,.95);
+  box-shadow: 0 0 14px rgba(56,189,248,.40), inset 0 0 0 2px rgba(255,255,255,.18);
+}
+
+/* sayaç / hız */
+#ara_content #gpsIndex,
+#ara_content #gpsTotal,
+#ara_content #gpsSpeed{
+  font-weight: 900;
+  font-size: 12px;
+  color: var(--cam-ink);
+  opacity: .9;
+}
+
+/* ===== INFO PANEL ===== */
+#ara_content #gpsInfo{
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: var(--cam-r2);
+  border: 1px solid var(--cam-line2);
+  background: var(--cam-dark2);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.18);
+}
+#ara_content .gps-info-row{
+  display: flex;
+  gap: 12px;
+  margin: 4px 0;
+}
+#ara_content .gps-k{
+  width: 92px;
+  font-weight: 900;
+  font-size: 12px;
+  color: var(--cam-muted);
+}
+#ara_content .gps-v{
+  flex: 1;
+  font-weight: 900;
+  font-size: 12px;
+  color: var(--cam-ink);
+}
+
+/* ===== MAP ALANI ===== */
+#ara_content .container{
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#ara_content .table-container{
+  flex: 1 1 auto;
+  overflow: hidden;
+  border: 1px solid var(--cam-line2);
+  border-radius: var(--cam-r);
+  background: var(--cam-dark3);
+  position: relative;
+  min-height: 420px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.35);
+}
+
+#ara_content #map{
   width: 100%;
   height: 100%;
-  position: relative; /* ← bu önemli */
+  position: relative;
+  min-height: 420px;
+  border-radius: var(--cam-r);
 }
 
-#layerButtons {
+/* Leaflet control’leri de cam yapalım */
+#ara_content .leaflet-control-zoom a{
+  background: rgba(8,14,26,.70) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+#ara_content .leaflet-control-zoom a:hover{
+  background: rgba(8,14,26,.85) !important;
+}
+
+/* ===== Layer Buttons (chip) ===== */
+#ara_content #layerButtons{
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 1000;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 999px;
+  background: rgba(8,14,26,.55);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 16px 40px rgba(0,0,0,.40);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
+#ara_content #layerButtons button{
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: .16s ease;
+}
+#ara_content #layerButtons button:hover{
+  background: rgba(56,189,248,.16);
+  border-color: rgba(56,189,248,.35);
+  transform: translateY(-1px);
+}
+
+/* ===== HATA PANELİ ===== */
+#ara_content #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--cam-dangerb);
+  background: var(--cam-dangerSoft);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* ===== Leaflet divIcon ===== */
+#ara_content .gps-pin-dot{
+  width: 14px; height: 14px;
+  border-radius: 999px;
+  background: rgba(56,189,248,.95);
+  box-shadow: 0 0 18px rgba(56,189,248,.55),
+              inset 0 0 0 2px rgba(255,255,255,.25);
+}
+
 
 </style>
 
-
 <div class="card p-1">
-		<div style="display: flex; align-items: center;">
-			<select style="width:350px;" class="form-select" id="fileSelect" name="fileSelect">
-				
-			</select>
-		  	<span style="padding-left: 5px;"></span>
-  			<input type="date" style="width:120px;" id="startDate" class="form-control" value="1900-01-01">
-  			<span style="padding-left: 5px;"></span>
-  			<input type="date" style="width:120px;" id="endDate" class="form-control" value="2100-12-31">
-			<span style="padding-left: 5px;"></span>
-			
-			<button class="btn btn-primary" type="button" onclick="goster()" id="gosterButton" style="margin-left: 10px;">Goster</button>
-			<span style="padding-left: 5px;"></span>
-		  		<button class="btn btn-primary" type="button" onclick="geri()" id="geriButton" style="margin-left: 10px;">◀ Geri</button>
-  				<span style="padding-left: 5px;"></span>
-  				<button class="btn btn-primary" type="button" onclick="ileri()" id="ileriButton" style="margin-left: 10px;">İleri ▶</button>
-	
-	
-	</div>
-</div>
-<div id="errorDiv" style="display: none; color: red; font-weight: bold;"></div>
-<div class="container">
-		<div class="table-container">
-		<div id="map" >
-			<div id="layerButtons" >
-  				<button onclick="setLayer('osm')">🗺️ Normal</button>
-  				<button onclick="setLayer('satellite')">🛰️ Uydu</button>
-  				<button onclick="setLayer('dark')">🌙 Gece</button>
-			</div>
-			</div>
+  <div id="ustbolum" style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+  
+  <div style="position: relative; width: 350px;">
+    <select style="width:350px;" class="form-select" id="fileSelect" name="fileSelect"></select>
+		<span
+				style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
 		</div>
+		
+    <input type="date" style="width:140px;" id="startDate" class="form-control" value="1900-01-01">
+    <input type="date" style="width:140px;" id="endDate" class="form-control" value="2100-12-31">
+
+    <button class="btn btn-primary" type="button" onclick="goster()" id="gosterButton">Göster</button>
+    <button class="btn btn-primary" type="button" onclick="geri()" id="geriButton">◀ Geri</button>
+    <button class="btn btn-primary" type="button" onclick="ileri()" id="ileriButton">İleri ▶</button>
+  </div>
+
+  <!-- yeni: play/pause + slider + sayaç -->
+  <div id="gpsControls">
+    <button class="btn btn-success btn-sm" id="btnPlay" type="button" onclick="play()">▶</button>
+    <button class="btn btn-warning btn-sm" id="btnPause" type="button" onclick="stopPlay()" disabled>⏸</button>
+
+    <span style="font-weight:800; font-size:12px;">
+      <span id="gpsIndex">0</span>/<span id="gpsTotal">0</span>
+    </span>
+
+    <input id="gpsSlider" type="range" value="0" min="0" max="0">
+
+    <span id="gpsSpeed" style="font-weight:800; font-size:12px; opacity:.8;">800 ms</span>
+  </div>
+
+  <!-- yeni: bilgi paneli -->
+  <div id="gpsInfo">
+    <div class="gps-info-row"><div class="gps-k">Bilgi</div><div class="gps-v">Henüz veri yok</div></div>
+  </div>
+</div>
+
+<div id="errorDiv"></div>
+
+<div class="container">
+  <div class="table-container">
+    <div id="map">
+      <div id="layerButtons">
+        <button type="button" onclick="setLayer('osm')">🗺️ Normal</button>
+        <button type="button" onclick="setLayer('satellite')">🛰️ Uydu</button>
+        <button type="button" onclick="setLayer('dark')">🌙 Gece</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <input type="hidden" id="gpsBilgi" name="gpsBilgi" value="initialValue">
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-
+<script src="/obs_js_files/gps/gps.js"></script>
