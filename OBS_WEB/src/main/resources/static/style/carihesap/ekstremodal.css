@@ -55,6 +55,8 @@
 #ara_content .modal-ekstre .modal-body{
   padding: 12px 14px !important;
   background: rgba(8,14,26,.72) !important;
+  
+  /* background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important; */
 }
 
 /* FOOTER */

@@ -152,56 +152,42 @@
 </style>
 
 <div class="card p-4">
-  <div class="acc-title">Hesap İşlemleri</div>
-  <div class="acc-sub">Bu işlem geri alınamaz. Hesabı silmeden önce emin ol.</div>
+	<div class="acc-title">Hesap İşlemleri</div>
+	<div class="acc-sub">Bu işlem geri alınamaz. Hesabı silmeden önce
+		emin ol.</div>
 
-  <div class="acc-user">
-    <span>👤</span>
-    <span sec:authorize="isAuthenticated()"
-          sec:authentication="name"
-          style="font-weight:900;"></span>
-  </div>
+	<div class="acc-user">
+		<span>👤</span> <span sec:authorize="isAuthenticated()"
+			sec:authentication="name" style="font-weight: 900;"></span>
+	</div>
 
-  <div style="height:14px;"></div>
+	<div style="height: 14px;"></div>
 
-  <!-- 🔴 onclick YOK -->
-  <button class="btn btn-danger-2026"
-          type="button"
-          id="hesapyoketButton">
-    🧨 Hesap Sil
-  </button>
+	<!-- 🔴 onclick YOK -->
+	<button class="btn btn-danger-2026" type="button" id="hesapyoketButton">
+		🧨 Hesap Sil</button>
 
-  <!-- 2. adım onay -->
-  <div id="confirmBox" class="confirm-box" style="display:none;">
-    <div style="font-weight:900; margin-bottom:8px;">
-      Onay için <span style="color:#fb7185;">SIL</span> yaz
-    </div>
+	<!-- 2. adım onay -->
+	<div id="confirmBox" class="confirm-box" style="display: none;">
+		<div style="font-weight: 900; margin-bottom: 8px;">
+			Onay için <span style="color: #fb7185;">SIL</span> yaz
+		</div>
 
-    <div class="confirm-row">
-      <input id="confirmText"
-             class="confirm-input"
-             type="text"
-             placeholder="SIL yaz ve onayla">
+		<div class="confirm-row">
+			<input id="confirmText" class="confirm-input" type="text"
+				placeholder="SIL yaz ve onayla">
 
-      <!-- 🔴 onclick YOK -->
-      <button class="btn btn-danger-2026"
-              type="button"
-              id="confirmDeleteBtn"
-              disabled>
-        Evet, Sil
-      </button>
+			<!-- 🔴 onclick YOK -->
+			<button class="btn btn-danger-2026" type="button"
+				id="confirmDeleteBtn" disabled>Evet, Sil</button>
 
-      <!-- 🔴 onclick YOK -->
-      <button class="btn btn-secondary"
-              type="button"
-              id="confirmCloseBtn"
-              style="height:46px;border-radius:14px;">
-        Vazgeç
-      </button>
-    </div>
-  </div>
+			<!-- 🔴 onclick YOK -->
+			<button class="btn btn-secondary" type="button" id="confirmCloseBtn"
+				style="height: 46px; border-radius: 14px;">Vazgeç</button>
+		</div>
+	</div>
 
-  <div id="errorDiv"></div>
+	<div id="errorDiv"></div>
 </div>
 
 
