@@ -26,9 +26,10 @@ public class StokController {
 	@GetMapping("stok/getBaslik")
 	@ResponseBody
 	public Map<String, String> getBaslik() {
+		String[] detay  = faturaService.conn_detail();
 		Map<String, String> response = new HashMap<>();
 		try {
-			response.put("baslik", faturaService.fat_firma_adi());
+			response.put("baslik", faturaService.fat_firma_adi() + " / " + detay[1]);
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
 			response.put("baslik", ""); 

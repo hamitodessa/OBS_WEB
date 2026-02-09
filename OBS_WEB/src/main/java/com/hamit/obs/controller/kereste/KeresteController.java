@@ -24,9 +24,10 @@ public class KeresteController {
 	@GetMapping("kereste/getBaslik")
 	@ResponseBody
 	public Map<String, String> getBaslik() {
+		String[] detay  = keresteService.conn_detail();
 		Map<String, String> response = new HashMap<>();
 		try {
-			response.put("baslik", keresteService.ker_firma_adi());
+			response.put("baslik", keresteService.ker_firma_adi() + " / " + detay[1]);
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
 			response.put("baslik", ""); 
