@@ -81,6 +81,9 @@
   border-top: 1px solid rgba(255,255,255,.10) !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
   background: rgba(255,255,255,.02) !important;
+  
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
 
 /* 4) Table (HTML: id="modalTable" class="table modal-table ...") */
@@ -149,7 +152,7 @@
 
 /* Optional: row height (HTML’de class="table-row-height" var) */
 #secondModal table.modal-table.table-row-height td{
-  height: 22px;
+  height: 20px;
   line-height: 18px;
   padding-top: 4px;
   padding-bottom: 4px;

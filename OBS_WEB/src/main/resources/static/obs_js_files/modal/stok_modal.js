@@ -1,86 +1,108 @@
+
+
 async function openurunkodlariModal(inputId, secondnerden, barkodurunkodu) {
-  $('#urnsecondModal').modal('show');
-  const modalError = document.getElementById("urnsecond-errorDiv");
-  modalError.style.display = "none";
-  modalError.innerText = "";
-  document.body.style.cursor = "wait";
-  try {
-    const response = await fetchWithSessionCheck("modal/urunkodlari");
-    if (response.errorMessage) {
-      throw new Error(response.errorMessage);
-    }
-    const data = response;
-    const tableBody = document.getElementById("urnsecond-modalTableBody");
-    tableBody.innerHTML = "";
-    if (data.length === 0) {
-      if (modalError) {
-        modalError.style.display = "block";
-        modalError.innerText = "Hiç veri bulunamadı.";
-      }
-      return;
-    }
-    tableBody.classList.add("table-row-height");
-    data.forEach((row) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-                   <td>${row.Barkod || ""}</td>
-                   <td>${row.Kodu || ""}</td>
-                   <td>${row.Adi || ""}</td>
-                   <td>${row.Sinif || ""}</td>
-									 <td>${row.Birim || ""}</td>
-									 <td>${row.Agirlik || ""}</td>
-									 <td>${row.Mensei || ""}</td>
-									 <td>${row.Ana_Grup || ""}</td>
-									 <td>${row.Alt_Grup || ""}</td>
-               `;
-      tr.onclick = () => urnselectValue(inputId, row.Barkod, row.Kodu, secondnerden, barkodurunkodu);
-      tableBody.appendChild(tr);
-    });
-  } catch (error) {
+    modalShow("urnsecondModal");
+
     const modalError = document.getElementById("urnsecond-errorDiv");
-    modalError.style.display = "block";
-    modalError.innerText = `Bir hata oluştu: ${error.message}`;
-  } finally {
-    document.body.style.cursor = "default";
-  }
+    if (modalError) {
+        modalError.style.display = "none";
+        modalError.innerText = "";
+    }
+
+    document.body.style.cursor = "wait";
+
+    try {
+        const response = await fetchWithSessionCheck("modal/urunkodlari");
+        if (response?.errorMessage) throw new Error(response.errorMessage);
+
+        const data = Array.isArray(response) ? response : [];
+
+        const tableBody = document.getElementById("urnsecond-modalTableBody");
+        if (!tableBody) throw new Error("urnsecond-modalTableBody bulunamadı");
+
+        tableBody.innerHTML = "";
+
+        if (data.length === 0) {
+            if (modalError) {
+                modalError.style.display = "block";
+                modalError.innerText = "Hiç veri bulunamadı.";
+            }
+            return;
+        }
+
+        tableBody.classList.add("table-row-height");
+
+        for (const row of data) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+        <td>${row?.Barkod ?? ""}</td>
+        <td>${row?.Kodu ?? ""}</td>
+        <td>${row?.Adi ?? ""}</td>
+        <td>${row?.Sinif ?? ""}</td>
+        <td>${row?.Birim ?? ""}</td>
+        <td>${row?.Agirlik ?? ""}</td>
+        <td>${row?.Mensei ?? ""}</td>
+        <td>${row?.Ana_Grup ?? ""}</td>
+        <td>${row?.Alt_Grup ?? ""}</td>
+      `;
+            tr.addEventListener("click", () =>
+                urnselectValue(
+                    inputId,
+                    row?.Barkod ?? "",
+                    row?.Kodu ?? "",
+                    secondnerden,
+                    barkodurunkodu
+                )
+            );
+            tableBody.appendChild(tr);
+        }
+				
+				const modalsearch = byId("urnsecond-modalSearch");
+				       modalsearch.value = '';
+				       modalsearch.focus();
+    } catch (error) {
+        if (modalError) {
+            modalError.style.display = "block";
+            modalError.innerText = `Bir hata oluştu: ${error?.message ?? error}`;
+        }
+    } finally {
+        document.body.style.cursor = "default";
+    }
 }
 
 function stkfilterTable() {
-  const searchValue = document.getElementById("modalSearch").value.toLowerCase();
-  const rows = document.querySelectorAll("#modalTable tbody tr");
-  rows.forEach((row) => {
-    const rowText = Array.from(row.cells)
-      .map((cell) => cell.textContent.toLowerCase())
-      .join(" ");
-    row.style.display = rowText.includes(searchValue) ? "" : "none";
-  });
+    // Senin modal id’lerin "urnsecond-modalSearch" / "urnsecond-modalTable" ise buna göre düzelt
+    // (Eski kodda modalSearch/modalTable kalmış)
+    const searchValue = (document.getElementById("urnsecond-modalSearch")?.value ?? "").toLowerCase();
+    const rows = document.querySelectorAll("#urnsecond-modalTableBody tbody tr");
+
+    rows.forEach((row) => {
+        const rowText = Array.from(row.cells)
+            .map((cell) => (cell.textContent || "").toLowerCase())
+            .join(" ");
+        row.style.display = rowText.includes(searchValue) ? "" : "none";
+    });
 }
 
 function urnselectValue(inputId, selectedBarkod, selectedKodu, secondnerden, barkodurunkodu) {
-  const inputElementm = document.getElementById(inputId);
-  document.getElementById("urnsecond-modalSearch").value = "";
-  $('#urnsecondModal').modal('hide');
+    const inputEl = document.getElementById(inputId);
+    const searchEl = document.getElementById("urnsecond-modalSearch");
+    if (searchEl) searchEl.value = "";
 
-  if (inputElementm) {
-    if (barkodurunkodu === "ukodukod") {
-      inputElementm.value = selectedKodu;
-    } else if (barkodurunkodu === "barkod") {
-      inputElementm.value = selectedBarkod;
+    modalHide("urnsecondModal");
+
+    if (inputEl) {
+        if (barkodurunkodu === "ukodukod") inputEl.value = selectedKodu;
+        else if (barkodurunkodu === "barkod") inputEl.value = selectedBarkod;
     }
-  }
-  if (secondnerden === "imalat") {
-    urnaramaYap("Kodu");
-  }
-  else if (secondnerden === "imalatsatir") {
-    const event = new Event('change', { bubbles: true });
-    inputElementm.dispatchEvent(event);
-  }
-  else if (secondnerden === "recetealt") {
-    const event = new Event('change', { bubbles: true });
-    inputElementm.dispatchEvent(event);
-  }
-  else if (secondnerden === "recetesatir") {
-    const event = new Event('change', { bubbles: true });
-    inputElementm.dispatchEvent(event);
-  }
+
+    if (secondnerden === "imalat") {
+        urnaramaYap("Kodu");
+        return;
+    }
+
+    if (secondnerden === "imalatsatir" || secondnerden === "recetealt" || secondnerden === "recetesatir") {
+        if (inputEl) inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+        return;
+    }
 }

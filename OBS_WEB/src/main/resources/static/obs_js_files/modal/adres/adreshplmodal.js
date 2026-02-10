@@ -1,18 +1,30 @@
+
+
+// open
 async function openadrkodlariModal(inputId, secondnerden) {
     activeNestedInputId = inputId;
-    $('#adrsecondModal').modal('show');
+
+    modalShow("adrsecondModal");
+
     const modalError = document.getElementById("adrsecond-errorDiv");
-    modalError.style.display = "none";
-    modalError.innerText = "";
+    if (modalError) {
+        modalError.style.display = "none";
+        modalError.innerText = "";
+    }
+
     document.body.style.cursor = "wait";
+
     try {
         const response = await fetchWithSessionCheck("modal/adrhsppln");
-        if (response.errorMessage) {
-            throw new Error(response.errorMessage);
-        }
-        const data = response;
+        if (response?.errorMessage) throw new Error(response.errorMessage);
+
+        const data = Array.isArray(response) ? response : [];
+
         const tableBody = document.getElementById("adrsecond-modalTableBody");
+        if (!tableBody) throw new Error("adrsecond-modalTableBody bulunamadı");
+
         tableBody.innerHTML = "";
+
         if (data.length === 0) {
             if (modalError) {
                 modalError.style.display = "block";
@@ -20,44 +32,54 @@ async function openadrkodlariModal(inputId, secondnerden) {
             }
             return;
         }
+
         tableBody.classList.add("table-row-height");
-        data.forEach((row) => {
+
+        for (const row of data) {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                   <td style="min-width:20%;">${row.M_Kodu || ""}</td>
-                   <td>${row.Adi || ""}</td>
-               `;
-            tr.onclick = () => adrselectValue(inputId, row.M_Kodu, secondnerden);
+        <td style="min-width:20%;">${row?.M_Kodu ?? ""}</td>
+        <td>${row?.Adi ?? ""}</td>
+      `;
+            tr.addEventListener("click", () => adrselectValue(inputId, row?.M_Kodu ?? "", secondnerden));
             tableBody.appendChild(tr);
-        });
+        }
+				const modalsearch = byId("adrsecond-modalSearch");
+				               modalsearch.value = '';
+				               modalsearch.focus();
     } catch (error) {
-        const modalError = document.getElementById("adrsecond-errorDiv");
-        modalError.style.display = "block";
-        modalError.innerText = `Bir hata oluştu: ${error.message}`;
+        if (modalError) {
+            modalError.style.display = "block";
+            modalError.innerText = `Bir hata oluştu: ${error?.message ?? error}`;
+        }
     } finally {
         document.body.style.cursor = "default";
     }
 }
 
+// select
 function adrselectValue(inputId, selectedKodu, secondnerden) {
-    $('#adrsecondModal').modal('hide');
-    const inputElementm = document.getElementById(inputId);
-    document.getElementById("adrsecond-modalSearch").value = "";
-    inputElementm.value = selectedKodu;
-    if (secondnerden === "fatura") {
-        adrhesapAdiOgren(inputId, 'adresadilbl');
+    modalHide("adrsecondModal");
+
+    const inputEl = document.getElementById(inputId);
+    if (inputEl) inputEl.value = selectedKodu;
+
+    const searchEl = document.getElementById("adrsecond-modalSearch");
+    if (searchEl) searchEl.value = "";
+
+    if (secondnerden === "fatura" || secondnerden === "irsaliye") {
+        adrhesapAdiOgren(inputId, "adresadilbl");
     }
-		else if (secondnerden === "irsaliye") {
-		    adrhesapAdiOgren(inputId, 'adresadilbl');
-		}
 }
 
+// filter
 function adrfilterTable() {
-    const searchValue = document.getElementById("adrsecond-modalSearch").value.toLowerCase();
+    const searchValue = (document.getElementById("adrsecond-modalSearch")?.value ?? "").toLowerCase();
     const rows = document.querySelectorAll("#adrsecond-modalTable tbody tr");
+
     rows.forEach((row) => {
         const rowText = Array.from(row.cells)
-            .map((cell) => cell.textContent.toLowerCase())
+            .map((cell) => (cell.textContent || "").toLowerCase())
             .join(" ");
         row.style.display = rowText.includes(searchValue) ? "" : "none";
     });
