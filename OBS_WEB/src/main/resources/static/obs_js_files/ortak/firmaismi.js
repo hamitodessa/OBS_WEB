@@ -85,20 +85,9 @@ OBS.FIRMA.firmaIsmiSayfa = async function (modul) {
   if (baslik) baslik.innerText = "";
 
   try {
-    const res = await fetch("obs/firmaismi", { method: "GET" });
+    const res = await fetchWithSessionCheck("obs/firmaismi", { method: "GET" });
 
-    if (res.status === 401) {
-      window.location.href = "/login";
-      return;
-    }
-
-    const html = await res.text();
-
-    if (html.includes("<form") && html.includes('name="username"')) {
-      window.location.href = "/login";
-      return;
-    }
-
+    const html = res.data;
     const ara = OBS.FIRMA._el("ara_content");
     if (ara) ara.innerHTML = html;
 

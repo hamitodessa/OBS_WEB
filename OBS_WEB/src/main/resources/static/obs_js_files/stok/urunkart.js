@@ -303,15 +303,8 @@ OBS.URUNKART.sayfaYukle = async () => {
   const url = "stok/urunkart";
   try {
     OBS.URUNKART._setCursor(true);
-    const r = await fetch(url, { method: "GET" });
-    if (!r.ok) throw new Error(`Bir hata oluştu: ${r.statusText}`);
-
-    const html = await r.text();
-
-    if (html.includes('<form') && html.includes('name="username"')) {
-      window.location.href = "/login";
-      return;
-    }
+    const r = await fetchWithSessionCheck(url, { method: "GET" });
+    const html = await r.data;
 
     const host = document.getElementById("ara_content");
     if (host) host.innerHTML = html;

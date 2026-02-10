@@ -71,9 +71,9 @@ OBS.setCursorDefault = function () {
 
   /* fetch */
   M._fetchJson = async function (url) {
-    const r = await fetch(url, { headers: { "Accept": "application/json" } });
-    if (!r.ok) throw new Error("Liste alınamadı. HTTP " + r.status);
-    return await r.json();
+    const r = await fetchWithSessionCheck(url, { headers: { "Accept": "application/json" } });
+   
+    return r;
   };
 
   M.load = async function () {

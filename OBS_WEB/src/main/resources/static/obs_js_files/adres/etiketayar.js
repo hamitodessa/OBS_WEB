@@ -84,18 +84,8 @@ OBS.ADR.sayfaYukle = async function () {
   try {
     OBS.ADR._cursor(true);
 
-    const response = await fetch("adres/etiketayar", { method: "GET" });
-    if (!response.ok) {
-      throw new Error(`Bir hata oluştu: ${response.statusText}`);
-    }
-
-    const html = await response.text();
-
-    if (html.includes("<form") && html.includes('name="username"')) {
-      window.location.href = "/login";
-      return;
-    }
-
+    const response = await fetchWithSessionCheck("adres/etiketayar", { method: "GET" });
+    const html = response.data
     const ara = document.getElementById("ara_content");
     if (ara) ara.innerHTML = html;
 

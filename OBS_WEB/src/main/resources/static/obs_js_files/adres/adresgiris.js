@@ -97,17 +97,11 @@ OBS.ADR.sayfaYukle = async function () {
   const url = "adres/adresgiris";
   try {
     OBS.ADR._setCursor(true);
-    const response = await fetch(url, { method: "GET" });
-    if (!response.ok) throw new Error(`Bir hata oluştu: ${response.statusText}`);
-
-    const data = await response.text();
-    if (data.includes("<form") && data.includes('name="username"')) {
-      window.location.href = "/login";
-      return;
-    }
+    const response = await fetchWithSessionCheck(url, { method: "GET" });
+    
 
     const ara = document.getElementById("ara_content");
-    if (ara) ara.innerHTML = data;
+    if (ara) ara.innerHTML = response.data;
 
     // eski akışın aynısı:
     if (typeof window.adresBaslik === "function") window.adresBaslik();

@@ -23,8 +23,7 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSuccessHandler successHandler , LoginFailureHandler loginFailureHandler ) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 		.authorizeHttpRequests(request -> request
-				.requestMatchers(
-					"/css/**", "/images/**", "/style/**", "/user/send_password", "/user/register")
+				.requestMatchers("/images/**","/user/send_password", "/user/register")
 				.permitAll()
 				.anyRequest().authenticated() 
 				)
