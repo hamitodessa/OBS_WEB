@@ -221,8 +221,17 @@
   position: sticky;
   top: 14px;
 }
+#ara_content .resimcentered-div{
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 #ara_content .resimdiv{
   width: 100%;
+  height: 280px;
   max-height: 280px;
   display:flex;
   justify-content:center;
@@ -240,7 +249,6 @@
 #ara_content .resimgoster{
   width: calc(100% - 4px);
   height: calc(100% - 4px);
- 
   border-radius: 14px; /* 18 - 2 - 2 */
   background: transparent;
   mix-blend-mode: multiply;
@@ -255,6 +263,57 @@
   color: #fff;
   font-weight: 900;
 }
+
+/* seç butonu */
+#ara_content .file-pick{
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(56,189,248,.35);
+  background: rgba(56,189,248,.16);
+  color: rgba(255,255,255,.95);
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+#ara_content .file-pick:hover{
+  background: rgba(56,189,248,.24);
+  border-color: rgba(56,189,248,.55);
+  transform: translateY(-1px);
+}
+
+/* native file input gizle */
+#ara_content .file-native{
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+/* dosya adı chip */
+#ara_content .file-name{
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(8,14,26,.35);
+  color: rgba(255,255,255,.86);
+  font-weight: 800;
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 
 /* GRID SPAN yardımcıları (12 kolon - ilk satır için) */
 #ara_content .c12{ grid-column: span 12; }
@@ -451,18 +510,20 @@
 
     <!-- SAĞ: RESİM -->
     <div class="adr-photo">
+        <div class="resimcentered-div">
       <div class="resimdiv">
-        <img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim" style="display:none;" />
+        <img id="resimGoster" class="resimgoster" src="" alt=""/>
       </div>
 
-      <button type="button" id="resimremove" class="btn btn-secondary" style="width:100%; margin-top:10px;" onclick="OBS.ADR.resimSil()">
+      <button type="button" id="resimremove" class="btn btn-secondary"   onclick="OBS.ADR.resimSil()">
         <i class="fa fa-remove"></i>
       </button>
 
-      <input type="file" id="resim" name="resim" accept="image/*" disabled
-             class="form-control" style="width:100%; margin-top:10px;">
+	  <label class="file-pick" for="resim"> <i class="fa fa-image" ></i> Resim Seç	</label> 
+      <input class="file-native" type="file" name="resim" id="resim" accept="image/*"   />
+			<div class="file-name" id="resimFileName" >Dosya seçilmedi</div>		
     </div>
-
+</div>
   </div>
 </div>
 

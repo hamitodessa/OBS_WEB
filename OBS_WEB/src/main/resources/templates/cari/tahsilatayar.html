@@ -22,7 +22,7 @@
 
 /* Ana panel */
 #ara_content .centered-div{
-  width: 55%;
+  width: 45%;
  
   margin: 0 auto;
   box-sizing: border-box;
@@ -163,6 +163,7 @@
 }
 
 #ara_content .resimgoster{
+/*
   width: 100% !important;
   height: 132px !important;
   border-radius: 12px;
@@ -172,6 +173,15 @@
   display: block;
   object-fit: contain;
   padding: 8px;
+  */
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  max-height:140px !important;
+  
+  background: transparent;
+  mix-blend-mode: multiply;
+  border-radius: 14px; /* 18 - 2 - 2 */
+  
 }
 
 /* =========================

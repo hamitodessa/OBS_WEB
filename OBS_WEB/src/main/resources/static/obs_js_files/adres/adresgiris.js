@@ -12,7 +12,7 @@ OBS.ADR._root = () =>
   document.getElementById("ara_content") ||
   document;
 
-OBS.ADR.byId = (id) => OBS.ADR._root().querySelector("#" + id);
+OBS.ADR.byId = (id) => document.getElementById(id);
 OBS.ADR.qsa  = (sel) => Array.from(OBS.ADR._root().querySelectorAll(sel));
 
 OBS.ADR._setErr = (msg) => {
@@ -324,30 +324,113 @@ OBS.ADR.sil = async function () {
 
 /* ---------- resim sil ---------- */
 OBS.ADR.resimSil = function () {
+	 OBS.ADR._setErr("");
+	OBS.ADR._resetFileUI();
+};
+
+
+OBS.ADR._setImgBase64 = function (base64) {
   const img = OBS.ADR.byId("resimGoster");
   if (!img) return;
-  img.src = "";
-  img.style.display = "none";
-	const fileInput = OBS.ADR.byId("resim");
-	 if (fileInput) fileInput.value = "";
+
+  if (base64 && base64.trim() !== "") {
+    img.src = "data:image/jpeg;base64," + base64.trim();
+    img.style.display = "block";
+  } else {
+    img.src = "";
+    img.style.display = "none";
+  }
+};
+
+OBS.ADR._appendBase64ImgAsBlob = function (formData, imgId, formKey, filename) {
+  const img = OBS.ADR.byId(imgId);
+  if (!img) return;
+
+  const src = img.src || "";
+  if (!src.startsWith("data:image")) return;
+
+  const base64 = src.split(",")[1];
+  if (!base64) return;
+
+  const byteCharacters = atob(base64);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) byteNumbers[i] = byteCharacters.charCodeAt(i);
+  const byteArray = new Uint8Array(byteNumbers);
+
+  const blob = new Blob([byteArray], { type: "image/jpeg" });
+  formData.append(formKey, blob, filename);
+};
+
+
+OBS.ADR._MAX_KB = 500;
+OBS.ADR.onFileChanged = function () {
+  const input = OBS.ADR.byId("resim");
+  if (!input) return;
+
+  const file = input.files?.[0];
+  if (!file) {
+    OBS.ADR._setFileName("Dosya seçilmedi");
+    return;
+  }
+
+  if (file.type && !file.type.startsWith("image/")) {
+	OBS.ADR._setErr("Lütfen bir resim dosyası seçin!");
+   OBS.ADR._resetFileUI();
+    return;
+  }
+
+  const maxBytes = OBS.ADR._MAX_KB * 1024;
+  if (file.size > maxBytes) {
+    OBS.ADR._setErr(`Dosya boyutu ${OBS.ADR._MAX_KB} KB'ı geçemez!`);
+    OBS.ADR._resetFileUI();
+    return;
+  }
+
+  OBS.ADR._setErr("");
+  OBS.ADR._setFileName(file.name);
+
+  // preview
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = OBS.ADR.byId("resimGoster");
+    if (!img) return;
+    img.src = e.target.result;
+    img.style.display = "block";
+		
+  };
+  reader.readAsDataURL(file);
+};
+
+OBS.ADR._setFileName = function (text) {
+  const el = OBS.ADR.byId("resimFileName");
+  if (!el) return;
+  el.textContent = text || "Dosya seçilmedi";
+};
+
+OBS.ADR._resetFileUI = function () {
+  const inp = OBS.ADR.byId("resim");
+  if (inp) inp.value = "";
+
+  const img = OBS.ADR.byId("resimGoster");
+  if (img) {
+    img.src = "";
+    img.style.display = "none";
+  }
+
+  OBS.ADR._setFileName("Dosya seçilmedi");
+};
+
+OBS.ADR._bindFileEvents = function () {
+  const logoInput = OBS.ADR.byId("resim");
+  if (logoInput && logoInput.dataset.bound !== "1") {
+    logoInput.dataset.bound = "1";
+    logoInput.addEventListener("change", OBS.ADR.onFileChanged);
+  }
+
 };
 
 /* ---------- init (event bağla) ---------- */
 OBS.ADR.init = function () {
-  const fileEl = OBS.ADR.byId("resim");
-  if (fileEl && !fileEl._obsBound) {
-    fileEl.addEventListener("change", (event) => {
-      const file = event.target.files?.[0];
-      const maxSizeInKB = 500;
-      const maxSizeInBytes = maxSizeInKB * 1024;
-
-      if (file && file.size > maxSizeInBytes) {
-        OBS.ADR._setErr(`Dosya boyutu ${maxSizeInKB} KB'ı geçemez!`);
-        event.target.value = "";
-      } else {
-        OBS.ADR._setErr("");
-      }
-    });
-    fileEl._obsBound = true;
-  }
+	
+	OBS.ADR._bindFileEvents();
 };

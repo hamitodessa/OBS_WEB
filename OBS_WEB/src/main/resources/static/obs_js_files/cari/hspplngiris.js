@@ -387,6 +387,6 @@ OBS.HSPPLN._bindFileEvents = function () {
    INIT
    ========================= */
 OBS.HSPPLN.init = function () {
- 	OBS.HSPPLN._bindFileEvents();
+  OBS.HSPPLN._bindFileEvents();
   OBS.HSPPLN._setFileName("Dosya seçilmedi");
 };
