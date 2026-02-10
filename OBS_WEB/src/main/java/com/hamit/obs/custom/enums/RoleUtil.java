@@ -2,6 +2,7 @@ package com.hamit.obs.custom.enums;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.hamit.obs.model.user.RolEnum;
 import com.hamit.obs.model.user.User;
@@ -34,6 +35,10 @@ public final class RoleUtil {
                 .map(GrantedAuthority::getAuthority)
                 .map(RoleUtil::normalize)
                 .anyMatch(r -> rol.name().equals(r));
+    }
+    
+    public static boolean durumRole( RolEnum rol) {
+        return hasRole(SecurityContextHolder.getContext().getAuthentication(), rol);
     }
 
     public static RolEnum resolveRolEnum(User user) {

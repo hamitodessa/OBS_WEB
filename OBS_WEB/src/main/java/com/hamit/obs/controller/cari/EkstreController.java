@@ -64,6 +64,7 @@ public class EkstreController {
 			response.put("data", Collections.emptyList());
 			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}
 		return response;

@@ -33,6 +33,7 @@ import com.hamit.obs.service.user.UserService;
 @Controller
 public class LoginController {
 
+
 	@Autowired
 	private UserService userService;
 	
@@ -56,6 +57,9 @@ public class LoginController {
 	
 	@Autowired
 	private ForumService forumService;
+
+
+   
 	
 
 	@GetMapping("/login")

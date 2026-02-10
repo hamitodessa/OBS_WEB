@@ -61,8 +61,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			UserSessionManager.removeUserSessionsByUsername(useremail);
 			
-			//RolEnum rol = RoleUtil.resolveRolEnum(authentication);
-			
 			cariService.initialize();
 			kurService.initialize();
 			adresService.initialize();

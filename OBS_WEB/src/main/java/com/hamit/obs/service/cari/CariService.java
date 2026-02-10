@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.connection.ConnectionManager;
+import com.hamit.obs.custom.enums.RoleUtil;
 import com.hamit.obs.custom.enums.modulTipi;
+import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.cari.dekontDTO;
 import com.hamit.obs.dto.cari.dvzcevirmeDTO;
 import com.hamit.obs.dto.cari.hesapplaniDTO;
@@ -22,6 +24,7 @@ import com.hamit.obs.dto.cari.tahsilatDTO;
 import com.hamit.obs.dto.cari.tahsilatTableRowDTO;
 import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.exception.ServiceException;
+import com.hamit.obs.model.user.RolEnum;
 import com.hamit.obs.repository.cari.ICariDatabase;
 import com.hamit.obs.repository.loglama.LoglamaRepository;
 import com.hamit.obs.service.adres.AdresService;
@@ -80,16 +83,9 @@ public class CariService {
 			throw new ServiceException(errorMessages(e));
 		}
 	}
+	
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable){
 		try {
-			//RolEnum rolEnum = RoleUtil.resolveRolEnum(SecurityContextHolder.getContext().getAuthentication());
-			//String rolAdi = rolEnum != null ? rolEnum.name() : null;
-			
-			//if (! RoleUtil.hasRole(SecurityContextHolder.getContext().getAuthentication(), RolEnum.USER)) {
-			//	   System.out.println("Rol Adi=" +RolEnum.USER.toString());
-			//	   throw new ServiceException("Yetkiniz Yok =" + RolEnum.USER.toString());
-			//}
-			
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			return strategy.ekstre(hesap, t1, t2,pageable,cariConnDetails);
@@ -139,9 +135,14 @@ public class CariService {
 
 	public boolean cari_dekont_kaydet(dekontDTO dBilgi){
 		try {
-			
+			if (! RoleUtil.durumRole(RolEnum.ADMIN))
+				throw new ServiceException("Yetkiniz Yok");
+
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+			
+			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
+			evrak_yoket(dBilgi.getFisNo(),usrString);
 			loglamaDTO.setEvrak(String.valueOf(dBilgi.getFisNo()));
 			String mesaj = "A. Hes:" + dBilgi.getAhes().toString().trim() + " Tut:" + dBilgi.getAlacak() +
 					" B. Hes:"+ dBilgi.getBhes().toString().trim() + " Tut:" + dBilgi.getBorc();
@@ -177,6 +178,12 @@ public class CariService {
 		}
 	}
 	public void evrak_yoket(int evrakno,String user) {
+		//RolEnum rolEnum = RoleUtil.resolveRolEnum(SecurityContextHolder.getContext().getAuthentication());
+		//String rolAdi = rolEnum != null ? rolEnum.name() : null;
+		// System.out.println("Rol Adi=" +rolAdi);
+		if (! RoleUtil.durumRole(RolEnum.ADMIN))
+			throw new ServiceException("Yetkiniz Yok");
+
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);

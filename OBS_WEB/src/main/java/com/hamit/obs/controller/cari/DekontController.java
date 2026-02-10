@@ -112,7 +112,7 @@ public class DekontController {
 		try {
 			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			dekontDTO.setUser(usrString);
-			cariservice.evrak_yoket(dekontDTO.getFisNo(),usrString);
+			//cariservice.evrak_yoket(dekontDTO.getFisNo(),usrString);
 			boolean status = cariservice.cari_dekont_kaydet(dekontDTO);
 			if (status) {
 				response.put("message", "Kayıt başarılı");
