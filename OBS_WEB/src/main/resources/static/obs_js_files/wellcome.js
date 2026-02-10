@@ -3,13 +3,11 @@
 async function getWellcomeData() {
 	try {
 		document.body.style.cursor = "wait";
-		const response = await fetch("wellcomecalismadizini", {
+		const response = await fetchWithSessionCheck("wellcomecalismadizini", {
 			method: "GET",
 		});
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		const data = await response.json();
+		
+		const data = response;
 		if (data.errorMessage) {
 			throw new Error(data.errorMessage);
 		}
