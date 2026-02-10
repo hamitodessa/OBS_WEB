@@ -236,12 +236,10 @@
   display:flex;
   justify-content:center;
   align-items:center;
-
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)) !important;
   border: 1px solid rgba(255,255,255,.18) !important;
   border-radius: 18px;
   overflow: hidden;
-
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,.05),
     0 10px 30px rgba(0,0,0,.35);
@@ -358,188 +356,202 @@
 }
 </style>
 
+<div id="errorDiv"></div>
+<div class="card">
+	<div class="hsp-layout">
+		<!-- SOL -->
+		<div class="hsp-left">
+			<!-- TOOLBAR (AYNI) -->
+			<div class="hsp-toolbar">
+				<span class="hsp-label" style="min-width: 110px;">Arama</span> <input
+					type="text" id="arama" class="form-control"
+					oninput="OBS.HSPPLN.aramaYap()" th:value="${hesapKodu}">
+				<div style="position: relative;">
+					<input class="form-control cins_bold" maxlength="12"
+						list="hesapOptions" id="hesapKodlari"
+						style="width: 100%; padding-right: 30px;">
+					<datalist id="hesapOptions">
+						<option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
+					</datalist>
+					<span class="datalist-arrow"
+						style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none;">▼</span>
+				</div>
+			</div>
 
+			<!-- NAV (AYNI) -->
+			<div class="hsp-actions">
+				<button type="button" id="geriButton" class="btn btn-secondary"
+					onclick="OBS.HSPPLN.geri()">
+					<i class="fa fa-backward"></i>
+				</button>
+				<button type="button" id="ilkButton" class="btn btn-secondary"
+					onclick="OBS.HSPPLN.ilk()">
+					<i class="fa fa-refresh"></i>
+				</button>
+				<button type="button" id="ileriButton" class="btn btn-secondary"
+					onclick="OBS.HSPPLN.ileri()">
+					<i class="fa fa-forward"></i>
+				</button>
+			</div>
+			<!-- HESAP KODU SATIRI (AYNI) -->
+			<div class="hsp-form">
+				<div class="hsp-field c6">
+					<span class="hsp-label">Hesap Kodu</span> <input type="text"
+						id="kodu" disabled class="form-control"
+						style="max-width: 180px; font-weight: bold;"
+						oninput="hesapAdiOgren(this.value, 'kodKontrol')"> <span
+						id="kodKontrol"></span>
+				</div>
 
-  <div id="errorDiv"></div>
+				<div class="hsp-field c6">
+					<span class="hsp-label">Unvan</span> <input type="text" id="adi"
+						disabled class="form-control">
+				</div>
 
-  <div class="card">
-    <div class="hsp-layout">
+			</div>
 
-      <!-- SOL -->
-      <div class="hsp-left">
+			<!-- ALT GRID (DIŞ KUTU YOK, SÜPER KOMPAKT) -->
+			<div class="hsp-grid">
 
-        <!-- TOOLBAR (AYNI) -->
-        <div class="hsp-toolbar">
-          <span class="hsp-label" style="min-width:110px;">Arama</span>
+				<div class="hsp-item">
+					<span class="hsp-label">Karton</span> <input type="text"
+						id="karton" disabled class="form-control">
+				</div>
 
-          <input type="text" id="arama" class="form-control"
-                 oninput="OBS.HSPPLN.aramaYap()" th:value="${hesapKodu}">
+				<div class="hsp-item">
+					<span class="hsp-label">Cins</span> <input type="text" id="hcins"
+						disabled class="form-control">
+				</div>
 
-          <div style="position: relative;">
-            <input class="form-control cins_bold" maxlength="12"
-                   list="hesapOptions" id="hesapKodlari"
-                   style="width:100%; padding-right:30px;">
-            <datalist id="hesapOptions">
-              <option th:each="kod : ${hesapKodlari}" th:value="${kod.HESAP}"></option>
-            </datalist>
-            <span class="datalist-arrow"
-                  style="position:absolute; top:50%; right:10px; transform:translateY(-50%); pointer-events:none;">▼</span>
-          </div>
-        </div>
+				<div class="hsp-item sms">
+					<span class="hsp-label">Sms</span> <input type="checkbox" id="sms"
+						class="form-check-input">
+				</div>
 
-        <!-- NAV (AYNI) -->
-        <div class="hsp-actions">
-          <button type="button" id="geriButton" class="btn btn-secondary" onclick="OBS.HSPPLN.geri()"><i class="fa fa-backward"></i></button>
-          <button type="button" id="ilkButton" class="btn btn-secondary" onclick="OBS.HSPPLN.ilk()"><i class="fa fa-refresh"></i></button>
-          <button type="button" id="ileriButton" class="btn btn-secondary" onclick="OBS.HSPPLN.ileri()"><i class="fa fa-forward"></i></button>
-        </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Yetkili</span> <input type="text"
+						id="yetkili" disabled class="form-control">
+				</div>
 
-        <!-- HESAP KODU SATIRI (AYNI) -->
-        <div class="hsp-form">
+				<div class="hsp-item">
+					<span class="hsp-label">Email</span> <input type="text" id="mail"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-field c6">
-            <span class="hsp-label">Hesap Kodu</span>
-            <input type="text" id="kodu" disabled class="form-control" style="max-width:180px;font-weight:bold;"
-                   oninput="hesapAdiOgren(this.value, 'kodKontrol')">
-            <span id="kodKontrol"></span>
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Adres1</span> <input type="text" id="ad1"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-field c6">
-            <span class="hsp-label">Unvan</span>
-            <input type="text" id="adi" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Semt</span> <input type="text" id="semt"
+						disabled class="form-control">
+				</div>
 
-        </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Adres2</span> <input type="text" id="ad2"
+						disabled class="form-control">
+				</div>
 
-        <!-- ALT GRID (DIŞ KUTU YOK, SÜPER KOMPAKT) -->
-        <div class="hsp-grid">
+				<div class="hsp-item">
+					<span class="hsp-label">Sehir</span> <input type="text" id="seh"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Karton</span>
-            <input type="text" id="karton" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Vergi D.</span> <input type="text" id="vd"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Cins</span>
-            <input type="text" id="hcins" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Vergi No</span> <input type="text" id="vn"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item sms">
-            <span class="hsp-label">Sms</span>
-            <input type="checkbox" id="sms" class="form-check-input">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Tel 1</span> <input type="text" id="t1"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Yetkili</span>
-            <input type="text" id="yetkili" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Tel 2</span> <input type="text" id="t2"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Email</span>
-            <input type="text" id="mail" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Tel 3</span> <input type="text" id="t3"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Adres1</span>
-            <input type="text" id="ad1" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Fax</span> <input type="text" id="fx"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Semt</span>
-            <input type="text" id="semt" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Ozel 1</span> <input type="text" id="o1"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Adres2</span>
-            <input type="text" id="ad2" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Ozel 2</span> <input type="text" id="o2"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Sehir</span>
-            <input type="text" id="seh" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Ozel 3</span> <input type="text" id="o3"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Vergi D.</span>
-            <input type="text" id="vd" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Web</span> <input type="text" id="web"
+						disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Vergi No</span>
-            <input type="text" id="vn" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">TC Kimlik</span> <input type="text"
+						id="kim" disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Tel 1</span>
-            <input type="text" id="t1" disabled class="form-control">
-          </div>
+				<div class="hsp-item">
+					<span class="hsp-label">Aciklama</span> <input type="text"
+						id="acik" disabled class="form-control">
+				</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Tel 2</span>
-            <input type="text" id="t2" disabled class="form-control">
-          </div>
+			</div>
 
-          <div class="hsp-item">
-            <span class="hsp-label">Tel 3</span>
-            <input type="text" id="t3" disabled class="form-control">
-          </div>
-
-          <div class="hsp-item">
-            <span class="hsp-label">Fax</span>
-            <input type="text" id="fx" disabled class="form-control">
-          </div>
-
-          <div class="hsp-item">
-            <span class="hsp-label">Ozel 1</span>
-            <input type="text" id="o1" disabled class="form-control">
-          </div>
-
-          <div class="hsp-item">
-            <span class="hsp-label">Ozel 2</span>
-            <input type="text" id="o2" disabled class="form-control">
-          </div>
-
-          <div class="hsp-item">
-            <span class="hsp-label">Ozel 3</span>
-            <input type="text" id="o3" disabled class="form-control">
-          </div>
-
-          <div class="hsp-item">
-            <span class="hsp-label">Web</span>
-            <input type="text" id="web" disabled class="form-control">
-          </div>
-
-          <div class="hsp-item">
-            <span class="hsp-label">TC Kimlik</span>
-            <input type="text" id="kim" disabled class="form-control">
-          </div>
-
-          <div class="hsp-item">
-            <span class="hsp-label">Aciklama</span>
-            <input type="text" id="acik" disabled class="form-control">
-          </div>
-
-        </div>
-
-        <!-- KAYDET / SİL / YENİ -->
-        <div class="hsp-actions">
-          <button type="button" id="kaydetButton" class="btn btn-secondary" onclick="OBS.HSPPLN.kayit()"><i class="fa fa-save"></i></button>
-          <button type="button" id="silButton" class="btn btn-secondary" onclick="OBS.HSPPLN.hesapSil()"><i class="fa fa-trash"></i></button>
-          <button type="button" id="yeniButton" class="btn btn-secondary" onclick="OBS.HSPPLN.enableInputs()"><i class="fa fa-plus"></i></button>
-        </div>
-      </div>
-      <!-- SAĞ FOTO -->
-      <div class="hsp-photo">
-        <div class="resimcentered-div">
-          <div class="resimdiv">
-            <img id="resimGoster" class="resimgoster" src="" alt="Base64 Resim" />
-          </div>
-          <button type="button" id="resimremove" class="btn btn-secondary" onclick="OBS.HSPPLN.resimSil()"><i class="fa fa-remove"></i>
-          </button>
-			<label class="file-pick" for="resim"> <i class="fa fa-image"></i> Resim Seç	</label> 
-			<input class="file-native" type="file" name="resim" id="resim" accept="image/*"   />
-			<div class="file-name" id="resimFileName">Dosya seçilmedi</div>			
-        </div>
-      </div>
-    </div>
+			<!-- KAYDET / SİL / YENİ -->
+			<div class="hsp-actions">
+				<button type="button" id="kaydetButton" class="btn btn-secondary"
+					onclick="OBS.HSPPLN.kayit()">
+					<i class="fa fa-save"></i>
+				</button>
+				<button type="button" id="silButton" class="btn btn-secondary"
+					onclick="OBS.HSPPLN.hesapSil()">
+					<i class="fa fa-trash"></i>
+				</button>
+				<button type="button" id="yeniButton" class="btn btn-secondary"
+					onclick="OBS.HSPPLN.enableInputs()">
+					<i class="fa fa-plus"></i>
+				</button>
+			</div>
+		</div>
+		<!-- SAĞ FOTO -->
+		<div class="hsp-photo">
+			<div class="resimcentered-div">
+				<div class="resimdiv">
+					<img id="resimGoster" class="resimgoster" src="" alt="" />
+				</div>
+				<button type="button" id="resimremove" class="btn btn-secondary"
+					onclick="OBS.HSPPLN.resimSil()">
+					<i class="fa fa-remove"></i>
+				</button>
+				<label class="file-pick" for="resim"> <i class="fa fa-image"></i>
+					Resim Seç
+				</label> <input class="file-native" type="file" name="resim" id="resim"
+					accept="image/*" />
+				<div class="file-name" id="resimFileName">Dosya seçilmedi</div>
+			</div>
+		</div>
+	</div>
 </div>
