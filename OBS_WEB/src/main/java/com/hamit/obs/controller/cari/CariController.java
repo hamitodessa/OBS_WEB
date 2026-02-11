@@ -67,7 +67,7 @@ public class CariController {
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
 			response.put("baslik", ""); 
-			response.put("errorMessage", e.getMessage()); // Hata mesajı
+			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
 			response.put("errorMessage", "Hata: " + e.getMessage());
 		}

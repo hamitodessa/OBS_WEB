@@ -1,0 +1,606 @@
+2026-02-11 21:58:03.662 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-02-11 21:58:03.741 INFO  com.hamit.obs.ObsWebApplication - Starting ObsWebApplication using Java 21.0.1 with PID 10448 (C:\Users\hamit\git\OBS_WEB\OBS_WEB\target\classes started by hamit in C:\Users\hamit\git\OBS_WEB\OBS_WEB)
+2026-02-11 21:58:03.742 INFO  com.hamit.obs.ObsWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-11 21:58:05.605 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-11 21:58:05.769 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 149 ms. Found 6 JPA repository interfaces.
+2026-02-11 21:58:06.532 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-02-11 21:58:06.547 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-02-11 21:58:06.549 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-11 21:58:06.550 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.49]
+2026-02-11 21:58:06.624 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-11 21:58:06.625 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2811 ms
+2026-02-11 21:58:06.815 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-02-11 21:58:07.240 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1a717d79
+2026-02-11 21:58:07.242 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-02-11 21:58:07.294 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-11 21:58:07.365 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.36.Final
+2026-02-11 21:58:07.417 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-02-11 21:58:07.531 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration boolean -> org.hibernate.type.BasicTypeReference@365bfc5f
+2026-02-11 21:58:07.531 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration boolean -> org.hibernate.type.BasicTypeReference@365bfc5f
+2026-02-11 21:58:07.531 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Boolean -> org.hibernate.type.BasicTypeReference@365bfc5f
+2026-02-11 21:58:07.531 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration numeric_boolean -> org.hibernate.type.BasicTypeReference@1a7e799e
+2026-02-11 21:58:07.531 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.NumericBooleanConverter -> org.hibernate.type.BasicTypeReference@1a7e799e
+2026-02-11 21:58:07.532 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration true_false -> org.hibernate.type.BasicTypeReference@37a3ec27
+2026-02-11 21:58:07.532 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.TrueFalseConverter -> org.hibernate.type.BasicTypeReference@37a3ec27
+2026-02-11 21:58:07.532 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration yes_no -> org.hibernate.type.BasicTypeReference@283baa39
+2026-02-11 21:58:07.532 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.YesNoConverter -> org.hibernate.type.BasicTypeReference@283baa39
+2026-02-11 21:58:07.532 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration byte -> org.hibernate.type.BasicTypeReference@416b1265
+2026-02-11 21:58:07.532 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration byte -> org.hibernate.type.BasicTypeReference@416b1265
+2026-02-11 21:58:07.533 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Byte -> org.hibernate.type.BasicTypeReference@416b1265
+2026-02-11 21:58:07.533 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration binary -> org.hibernate.type.BasicTypeReference@2830315f
+2026-02-11 21:58:07.533 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration byte[] -> org.hibernate.type.BasicTypeReference@2830315f
+2026-02-11 21:58:07.533 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration [B -> org.hibernate.type.BasicTypeReference@2830315f
+2026-02-11 21:58:07.533 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration binary_wrapper -> org.hibernate.type.BasicTypeReference@da22aa
+2026-02-11 21:58:07.533 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration wrapper-binary -> org.hibernate.type.BasicTypeReference@da22aa
+2026-02-11 21:58:07.533 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration image -> org.hibernate.type.BasicTypeReference@75452aea
+2026-02-11 21:58:07.534 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration blob -> org.hibernate.type.BasicTypeReference@6c24f61d
+2026-02-11 21:58:07.534 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Blob -> org.hibernate.type.BasicTypeReference@6c24f61d
+2026-02-11 21:58:07.534 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_blob -> org.hibernate.type.BasicTypeReference@4537880f
+2026-02-11 21:58:07.534 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_blob_wrapper -> org.hibernate.type.BasicTypeReference@14292d71
+2026-02-11 21:58:07.534 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration short -> org.hibernate.type.BasicTypeReference@48e74764
+2026-02-11 21:58:07.535 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration short -> org.hibernate.type.BasicTypeReference@48e74764
+2026-02-11 21:58:07.535 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Short -> org.hibernate.type.BasicTypeReference@48e74764
+2026-02-11 21:58:07.535 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration integer -> org.hibernate.type.BasicTypeReference@338d47b
+2026-02-11 21:58:07.535 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration int -> org.hibernate.type.BasicTypeReference@338d47b
+2026-02-11 21:58:07.536 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Integer -> org.hibernate.type.BasicTypeReference@338d47b
+2026-02-11 21:58:07.536 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration long -> org.hibernate.type.BasicTypeReference@7a3643e3
+2026-02-11 21:58:07.536 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration long -> org.hibernate.type.BasicTypeReference@7a3643e3
+2026-02-11 21:58:07.536 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Long -> org.hibernate.type.BasicTypeReference@7a3643e3
+2026-02-11 21:58:07.537 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration float -> org.hibernate.type.BasicTypeReference@2729bb71
+2026-02-11 21:58:07.537 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration float -> org.hibernate.type.BasicTypeReference@2729bb71
+2026-02-11 21:58:07.537 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Float -> org.hibernate.type.BasicTypeReference@2729bb71
+2026-02-11 21:58:07.537 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration double -> org.hibernate.type.BasicTypeReference@55071497
+2026-02-11 21:58:07.537 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration double -> org.hibernate.type.BasicTypeReference@55071497
+2026-02-11 21:58:07.537 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Double -> org.hibernate.type.BasicTypeReference@55071497
+2026-02-11 21:58:07.537 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration big_integer -> org.hibernate.type.BasicTypeReference@10d98940
+2026-02-11 21:58:07.537 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.math.BigInteger -> org.hibernate.type.BasicTypeReference@10d98940
+2026-02-11 21:58:07.538 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration big_decimal -> org.hibernate.type.BasicTypeReference@58b8f9e3
+2026-02-11 21:58:07.538 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.math.BigDecimal -> org.hibernate.type.BasicTypeReference@58b8f9e3
+2026-02-11 21:58:07.538 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration character -> org.hibernate.type.BasicTypeReference@32a033b6
+2026-02-11 21:58:07.538 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration char -> org.hibernate.type.BasicTypeReference@32a033b6
+2026-02-11 21:58:07.539 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Character -> org.hibernate.type.BasicTypeReference@32a033b6
+2026-02-11 21:58:07.539 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration character_nchar -> org.hibernate.type.BasicTypeReference@5f6e2ad9
+2026-02-11 21:58:07.539 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration string -> org.hibernate.type.BasicTypeReference@3212bfd
+2026-02-11 21:58:07.539 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.String -> org.hibernate.type.BasicTypeReference@3212bfd
+2026-02-11 21:58:07.540 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration nstring -> org.hibernate.type.BasicTypeReference@1cc9bd9b
+2026-02-11 21:58:07.540 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration characters -> org.hibernate.type.BasicTypeReference@2f471037
+2026-02-11 21:58:07.540 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration char[] -> org.hibernate.type.BasicTypeReference@2f471037
+2026-02-11 21:58:07.540 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration [C -> org.hibernate.type.BasicTypeReference@2f471037
+2026-02-11 21:58:07.540 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration wrapper-characters -> org.hibernate.type.BasicTypeReference@1d1cfe4
+2026-02-11 21:58:07.541 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration text -> org.hibernate.type.BasicTypeReference@ba562e0
+2026-02-11 21:58:07.541 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ntext -> org.hibernate.type.BasicTypeReference@5a51336a
+2026-02-11 21:58:07.541 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration clob -> org.hibernate.type.BasicTypeReference@4d8056bf
+2026-02-11 21:58:07.541 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Clob -> org.hibernate.type.BasicTypeReference@4d8056bf
+2026-02-11 21:58:07.541 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration nclob -> org.hibernate.type.BasicTypeReference@42211e04
+2026-02-11 21:58:07.541 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.NClob -> org.hibernate.type.BasicTypeReference@42211e04
+2026-02-11 21:58:07.542 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_clob -> org.hibernate.type.BasicTypeReference@6233c6c2
+2026-02-11 21:58:07.542 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_clob_char_array -> org.hibernate.type.BasicTypeReference@312a738d
+2026-02-11 21:58:07.542 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_clob_character_array -> org.hibernate.type.BasicTypeReference@7e50eeb9
+2026-02-11 21:58:07.542 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_nclob -> org.hibernate.type.BasicTypeReference@34cb0e49
+2026-02-11 21:58:07.542 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_nclob_character_array -> org.hibernate.type.BasicTypeReference@48b2dbc4
+2026-02-11 21:58:07.543 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_nclob_char_array -> org.hibernate.type.BasicTypeReference@2a667f44
+2026-02-11 21:58:07.543 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration Duration -> org.hibernate.type.BasicTypeReference@53ba7997
+2026-02-11 21:58:07.543 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.Duration -> org.hibernate.type.BasicTypeReference@53ba7997
+2026-02-11 21:58:07.543 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration LocalDateTime -> org.hibernate.type.BasicTypeReference@3f6f9cef
+2026-02-11 21:58:07.543 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.LocalDateTime -> org.hibernate.type.BasicTypeReference@3f6f9cef
+2026-02-11 21:58:07.543 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration LocalDate -> org.hibernate.type.BasicTypeReference@61dd1c3d
+2026-02-11 21:58:07.544 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.LocalDate -> org.hibernate.type.BasicTypeReference@61dd1c3d
+2026-02-11 21:58:07.544 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration LocalTime -> org.hibernate.type.BasicTypeReference@7858d31d
+2026-02-11 21:58:07.544 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.LocalTime -> org.hibernate.type.BasicTypeReference@7858d31d
+2026-02-11 21:58:07.544 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetDateTime -> org.hibernate.type.BasicTypeReference@782e6b40
+2026-02-11 21:58:07.544 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.OffsetDateTime -> org.hibernate.type.BasicTypeReference@782e6b40
+2026-02-11 21:58:07.545 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetDateTimeWithTimezone -> org.hibernate.type.BasicTypeReference@3b65084e
+2026-02-11 21:58:07.545 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetDateTimeWithoutTimezone -> org.hibernate.type.BasicTypeReference@32d0d7eb
+2026-02-11 21:58:07.545 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTime -> org.hibernate.type.BasicTypeReference@cae2a97
+2026-02-11 21:58:07.546 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.OffsetTime -> org.hibernate.type.BasicTypeReference@cae2a97
+2026-02-11 21:58:07.546 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTimeUtc -> org.hibernate.type.BasicTypeReference@7d12429
+2026-02-11 21:58:07.546 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTimeWithTimezone -> org.hibernate.type.BasicTypeReference@14656be5
+2026-02-11 21:58:07.546 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTimeWithoutTimezone -> org.hibernate.type.BasicTypeReference@20be890d
+2026-02-11 21:58:07.547 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZonedDateTime -> org.hibernate.type.BasicTypeReference@5db9f51f
+2026-02-11 21:58:07.547 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.ZonedDateTime -> org.hibernate.type.BasicTypeReference@5db9f51f
+2026-02-11 21:58:07.547 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZonedDateTimeWithTimezone -> org.hibernate.type.BasicTypeReference@534762ed
+2026-02-11 21:58:07.547 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZonedDateTimeWithoutTimezone -> org.hibernate.type.BasicTypeReference@6c421123
+2026-02-11 21:58:07.547 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration date -> org.hibernate.type.BasicTypeReference@38e00b47
+2026-02-11 21:58:07.547 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Date -> org.hibernate.type.BasicTypeReference@38e00b47
+2026-02-11 21:58:07.547 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration time -> org.hibernate.type.BasicTypeReference@2a631049
+2026-02-11 21:58:07.548 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Time -> org.hibernate.type.BasicTypeReference@2a631049
+2026-02-11 21:58:07.548 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration timestamp -> org.hibernate.type.BasicTypeReference@425b5fe2
+2026-02-11 21:58:07.548 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Timestamp -> org.hibernate.type.BasicTypeReference@425b5fe2
+2026-02-11 21:58:07.548 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.Date -> org.hibernate.type.BasicTypeReference@425b5fe2
+2026-02-11 21:58:07.549 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration calendar -> org.hibernate.type.BasicTypeReference@3eec8583
+2026-02-11 21:58:07.549 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.Calendar -> org.hibernate.type.BasicTypeReference@3eec8583
+2026-02-11 21:58:07.549 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.GregorianCalendar -> org.hibernate.type.BasicTypeReference@3eec8583
+2026-02-11 21:58:07.549 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration calendar_date -> org.hibernate.type.BasicTypeReference@66e1b2a
+2026-02-11 21:58:07.549 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration calendar_time -> org.hibernate.type.BasicTypeReference@343db2f6
+2026-02-11 21:58:07.550 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration instant -> org.hibernate.type.BasicTypeReference@2c815fdc
+2026-02-11 21:58:07.550 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.Instant -> org.hibernate.type.BasicTypeReference@2c815fdc
+2026-02-11 21:58:07.550 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration uuid -> org.hibernate.type.BasicTypeReference@769b0752
+2026-02-11 21:58:07.550 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.UUID -> org.hibernate.type.BasicTypeReference@769b0752
+2026-02-11 21:58:07.550 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration pg-uuid -> org.hibernate.type.BasicTypeReference@769b0752
+2026-02-11 21:58:07.550 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration uuid-binary -> org.hibernate.type.BasicTypeReference@dae5e0
+2026-02-11 21:58:07.550 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration uuid-char -> org.hibernate.type.BasicTypeReference@59a94d0f
+2026-02-11 21:58:07.551 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration class -> org.hibernate.type.BasicTypeReference@7ff09659
+2026-02-11 21:58:07.551 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Class -> org.hibernate.type.BasicTypeReference@7ff09659
+2026-02-11 21:58:07.551 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration currency -> org.hibernate.type.BasicTypeReference@517fbf62
+2026-02-11 21:58:07.551 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration Currency -> org.hibernate.type.BasicTypeReference@517fbf62
+2026-02-11 21:58:07.551 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.Currency -> org.hibernate.type.BasicTypeReference@517fbf62
+2026-02-11 21:58:07.552 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration locale -> org.hibernate.type.BasicTypeReference@65db548
+2026-02-11 21:58:07.552 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.Locale -> org.hibernate.type.BasicTypeReference@65db548
+2026-02-11 21:58:07.552 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration serializable -> org.hibernate.type.BasicTypeReference@150f41b9
+2026-02-11 21:58:07.552 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.io.Serializable -> org.hibernate.type.BasicTypeReference@150f41b9
+2026-02-11 21:58:07.553 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration timezone -> org.hibernate.type.BasicTypeReference@6e364f1f
+2026-02-11 21:58:07.553 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.TimeZone -> org.hibernate.type.BasicTypeReference@6e364f1f
+2026-02-11 21:58:07.553 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZoneOffset -> org.hibernate.type.BasicTypeReference@429e7914
+2026-02-11 21:58:07.553 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.ZoneOffset -> org.hibernate.type.BasicTypeReference@429e7914
+2026-02-11 21:58:07.553 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration url -> org.hibernate.type.BasicTypeReference@298263fa
+2026-02-11 21:58:07.554 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.net.URL -> org.hibernate.type.BasicTypeReference@298263fa
+2026-02-11 21:58:07.554 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration vector -> org.hibernate.type.BasicTypeReference@466fedfa
+2026-02-11 21:58:07.554 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration float_vector -> org.hibernate.type.BasicTypeReference@1a7d0c9f
+2026-02-11 21:58:07.554 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration double_vector -> org.hibernate.type.BasicTypeReference@2b1a901d
+2026-02-11 21:58:07.554 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration byte_vector -> org.hibernate.type.BasicTypeReference@11bdab37
+2026-02-11 21:58:07.555 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration row_version -> org.hibernate.type.BasicTypeReference@280484c7
+2026-02-11 21:58:07.562 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration object -> org.hibernate.type.JavaObjectType@14590fe2
+2026-02-11 21:58:07.562 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Object -> org.hibernate.type.JavaObjectType@14590fe2
+2026-02-11 21:58:07.563 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration null -> org.hibernate.type.NullType@298e002d
+2026-02-11 21:58:07.564 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_date -> org.hibernate.type.BasicTypeReference@6b9a1205
+2026-02-11 21:58:07.564 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_time -> org.hibernate.type.BasicTypeReference@3c6bd624
+2026-02-11 21:58:07.564 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_timestamp -> org.hibernate.type.BasicTypeReference@3d8d52be
+2026-02-11 21:58:07.564 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_calendar -> org.hibernate.type.BasicTypeReference@645ba24a
+2026-02-11 21:58:07.564 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_calendar_date -> org.hibernate.type.BasicTypeReference@5f6a8efe
+2026-02-11 21:58:07.564 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_calendar_time -> org.hibernate.type.BasicTypeReference@3dd2b9c1
+2026-02-11 21:58:07.564 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_binary -> org.hibernate.type.BasicTypeReference@6a1d1467
+2026-02-11 21:58:07.564 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_serializable -> org.hibernate.type.BasicTypeReference@536da29c
+2026-02-11 21:58:07.868 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-11 21:58:08.057 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 16.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-02-11 21:58:08.072 DEBUG o.h.t.d.sql.spi.DdlTypeRegistry - addDescriptor(2003, org.hibernate.type.descriptor.sql.internal.ArrayDdlTypeImpl@1280bae3) replaced previous registration(org.hibernate.type.descriptor.sql.internal.ArrayDdlTypeImpl@256a5df0)
+2026-02-11 21:58:08.072 DEBUG o.h.t.d.sql.spi.DdlTypeRegistry - addDescriptor(6, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@1868ed54) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@131777e8)
+2026-02-11 21:58:08.077 DEBUG o.h.t.d.jdbc.spi.JdbcTypeRegistry - addDescriptor(2004, BlobTypeDescriptor(BLOB_BINDING)) replaced previous registration(BlobTypeDescriptor(DEFAULT))
+2026-02-11 21:58:08.078 DEBUG o.h.t.d.jdbc.spi.JdbcTypeRegistry - addDescriptor(2005, ClobTypeDescriptor(CLOB_BINDING)) replaced previous registration(ClobTypeDescriptor(DEFAULT))
+2026-02-11 21:58:08.093 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration JAVA_OBJECT -> org.hibernate.type.JavaObjectType@1d1c63af
+2026-02-11 21:58:08.093 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Object -> org.hibernate.type.JavaObjectType@1d1c63af
+2026-02-11 21:58:08.093 DEBUG o.hibernate.type.BasicTypeRegistry - Type registration key [java.lang.Object] overrode previous entry : `org.hibernate.type.JavaObjectType@14590fe2`
+2026-02-11 21:58:08.100 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.DurationType -> basicType@1(java.time.Duration,3015)
+2026-02-11 21:58:08.100 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration Duration -> basicType@1(java.time.Duration,3015)
+2026-02-11 21:58:08.100 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.Duration -> basicType@1(java.time.Duration,3015)
+2026-02-11 21:58:08.107 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.OffsetDateTimeType -> basicType@2(java.time.OffsetDateTime,3003)
+2026-02-11 21:58:08.107 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetDateTime -> basicType@2(java.time.OffsetDateTime,3003)
+2026-02-11 21:58:08.107 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.OffsetDateTime -> basicType@2(java.time.OffsetDateTime,3003)
+2026-02-11 21:58:08.107 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.ZonedDateTimeType -> basicType@3(java.time.ZonedDateTime,3003)
+2026-02-11 21:58:08.108 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZonedDateTime -> basicType@3(java.time.ZonedDateTime,3003)
+2026-02-11 21:58:08.108 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.ZonedDateTime -> basicType@3(java.time.ZonedDateTime,3003)
+2026-02-11 21:58:08.109 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.OffsetTimeType -> basicType@4(java.time.OffsetTime,3007)
+2026-02-11 21:58:08.110 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTime -> basicType@4(java.time.OffsetTime,3007)
+2026-02-11 21:58:08.110 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.OffsetTime -> basicType@4(java.time.OffsetTime,3007)
+2026-02-11 21:58:08.112 DEBUG o.h.type.spi.TypeConfiguration$Scope - Scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration@12e3f4ae] to MetadataBuildingContext [org.hibernate.boot.internal.MetadataBuildingContextRootImpl@537451d5]
+2026-02-11 21:58:09.714 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-11 21:58:09.715 DEBUG o.h.type.spi.TypeConfiguration$Scope - Scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration@12e3f4ae] to SessionFactoryImplementor [org.hibernate.internal.SessionFactoryImpl@23169374]
+2026-02-11 21:58:09.718 TRACE o.h.type.spi.TypeConfiguration$Scope - Handling #sessionFactoryCreated from [org.hibernate.internal.SessionFactoryImpl@23169374] for TypeConfiguration
+2026-02-11 21:58:09.718 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-11 21:58:10.039 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-02-11 21:58:11.168 INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-02-11 21:58:11.497 INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetails
+2026-02-11 21:58:11.623 DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, UsernamePasswordAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-02-11 21:58:12.001 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-02-11 21:58:12.037 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-02-11 21:58:12.048 INFO  com.hamit.obs.ObsWebApplication - Started ObsWebApplication in 9.247 seconds (process running for 10.525)
+2026-02-11 21:59:50.772 INFO  o.s.b.a.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin - Application shutdown requested.
+2026-02-11 21:59:50.777 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-11 21:59:50.779 INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2026-02-11 21:59:50.798 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-02-11 21:59:50.799 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2026-02-11 21:59:50.808 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-02-11 21:59:50.809 TRACE o.h.type.spi.TypeConfiguration$Scope - Handling #sessionFactoryClosed from [org.hibernate.internal.SessionFactoryImpl@23169374] for TypeConfiguration
+2026-02-11 21:59:50.809 DEBUG o.h.type.spi.TypeConfiguration$Scope - Un-scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration$Scope@641d96b1] from SessionFactory [org.hibernate.internal.SessionFactoryImpl@23169374]
+2026-02-11 21:59:50.823 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-02-11 21:59:50.830 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-02-11 22:00:21.293 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-02-11 22:00:21.382 INFO  com.hamit.obs.ObsWebApplication - Starting ObsWebApplication using Java 21.0.1 with PID 15524 (C:\Users\hamit\git\OBS_WEB\OBS_WEB\target\classes started by hamit in C:\Users\hamit\git\OBS_WEB\OBS_WEB)
+2026-02-11 22:00:21.383 INFO  com.hamit.obs.ObsWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-11 22:00:23.083 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-11 22:00:23.229 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 137 ms. Found 6 JPA repository interfaces.
+2026-02-11 22:00:23.937 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-02-11 22:00:23.950 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-02-11 22:00:23.952 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-11 22:00:23.953 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.49]
+2026-02-11 22:00:24.031 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-02-11 22:00:24.032 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2567 ms
+2026-02-11 22:00:24.214 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-02-11 22:00:24.487 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@12cd129c
+2026-02-11 22:00:24.489 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-02-11 22:00:24.532 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-11 22:00:24.588 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.36.Final
+2026-02-11 22:00:24.628 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-02-11 22:00:24.711 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration boolean -> org.hibernate.type.BasicTypeReference@6afeaf2d
+2026-02-11 22:00:24.712 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration boolean -> org.hibernate.type.BasicTypeReference@6afeaf2d
+2026-02-11 22:00:24.712 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Boolean -> org.hibernate.type.BasicTypeReference@6afeaf2d
+2026-02-11 22:00:24.712 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration numeric_boolean -> org.hibernate.type.BasicTypeReference@365bfc5f
+2026-02-11 22:00:24.712 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.NumericBooleanConverter -> org.hibernate.type.BasicTypeReference@365bfc5f
+2026-02-11 22:00:24.712 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration true_false -> org.hibernate.type.BasicTypeReference@1a7e799e
+2026-02-11 22:00:24.713 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.TrueFalseConverter -> org.hibernate.type.BasicTypeReference@1a7e799e
+2026-02-11 22:00:24.713 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration yes_no -> org.hibernate.type.BasicTypeReference@37a3ec27
+2026-02-11 22:00:24.713 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.YesNoConverter -> org.hibernate.type.BasicTypeReference@37a3ec27
+2026-02-11 22:00:24.713 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration byte -> org.hibernate.type.BasicTypeReference@283baa39
+2026-02-11 22:00:24.713 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration byte -> org.hibernate.type.BasicTypeReference@283baa39
+2026-02-11 22:00:24.714 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Byte -> org.hibernate.type.BasicTypeReference@283baa39
+2026-02-11 22:00:24.714 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration binary -> org.hibernate.type.BasicTypeReference@416b1265
+2026-02-11 22:00:24.714 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration byte[] -> org.hibernate.type.BasicTypeReference@416b1265
+2026-02-11 22:00:24.714 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration [B -> org.hibernate.type.BasicTypeReference@416b1265
+2026-02-11 22:00:24.714 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration binary_wrapper -> org.hibernate.type.BasicTypeReference@2830315f
+2026-02-11 22:00:24.714 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration wrapper-binary -> org.hibernate.type.BasicTypeReference@2830315f
+2026-02-11 22:00:24.714 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration image -> org.hibernate.type.BasicTypeReference@da22aa
+2026-02-11 22:00:24.714 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration blob -> org.hibernate.type.BasicTypeReference@75452aea
+2026-02-11 22:00:24.715 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Blob -> org.hibernate.type.BasicTypeReference@75452aea
+2026-02-11 22:00:24.715 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_blob -> org.hibernate.type.BasicTypeReference@6c24f61d
+2026-02-11 22:00:24.715 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_blob_wrapper -> org.hibernate.type.BasicTypeReference@4537880f
+2026-02-11 22:00:24.715 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration short -> org.hibernate.type.BasicTypeReference@14292d71
+2026-02-11 22:00:24.715 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration short -> org.hibernate.type.BasicTypeReference@14292d71
+2026-02-11 22:00:24.716 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Short -> org.hibernate.type.BasicTypeReference@14292d71
+2026-02-11 22:00:24.716 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration integer -> org.hibernate.type.BasicTypeReference@48e74764
+2026-02-11 22:00:24.716 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration int -> org.hibernate.type.BasicTypeReference@48e74764
+2026-02-11 22:00:24.717 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Integer -> org.hibernate.type.BasicTypeReference@48e74764
+2026-02-11 22:00:24.717 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration long -> org.hibernate.type.BasicTypeReference@338d47b
+2026-02-11 22:00:24.717 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration long -> org.hibernate.type.BasicTypeReference@338d47b
+2026-02-11 22:00:24.717 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Long -> org.hibernate.type.BasicTypeReference@338d47b
+2026-02-11 22:00:24.717 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration float -> org.hibernate.type.BasicTypeReference@7a3643e3
+2026-02-11 22:00:24.717 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration float -> org.hibernate.type.BasicTypeReference@7a3643e3
+2026-02-11 22:00:24.717 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Float -> org.hibernate.type.BasicTypeReference@7a3643e3
+2026-02-11 22:00:24.718 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration double -> org.hibernate.type.BasicTypeReference@2729bb71
+2026-02-11 22:00:24.718 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration double -> org.hibernate.type.BasicTypeReference@2729bb71
+2026-02-11 22:00:24.718 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Double -> org.hibernate.type.BasicTypeReference@2729bb71
+2026-02-11 22:00:24.718 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration big_integer -> org.hibernate.type.BasicTypeReference@55071497
+2026-02-11 22:00:24.718 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.math.BigInteger -> org.hibernate.type.BasicTypeReference@55071497
+2026-02-11 22:00:24.718 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration big_decimal -> org.hibernate.type.BasicTypeReference@10d98940
+2026-02-11 22:00:24.718 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.math.BigDecimal -> org.hibernate.type.BasicTypeReference@10d98940
+2026-02-11 22:00:24.719 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration character -> org.hibernate.type.BasicTypeReference@58b8f9e3
+2026-02-11 22:00:24.719 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration char -> org.hibernate.type.BasicTypeReference@58b8f9e3
+2026-02-11 22:00:24.719 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Character -> org.hibernate.type.BasicTypeReference@58b8f9e3
+2026-02-11 22:00:24.719 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration character_nchar -> org.hibernate.type.BasicTypeReference@32a033b6
+2026-02-11 22:00:24.719 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration string -> org.hibernate.type.BasicTypeReference@5f6e2ad9
+2026-02-11 22:00:24.719 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.String -> org.hibernate.type.BasicTypeReference@5f6e2ad9
+2026-02-11 22:00:24.720 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration nstring -> org.hibernate.type.BasicTypeReference@3212bfd
+2026-02-11 22:00:24.720 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration characters -> org.hibernate.type.BasicTypeReference@1cc9bd9b
+2026-02-11 22:00:24.720 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration char[] -> org.hibernate.type.BasicTypeReference@1cc9bd9b
+2026-02-11 22:00:24.720 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration [C -> org.hibernate.type.BasicTypeReference@1cc9bd9b
+2026-02-11 22:00:24.720 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration wrapper-characters -> org.hibernate.type.BasicTypeReference@2f471037
+2026-02-11 22:00:24.720 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration text -> org.hibernate.type.BasicTypeReference@1d1cfe4
+2026-02-11 22:00:24.721 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ntext -> org.hibernate.type.BasicTypeReference@ba562e0
+2026-02-11 22:00:24.721 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration clob -> org.hibernate.type.BasicTypeReference@5a51336a
+2026-02-11 22:00:24.721 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Clob -> org.hibernate.type.BasicTypeReference@5a51336a
+2026-02-11 22:00:24.721 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration nclob -> org.hibernate.type.BasicTypeReference@4d8056bf
+2026-02-11 22:00:24.721 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.NClob -> org.hibernate.type.BasicTypeReference@4d8056bf
+2026-02-11 22:00:24.721 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_clob -> org.hibernate.type.BasicTypeReference@42211e04
+2026-02-11 22:00:24.721 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_clob_char_array -> org.hibernate.type.BasicTypeReference@6233c6c2
+2026-02-11 22:00:24.722 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_clob_character_array -> org.hibernate.type.BasicTypeReference@312a738d
+2026-02-11 22:00:24.722 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_nclob -> org.hibernate.type.BasicTypeReference@7e50eeb9
+2026-02-11 22:00:24.722 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_nclob_character_array -> org.hibernate.type.BasicTypeReference@34cb0e49
+2026-02-11 22:00:24.722 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration materialized_nclob_char_array -> org.hibernate.type.BasicTypeReference@48b2dbc4
+2026-02-11 22:00:24.722 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration Duration -> org.hibernate.type.BasicTypeReference@2a667f44
+2026-02-11 22:00:24.722 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.Duration -> org.hibernate.type.BasicTypeReference@2a667f44
+2026-02-11 22:00:24.722 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration LocalDateTime -> org.hibernate.type.BasicTypeReference@53ba7997
+2026-02-11 22:00:24.722 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.LocalDateTime -> org.hibernate.type.BasicTypeReference@53ba7997
+2026-02-11 22:00:24.723 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration LocalDate -> org.hibernate.type.BasicTypeReference@3f6f9cef
+2026-02-11 22:00:24.723 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.LocalDate -> org.hibernate.type.BasicTypeReference@3f6f9cef
+2026-02-11 22:00:24.723 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration LocalTime -> org.hibernate.type.BasicTypeReference@61dd1c3d
+2026-02-11 22:00:24.723 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.LocalTime -> org.hibernate.type.BasicTypeReference@61dd1c3d
+2026-02-11 22:00:24.723 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetDateTime -> org.hibernate.type.BasicTypeReference@7858d31d
+2026-02-11 22:00:24.723 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.OffsetDateTime -> org.hibernate.type.BasicTypeReference@7858d31d
+2026-02-11 22:00:24.723 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetDateTimeWithTimezone -> org.hibernate.type.BasicTypeReference@782e6b40
+2026-02-11 22:00:24.724 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetDateTimeWithoutTimezone -> org.hibernate.type.BasicTypeReference@3b65084e
+2026-02-11 22:00:24.724 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTime -> org.hibernate.type.BasicTypeReference@32d0d7eb
+2026-02-11 22:00:24.724 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.OffsetTime -> org.hibernate.type.BasicTypeReference@32d0d7eb
+2026-02-11 22:00:24.724 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTimeUtc -> org.hibernate.type.BasicTypeReference@cae2a97
+2026-02-11 22:00:24.724 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTimeWithTimezone -> org.hibernate.type.BasicTypeReference@7d12429
+2026-02-11 22:00:24.724 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTimeWithoutTimezone -> org.hibernate.type.BasicTypeReference@14656be5
+2026-02-11 22:00:24.724 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZonedDateTime -> org.hibernate.type.BasicTypeReference@20be890d
+2026-02-11 22:00:24.725 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.ZonedDateTime -> org.hibernate.type.BasicTypeReference@20be890d
+2026-02-11 22:00:24.725 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZonedDateTimeWithTimezone -> org.hibernate.type.BasicTypeReference@5db9f51f
+2026-02-11 22:00:24.725 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZonedDateTimeWithoutTimezone -> org.hibernate.type.BasicTypeReference@534762ed
+2026-02-11 22:00:24.725 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration date -> org.hibernate.type.BasicTypeReference@6c421123
+2026-02-11 22:00:24.725 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Date -> org.hibernate.type.BasicTypeReference@6c421123
+2026-02-11 22:00:24.725 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration time -> org.hibernate.type.BasicTypeReference@38e00b47
+2026-02-11 22:00:24.725 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Time -> org.hibernate.type.BasicTypeReference@38e00b47
+2026-02-11 22:00:24.726 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration timestamp -> org.hibernate.type.BasicTypeReference@2a631049
+2026-02-11 22:00:24.726 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.sql.Timestamp -> org.hibernate.type.BasicTypeReference@2a631049
+2026-02-11 22:00:24.727 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.Date -> org.hibernate.type.BasicTypeReference@2a631049
+2026-02-11 22:00:24.727 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration calendar -> org.hibernate.type.BasicTypeReference@425b5fe2
+2026-02-11 22:00:24.727 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.Calendar -> org.hibernate.type.BasicTypeReference@425b5fe2
+2026-02-11 22:00:24.727 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.GregorianCalendar -> org.hibernate.type.BasicTypeReference@425b5fe2
+2026-02-11 22:00:24.727 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration calendar_date -> org.hibernate.type.BasicTypeReference@3eec8583
+2026-02-11 22:00:24.727 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration calendar_time -> org.hibernate.type.BasicTypeReference@66e1b2a
+2026-02-11 22:00:24.727 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration instant -> org.hibernate.type.BasicTypeReference@343db2f6
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.Instant -> org.hibernate.type.BasicTypeReference@343db2f6
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration uuid -> org.hibernate.type.BasicTypeReference@2c815fdc
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.UUID -> org.hibernate.type.BasicTypeReference@2c815fdc
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration pg-uuid -> org.hibernate.type.BasicTypeReference@2c815fdc
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration uuid-binary -> org.hibernate.type.BasicTypeReference@769b0752
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration uuid-char -> org.hibernate.type.BasicTypeReference@dae5e0
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration class -> org.hibernate.type.BasicTypeReference@59a94d0f
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Class -> org.hibernate.type.BasicTypeReference@59a94d0f
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration currency -> org.hibernate.type.BasicTypeReference@7ff09659
+2026-02-11 22:00:24.728 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration Currency -> org.hibernate.type.BasicTypeReference@7ff09659
+2026-02-11 22:00:24.729 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.Currency -> org.hibernate.type.BasicTypeReference@7ff09659
+2026-02-11 22:00:24.729 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration locale -> org.hibernate.type.BasicTypeReference@517fbf62
+2026-02-11 22:00:24.729 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.Locale -> org.hibernate.type.BasicTypeReference@517fbf62
+2026-02-11 22:00:24.729 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration serializable -> org.hibernate.type.BasicTypeReference@65db548
+2026-02-11 22:00:24.729 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.io.Serializable -> org.hibernate.type.BasicTypeReference@65db548
+2026-02-11 22:00:24.729 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration timezone -> org.hibernate.type.BasicTypeReference@150f41b9
+2026-02-11 22:00:24.730 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.util.TimeZone -> org.hibernate.type.BasicTypeReference@150f41b9
+2026-02-11 22:00:24.730 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZoneOffset -> org.hibernate.type.BasicTypeReference@6e364f1f
+2026-02-11 22:00:24.731 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.ZoneOffset -> org.hibernate.type.BasicTypeReference@6e364f1f
+2026-02-11 22:00:24.731 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration url -> org.hibernate.type.BasicTypeReference@429e7914
+2026-02-11 22:00:24.731 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.net.URL -> org.hibernate.type.BasicTypeReference@429e7914
+2026-02-11 22:00:24.731 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration vector -> org.hibernate.type.BasicTypeReference@298263fa
+2026-02-11 22:00:24.731 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration float_vector -> org.hibernate.type.BasicTypeReference@466fedfa
+2026-02-11 22:00:24.731 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration double_vector -> org.hibernate.type.BasicTypeReference@1a7d0c9f
+2026-02-11 22:00:24.731 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration byte_vector -> org.hibernate.type.BasicTypeReference@2b1a901d
+2026-02-11 22:00:24.732 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration row_version -> org.hibernate.type.BasicTypeReference@11bdab37
+2026-02-11 22:00:24.740 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration object -> org.hibernate.type.JavaObjectType@57f0bfc3
+2026-02-11 22:00:24.740 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Object -> org.hibernate.type.JavaObjectType@57f0bfc3
+2026-02-11 22:00:24.741 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration null -> org.hibernate.type.NullType@2807cf3
+2026-02-11 22:00:24.741 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_date -> org.hibernate.type.BasicTypeReference@298e002d
+2026-02-11 22:00:24.741 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_time -> org.hibernate.type.BasicTypeReference@6b9a1205
+2026-02-11 22:00:24.741 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_timestamp -> org.hibernate.type.BasicTypeReference@3c6bd624
+2026-02-11 22:00:24.741 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_calendar -> org.hibernate.type.BasicTypeReference@3d8d52be
+2026-02-11 22:00:24.742 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_calendar_date -> org.hibernate.type.BasicTypeReference@645ba24a
+2026-02-11 22:00:24.742 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_calendar_time -> org.hibernate.type.BasicTypeReference@5f6a8efe
+2026-02-11 22:00:24.742 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_binary -> org.hibernate.type.BasicTypeReference@3dd2b9c1
+2026-02-11 22:00:24.742 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration imm_serializable -> org.hibernate.type.BasicTypeReference@6a1d1467
+2026-02-11 22:00:24.985 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-11 22:00:25.161 INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 16.3
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-02-11 22:00:25.174 DEBUG o.h.t.d.sql.spi.DdlTypeRegistry - addDescriptor(2003, org.hibernate.type.descriptor.sql.internal.ArrayDdlTypeImpl@5f9a8ddc) replaced previous registration(org.hibernate.type.descriptor.sql.internal.ArrayDdlTypeImpl@1280bae3)
+2026-02-11 22:00:25.175 DEBUG o.h.t.d.sql.spi.DdlTypeRegistry - addDescriptor(6, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@256a5df0) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@1868ed54)
+2026-02-11 22:00:25.178 DEBUG o.h.t.d.jdbc.spi.JdbcTypeRegistry - addDescriptor(2004, BlobTypeDescriptor(BLOB_BINDING)) replaced previous registration(BlobTypeDescriptor(DEFAULT))
+2026-02-11 22:00:25.178 DEBUG o.h.t.d.jdbc.spi.JdbcTypeRegistry - addDescriptor(2005, ClobTypeDescriptor(CLOB_BINDING)) replaced previous registration(ClobTypeDescriptor(DEFAULT))
+2026-02-11 22:00:25.190 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration JAVA_OBJECT -> org.hibernate.type.JavaObjectType@54b2d002
+2026-02-11 22:00:25.190 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.lang.Object -> org.hibernate.type.JavaObjectType@54b2d002
+2026-02-11 22:00:25.190 DEBUG o.hibernate.type.BasicTypeRegistry - Type registration key [java.lang.Object] overrode previous entry : `org.hibernate.type.JavaObjectType@57f0bfc3`
+2026-02-11 22:00:25.196 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.DurationType -> basicType@1(java.time.Duration,3015)
+2026-02-11 22:00:25.196 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration Duration -> basicType@1(java.time.Duration,3015)
+2026-02-11 22:00:25.196 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.Duration -> basicType@1(java.time.Duration,3015)
+2026-02-11 22:00:25.202 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.OffsetDateTimeType -> basicType@2(java.time.OffsetDateTime,3003)
+2026-02-11 22:00:25.203 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetDateTime -> basicType@2(java.time.OffsetDateTime,3003)
+2026-02-11 22:00:25.203 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.OffsetDateTime -> basicType@2(java.time.OffsetDateTime,3003)
+2026-02-11 22:00:25.203 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.ZonedDateTimeType -> basicType@3(java.time.ZonedDateTime,3003)
+2026-02-11 22:00:25.203 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration ZonedDateTime -> basicType@3(java.time.ZonedDateTime,3003)
+2026-02-11 22:00:25.203 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.ZonedDateTime -> basicType@3(java.time.ZonedDateTime,3003)
+2026-02-11 22:00:25.204 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration org.hibernate.type.OffsetTimeType -> basicType@4(java.time.OffsetTime,3007)
+2026-02-11 22:00:25.204 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration OffsetTime -> basicType@4(java.time.OffsetTime,3007)
+2026-02-11 22:00:25.204 DEBUG o.hibernate.type.BasicTypeRegistry - Adding type registration java.time.OffsetTime -> basicType@4(java.time.OffsetTime,3007)
+2026-02-11 22:00:25.206 DEBUG o.h.type.spi.TypeConfiguration$Scope - Scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration@1e50eb3f] to MetadataBuildingContext [org.hibernate.boot.internal.MetadataBuildingContextRootImpl@12e3f4ae]
+2026-02-11 22:00:26.515 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-11 22:00:26.516 DEBUG o.h.type.spi.TypeConfiguration$Scope - Scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration@1e50eb3f] to SessionFactoryImplementor [org.hibernate.internal.SessionFactoryImpl@4f2b1a2f]
+2026-02-11 22:00:26.520 TRACE o.h.type.spi.TypeConfiguration$Scope - Handling #sessionFactoryCreated from [org.hibernate.internal.SessionFactoryImpl@4f2b1a2f] for TypeConfiguration
+2026-02-11 22:00:26.520 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-11 22:00:26.820 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-02-11 22:00:27.908 INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+2026-02-11 22:00:28.232 INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetails
+2026-02-11 22:00:28.402 DEBUG o.s.s.web.DefaultSecurityFilterChain - Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, UsernamePasswordAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-02-11 22:00:28.826 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-02-11 22:00:28.850 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-02-11 22:00:28.860 INFO  com.hamit.obs.ObsWebApplication - Started ObsWebApplication in 8.509 seconds (process running for 9.8)
+2026-02-11 22:00:34.767 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-02-11 22:00:34.768 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-02-11 22:00:34.772 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-02-11 22:00:34.828 DEBUG o.s.security.web.FilterChainProxy - Securing GET /login
+2026-02-11 22:00:34.853 DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-02-11 22:00:34.856 DEBUG o.s.security.web.FilterChainProxy - Secured GET /login
+2026-02-11 22:00:35.526 DEBUG o.s.security.web.FilterChainProxy - Securing GET /images/logo/obs_logo_new.svg
+2026-02-11 22:00:35.527 DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-02-11 22:00:35.534 DEBUG o.s.security.web.FilterChainProxy - Secured GET /images/logo/obs_logo_new.svg
+2026-02-11 22:00:42.027 DEBUG o.s.security.web.FilterChainProxy - Securing POST /login
+2026-02-11 22:00:42.462 DEBUG org.hibernate.SQL - select u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password from users u1_0 where u1_0.email=?
+2026-02-11 22:00:42.595 DEBUG org.hibernate.SQL - select ed1_0.id,ed1_0.bssl,ed1_0.btsl,ed1_0.email,ed1_0.gon_isim,ed1_0.gon_mail,ed1_0.hesap,ed1_0.host,ed1_0.port,ed1_0.sifre,ed1_0.user_id,u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,ea1_0.id,ea1_0.altbosluk,ea1_0.dikeyarabosluk,ea1_0.genislik,ea1_0.sagbosluk,ea1_0.solbosluk,ea1_0.user_id,ea1_0.ustbosluk,ea1_0.yataydikey,ea1_0.yukseklik,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password,r1_0.user_id,r1_1.id,r1_1.name from email_details ed1_0 join users u1_0 on u1_0.id=ed1_0.user_id left join etiket_ayar ea1_0 on u1_0.id=ea1_0.user_id left join user_roles r1_0 on u1_0.id=r1_0.user_id left join roles r1_1 on r1_1.id=r1_0.role_id where ed1_0.user_id=?
+2026-02-11 22:00:42.675 DEBUG org.hibernate.SQL - select ea1_0.id,ea1_0.altbosluk,ea1_0.dikeyarabosluk,ea1_0.genislik,ea1_0.sagbosluk,ea1_0.solbosluk,ea1_0.user_id,u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,ed1_0.id,ed1_0.bssl,ed1_0.btsl,ed1_0.email,ed1_0.gon_isim,ed1_0.gon_mail,ed1_0.hesap,ed1_0.host,ed1_0.port,ed1_0.sifre,ed1_0.user_id,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password,r1_0.user_id,r1_1.id,r1_1.name,ea1_0.ustbosluk,ea1_0.yataydikey,ea1_0.yukseklik from etiket_ayar ea1_0 join users u1_0 on u1_0.id=ea1_0.user_id left join email_details ed1_0 on u1_0.id=ed1_0.user_id left join user_roles r1_0 on u1_0.id=r1_0.user_id left join roles r1_1 on r1_1.id=r1_0.role_id where ea1_0.user_id=?
+2026-02-11 22:00:42.847 DEBUG o.s.s.a.d.DaoAuthenticationProvider - Failed to authenticate since password does not match stored value
+2026-02-11 22:00:42.848 DEBUG o.s.s.authentication.ProviderManager - Authentication failed with provider DaoAuthenticationProvider since Bad credentials
+2026-02-11 22:00:42.994 DEBUG org.hibernate.SQL - select u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password from users u1_0 where u1_0.email=?
+2026-02-11 22:00:42.997 DEBUG org.hibernate.SQL - select ed1_0.id,ed1_0.bssl,ed1_0.btsl,ed1_0.email,ed1_0.gon_isim,ed1_0.gon_mail,ed1_0.hesap,ed1_0.host,ed1_0.port,ed1_0.sifre,ed1_0.user_id,u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,ea1_0.id,ea1_0.altbosluk,ea1_0.dikeyarabosluk,ea1_0.genislik,ea1_0.sagbosluk,ea1_0.solbosluk,ea1_0.user_id,ea1_0.ustbosluk,ea1_0.yataydikey,ea1_0.yukseklik,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password,r1_0.user_id,r1_1.id,r1_1.name from email_details ed1_0 join users u1_0 on u1_0.id=ed1_0.user_id left join etiket_ayar ea1_0 on u1_0.id=ea1_0.user_id left join user_roles r1_0 on u1_0.id=r1_0.user_id left join roles r1_1 on r1_1.id=r1_0.role_id where ed1_0.user_id=?
+2026-02-11 22:00:43.004 DEBUG org.hibernate.SQL - select ea1_0.id,ea1_0.altbosluk,ea1_0.dikeyarabosluk,ea1_0.genislik,ea1_0.sagbosluk,ea1_0.solbosluk,ea1_0.user_id,u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,ed1_0.id,ed1_0.bssl,ed1_0.btsl,ed1_0.email,ed1_0.gon_isim,ed1_0.gon_mail,ed1_0.hesap,ed1_0.host,ed1_0.port,ed1_0.sifre,ed1_0.user_id,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password,r1_0.user_id,r1_1.id,r1_1.name,ea1_0.ustbosluk,ea1_0.yataydikey,ea1_0.yukseklik from etiket_ayar ea1_0 join users u1_0 on u1_0.id=ea1_0.user_id left join email_details ed1_0 on u1_0.id=ed1_0.user_id left join user_roles r1_0 on u1_0.id=r1_0.user_id left join roles r1_1 on r1_1.id=r1_0.role_id where ea1_0.user_id=?
+2026-02-11 22:00:43.152 DEBUG o.s.s.a.d.DaoAuthenticationProvider - Failed to authenticate since password does not match stored value
+2026-02-11 22:00:43.164 DEBUG o.s.s.authentication.ProviderManager - Authentication failed with provider DaoAuthenticationProvider since Bad credentials
+2026-02-11 22:00:43.164 DEBUG o.s.s.authentication.ProviderManager - Denying authentication since all attempted providers failed
+2026-02-11 22:00:43.165 WARN  c.h.obs.config.LoginFailureHandler - LOGIN FAIL - user=hamit@okumus.com ip=0:0:0:0:0:0:0:1 ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 uri=/login reason=Bad credentials
+2026-02-11 22:00:43.177 DEBUG o.s.security.web.FilterChainProxy - Securing GET /login?error=true
+2026-02-11 22:00:43.203 DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-02-11 22:00:43.274 DEBUG o.s.s.w.s.HttpSessionRequestCache - Saved request http://localhost:8080/login?error=true&continue to session
+2026-02-11 22:00:43.275 DEBUG o.s.s.web.DefaultRedirectStrategy - Redirecting to http://localhost:8080/login
+2026-02-11 22:00:43.293 DEBUG o.s.security.web.FilterChainProxy - Securing GET /login
+2026-02-11 22:00:43.294 DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-02-11 22:00:43.294 DEBUG o.s.security.web.FilterChainProxy - Secured GET /login
+2026-02-11 22:00:43.341 DEBUG o.s.security.web.FilterChainProxy - Securing GET /images/logo/obs_logo_new.svg
+2026-02-11 22:00:43.343 DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2026-02-11 22:00:43.344 DEBUG o.s.security.web.FilterChainProxy - Secured GET /images/logo/obs_logo_new.svg
+2026-02-11 22:00:48.962 DEBUG o.s.security.web.FilterChainProxy - Securing POST /login
+2026-02-11 22:00:48.965 DEBUG org.hibernate.SQL - select u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password from users u1_0 where u1_0.email=?
+2026-02-11 22:00:48.968 DEBUG org.hibernate.SQL - select ed1_0.id,ed1_0.bssl,ed1_0.btsl,ed1_0.email,ed1_0.gon_isim,ed1_0.gon_mail,ed1_0.hesap,ed1_0.host,ed1_0.port,ed1_0.sifre,ed1_0.user_id,u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,ea1_0.id,ea1_0.altbosluk,ea1_0.dikeyarabosluk,ea1_0.genislik,ea1_0.sagbosluk,ea1_0.solbosluk,ea1_0.user_id,ea1_0.ustbosluk,ea1_0.yataydikey,ea1_0.yukseklik,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password,r1_0.user_id,r1_1.id,r1_1.name from email_details ed1_0 join users u1_0 on u1_0.id=ed1_0.user_id left join etiket_ayar ea1_0 on u1_0.id=ea1_0.user_id left join user_roles r1_0 on u1_0.id=r1_0.user_id left join roles r1_1 on r1_1.id=r1_0.role_id where ed1_0.user_id=?
+2026-02-11 22:00:48.972 DEBUG org.hibernate.SQL - select ea1_0.id,ea1_0.altbosluk,ea1_0.dikeyarabosluk,ea1_0.genislik,ea1_0.sagbosluk,ea1_0.solbosluk,ea1_0.user_id,u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,ed1_0.id,ed1_0.bssl,ed1_0.btsl,ed1_0.email,ed1_0.gon_isim,ed1_0.gon_mail,ed1_0.hesap,ed1_0.host,ed1_0.port,ed1_0.sifre,ed1_0.user_id,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password,r1_0.user_id,r1_1.id,r1_1.name,ea1_0.ustbosluk,ea1_0.yataydikey,ea1_0.yukseklik from etiket_ayar ea1_0 join users u1_0 on u1_0.id=ea1_0.user_id left join email_details ed1_0 on u1_0.id=ed1_0.user_id left join user_roles r1_0 on u1_0.id=r1_0.user_id left join roles r1_1 on r1_1.id=r1_0.role_id where ea1_0.user_id=?
+2026-02-11 22:00:49.121 DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2026-02-11 22:00:49.124 DEBUG o.s.s.w.a.s.ChangeSessionIdAuthenticationStrategy - Changed session id from 49B73E088FB7755B5E574101A16BD5E7
+2026-02-11 22:00:49.126 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]] to HttpSession [org.apache.catalina.session.StandardSessionFacade@42cd3a0c]
+2026-02-11 22:00:49.127 DEBUG o.s.s.w.a.UsernamePasswordAuthenticationFilter - Set SecurityContextHolder to UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]
+2026-02-11 22:00:49.128 INFO  c.h.obs.config.LoginSuccessHandler - LOGIN OK   - user=hamit@okumus.com ip=0:0:0:0:0:0:0:1 ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 uri=/login
+2026-02-11 22:00:49.147 DEBUG org.hibernate.SQL - select ud1_0.id,ud1_0.calisanmi,ud1_0.email,ud1_0.hangi_sql,ud1_0.izinlimi,ud1_0.log,ud1_0.superviser,ud1_0.user_id,ud1_0.user_ip,ud1_0.user_modul,ud1_0.user_prog_kodu,ud1_0.user_pwd_server,ud1_0.user_server from user_details ud1_0 where upper(ud1_0.email)=upper(?) and ud1_0.calisanmi
+2026-02-11 22:00:49.184 DEBUG org.hibernate.SQL - select u1_0.id,u1_0.admin_hesap,u1_0.calisandvzcins,u1_0.email,ed1_0.id,ed1_0.bssl,ed1_0.btsl,ed1_0.email,ed1_0.gon_isim,ed1_0.gon_mail,ed1_0.hesap,ed1_0.host,ed1_0.port,ed1_0.sifre,ed1_0.user_id,ea1_0.id,ea1_0.altbosluk,ea1_0.dikeyarabosluk,ea1_0.genislik,ea1_0.sagbosluk,ea1_0.solbosluk,ea1_0.user_id,ea1_0.ustbosluk,ea1_0.yataydikey,ea1_0.yukseklik,u1_0.first_name,u1_0.image,u1_0.last_name,u1_0.password,r1_0.user_id,r1_1.id,r1_1.name from users u1_0 left join email_details ed1_0 on u1_0.id=ed1_0.user_id left join etiket_ayar ea1_0 on u1_0.id=ea1_0.user_id left join user_roles r1_0 on u1_0.id=r1_0.user_id left join roles r1_1 on r1_1.id=r1_0.role_id where u1_0.id=?
+2026-02-11 22:00:49.240 DEBUG o.s.security.web.FilterChainProxy - Securing GET /index
+2026-02-11 22:00:49.242 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:49.242 DEBUG o.s.security.web.FilterChainProxy - Secured GET /index
+2026-02-11 22:00:49.268 DEBUG org.hibernate.SQL - select u1_0.image from users u1_0 where lower(u1_0.email)=lower(?)
+2026-02-11 22:00:49.288 DEBUG org.hibernate.SQL - select r1_1.name from users u1_0 join user_roles r1_0 on u1_0.id=r1_0.user_id join roles r1_1 on r1_1.id=r1_0.role_id where lower(u1_0.email)=lower(?)
+2026-02-11 22:00:50.804 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/fetchWithSessionCheckForDownload.js
+2026-02-11 22:00:50.807 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/fetchWithSessionCheck.js
+2026-02-11 22:00:50.808 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/fetchWithSessionCheckForm.js
+2026-02-11 22:00:50.809 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.810 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/fetchWithSessionCheckForDownload.js
+2026-02-11 22:00:50.811 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.811 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/fetchWithSessionCheck.js
+2026-02-11 22:00:50.812 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.815 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/fetchWithSessionCheckForm.js
+2026-02-11 22:00:50.817 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/ortak/firmaismi.js
+2026-02-11 22:00:50.819 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.819 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/ortak/firmaismi.js
+2026-02-11 22:00:50.821 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/obs_global.js
+2026-02-11 22:00:50.822 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.823 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/obs_global.js
+2026-02-11 22:00:50.827 DEBUG o.s.security.web.FilterChainProxy - Securing GET /style/index.css
+2026-02-11 22:00:50.828 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/modal/obs_modal.js
+2026-02-11 22:00:50.828 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.828 DEBUG o.s.security.web.FilterChainProxy - Secured GET /style/index.css
+2026-02-11 22:00:50.828 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.828 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/modal/obs_modal.js
+2026-02-11 22:00:50.832 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/modal/cari/hspplnmodal.js
+2026-02-11 22:00:50.834 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.834 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/modal/urun_kodlari_modal.js
+2026-02-11 22:00:50.834 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/modal/cari/hspplnmodal.js
+2026-02-11 22:00:50.835 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.835 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/modal/urun_kodlari_modal.js
+2026-02-11 22:00:50.844 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/modal/adres/adreshplmodal.js
+2026-02-11 22:00:50.845 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.845 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/modal/adres/adreshplmodal.js
+2026-02-11 22:00:50.851 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/index.js
+2026-02-11 22:00:50.854 DEBUG o.s.security.web.FilterChainProxy - Securing GET /images/logo/obs_logo_son.png
+2026-02-11 22:00:50.854 DEBUG o.s.security.web.FilterChainProxy - Secured GET /images/logo/obs_logo_son.png
+2026-02-11 22:00:50.854 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.854 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/index.js
+2026-02-11 22:00:50.862 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.929 DEBUG o.s.security.web.FilterChainProxy - Securing GET /wellcome
+2026-02-11 22:00:50.930 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.930 DEBUG o.s.security.web.FilterChainProxy - Secured GET /wellcome
+2026-02-11 22:00:50.951 DEBUG o.s.security.web.FilterChainProxy - Securing GET /obs_js_files/wellcome.js
+2026-02-11 22:00:50.952 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.952 DEBUG o.s.security.web.FilterChainProxy - Secured GET /obs_js_files/wellcome.js
+2026-02-11 22:00:50.964 DEBUG o.s.security.web.FilterChainProxy - Securing GET /wellcomecalismadizini
+2026-02-11 22:00:50.965 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:00:50.965 DEBUG o.s.security.web.FilterChainProxy - Secured GET /wellcomecalismadizini
+2026-02-11 22:01:57.078 DEBUG o.s.security.web.FilterChainProxy - Securing GET /login
+2026-02-11 22:01:57.078 DEBUG o.s.security.web.FilterChainProxy - Secured GET /login
+2026-02-11 22:01:57.084 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:01:57.094 DEBUG o.s.security.web.FilterChainProxy - Securing GET /images/logo/obs_logo_new.svg
+2026-02-11 22:01:57.094 DEBUG o.s.security.web.FilterChainProxy - Secured GET /images/logo/obs_logo_new.svg
+2026-02-11 22:01:57.098 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:02:05.358 DEBUG o.s.security.web.FilterChainProxy - Securing GET /admin/logs
+2026-02-11 22:02:05.358 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:02:05.360 DEBUG o.s.security.web.FilterChainProxy - Secured GET /admin/logs
+2026-02-11 22:02:05.434 DEBUG o.s.security.web.FilterChainProxy - Securing GET /favicon.ico
+2026-02-11 22:02:05.434 DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=org.springframework.security.core.userdetails.User [Username=hamit@okumus.com, Password=[PROTECTED], Enabled=true, AccountNonExpired=true, CredentialsNonExpired=true, AccountNonLocked=true, Granted Authorities=[ROLE_ADMIN]], Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=49B73E088FB7755B5E574101A16BD5E7], Granted Authorities=[ROLE_ADMIN]]]
+2026-02-11 22:02:05.434 DEBUG o.s.security.web.FilterChainProxy - Secured GET /favicon.ico
+2026-02-11 22:02:05.440 ERROR c.h.o.e.GlobalExceptionHandler - ResponseEntity  - user=hamit@okumus.com
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource favicon.ico.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:235)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:229)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-02-11 22:06:20.332 INFO  o.s.b.a.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin - Application shutdown requested.
+2026-02-11 22:06:20.336 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-11 22:06:20.337 INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+2026-02-11 22:06:20.352 INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-02-11 22:06:20.353 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+2026-02-11 22:06:20.361 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-02-11 22:06:20.362 TRACE o.h.type.spi.TypeConfiguration$Scope - Handling #sessionFactoryClosed from [org.hibernate.internal.SessionFactoryImpl@4f2b1a2f] for TypeConfiguration
+2026-02-11 22:06:20.362 DEBUG o.h.type.spi.TypeConfiguration$Scope - Un-scoping TypeConfiguration [org.hibernate.type.spi.TypeConfiguration$Scope@5bf5c2bd] from SessionFactory [org.hibernate.internal.SessionFactoryImpl@4f2b1a2f]
+2026-02-11 22:06:20.364 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-02-11 22:06:20.369 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

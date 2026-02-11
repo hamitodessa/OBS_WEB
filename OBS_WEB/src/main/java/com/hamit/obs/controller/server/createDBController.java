@@ -112,7 +112,7 @@ public class createDBController {
 		} catch (ServiceException e) {
 			response.put("olustuDurum",drm ); 
 			response.put("indexolustuDurum","false");
-			response.put("errorMessage", e.getMessage()); // Hata mesajı
+			response.put("errorMessage", e.getMessage());
 		} catch (Exception e) {
 			response.put("olustuDurum",drm ); 
 			response.put("indexolustuDurum","false");

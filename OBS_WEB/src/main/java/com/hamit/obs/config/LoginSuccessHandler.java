@@ -27,7 +27,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-	private static final Logger log = LoggerFactory.getLogger(LoginSuccessHandler.class);
+	private final Logger log = LoggerFactory.getLogger(LoginSuccessHandler.class);
 	@Autowired
 	private CariService cariService ;
 	
@@ -58,11 +58,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			String ua       = request.getHeader("User-Agent");
 			String uri      = request.getRequestURI();
 			log.info("LOGIN OK   - user={} ip={} ua={} uri={}", username, ip, ua, uri);
-
-			
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			UserSessionManager.removeUserSessionsByUsername(useremail);
-			
 			connectionManager.loadAllConnections(useremail);
 			
 			cariService.initialize();
