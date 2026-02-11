@@ -81,9 +81,10 @@ public class AdresGirisController {
 	@GetMapping("adres/getBaslik")
 	@ResponseBody
 	public Map<String, String> getBaslik() {
+		String[] detay  = adresService.conn_detail();
 		Map<String, String> response = new HashMap<>();
 		try {
-			response.put("baslik", adresService.adres_firma_adi());
+			response.put("baslik", adresService.adres_firma_adi() + " / " + detay[1]);
 			response.put("errorMessage","");
 		} catch (ServiceException e) {
 			log.error("Adres Get Baslik: user={} reason={}",currentUser(), e.getMessage(),e);

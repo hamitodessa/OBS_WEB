@@ -98,10 +98,20 @@ const pageModules = {
             if (typeof OBS?.FIRMA?.firmaIsmiSayfa === "function") OBS.FIRMA.firmaIsmiSayfa(modul);
         }
     },
-    "/kur/kurgiris": { js: "/obs_js_files/kur/kurgiris.js", init: () => OBS?.KUR?.init?.() },
-    "/kur/kurrapor": { js: "/obs_js_files/kur/kurrapor.js" },
+    "/kur/kurgiris": { js: "/obs_js_files/kur/kurgiris.js", 
+		init: () => {
+			if (typeof window.kurBaslik === "function") window.kurBaslik();
+			OBS?.KUR?.init?.()
+		}
+	},
+    "/kur/kurrapor": { js: "/obs_js_files/kur/kurrapor.js" 	, 
+		init: () => {
+			if (typeof window.kurBaslik === "function") window.kurBaslik();
+		}
+	},
     "/adres/adresgiris": {js: "/obs_js_files/adres/adresgiris.js",
         init: () => {
+			if (typeof window.adresBaslik === "function") window.adresBaslik();
             if (typeof OBS?.ADR?.init === "function") OBS.ADR.init();
             if (typeof OBS?.ADR?.aramaYap === "function") OBS.ADR.aramaYap();
             const arama = document.getElementById("arama");
@@ -110,7 +120,7 @@ const pageModules = {
     },
     "/adres/etiketliste": {js: "/obs_js_files/adres/etiketlistele.js",
         init: () => {
-            window.adresBaslik();
+             if (typeof window.adresBaslik === "function") window.adresBaslik();
         }
     },
     "/adres/etiketayar": {js: "/obs_js_files/adres/etiketayar.js",
