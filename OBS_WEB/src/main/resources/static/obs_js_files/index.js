@@ -1,4 +1,3 @@
-
 /* =========================
    OBS – Dynamic Page Loader (çakışmasız)  ✅ MULTI-JS
    - data-url ile sayfa yükler
@@ -43,18 +42,12 @@ function loadScriptOnce(src) {
    ------------------------- */
 const pageModules = {
     "/wellcome": { js: "/obs_js_files/wellcome.js", init: "getWellcomeData" },
-
-    // ✅ örnek: 2 JS
     "/cari/ekstre": {
-        js: [
-            //	"/obs_js_files/modal/cari/hspplnmodal.js",
-            "/obs_js_files/cari/cariekstre.js"
-        ],
+        js: "/obs_js_files/cari/cariekstre.js",
         init: () => {
             if (typeof window.cariBaslik === "function") window.cariBaslik();
         }
     },
-
     "/cari/hspplngiris": {
         js: "/obs_js_files/cari/hspplngiris.js",
         init: () => {
@@ -77,7 +70,6 @@ const pageModules = {
             if (typeof window.cariBaslik === "function") window.cariBaslik();
         }
     },
-
     "/cari/tahsilat": {
         js: "/obs_js_files/cari/tahsilat.js",
         init: () => {
@@ -85,13 +77,11 @@ const pageModules = {
             if (typeof window.fetchHesapKodlariOnce === "function") window.fetchHesapKodlariOnce();
         }
     },
-
-    "/cari/mizan": { js: "/obs_js_files/cari/mizan.js", init: "cariBaslik" },
-    "/cari/ozelmizan": { js: "/obs_js_files/cari/ozelmizan.js", init: "cariBaslik" },
-    "/cari/dvzcevirme": { js: "/obs_js_files/cari/dvzcevirme.js", init: "cariBaslik" },
-    "/cari/gunlukkontrol": { js: "/obs_js_files/cari/gunluktakip.js", init: "cariBaslik" },
-    "/cari/tahsilatrapor": { js: "/obs_js_files/cari/tahsilatrapor.js", init: "cariBaslik" },
-
+    "/cari/mizan": { js: "/obs_js_files/cari/mizan.js", init: () => { window.cariBaslik() } },
+    "/cari/ozelmizan": { js: "/obs_js_files/cari/ozelmizan.js", init: () => { window.cariBaslik() } },
+    "/cari/dvzcevirme": { js: "/obs_js_files/cari/dvzcevirme.js", init: () => { window.cariBaslik() } },
+    "/cari/gunlukkontrol": { js: "/obs_js_files/cari/gunluktakip.js", init: () => { window.cariBaslik() } },
+    "/cari/tahsilatrapor": { js: "/obs_js_files/cari/tahsilatrapor.js", init: () => { window.cariBaslik() } },
     "/cari/tahsilatdegerleri": {
         js: "/obs_js_files/cari/tahsilatayar.js",
         init: () => {
@@ -99,24 +89,18 @@ const pageModules = {
             if (typeof OBS?.TAHAYAR?.init === "function") OBS.TAHAYAR.init();
         }
     },
-
-    "/cari/ornekhesapplani": { js: "/obs_js_files/cari/ornhsppln.js", init: "cariBaslik" },
-    "/cari/carikoddegis": { js: "/obs_js_files/cari/koddegis.js", init: "cariBaslik" },
-
-    
-    "/obs/firmaismi": {
-        js: "/obs_js_files/ortak/firmaismi.js",
+    "/cari/ornekhesapplani": { js: "/obs_js_files/cari/ornhsppln.js", init: () => { window.cariBaslik() } },
+    "/cari/carikoddegis": {js: "/obs_js_files/cari/koddegis.js", init: () => { window.cariBaslik() }
+    },
+    "/obs/firmaismi": {js: "/obs_js_files/ortak/firmaismi.js",
         init: (params) => {
             const modul = params?.get("modul") || "";
             if (typeof OBS?.FIRMA?.firmaIsmiSayfa === "function") OBS.FIRMA.firmaIsmiSayfa(modul);
         }
     },
-
     "/kur/kurgiris": { js: "/obs_js_files/kur/kurgiris.js", init: () => OBS?.KUR?.init?.() },
     "/kur/kurrapor": { js: "/obs_js_files/kur/kurrapor.js" },
-
-    "/adres/adresgiris": {
-        js: "/obs_js_files/adres/adresgiris.js",
+    "/adres/adresgiris": {js: "/obs_js_files/adres/adresgiris.js",
         init: () => {
             if (typeof OBS?.ADR?.init === "function") OBS.ADR.init();
             if (typeof OBS?.ADR?.aramaYap === "function") OBS.ADR.aramaYap();
@@ -124,50 +108,41 @@ const pageModules = {
             if (arama) arama.value = "";
         }
     },
-
-    "/adres/etiketliste": { js: "/obs_js_files/adres/etiketlistele.js", init: "adresBaslik" },
-
-    "/adres/etiketayar": {
-        js: "/obs_js_files/adres/etiketayar.js",
+    "/adres/etiketliste": {js: "/obs_js_files/adres/etiketlistele.js",
+        init: () => {
+            window.adresBaslik();
+        }
+    },
+    "/adres/etiketayar": {js: "/obs_js_files/adres/etiketayar.js",
         init: () => {
             if (typeof window.adresBaslik === "function") window.adresBaslik();
             if (typeof OBS?.ADR?.init === "function") OBS.ADR.init();
         }
     },
-
-    "/kambiyo/cekgiris": {
-        js: "/obs_js_files/kambiyo/cekgiris.js",
+    "/kambiyo/cekgiris": {js: "/obs_js_files/kambiyo/cekgiris.js",
         init: () => {
             if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
             if (typeof OBS?.CEKGIR?.init === "function") OBS.CEKGIR.init();
         }
     },
-
-    "/kambiyo/cekcikis": {
-        js: "/obs_js_files/kambiyo/cekcikis.js",
+    "/kambiyo/cekcikis": {js: "/obs_js_files/kambiyo/cekcikis.js",
         init: () => {
             if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
             if (typeof OBS?.CEKCIK?.init === "function") OBS.CEKCIK.init();
         }
     },
-
-    "/kambiyo/cektakip": {
-        js: "/obs_js_files/kambiyo/cekkontrol.js",
+    "/kambiyo/cektakip": {js: "/obs_js_files/kambiyo/cekkontrol.js",
         init: () => {
             if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
         }
     },
-
-    "/kambiyo/cekrapor": {
-        js: "/obs_js_files/kambiyo/cekrapor.js",
+    "/kambiyo/cekrapor": {js: "/obs_js_files/kambiyo/cekrapor.js",
         init: () => {
             if (typeof window.kambiyoBaslik === "function") window.kambiyoBaslik();
             if (typeof OBS?.CEKRAP?.init === "function") OBS.CEKRAP.init();
         }
     },
-
-    "/stok/urunkart": {
-        js: "/obs_js_files/stok/urunkart.js",
+    "/stok/urunkart": {js: "/obs_js_files/stok/urunkart.js",
         init: () => {
             if (typeof window.stokBaslik === "function") window.stokBaslik();
             if (typeof OBS?.URUNKART?.init === "function") OBS.URUNKART.init();
@@ -176,15 +151,12 @@ const pageModules = {
             if (arama) arama.value = "";
         }
     },
-
-    "/stok/uretim": {
-        js: "/obs_js_files/stok/uretim.js",
+    "/stok/uretim": {js: "/obs_js_files/stok/uretim.js",
         init: () => {
             if (typeof window.stokBaslik === "function") window.stokBaslik();
             if (typeof OBS?.URETIM?.init === "function") OBS.URETIM.init();
         }
     },
-
     "/stok/fatura": {
         js: "/obs_js_files/stok/fatura.js",
         init: () => {
@@ -192,7 +164,6 @@ const pageModules = {
             if (typeof OBS?.FATURA?.init === "function") OBS.FATURA.init();
         }
     },
-
     "/stok/irsaliye": {
         js: "/obs_js_files/stok/irsaliye.js",
         init: () => {
@@ -200,7 +171,6 @@ const pageModules = {
             if (typeof OBS?.IRSALIYE?.init === "function") OBS.IRSALIYE.init();
         }
     },
-
     "/stok/zayi": {
         js: "/obs_js_files/stok/zayi.js",
         init: () => {
@@ -208,7 +178,6 @@ const pageModules = {
             if (typeof OBS?.ZAI?.fetchkod === "function") OBS.ZAI.fetchkod();
         }
     },
-
     "/stok/recete": {
         js: "/obs_js_files/stok/recete.js",
         init: () => {
@@ -216,14 +185,12 @@ const pageModules = {
             if (typeof OBS?.RECETE?.fetchkod === "function") OBS.RECETE.fetchkod();
         }
     },
-
     "/stok/fatrapor": {
         js: "/obs_js_files/stok/raporlar/fatrapor.js",
         init: () => {
             if (typeof window.stokBaslik === "function") window.stokBaslik();
         }
     },
-
     "/stok/irsrapor": { js: "/obs_js_files/stok/raporlar/irsrapor.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
     "/stok/envanter": { js: "/obs_js_files/stok/raporlar/envanter.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
     "/stok/imarapor": { js: "/obs_js_files/stok/raporlar/imarapor.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
@@ -231,7 +198,6 @@ const pageModules = {
     "/stok/stokrapor": { js: "/obs_js_files/stok/raporlar/stokrapor.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
     "/stok/grprapor": { js: "/obs_js_files/stok/raporlar/grprapor.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
     "/stok/stokdetay": { js: "/obs_js_files/stok/raporlar/stokdetay.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
-
     "/stok/degiskenler": {
         js: "/obs_js_files/stok/degiskenler.js",
         init: () => {
@@ -239,46 +205,40 @@ const pageModules = {
             if (typeof OBS?.DEGISKENLER?.init === "function") OBS.DEGISKENLER.init();
         }
     },
-//
     "/kereste/giris": {
-		js: ["/obs_js_files/inputmask/inputmask.min.js",
-		     "/obs_js_files/kereste/giris.js"],
+        js: ["/obs_js_files/inputmask/inputmask.min.js",
+            "/obs_js_files/kereste/giris.js"],
         init: () => {
             if (typeof window.keresteBaslik === "function") window.keresteBaslik();
             if (typeof OBS?.KERGIRIS?.init === "function") OBS.KERGIRIS.init();
         }
     },
-
     "/kereste/cikis": {
-		js: ["/obs_js_files/inputmask/inputmask.min.js",
-		     "/obs_js_files/kereste/cikis.js"],
+        js: ["/obs_js_files/inputmask/inputmask.min.js",
+            "/obs_js_files/kereste/cikis.js"],
         init: () => {
             if (typeof window.keresteBaslik === "function") window.keresteBaslik();
             if (typeof OBS?.KERCIKIS?.init === "function") OBS.KERCIKIS.init();
         }
     },
-
     "/kereste/koddegis": {
-		js: ["/obs_js_files/inputmask/inputmask.min.js",
-			"/obs_js_files/kereste/koddegis.js"],
+        js: ["/obs_js_files/inputmask/inputmask.min.js",
+            "/obs_js_files/kereste/koddegis.js"],
         init: () => {
             if (typeof window.keresteBaslik === "function") window.keresteBaslik();
             if (typeof OBS?.KODDEGIS?.init === "function") OBS.KODDEGIS.init();
         }
     },
-
     "/kereste/fatrapor": {
         js: "/obs_js_files/kereste/raporlar/fatrapor.js",
         init: () => {
             if (typeof window.keresteBaslik === "function") window.keresteBaslik();
         }
     },
-
     "/kereste/detay": { js: "/obs_js_files/kereste/raporlar/kerdetay.js", init: () => { if (typeof window.keresteBaslik === "function") window.keresteBaslik(); } },
     "/kereste/grprapor": { js: "/obs_js_files/kereste/raporlar/grprapor.js", init: () => { if (typeof window.keresteBaslik === "function") window.keresteBaslik(); } },
     "/kereste/envanter": { js: "/obs_js_files/kereste/raporlar/envanter.js", init: () => { if (typeof window.keresteBaslik === "function") window.keresteBaslik(); } },
     "/kereste/ortfiat": { js: "/obs_js_files/kereste/raporlar/ortfiat.js", init: () => { if (typeof window.keresteBaslik === "function") window.keresteBaslik(); } },
-
     "/kereste/kodaciklama": {
         js: "/obs_js_files/kereste/kodaciklama.js",
         init: () => {
@@ -286,7 +246,6 @@ const pageModules = {
             if (typeof window.kodacikyukle === "function") window.kodacikyukle();
         }
     },
-
     "/kereste/konsimentoaciklama": {
         js: "/obs_js_files/kereste/konsaciklama.js",
         init: () => {
@@ -294,7 +253,6 @@ const pageModules = {
             if (typeof window.konsacikyukle === "function") window.konsacikyukle();
         }
     },
-
     "/kereste/degiskenler": {
         js: "/obs_js_files/kereste/degiskenler.js",
         init: () => {
@@ -302,27 +260,20 @@ const pageModules = {
             if (typeof OBS?.KERDEGISKENLER?.init === "function") OBS.KERDEGISKENLER.init();
         }
     },
-
     "/user/gidenraporlar": { js: "/obs_js_files/giden_rapor/gidenrapor.js" },
-
     "/user/mailgonderme": {
         js: "/obs_js_files/sendemail/sendemail.js",
         init: () => { if (typeof OBS?.REPORTMAIL?.init === "function") OBS.REPORTMAIL.init(); }
     },
-
     "/send_email": {
         js: "/obs_js_files/sendemail/sendemail.js",
         init: () => { if (typeof OBS?.REPORTMAIL?.init === "function") OBS.REPORTMAIL.init(); }
     },
-
     "/user/lograpor": { js: "/obs_js_files/user/lograpor.js", init: () => OBS?.LOG?.updatePaginationUI?.() },
-
     "/backup/backuptakip": { js: "/obs_js_files/backup/backuptakip.js" },
     "/backup/lograpor": { js: "/obs_js_files/backup/lograpor.js" },
-
     "/user/user_pwd_change": { js: "/obs_js_files/user/sifredegis.js", init: () => OBS?.PWD?.init?.() },
     "/user/user_update": { js: "/obs_js_files/user/userupdate.js", init: () => OBS?.USERUPD?.init?.() },
-
     "/user/userdetails": {
         js: "/obs_js_files/user/userDetails.js",
         init: () => {
@@ -330,7 +281,6 @@ const pageModules = {
             OBS?.USERDETAIL?.detailoku?.();
         }
     },
-
     "/user/userizinler": {
         js: "/obs_js_files/user/userizinleri.js",
         init: () => {
@@ -338,29 +288,23 @@ const pageModules = {
             OBS?.USERIZIN?.adminbaglihesapoku?.();
         }
     },
-
     "/user/userlist": {
         js: "/obs_js_files/user/userlist.js",
         init: () => { OBS?.USERS_LIST?.init?.(); }
     },
-
     "/user/emailsettings": {
         js: "/obs_js_files/user/emailayar.js",
         init: () => { if (window.emailSettingsInit) window.emailSettingsInit(); }
     },
-
     "/user/createdb": {
         js: "/obs_js_files/server/createdb.js",
         init: () => { if (window.createDbInit) window.createDbInit(); }
     },
-
     "/user/copyuser": { js: "/obs_js_files/user/copyuser.js" },
-
     "/user/deleteaccount": {
         js: "/obs_js_files/user/deleteuser.js",
         init: () => { if (window.accountDeleteInit) window.accountDeleteInit(); }
     },
-
     "/forum": {
         js: "/obs_js_files/forum/forum.js",
         init: () => { OBS?.FORUM?.init?.(); }
@@ -368,54 +312,47 @@ const pageModules = {
     "/gps/gps": {
         js: "/obs_js_files/gps/gps.js",
     }
-
 };
 
 /* -------------------------
-   Module runner (query destekli) ✅ MULTI-JS
+   Module runner 
    ------------------------- */
 async function runPageModule(url) {
     const u = new URL(url, window.location.origin);
     const path = u.pathname;
     const params = u.searchParams;
-
     const mod = pageModules[path];
     if (!mod) return;
-
-    // ✅ js string | array destek
     const jsList = Array.isArray(mod.js) ? mod.js : (mod.js ? [mod.js] : []);
-
-    // ✅ sırayla yükle (dependency varsa garanti)
     for (const src of jsList) {
         await loadScriptOnce(src);
     }
-
     const fn = (typeof mod.init === "function") ? mod.init : window[mod.init];
     if (typeof fn === "function") fn(params, u);
 }
 
-   async function sayfaYukle(url) {
-     const ara = ROOT.ara;
-     const baslik = ROOT.baslik;
-     if (!ara) return;
-     try {
-       if (baslik) baslik.innerText = "";
-       const html = await fetchWithSessionCheckForm(url);
-       if (!html) return;
-       ara.innerHTML = html;
-       try {
-         await runPageModule(url);
-       } catch (e) {
-         ara.innerHTML += `<div class="cam-error">${e.message}</div>`;
-       }
-       const p = new URL(url, location.origin).pathname;
-       if (window.urlActions?.[p]) {
-         try { window.urlActions[p](); } catch {}
-       }
-     } catch (e) {
-       ara.innerHTML = `<div class="cam-error">Bir hata: ${e?.message ?? "Bilinmeyen hata"}</div>`;
-     }
-   }
+async function sayfaYukle(url) {
+    const ara = ROOT.ara;
+    const baslik = ROOT.baslik;
+    if (!ara) return;
+    try {
+        if (baslik) baslik.innerText = "";
+        const html = await fetchWithSessionCheckForm(url);
+        if (!html) return;
+        ara.innerHTML = html;
+        try {
+            await runPageModule(url);
+        } catch (e) {
+            ara.innerHTML += `<div class="cam-error">${e.message}</div>`;
+        }
+        const p = new URL(url, location.origin).pathname;
+        if (window.urlActions?.[p]) {
+            try { window.urlActions[p](); } catch {}
+        }
+    } catch (e) {
+        ara.innerHTML = `<div class="cam-error">Bir hata: ${e?.message ?? "Bilinmeyen hata"}</div>`;
+    }
+}
 
 document.addEventListener("click", (e) => {
     const link = e.target.closest(".changeLink");
