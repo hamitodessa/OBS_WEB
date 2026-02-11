@@ -2,22 +2,6 @@
 
 #ara_content{ color: rgba(255,255,255,.92); padding: 0 !important;}
 
-.group-box {
-	border: 1px solid #ccc;
-	padding: 7px;
-	margin: 10px;
-	width: calc(100% - 20px);
-	box-sizing: border-box;
-}
-
-.child {
-	width: 60%;
-	padding: 2px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-	align-items: center;
-}
 
 /* =========================
    2026 AUTO CAM CARD (welcome)
@@ -32,6 +16,7 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   color: rgba(255,255,255,.92);
+   margin-top: 8px;
 }
 
 /* kart içindeki link */
@@ -53,21 +38,26 @@
 
 /* 2) group-box / child: eski gri çerçeveleri modernleştir */
 #ara_content .child{
-  width: min(720px, 100%);
+ width: 50%;
   padding: 10px;
   margin: 0 auto;
   border: 1px solid rgba(255,255,255,.12);
-  border-radius: 16px;
+  border-radius: 14px;
   background: rgba(0,0,0,.10);
 }
 
+
 #ara_content .group-box{
+width: 100%;
   border: 1px solid rgba(255,255,255,.14);
-  border-radius: 14px;
-  padding: 10px 12px;
+  border-radius: 10px;
+  padding: 5px;
   margin: 10px 0;
+  box-sizing: border-box;
   background: rgba(255,255,255,.04);
 }
+
+
 
 /* label görünsün */
 #ara_content .group-box label{
@@ -89,21 +79,18 @@
 }
 </style>
 <div class="card p-4">Merhaba , OBS Sisteme hos geldiniz </div>
-<br>
+
 <div class="card p-4">“MS SQL“ , “MY SQL” ve “POSTGRE SQL”  Veri tabani secenegi kullanan bir  programdir…., sinirsiz dosya acma olanagi sunmaktadir.
 	<br>
 		Firmanızın hesaplarını kolaylıkla takip edebileceğiniz; Müşteri Cari Hesabı,Çek-Senet, Fatura-İrsaliye-Stok , Doviz Kurlari   , Adres   modüllerini içeren, arayüzü oldukça hoş, kullanımı kolay bir programdır.
 	<br>
 		Detaylı raporlama  özellikleri ile istediginiz raporlari alip , isterseniz PDF,Word, Excel  formatinda kayit yapabilir veya E-Mail olarak gonderme firsatina sahipsiniz…
 </div>
-
-<br>
 <div class="card p-4">
 		Java Tabanli Cok teferruatli masaustu versionu 
 		<a style="font-size:14px;font-weight:bold;" href="http://www.okumus.gen.tr" target="_blank">OBS Masaüstü versiyon indirme</a>
 </div>
-<br>
-<div class="card p-4">
+<div class="card">
 	<div class="child">
 		<div class="group-box">
 			<div style="display: flex; align-items: center; gap: 10px;">
