@@ -1,32 +1,30 @@
 /* =========================
-   2026 CAM – SECOND MODAL (FINAL)
-   HTML uyumlu: #modalSearch + .modall-table-container + table.modal-table (#modalTable)
+   2026 CAM – SECOND MODAL (ISOLATED / FINAL)
+   Scope: #secondModal only
    ========================= */
 
-/* 1) Modal cam görünüm */
+#secondModal .modal-dialog{
+  max-width: 650px;         /* min-width yerine bootstrap mantığı */
+  width: 650px;
+}
+
 #secondModal .modal-content{
   background: rgba(8,14,26,.96) !important;
   color: rgba(255,255,255,.94) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px !important;
   box-shadow: 0 22px 65px rgba(0,0,0,.55) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  overflow: hidden !important; /* scroll içeride değil container'da */
-}
+  overflow: hidden !important;
+ 
+ }
 
-/* Header (search + close) */
+/* Header */
 #secondModal .modal-header{
   position: relative;
   gap: 10px;
   align-items: center;
-  padding: 12px 12px !important;
-
-  background: linear-gradient(180deg,
-    rgba(31,59,92,.92),
-    rgba(22,43,68,.92)
-  ) !important;
-
+  padding: 12px !important;
+  background: linear-gradient(180deg,rgba(31,59,92,.92),rgba(22,43,68,.92)) !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
 }
 
@@ -43,24 +41,22 @@
   );
 }
 
-/* Close butonu (bootstrap) */
+/* Close */
 #secondModal .btn-close{
   filter: invert(1) grayscale(100%);
   opacity: .85;
 }
 #secondModal .btn-close:hover{ opacity: 1; }
 
-/* 2) Search input (id=modalSearch) */
+/* Search */
 #secondModal #modalSearch{
-  height: 46px !important;
-  border-radius: 14px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
 }
-#secondModal #modalSearch::placeholder{
-  color: rgba(255,255,255,.55) !important;
-}
+#secondModal #modalSearch::placeholder{ color: rgba(255,255,255,.55) !important; }
 #secondModal #modalSearch:focus{
   border-color: rgba(56,189,248,.70) !important;
   box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
@@ -68,96 +64,11 @@
   color: #fff !important;
 }
 
-/* error div (id=hsperrorDiv) */
-
-
-/* 3) Table container: gerçek scroll burada */
-#secondModal .modall-table-container{
-  overflow: auto;
-  height: calc(600px - 70px); /* gerekirse 80 yap */
-  border-top: 1px solid rgba(255,255,255,.10) !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  background: rgba(255,255,255,.02) !important;
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
-}
-
-/* 4) Table (HTML: id="modalTable" class="table modal-table ...") */
-#secondModal table.modal-table{
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 13px;
-  color: rgba(255,255,255,.86);
-
-  /* Bootstrap tablo renk değişkenlerini modal içinde kontrol et */
-  --bs-table-bg: transparent !important;
-  --bs-table-color: rgba(255,255,255,.86) !important;
-  --bs-table-border-color: rgba(255,255,255,.08) !important;
-  --bs-table-accent-bg: transparent !important;
-  --bs-table-striped-bg: transparent !important;
-  --bs-table-hover-bg: rgba(56,189,248,.14) !important;
-  --bs-table-active-bg: rgba(56,189,248,.18) !important;
-}
-
-/* Cells */
-#secondModal table.modal-table th,
-#secondModal table.modal-table td{
-  text-align: left;
-  vertical-align: middle;
-  white-space: nowrap;
-  padding: 8px 10px;
-  border: 1px solid rgba(255,255,255,.08) !important;
-
-  /* dışarıdan gelen background basmalarını kapat */
-  background-color: transparent !important;
-  background-image: none !important;
-}
-
-/* Header sticky */
-#secondModal table.modal-table thead th{
-  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
-  color: #ffffff !important;
-  border-bottom: 1px solid rgba(255,255,255,.12) !important;
-  font-weight: 900;
-
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-/* Hover (mavi) */
-#secondModal table.modal-table.table-hover tbody tr:hover td{
-  background: rgba(56,189,248,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Seçili satır (yeşil) — SENİN istediğin kalıcı seçim */
-#secondModal table.modal-table tbody tr.selected td{
-  background: rgba(34,197,94,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Bootstrap'in table-active / table-success gibi boyamalarını da kontrol et */
-#secondModal #modalTable tbody tr.table-active > td,
-#secondModal #modalTable tbody tr.active > td,
-#secondModal #modalTable tbody tr.table-success > td{
-  background-color: rgba(56,189,248,.18) !important;
-  color: #fff !important;
-}
-
-/* Optional: row height (HTML’de class="table-row-height" var) */
-#secondModal table.modal-table.table-row-height td{
-  height: 18px;
-  line-height: 18px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
+/* Error */
 #secondModal #hsperrorDiv{
   display:none;
-  margin-top: 12px;
   padding: 10px 12px;
+  margin: 10px 12px 0 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
   background: rgba(251,113,133,.10);
@@ -165,17 +76,125 @@
   font-weight: 900;
 }
 
-#secondModal #btnKapat{
-  
-  margin-top: 2px;
-  border-radius: 8px 8px 18px 18px !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.55) !important;
+
+#secondModal .modall-table-container{
+  height: 500px;
+  overflow: auto;
+  margin-top: 5px;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  border-radius: 8px !important;
+
+  /* CAM2026 glass gradient */
+  background:
+    radial-gradient(1200px 420px at 10% 0%,
+      rgba(56,189,248,.22),
+      rgba(56,189,248,0) 55%),
+    radial-gradient(900px 520px at 95% 110%,
+      rgba(34,197,94,.16),
+      rgba(34,197,94,0) 58%),
+    linear-gradient(180deg,
+      rgba(8,14,26,.78),
+      rgba(8,14,26,.62)) !important;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+
+  position: relative;
 }
+
+/* hafif parıltı/shine */
+#secondModal .modall-table-container::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,.10),
+      rgba(255,255,255,0) 22%,
+      rgba(255,255,255,0) 80%,
+      rgba(255,255,255,.06));
+  opacity:.35;
+}
+
+
+/* Table */
+#secondModal table.modal-table{
+  width: 100%;
+  min-width: 0;
+  border-radius: 5px !important;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;   /* colgroup width + fixed => sütun kontrol */
+  font-size: 13px;
+  color: rgba(255,255,255,.86);
+  
+}
+
+/* Cells */
+#secondModal table.modal-table th,
+#secondModal table.modal-table td{
+  padding: 6px 8px;
+  border: 1px solid rgba(255,255,255,.08) !important;
+ 
+  white-space: nowrap;
+  overflow: hidden;           /* <<< daralmanın kilidi */
+  text-overflow: ellipsis;    /* <<< daralınca ... */
+}
+
+#secondModal table.modal-table tbody td{
+ 
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .3px;
+}
+/* Header sticky */
+#secondModal table.modal-table thead th{
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  font-weight: 900;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Hover */
+#secondModal table.modal-table.table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #fff !important;
+}
+
+/* Compact rows */
+#secondModal table.modal-table.table-row-height td{
+  height: 20px;
+  line-height: 20px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* Footer button */
+#secondModal .btn-close{
+  padding: 0 12px 12px 12px;
+}
+#secondModal .modal-header .btn-close{
+  opacity: .7;
+  transition: all .2s ease;
+}
+
+#secondModal .modal-header .btn-close:hover{
+  opacity: 1;
+  transform: scale(1.15);
+  filter: invert(1) drop-shadow(0 0 6px rgba(56,189,248,.6));
+}
+
 
 #secondModal #kapatbtn{
+  display: block;
   width: 100%;
-  border-radius: 8px 8px 18px 18px !important;
-  
+  height: 42px;
+ margin: 5px 0px 0px 0px;              /* alttaki boşluğu siler */
+  border-radius: 0 0 18px 18px !important;
 }
-

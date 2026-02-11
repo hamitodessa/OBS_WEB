@@ -1,28 +1,39 @@
-<div class="modal fade" th:fragment="secondModal" id="secondModal" tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true"
+<div class="modal fade" th:fragment="secondModal" id="secondModal"
+	tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true"
 	data-bs-backdrop="static" data-bs-keyboard="false">
-	<div class="modal-dialog modal-dialog-centered"	style="max-width: 650px;">
-		<div class="modal-content" style="height: 600px; overflow-y: hidden;">
+	<div class="modal-dialog modal-dialog-centered"  >
+		<div class="modal-content" >
 			<div class="modal-header">
-				<input type="text" class="form-control" id="modalSearch" placeholder="Search..." oninput="filterTable()">
-				<button type="button" class="btn-close" data-bs-dismiss="modal"	aria-label="Close"></button>
+				<input type="text" class="form-control" id="modalSearch"
+					placeholder="Search..." oninput="filterTable()">
+					
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
 			</div>
 			<div id="hsperrorDiv"></div>
 			<div class="modall-table-container">
 				<table id="modalTable"
 					class="table modal-table table-bordered table-hover table-row-height">
-					<thead class="thead-dark">
+					<colgroup>
+						<col style="width: 50px;">
+						<col style="width: 170px;">
+						<col style="width: 40px;">
+						<col style="width: 40px;">
+					</colgroup>
+					<thead>
 						<tr>
-							<th style="width:17%;">Hesap</th>
+							<th>Hesap</th>
 							<th>Unvan</th>
-							<th style="width:11%;">Cins</th>
-							<th style="width:13%;">Karton</th>
+							<th>Cins</th>
+							<th>Karton</th>
 						</tr>
 					</thead>
 					<tbody id="modalTableBody"></tbody>
 				</table>
 			</div>
 			<div id="btnKapat">
-			<button type="button" class="btn btn-primary" id="kapatbtn"	data-bs-dismiss="modal" aria-label="Close">Kapat</button>
+				<button type="button" class="btn btn-primary" id="kapatbtn"
+					data-bs-dismiss="modal" aria-label="Close">Kapat</button>
 			</div>
 		</div>
 	</div>
