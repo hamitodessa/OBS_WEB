@@ -79,43 +79,27 @@ OBS.BACKUPLOG._extractErrorMessage = function(payload, status) {
 
 /* ---------- fetch wrapper (tek tip) ---------- */
 OBS.BACKUPLOG.requestJson = async function(url) {
-    const resp = await fetch(url, { cache: "no-store" });
-    const body = await OBS.BACKUPLOG._readBodySmart(resp);
-    const payload = body.data;
-
-    // 1) Controller wrapper döndürüyorsa: {ok,status,message,data}
+    const payload = await fetchWithSessionCheck(url, { method: "GET" }, "json");
+    if (payload == null) return null; // login'e gitti vs.
     if (payload && typeof payload === "object" && !Array.isArray(payload) && ("ok" in payload || "status" in payload)) {
         if (payload.ok === false) {
-            const msg = OBS.BACKUPLOG._extractErrorMessage(payload, payload.status || resp.status || 500);
+            const msg = OBS.BACKUPLOG._extractErrorMessage(payload, payload.status || 500);
             const e = new Error(msg);
-            e.status = payload.status || resp.status;
+            e.status = payload.status || 500;
             throw e;
         }
-
-        // ok:true -> payload.data bazen string JSON olabilir
         let data = payload.data;
-
         if (typeof data === "string") {
             const s = data.trim();
             if (s.startsWith("{") || s.startsWith("[")) {
-                try { data = JSON.parse(s); } catch { /* kalsın */ }
+                try { data = JSON.parse(s); } catch {}
             }
         }
-
         return data;
     }
-
-    // 2) Eski sistem: status code ile yönetilen normal response
-    if (!resp.ok) {
-        const msg = OBS.BACKUPLOG._extractErrorMessage(payload, resp.status);
-        const e = new Error(msg);
-        e.status = resp.status;
-        throw e;
-    }
-
-    // 3) ok:true ama payload text ise (garip durum)
     return payload;
 };
+
 
 /* ---------- emir dropdown doldur ---------- */
 OBS.BACKUPLOG.emirIsmiDoldur = async function() {
@@ -128,12 +112,10 @@ OBS.BACKUPLOG.emirIsmiDoldur = async function() {
         OBS.BACKUPLOG._setError("⚠️ Lütfen sunucu ve şifre bilgilerini girin.");
         return;
     }
-
     OBS.BACKUPLOG._setCursor(true);
     OBS.BACKUPLOG._setError("");
     OBS.BACKUPLOG._clearTable();
     if (hangi_emir) hangi_emir.innerHTML = "";
-
     const url =
         `/backup/emirliste?server=${encodeURIComponent(server)}` +
         `&key=${encodeURIComponent(apiKey)}` +
@@ -141,30 +123,21 @@ OBS.BACKUPLOG.emirIsmiDoldur = async function() {
 
     try {
         const res = await OBS.BACKUPLOG.requestJson(url);
-
-        // res wrapper da olabilir, array de olabilir
+		if (res == null) return;
         let arr = res;
-
-        // wrapper geldiyse
         if (arr && typeof arr === "object" && !Array.isArray(arr) && ("ok" in arr || "status" in arr)) {
             if (arr.ok === false) {
                 throw new Error(arr.message || "Bilinmeyen hata");
             }
             arr = arr.data;
         }
-
-        // data string ise parse et
         if (typeof arr === "string") {
             try { arr = JSON.parse(arr); } catch { arr = []; }
         }
-
-        // garanti array
         arr = Array.isArray(arr) ? arr : [];
-
         hangi_emir.appendChild(new Option("Lütfen seçiniz", ""));
         hangi_emir.appendChild(new Option("Hepsi", "Hepsi"));
         hangi_emir.appendChild(new Option("System", "System"));
-
         arr.forEach(item => {
             if (item?.EMIR_ISMI) hangi_emir.appendChild(new Option(item.EMIR_ISMI, item.EMIR_ISMI));
         });
@@ -218,7 +191,7 @@ OBS.BACKUPLOG.logListe = async function(page = 0) {
 
     try {
         const data = await OBS.BACKUPLOG.requestJson(url);
-
+		if (data == null) return;
         const arr = Array.isArray(data) ? data : [];
         arr.forEach(row => {
             const tr = document.createElement("tr");

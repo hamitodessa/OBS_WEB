@@ -33,15 +33,11 @@ OBS.EMIRLISTE._clearTable = function() {
 OBS.EMIRLISTE._renderRows = function(data) {
     const tableBody = OBS.EMIRLISTE.byId("tableBody") || document.getElementById("tableBody");
     if (!tableBody) return;
-
     tableBody.innerHTML = "";
-
     (Array.isArray(data) ? data : []).forEach((row) => {
         const tr = document.createElement("tr");
         tr.classList.add("table-row-height");
-
         const durumText = row?.DURUM == 1 ? "Aktif" : "Pasif";
-
         tr.innerHTML = `
       <td>${row?.EMIR_ISMI ?? ""}</td>
       <td>${durumText}</td>
@@ -127,51 +123,38 @@ OBS.EMIRLISTE.emirliste = async function() {
         `&key=${encodeURIComponent(apiKey)}` +
         `&user=${encodeURIComponent(user)}`;
 
-    try {
-        const resp = await fetch(url, { cache: "no-store" });
-        const body = await OBS.EMIRLISTE._readBodySmart(resp);
-        const payload = body.data;
+		try {
+		    const payload = await fetchWithSessionCheck(url, {
+		        method: "GET"
+		    }, "json");
 
-        if (payload && typeof payload === "object" && !Array.isArray(payload) && ("ok" in payload || "status" in payload)) {
-            if (payload.ok === false) {
-                const msg = OBS.EMIRLISTE._extractErrorMessage(payload);
-                OBS.EMIRLISTE._setError(msg);
-                OBS.EMIRLISTE._clearTable();
-                return;
-            }
-            let arr = payload.data;
-            if (typeof arr === "string") {
-                try { arr = JSON.parse(arr); } catch { /* kalsın */ }
-            }
-            if (!Array.isArray(arr)) {
-                OBS.EMIRLISTE._setError("Beklenmeyen veri formatı.");
-                OBS.EMIRLISTE._clearTable();
-                return;
-            }
+		    if (!payload) return; // login redirect olmuş olabilir
 
-            OBS.EMIRLISTE._renderRows(arr);
-            return;
-        }
+		    if (payload.ok === false) {
+		        const msg = OBS.EMIRLISTE._extractErrorMessage(payload);
+		        OBS.EMIRLISTE._setError(msg);
+		        OBS.EMIRLISTE._clearTable();
+		        return;
+		    }
 
-        if (Array.isArray(payload)) {
-            OBS.EMIRLISTE._renderRows(payload);
-            return;
-        }
+		    let arr = payload.data;
 
-        if (!resp.ok) {
-            const msg = OBS.EMIRLISTE._extractErrorMessage(payload);
-            OBS.EMIRLISTE._setError(msg);
-            OBS.EMIRLISTE._clearTable();
-            return;
-        }
-        OBS.EMIRLISTE._setError("Beklenmeyen veri formatı.");
-        OBS.EMIRLISTE._clearTable();
+		    if (typeof arr === "string") {
+		        try { arr = JSON.parse(arr); } catch {}
+		    }
 
-    } catch (error) {
-        console.error("Fetch hatası:", error);
-        OBS.EMIRLISTE._setError("Ağ hatası. Lütfen tekrar deneyin.");
-        OBS.EMIRLISTE._clearTable();
-    } finally {
-        document.body.style.cursor = "default";
-    }
+		    if (!Array.isArray(arr)) {
+		        OBS.EMIRLISTE._setError("Beklenmeyen veri formatı.");
+		        OBS.EMIRLISTE._clearTable();
+		        return;
+		    }
+
+		    OBS.EMIRLISTE._renderRows(arr);
+
+		} catch (error) {
+		    console.error("Fetch hatası:", error);
+		    OBS.EMIRLISTE._setError("Ağ hatası. Lütfen tekrar deneyin.");
+		    OBS.EMIRLISTE._clearTable();
+		}
+ 
 };
