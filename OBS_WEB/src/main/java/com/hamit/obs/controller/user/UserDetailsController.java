@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
@@ -58,6 +59,9 @@ public class UserDetailsController {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private ConnectionManager connectionManager;
 
 	@GetMapping("user/userdetails")
 	public String user_detailss() {
@@ -147,6 +151,7 @@ public class UserDetailsController {
 				userDetailsService.saveUserDetails(userDetails);
 				response.put("errorMessage", "");
 				modulTipi modultip = modulTipi.fromDbValue(userDetails.getUser_modul());
+				connectionManager.loadAllConnections(user.getEmail());
 				switch (modultip) {
 				case CARI_HESAP -> cariService.initialize();
 				case KUR        -> kurService.initialize();

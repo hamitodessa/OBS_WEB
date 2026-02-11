@@ -3,13 +3,11 @@ package com.hamit.obs.service.kur;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
-import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.dto.kur.kurgirisDTO;
 import com.hamit.obs.dto.kur.kurraporDTO;
@@ -20,9 +18,6 @@ import com.hamit.obs.service.context.KurDatabaseContext;
 @Service
 public class KurService {
 
-	@Autowired
-	private ConnectionManager masterConnectionManager;
-
 	private final KurDatabaseContext databaseStrategyContext;
 	private IKurDatabase strategy;
 
@@ -30,15 +25,16 @@ public class KurService {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
 	public void initialize() {
-		if (SecurityContextHolder.getContext().getAuthentication() != null) {
-			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			UserSessionManager.removeUserByModul(useremail,modulTipi.KUR);
-			this.strategy = databaseStrategyContext.getStrategy();
-			masterConnectionManager.loadConnections(modulTipi.KUR,useremail);
-			UserSessionManager.addUserSession(useremail, modulTipi.KUR, masterConnectionManager.getConnection(modulTipi.KUR, useremail));
-		} else {
-			throw new ServiceException("No authenticated user found in SecurityContext");
-		}
+	    var auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth == null)
+	        throw new ServiceException("No authenticated user found in SecurityContext");
+	    String email = auth.getName();
+	    ConnectionDetails cd =
+	            UserSessionManager.getUserSession(email, modulTipi.KUR);
+	    UserSessionManager.addUserSession(email, modulTipi.KUR,cd);
+	    if (cd == null)
+	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
+	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 
 	public String[] conn_detail() {

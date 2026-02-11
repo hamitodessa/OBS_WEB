@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
-import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Formatlama;
 import com.hamit.obs.dto.kambiyo.bordrodetayDTO;
@@ -28,24 +27,22 @@ public class KambiyoService {
 
 	private LoglamaDTO loglamaDTO = new LoglamaDTO();
 
-	@Autowired
-	private ConnectionManager masterConnectionManager;
-
 	private final KambiyoDatabaseContext databaseStrategyContext;
 	private IKambiyoDatabase strategy;
 	public KambiyoService(KambiyoDatabaseContext databaseStrategyContext) {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
 	public void initialize() {
-		if (SecurityContextHolder.getContext().getAuthentication() != null) {
-			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			UserSessionManager.removeUserByModul(useremail,modulTipi.KAMBIYO);
-			this.strategy = databaseStrategyContext.getStrategy();
-			masterConnectionManager.loadConnections(modulTipi.KAMBIYO,useremail);
-			UserSessionManager.addUserSession(useremail, modulTipi.KAMBIYO, masterConnectionManager.getConnection(modulTipi.KAMBIYO, useremail));
-		} else {
-			throw new ServiceException("No authenticated user found in SecurityContext");
-		}
+	    var auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth == null)
+	        throw new ServiceException("No authenticated user found in SecurityContext");
+	    String email = auth.getName();
+	    ConnectionDetails cd =
+	            UserSessionManager.getUserSession(email, modulTipi.KAMBIYO);
+	    UserSessionManager.addUserSession(email, modulTipi.KAMBIYO,cd);
+	    if (cd == null)
+	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
+	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 
 	public String[] conn_detail() {

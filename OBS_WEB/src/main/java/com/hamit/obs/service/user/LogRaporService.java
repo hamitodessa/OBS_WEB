@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
-import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.exception.ServiceException;
@@ -22,9 +22,6 @@ public class LogRaporService {
 	private LoglamaRepository loglamaRepository;
 
 	@Autowired
-	private ConnectionManager masterConnectionManager;
-
-	@Autowired
 	private UserService userService;
 
 	ConnectionDetails connConnDetails ;
@@ -32,8 +29,9 @@ public class LogRaporService {
 	public List<Map<String, Object>> lograpor(String startDate,String endDate,String aciklama,modulTipi modul,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			masterConnectionManager.loadConnections(modul,useremail);
-			connConnDetails = masterConnectionManager.getConnection(modul, useremail);
+			
+			ConnectionDetails connConnDetails =
+		            UserSessionManager.getUserSession(useremail, modul);
 			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
 			return loglamaRepository.logRapor(usrString ,startDate,endDate,aciklama,pageable ,connConnDetails);
 		} catch (ServiceException e) {
@@ -49,8 +47,8 @@ public class LogRaporService {
 	public double logsize(String startDate,String endDate,modulTipi modul,String aciklama){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			masterConnectionManager.loadConnections(modul,useremail);
-			connConnDetails = masterConnectionManager.getConnection(modul, useremail);
+			ConnectionDetails connConnDetails =
+		            UserSessionManager.getUserSession(useremail, modul);
 			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
 			return loglamaRepository.log_raporsize(startDate,endDate,usrString,aciklama,connConnDetails);
 		} catch (ServiceException e) {

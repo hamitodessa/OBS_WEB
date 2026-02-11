@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
-import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.kereste.kerestedetayDTO;
@@ -26,9 +25,6 @@ import com.hamit.obs.service.context.KeresteDatabaseContext;
 @Service
 public class KeresteService {
 
-	@Autowired
-	private ConnectionManager masterConnectionManager;
-
 	private LoglamaDTO loglamaDTO = new LoglamaDTO();
 
 	@Autowired
@@ -41,15 +37,16 @@ public class KeresteService {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
 	public void initialize() {
-		if (SecurityContextHolder.getContext().getAuthentication() != null) {
-			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			UserSessionManager.removeUserByModul(useremail,modulTipi.KERESTE);
-			this.strategy = databaseStrategyContext.getStrategy();
-			masterConnectionManager.loadConnections(modulTipi.KERESTE,useremail);
-			UserSessionManager.addUserSession(useremail, modulTipi.KERESTE, masterConnectionManager.getConnection(modulTipi.KERESTE, useremail));
-		} else {
-			throw new ServiceException("No authenticated user found in SecurityContext");
-		}
+	    var auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth == null)
+	        throw new ServiceException("No authenticated user found in SecurityContext");
+	    String email = auth.getName();
+	    ConnectionDetails cd =
+	            UserSessionManager.getUserSession(email, modulTipi.KERESTE);
+	    UserSessionManager.addUserSession(email, modulTipi.KERESTE,cd);
+	    if (cd == null)
+	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
+	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 
 	public String[] conn_detail() {

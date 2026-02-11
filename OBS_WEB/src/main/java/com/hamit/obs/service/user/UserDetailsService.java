@@ -46,4 +46,8 @@ public class UserDetailsService {
 	public List<User_Details> izinlimiKontrol(String userModul, String email){
 		return userDetailsRepository.izinlimiKontrol(userModul, email);
 	}
+	
+	public List<User_Details> user_Details_All(String email) {
+	    return userDetailsRepository.findByEmailIgnoreCaseAndCalisanmiTrue(email);
+	}
 }

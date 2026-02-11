@@ -3,13 +3,11 @@ package com.hamit.obs.service.adres;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
-import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.dto.adres.adresDTO;
 import com.hamit.obs.exception.ServiceException;
@@ -20,8 +18,6 @@ import com.hamit.obs.service.context.AdresDatabaseContext;
 public class AdresService {
 //			RolEnum role = RoleUtil.resolveRolEnum(SecurityContextHolder.getContext().getAuthentication());
 
-	@Autowired
-	private ConnectionManager masterConnectionManager;
 
 	private final AdresDatabaseContext databaseStrategyContext;
 	private IAdresDatabase strategy;
@@ -30,15 +26,16 @@ public class AdresService {
 	}
 
 	public void initialize() {
-		if (SecurityContextHolder.getContext().getAuthentication() != null) {
-			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			UserSessionManager.removeUserByModul(useremail,modulTipi.ADRES);
-			this.strategy = databaseStrategyContext.getStrategy();
-			masterConnectionManager.loadConnections(modulTipi.ADRES,useremail);
-			UserSessionManager.addUserSession(useremail, modulTipi.ADRES, masterConnectionManager.getConnection(modulTipi.ADRES, useremail));
-		} else {
-			throw new ServiceException("No authenticated user found in SecurityContext");
-		}
+	    var auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth == null)
+	        throw new ServiceException("No authenticated user found in SecurityContext");
+	    String email = auth.getName();
+	    ConnectionDetails cd =
+	            UserSessionManager.getUserSession(email, modulTipi.ADRES);
+	    UserSessionManager.addUserSession(email, modulTipi.ADRES,cd);
+	    if (cd == null)
+	        throw new ServiceException("ADRES bağlantısı bulunamadı: " + email);
+	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 
 	public String[] conn_detail() {

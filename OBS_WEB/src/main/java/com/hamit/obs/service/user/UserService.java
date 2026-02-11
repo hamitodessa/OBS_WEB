@@ -52,7 +52,8 @@ public class UserService {
 		user.setRoles(roles);
 		userRepository.save(user);
 	}
-
+	
+	
 	public User getCurrentUser() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (principal instanceof UserDetails) {

@@ -18,4 +18,7 @@ public class ConnectionDetails {
 	private boolean loglama;
 	private String jdbcUrl;
 	private String jdbcUrlLog;
+	public sqlTipi getSqlTipi() {
+	    return sqlTipi;
+	}
 }

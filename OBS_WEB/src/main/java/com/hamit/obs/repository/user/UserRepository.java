@@ -23,5 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT r.name FROM User u JOIN u.roles r WHERE LOWER(u.email) = LOWER(:email)")
     List<RolEnum> getRoleNamesByEmail(@Param("email") String email);
     
+   
       
 }

@@ -2,25 +2,19 @@ package com.hamit.obs.service.context;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.enums.sqlTipi;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.cari.CariMsSQL;
 import com.hamit.obs.repository.cari.CariMySQL;
 import com.hamit.obs.repository.cari.CariPgSQL;
 import com.hamit.obs.repository.cari.ICariDatabase;
-import com.hamit.obs.service.user.UserDetailsService;
 
 @Service
 public class CariDatabaseContext {
 	private final Map<String, ICariDatabase> strategies = new HashMap<>();
 
-	@Autowired
-	private UserDetailsService userDetailsService;
 
 	public CariDatabaseContext(CariMySQL mySQL, CariMsSQL msSQL, CariPgSQL pgSQL) {
 		strategies.put(sqlTipi.MYSQL.getValue(), mySQL);
@@ -28,20 +22,10 @@ public class CariDatabaseContext {
 		strategies.put(sqlTipi.PGSQL.getValue(), pgSQL);
 	}
 
-	public ICariDatabase getStrategy() {
-		try {
-			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-	        String config = userDetailsService.findHangiSQLByUserId(modulTipi.CARI_HESAP.getDbValue(), useremail);
-	        if (config == null || config.isEmpty())
-	        	throw new ServiceException("Kullanıcıya ait SQL konfigürasyonu bulunamadı.");
-	        ICariDatabase strategy = strategies.get(config);
-	        if (strategy == null)
-	        	throw new ServiceException("Belirtilen konfigürasyona uygun strateji bulunamadı: " + config);
-	        return strategy;
-	    } catch (ServiceException e) {
-	        throw e;
-	    } catch (Exception e) {
-	        throw new ServiceException("Strateji alma sırasında beklenmeyen bir hata oluştu.", e);
-	    }
+	public ICariDatabase getStrategy(sqlTipi tip) {
+	    if (tip == null) throw new ServiceException("SQL tipi null");
+	    ICariDatabase strategy = strategies.get(tip.getValue());
+	    if (strategy == null) throw new ServiceException("Strateji bulunamadı: " + tip.getValue());
+	    return strategy;
 	}
 }

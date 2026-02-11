@@ -33,4 +33,6 @@ public interface IUserDetailsRepository extends JpaRepository<User_Details, Long
 	void updateUserDetailsCalisanmiNulle(@Param("userModul") String userModul,
 			@Param("userEmail") String userEmail,
 			@Param("userCalisanmi") boolean userCalisanmi);
+	
+	 List<User_Details> findByEmailIgnoreCaseAndCalisanmiTrue(String email);
 }

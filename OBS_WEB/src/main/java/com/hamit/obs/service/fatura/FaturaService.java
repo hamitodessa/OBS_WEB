@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
-import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.Global_Yardimci;
 import com.hamit.obs.dto.loglama.LoglamaDTO;
@@ -29,8 +28,6 @@ import com.hamit.obs.service.context.FaturaDatabaseContext;
 @Service
 public class FaturaService {
 
-	@Autowired
-	private ConnectionManager masterConnectionManager;
 	
 	private LoglamaDTO loglamaDTO = new LoglamaDTO();
 	
@@ -44,15 +41,16 @@ public class FaturaService {
 		this.databaseStrategyContext = databaseStrategyContext;
 	}
 	public void initialize() {
-		if (SecurityContextHolder.getContext().getAuthentication() != null) {
-			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			UserSessionManager.removeUserByModul(useremail,modulTipi.FATURA);
-			this.strategy = databaseStrategyContext.getStrategy();
-			masterConnectionManager.loadConnections(modulTipi.FATURA,useremail);
-			UserSessionManager.addUserSession(useremail, modulTipi.FATURA, masterConnectionManager.getConnection(modulTipi.FATURA, useremail));
-		} else {
-			throw new ServiceException("No authenticated user found in SecurityContext");
-		}
+	    var auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth == null)
+	        throw new ServiceException("No authenticated user found in SecurityContext");
+	    String email = auth.getName();
+	    ConnectionDetails cd =
+	            UserSessionManager.getUserSession(email, modulTipi.FATURA);
+	    UserSessionManager.addUserSession(email, modulTipi.FATURA,cd);
+	    if (cd == null)
+	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
+	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 	
 	public String[] conn_detail() {

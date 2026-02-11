@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
@@ -45,7 +46,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	@Autowired
 	private KeresteService keresteService;
 	
-	
+	@Autowired
+	private ConnectionManager connectionManager;
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -60,6 +62,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			UserSessionManager.removeUserSessionsByUsername(useremail);
+			
+			connectionManager.loadAllConnections(useremail);
 			
 			cariService.initialize();
 			kurService.initialize();
