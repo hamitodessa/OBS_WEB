@@ -69,19 +69,15 @@
 }
 
 /* error div (id=hsperrorDiv) */
-#secondModal #hsperrorDiv{
-  padding: 8px 12px;
-}
+
 
 /* 3) Table container: gerçek scroll burada */
 #secondModal .modall-table-container{
   overflow: auto;
   height: calc(600px - 70px); /* gerekirse 80 yap */
-
   border-top: 1px solid rgba(255,255,255,.10) !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
   background: rgba(255,255,255,.02) !important;
-  
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
@@ -152,10 +148,10 @@
 
 /* Optional: row height (HTML’de class="table-row-height" var) */
 #secondModal table.modal-table.table-row-height td{
-  height: 20px;
+  height: 18px;
   line-height: 18px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 #secondModal #hsperrorDiv{
@@ -168,3 +164,18 @@
   color: #fff;
   font-weight: 900;
 }
+
+#secondModal #btnKapat{
+  
+  margin-top: 2px;
+  border-radius: 8px 8px 18px 18px !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+}
+
+#secondModal #kapatbtn{
+  width: 100%;
+  border-radius: 8px 8px 18px 18px !important;
+  
+}
+
