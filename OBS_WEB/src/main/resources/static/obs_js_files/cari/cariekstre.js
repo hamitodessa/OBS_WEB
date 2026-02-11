@@ -71,16 +71,16 @@ OBS.EKSTRE.updatePaginationUI = (disableAllWhileLoading = false) => {
 };
 
 /* ---------- global button functions (HTML onclick aynı kalsın) ---------- */
-window.ilksayfa = function() {
+OBS.EKSTRE.ilksayfa = function() {
     if (OBS.EKSTRE.currentPage > 0) OBS.EKSTRE.eksfetchTableData(0);
 };
-window.oncekisayfa = function() {
+OBS.EKSTRE.oncekisayfa = function() {
     if (OBS.EKSTRE.currentPage > 0) OBS.EKSTRE.eksfetchTableData(OBS.EKSTRE.currentPage - 1);
 };
-window.sonrakisayfa = function() {
+OBS.EKSTRE.sonrakisayfa = function() {
     if (OBS.EKSTRE.currentPage < OBS.EKSTRE.totalPages - 1) OBS.EKSTRE.eksfetchTableData(OBS.EKSTRE.currentPage + 1);
 };
-window.sonsayfa = function() {
+OBS.EKSTRE.sonsayfa = function() {
     if (OBS.EKSTRE.totalPages > 0) OBS.EKSTRE.eksfetchTableData(OBS.EKSTRE.totalPages - 1);
 };
 
