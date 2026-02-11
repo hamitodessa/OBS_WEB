@@ -103,7 +103,7 @@ const pageModules = {
     "/cari/ornekhesapplani": { js: "/obs_js_files/cari/ornhsppln.js", init: "cariBaslik" },
     "/cari/carikoddegis": { js: "/obs_js_files/cari/koddegis.js", init: "cariBaslik" },
 
-    /* ✅ TEK entry: firmaismi (modul parametre ile seçilecek) */
+    
     "/obs/firmaismi": {
         js: "/obs_js_files/ortak/firmaismi.js",
         init: (params) => {
@@ -239,9 +239,10 @@ const pageModules = {
             if (typeof OBS?.DEGISKENLER?.init === "function") OBS.DEGISKENLER.init();
         }
     },
-
+//
     "/kereste/giris": {
-        js: "/obs_js_files/kereste/giris.js",
+		js: ["/obs_js_files/inputmask/inputmask.min.js",
+		     "/obs_js_files/kereste/giris.js"],
         init: () => {
             if (typeof window.keresteBaslik === "function") window.keresteBaslik();
             if (typeof OBS?.KERGIRIS?.init === "function") OBS.KERGIRIS.init();
@@ -249,7 +250,8 @@ const pageModules = {
     },
 
     "/kereste/cikis": {
-        js: "/obs_js_files/kereste/cikis.js",
+		js: ["/obs_js_files/inputmask/inputmask.min.js",
+		     "/obs_js_files/kereste/cikis.js"],
         init: () => {
             if (typeof window.keresteBaslik === "function") window.keresteBaslik();
             if (typeof OBS?.KERCIKIS?.init === "function") OBS.KERCIKIS.init();
@@ -257,7 +259,8 @@ const pageModules = {
     },
 
     "/kereste/koddegis": {
-        js: "/obs_js_files/kereste/koddegis.js",
+		js: ["/obs_js_files/inputmask/inputmask.min.js",
+			"/obs_js_files/kereste/koddegis.js"],
         init: () => {
             if (typeof window.keresteBaslik === "function") window.keresteBaslik();
             if (typeof OBS?.KODDEGIS?.init === "function") OBS.KODDEGIS.init();
@@ -391,48 +394,28 @@ async function runPageModule(url) {
     if (typeof fn === "function") fn(params, u);
 }
 
-/* -------------------------
-   Main loader
-   ------------------------- */
-async function sayfaYukle(url) {
-    const ara = ROOT.ara;
-    const baslik = ROOT.baslik;
-    if (!ara) return;
-    try {
-        if (baslik) baslik.innerText = "";
-        document.body.style.cursor = "wait";
-        const res = await fetch(url, {
-            method: "GET",
-            credentials: "same-origin",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-            cache: "no-store"
-        });
-        if (res.status === 401) { window.location.href = "/login"; return; }
-        const data = await res.text();
-        if (data.includes("<form") && data.includes('name="username"')) {
-            window.location.href = "/login";
-            return;
-        }
-        if (!res.ok) {
-            ara.innerHTML = `<div class="cam-error">Serverda hata: ${res.status} - ${res.statusText || "error"}</div>`;
-            return;
-        }
-        ara.innerHTML = data;
-        try {
-            await runPageModule(url);
-        } catch (e) {
-            ara.innerHTML += `<div class="cam-error">${e.message}</div>`;
-        }
-        const p = new URL(url, location.origin).pathname;
-        if (window.urlActions && typeof window.urlActions[p] === "function") {
-            try { window.urlActions[p](); } catch (e) {}
-        }
-    } catch (e) {
-        ara.innerHTML = `<div class="cam-error">Bir hata: ${e?.message ?? "Bilinmeyen hata"}</div>`;
-    } finally {
-        document.body.style.cursor = "default";
-    }
-}
+   async function sayfaYukle(url) {
+     const ara = ROOT.ara;
+     const baslik = ROOT.baslik;
+     if (!ara) return;
+     try {
+       if (baslik) baslik.innerText = "";
+       const html = await fetchWithSessionCheckForm(url);
+       if (!html) return;
+       ara.innerHTML = html;
+       try {
+         await runPageModule(url);
+       } catch (e) {
+         ara.innerHTML += `<div class="cam-error">${e.message}</div>`;
+       }
+       const p = new URL(url, location.origin).pathname;
+       if (window.urlActions?.[p]) {
+         try { window.urlActions[p](); } catch {}
+       }
+     } catch (e) {
+       ara.innerHTML = `<div class="cam-error">Bir hata: ${e?.message ?? "Bilinmeyen hata"}</div>`;
+     }
+   }
 
 document.addEventListener("click", (e) => {
     const link = e.target.closest(".changeLink");
