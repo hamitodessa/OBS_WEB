@@ -43,9 +43,8 @@ public class KeresteService {
 	    String email = auth.getName();
 	    ConnectionDetails cd =
 	            UserSessionManager.getUserSession(email, modulTipi.KERESTE);
-	    UserSessionManager.addUserSession(email, modulTipi.KERESTE,cd);
 	    if (cd == null)
-	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
+	        throw new ServiceException("Kereste bağlantısı bulunamadı: " + email);
 	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 

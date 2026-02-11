@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.config.UserSessionManager;
+import com.hamit.obs.connection.ConnectionManager;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
 import com.hamit.obs.dto.user.UserRowDTO;
@@ -65,7 +66,9 @@ public class UserIzinleriController {
 	private UserListService userListService;
 	@Autowired
 	private ForumService forumService;
-
+	@Autowired
+	private ConnectionManager connectionManager;
+	
 	@GetMapping("user/userizinler")
 	public String user_detailss() {
 	    User user = userService.getCurrentUser();
@@ -158,6 +161,7 @@ public class UserIzinleriController {
 			userDetailsService.saveUserDetails(userDetails);
 			response.put("errorMessage", ""); 
 			modulTipi modultip = modulTipi.fromDbValue(userDetails.getUser_modul());
+			connectionManager.loadAllConnections(user.getEmail());
 			switch (modultip) {
 			case CARI_HESAP -> cariService.initialize();
 			case KUR        -> kurService.initialize();

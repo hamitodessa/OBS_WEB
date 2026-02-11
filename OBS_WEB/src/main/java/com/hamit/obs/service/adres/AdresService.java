@@ -32,7 +32,6 @@ public class AdresService {
 	    String email = auth.getName();
 	    ConnectionDetails cd =
 	            UserSessionManager.getUserSession(email, modulTipi.ADRES);
-	    UserSessionManager.addUserSession(email, modulTipi.ADRES,cd);
 	    if (cd == null)
 	        throw new ServiceException("ADRES bağlantısı bulunamadı: " + email);
 	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());

@@ -39,9 +39,8 @@ public class KambiyoService {
 	    String email = auth.getName();
 	    ConnectionDetails cd =
 	            UserSessionManager.getUserSession(email, modulTipi.KAMBIYO);
-	    UserSessionManager.addUserSession(email, modulTipi.KAMBIYO,cd);
 	    if (cd == null)
-	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
+	        throw new ServiceException("Kambiyo bağlantısı bulunamadı: " + email);
 	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 

@@ -54,9 +54,7 @@ public class CariService {
 	    if (auth == null)
 	        throw new ServiceException("No authenticated user found in SecurityContext");
 	    String email = auth.getName();
-	    ConnectionDetails cd =
-	            UserSessionManager.getUserSession(email, modulTipi.CARI_HESAP);
-	    UserSessionManager.addUserSession(email, modulTipi.CARI_HESAP,cd);
+	    ConnectionDetails cd = UserSessionManager.getUserSession(email, modulTipi.CARI_HESAP);
 	    if (cd == null)
 	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
 	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());

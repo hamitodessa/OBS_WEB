@@ -31,9 +31,8 @@ public class KurService {
 	    String email = auth.getName();
 	    ConnectionDetails cd =
 	            UserSessionManager.getUserSession(email, modulTipi.KUR);
-	    UserSessionManager.addUserSession(email, modulTipi.KUR,cd);
 	    if (cd == null)
-	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
+	        throw new ServiceException("Kur bağlantısı bulunamadı: " + email);
 	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 

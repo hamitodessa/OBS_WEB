@@ -47,9 +47,8 @@ public class FaturaService {
 	    String email = auth.getName();
 	    ConnectionDetails cd =
 	            UserSessionManager.getUserSession(email, modulTipi.FATURA);
-	    UserSessionManager.addUserSession(email, modulTipi.FATURA,cd);
 	    if (cd == null)
-	        throw new ServiceException("CARI bağlantısı bulunamadı: " + email);
+	        throw new ServiceException("Stok bağlantısı bulunamadı: " + email);
 	    this.strategy = databaseStrategyContext.getStrategy(cd.getSqlTipi());
 	}
 	
