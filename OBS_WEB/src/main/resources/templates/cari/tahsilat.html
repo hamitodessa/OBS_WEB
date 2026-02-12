@@ -12,37 +12,34 @@
 
 /* ===== CARD / ÜST TAB BAR ===== */
 #ara_content .card{
+  padding: 5px !important;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-
 }
 
 /* ===== NAV TABS ===== */
+/* NAV TABS */
 #ara_content .nav-tabs{
-  border-bottom: 1px solid rgba(255,255,255,.14);
-  gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,.14) !important;
+  gap: 6px;
 }
 #ara_content .nav-tabs .nav-link{
   border: 1px solid rgba(255,255,255,.14) !important;
-  background: rgba(255,255,255,.04) !important;
-  color: rgba(255,255,255,.80) !important;
+  border-bottom: none !important;
+  background: rgba(255,255,255,.06) !important;
+  color: rgba(255,255,255,.78) !important;
   border-radius: 14px 14px 0 0 !important;
-  padding: 10px 14px;
   font-weight: 900;
-  transition: .16s ease;
-}
-#ara_content .nav-tabs .nav-link:hover{
-  background: rgba(255,255,255,.08) !important;
-  transform: translateY(-2px);
+  padding: 8px 12px;
 }
 #ara_content .nav-tabs .nav-link.active{
-  background: rgba(56,189,248,.16) !important;
+  background: linear-gradient(135deg, rgba(56,189,248,.28), rgba(34,197,94,.18)) !important;
   color: #fff !important;
-  border-color: rgba(56,189,248,.35) !important;
+  box-shadow: inset 0 0 0 1px rgba(56,189,248,.35);
 }
 
 /* ===== ANA PANEL (TEK KUTU) ===== */
@@ -231,15 +228,23 @@
 }
 
 #ara_content #cektablecontainer {
-  margin-top:8px; 
-  border-radius:10px; 
-  overflow:auto; 
-  border:1px solid rgba(255,255,255,.14); 
+  height: 55vh;
+  display:flex;
+  flex-direction:column;
+  flex-grow:1;
+
+  margin-top:10px;
+  padding:0;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+  border-radius:12px;
+  overflow:auto;
+
   background: rgba(255,255,255,.03);
 
- scrollbar-width: thin;
+  scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
-  
 }
  
 /* =========================
@@ -247,24 +252,26 @@
    ========================= */
 #ara_content #cekTable{
   width: 100%;
-  margin-top: 5px;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius:10px;
+ 
+  min-width:1000px;
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:12px;
+  overflow:hidden;
+  font-size:13px;
 }
 
 /* header */
 #ara_content #cekTable thead th{
-  position: sticky;
+   position: sticky;
   top: 0;
-  z-index: 2;
-  background: linear-gradient(180deg,#1f3b5c,#162b44);
-  color: #fff;
-  font-size: 13px;
+  z-index: 3;
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  border: none !important;
   font-weight: 900;
   text-align: left;
-  white-space: nowrap;
-  border: 1px solid rgba(255,255,255,.08);
+  
 }
 
 /* sadece alt çizgi */
@@ -525,7 +532,6 @@
 			<!-- SATIR 5: checkbox -->
 			<div class="group-box">
         <div class="form-row">
-         
             <input type="checkbox" class="form-check-input" style="margin-left:10px;" id="fisnoyazdir">
             <label class="form-check-label" for="fisnoyazdir">Yazicida Fis No Yazdir</label>
           
@@ -541,9 +547,7 @@
           <button class="btn btn-primary" type="button" id="carikaydetButton" onclick="openFirstModal('tahsilatckaydet')">Cari Kaydet</button>
         </div>
       </div>
-
       <div id="errorDiv"></div>
-
     </div>
   </div>
 
