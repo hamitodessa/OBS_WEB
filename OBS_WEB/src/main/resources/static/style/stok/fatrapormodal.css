@@ -207,7 +207,6 @@
    FATRAP PATCH – sağ select geniş + grid boşluk
    ========================= */
 
-/* GRID boşlukları + hizalama */
 #ara_content .modal-fatrap .input-group{
   margin: 0 0 8px 0 !important;
   padding: 0 !important;
@@ -215,28 +214,23 @@
   row-gap: 8px !important;
   align-items: center !important;
 
-  /* sağ blok select’ler daha geniş */
   grid-template-columns:
     130px minmax(160px, 1fr) minmax(160px, 1fr)
     130px minmax(260px, 1.6fr) minmax(260px, 1.6fr) !important;
 }
 
-/* Sağ taraftaki select-wrap minimum genişlik */
 #ara_content .modal-fatrap .input-group > .select-wrap{
   min-width: 260px !important;
 }
 
-/* İçindeki select de tam yayılsın */
 #ara_content .modal-fatrap .input-group > .select-wrap .form-select{
   width: 100% !important;
 }
 
-/* Tek label olan satırlar (urun/tevkifat gibi) aynı kalsın */
 #ara_content .modal-fatrap .input-group:not(:has(.input-group-text ~ .input-group-text)){
   grid-template-columns: 130px minmax(160px, 1fr) minmax(160px, 1fr) !important;
 }
 
-/* Çok dar ekranlarda taşmayı önle */
 @media (max-width: 1200px){
   #ara_content .modal-fatrap .input-group{
     grid-template-columns:
@@ -247,4 +241,3 @@
     min-width: 220px !important;
   }
 }
-

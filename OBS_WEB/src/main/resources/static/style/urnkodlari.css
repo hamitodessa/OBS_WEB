@@ -198,31 +198,25 @@
   border-radius: 0 0 18px 18px !important;
 }
 
-/* Gradient'i öldüren beyaz tablo/hücre backgroundlarını sıfırla */
 #urnsecondModal table.urnsecond-modal-table{
   background: transparent !important;
 }
 
-/* Bootstrap / global td background kapatıyorsa */
 #urnsecondModal table.urnsecond-modal-table tbody td{
   background: transparent !important;
 }
 
-/* Header zaten sende gradient; yine de garanti */
 #urnsecondModal table.urnsecond-modal-table thead th{
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
 }
-/* Normal durumda yazıları beyaz yap */
 #urnsecondModal table.urnsecond-modal-table tbody td{
   color: rgba(255,255,255,.86) !important;
 }
 
-/* İstersen satır bazlı da (bazı css tr'ye basar) */
 #urnsecondModal table.urnsecond-modal-table tbody tr{
   color: rgba(255,255,255,.86) !important;
 }
 
-/* Hover sende zaten var; garanti olsun */
 #urnsecondModal table.urnsecond-modal-table.table-hover tbody tr:hover td{
   color: #fff !important;
 }

@@ -203,19 +203,4 @@
   border-spacing: 0 !important;
 }
 
-/* colgroup’u CSS ile kilitle (inline kalsa da fark etmez) */
-#secondModal .cam26-secondmodal #modalTable col:nth-child(1){ width: 50px !important; }
-#secondModal .cam26-secondmodal #modalTable col:nth-child(2){ width: 170px !important; }
-#secondModal .cam26-secondmodal #modalTable col:nth-child(3){ width: 40px !important; }
-#secondModal .cam26-secondmodal #modalTable col:nth-child(4){ width: 40px !important; }
 
-/* Hücrelerin genişlememesini garanti et */
-#secondModal .cam26-secondmodal #modalTable th,
-#secondModal .cam26-secondmodal #modalTable td{
-  min-width: 0 !important;
-  max-width: 0 !important;   /* <<< kilit */
-  width: auto !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
