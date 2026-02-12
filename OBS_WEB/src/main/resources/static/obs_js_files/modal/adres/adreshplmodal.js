@@ -38,7 +38,7 @@ async function openadrkodlariModal(inputId, secondnerden) {
         for (const row of data) {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-        <td style="min-width:20%;">${row?.M_Kodu ?? ""}</td>
+        <td>${row?.M_Kodu ?? ""}</td>
         <td>${row?.Adi ?? ""}</td>
       `;
             tr.addEventListener("click", () => adrselectValue(inputId, row?.M_Kodu ?? "", secondnerden));
@@ -57,7 +57,7 @@ async function openadrkodlariModal(inputId, secondnerden) {
     }
 }
 
-// select
+
 function adrselectValue(inputId, selectedKodu, secondnerden) {
     modalHide("adrsecondModal");
 
@@ -67,9 +67,11 @@ function adrselectValue(inputId, selectedKodu, secondnerden) {
     const searchEl = document.getElementById("adrsecond-modalSearch");
     if (searchEl) searchEl.value = "";
 
-    if (secondnerden === "fatura" || secondnerden === "irsaliye") {
+    if (secondnerden === "fatura" || secondnerden === "irsaliye" ) {
         adrhesapAdiOgren(inputId, "adresadilbl");
-    }
+    }else if (secondnerden === "tahsilat") {
+				        adrhesapAdiOgren(inputId, "lbladrheskod");
+		}
 }
 
 // filter

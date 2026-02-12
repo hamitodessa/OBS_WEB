@@ -5,30 +5,28 @@
    + .adrsecond-modall-table-container + table#adrsecond-modalTable.adrsecond-modal-table
    ========================= */
 
-/* 1) Modal cam görünüm */
+#adrsecondModal .modal-dialog{
+  max-width: 600px;
+  width: 600px;
+}
+
+/* ================= CONTENT ================= */
 #adrsecondModal .modal-content{
   background: rgba(8,14,26,.96) !important;
   color: rgba(255,255,255,.94) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px !important;
   box-shadow: 0 22px 65px rgba(0,0,0,.55) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  overflow: hidden !important; /* scroll içeride değil container'da */
+  overflow: hidden !important;
 }
 
-/* Header (search + close) */
+/* ================= HEADER ================= */
 #adrsecondModal .modal-header{
   position: relative;
   gap: 10px;
   align-items: center;
-  padding: 12px 12px !important;
-
-  background: linear-gradient(180deg,
-    rgba(31,59,92,.92),
-    rgba(22,43,68,.92)
-  ) !important;
-
+  padding: 12px !important;
+  background: linear-gradient(180deg,rgba(31,59,92,.92),rgba(22,43,68,.92)) !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
 }
 
@@ -45,129 +43,163 @@
   );
 }
 
-/* Close butonu */
-#adrsecondModal .btn-close{
+/* Close */
+#adrsecondModal .modal-header .btn-close{
   filter: invert(1) grayscale(100%);
-  opacity: .85;
+  opacity: .7;
+  transition: all .2s ease;
 }
-#adrsecondModal .btn-close:hover{ opacity: 1; }
+#adrsecondModal .modal-header .btn-close:hover{
+  opacity: 1;
+  transform: scale(1.15);
+  filter: invert(1) drop-shadow(0 0 6px rgba(56,189,248,.6));
+}
 
-/* 2) Search input */
-#adrsecondModal #adrsecond-modalSearch{
-  height: 46px !important;
-  border-radius: 14px !important;
+/* ================= SEARCH ================= */
+#adrsecondModal #modalSearch{
+  height: 40px !important;
+  border-radius: 12px !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
 }
-#adrsecondModal #adrsecond-modalSearch::placeholder{
+#adrsecondModal #modalSearch::placeholder{
   color: rgba(255,255,255,.55) !important;
-  font-weight: 700;
 }
-#adrsecondModal #adrsecond-modalSearch:focus{
+#adrsecondModal #modalSearch:focus{
   border-color: rgba(56,189,248,.70) !important;
   box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
   background: rgba(8,14,26,.70) !important;
   color: #fff !important;
 }
 
-/* error div */
-#adrsecondModal #adrsecond-errorDiv{
-  padding: 8px 12px;
-  border-top: 1px solid rgba(255,255,255,.06);
-  color: #fff !important;
-}
-
-/* 3) Table container (gerçek scroll burada) */
-#adrsecondModal .adrsecond-modall-table-container{
-  overflow: auto;
-  height: calc(600px - 70px); /* header yüksekliği değişirse 80 yap */
-
-  border-top: 1px solid rgba(255,255,255,.10) !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  background: rgba(255,255,255,.02) !important;
-  
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
-}
-
-/* 4) Table */
-#adrsecondModal table.adrsecond-modal-table{
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 13px;
-  color: rgba(255,255,255,.86);
-
-  --bs-table-bg: transparent !important;
-  --bs-table-color: rgba(255,255,255,.86) !important;
-  --bs-table-border-color: rgba(255,255,255,.08) !important;
-  --bs-table-accent-bg: transparent !important;
-  --bs-table-striped-bg: transparent !important;
-  --bs-table-hover-bg: rgba(56,189,248,.14) !important;
-  --bs-table-active-bg: rgba(56,189,248,.18) !important;
-}
-
-/* Cells */
-#adrsecondModal table.adrsecond-modal-table th,
-#adrsecondModal table.adrsecond-modal-table td{
-  text-align: left;
-  vertical-align: middle;
-  white-space: nowrap;
-  padding: 8px 10px;
-  border: 1px solid rgba(255,255,255,.08) !important;
-
-  background-color: transparent !important;
-  background-image: none !important;
-}
-
-/* Header sticky */
-#adrsecondModal table.adrsecond-modal-table thead th{
-  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
-  color: #ffffff !important;
-  border-bottom: 1px solid rgba(255,255,255,.12) !important;
-  font-weight: 900;
-
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-/* Hover (mavi) */
-#adrsecondModal table.adrsecond-modal-table.table-hover tbody tr:hover td{
-  background: rgba(56,189,248,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Seçili satır (yeşil) – kalıcı seçim */
-#adrsecondModal table.adrsecond-modal-table tbody tr.selected td{
-  background: rgba(34,197,94,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Bootstrap state class’larını kontrol et */
-#adrsecondModal #adrsecond-modalTable tbody tr.table-active > td,
-#adrsecondModal #adrsecond-modalTable tbody tr.active > td,
-#adrsecondModal #adrsecond-modalTable tbody tr.table-success > td{
-  background-color: rgba(56,189,248,.18) !important;
-  color: #fff !important;
-}
-
-/* Optional: satır yüksekliği (daha kompakt istersen) */
-#adrsecondModal table.adrsecond-modal-table td{
-  height: 20px;
-  line-height: 18px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
+/* ================= ERROR ================= */
 #adrsecondModal #adrsecond-errorDiv{
   display:none;
-  margin-top: 12px;
   padding: 10px 12px;
+  margin: 10px 12px 0;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
   background: rgba(251,113,133,.10);
   color: #fff;
   font-weight: 900;
 }
+
+/* ================= TABLE CONTAINER ================= */
+#adrsecondModal .adrsecond-modall-table-container{
+  height: 500px;
+  overflow: auto;
+  margin-top: 5px;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  border-radius: 8px !important;
+  position: relative;
+
+  background:
+    radial-gradient(1200px 420px at 10% 0%,
+      rgba(56,189,248,.22),
+      rgba(56,189,248,0) 55%),
+    radial-gradient(900px 520px at 95% 110%,
+      rgba(34,197,94,.16),
+      rgba(34,197,94,0) 58%),
+    linear-gradient(180deg,
+      rgba(8,14,26,.78),
+      rgba(8,14,26,.62)) !important;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+}
+
+#adrsecondModal .adrsecond-modall-table-container::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,.10),
+      rgba(255,255,255,0) 22%,
+      rgba(255,255,255,0) 80%,
+      rgba(255,255,255,.06));
+  opacity:.35;
+}
+
+/* ================= TABLE ================= */
+#adrsecondModal table.adrsecond-modal-table{
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+  color: rgba(255,255,255,.86);
+  background: transparent !important;
+}
+
+/* Cells */
+#adrsecondModal table.adrsecond-modal-table th,
+#adrsecondModal table.adrsecond-modal-table td{
+  padding: 6px 8px;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: transparent !important;
+}
+
+/* Body text */
+#adrsecondModal table.adrsecond-modal-table tbody td{
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .3px;
+}
+
+/* Sticky header */
+#adrsecondModal table.adrsecond-modal-table thead th{
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+  color: #fff !important;
+  font-weight: 900;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+#adrsecondModal table.adrsecond-modal-table.table-hover tbody tr:hover td{
+  color: #fff !important;
+}
+
+#adrsecondModal table.adrsecond-modal-table tbody td{
+  color: rgba(255,255,255,.86) !important;
+}
+
+/* ================= FOOTER BUTTON ================= */
+#adrsecondModal #kapatbtn{
+  display: block;
+  width: 100%;
+  height: 42px;
+  margin: 5px 0 0;
+  border-radius: 0 0 18px 18px !important;
+
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
+  transition: .16s ease;
+  font-weight: 800;
+}
+
+#adrsecondModal #kapatbtn:hover{
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
+}
+
+
+#adrsecondModal .cam26-secondmodal #adrsecond-modalTable{
+  table-layout: fixed !important;
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+

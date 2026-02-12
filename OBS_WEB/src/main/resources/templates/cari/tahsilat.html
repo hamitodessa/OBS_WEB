@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="style/yenihsppln.css" />
+<link rel="stylesheet" href="style/adrkodlari.css" />
 
 <style>
 /* =========================
@@ -229,7 +230,18 @@
   box-shadow: 0 0 0 3px rgba(56,189,248,.35);
 }
 
+#ara_content #cektablecontainer {
+  margin-top:8px; 
+  border-radius:10px; 
+  overflow:auto; 
+  border:1px solid rgba(255,255,255,.14); 
+  background: rgba(255,255,255,.03);
 
+ scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+  
+}
+ 
 /* =========================
    TAB2 - CEK TABLE (hover YOK)
    ========================= */
@@ -238,7 +250,7 @@
   margin-top: 5px;
   border-collapse: separate;
   border-spacing: 0;
-  
+  border-radius:10px;
 }
 
 /* header */
@@ -454,7 +466,8 @@
 					<div style="position: relative; width: 140px;">
 						<input class="form-control cins_bold"
 							oninput="adrhesapAdiOgren('adresheskod','lbladrheskod')"
-							list="adreskoduOptions" maxlength="12" id="adresheskod">
+							list="adreskoduOptions" maxlength="12" id="adresheskod"
+							ondblclick="openadrkodlariModal('adresheskod', 'tahsilat')">
 						<datalist id="adreskoduOptions"></datalist>
 						 <span class="select-arrow">▼</span>
 					</div>
@@ -541,9 +554,9 @@
       <i class="fa fa-plus"></i>
     </button>
 
-    <div style="margin-top:8px; border-radius:10px; overflow:auto; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.03);">
+    <div id="cektablecontainer">
       <table class="table" id="cekTable">
-        <thead class="thead-dark">
+        <thead>
           <tr>
             <th style="width:25px;"></th>
             <th>Banka</th>
@@ -573,6 +586,6 @@
 
 <div th:replace="~{modal/borc_alacak :: modalborcalacak}"></div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>
-
+<div th:replace="~{modal/adres/adrhplnmodal :: adrsecondModal}"></div>
 
 
