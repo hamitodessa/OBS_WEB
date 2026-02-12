@@ -1,31 +1,31 @@
 /* =========================
-   URN SECOND MODAL (S026 CAM)
+   URN SECOND MODAL (S026 CAM – CLEAN)
    ========================= */
 
+/* DIALOG */
 #urnsecondModal .modal-dialog{
-  max-width: 1000px;         /* min-width yerine bootstrap mantığı */
+  max-width: 1000px;
   width: 1000px;
 }
 
-/* modal-content */
+/* CONTENT */
 #urnsecondModal .modal-content{
-  background: rgba(8,14,26,.96) !important;
-  color: rgba(255,255,255,.94) !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  border-radius: 18px !important;
-  box-shadow: 0 22px 65px rgba(0,0,0,.55) !important;
-  overflow: hidden !important;
- }
+  background: rgba(8,14,26,.96);
+  color: rgba(255,255,255,.94);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 18px;
+  box-shadow: 0 22px 65px rgba(0,0,0,.55);
+  overflow: hidden;
+}
 
-
-/* Header */
+/* HEADER */
 #urnsecondModal .modal-header{
   position: relative;
   gap: 10px;
   align-items: center;
-  padding: 12px !important;
-  background: linear-gradient(180deg,rgba(31,59,92,.92),rgba(22,43,68,.92)) !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  padding: 12px;
+  background: linear-gradient(180deg,rgba(31,59,92,.92),rgba(22,43,68,.92));
+  border-bottom: 1px solid rgba(255,255,255,.10);
 }
 
 #urnsecondModal .modal-header::after{
@@ -41,144 +41,9 @@
   );
 }
 
-/* Close */
-#urnsecondModal .btn-close{
-  filter: invert(1) grayscale(100%);
-  opacity: .85;
-}
-#urnsecondModal .btn-close:hover{ opacity: 1; }
-
-/* Search */
-#urnsecondModal #urnsecond-modalSearch{
-  height: 40px !important;
-  border-radius: 12px !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(8,14,26,.55) !important;
-  color: rgba(255,255,255,.92) !important;
-}
-#urnsecondModal #urnsecond-modalSearch::placeholder{ color: rgba(255,255,255,.55) !important; }
-#urnsecondModal #urnsecond-modalSearch{
-  border-color: rgba(56,189,248,.70) !important;
-  box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
-  background: rgba(8,14,26,.70) !important;
-  color: #fff !important;
-}
-
-/* Error */
-#urnsecondModal #stkerrorDiv{
-  display:none;
-  padding: 10px 12px;
-  margin: 10px 12px 0 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(251,113,133,.35);
-  background: rgba(251,113,133,.10);
-  color: #fff;
-  font-weight: 900;
-}
-
-/* Table container: scroll burada */
-#urnsecondModal .modall-table-container{
-  height: 500px;
-  overflow: auto;
-  margin-top: 5px;
-  border: 1px solid rgba(255,255,255,.12) !important;
-  border-radius: 8px !important;
-
-  /* CAM2026 glass gradient */
-  background:
-    radial-gradient(1200px 420px at 10% 0%,
-      rgba(56,189,248,.22),
-      rgba(56,189,248,0) 55%),
-    radial-gradient(900px 520px at 95% 110%,
-      rgba(34,197,94,.16),
-      rgba(34,197,94,0) 58%),
-    linear-gradient(180deg,
-      rgba(8,14,26,.78),
-      rgba(8,14,26,.62)) !important;
-
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
-
-  position: relative;
-  
-}
-
-/* hafif parıltı/shine */
-#urnsecondModal .modall-table-container::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    linear-gradient(180deg,
-      rgba(255,255,255,.10),
-      rgba(255,255,255,0) 22%,
-      rgba(255,255,255,0) 80%,
-      rgba(255,255,255,.06));
-  opacity:.35;
-}
-
-/* Table */
-#urnsecondModal table.urnsecond-modal-table{
-  width: 100%;
-  min-width: 0;
-  border-radius: 5px !important;
-  border-collapse: separate;
-  border-spacing: 0;
-  table-layout: fixed;
-  font-size: 13px;
-  color: rgba(255,255,255,.86);
-  
-}
-
-/* Cells */
-#urnsecondModal table.urnsecond-modal-table th,
-#urnsecondModal table.urnsecond-modal-table td{
-  padding: 6px 8px;
-  border: 1px solid rgba(255,255,255,.08) !important;
-  white-space: nowrap;
-  overflow: hidden;         
-  text-overflow: ellipsis;
-}
-
-#urnsecondModal table.urnsecond-modal-table tbody td{
- 
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .3px;
-}
-/* Header sticky */
-#urnsecondModal table.urnsecond-modal-table thead th{
-  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
-  color: #fff !important;
-  font-weight: 900;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-/* Hover */
-#urnsecondModal table.urnsecond-modal-table.table-hover tbody tr:hover td{
-  background: rgba(56,189,248,.14) !important;
-  color: #fff !important;
-}
-
-/* Compact rows */
-#urnsecondModal table.urnsecond-modal-table.table-row-height td{
-  height: 20px;
-  line-height: 20px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
-/* Footer button */
-#urnsecondModal .btn-close{
-  padding: 0 12px 12px 12px;
-}
+/* CLOSE BUTTON */
 #urnsecondModal .modal-header .btn-close{
+  filter: invert(1) grayscale(100%);
   opacity: .7;
   transition: all .2s ease;
 }
@@ -189,34 +54,137 @@
   filter: invert(1) drop-shadow(0 0 6px rgba(56,189,248,.6));
 }
 
+/* SEARCH */
+#urnsecondModal #urnsecond-modalSearch{
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(56,189,248,.70);
+  background: rgba(8,14,26,.70);
+  color: #fff;
+  box-shadow: 0 0 0 5px rgba(56,189,248,.18);
+}
 
+#urnsecondModal #urnsecond-modalSearch::placeholder{
+  color: rgba(255,255,255,.55);
+}
+
+/* ERROR */
+#urnsecondModal #stkerrorDiv{
+  display:none;
+  padding: 10px 12px;
+  margin: 10px 12px 0;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* TABLE CONTAINER */
+#urnsecondModal #mdlcontent .modall-table-container{
+  position: relative;
+  height: 500px;
+  overflow: auto;
+  margin-top: 5px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+
+  background:
+    radial-gradient(1200px 420px at 10% 0%,
+      rgba(56,189,248,.22),
+      rgba(56,189,248,0) 55%),
+    radial-gradient(900px 520px at 95% 110%,
+      rgba(34,197,94,.16),
+      rgba(34,197,94,0) 58%),
+    linear-gradient(180deg,
+      rgba(8,14,26,.78),
+      rgba(8,14,26,.62));
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+}
+
+#urnsecondModal #mdlcontent .modall-table-container::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(180deg,
+      rgba(255,255,255,.10),
+      rgba(255,255,255,0) 22%,
+      rgba(255,255,255,0) 80%,
+      rgba(255,255,255,.06));
+  opacity:.35;
+}
+
+/* TABLE */
+/* TABLE */
+#urnsecondModal #urnsecond-modalTableContainer .urnsecond-modal-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: 13px;
+  background: transparent;
+}
+
+/* CELLS */
+#urnsecondModal #urnsecond-modalTableContainer .urnsecond-modal-table th,
+#urnsecondModal #urnsecond-modalTableContainer .urnsecond-modal-table td{
+  padding: 6px 8px;
+  border: 1px solid rgba(255,255,255,.08);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* NORMAL SATIR */
+#urnsecondModal #urnsecond-modalTableContainer .urnsecond-modal-table tbody tr{
+  background: transparent;
+}
+
+#urnsecondModal #urnsecond-modalTableContainer .urnsecond-modal-table tbody td{
+  background: transparent;
+  color: rgba(255,255,255,.92);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .3px;
+}
+
+/* HOVER */
+#urnsecondModal #urnsecond-modalTableContainer .urnsecond-modal-table.table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.25);
+  color: #fff;
+  transition: all .15s ease;
+}
+
+/* STICKY HEADER */
+#urnsecondModal #urnsecond-modalTableContainer .urnsecond-modal-table thead th{
+  background: linear-gradient(180deg,#1f3b5c,#162b44);
+  color: #fff;
+  font-weight: 900;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* COMPACT ROW */
+#urnsecondModal #urnsecond-modalTableContainer .urnsecond-modal-table.table-row-height td{
+  height: 20px;
+  line-height: 20px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* FOOTER BUTTON */
 #urnsecondModal #kapatbtn{
   display: block;
   width: 100%;
   height: 42px;
- margin: 5px 0px 0px 0px;              /* alttaki boşluğu siler */
-  border-radius: 0 0 18px 18px !important;
+  margin: 5px 0 0;
+  border-radius: 0 0 18px 18px;
 }
 
-#urnsecondModal table.urnsecond-modal-table{
-  background: transparent !important;
-}
-
-#urnsecondModal table.urnsecond-modal-table tbody td{
-  background: transparent !important;
-}
-
-#urnsecondModal table.urnsecond-modal-table thead th{
-  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
-}
-#urnsecondModal table.urnsecond-modal-table tbody td{
-  color: rgba(255,255,255,.86) !important;
-}
-
-#urnsecondModal table.urnsecond-modal-table tbody tr{
-  color: rgba(255,255,255,.86) !important;
-}
-
-#urnsecondModal table.urnsecond-modal-table.table-hover tbody tr:hover td{
-  color: #fff !important;
-}

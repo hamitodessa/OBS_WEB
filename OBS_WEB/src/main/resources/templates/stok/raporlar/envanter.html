@@ -104,19 +104,19 @@
 #ara_content #second-table-container{ display:none; }
 
 /* scrollbar */
-#ara_content .table-container::-webkit-scrollbar{ width:10px; height:10px; }
-#ara_content .table-container::-webkit-scrollbar-thumb{
+#ara_content #envtableContainer .table-container::-webkit-scrollbar{ width:10px; height:10px; }
+#ara_content #envtableContainer .table-container::-webkit-scrollbar-thumb{
   background: rgba(255,255,255,.18);
   border:2px solid rgba(0,0,0,.20);
   border-radius:999px;
 }
-#ara_content .table-container::-webkit-scrollbar-track{
+#ara_content #envtableContainer .table-container::-webkit-scrollbar-track{
   background: rgba(0,0,0,.18);
   border-radius:999px;
 }
 
 /* TABLE BASE */
-#ara_content table{
+#ara_content #envtableContainer table{
   width:100%;
   min-width:1000px;
   border-collapse:separate;
@@ -125,8 +125,8 @@
   overflow:hidden;
   font-size:13px;
 }
-#ara_content th,
-#ara_content td{
+#ara_content #envtableContainer th,
+#ara_content #envtableContainer td{
   border: 1px solid rgba(255,255,255,.08);
   padding: 6px 10px;
   white-space: nowrap;
@@ -134,7 +134,7 @@
 }
 
 
-#ara_content .table-row-height td{
+#ara_content #envtableContainer .table-row-height td{
   height: 18px;
   line-height: 18px;
   padding-top: 2px;
@@ -142,7 +142,7 @@
 }
 
 /* HEADER */
-#ara_content thead th{
+#ara_content #envtableContainer thead th{
   position: sticky;
   top: 0;
   z-index: 4;
@@ -154,7 +154,7 @@
 }
 
 /* BODY */
-#ara_content tbody td{
+#ara_content #envtableContainer tbody td{
   background: rgba(255,255,255,.04);
   color: rgba(255,255,255,.82);
   transition: color .12s ease, background .12s ease;
@@ -177,23 +177,23 @@
 
 
 /* HOVER + SELECTED */
-#ara_content .table-hover tbody tr:hover td{
+#ara_content #envtableContainer .table-hover tbody tr:hover td{
   background: rgba(56,189,248,.14) !important;
   color: #ffffff !important;
 }
-#ara_content tbody tr.selected td{
+#ara_content #envtableContainer tbody tr.selected td{
   background: rgba(34,197,94,.14) !important;
   color: #ffffff !important;
 }
 
 /* NUMERIC */
-#ara_content .double-column{
+#ara_content #envtableContainer .double-column{
   text-align:right;
   font-variant-numeric: tabular-nums;
 }
 
 /* FOOTER (td bazlı) */
-#ara_content tfoot td{
+#ara_content #envtableContainer tfoot td{
   position: sticky;
   bottom: 0;
   z-index: 6;
@@ -214,17 +214,17 @@
   color: #fff;
   font-weight: 900;
 }
-#ara_content .container.two-tables .table-container:first-child{
+#ara_content #envtableContainer .container.two-tables .table-container:first-child{
   flex: 0 0 15vh;   /* ana tablo daha kısa */
   min-height: 160px;
 }
-#ara_content .container.two-tables #second-table-container{
+#ara_content #envtableContainer .container.two-tables #second-table-container{
   flex: 1 1 auto;   /* kalan alan ikinci tablo */
   min-height: 260px;
 }
 
-#ara_content td.double-column,
-#ara_content th.double-column{
+#ara_content #envtableContainer td.double-column,
+#ara_content #envtableContainer th.double-column{
   text-align: right !important;
   font-variant-numeric: tabular-nums;
 }
@@ -246,7 +246,7 @@
 
 
 <div class="container">
-  <div class="table-container">
+  <div class="table-container" id="envtableContainer">
     <table id="main-table" class="table table-bordered table-hover table-row-height">
       <thead>
         <tr>

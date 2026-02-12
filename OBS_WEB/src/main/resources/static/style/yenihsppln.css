@@ -163,10 +163,12 @@
   z-index: 2;
 }
 
-/* Hover */
 #secondModal table.modal-table.table-hover tbody tr:hover td{
-  background: rgba(56,189,248,.14) !important;
   color: #fff !important;
+}
+
+#secondModal table.modal-table tbody td{
+  color: rgba(255,255,255,.86) !important;
 }
 
 /* ================= FOOTER BUTTON ================= */
@@ -178,24 +180,6 @@
   border-radius: 0 0 18px 18px !important;
 }
 
-/* Normal durumda yazıları beyaz yap */
-#secondModal table.modal-table tbody td{
-  color: rgba(255,255,255,.86) !important;
-}
-
-/* İstersen satır bazlı da (bazı css tr'ye basar) */
-#secondModal table.modal-table tbody tr{
-  color: rgba(255,255,255,.86) !important;
-}
-
-/* Hover sende zaten var; garanti olsun */
-#secondModal table.modal-table.table-hover tbody tr:hover td{
-  color: #fff !important;
-}
-
-/* =========================
-   HARD NAMESPACE SCOPE
-   ========================= */
 #secondModal .cam26-secondmodal #modalTable{
   table-layout: fixed !important;
   width: 100% !important;

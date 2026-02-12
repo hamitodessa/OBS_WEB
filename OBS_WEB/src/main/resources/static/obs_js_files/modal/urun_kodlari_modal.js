@@ -3,7 +3,7 @@
 async function openurunkodlariModal(inputId, secondnerden, barkodurunkodu) {
     modalShow("urnsecondModal");
 
-    const modalError = document.getElementById("urnsecond-errorDiv");
+    const modalError = document.getElementById("stkerrorDiv");
     if (modalError) {
         modalError.style.display = "none";
         modalError.innerText = "";
@@ -71,18 +71,19 @@ async function openurunkodlariModal(inputId, secondnerden, barkodurunkodu) {
 }
 
 function stkfilterTable() {
-    // Senin modal id’lerin "urnsecond-modalSearch" / "urnsecond-modalTable" ise buna göre düzelt
-    // (Eski kodda modalSearch/modalTable kalmış)
-    const searchValue = (document.getElementById("urnsecond-modalSearch")?.value ?? "").toLowerCase();
-    const rows = document.querySelectorAll("#urnsecond-modalTableBody tbody tr");
+  const searchValue = (document.getElementById("urnsecond-modalSearch")?.value ?? "").toLowerCase();
+  console.info("Filtering table with search value:", searchValue);
 
-    rows.forEach((row) => {
-        const rowText = Array.from(row.cells)
-            .map((cell) => (cell.textContent || "").toLowerCase())
-            .join(" ");
-        row.style.display = rowText.includes(searchValue) ? "" : "none";
-    });
+  const rows = document.querySelectorAll("#urnsecond-modalTableBody tr"); // ✅ düzeltildi
+
+  rows.forEach((row) => {
+    const rowText = Array.from(row.cells)
+      .map((cell) => (cell.textContent || "").toLowerCase())
+      .join(" ");
+    row.style.display = rowText.includes(searchValue) ? "" : "none";
+  });
 }
+
 
 function urnselectValue(inputId, selectedBarkod, selectedKodu, secondnerden, barkodurunkodu) {
     const inputEl = document.getElementById(inputId);
@@ -97,7 +98,7 @@ function urnselectValue(inputId, selectedBarkod, selectedKodu, secondnerden, bar
     }
 
     if (secondnerden === "imalat") {
-        urnaramaYap("Kodu");
+        OBS.URETIM.urunAramaYap("Kodu");
         return;
     }
 
