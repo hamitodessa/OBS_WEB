@@ -195,12 +195,7 @@ const pageModules = {
             if (typeof OBS?.RECETE?.fetchkod === "function") OBS.RECETE.fetchkod();
         }
     },
-    "/stok/fatrapor": {
-        js: "/obs_js_files/stok/raporlar/fatrapor.js",
-        init: () => {
-            if (typeof window.stokBaslik === "function") window.stokBaslik();
-        }
-    },
+    "/stok/fatrapor": {js: "/obs_js_files/stok/raporlar/fatrapor.js",init: () => {if (typeof window.stokBaslik === "function") window.stokBaslik();} },
     "/stok/irsrapor": { js: "/obs_js_files/stok/raporlar/irsrapor.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
     "/stok/envanter": { js: "/obs_js_files/stok/raporlar/envanter.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
     "/stok/imarapor": { js: "/obs_js_files/stok/raporlar/imarapor.js", init: () => { if (typeof window.stokBaslik === "function") window.stokBaslik(); } },
