@@ -102,7 +102,7 @@
 }
 
 /* ===== TABLE ===== */
-#ara_content table{
+#ara_content #stoktableContainer table{
   width:100%;
   min-width:1000px;
   border-collapse:separate;
@@ -113,8 +113,8 @@
 }
 
 /* Cells */
-#ara_content th,
-#ara_content td{
+#ara_content #stoktableContainer th,
+#ara_content #stoktableContainer td{
   border: 1px solid rgba(255,255,255,.08);
   padding: 6px 10px;
   white-space: nowrap;
@@ -122,7 +122,7 @@
 }
 
 /* Header sticky */
-#ara_content thead th{
+#ara_content #stoktableContainer thead th{
   position: sticky;
   top: 0;
   z-index: 3;
@@ -134,7 +134,7 @@
 }
 
 /* Body base */
-#ara_content tbody td{
+#ara_content #stoktableContainer tbody td{
   background: rgba(255,255,255,.04);
   color: rgba(255,255,255,.82);
   transition: color .12s ease, background .12s ease;
@@ -142,39 +142,35 @@
 
 
 /* Hover foreground fix */
-#ara_content .table-hover tbody tr:hover td{
+#ara_content #stoktableContainer .table-hover tbody tr:hover td{
   background: rgba(56,189,248,.14) !important;
   color: #ffffff !important;
 }
 
 /* Seçili satır (kalıcı) */
-#ara_content tbody tr.selected td{
+#ara_content #stoktableContainer tbody tr.selected td{
   background: rgba(34,197,94,.14) !important;
   color: #ffffff !important;
 }
 
 /* Satır yüksekliği (ekstre için ideal) */
-#ara_content tbody td{
+#ara_content #stoktableContainer tbody td{
   height: 26px;
   line-height: 18px;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-/* Numeric kolonlar */
-#ara_content .double-column{
-  text-align:right;
-  font-variant-numeric: tabular-nums;
-}
 
-#ara_content .table-row-height td{
+
+#ara_content #stoktableContainer .table-row-height td{
   height: 18px;
   line-height: 18px;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-#ara_content #main-table tfoot th{
+#ara_content #stoktableContainer  tfoot th{
   position: sticky;
   bottom: 0;
   z-index: 6;
@@ -212,8 +208,8 @@
   font-weight: 900;
 }
 
-#ara_content td.double-column,
-#ara_content th.double-column{
+#ara_content #stoktableContainer td.double-column,
+#ara_content #stoktableContainer th.double-column{
   text-align: right !important;
   font-variant-numeric: tabular-nums;
 }
@@ -233,7 +229,7 @@
 </div>
 <div id="errorDiv"></div>
 
-	<div class="table-container">
+	<div class="table-container" id="stoktableContainer">
 		<table id="main-table" class="table table-bordered table-hover table-row-height">
 			<thead class="thead-dark"></thead>
 			<tbody id="mainTableBody"></tbody>

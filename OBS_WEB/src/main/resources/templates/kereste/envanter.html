@@ -90,7 +90,7 @@
 
 
 /* TABLE BASE */
-#ara_content table{
+#ara_content #kerenvanterTableContainer table{
   width:100%;
   min-width:1000px;
   border-collapse:separate;
@@ -99,8 +99,8 @@
   overflow:hidden;
   font-size:13px;
 }
-#ara_content th,
-#ara_content td{
+#ara_content #kerenvanterTableContainer th,
+#ara_content #kerenvanterTableContainer td{
   border: 1px solid rgba(255,255,255,.08);
   padding: 6px 10px;
   white-space: nowrap;
@@ -108,7 +108,7 @@
 }
 
 /* HEADER */
-#ara_content thead th{
+#ara_content #kerenvanterTableContainer thead th{
   position: sticky;
   top: 0;
   z-index: 4;
@@ -120,14 +120,14 @@
 }
 
 /* BODY */
-#ara_content tbody td{
+#ara_content #kerenvanterTableContainer tbody td{
   background: rgba(255,255,255,.04);
   color: rgba(255,255,255,.82);
   transition: color .12s ease, background .12s ease;
 }
 
 /* ROW HEIGHTS */
-#ara_content #main-table tbody td{
+#ara_content #kerenvanterTableContainer tbody td{
   height: 26px;
   line-height: 18px;
   padding-top: 4px;
@@ -141,23 +141,23 @@
 }
 
 /* HOVER + SELECTED */
-#ara_content .table-hover tbody tr:hover td{
+#ara_content #kerenvanterTableContainer .table-hover tbody tr:hover td{
   background: rgba(56,189,248,.14) !important;
   color: #ffffff !important;
 }
-#ara_content tbody tr.selected td{
+#ara_content #kerenvanterTableContainer tbody tr.selected td{
   background: rgba(34,197,94,.14) !important;
   color: #ffffff !important;
 }
 
 /* NUMERIC */
-#ara_content .double-column{
+#ara_content #kerenvanterTableContainer .double-column{
   text-align:right;
   font-variant-numeric: tabular-nums;
 }
 
 /* FOOTER (td bazlı) */
-#ara_content tfoot td{
+#ara_content #kerenvanterTableContainer tfoot td{
   position: sticky;
   bottom: 0;
   z-index: 6;
@@ -181,13 +181,7 @@
 
 
 
-#ara_content td.double-column,
-#ara_content th.double-column{
-  text-align: right !important;
-  font-variant-numeric: tabular-nums;
-}
-
-#ara_content #main-table tfoot th {
+#ara_content #kerenvanterTableContainer tfoot th {
 	position: sticky;
 	bottom: 0;
 	z-index: 6;
@@ -215,7 +209,7 @@
 	</div>
 	<div id="errorDiv"></div>
 
-		<div class="table-container">
+		<div class="table-container" id="kerenvanterTableContainer">
 			<table id="main-table" class="table table-bordered table-hover table-row-height">
 				<thead>
 				</thead>

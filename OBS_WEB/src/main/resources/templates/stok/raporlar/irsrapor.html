@@ -129,13 +129,13 @@
 
 
 /* NUMERIC */
-#ara_content .double-column{
+#ara_content #irstableContainer .double-column{
   text-align:right !important;
   font-variant-numeric: tabular-nums;
 }
 
 /* ===== MAIN TABLE ===== */
-#ara_content table.t-main{
+#ara_content #irstableContainer table.t-main{
   width:100%;
   min-width:1000px;
   border-collapse:separate;
@@ -144,14 +144,14 @@
   overflow:hidden;
   font-size:13px;
 }
-#ara_content table.t-main th,
-#ara_content table.t-main td{
+#ara_content #irstableContainer table.t-main th,
+#ara_content #irstableContainer table.t-main td{
   border: 1px solid rgba(255,255,255,.08);
   padding: 6px 10px;
   white-space: nowrap;
   vertical-align: middle;
 }
-#ara_content table.t-main thead th{
+#ara_content #irstableContainer table.t-main thead th{
   position: sticky;
   top: 0;
   z-index: 3;
@@ -161,7 +161,7 @@
   font-weight: 900;
   text-align: left;
 }
-#ara_content table.t-main tbody td{
+#ara_content #irstableContainer table.t-main tbody td{
   background: rgba(255,255,255,.04);
   color: rgba(255,255,255,.82);
   transition: .12s ease;
@@ -170,7 +170,7 @@
   padding-top: 2px;
   padding-bottom: 2px;
 }
-#ara_content #main-table tfoot th{
+#ara_content #irstableContainer tfoot th{
   position: sticky;
   bottom: 0;
   z-index: 5;
@@ -183,25 +183,25 @@
   border-color: rgba(255,255,255,.08) !important;
 }
 /* hover + selected sadece ANA satır */
-#ara_content table.t-main tbody tr:not(.details-row):hover td{
+#ara_content #irstableContainer table.t-main tbody tr:not(.details-row):hover td{
   background: rgba(56,189,248,.14) !important;
   color:#fff !important;
 }
-#ara_content table.t-main tbody tr:not(.details-row).selected td{
+#ara_content #irstableContainer table.t-main tbody tr:not(.details-row).selected td{
   background: rgba(34,197,94,.14) !important;
   color:#fff !important;
 }
 
 /* TOGGLE COL */
-#ara_content table.t-main th:first-child,
-#ara_content table.t-main td:first-child{
+#ara_content #irstableContainer table.t-main th:first-child,
+#ara_content #irstableContainer table.t-main td:first-child{
   width: 44px;
   min-width: 44px;
   max-width: 44px;
   text-align: center;
   padding: 0 !important;
 }
-#ara_content table.t-main .toggle-button{
+#ara_content #irstableContainer table.t-main .toggle-button{
   display:flex;
   align-items:center;
   justify-content:center;
@@ -214,21 +214,21 @@
   user-select:none;
   cursor:pointer;
 }
-#ara_content table.t-main .toggle-button:hover{
+#ara_content #irstableContainer table.t-main .toggle-button:hover{
   color: rgba(56,189,248,.95);
   text-shadow: 0 0 10px rgba(56,189,248,.35);
 }
 
 /* DETAILS ROW */
-#ara_content tr.details-row{ display:none; }
-#ara_content tr.details-row > td{
+#ara_content #irstableContainer tr.details-row{ display:none; }
+#ara_content #irstableContainer tr.details-row > td{
   padding: 10px !important;
   border: none !important;
   background: transparent !important;
 }
 
 /* DETAILS PANEL */
-#ara_content .details-wrap{
+#ara_content #irstableContainer .details-wrap{
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 16px;
   background: rgba(8,14,26,.28);
@@ -238,7 +238,7 @@
 }
 
 /* ===== DETAILS TABLE ===== */
-#ara_content table.t-details{
+#ara_content #irstableContainer table.t-details{
   width: max-content;     /* kolonlar daralmasın */
   min-width: 1200px;
   table-layout: auto;
@@ -248,8 +248,8 @@
   overflow:hidden;
   font-size: 13px;
 }
-#ara_content table.t-details th,
-#ara_content table.t-details td{
+#ara_content #irstableContainer table.t-details th,
+#ara_content #irstableContainer table.t-details td{
   border: 1px solid rgba(255,255,255,.08);
   padding: 8px 10px;
   white-space: nowrap;
@@ -257,18 +257,18 @@
   text-overflow: ellipsis;
   text-align: left;
 }
-#ara_content table.t-details thead th{
+#ara_content #irstableContainer table.t-details thead th{
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
   color:#fff !important;
   border:none !important;
   font-weight: 900;
 }
-#ara_content table.t-details tbody td{
+#ara_content #irstableContainer table.t-details tbody td{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.88) !important;
   transition: .12s ease;
 }
-#ara_content table.t-details tbody tr:hover td{
+#ara_content #irstableContainer table.t-details tbody tr:hover td{
   background: rgba(56,189,248,.10) !important;
   color:#fff !important;
 }
@@ -288,24 +288,24 @@
 }
 
 /* ===== 2026 CAM SCROLLBAR (DETAILS) ===== */
-#ara_content .details-wrap{
+#ara_content #irstableContainer .details-wrap{
   scrollbar-width: thin;                               /* Firefox */
   scrollbar-color: rgba(255,255,255,.22) rgba(0,0,0,.12);
 }
 
 /* Chrome / Edge / Safari */
-#ara_content .details-wrap::-webkit-scrollbar{
+#ara_content #irstableContainer .details-wrap::-webkit-scrollbar{
   height: 10px;   /* yatay scroll */
   width: 10px;    /* dikey olursa */
 }
 
-#ara_content .details-wrap::-webkit-scrollbar-track{
+#ara_content #irstableContainer .details-wrap::-webkit-scrollbar-track{
   background: rgba(0,0,0,.12);
   border-radius: 999px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
 }
 
-#ara_content .details-wrap::-webkit-scrollbar-thumb{
+#ara_content #irstableContainer .details-wrap::-webkit-scrollbar-thumb{
   background: linear-gradient(
     180deg,
     rgba(255,255,255,.28),
@@ -316,7 +316,7 @@
   box-shadow: 0 6px 18px rgba(0,0,0,.35);
 }
 
-#ara_content .details-wrap::-webkit-scrollbar-thumb:hover{
+#ara_content #irstableContainer .details-wrap::-webkit-scrollbar-thumb:hover{
   background: linear-gradient(
     180deg,
     rgba(56,189,248,.38),
@@ -341,7 +341,7 @@
 	</div>
 	<div id="errorDiv"></div>
 
-		<div class="table-container">
+		<div class="table-container" id="irstableContainer">
 			<table id="main-table" class="t-main">
 				<thead class="thead-dark">
 				</thead>
