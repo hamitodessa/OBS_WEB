@@ -18,6 +18,8 @@
   padding: 8px !important;   /* p-1 yerine net kontrol */
   box-sizing: border-box;
   width:75%;
+  height: 75vh;
+  overflow: hidden;   
 }
 
 /* ===== GROUP-BOX (üst panel) ===== */
@@ -114,19 +116,47 @@
   font-weight: 900;
 }
 
-/* ===== TABLE (tah-table) ===== */
-#ara_content table{
-   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
+#ara_content .guntable-container{
+  width: 100%;
+  flex: 1;                   /* kalan alanı kaplasın */
+  overflow: auto;            /* scroll burada */
+  margin-top: 10px;
   border-radius: 16px;
-  font-size: 13px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.03);
+
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+ 
+}
+/* Scrollbar (Chrome/Edge) */
+#ara_content .guntable-container::-webkit-scrollbar{ width:10px; height:10px; }
+#ara_content .guntable-container::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.18);
+  border:2px solid rgba(0,0,0,.20);
+  border-radius:999px;
+}
+#ara_content .guntable-container::-webkit-scrollbar-track{
+  background: rgba(0,0,0,.18);
+  border-radius:999px;
 }
 
 
-#ara_content th,
-#ara_content td{
+
+/* ===== TABLE (tah-table) ===== */
+#ara_content #mytable table{
+  width: 100%;
+ 
+  border-collapse:separate;
+  border-spacing:0;
+  border-radius:16px;
+  overflow:hidden;
+  font-size:13px;
+}
+
+
+#ara_content #mytable th,
+#ara_content #mytable td{
   border: 1px solid rgba(255,255,255,.08);
   padding: 6px 10px;
   white-space: nowrap;
@@ -134,7 +164,7 @@
 }
 
 /* Header sticky */
-#ara_content thead th{
+#ara_content #mytable thead th{
   position: sticky;
   top: 0;
   z-index: 3;
@@ -146,7 +176,7 @@
 }
 
 /* Body base */
-#ara_content tbody td{
+#ara_content #mytable tbody td{
   background: rgba(255,255,255,.04);
   color: rgba(255,255,255,.82);
   transition: color .12s ease, background .12s ease;
@@ -154,19 +184,19 @@
 
 
 /* Hover foreground fix */
-#ara_content .table-hover tbody tr:hover td{
+#ara_content #mytable .table-hover tbody tr:hover td{
   background: rgba(56,189,248,.14) !important;
   color: #ffffff !important;
 }
 
 /* Seçili satır (kalıcı) */
-#ara_content tbody tr.selected td{
+#ara_content #mytable tbody tr.selected td{
   background: rgba(34,197,94,.14) !important;
   color: #ffffff !important;
 }
 
 /* Satır yüksekliği (ekstre için ideal) */
-#ara_content tbody td{
+#ara_content #mytable tbody td{
   height: 26px;
   line-height: 18px;
   padding-top: 4px;
@@ -179,7 +209,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-#ara_content .table-row-height td{
+#ara_content #mytable .table-row-height td{
   height: 18px;
   line-height: 18px;
   padding-top: 2px;
@@ -187,7 +217,7 @@
 }
 
 /* TFOOT (toplamlar) sticky olsun – çok yakışıyor */
-#ara_content tfoot td{
+#ara_content #mytable tfoot td{
   position: sticky;
   bottom: 0;
   z-index: 2;
@@ -203,11 +233,11 @@
 }
 
 /* ===== KOLON GENİŞLİKLERİ (bootstrap ile kavga etmesin) ===== */
-#ara_content .table th:nth-child(1), #ara_content .table td:nth-child(1){ width: 6%; }
-#ara_content .table th:nth-child(3), #ara_content .table td:nth-child(3){ width: 13%; }
-#ara_content .table th:nth-child(4), #ara_content .table td:nth-child(4){ width: 13%; }
-#ara_content .table th:nth-child(5), #ara_content .table td:nth-child(5){ width: 13%; }
-#ara_content .table th:nth-child(6), #ara_content .table td:nth-child(6){ width: 5%; }
+#ara_content #mytable .table th:nth-child(1), #ara_content .table td:nth-child(1){ width: 6%; }
+#ara_content #mytable .table th:nth-child(3), #ara_content .table td:nth-child(3){ width: 13%; }
+#ara_content #mytable .table th:nth-child(4), #ara_content .table td:nth-child(4){ width: 13%; }
+#ara_content #mytable .table th:nth-child(5), #ara_content .table td:nth-child(5){ width: 13%; }
+#ara_content #mytable .table th:nth-child(6), #ara_content .table td:nth-child(6){ width: 5%; }
 
 /* ===== RESPONSIVE ===== */
 
@@ -217,17 +247,17 @@
   }
 
 
-#ara_content tfoot td{
+#ara_content #mytable tfoot td{
   color: rgba(255,255,255,.88) !important;
 }
 
 /* sayısal kolonlar + metinler */
-#ara_content tfoot td.double-column{
+#ara_content #mytable tfoot td.double-column{
   color: rgba(255,255,255,.92) !important;
 }
 
 /* boş hücreler de kararmasın */
-#ara_content tfoot td:empty{
+#ara_content #mytable tfoot td:empty{
   color: rgba(255,255,255,.65) !important;
 }
 </style>
@@ -273,10 +303,10 @@
 	</div>
 	
 	<div id="errorDiv"></div>
-	<!--	<div style="overflow-x: auto; width: 90%;height:650px;">    -->
-	<table class="table table-bordered table-hover table-row-height" id="mytable"
+	<div class="guntable-container">
+	<table class="table table-hover table-row-height" id="mytable"
 		style="margin-top: 5px;">
-		<thead class="thead-dark">
+		<thead>
 			<tr>
 				<th>EVRAK</th>
 				<th>IZAHAT</th>
@@ -318,5 +348,8 @@
 			</tr>
 		</tfoot>
 	</table>
+	</div>
+	
+	
 </div>
 <div th:replace="~{modal/yenihsppln :: secondModal}"></div>

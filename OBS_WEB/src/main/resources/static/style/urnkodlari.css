@@ -2,6 +2,11 @@
    URN SECOND MODAL (S026 CAM)
    ========================= */
 
+#urnsecondModal .modal-dialog{
+  max-width: 1000px;         /* min-width yerine bootstrap mantığı */
+  width: 1000px;
+}
+
 /* modal-content */
 #urnsecondModal .modal-content{
   background: rgba(8,14,26,.96) !important;
@@ -9,23 +14,17 @@
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px !important;
   box-shadow: 0 22px 65px rgba(0,0,0,.55) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  overflow: hidden !important; /* scroll içeride değil container'da */
-}
+  overflow: hidden !important;
+ }
 
-/* Header (search + close) */
+
+/* Header */
 #urnsecondModal .modal-header{
   position: relative;
   gap: 10px;
   align-items: center;
-  padding: 12px 12px !important;
-
-  background: linear-gradient(180deg,
-    rgba(31,59,92,.92),
-    rgba(22,43,68,.92)
-  ) !important;
-
+  padding: 12px !important;
+  background: linear-gradient(180deg,rgba(31,59,92,.92),rgba(22,43,68,.92)) !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
 }
 
@@ -42,36 +41,34 @@
   );
 }
 
-/* Close butonu */
+/* Close */
 #urnsecondModal .btn-close{
   filter: invert(1) grayscale(100%);
   opacity: .85;
 }
 #urnsecondModal .btn-close:hover{ opacity: 1; }
 
-/* Search input */
+/* Search */
 #urnsecondModal #urnsecond-modalSearch{
-  height: 46px !important;
-  border-radius: 14px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   background: rgba(8,14,26,.55) !important;
   color: rgba(255,255,255,.92) !important;
 }
-#urnsecondModal #urnsecond-modalSearch::placeholder{
-  color: rgba(255,255,255,.55) !important;
-}
-#urnsecondModal #urnsecond-modalSearch:focus{
+#urnsecondModal #urnsecond-modalSearch::placeholder{ color: rgba(255,255,255,.55) !important; }
+#urnsecondModal #urnsecond-modalSearch{
   border-color: rgba(56,189,248,.70) !important;
   box-shadow: 0 0 0 5px rgba(56,189,248,.18) !important;
   background: rgba(8,14,26,.70) !important;
   color: #fff !important;
 }
 
-/* error div (senin HTML’de id="errorDiv") */
-#urnsecondModal #errorDiv{
+/* Error */
+#urnsecondModal #stkerrorDiv{
   display:none;
-  margin: 10px 12px 0;
   padding: 10px 12px;
+  margin: 10px 12px 0 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
   background: rgba(251,113,133,.10);
@@ -81,68 +78,151 @@
 
 /* Table container: scroll burada */
 #urnsecondModal .modall-table-container{
+  height: 500px;
   overflow: auto;
-  height: calc(600px - 70px);
+  margin-top: 5px;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  border-radius: 8px !important;
 
-  border-top: 1px solid rgba(255,255,255,.10) !important;
-  border-bottom: 1px solid rgba(255,255,255,.10) !important;
-  background: rgba(255,255,255,.02) !important;
-  
-  scrollbar-width: thin; /* Firefox */
+  /* CAM2026 glass gradient */
+  background:
+    radial-gradient(1200px 420px at 10% 0%,
+      rgba(56,189,248,.22),
+      rgba(56,189,248,0) 55%),
+    radial-gradient(900px 520px at 95% 110%,
+      rgba(34,197,94,.16),
+      rgba(34,197,94,0) 58%),
+    linear-gradient(180deg,
+      rgba(8,14,26,.78),
+      rgba(8,14,26,.62)) !important;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+
+  position: relative;
   
+}
+
+/* hafif parıltı/shine */
+#urnsecondModal .modall-table-container::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(255,255,255,.10),
+      rgba(255,255,255,0) 22%,
+      rgba(255,255,255,0) 80%,
+      rgba(255,255,255,.06));
+  opacity:.35;
 }
 
 /* Table */
-#urnsecondModal #urnsecond-modalTable{
+#urnsecondModal table.urnsecond-modal-table{
   width: 100%;
+  min-width: 0;
+  border-radius: 5px !important;
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed;
   font-size: 13px;
   color: rgba(255,255,255,.86);
-
-  --bs-table-bg: transparent !important;
-  --bs-table-color: rgba(255,255,255,.86) !important;
-  --bs-table-border-color: rgba(255,255,255,.08) !important;
-  --bs-table-accent-bg: transparent !important;
-  --bs-table-striped-bg: transparent !important;
-  --bs-table-hover-bg: rgba(56,189,248,.14) !important;
-  --bs-table-active-bg: rgba(56,189,248,.18) !important;
+  
 }
 
-#urnsecondModal #urnsecond-modalTable th,
-#urnsecondModal #urnsecond-modalTable td{
-  text-align: left;
-  vertical-align: middle;
-  white-space: nowrap;
-  padding: 8px 10px;
+/* Cells */
+#urnsecondModal table.urnsecond-modal-table th,
+#urnsecondModal table.urnsecond-modal-table td{
+  padding: 6px 8px;
   border: 1px solid rgba(255,255,255,.08) !important;
-  background-color: transparent !important;
-  background-image: none !important;
+  white-space: nowrap;
+  overflow: hidden;         
+  text-overflow: ellipsis;
 }
 
-/* sticky thead */
-#urnsecondModal #urnsecond-modalTable thead th{
+#urnsecondModal table.urnsecond-modal-table tbody td{
+ 
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .3px;
+}
+/* Header sticky */
+#urnsecondModal table.urnsecond-modal-table thead th{
   background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
-  color: #ffffff !important;
-  border-bottom: 1px solid rgba(255,255,255,.12) !important;
+  color: #fff !important;
   font-weight: 900;
-
   position: sticky;
   top: 0;
   z-index: 2;
 }
 
-/* hover */
-#urnsecondModal #urnsecond-modalTable.table-hover tbody tr:hover td{
+/* Hover */
+#urnsecondModal table.urnsecond-modal-table.table-hover tbody tr:hover td{
   background: rgba(56,189,248,.14) !important;
-  color: #ffffff !important;
+  color: #fff !important;
 }
 
-/* row height helper */
-#urnsecondModal #urnsecond-modalTableBody.table-row-height td{
+/* Compact rows */
+#urnsecondModal table.urnsecond-modal-table.table-row-height td{
   height: 20px;
-  line-height: 18px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  line-height: 20px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* Footer button */
+#urnsecondModal .btn-close{
+  padding: 0 12px 12px 12px;
+}
+#urnsecondModal .modal-header .btn-close{
+  opacity: .7;
+  transition: all .2s ease;
+}
+
+#urnsecondModal .modal-header .btn-close:hover{
+  opacity: 1;
+  transform: scale(1.15);
+  filter: invert(1) drop-shadow(0 0 6px rgba(56,189,248,.6));
+}
+
+
+#urnsecondModal #kapatbtn{
+  display: block;
+  width: 100%;
+  height: 42px;
+ margin: 5px 0px 0px 0px;              /* alttaki boşluğu siler */
+  border-radius: 0 0 18px 18px !important;
+}
+
+/* Gradient'i öldüren beyaz tablo/hücre backgroundlarını sıfırla */
+#urnsecondModal table.urnsecond-modal-table{
+  background: transparent !important;
+}
+
+/* Bootstrap / global td background kapatıyorsa */
+#urnsecondModal table.urnsecond-modal-table tbody td{
+  background: transparent !important;
+}
+
+/* Header zaten sende gradient; yine de garanti */
+#urnsecondModal table.urnsecond-modal-table thead th{
+  background: linear-gradient(180deg,#1f3b5c,#162b44) !important;
+}
+/* Normal durumda yazıları beyaz yap */
+#urnsecondModal table.urnsecond-modal-table tbody td{
+  color: rgba(255,255,255,.86) !important;
+}
+
+/* İstersen satır bazlı da (bazı css tr'ye basar) */
+#urnsecondModal table.urnsecond-modal-table tbody tr{
+  color: rgba(255,255,255,.86) !important;
+}
+
+/* Hover sende zaten var; garanti olsun */
+#urnsecondModal table.urnsecond-modal-table.table-hover tbody tr:hover td{
+  color: #fff !important;
 }

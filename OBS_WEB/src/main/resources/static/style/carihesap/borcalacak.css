@@ -10,17 +10,17 @@
    ========================= */
 /* =========================
    2026 CAM – BORÇ/ALACAK MODAL (TEMİZ / SOL HİZALI)
-   Scope: #ara_content .modal-borcalacak
+   Scope: #ara_content 
    ========================= */
 
 /* DIALOG */
-#ara_content .modal-borcalacak .modal-dialog{
+#firstModal .modal-dialog{
   max-width: 450px !important;
   margin: 0 auto !important;
 }
 
 /* CAM KABUK */
-#ara_content .modal-borcalacak .modal-content{
+#firstModal  .modal-content{
   border-radius: 16px !important;
   border: 1px solid rgba(255,255,255,.14) !important;
   background: rgba(8,14,26,.96) !important;
@@ -30,7 +30,7 @@
 }
 
 /* HEADER */
-#ara_content .modal-borcalacak .modal-header{
+#firstModal  .modal-header{
   padding: 10px 14px !important;
   border-bottom: 1px solid rgba(255,255,255,.10) !important;
   background: linear-gradient(180deg,
@@ -40,37 +40,37 @@
   ) !important;
 }
 
-#ara_content .modal-borcalacak .modal-title{
+#firstModal  .modal-title{
   font-weight: 900 !important;
   font-size: 15px !important;
 }
 
-#ara_content .modal-borcalacak .btn-close{
+#firstModal  .btn-close{
   filter: invert(1) grayscale(1) !important;
   opacity: .85 !important;
 }
 
 /* BODY */
-#ara_content .modal-borcalacak .modal-body{
+#firstModal  .modal-body{
   padding: 12px 14px !important;
   background: rgba(8,14,26,.72) !important;
 }
 
 /* FOOTER */
-#ara_content .modal-borcalacak .modal-footer{
+#firstModal  .modal-footer{
   padding: 10px 14px !important;
   background: rgba(8,14,26,.66) !important;
   border-top: 1px solid rgba(255,255,255,.08) !important;
 }
 
 /* INPUT GROUP – KOMPAT */
-#ara_content .modal-borcalacak .input-group{
+#firstModal  .input-group{
   gap: 8px !important;
   margin-bottom: 8px !important;
 }
 
 /* LABEL (input-group-text) */
-#ara_content .modal-borcalacak .input-group-text{
+#firstModal  .input-group-text{
   width: 130px !important;
   height: 38px !important;
   padding: 6px 10px !important;
@@ -90,7 +90,7 @@
 }
 
 /* INPUT / LABEL(form-control) */
-#ara_content .modal-borcalacak .form-control{
+#firstModal  .form-control{
   height: 38px !important;
   padding: 6px 10px !important;
 
@@ -106,7 +106,7 @@
 }
 
 /* LABEL gibi kullanılan form-control için minik premium dokunuş */
-#ara_content .modal-borcalacak label.form-control{
+#firstModal  label.form-control{
   padding-left: 12px !important;
   font-weight: 800 !important;
   cursor: default !important;
@@ -114,7 +114,7 @@
 }
 
 /* FOCUS */
-#ara_content .modal-borcalacak .form-control:focus{
+#firstModal  .form-control:focus{
   border-color: rgba(56,189,248,.70) !important;
   box-shadow: 0 0 0 3px rgba(56,189,248,.20) !important;
   background: rgba(8,14,26,.70) !important;
@@ -122,7 +122,7 @@
 }
 
 /* FOOTER BUTTON */
-#ara_content .modal-borcalacak .modal-footer > button.btn.btn-primary{
+#firstModal  .modal-footer > button.btn.btn-primary{
   width: 220px !important;
   height: 44px !important;
   margin-left: auto !important;
@@ -140,7 +140,7 @@
 }
 
 /* HOVER */
-#ara_content .modal-borcalacak .btn.btn-primary:hover{
+#firstModal  .btn.btn-primary:hover{
   background: rgba(56,189,248,.26) !important;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px) !important;

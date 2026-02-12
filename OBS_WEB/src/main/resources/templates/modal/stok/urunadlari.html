@@ -1,15 +1,26 @@
 <div class="modal fade" th:fragment="urnsecondModal" id="urnsecondModal" tabindex="-1" aria-labelledby="secondModalLabel" aria-hidden="true"
     data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 60%;">
-        <div class="modal-content" style="height: 600px; overflow-y: hidden;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header">
                 <input type="text" class="form-control" id="urnsecond-modalSearch" placeholder="Search..." oninput="stkfilterTable()">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="errorDiv"></div>
+            <div id="stkerrorDiv"></div>
             <div class="modall-table-container">
-                <table id="urnsecond-modalTable" class="table urnsecond-modal-table table-bordered table-hover tah-table">
-                    <thead class="thead-dark">
+                <table id="urnsecond-modalTable" class="table urnsecond-modal-table table-hover tah-table">
+                    <colgroup>
+						<col style="width: 50px;">
+						<col style="width: 50px;">
+						<col style="width: 150px;">
+						<col style="width: 40px;">
+						<col style="width: 40px;">
+						<col style="width: 40px;">
+						<col style="width: 70px;">	
+						<col style="width: 70px;">
+						<col style="width: 70px;">
+					</colgroup>
+                    <thead>
                         <tr>
                             <th>Barkod</th>
                             <th>Kodu</th>
@@ -25,6 +36,10 @@
                     <tbody id="urnsecond-modalTableBody"></tbody>
                 </table>
             </div>
+            <div id="btnKapat">
+				<button type="button" class="btn btn-primary" id="kapatbtn"
+					data-bs-dismiss="modal" aria-label="Close">Kapat</button>
+			</div>
         </div>
     </div>
 </div>

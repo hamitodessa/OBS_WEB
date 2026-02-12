@@ -3,11 +3,14 @@
 
 <style>
 /* =========================
-   2026 CAM – TABLE STANDARD (EKSTRE)
-   Scope: #ara_content
+   2026 CAM – TABLE STANDARD (EKSTRE) (ISOLATED)
+   Scope: #ara_content + #ekstreTable only
    ========================= */
 
-#ara_content{ color: rgba(255,255,255,.92);padding: 0 !important; }
+#ara_content{
+  color: rgba(255,255,255,.92);
+  padding: 0 !important;
+}
 
 /* ===== CARD ===== */
 #ara_content .card{
@@ -23,9 +26,8 @@
 #ara_content .btn{
   height: 36px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
+  background: rgba(56,189,248,.18) !important;
   color: rgba(255,255,255,.95) !important;
   transition: .16s ease;
   font-weight: 800;
@@ -36,7 +38,7 @@
   color: rgba(255,255,255,.95) !important;
 }
 #ara_content .btn:hover{
- background: rgba(56,189,248,.26) !important;
+  background: rgba(56,189,248,.26) !important;
   border-color: rgba(56,189,248,.55) !important;
   transform: translateY(-1px);
 }
@@ -58,44 +60,47 @@
 }
 #ara_content input[type="date"]{ color-scheme: dark; }
 
-
-
-#ara_content .table-container{
-   height: 75vh;
+/* =========================
+   TABLE CONTAINER (EKSTRE ONLY)
+   ========================= */
+#ara_content #ekstreTableContainer{
+  height: 75vh;
   display:flex;
   flex-direction:column;
+  flex-grow:1;
+
   margin-top:10px;
   padding:0;
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-  
-  flex-grow:1;
+
   overflow:auto;
-  margin-top:10px;
-  
+
   background: rgba(255,255,255,.03);
-  
-  scrollbar-width: thin; /* Firefox */
+
+  scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
 
 /* Scrollbar (Chrome/Edge) */
-#ara_content .table-container::-webkit-scrollbar{ width:10px; height:10px; }
-#ara_content .table-container::-webkit-scrollbar-thumb{
+#ara_content #ekstreTableContainer::-webkit-scrollbar{ width:10px; height:10px; }
+#ara_content #ekstreTableContainer::-webkit-scrollbar-thumb{
   background: rgba(255,255,255,.18);
   border:2px solid rgba(0,0,0,.20);
   border-radius:999px;
 }
-#ara_content .table-container::-webkit-scrollbar-track{
+#ara_content #ekstreTableContainer::-webkit-scrollbar-track{
   background: rgba(0,0,0,.18);
   border-radius:999px;
 }
 
-/* ===== TABLE ===== */
-#ara_content table{
+/* =========================
+   TABLE (EKSTRE ONLY)  <<< ÇAKIŞMA BİTTİ
+   ========================= */
+#ara_content #ekstreTable{
   width:100%;
-   min-width:1000px;
+  min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -103,17 +108,17 @@
   font-size:13px;
 }
 
-/* Cells */
-#ara_content th,
-#ara_content td{
+/* Cells (EKSTRE ONLY) */
+#ara_content #ekstreTable th,
+#ara_content #ekstreTable td{
   border: 1px solid rgba(255,255,255,.08);
   padding: 6px 10px;
   white-space: nowrap;
   vertical-align: middle;
 }
 
-/* Header sticky */
-#ara_content thead th{
+/* Header sticky (EKSTRE ONLY) */
+#ara_content #ekstreTable thead th{
   position: sticky;
   top: 0;
   z-index: 3;
@@ -124,49 +129,46 @@
   text-align: left;
 }
 
-/* Body base */
-#ara_content tbody td{
+/* Body base (EKSTRE ONLY) */
+#ara_content #ekstreTable tbody td{
   background: rgba(255,255,255,.04);
   color: rgba(255,255,255,.82);
   transition: color .12s ease, background .12s ease;
-}
 
-
-/* Hover foreground fix */
-#ara_content .table-hover tbody tr:hover td{
-  background: rgba(56,189,248,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Seçili satır (kalıcı) */
-#ara_content tbody tr.selected td{
-  background: rgba(34,197,94,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Satır yüksekliği (ekstre için ideal) */
-#ara_content tbody td{
   height: 26px;
   line-height: 18px;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
+/* Hover (EKSTRE ONLY) */
+#ara_content #ekstreTable.table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #ffffff !important;
+}
+
+/* Seçili satır (EKSTRE ONLY) */
+#ara_content #ekstreTable tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color: #ffffff !important;
+}
+
 /* Numeric kolonlar */
-#ara_content .double-column{
+#ara_content #ekstreTable .double-column{
   text-align:right;
   font-variant-numeric: tabular-nums;
 }
 
-#ara_content .table-row-height td{
+/* Eğer table-row-height class’ı kullanıyorsan (EKSTRE ONLY) */
+#ara_content #ekstreTable.table-row-height td{
   height: 18px;
   line-height: 18px;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-/* TFOOT (toplamlar) sticky olsun – çok yakışıyor */
-#ara_content tfoot td{
+/* TFOOT sticky (EKSTRE ONLY) */
+#ara_content #ekstreTable tfoot td{
   position: sticky;
   bottom: 0;
   z-index: 2;
@@ -175,7 +177,9 @@
   font-weight: 900;
 }
 
-/* ===== PAGINATION ===== */
+/* =========================
+   PAGINATION
+   ========================= */
 #ara_content .pagination-container{
   margin-top: 10px !important;
   display:flex;
@@ -189,7 +193,9 @@
   place-items: center;
 }
 
-/* ===== ERROR ===== */
+/* =========================
+   ERROR
+   ========================= */
 #ara_content #errorDiv{
   display:none;
   margin-top: 12px;
@@ -201,8 +207,6 @@
   font-weight: 900;
 }
 
-
-
 #ara_content #hesapAdi{
   color: rgba(255,255,255,.92) !important;
   font-weight: 900;
@@ -211,80 +215,82 @@
 
 
 <div class="card p-1">
-	<div style="display: flex; align-items: center; gap: 10px">
-		<button class="btn btn-primary" type="button" id="eksyenileButton"
-			style="margin-left: 10px" onclick="openFirstModal('ekstre')">Filtre</button>
-		<div style="position: relative; width: 150px;">
-			<select id="reportFormat" class="form-select" style="width: 150px;"
-				onchange="OBS.EKSTRE.ekstredownloadReport(this.value)" disabled>
-				<option value="" disabled selected>Rapor Indir</option>
-				<option value="pdf">PDF</option>
-				<option value="xlsx">Excel (XLSX)</option>
-				<option value="docx">Word (DOCX)</option>
-				<option value="xml">XML</option>
-			</select> <span
-				style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
-		</div>
-		<button class="btn btn-primary" type="button" id="mailButton"
-			onclick="OBS.EKSTRE.ekstremailAt()" disabled>Email Gonder</button>
-		<label id="hesapAdi" style="width: 300px; font-weight: bold;">.....</label>
-	</div>
+  <div style="display: flex; align-items: center; gap: 10px">
+    <button class="btn btn-primary" type="button" id="eksyenileButton"
+      style="margin-left: 10px" onclick="openFirstModal('ekstre')">Filtre</button>
+
+    <div style="position: relative; width: 150px;">
+      <select id="reportFormat" class="form-select" style="width: 150px;"
+        onchange="OBS.EKSTRE.ekstredownloadReport(this.value)" disabled>
+        <option value="" disabled selected>Rapor Indir</option>
+        <option value="pdf">PDF</option>
+        <option value="xlsx">Excel (XLSX)</option>
+        <option value="docx">Word (DOCX)</option>
+        <option value="xml">XML</option>
+      </select>
+      <span
+        style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
+    </div>
+
+    <button class="btn btn-primary" type="button" id="mailButton"
+      onclick="OBS.EKSTRE.ekstremailAt()" disabled>Email Gonder</button>
+
+    <label id="hesapAdi" style="width: 300px; font-weight: bold;">.....</label>
+  </div>
 </div>
+
 <div id="errorDiv"></div>
 
-<div class="table-container">
-	<table class="table table-bordered table-hover table-row-height">
-		<thead>
-			<tr>
-				<th>TARIH</th>
-				<th>EVRAK</th>
-				<th>IZAHAT</th>
-				<th>KODU</th>
-				<th class="double-column">KUR</th>
-				<th class="double-column">BORC</th>
-				<th class="double-column">ALACAK</th>
-				<th class="double-column">+ / - BAKIYE</th>
-				<th>User</th>
-			</tr>
-		</thead>
-		<tbody id="tableBody"></tbody>
-		<tfoot>
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td id="totalBorc" style="text-align: right; font-weight: bold"></td>
-				<td id="totalAlacak" style="text-align: right; font-weight: bold"></td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tfoot>
-	</table>
+<div class="table-container" id="ekstreTableContainer">
+  <table id="ekstreTable" class="table table-bordered table-hover table-row-height">
+    <thead>
+      <tr>
+        <th>TARIH</th>
+        <th>EVRAK</th>
+        <th>IZAHAT</th>
+        <th>KODU</th>
+        <th class="double-column">KUR</th>
+        <th class="double-column">BORC</th>
+        <th class="double-column">ALACAK</th>
+        <th class="double-column">+ / - BAKIYE</th>
+        <th>User</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="totalBorc" style="text-align: right; font-weight: bold"></td>
+        <td id="totalAlacak" style="text-align: right; font-weight: bold"></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
 </div>
 
-<div class='pagination-container' style="margin-top: 5px">
-	<button type="button" class="btn btn-secondary ml-2" id="ilksayfa"
-		onclick="OBS.EKSTRE.ilksayfa()">
-		<i class="fa fa-backward"></i>
-	</button>
-	<span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" id="oncekisayfa"
-		onclick="OBS.EKSTRE.oncekisayfa()">
-		<i class="fa fa-angle-left"></i>
-	</button>
-	<span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" id="sonrakisayfa"
-		onclick="OBS.EKSTRE.sonrakisayfa()">
-		<i class="fa fa-angle-right"></i>
-	</button>
-	<span style="padding-left: 5px;"></span>
-	<button type="button" class="btn btn-secondary ml-2" id="sonsayfa"
-		onclick="OBS.EKSTRE.sonsayfa()">
-		<i class="fa fa-forward"></i>
-	</button>
+<div class="pagination-container" style="margin-top: 5px">
+  <button type="button" class="btn btn-secondary ml-2" id="ilksayfa" onclick="OBS.EKSTRE.ilksayfa()">
+    <i class="fa fa-backward"></i>
+  </button>
+  <span style="padding-left: 5px;"></span>
+  <button type="button" class="btn btn-secondary ml-2" id="oncekisayfa" onclick="OBS.EKSTRE.oncekisayfa()">
+    <i class="fa fa-angle-left"></i>
+  </button>
+  <span style="padding-left: 5px;"></span>
+  <button type="button" class="btn btn-secondary ml-2" id="sonrakisayfa" onclick="OBS.EKSTRE.sonrakisayfa()">
+    <i class="fa fa-angle-right"></i>
+  </button>
+  <span style="padding-left: 5px;"></span>
+  <button type="button" class="btn btn-secondary ml-2" id="sonsayfa" onclick="OBS.EKSTRE.sonsayfa()">
+    <i class="fa fa-forward"></i>
+  </button>
 </div>
+
 <input type="hidden" id="ekstreBilgi" name="ekstreBilgi" value="initialValue" />
 
 <div th:replace="~{modal/cari/ekstrefiltre :: modalekstre}"></div>

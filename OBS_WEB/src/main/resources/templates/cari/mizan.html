@@ -3,11 +3,11 @@
 
 <style>
 /* =========================
-   2026 CAM – TABLE STANDARD (EKSTRE)
-   Scope: #ara_content
+   2026 CAM – TABLE STANDARD (MIZAN) (ISOLATED)
+   Scope: #ara_content + #mizanTable only
    ========================= */
 
-#ara_content{ color: rgba(255,255,255,.92);padding: 0 !important; }
+#ara_content{ color: rgba(255,255,255,.92); padding: 0 !important; }
 
 /* ===== CARD ===== */
 #ara_content .card{
@@ -30,7 +30,7 @@
   font-weight: 800;
 }
 #ara_content .btn.btn-primary{
- background: rgba(56,189,248,.18) !important;
+  background: rgba(56,189,248,.18) !important;
   border: 1px solid rgba(56,189,248,.35) !important;
   color: rgba(255,255,255,.95) !important;
 }
@@ -57,43 +57,47 @@
 }
 #ara_content input[type="date"]{ color-scheme: dark; }
 
-
-#ara_content .table-container{
-height: 75vh;
+/* =========================
+   TABLE CONTAINER (MIZAN ONLY)
+   ========================= */
+#ara_content #mizanTableContainer{
+  height: 75vh;
   display:flex;
   flex-direction:column;
+  flex-grow:1;
+
   margin-top:10px;
   padding:0;
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-  
-  flex-grow:1;
+
   overflow:auto;
-  margin-top:10px;
-  
+
   background: rgba(255,255,255,.03);
-  
-  scrollbar-width: thin; /* Firefox */
+
+  scrollbar-width: thin;
   scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
 }
 
 /* Scrollbar (Chrome/Edge) */
-#ara_content .table-container::-webkit-scrollbar{ width:10px; height:10px; }
-#ara_content .table-container::-webkit-scrollbar-thumb{
+#ara_content #mizanTableContainer::-webkit-scrollbar{ width:10px; height:10px; }
+#ara_content #mizanTableContainer::-webkit-scrollbar-thumb{
   background: rgba(255,255,255,.18);
   border:2px solid rgba(0,0,0,.20);
   border-radius:999px;
 }
-#ara_content .table-container::-webkit-scrollbar-track{
+#ara_content #mizanTableContainer::-webkit-scrollbar-track{
   background: rgba(0,0,0,.18);
   border-radius:999px;
 }
 
-/* ===== TABLE ===== */
-#ara_content table{
+/* =========================
+   TABLE (MIZAN ONLY)  <<< ÇAKIŞMA BİTTİ
+   ========================= */
+#ara_content #mizanTable{
   width:100%;
-   min-width:1000px;
+  min-width:1000px;
   border-collapse:separate;
   border-spacing:0;
   border-radius:16px;
@@ -101,17 +105,17 @@ height: 75vh;
   font-size:13px;
 }
 
-/* Cells */
-#ara_content th,
-#ara_content td{
+/* Cells (MIZAN ONLY) */
+#ara_content #mizanTable th,
+#ara_content #mizanTable td{
   border: 1px solid rgba(255,255,255,.08);
   padding: 6px 10px;
   white-space: nowrap;
   vertical-align: middle;
 }
 
-/* Header sticky */
-#ara_content thead th{
+/* Header sticky (MIZAN ONLY) */
+#ara_content #mizanTable thead th{
   position: sticky;
   top: 0;
   z-index: 3;
@@ -122,78 +126,56 @@ height: 75vh;
   text-align: left;
 }
 
-/* Body base */
-#ara_content tbody td{
-  background: rgba(255,255,255,.04);
+/* Body base (MIZAN ONLY) */
+#ara_content #mizanTable tbody td{
   background: rgba(255,255,255,.04) !important;
   color: rgba(255,255,255,.78) !important;
-  transition: .12s ease;
-}
+  transition: background .12s ease, color .12s ease;
 
-
-/* Hover foreground fix */
-#ara_content .table-hover tbody tr:hover td{
-  background: rgba(56,189,248,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Seçili satır (kalıcı) */
-#ara_content tbody tr.selected td{
-  background: rgba(34,197,94,.14) !important;
-  color: #ffffff !important;
-}
-
-/* Satır yüksekliği (ekstre için ideal) */
-#ara_content tbody td{
   height: 26px;
   line-height: 18px;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-/* Numeric kolonlar */
-#ara_content .double-column{
+/* Hover (MIZAN ONLY) */
+#ara_content #mizanTable.table-hover tbody tr:hover td{
+  background: rgba(56,189,248,.14) !important;
+  color: #ffffff !important;
+}
+
+/* Seçili satır (MIZAN ONLY) */
+#ara_content #mizanTable tbody tr.selected td{
+  background: rgba(34,197,94,.14) !important;
+  color: #ffffff !important;
+}
+
+/* Numeric kolonlar (MIZAN ONLY) */
+#ara_content #mizanTable .double-column{
   text-align:right;
   font-variant-numeric: tabular-nums;
 }
 
-#ara_content .table-row-height td{
+/* table-row-height class’ı (MIZAN ONLY) */
+#ara_content #mizanTable.table-row-height td{
   height: 18px;
   line-height: 18px;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-/* TFOOT (toplamlar) sticky olsun – çok yakışıyor */
-#ara_content tfoot td{
+/* TFOOT (MIZAN ONLY) */
+#ara_content #mizanTable tfoot td{
   position: sticky;
   bottom: 0;
   z-index: 2;
- 
   border-color: rgba(255,255,255,.08);
   font-weight: 900;
-}
-
-#ara_content tfoot td{
   background: linear-gradient(180deg, rgba(56,189,248,.22), rgba(37,99,235,.18)) !important;
   color: #fff !important;
-  font-weight: 900;
   border-top: 1px solid rgba(56,189,248,.45) !important;
   border-bottom: none !important;
   padding: 8px 10px !important;
-}
-/* ===== PAGINATION ===== */
-#ara_content .pagination-container{
-  margin-top: 10px !important;
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-}
-#ara_content .pagination-container .btn{
-  width: 46px;
-  padding: 0;
-  display: grid;
-  place-items: center;
 }
 
 /* ===== ERROR ===== */
@@ -207,59 +189,60 @@ height: 75vh;
   color: #fff;
   font-weight: 900;
 }
-
-#ara_content #hesapAdi{
-  color: rgba(255,255,255,.92) !important;
-  font-weight: 900;
-}
 </style>
+
+
 <div class="card p-1">
-	<div style="display: flex; align-items: center;gap:10px;">
-		<button class="btn btn-primary" type="button" id="mizyenileButton"
-			style="margin-left: 10px" onclick="openFirstModal('mizan')">Filtre</button>
-		<div style="position: relative; width: 150px; ">
-			<select id="reportFormat" class="form-select"
-				style="width: 150px; "
-				onchange="OBS.MIZAN.mizdownloadReport(this.value)" disabled>
-				<option value="" disabled selected>Rapor Indir</option>
-				<option value="pdf">PDF</option>
-				<option value="xlsx">Excel (XLSX)</option>
-				<option value="docx">Word (DOCX)</option>
-				<option value="xml">XML</option>
-			</select> <span
-				style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
-		</div>
-		<button class="btn btn-primary" 
-			type="button" id="mailButton" onclick="OBS.MIZAN.mizmailAt()" disabled>
-			Email Gonder</button>
-	</div>
+  <div style="display: flex; align-items: center; gap:10px;">
+    <button class="btn btn-primary" type="button" id="mizyenileButton"
+      style="margin-left: 10px" onclick="openFirstModal('mizan')">Filtre</button>
+
+    <div style="position: relative; width: 150px;">
+      <select id="reportFormat" class="form-select" style="width: 150px;"
+        onchange="OBS.MIZAN.mizdownloadReport(this.value)" disabled>
+        <option value="" disabled selected>Rapor Indir</option>
+        <option value="pdf">PDF</option>
+        <option value="xlsx">Excel (XLSX)</option>
+        <option value="docx">Word (DOCX)</option>
+        <option value="xml">XML</option>
+      </select>
+      <span style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);
+        pointer-events: none; color: #fff; font-weight: 700; text-shadow: 0 0 6px rgba(255, 255, 255, .35);">▼</span>
+    </div>
+
+    <button class="btn btn-primary" type="button" id="mailButton"
+      onclick="OBS.MIZAN.mizmailAt()" disabled>Email Gonder</button>
+  </div>
 </div>
+
 <div id="errorDiv"></div>
-	<div class="table-container">
-		<table class="table table-bordered table-hover table-row-height">
-			<thead class="thead-dark">
-				<tr>
-					<th>HESAP</th>
-					<th>UNVAN</th>
-					<th>H_CINSI</th>
-					<th class="double-column">BORC</th>
-					<th class="double-column">ALACAK</th>
-					<th class="double-column">BAKIYE</th>
-				</tr>
-			</thead>
-			<tbody id="tableBody"></tbody>
-			<tfoot>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td id="totalBorc" style="text-align: right; font-weight: bold"></td>
-					<td id="totalAlacak" style="text-align: right; font-weight: bold"></td>
-					<td id="totalBakiye" style="text-align: right; font-weight: bold"></td>
-				</tr>
-			</tfoot>
-		</table>
-	</div>
+
+<div class="table-container" id="mizanTableContainer">
+  <table id="mizanTable" class="table table-bordered table-hover table-row-height">
+    <thead>
+      <tr>
+        <th>HESAP</th>
+        <th>UNVAN</th>
+        <th>H_CINSI</th>
+        <th class="double-column">BORC</th>
+        <th class="double-column">ALACAK</th>
+        <th class="double-column">BAKIYE</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+    <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="totalBorc" style="text-align: right; font-weight: bold"></td>
+        <td id="totalAlacak" style="text-align: right; font-weight: bold"></td>
+        <td id="totalBakiye" style="text-align: right; font-weight: bold"></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
 
 <input type="hidden" id="mizanBilgi" name="mizanBilgi"
 	value="initialValue" />
