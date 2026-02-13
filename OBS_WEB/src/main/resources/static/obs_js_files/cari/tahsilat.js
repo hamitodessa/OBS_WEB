@@ -2,9 +2,6 @@ window.OBS = window.OBS || {};
 OBS.TAHSILAT = OBS.TAHSILAT || {};
 
 (function(M) {
-    /* =========================
-       helpers
-       ========================= */
     M.byId = (id) => document.getElementById(id);
 
     M._showError = function(msg) {
@@ -163,7 +160,7 @@ OBS.TAHSILAT = OBS.TAHSILAT || {};
         if (tbody) tbody.innerHTML = "";
         M._setRowCounter(0);
 
-        for (let i = 0;i < 10;i++) M.addRow();
+        for (let i = 0;i < 5;i++) M.addRow();
         M.updateColumnTotal();
     };
 
@@ -552,9 +549,6 @@ OBS.TAHSILAT = OBS.TAHSILAT || {};
         return { tahsilatDTO, tableData };
     };
 
-    /* =========================
-       save / delete / download / cari
-       ========================= */
     M.tahfisKayit = async function() {
         const payload = M.prepareRequestPayload();
         M._clearError();
