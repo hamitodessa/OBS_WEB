@@ -66,4 +66,7 @@ public class User {
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Gonderilmis_Mailler> gonderilmisMailler = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User_Shortcut> shortcuts = new ArrayList<>();
 }

@@ -32,6 +32,7 @@
 <script src="/obs_js_files/modal/cari/hspplnmodal.js"></script>
 <script src="/obs_js_files/modal/urun_kodlari_modal.js"></script>
 <script src="/obs_js_files/modal/adres/adreshplmodal.js"></script>
+<script src="/obs_js_files/shortcuts.js"></script>
 
 <link rel="stylesheet" href="/style/index.css">
 
@@ -218,11 +219,10 @@
 							data-url="/user/emailsettings"><span>E Mail Ayarlari</span></a> <a
 							href="" class="changeLink" data-url="/user/createdb"><span>Yeni
 								Veritabani Olustur</span></a> <a href="" class="changeLink"
-							data-url="/user/copyuser"><span>Kullanici Kopyala</span></a> <a
-							href="" class="changeLink" data-url="/user/deleteaccount"><span>Hesap
-								Silme</span></a> <a th:if="${menuitemvisiblegps}" href=""
-							class="changeLink" data-url="/user/userlist"><span>Kullanici
-								Listesi</span></a>
+							data-url="/user/copyuser"><span>Kullanici Kopyala</span></a> 
+							<a href="" class="changeLink" data-url="/user/deleteaccount"><span>Hesap Silme</span></a> 
+							<a th:if="${menuitemvisiblegps}" href="" class="changeLink" data-url="/user/userlist"><span>Kullanici Listesi</span></a>
+							<a href="" class="changeLink" data-url="/user/shortcut"><span>Kisa Yollar</span></a> 
 					</div>
 				</details>
 
@@ -295,5 +295,24 @@
 		</main>
 	</div>
 <script src="/obs_js_files/index.js"></script>
+
+<script th:inline="javascript">
+  window.OBS = window.OBS || {};
+  OBS.CONFIG = OBS.CONFIG || {};
+  OBS.CONFIG.shortcuts = OBS.CONFIG.shortcuts || {};
+
+  const m = /*[[${shortcuts}]]*/ {};
+  for (const k in m) OBS.CONFIG.shortcuts[k] = m[k];
+
+  // defaultlar (db boşsa)
+  OBS.CONFIG.shortcuts["SAVE"]    = OBS.CONFIG.shortcuts["SAVE"]    || "S";
+  OBS.CONFIG.shortcuts["DELETE"]  = OBS.CONFIG.shortcuts["DELETE"]  || "D";
+  OBS.CONFIG.shortcuts["REFRESH"] = OBS.CONFIG.shortcuts["REFRESH"] || "R";
+  OBS.CONFIG.shortcuts["NEW"]     = OBS.CONFIG.shortcuts["NEW"]     || "N";
+  OBS.CONFIG.shortcuts["SEARCH"]  = OBS.CONFIG.shortcuts["SEARCH"]  || "F";
+</script>
+
+
+
 </body>
 </html>

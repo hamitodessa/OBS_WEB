@@ -493,11 +493,9 @@ OBS.DEKONT = OBS.DEKONT || {};
         }
     };
 
-    /* ==========================
-       (İstersen init koyarız)
-       ========================== */
     M.init = function() {
-        // sayfa ilk açılışta gerekiyorsa buraya yaz
-        // örn: M.dekdisableInputs();
+		OBS.SHORTCUTS.setHandler("SAVE", () => M.dekfisKayit());
+		OBS.SHORTCUTS.setHandler("DELETE", () => M.dekfisYoket());
+		OBS.SHORTCUTS.setHandler("NEW", () => M.dekyenifis());
     };
 })(OBS.DEKONT);

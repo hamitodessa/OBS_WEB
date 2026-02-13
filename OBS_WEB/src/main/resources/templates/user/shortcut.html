@@ -1,0 +1,232 @@
+<div class="cam-shortcuts card p-4" id="shortcut_settings">
+  <div class="cam-head">
+    <div class="cam-title">Kısayol Ayarları</div>
+    <div class="cam-sub">Tüm modüllerde aynı çalışır (Ctrl + harf).</div>
+  </div>
+
+  <div class="cam-grid">
+
+    <div class="cam-row">
+      <div class="cam-left">
+        <div class="cam-label">Kaydet</div>
+        <div class="cam-keyhint">Action: <span class="chip">SAVE</span></div>
+      </div>
+      <div class="cam-right">
+        <div class="fat-rel">
+          <select id="sc_SAVE" class="form-select cam-select" th:value="${shortcuts['SAVE']}">
+          		<option th:each="ch : ${#strings.arraySplit('A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z', ',')}"
+          			th:value="${ch}" th:text="${ch}"
+          			th:selected="${ch == shortcuts['SAVE']}">
+          		</option>
+          </select>
+          <span class="fat-arrow">▼</span>
+        </div>
+        <button class="btn cam-btn" onclick="OBS.SHORTCUT_SETTINGS.save('SAVE','sc_SAVE')">Kaydet</button>
+      </div>
+    </div>
+
+    <div class="cam-row">
+      <div class="cam-left">
+        <div class="cam-label">Sil</div>
+        <div class="cam-keyhint">Action: <span class="chip">DELETE</span></div>
+      </div>
+      <div class="cam-right">
+        <div class="fat-rel">
+          <select id="sc_DELETE" class="form-select cam-select" th:value="${shortcuts['DELETE']}">
+          	<option th:each="ch : ${#strings.arraySplit('A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z', ',')}"
+          			th:value="${ch}" th:text="${ch}"
+          			th:selected="${ch == shortcuts['DELETE']}">
+          		</option>
+          </select>
+          <span class="fat-arrow">▼</span>
+        </div>
+        <button class="btn cam-btn" onclick="OBS.SHORTCUT_SETTINGS.save('DELETE','sc_DELETE')">Kaydet</button>
+      </div>
+    </div>
+
+    <div class="cam-row">
+      <div class="cam-left">
+        <div class="cam-label">Yenile</div>
+        <div class="cam-keyhint">Action: <span class="chip">REFRESH</span></div>
+      </div>
+      <div class="cam-right">
+        <div class="fat-rel">
+          <select id="sc_REFRESH" class="form-select cam-select" th:value="${shortcuts['REFRESH']}">
+          		<option th:each="ch : ${#strings.arraySplit('A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z', ',')}"
+          			th:value="${ch}" th:text="${ch}"
+          			th:selected="${ch == shortcuts['REFRESH']}">
+          		</option>
+          </select>
+          <span class="fat-arrow">▼</span>
+        </div>
+        <button class="btn cam-btn" onclick="OBS.SHORTCUT_SETTINGS.save('REFRESH','sc_REFRESH')">Kaydet</button>
+      </div>
+    </div>
+
+    <div class="cam-row">
+      <div class="cam-left">
+        <div class="cam-label">Yeni</div>
+        <div class="cam-keyhint">Action: <span class="chip">NEW</span></div>
+      </div>
+      <div class="cam-right">
+        <div class="fat-rel">
+          <select id="sc_NEW" class="form-select cam-select" th:value="${shortcuts['NEW']}">
+          		<option th:each="ch : ${#strings.arraySplit('A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z', ',')}"
+          			th:value="${ch}" th:text="${ch}"
+          			th:selected="${ch == shortcuts['NEW']}">
+          		</option>
+          </select>
+          <span class="fat-arrow">▼</span>
+        </div>
+        <button class="btn cam-btn" onclick="OBS.SHORTCUT_SETTINGS.save('NEW','sc_NEW')">Kaydet</button>
+      </div>
+    </div>
+
+    <div class="cam-row">
+      <div class="cam-left">
+        <div class="cam-label">Ara</div>
+        <div class="cam-keyhint">Action: <span class="chip">SEARCH</span></div>
+      </div>
+      <div class="cam-right">
+        <div class="fat-rel">
+          <select id="sc_SEARCH" class="form-select cam-select"></select>
+          <span class="fat-arrow">▼</span>
+        </div>
+        <button class="btn cam-btn" onclick="OBS.SHORTCUT_SETTINGS.save('SEARCH','sc_SEARCH')">Kaydet</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cam-foot">
+    <div class="note">
+      Not: Bazı kısayollar tarayıcı ile çakışabilir. (Ctrl+S genelde “Kaydet”tir; biz override ediyoruz.)
+    </div>
+  </div>
+  <div id="errorDiv"></div>
+</div>
+
+<style>
+/* =========================
+   2026 CAM – SHORTCUT SETTINGS
+   Scope: #ara_content .cam-shortcuts
+   ========================= */
+
+#ara_content{ color: rgba(255,255,255,.92); padding: 0 !important; }
+
+#ara_content .cam-shortcuts.card{
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  width:40%;
+}
+
+#ara_content #shortcut_settings .cam-head{ margin-bottom: 10px; }
+#ara_content #shortcut_settings .cam-title{ font-weight: 900; font-size: 18px; letter-spacing: .2px; }
+#ara_content #shortcut_settings .cam-sub{ opacity: .78; font-size: 13px; margin-top: 2px; }
+
+#ara_content #shortcut_settings .cam-grid{ display: grid; gap: 10px; margin-top: 10px; }
+
+#ara_content #shortcut_settings .cam-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(8,14,26,.45);
+}
+
+#ara_content #shortcut_settings .cam-left{ min-width: 240px; }
+#ara_content #shortcut_settings .cam-label{ font-weight: 900; font-size: 13px; }
+#ara_content #shortcut_settings .cam-keyhint{ margin-top: 2px; font-size: 12px; opacity: .75; }
+
+#ara_content #shortcut_settings .chip{
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(56,189,248,.28);
+  background: rgba(56,189,248,.12);
+  
+  font-weight: 800;
+  color: rgba(255,255,255,.92) !important;
+}
+
+#ara_content #shortcut_settings .cam-right{ display: flex; align-items: center; gap: 10px; }
+
+#ara_content #shortcut_settings .cam-select{
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  background: rgba(8,14,26,.55) !important;
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 900;
+  padding-right: 30px;
+}
+
+#ara_content #shortcut_settings .fat-rel{ position: relative; }
+#ara_content #shortcut_settings .fat-arrow{
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 12px;
+  opacity: .85;
+  color: rgba(255,255,255,.90);
+}
+
+#ara_content #shortcut_settings .cam-btn{
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(56,189,248,.18) !important;
+  border: 1px solid rgba(56,189,248,.35) !important;
+  color: rgba(255,255,255,.95) !important;
+  font-weight: 900;
+  transition: .16s ease;
+}
+#ara_content #shortcut_settings .cam-btn:hover{
+  background: rgba(56,189,248,.26) !important;
+  border-color: rgba(56,189,248,.55) !important;
+  transform: translateY(-1px);
+}
+
+#ara_content #shortcut_settings .cam-foot{ margin-top: 12px; opacity: .75; font-size: 12px; }
+
+/* === FIX: Dark tema'da siyah yazı override === */
+#ara_content #shortcut_settings .cam-shortcuts,
+#ara_content .cam-shortcuts *{
+  color: rgba(255,255,255,.92) !important;
+}
+
+/* bazı yerlerde opacity yüzünden daha iyi görünsün */
+#ara_content #shortcut_settings .cam-sub,
+#ara_content #shortcut_settings .cam-keyhint,
+#ara_content #shortcut_settings .cam-foot,
+#ara_content #shortcut_settings .note{
+  color: rgba(255,255,255,.72) !important;
+}
+
+/* chip zaten OK ama garanti */
+#ara_content #shortcut_settings .chip{
+  color: rgba(255,255,255,.92) !important;
+}
+
+#ara_content  #shortcut_settings #errorDiv{
+  display:none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251,113,133,.35);
+  background: rgba(251,113,133,.10);
+  color: #fff;
+  font-weight: 900;
+}
+
+</style>
+
+<script src="/obs_js_files/user/shortcut/shortcuts_settings.js"></script>

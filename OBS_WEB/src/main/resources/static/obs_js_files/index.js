@@ -68,6 +68,7 @@ const pageModules = {
         js: "/obs_js_files/cari/dekont.js",
         init: () => {
             if (typeof window.cariBaslik === "function") window.cariBaslik();
+			if (typeof OBS?.DEKONT?.init === "function") OBS.DEKONT.init();
         }
     },
     "/cari/tahsilat": {
@@ -327,6 +328,12 @@ const pageModules = {
         js: "/obs_js_files/forum/forum.js",
         init: () => { OBS?.FORUM?.init?.(); }
     },
+	"/user/shortcut": {
+	        js: "/obs_js_files/user/shortcut/shortcuts_settings.js",
+	init: () => {
+	    if (typeof OBS?.SHORTCUT_SETTINGS?.init === "function") OBS.SHORTCUT_SETTINGS.init();
+		  }
+	},
     "/gps/gps": {
         js: "/obs_js_files/gps/gps.js",
     }

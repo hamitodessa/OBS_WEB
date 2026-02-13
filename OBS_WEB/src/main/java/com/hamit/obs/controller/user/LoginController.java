@@ -28,6 +28,7 @@ import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.kur.KurService;
 import com.hamit.obs.service.user.UserService;
+import com.hamit.obs.service.user.UserShortcutService;
 
 
 @Controller
@@ -58,7 +59,8 @@ public class LoginController {
 	@Autowired
 	private ForumService forumService;
 
-
+	@Autowired
+	UserShortcutService userShortcutService;
    
 	
 
@@ -86,6 +88,10 @@ public class LoginController {
 		model.addAttribute("ip", restTemplate.getForObject(apiUrl, String.class));
 		int mesajsayi = forumService.getmesajsayi(useremail);
 		model.addAttribute("mesajadet", mesajsayi == 0 ? "":mesajsayi);
+		
+		Map<String, String> shortcuts = userShortcutService.getShortcuts(userService.getCurrentUser().getId());
+		model.addAttribute("shortcuts", shortcuts);
+		
 		return model;
 	}
 
