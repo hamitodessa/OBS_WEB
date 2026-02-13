@@ -63,7 +63,7 @@ public class CariService {
 	
 	public String[] conn_detail() {
 		String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-		ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+		ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 		String[] detay = {"","",""};
 		detay[0] = cariConnDetails.getSqlTipi().getValue() ;
 		detay[1] = cariConnDetails.getDatabaseName() ;
@@ -74,7 +74,7 @@ public class CariService {
 	public String[] hesap_adi_oku(String hesap) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			return strategy.hesap_adi_oku(hesap,cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -84,7 +84,7 @@ public class CariService {
 	public List<Map<String, Object>> ekstre(String hesap, String t1, String t2,Pageable pageable){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			return strategy.ekstre(hesap, t1, t2,pageable,cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -94,7 +94,7 @@ public class CariService {
 	public double eks_raporsize(String hesap , String t1 ,String t2) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			return strategy.eks_raporsize(hesap, t1, t2,cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -104,7 +104,7 @@ public class CariService {
 	public List<Map<String, Object>> hesap_kodlari(){
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
-			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
+			ConnectionDetails cariConnDetails = UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
 			return strategy.hesap_kodlari(cariConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
@@ -137,7 +137,6 @@ public class CariService {
 
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);
-			
 			String usrString = Global_Yardimci.user_log(SecurityContextHolder.getContext().getAuthentication().getName());
 			evrak_yoket(dBilgi.getFisNo(),usrString);
 			loglamaDTO.setEvrak(String.valueOf(dBilgi.getFisNo()));
@@ -180,7 +179,6 @@ public class CariService {
 		// System.out.println("Rol Adi=" +rolAdi);
 		if (! RoleUtil.durumRole(RolEnum.ADMIN))
 			throw new ServiceException("Yetkiniz Yok");
-
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails cariConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.CARI_HESAP);

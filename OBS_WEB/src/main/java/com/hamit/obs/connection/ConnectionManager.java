@@ -22,28 +22,6 @@ public class ConnectionManager {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	private String generateJdbcUrl(User_Details details,String modul,String dosbaslangic) {
-		String cnnString="" ;
-		if(details.getHangi_sql().equals(sqlTipi.MSSQL.getValue()))
-			cnnString = "jdbc:sqlserver://" + details.getUser_ip() + ";databaseName=" + dosbaslangic + details.getUser_prog_kodu() + ";trustServerCertificate=true;";
-		else if(details.getHangi_sql().equals(sqlTipi.MYSQL.getValue()))
-			cnnString = "jdbc:mysql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu();
-		else if(details.getHangi_sql().equals(sqlTipi.PGSQL.getValue()))
-			cnnString = "jdbc:postgresql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu();
-		return cnnString ;
-	}
-
-	private String generateJdbcUrlLog(User_Details details,String dosbaslangic) {
-		String cnnString="" ;
-		if(details.getHangi_sql().equals(sqlTipi.MSSQL.getValue()))
-			cnnString = "jdbc:sqlserver://" + details.getUser_ip() + ";databaseName=" + dosbaslangic + details.getUser_prog_kodu() + "_LOG" +	";trustServerCertificate=true;";
-		else if(details.getHangi_sql().equals(sqlTipi.MYSQL.getValue()))
-			cnnString = "jdbc:mysql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu()  + "_LOG";
-		else if(details.getHangi_sql().equals(sqlTipi.PGSQL.getValue()))
-			cnnString = "jdbc:postgresql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu()  + "_log";
-		return cnnString ;
-	}
-
 	public void loadAllConnections(String userEmail) {
 		List<User_Details> list = userDetailsService.user_Details_All(userEmail);
 		if (list.isEmpty()) {
@@ -74,4 +52,27 @@ public class ConnectionManager {
 							details.getLog(),jdbcUrl,jdbcUrlLog));
 		}
 	}
+
+	private String generateJdbcUrl(User_Details details,String modul,String dosbaslangic) {
+		String cnnString="" ;
+		if(details.getHangi_sql().equals(sqlTipi.MSSQL.getValue()))
+			cnnString = "jdbc:sqlserver://" + details.getUser_ip() + ";databaseName=" + dosbaslangic + details.getUser_prog_kodu() + ";trustServerCertificate=true;";
+		else if(details.getHangi_sql().equals(sqlTipi.MYSQL.getValue()))
+			cnnString = "jdbc:mysql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu();
+		else if(details.getHangi_sql().equals(sqlTipi.PGSQL.getValue()))
+			cnnString = "jdbc:postgresql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu();
+		return cnnString ;
+	}
+
+	private String generateJdbcUrlLog(User_Details details,String dosbaslangic) {
+		String cnnString="" ;
+		if(details.getHangi_sql().equals(sqlTipi.MSSQL.getValue()))
+			cnnString = "jdbc:sqlserver://" + details.getUser_ip() + ";databaseName=" + dosbaslangic + details.getUser_prog_kodu() + "_LOG" +	";trustServerCertificate=true;";
+		else if(details.getHangi_sql().equals(sqlTipi.MYSQL.getValue()))
+			cnnString = "jdbc:mysql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu()  + "_LOG";
+		else if(details.getHangi_sql().equals(sqlTipi.PGSQL.getValue()))
+			cnnString = "jdbc:postgresql://" + details.getUser_ip() +  "/" + dosbaslangic.toLowerCase() + details.getUser_prog_kodu()  + "_log";
+		return cnnString ;
+	}
+
 }

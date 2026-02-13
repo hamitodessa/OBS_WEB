@@ -15,7 +15,6 @@ import com.hamit.obs.repository.cari.ICariDatabase;
 public class CariDatabaseContext {
 	private final Map<String, ICariDatabase> strategies = new HashMap<>();
 
-
 	public CariDatabaseContext(CariMySQL mySQL, CariMsSQL msSQL, CariPgSQL pgSQL) {
 		strategies.put(sqlTipi.MYSQL.getValue(), mySQL);
 		strategies.put(sqlTipi.MSSQL.getValue(), msSQL);

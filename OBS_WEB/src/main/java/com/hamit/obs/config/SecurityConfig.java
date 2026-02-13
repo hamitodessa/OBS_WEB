@@ -25,15 +25,13 @@ public class SecurityConfig {
 		.authorizeHttpRequests(request -> request
 				.requestMatchers("/images/**","/user/send_password", "/user/register")
 				.permitAll()
-				.anyRequest().authenticated() 
-				)
+				.anyRequest().authenticated())
 		.formLogin(form -> form
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
 				.successHandler(successHandler)
 				.failureHandler(loginFailureHandler)
-				.permitAll()
-				)
+				.permitAll())
 		.logout(logout -> logout
 				.logoutUrl("/logout")
 				.logoutSuccessUrl("/login")
@@ -45,11 +43,9 @@ public class SecurityConfig {
 		                UserSessionManager.removeUserSessionsByUsername(username);
 		            }
 		        })
-				.permitAll()
-				)
+				.permitAll())
 		.sessionManagement(session -> session
-				.invalidSessionUrl("/session-expired")
-				)
+				.invalidSessionUrl("/session-expired"))
 		.userDetailsService(customUserDetails);
 		return http.build();
 	}

@@ -60,7 +60,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			log.info("LOGIN OK   - user={} ip={} ua={} uri={}", username, ip, ua, uri);
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			UserSessionManager.removeUserSessionsByUsername(useremail);
-			connectionManager.loadAllConnections(useremail);
+			connectionManager.loadAllConnections(useremail);// Kullanıcının tüm bağlantılarını yükle
 			
 			cariService.initialize();
 			kurService.initialize();

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hamit.obs.connection.ConnectionManager;
+import com.hamit.obs.custom.enums.RoleUtil;
 import com.hamit.obs.custom.enums.modulTipi;
 import com.hamit.obs.custom.enums.modulbaslikTipi;
 import com.hamit.obs.custom.yardimci.TextSifreleme;
@@ -56,10 +57,8 @@ public class UserDetailsController {
 	private KeresteService keresteService;
 	@Autowired
 	private ServerService serverService;
-	
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
 	@Autowired
 	private ConnectionManager connectionManager;
 
@@ -112,11 +111,7 @@ public class UserDetailsController {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			boolean drm = false;
-			User userr = userService.getCurrentUser();
-			Set<Role> roles = userr.getRoles();
-			boolean isAdmin = roles.stream()
-					.anyMatch(role -> role.getName() == RolEnum.ADMIN);
-			if (!isAdmin) {
+			if (! RoleUtil.durumRole(RolEnum.ADMIN)) {
 				List<User_Details> userDetailsList = userDetailsService.izinlimiKontrol(
 						userDetails.getUser_modul(),
 						userService.getCurrentUser().getEmail()
@@ -221,6 +216,7 @@ public class UserDetailsController {
 			modulTipi modultip = modulTipi.fromDbValue((String) request.get("modul"));
 			userDetailsService.deleteUserDetails(id);
 			response.put("errorMessage", ""); 
+			connectionManager.loadAllConnections(SecurityContextHolder.getContext().getAuthentication().getName());
 			switch (modultip) {
 			case CARI_HESAP -> cariService.initialize();
 			case KUR        -> kurService.initialize();
