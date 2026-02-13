@@ -329,10 +329,9 @@ const pageModules = {
         init: () => { OBS?.FORUM?.init?.(); }
     },
 	"/user/shortcut": {
-	        js: "/obs_js_files/user/shortcut/shortcuts_settings.js",
-	init: () => {
-	    if (typeof OBS?.SHORTCUT_SETTINGS?.init === "function") OBS.SHORTCUT_SETTINGS.init();
-		  }
+	     js: "/obs_js_files/user/shortcut/shortcuts_settings.js",
+	     init: () => {if (typeof OBS?.SHORTCUT_SETTINGS?.init === "function") OBS.SHORTCUT_SETTINGS.init();
+	}
 	},
     "/gps/gps": {
         js: "/obs_js_files/gps/gps.js",
