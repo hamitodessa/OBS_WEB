@@ -86,24 +86,30 @@ function stkfilterTable() {
 
 
 function urnselectValue(inputId, selectedBarkod, selectedKodu, secondnerden, barkodurunkodu) {
-    const inputEl = document.getElementById(inputId);
-    const searchEl = document.getElementById("urnsecond-modalSearch");
-    if (searchEl) searchEl.value = "";
+  const inputEl = document.getElementById(inputId);
+  const searchEl = document.getElementById("urnsecond-modalSearch");
+  if (searchEl) searchEl.value = "";
 
-    modalHide("urnsecondModal");
+  const val = (barkodurunkodu === "ukodukod") ? selectedKodu : selectedBarkod;
 
-    if (inputEl) {
-        if (barkodurunkodu === "ukodukod") inputEl.value = selectedKodu;
-        else if (barkodurunkodu === "barkod") inputEl.value = selectedBarkod;
-    }
+  if (inputEl) inputEl.value = val;
 
-    if (secondnerden === "imalat") {
-        OBS.URETIM.urunAramaYap("Kodu");
-        return;
-    }
+  modalHide("urnsecondModal");
 
-    if (secondnerden === "imalatsatir" || secondnerden === "recetealt" || secondnerden === "recetesatir") {
-        if (inputEl) inputEl.dispatchEvent(new Event("change", { bubbles: true }));
-        return;
-    }
+  if (secondnerden === "imalat") {
+    OBS.URETIM.urunAramaYap("Kodu");
+    return;
+  }
+
+  if (secondnerden === "imalatsatir" || secondnerden === "recetealt" || secondnerden === "recetesatir" || secondnerden === "fatsatir") {
+    if (!inputEl) return;
+
+    setTimeout(() => {
+      inputEl.focus(); // opsiyonel ama iyi
+      inputEl.dispatchEvent(new Event("input",  { bubbles: true }));
+      inputEl.dispatchEvent(new Event("change", { bubbles: true }));
+    }, 0);
+
+    return;
+  }
 }
