@@ -41,17 +41,15 @@ public class UserPrefsController {
     public Model shortcutsPage(Model model) {
         try {
             Long userId = userService.getCurrentUser().getId();
-
             Map<String, String> sc = shortcutService.getShortcuts(userId);
-
             // defaultlar (db boşsa)
             sc.putIfAbsent("SAVE", "S");
             sc.putIfAbsent("DELETE", "D");
             sc.putIfAbsent("REFRESH", "R");
             sc.putIfAbsent("NEW", "N");
             sc.putIfAbsent("SEARCH", "F");
-
             model.addAttribute("shortcuts", sc);
+            model.addAttribute("errorMessage", "");
             return model; 
         } catch (ServiceException e) {
             model.addAttribute("errorMessage", e.getMessage());
