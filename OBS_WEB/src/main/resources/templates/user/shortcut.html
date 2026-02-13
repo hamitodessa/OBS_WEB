@@ -1,4 +1,5 @@
-<div class="cam-shortcuts card p-4" id="shortcut_settings">
+<div id="shortcut_settings">
+<div class="cam-shortcuts card p-4" >
   <div class="cam-head">
     <div class="cam-title">Kısayol Ayarları</div>
     <div class="cam-sub">Tüm modüllerde aynı çalışır (Ctrl + harf).</div>
@@ -105,7 +106,7 @@
   </div>
   <div id="errorDiv"></div>
 </div>
-
+</div>
 <style>
 /* =========================
    2026 CAM – SHORTCUT SETTINGS
@@ -114,44 +115,84 @@
 
 #ara_content{ color: rgba(255,255,255,.92); padding: 0 !important; }
 
-#ara_content .cam-shortcuts.card{
+/* =====================================================
+   2026 CAM – SHORTCUT SETTINGS (CLEAN FINAL)
+   Scope: #ara_content #shortcut_settings
+   ===================================================== */
+
+#ara_content #shortcut_settings{
+  color: rgba(255,255,255,.92);
+}
+
+/* CARD */
+#ara_content #shortcut_settings .cam-shortcuts.card{
+  width: min(680px, 96%);
+  margin: 0 auto;
+  padding: 16px !important;
+
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06)) !important;
   border: 1px solid rgba(255,255,255,.16) !important;
   border-radius: 18px;
   box-shadow: 0 18px 55px rgba(0,0,0,.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  width: min(680px, 96%);
-  margin: 0 auto;                 /* ortala */
-  max-height: calc(100vh - 170px); /* header vs için pay */
+
+  /* responsive height + internal scroll */
+  max-height: calc(100vh - 170px);
   display: flex;
   flex-direction: column;
-  
-  scrollbar-width: thin;
-  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
-  
 }
 
+/* HEAD */
 #ara_content #shortcut_settings .cam-head{ margin-bottom: 10px; }
-#ara_content #shortcut_settings .cam-title{ font-weight: 900; font-size: 18px; letter-spacing: .2px; }
-#ara_content #shortcut_settings .cam-sub{ opacity: .78; font-size: 13px; margin-top: 2px; }
+#ara_content #shortcut_settings .cam-title{
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,.95);
+}
+#ara_content #shortcut_settings .cam-sub{
+  margin-top: 2px;
+  font-size: 13px;
+  opacity: .78;
+  color: rgba(255,255,255,.78);
+}
 
-#ara_content #shortcut_settings .cam-grid{ 
-
-display: grid;
- gap: 10px;
+/* GRID (scroll area) */
+#ara_content #shortcut_settings .cam-grid{
+  display: grid;
+  gap: 10px;
   margin-top: 10px;
-  overflow: auto;
-  padding-right: 4px;      /* scrollbar çarpmasın */
-  flex: 1 1 auto;          /* kart içinde büyüsün */
-  min-height: 0;           /* flex + overflow için kritik */
-   }
 
+  overflow: auto;
+  padding-right: 4px;
+  flex: 1 1 auto;
+  min-height: 0;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+}
+#ara_content #shortcut_settings .cam-grid::-webkit-scrollbar{ width: 10px; }
+#ara_content #shortcut_settings .cam-grid::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 999px;
+}
+#ara_content #shortcut_settings .cam-grid::-webkit-scrollbar-thumb{
+  background: rgba(56,189,248,.35);
+  border: 2px solid rgba(255,255,255,.06);
+  border-radius: 999px;
+}
+#ara_content #shortcut_settings .cam-grid::-webkit-scrollbar-thumb:hover{
+  background: rgba(56,189,248,.55);
+}
+
+/* ROW */
 #ara_content #shortcut_settings .cam-row{
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.10);
@@ -159,22 +200,37 @@ display: grid;
 }
 
 #ara_content #shortcut_settings .cam-left{ min-width: 175px; }
-#ara_content #shortcut_settings .cam-label{ font-weight: 900; font-size: 13px; }
-#ara_content #shortcut_settings .cam-keyhint{ margin-top: 2px; font-size: 12px; opacity: .75; }
+#ara_content #shortcut_settings .cam-label{
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(255,255,255,.92);
+}
+#ara_content #shortcut_settings .cam-keyhint{
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: .75;
+  color: rgba(255,255,255,.72);
+}
 
+/* CHIP */
 #ara_content #shortcut_settings .chip{
   display: inline-block;
   padding: 2px 8px;
   border-radius: 999px;
   border: 1px solid rgba(56,189,248,.28);
   background: rgba(56,189,248,.12);
-  
+  color: rgba(255,255,255,.92);
   font-weight: 800;
-  color: rgba(255,255,255,.92) !important;
 }
 
-#ara_content #shortcut_settings .cam-right{ display: flex; align-items: center; gap: 10px; }
+/* RIGHT */
+#ara_content #shortcut_settings .cam-right{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
+/* SELECT */
 #ara_content #shortcut_settings .cam-select{
   height: 38px;
   border-radius: 12px;
@@ -183,9 +239,9 @@ display: grid;
   color: rgba(255,255,255,.92) !important;
   font-weight: 900;
   padding-right: 30px;
-  width: 80px;
 }
 
+/* ARROW */
 #ara_content #shortcut_settings .fat-rel{ position: relative; }
 #ara_content #shortcut_settings .fat-arrow{
   position: absolute;
@@ -198,6 +254,7 @@ display: grid;
   color: rgba(255,255,255,.90);
 }
 
+/* BUTTON */
 #ara_content #shortcut_settings .cam-btn{
   height: 38px;
   border-radius: 12px;
@@ -213,43 +270,44 @@ display: grid;
   transform: translateY(-1px);
 }
 
-#ara_content #shortcut_settings .cam-foot{ margin-top: 12px; opacity: .75; font-size: 12px; }
-
-/* === FIX: Dark tema'da siyah yazı override === */
-#ara_content #shortcut_settings .cam-shortcuts,
-#ara_content .cam-shortcuts *{
-  color: rgba(255,255,255,.92) !important;
+/* FOOT */
+#ara_content #shortcut_settings .cam-foot{
+  margin-top: 12px;
+  opacity: .75;
+  font-size: 12px;
+  color: rgba(255,255,255,.72);
+  flex: 0 0 auto;
 }
 
-/* bazı yerlerde opacity yüzünden daha iyi görünsün */
-#ara_content #shortcut_settings .cam-sub,
-#ara_content #shortcut_settings .cam-keyhint,
-#ara_content #shortcut_settings .cam-foot,
-#ara_content #shortcut_settings .note{
-  color: rgba(255,255,255,.72) !important;
-}
-
-/* chip zaten OK ama garanti */
-#ara_content #shortcut_settings .chip{
-  color: rgba(255,255,255,.92) !important;
-}
-
-#ara_content  #shortcut_settings #errorDiv{
+/* MESSAGE BOX (inline) */
+#ara_content #shortcut_settings #errorDiv{
   display:none;
   margin-top: 12px;
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(251,113,133,.35);
   background: rgba(251,113,133,.10);
-  color: #fff;
+  color: rgba(255,255,255,.95);
   font-weight: 900;
 }
 
-
-#ara_content #shortcut_settings .cam-head,
-#ara_content #shortcut_settings .cam-foot{
-  flex: 0 0 auto;
+/* RESPONSIVE: narrow screens */
+@media (max-width: 900px){
+  #ara_content #shortcut_settings .cam-row{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  #ara_content #shortcut_settings .cam-right{
+    width: 100%;
+    justify-content: flex-end;
+  }
+  #ara_content #shortcut_settings .cam-left{
+    min-width: 0;
+    width: 100%;
+  }
 }
+
 </style>
 
 <script src="/obs_js_files/user/shortcut/shortcuts_settings.js"></script>
