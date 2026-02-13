@@ -30,8 +30,7 @@ public class LogRaporService {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			
-			ConnectionDetails connConnDetails =
-		            UserSessionManager.getUserSession(useremail, modul);
+			ConnectionDetails connConnDetails = UserSessionManager.getUserSession(useremail, modul);
 			String usrString = Global_Yardimci.user_log(userService.getCurrentUser().getEmail());
 			return loglamaRepository.logRapor(usrString ,startDate,endDate,aciklama,pageable ,connConnDetails);
 		} catch (ServiceException e) {

@@ -45,7 +45,10 @@ public class LoglamaRepository {
 		int offset = page * pageSize;
 		String sql = "" ;
 		if(connDetails.getSqlTipi().equals(sqlTipi.MSSQL)) {
-			sql = " SELECT FORMAT (TARIH,'dd.MM.yyyy HH:mm:ss fff') AS TARIH,MESAJ,EVRAK,USER_NAME" +
+			sql = " SELECT CONVERT(varchar(10), TARIH, 104) + ' ' + " +
+					" LEFT(CONVERT(varchar(12), TARIH, 114), 8) + '.' + " +
+					" RIGHT(CONVERT(varchar(12), TARIH, 114), 3) AS TARIHH, " +
+					" MESAJ,EVRAK,USER_NAME" +
 					" FROM LOGLAMA WITH (INDEX (IX_LOGLAMA))" + 
 					" WHERE MESAJ LIKE N'%" + aciklama + "%'" + 
 					" AND TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
@@ -53,22 +56,24 @@ public class LoglamaRepository {
 					" ORDER BY TARIH " +
 					" OFFSET " + offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
 		}else if(connDetails.getSqlTipi().equals(sqlTipi.MYSQL)) {
-			sql = "SELECT DATE_FORMAT(TARIH,'%d.%m.%Y %H:%i:%s') AS TARIH,MESAJ,EVRAK,USER_NAME" + 
-					" FROM LOGLAMA USE INDEX (IX_LOGLAMA)" + 
-					" WHERE MESAJ LIKE N'%" + aciklama + "%'" + 
-					" AND TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
-					" AND USER_NAME LIKE '" + user + "%'" +
-					" ORDER BY TARIH" +
-					" LIMIT " + pageSize + " OFFSET " + offset + " ";
+			sql = "SELECT DATE_FORMAT(TARIH,'%d.%m.%Y %H:%i:%s') AS TARIHH, MESAJ, EVRAK, USER_NAME" +
+				      " FROM LOGLAMA USE INDEX (IX_LOGLAMA)" +
+				      " WHERE MESAJ LIKE '%" + aciklama + "%'" +
+				      " AND TARIH BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" +
+				      " AND USER_NAME LIKE '" + user + "%'" +
+				      " ORDER BY TARIH" +
+				      " LIMIT " + pageSize + " OFFSET " + offset + " ";
 		} else if(connDetails.getSqlTipi().equals(sqlTipi.PGSQL)) {
-			sql = "SELECT TO_CHAR(\"TARIH\",'dd.MM.yyyy HH:mm:ss ms') AS \"TARIH\",\"MESAJ\",\"EVRAK\",\"USER_NAME\"" +
-					" FROM \"LOGLAMA\"" + 
-					" WHERE \"MESAJ\"::text LIKE '%" + aciklama + "%'" +
-					" AND \"TARIH\" BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998'" + 
-					" AND \"USER_NAME\"::text LIKE '" + user + "'" +
-					" ORDER BY \"TARIH\"" +
-					" LIMIT " + pageSize + " OFFSET " + offset + " ";
+			sql = "SELECT TO_CHAR(\"TARIH\", 'DD.MM.YYYY HH24:MI:SS.MS') AS \"TARIHH\", " +
+					"\"MESAJ\", \"EVRAK\", \"USER_NAME\" " +
+					"FROM \"LOGLAMA\" " +
+					"WHERE \"MESAJ\"::text LIKE '%" + aciklama + "%' " +
+					"AND \"TARIH\" BETWEEN '" + startDate + "' AND '" + endDate + " 23:59:59.998' " +
+					"AND \"USER_NAME\"::text LIKE '" + user + "%' " +
+					"ORDER BY \"TARIH\" " +
+					"LIMIT " + pageSize + " OFFSET " + offset;
 		}
+		System.out.println("SQL Sorgusu: " + sql);
 		List<Map<String, Object>> resultList = new ArrayList<>(); 
 		try (Connection connection = DriverManager.getConnection(connDetails.getJdbcUrlLog(), connDetails.getUsername(), connDetails.getPassword());
 				PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

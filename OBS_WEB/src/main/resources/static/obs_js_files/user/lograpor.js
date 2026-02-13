@@ -110,7 +110,7 @@ OBS.LOG.lograpor = async function(page) {
             const tr = document.createElement("tr");
             tr.classList.add("table-row-height");
             tr.innerHTML = `
-        <td>${item?.TARIH ?? ""}</td>
+        <td>${item?.TARIHH ?? ""}</td>
         <td>${item?.MESAJ ?? ""}</td>
         <td>${item?.EVRAK ?? ""}</td>
         <td>${item?.USER_NAME ?? ""}</td>
@@ -126,13 +126,14 @@ OBS.LOG.lograpor = async function(page) {
 };
 
 // === dışarıdan çağırdığın isimleri koruyalım ===
-window.ilksayfa = () => { if (OBS.LOG.currentPage > 0) OBS.LOG.lograpor(0); };
-window.oncekisayfa = () => { if (OBS.LOG.currentPage > 0) OBS.LOG.lograpor(OBS.LOG.currentPage - 1); };
-window.sonrakisayfa = () => { if (OBS.LOG.currentPage < OBS.LOG.totalPages - 1) OBS.LOG.lograpor(OBS.LOG.currentPage + 1); };
-window.sonsayfa = () => { if (OBS.LOG.totalPages > 0) OBS.LOG.lograpor(OBS.LOG.totalPages - 1); };
+OBS.LOG.ilksayfa = () => { if (OBS.LOG.currentPage > 0) OBS.LOG.lograpor(0); };
+OBS.LOG.oncekisayfa = () => { if (OBS.LOG.currentPage > 0) OBS.LOG.lograpor(OBS.LOG.currentPage - 1); };
+OBS.LOG.sonrakisayfa = () => { if (OBS.LOG.currentPage < OBS.LOG.totalPages - 1) OBS.LOG.lograpor(OBS.LOG.currentPage + 1); };
+OBS.LOG.sonsayfa = () => { if (OBS.LOG.totalPages > 0) OBS.LOG.lograpor(OBS.LOG.totalPages - 1); };
 
+/*
 window.toplampagesize = () => OBS.LOG.toplamPageSize();
 window.logdoldur = () => OBS.LOG.logdoldur();
 window.lograpor = (p) => OBS.LOG.lograpor(p);
-
+*/
 
