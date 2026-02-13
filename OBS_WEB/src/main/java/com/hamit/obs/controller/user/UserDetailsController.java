@@ -31,6 +31,7 @@ import com.hamit.obs.model.user.User_Details;
 import com.hamit.obs.service.adres.AdresService;
 import com.hamit.obs.service.cari.CariService;
 import com.hamit.obs.service.fatura.FaturaService;
+import com.hamit.obs.service.gunluk.GunlukService;
 import com.hamit.obs.service.kambiyo.KambiyoService;
 import com.hamit.obs.service.kereste.KeresteService;
 import com.hamit.obs.service.kur.KurService;
@@ -55,6 +56,8 @@ public class UserDetailsController {
     private FaturaService faturaService;
 	@Autowired
 	private KeresteService keresteService;
+	@Autowired
+	private GunlukService gunlukService;
 	@Autowired
 	private ServerService serverService;
 	@Autowired
@@ -154,6 +157,7 @@ public class UserDetailsController {
 				case KAMBIYO    -> kambiyoService.initialize();
 				case FATURA     -> faturaService.initialize();
 				case KERESTE    -> keresteService.initialize();
+				case GUNLUK		-> gunlukService.initialize();
 				default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
 			}
 			} else {
@@ -224,6 +228,7 @@ public class UserDetailsController {
 			case KAMBIYO    -> kambiyoService.initialize();
 			case FATURA     -> faturaService.initialize();
 			case KERESTE    -> keresteService.initialize();
+			case GUNLUK		-> gunlukService.initialize();
 			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
 		}
 		} catch (ServiceException e) {

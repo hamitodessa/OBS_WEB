@@ -76,6 +76,7 @@ public class createMSSQL {
 				case KAMBIYO    -> createTableKambiyo(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
 				case FATURA     -> createTableFatura(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
 				case KERESTE    -> createTableKereste(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
+				case GUNLUK    -> createTableGunluk(databaseConnection, sbilgi.getFirma_adi(), sbilgi.getUser_name());
 				default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
 			}
 			}
@@ -1217,6 +1218,53 @@ public class createMSSQL {
 			stmt.executeUpdate(sql);
 		}
 		sql = "INSERT INTO  FAT_EVRAK_FORMAT(SAT_SUT,TARIH,FIRMA_KODU,FIRMA_UNVANI,VERGI_DAIRESI ,VERGI_NO ,GIDECEGI_YER ,NOT_1 ,NOT_2 ,NOT_3,BASLIK_BOLUM,BARKOD,URUN_KODU ,URUN_ADI , DEPO ,IZAHAT,SIMGE ,BIRIM_FIAT ,ISKONTO ,MIKTAR,K_D_V ,TUTAR ,TUTAR_TOPLAM ,ISKONTO_TOPLAMI  ,BAKIYE ,K_D_V_TOPLAMI ,BELGE_TOPLAMI , YAZI_ILE,TEVKIFAT_ORANI ,AL_TAR_TEV_ED_KDV ,TEV_DAH_TOP_TUTAR , BEYAN_ED_KDV ,TEV_HAR_TOP_TUT,TEV_KASESI,ALT_BOLUM,N1 ,N2 ,N3 ,N4 ,N5 ,N6 ,N7 ,N8 ,N9 ,N10,[USER]) VALUES " + " ('SUTUN','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','Admin')";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		// ***************OZEL NO YAZ *************************
+		sql = "INSERT INTO OZEL (YONETICI, YON_SIFRE, FIRMA_ADI) VALUES (?, ?, ?)";
+		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, user_name);
+			stmt.setString(2, "12345");
+			stmt.setString(3, firmaAdi);
+			stmt.executeUpdate();
+		}
+	}
+	
+	public void createTableGunluk(Connection connection, String firmaAdi , String user_name) throws SQLException {
+		String sql =null;
+		sql = "CREATE TABLE GOREV ([GID] [int] IDENTITY(1,1) NOT NULL,BASL_TARIH DATE,BASL_SAAT nvarchar(5),BIT_TARIH DATE,BIT_SAAT nvarchar(5),TEKRARLA bit,ISIM nvarchar(30),GOREV nvarchar(30),YER nvarchar(30),MESAJ nvarchar(100),SECENEK nvarchar(10),DEGER int,[USER] nvarchar(15) NULL,[GID_NO] int)" ;  
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE NONCLUSTERED INDEX [IX_GOREV] ON [dbo].[GOREV]([ISIM] ASC,[GOREV] ASC"
+				+ ")WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)";
+
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE GUNLUK ([GRVID] [int] IDENTITY(1,1) NOT NULL,[GID] [int],TARIH DATE,SAAT nvarchar(5),ISIM nvarchar(30),GOREV nvarchar(30),YER nvarchar(30),MESAJ nvarchar(100),[USER] nvarchar(15) NULL)" ;  
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE NONCLUSTERED INDEX [IDX_GUNLUK] ON [dbo].[GUNLUK](	[TARIH] ASC "
+				+ " )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE OZEL(OZID int identity(1,1) CONSTRAINT PKeyOZID PRIMARY KEY,YONETICI nvarchar(25), YON_SIFRE nvarchar(15) , FIRMA_ADI nvarchar(50))";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE YETKILER(YETID int identity(1,1) CONSTRAINT PKeyYETID PRIMARY KEY,KULLANICI nvarchar(25), HESAP nvarchar(12), TAM_YETKI bit, GORUNTU bit )";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "CREATE TABLE EVRAK_NO(EID int identity(1,1) CONSTRAINT PKeyEID PRIMARY KEY,EVRAK integer )";
+		try (Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate(sql);
+		}
+		sql = "INSERT INTO  EVRAK_NO(EVRAK) VALUES ('0')";
 		try (Statement stmt = connection.createStatement()) {
 			stmt.executeUpdate(sql);
 		}

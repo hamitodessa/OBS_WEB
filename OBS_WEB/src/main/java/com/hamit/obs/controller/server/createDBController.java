@@ -68,6 +68,7 @@ public class createDBController {
 			case KAMBIYO    -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kam.name());
 			case FATURA     -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Fat.name());
 			case KERESTE    -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Ker.name());
+			case GUNLUK    -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Gun.name());
 			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
 		}
 			result = serverService.dosyakontrol(serverBilgiDTO);
@@ -102,6 +103,7 @@ public class createDBController {
 				case KAMBIYO    -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kam.name());
 				case FATURA     -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Fat.name());
 				case KERESTE    -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Ker.name());
+				case GUNLUK    -> svrBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Gun.name());
 			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
 			}
 			result = serverService.dosyaolustur(svrBilgiDTO);
@@ -129,7 +131,6 @@ public class createDBController {
 			modulTipi modultip = modulTipi.fromDbValue(modul);
 			switch(modultip) {
 			case CARI_HESAP:
-				
 				if(hangi.equals(sqlTipi.MSSQL)) 
 				{
 					stb.append(" SET QUOTED_IDENTIFIER ON; ");

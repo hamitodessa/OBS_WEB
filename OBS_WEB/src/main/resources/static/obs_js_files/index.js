@@ -328,7 +328,11 @@ const pageModules = {
         js: "/obs_js_files/forum/forum.js",
         init: () => { OBS?.FORUM?.init?.(); }
     },
-	"/user/shortcut": {
+		"/gunluk/gunluk": {js: "/obs_js_files/gunluk/gunluk.js",
+			   init: () => {if (window.OBS?.SCHEDULER?.init) OBS.SCHEDULER.init();}
+		 },
+		
+	  "/user/shortcut": {
 	     js: "/obs_js_files/user/shortcut/shortcuts_settings.js",
 	     init: () => {if (typeof OBS?.SHORTCUT_SETTINGS?.init === "function") OBS.SHORTCUT_SETTINGS.init();
 	}

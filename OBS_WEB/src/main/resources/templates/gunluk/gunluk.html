@@ -1,0 +1,225 @@
+<!-- =========================
+     2026 CAM – GÜNLÜK / SCHEDULER
+     ========================= -->
+
+<div id="camScheduler" class="cam-scheduler">
+
+  <!-- TOP BAR -->
+  <div class="cam-topbar">
+    <div class="cam-btns">
+      <button class="cam-ico" id="camSch_refresh" type="button" title="Şimdi / Refresh">⟳</button>
+      <button class="cam-ico" id="camSch_prev" type="button" title="Geri">⟨</button>
+      <button class="cam-ico" id="camSch_next" type="button" title="İleri">⟩</button>
+    </div>
+
+    <div class="cam-title" id="camSch_title">Grid</div>
+
+    <div class="cam-right">
+      <select id="camSch_viewMode" class="cam-select">
+        <option value="week" selected>Haftalık</option>
+        <option value="day">Günlük</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="cam-body">
+    <!-- GRID -->
+    <div class="cam-gridwrap">
+      <div class="cam-grid" id="camSch_grid"></div>
+      <div class="cam-footnote cam-muted" id="camSch_note">⟂ Hücreye tıkla → sağda görevleri gör.</div>
+    </div>
+
+    <!-- SIDE -->
+    <div class="cam-side">
+      <div class="cam-side-title" id="camSch_sideTitle">Görevler</div>
+      <div class="cam-side-list" id="camSch_taskList">
+        <div class="cam-muted">Bir hücre seç…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* =========================
+   2026 CAM – Scheduler (İZOLE)
+   Scope: #camScheduler
+   ========================= */
+
+#camScheduler{
+  --bg: rgba(8,14,26,.94);
+  --card: rgba(255,255,255,.06);
+  --line: rgba(255,255,255,.14);
+  --txt: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.62);
+  --ac: rgba(56,189,248,.55);
+
+  color: var(--txt);
+  background:
+    radial-gradient(1200px 520px at 10% 0%,
+      rgba(56,189,248,.18),
+      rgba(56,189,248,0) 55%),
+    radial-gradient(900px 520px at 95% 110%,
+      rgba(34,197,94,.12),
+      rgba(34,197,94,0) 58%),
+    linear-gradient(180deg, rgba(8,14,26,.92), rgba(8,14,26,.82));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 22px 65px rgba(0,0,0,.50);
+  overflow: hidden;
+}
+
+/* topbar */
+#camScheduler .cam-topbar{
+  display:flex; align-items:center; gap:12px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+  border-bottom: 1px solid var(--line);
+}
+#camScheduler .cam-btns{ display:flex; gap:8px; }
+
+#camScheduler .cam-ico{
+  width:42px; height:38px;
+  border-radius: 12px;
+  background: rgba(56,189,248,.14);
+  border: 1px solid rgba(56,189,248,.30);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  transition: .14s ease;
+}
+#camScheduler .cam-ico:hover{
+  background: rgba(56,189,248,.22);
+  transform: translateY(-1px);
+}
+#camScheduler .cam-title{
+  flex:1;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+
+#camScheduler .cam-select{
+  height:38px; padding: 0 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  color: var(--txt);
+}
+
+/* body layout */
+#camScheduler .cam-body{
+  display:grid;
+  grid-template-columns: 1fr 330px;
+  min-height: 560px;
+}
+#camScheduler .cam-gridwrap{ padding: 10px; }
+#camScheduler .cam-side{
+  border-left: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
+  padding: 10px;
+}
+#camScheduler .cam-side-title{
+  font-weight:900;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  margin-bottom: 10px;
+}
+#camScheduler .cam-side-list{
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(8,14,26,.45);
+  padding: 10px;
+  height: calc(560px - 90px);
+  overflow:auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,.45) rgba(255,255,255,.06);
+}
+#camScheduler .cam-side-list::-webkit-scrollbar{ width: 10px; }
+#camScheduler .cam-side-list::-webkit-scrollbar-thumb{
+  background: rgba(56,189,248,.40);
+  border: 2px solid rgba(8,14,26,.60);
+  border-radius: 10px;
+}
+#camScheduler .cam-side-list::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.06);
+  border-radius: 10px;
+}
+
+#camScheduler .cam-footnote{
+  margin-top: 10px;
+  padding: 8px 10px;
+  border: 1px dashed rgba(255,255,255,.14);
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+}
+#camScheduler .cam-muted{ color: var(--muted); }
+
+/* grid */
+#camScheduler .cam-grid{
+  display:grid;
+  grid-template-columns: 78px repeat(7, 1fr);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow:hidden;
+}
+#camScheduler .hcell{
+  padding: 10px 8px;
+  font-weight: 900;
+  background: rgba(255,255,255,.06);
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+#camScheduler .tcell{
+  padding: 8px 8px;
+  font-weight: 900;
+  color: rgba(255,255,255,.75);
+  background: rgba(255,255,255,.04);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+#camScheduler .cell{
+  position:relative;
+  padding: 8px 10px;
+  border-right: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(8,14,26,.40);
+  cursor:pointer;
+  transition:.12s ease;
+  user-select: none;
+}
+#camScheduler .cell:hover{ background: rgba(56,189,248,.08); }
+#camScheduler .cell.selected{
+  outline: 2px solid rgba(56,189,248,.55);
+  outline-offset: -2px;
+  background: rgba(56,189,248,.10);
+}
+
+#camScheduler .badge{
+  display:inline-flex;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  font-weight: 900;
+  font-size: 12px;
+}
+#camScheduler .badge.has{
+  background: rgba(56,189,248,.14);
+  border-color: rgba(56,189,248,.35);
+}
+
+/* tasks */
+#camScheduler .task{
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+  margin-bottom: 8px;
+}
+#camScheduler .task .t1{ font-weight:900; }
+#camScheduler .task .t2{ color: rgba(255,255,255,.70); font-size: 13px; margin-top: 4px; }
+</style>
+
+

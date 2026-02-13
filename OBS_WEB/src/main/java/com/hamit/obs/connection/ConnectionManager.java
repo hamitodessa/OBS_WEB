@@ -38,6 +38,7 @@ public class ConnectionManager {
 			case KAMBIYO    -> modulbaslikTipi.OK_Kam.name();
 			case FATURA     -> modulbaslikTipi.OK_Fat.name();
 			case KERESTE    -> modulbaslikTipi.OK_Ker.name();
+			case GUNLUK    -> modulbaslikTipi.OK_Gun.name();
 			default -> throw new IllegalArgumentException("Unexpected modul: " + mt);
 			};
 			String jdbcUrl    = generateJdbcUrl(details, modul, dosbaslangic);
