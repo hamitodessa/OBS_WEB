@@ -1,5 +1,6 @@
 package com.hamit.obs.repository.gunluk;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,11 +9,12 @@ import com.hamit.obs.dto.gunluk.gunlukBilgiDTO;
 public interface IGunlukDatabase {
 
 	String gun_firma_adi(ConnectionDetails gunlukConnDetails);
+	List<Map<String, Object>> gorev_sayi(Date start,Date end,ConnectionDetails gunlukConnDetails);
 	void gorev_kayit(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails) ;
 	void gorev_sil(int id,ConnectionDetails gunlukConnDetails);
 	List<Map<String, Object>> gorev_oku(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
 	List<Map<String, Object>> isim_oku(ConnectionDetails gunlukConnDetails);
-	List<Map<String, Object>> gorev_oku_tarih(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
+	List<Map<String, Object>> gorev_oku_tarih(String tarih,String saat,ConnectionDetails gunlukConnDetails);
 	List<Map<String, Object>> gID_oku(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
 	List<Map<String, Object>> hazir_gorevler(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
 	void gorev_tek_sil(int id,ConnectionDetails gunlukConnDetails);

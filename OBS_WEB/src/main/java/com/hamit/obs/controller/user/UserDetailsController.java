@@ -186,6 +186,7 @@ public class UserDetailsController {
 			case KAMBIYO -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Kam.name());
 			case FATURA -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Fat.name());
 			case KERESTE -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Ker.name());
+			case GUNLUK -> serverBilgiDTO.setUser_modul_baslik(modulbaslikTipi.OK_Gun.name());
 			default -> throw new IllegalArgumentException("Unexpected value: " + modultip);
 			}
 			String sifre = serverBilgiDTO.getUser_pwd_server();

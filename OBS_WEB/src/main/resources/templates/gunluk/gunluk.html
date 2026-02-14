@@ -4,49 +4,91 @@
 
 <div id="camScheduler" class="cam-scheduler">
 
-  <!-- TOP BAR -->
-  <div class="cam-topbar">
-    <div class="cam-btns">
-      <button class="cam-ico" id="camSch_refresh" type="button" title="Şimdi / Refresh">⟳</button>
-      <button class="cam-ico" id="camSch_prev" type="button" title="Geri">⟨</button>
-      <button class="cam-ico" id="camSch_next" type="button" title="İleri">⟩</button>
-    </div>
+	<!-- TOP BAR -->
+	<div class="cam-topbar">
+		<div class="cam-btns">
+			<button class="cam-ico" id="camSch_refresh" type="button"
+				title="Şimdi / Refresh">⟳</button>
+			<button class="cam-ico" id="camSch_prev" type="button" title="Geri">⟨</button>
+			<button class="cam-ico" id="camSch_next" type="button" title="İleri">⟩</button>
+		</div>
 
-    <div class="cam-title" id="camSch_title">Grid</div>
+		<div class="cam-title" id="camSch_title">Grid</div>
 
-    <div class="cam-right">
-      <select id="camSch_viewMode" class="cam-select">
-        <option value="week" selected>Haftalık</option>
-        <option value="day">Günlük</option>
-      </select>
-    </div>
-  </div>
+		<div class="cam-right">
+			<div style="width: 150px; position: relative;">
+				<select id="camSch_viewMode" class="form-select"
+					style="width: 150px;">
+					<option value="week" selected>Haftalık</option>
+					<option value="day">Günlük</option>
+				</select> <span class="select-arrow">▼</span>
+			</div>
+		</div>
+	</div>
 
-  <!-- BODY -->
-  <div class="cam-body">
-    <!-- GRID -->
-    <div class="cam-gridwrap">
-      <div class="cam-grid" id="camSch_grid"></div>
-      <div class="cam-footnote cam-muted" id="camSch_note">⟂ Hücreye tıkla → sağda görevleri gör.</div>
-    </div>
+	<!-- BODY -->
+	<div class="cam-body">
+		<!-- GRID -->
+		<div class="cam-gridwrap">
+			<div class="cam-grid" id="camSch_grid"></div>
+			<div class="cam-footnote cam-muted" id="camSch_note">⟂ Hücreye
+				tıkla → sağda görevleri gör.</div>
+		</div>
 
-    <!-- SIDE -->
-    <div class="cam-side">
-      <div class="cam-side-title" id="camSch_sideTitle">Görevler</div>
-      <div class="cam-side-list" id="camSch_taskList">
-        <div class="cam-muted">Bir hücre seç…</div>
-      </div>
-    </div>
-  </div>
+		<!-- SIDE -->
+		<div class="cam-side">
+			<div class="cam-side-title" id="camSch_sideTitle">Görevler</div>
+			<div class="cam-side-list" id="camSch_taskList">
+				<div class="cam-muted">Bir hücre seç…</div>
+			</div>
+			<!-- 👇 BURAYA KOYUYORUZ -->
+			<div class="cam-detail-title" id="camSch_detailTitle">Detay</div>
+			<div class="cam-detail-wrap">
+				<table class="cam-detail-table" id="camSch_detailTable">
+					<tbody>
+						<tr>
+							<th>Tarih</th>
+							<td class="cam-muted">—</td>
+						</tr>
+						<tr>
+							<th>Saat</th>
+							<td class="cam-muted">—</td>
+						</tr>
+						<tr>
+							<th>İsim</th>
+							<td class="cam-muted">—</td>
+						</tr>
+						<tr>
+							<th>Görev</th>
+							<td class="cam-muted">—</td>
+						</tr>
+						<tr>
+							<th>Yer</th>
+							<td class="cam-muted">—</td>
+						</tr>
+						<tr>
+							<th>Mesaj</th>
+							<td class="cam-muted">—</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="errorDiv"></div>
 </div>
 
 <style>
 /* =========================
-   2026 CAM – Scheduler (İZOLE)
+   2026 CAM – GÜNLÜK / SCHEDULER (CLEAN + COMPACT)
    Scope: #camScheduler
    ========================= */
-
+#ara_content{
+  color: rgba(255,255,255,.92);
+  padding: 0 !important;
+}
 #camScheduler{
+  /* tokens */
   --bg: rgba(8,14,26,.94);
   --card: rgba(255,255,255,.06);
   --line: rgba(255,255,255,.14);
@@ -54,14 +96,17 @@
   --muted: rgba(255,255,255,.62);
   --ac: rgba(56,189,248,.55);
 
+  /* compact spacing */
+  --gridTimeW: 66px;
+  --hPadY: 7px;  --hPadX: 8px;
+  --tPadY: 6px;  --tPadX: 8px;
+  --cPadY: 4px;  --cPadX: 8px;
+  --rowH: 30px;
+
   color: var(--txt);
   background:
-    radial-gradient(1200px 520px at 10% 0%,
-      rgba(56,189,248,.18),
-      rgba(56,189,248,0) 55%),
-    radial-gradient(900px 520px at 95% 110%,
-      rgba(34,197,94,.12),
-      rgba(34,197,94,0) 58%),
+    radial-gradient(1200px 520px at 10% 0%, rgba(56,189,248,.18), rgba(56,189,248,0) 55%),
+    radial-gradient(900px 520px at 95% 110%, rgba(34,197,94,.12), rgba(34,197,94,0) 58%),
     linear-gradient(180deg, rgba(8,14,26,.92), rgba(8,14,26,.82));
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -69,17 +114,21 @@
   overflow: hidden;
 }
 
-/* topbar */
+/* ---------- topbar ---------- */
 #camScheduler .cam-topbar{
-  display:flex; align-items:center; gap:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
   padding: 10px 12px;
   background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
   border-bottom: 1px solid var(--line);
 }
+
 #camScheduler .cam-btns{ display:flex; gap:8px; }
 
 #camScheduler .cam-ico{
-  width:42px; height:38px;
+  width: 42px;
+  height: 38px;
   border-radius: 12px;
   background: rgba(56,189,248,.14);
   border: 1px solid rgba(56,189,248,.30);
@@ -91,46 +140,70 @@
   background: rgba(56,189,248,.22);
   transform: translateY(-1px);
 }
+
 #camScheduler .cam-title{
-  flex:1;
-  font-weight:900;
-  letter-spacing:.2px;
+  flex: 1;
+  font-weight: 900;
+  letter-spacing: .2px;
 }
 
-#camScheduler .cam-select{
-  height:38px; padding: 0 10px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.06);
-  color: var(--txt);
+/* select (Bootstrap form-select) */
+#ara_content #camScheduler .form-select{
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(8,14,26,.45);
+  color: rgba(255,255,255,.92);
+  padding-right: 32px;  /* arrow için */
+}
+#ara_content #camScheduler .form-select:focus{
+  border-color: rgba(56,189,248,.65);
+  box-shadow: 0 0 0 4px rgba(56,189,248,.18);
+  background: rgba(8,14,26,.62);
+  color: #fff;
+}
+#ara_content #camScheduler .select-arrow{
+  position:absolute;
+  top:50%;
+  right:10px;
+  transform: translateY(-50%);
+  pointer-events:none;
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(255,255,255,.85);
+  text-shadow: 0 0 6px rgba(255,255,255,.28);
 }
 
-/* body layout */
+/* ---------- layout ---------- */
 #camScheduler .cam-body{
   display:grid;
-  grid-template-columns: 1fr 330px;
-  min-height: 560px;
+  grid-template-columns: 1fr 350px;
+  min-height: 520px;
 }
-#camScheduler .cam-gridwrap{ padding: 10px; }
+
+#camScheduler .cam-gridwrap{ padding: 8px; }
+
 #camScheduler .cam-side{
   border-left: 1px solid var(--line);
   background: rgba(255,255,255,.03);
-  padding: 10px;
+  padding: 8px;
 }
+
 #camScheduler .cam-side-title{
-  font-weight:900;
-  padding: 8px 10px;
+  font-weight: 900;
+  padding: 6px 10px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: rgba(255,255,255,.06);
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
+
 #camScheduler .cam-side-list{
   border: 1px solid var(--line);
   border-radius: 12px;
   background: rgba(8,14,26,.45);
-  padding: 10px;
-  height: calc(560px - 90px);
+  padding: 8px;
+  height: 300px;
   overflow:auto;
 
   scrollbar-width: thin;
@@ -154,72 +227,171 @@
   border-radius: 12px;
   background: rgba(255,255,255,.03);
 }
+
 #camScheduler .cam-muted{ color: var(--muted); }
 
-/* grid */
+/* ---------- grid ---------- */
 #camScheduler .cam-grid{
   display:grid;
-  grid-template-columns: 78px repeat(7, 1fr);
+  grid-template-columns: var(--gridTimeW) repeat(7, 1fr);
   border: 1px solid var(--line);
   border-radius: 12px;
   overflow:hidden;
 }
+
 #camScheduler .hcell{
-  padding: 10px 8px;
+  padding: var(--hPadY) var(--hPadX);
+  font-size: 13px;
   font-weight: 900;
   background: rgba(255,255,255,.06);
   border-bottom: 1px solid var(--line);
   border-right: 1px solid var(--line);
 }
+
 #camScheduler .tcell{
-  padding: 8px 8px;
+  padding: var(--tPadY) var(--tPadX);
+  font-size: 13px;
   font-weight: 900;
-  color: rgba(255,255,255,.75);
+  color: rgba(255,255,255,.76);
   background: rgba(255,255,255,.04);
   border-right: 1px solid var(--line);
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
+
 #camScheduler .cell{
   position:relative;
-  padding: 8px 10px;
+  padding: var(--cPadY) var(--cPadX);
+  min-height: var(--rowH);
   border-right: 1px solid rgba(255,255,255,.08);
   border-bottom: 1px solid rgba(255,255,255,.08);
   background: rgba(8,14,26,.40);
   cursor:pointer;
-  transition:.12s ease;
-  user-select: none;
+  transition: .12s ease;
+  user-select:none;
 }
 #camScheduler .cell:hover{ background: rgba(56,189,248,.08); }
+
 #camScheduler .cell.selected{
-  outline: 2px solid rgba(56,189,248,.55);
+  outline: 2px solid rgba(56,189,248,.85);
   outline-offset: -2px;
-  background: rgba(56,189,248,.10);
+  background: rgba(56,189,248,.14);
 }
 
+/* dolu hücre (JS cell.classList.toggle("has", has)) */
+#camScheduler .cell.has{
+  background: rgba(56,189,248,.08);
+}
+
+/* badge */
 #camScheduler .badge{
   display:inline-flex;
-  padding: 4px 8px;
+  padding: 2px 7px;
   border-radius: 999px;
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.14);
   font-weight: 900;
   font-size: 12px;
-}
-#camScheduler .badge.has{
-  background: rgba(56,189,248,.14);
-  border-color: rgba(56,189,248,.35);
+  line-height: 16px;
+  opacity: .78; /* 0 iken daha silik */
 }
 
-/* tasks */
+#camScheduler .badge.has{
+  opacity: 1;
+  background: rgba(56,189,248,.28);
+  border-color: rgba(56,189,248,.70);
+  box-shadow: 0 0 0 2px rgba(56,189,248,.14), 0 8px 22px rgba(56,189,248,.18);
+}
+
+/* ---------- tasks ---------- */
 #camScheduler .task{
-  padding: 10px;
+  padding: 8px 10px;
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 12px;
   background: rgba(255,255,255,.05);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
-#camScheduler .task .t1{ font-weight:900; }
-#camScheduler .task .t2{ color: rgba(255,255,255,.70); font-size: 13px; margin-top: 4px; }
+#camScheduler .task .t1{ font-weight: 900; font-size: 13px; }
+#camScheduler .task .t2{ color: rgba(255,255,255,.70); font-size: 12px; margin-top: 3px; }
+#camScheduler .task.clickable{ cursor:pointer; }
+#camScheduler .task.active{
+  outline: 2px solid rgba(34,197,94,.30);
+  outline-offset: -2px;
+  background: rgba(34,197,94,.08);
+}
+
+/* ---------- detail ---------- */
+#camScheduler .cam-detail-title{
+  font-weight: 900;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255,255,255,.06);
+  margin-top: 8px;
+}
+
+#camScheduler .cam-detail-wrap{
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(8,14,26,.35);
+  margin-top: 8px;
+  padding: 8px;
+}
+
+#camScheduler .cam-detail-table{
+  width:100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+#camScheduler .cam-detail-table th{
+  width: 90px;
+  text-align:left;
+  padding: 5px 8px;
+  color: rgba(255,255,255,.78);
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  font-weight: 900;
+}
+#camScheduler .cam-detail-table td{
+  padding: 5px 8px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  color: rgba(255,255,255,.92);
+}
+
+/* ---------- error ---------- */
+#ara_content #errorDiv{ margin: 10px 0; }
+
+#camScheduler .cam-alert{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(239,68,68,.35);
+  background: rgba(239,68,68,.10);
+  color: rgba(255,255,255,.92);
+  font-weight: 800;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+#camScheduler .cam-alert .a-title{ font-weight: 900; margin-bottom: 4px; }
+#camScheduler .cam-alert .a-msg{ color: rgba(255,255,255,.80); font-weight: 700; }
+
+/* ---------- busy overlay ---------- */
+#camScheduler .cam-busy{
+  position:absolute;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.28);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 50;
+}
+#camScheduler.busy{ cursor: wait; }
+#camScheduler.busy .cam-busy{ display:flex; }
+
+#camScheduler .cam-spinner{
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(56,189,248,.35);
+  background: rgba(56,189,248,.10);
+  font-weight: 900;
+}
+
 </style>
-
-

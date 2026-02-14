@@ -1,26 +1,22 @@
 package com.hamit.obs.service.gunluk;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.hamit.obs.config.UserSessionManager;
 import com.hamit.obs.connection.ConnectionDetails;
 import com.hamit.obs.custom.enums.modulTipi;
-import com.hamit.obs.dto.loglama.LoglamaDTO;
 import com.hamit.obs.exception.ServiceException;
 import com.hamit.obs.repository.gunluk.IGunlukDatabase;
-import com.hamit.obs.repository.loglama.LoglamaRepository;
 import com.hamit.obs.service.context.GunlukDatabaseContext;
 
 @Service
 public class GunlukService {
 
-	@Autowired
-	private LoglamaRepository loglamaRepository;
-
-	private LoglamaDTO loglamaDTO = new LoglamaDTO();
-	
 	private final GunlukDatabaseContext databaseStrategyContext;
 	private IGunlukDatabase strategy;
 	public GunlukService(GunlukDatabaseContext databaseStrategyContext) {
@@ -54,6 +50,26 @@ public class GunlukService {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
 			ConnectionDetails gunlukConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.GUNLUK);
 			return strategy.gun_firma_adi(gunlukConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> gorevsayi(Date start,Date end) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails gunlukConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.GUNLUK);
+			return strategy.gorev_sayi(start,end, gunlukConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> gorev_oku_tarih(String tarih,String saat) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails gunlukConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.GUNLUK);
+			return strategy.gorev_oku_tarih(tarih,saat, gunlukConnDetails);
 		} catch (ServiceException e) {
 			throw new ServiceException(errorMessages(e));
 		}

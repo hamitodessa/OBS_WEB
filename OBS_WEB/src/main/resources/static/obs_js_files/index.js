@@ -332,7 +332,7 @@ const pageModules = {
 			   init: () => {if (window.OBS?.SCHEDULER?.init) OBS.SCHEDULER.init();}
 		 },
 		
-	  "/user/shortcut": {
+	"/user/shortcut": {
 	     js: "/obs_js_files/user/shortcut/shortcuts_settings.js",
 	     init: () => {if (typeof OBS?.SHORTCUT_SETTINGS?.init === "function") OBS.SHORTCUT_SETTINGS.init();
 	}

@@ -1,5 +1,6 @@
 package com.hamit.obs.repository.gunluk;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,12 @@ public class GunlukPgSQL implements IGunlukDatabase{
 
 	@Override
 	public String gun_firma_adi(ConnectionDetails gunlukConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> gorev_sayi(Date start,Date end, ConnectionDetails gunlukConnDetails) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -42,7 +49,7 @@ public class GunlukPgSQL implements IGunlukDatabase{
 	}
 
 	@Override
-	public List<Map<String, Object>> gorev_oku_tarih(gunlukBilgiDTO gbilgi, ConnectionDetails gunlukConnDetails) {
+	public List<Map<String, Object>> gorev_oku_tarih(String tarih,String saat, ConnectionDetails gunlukConnDetails) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -138,4 +145,4 @@ public class GunlukPgSQL implements IGunlukDatabase{
 		return 0;
 	}
 
-}
+	}
