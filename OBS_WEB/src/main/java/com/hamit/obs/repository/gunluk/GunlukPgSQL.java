@@ -79,7 +79,7 @@ public class GunlukPgSQL implements IGunlukDatabase{
 	}
 
 	@Override
-	public List<Map<String, Object>> gorev_oku_aylik_grup(gunlukBilgiDTO gbilgi, ConnectionDetails gunlukConnDetails) {
+	public List<Map<String, Object>> gorev_oku_aylik_grup(String ay, ConnectionDetails gunlukConnDetails) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -143,6 +143,12 @@ public class GunlukPgSQL implements IGunlukDatabase{
 	public int gidnoal(ConnectionDetails gunlukConnDetails) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> gorev_oku_gun(String tarih, ConnectionDetails gunlukConnDetails) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	}

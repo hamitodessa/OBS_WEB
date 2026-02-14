@@ -65,6 +65,26 @@ public class GunlukService {
 		}
 	}
 	
+	public List<Map<String, Object>> gorev_oku_aylik_grup(String ay) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails gunlukConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.GUNLUK);
+			return strategy.gorev_oku_aylik_grup(ay, gunlukConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
+	public List<Map<String, Object>> gorev_oku_gun(String ay) {
+		try {
+			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();
+			ConnectionDetails gunlukConnDetails =  UserSessionManager.getUserSession(useremail, modulTipi.GUNLUK);
+			return strategy.gorev_oku_gun(ay, gunlukConnDetails);
+		} catch (ServiceException e) {
+			throw new ServiceException(errorMessages(e));
+		}
+	}
+	
 	public List<Map<String, Object>> gorev_oku_tarih(String tarih,String saat) {
 		try {
 			String useremail = SecurityContextHolder.getContext().getAuthentication().getName();

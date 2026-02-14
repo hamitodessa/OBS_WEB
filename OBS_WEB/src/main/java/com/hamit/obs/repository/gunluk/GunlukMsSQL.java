@@ -143,9 +143,47 @@ public class GunlukMsSQL  implements IGunlukDatabase {
 	}
 
 	@Override
-	public List<Map<String, Object>> gorev_oku_aylik_grup(gunlukBilgiDTO gbilgi, ConnectionDetails gunlukConnDetails) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Map<String, Object>> gorev_oku_aylik_grup(String ay, ConnectionDetails gunlukConnDetails) {
+		// ay: "2026-02"
+	    List<Map<String, Object>> resultList = new ArrayList<>();
+
+	    String sql =
+	        "SELECT CONVERT(varchar(10), TARIH, 23) AS tarih, COUNT(1) AS adet " +
+	        "FROM GUNLUK WITH (INDEX (IDX_GUNLUK)) " +
+	        "WHERE TARIH >= ? AND TARIH < ? " +
+	        "GROUP BY CONVERT(varchar(10), TARIH, 23) " +
+	        "ORDER BY CONVERT(varchar(10), TARIH, 23)";
+
+	    // start = 2026-02-01, end = 2026-03-01
+	    java.sql.Date start;
+	    java.sql.Date end;
+	    try {
+	        java.time.LocalDate s = java.time.LocalDate.parse(ay + "-01"); // "2026-02-01"
+	        java.time.LocalDate e = s.plusMonths(1);
+	        start = java.sql.Date.valueOf(s);
+	        end   = java.sql.Date.valueOf(e);
+	    } catch (Exception ex) {
+	        throw new ServiceException("Ay formatı hatalı. Beklenen: YYYY-MM (örn 2026-02)", ex);
+	    }
+
+	    try (Connection connection = DriverManager.getConnection(
+	            gunlukConnDetails.getJdbcUrl(),
+	            gunlukConnDetails.getUsername(),
+	            gunlukConnDetails.getPassword());
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
+
+	        ps.setDate(1, start);
+	        ps.setDate(2, end);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            resultList = ResultSetConverter.convertToList(rs);
+	        }
+
+	    } catch (Exception ex) {
+	        throw new ServiceException("Günlük aylık görev sayısı okuma hatası.", ex);
+	    }
+
+	    return resultList;
 	}
 
 	@Override
@@ -207,6 +245,45 @@ public class GunlukMsSQL  implements IGunlukDatabase {
 	public int gidnoal(ConnectionDetails gunlukConnDetails) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> gorev_oku_gun(String tarih, ConnectionDetails gunlukConnDetails) {
+		List<Map<String, Object>> resultList = new ArrayList<>();
+
+	    String sql =
+	        "SELECT " +
+	        "  CONVERT(varchar(10), TARIH, 23) AS tarih, " +
+	        "  SAAT AS saat, " +
+	        "  ISIM AS isim, " +
+	        "  GOREV AS gorev, " +
+	        "  YER AS yer, " +
+	        "  MESAJ AS mesaj, " +
+	        "  GID AS gid " +
+	        "FROM GUNLUK WITH (INDEX (IDX_GUNLUK)) " +
+	        "WHERE TARIH >= ? AND TARIH < DATEADD(day, 1, ?) " +
+	        "ORDER BY SAAT, GID";
+
+	    try (Connection connection = DriverManager.getConnection(
+	            gunlukConnDetails.getJdbcUrl(),
+	            gunlukConnDetails.getUsername(),
+	            gunlukConnDetails.getPassword());
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
+
+	        java.sql.Date date = java.sql.Date.valueOf(tarih);
+
+	        ps.setDate(1, date);
+	        ps.setDate(2, date);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            resultList = ResultSetConverter.convertToList(rs);
+	        }
+
+	    } catch (Exception ex) {
+	        throw new ServiceException("Günlük görev okuma hatası.", ex);
+	    }
+
+	    return resultList;
 	}
 
 	}

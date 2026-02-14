@@ -21,6 +21,7 @@
 					style="width: 150px;">
 					<option value="week" selected>Haftalık</option>
 					<option value="day">Günlük</option>
+					<option value="month">Aylık</option>
 				</select> <span class="select-arrow">▼</span>
 			</div>
 		</div>
@@ -392,6 +393,47 @@
   border: 1px solid rgba(56,189,248,.35);
   background: rgba(56,189,248,.10);
   font-weight: 900;
+}
+
+/* ===== MONTH MODE ===== */
+#camScheduler .cam-grid.month{
+  grid-template-columns: repeat(7, 1fr) !important; /* time kolonu yok */
+}
+
+#camScheduler .mcell{
+  position: relative;
+  min-height: 92px;
+  padding: 8px 10px;
+  border-right: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(8,14,26,.40);
+  cursor: pointer;
+  transition: .12s ease;
+  user-select:none;
+}
+#camScheduler .mcell:hover{ background: rgba(56,189,248,.08); }
+
+#camScheduler .mcell.out{ opacity: .45; }
+#camScheduler .mcell.selected{
+  outline: 2px solid rgba(56,189,248,.85);
+  outline-offset: -2px;
+  background: rgba(56,189,248,.14);
+}
+
+#camScheduler .mcell .m-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom: 6px;
+}
+#camScheduler .mcell .m-day{
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(255,255,255,.90);
+}
+#camScheduler .mcell .badge{
+  margin-left:auto;
 }
 
 </style>

@@ -19,7 +19,7 @@ public interface IGunlukDatabase {
 	List<Map<String, Object>> hazir_gorevler(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
 	void gorev_tek_sil(int id,ConnectionDetails gunlukConnDetails);
 	void gunluk_farkli_kayit(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
-	List<Map<String, Object>> gorev_oku_aylik_grup(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
+	List<Map<String, Object>> gorev_oku_aylik_grup(String ay,ConnectionDetails gunlukConnDetails);
 	List<Map<String, Object>> gorev_oku_sonraki(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
 	void gun_firma_adi_kayit(String fadi,ConnectionDetails gunlukConnDetails);
 	List<Map<String, Object>> gorev_oku_yillik_pivot(gunlukBilgiDTO gbilgi,ConnectionDetails gunlukConnDetails);
@@ -30,4 +30,5 @@ public interface IGunlukDatabase {
 	List<Map<String, Object>> yer_oku(ConnectionDetails gunlukConnDetails);
 	List<Map<String, Object>> gorev_oku(ConnectionDetails gunlukConnDetails);
 	int gidnoal(ConnectionDetails gunlukConnDetails);
+	List<Map<String, Object>> gorev_oku_gun(String tarih,ConnectionDetails gunlukConnDetails);
 }
